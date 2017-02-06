@@ -2,8 +2,11 @@
 
 fs = require 'fs'
 path = require 'path'
+
+# escape version marked
 marked = require '/home/c34031328/code/marked'
 
+# get filenames
 fileNames = do ->
     textFileName = process.argv[process.argv.length - 1]
     throw "no filename given!" if !process.argv[2]
@@ -22,6 +25,7 @@ fileNames = do ->
         template: templateFileName
     }
 
+# get metadata from raw text
 cookRaw = (rawText) ->
     getTitle = (rawText) ->
         (rawText.match /\S+/)[0]
@@ -39,6 +43,7 @@ cookRaw = (rawText) ->
     @main = getMain rawText
 
 
+# get metadata from git or other system
 getMeta = (fileName) ->
     console.error "prev, next, date can't access now."
 

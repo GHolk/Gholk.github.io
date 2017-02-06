@@ -6,7 +6,10 @@ html_files := $(html_files:.txt=.html)
 
 .PHONY: all
 
-all: $(html_files)
+all: $(html_files) system/tags.txt
+
+system/tags.txt: $(text_files)
+	egrep -oh '^#[^ ]+$$' $(text_files) | sort | uniq -c > $@
 
 %.html: text/%.txt $(text_to_html)
 	$(text_to_html) $< > $@

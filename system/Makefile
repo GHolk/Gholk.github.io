@@ -1,12 +1,16 @@
 
-text_to_html := ./text-to-html-page.coffee
+text_to_html := ./text-to-html-page.js
 generate_tags := ./generate_tags.sh
 text_files := $(wildcard ../text/*.txt)
 html_files := $(patsubst ../text/%,../%,$(text_files))
 html_files := $(html_files:.txt=.html)
 
 
-all: $(html_files) tags.txt upload
+all: $(html_files) tags.txt upload $(text_to_html)
+
+%.js: %.coffee
+	coffee -c $<
+	sed -i '1i#!/usr/bin/env node' $@
 
 tags.txt: $(text_files)
 	$(generate_tags) > $@

@@ -1,0 +1,3 @@
+open ftp://c34031328@myweb.ncku.edu.tw/twt
+mirror -Rnx '^.git|^text'
+ls

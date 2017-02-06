@@ -31,7 +31,7 @@ cookRaw = (rawText) ->
         (rawText.match /\S+/)[0]
 
     getTags = (rawText) ->
-        tagsMatch = rawText.match /^#\S+$/gm
+        tagsMatch = (rawText.match /^#\S+$/gm) || []
         for tag in tagsMatch
             tag.substr 1
 

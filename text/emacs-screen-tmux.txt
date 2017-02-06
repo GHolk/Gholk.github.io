@@ -1,0 +1,56 @@
+
+emacs 當 tmux 用
+================
+
+發現 emacs 根本可以直當 tmux 用了，
+只是不知道為什麼 emacs 裡的 ssh 跑很慢，
+上 ptt 超慢的，好像 render ansi escape code 有點困難。
+我猜是因為 emacs 只有一隻進程，
+（好啦我根本不知道 pid 跟
+進程、線程、優先的關係。
+我只是廢廢的非本科生，計概都亂學。）
+不像 tmux 是叫一堆 shell，
+再用 socket 把顯示整合給你看。
+
+
+調掉各種狀態列
+--------------
+基本上要把字調小一點，
+因為 emacs 共會吃掉三行，
+一行 menu bar、一行底下的狀態、
+再一條顯示訊息的 message bar。
+根本吃超多，不過那大概是我不會調的關係。
+
+在 emacs wiki 找到設定。
+但這樣調的缺點是 `C-x 2`
+時上下的邊界會不見。
+
+   (menu-bar-mode -1)
+   (setq-default mode-line-format nil)
+
+
+我在用 tmux 時也會把狀態列調掉，
+空出多一點空間，就可以把字調大。
+說實在我覺得狀態列很難用，
+而且 xwindow 已經有一條 docker，
+該有的都有了。
+
+
+GUI 下的 emacs
+--------------
+後來突然想到其實用 GUI 版的 emacs 也不錯。
+如果是要把 emacs 當 tmux 用的話，
+當然可以用 GUI 版的。
+而且只有在 GUI 下可以完整組合所有鍵： `Esc` 、
+`Meta` 、 `Alt` 、 `Ctrl` 、 `Shift` ，
+ansi shell 因為把 Ctrl 的組合視為 ascii code，
+就有些組合沒有對應的 code，
+就無法被看到。
+
+#emacs
+#tmux
+#screen
+#gui
+#cli
+#config
+

@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" prefix="og: http://ogp.me/ns#">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="c34031328">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="vim, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="undefined">
+<meta name="keywords" property="og:article:tag" content="emacs,tmux,screen,gui,cli,config">
+<link rel="next" type="text/html" href="undefined">
+<link rel="prev" type="text/html" href="undefined">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="system/icon.png">
+<meta property="og:image" content="system/icon.png">
+<link rel="stylesheet" type="text/css" href="system/style.css">
+<link rel="help" title="comment board" type="text/html" href="comment.html">
+
+<title>emacs</title>
+</head>
+<body>
+<h1 id="emacs 當 tmux 用">emacs 當 tmux 用</h1>
+<p>發現 emacs 根本可以直當 tmux 用了，
+只是不知道為什麼 emacs 裡的 ssh 跑很慢，
+上 ptt 超慢的，好像 render ansi escape code 有點困難。
+我猜是因為 emacs 只有一隻進程，
+（好啦我根本不知道 pid 跟
+進程、線程、優先的關係。
+我只是廢廢的非本科生，計概都亂學。）
+不像 tmux 是叫一堆 shell，
+再用 socket 把顯示整合給你看。</p>
+<h2 id="調掉各種狀態列">調掉各種狀態列</h2>
+<p>基本上要把字調小一點，
+因為 emacs 共會吃掉三行，
+一行 menu bar、一行底下的狀態、
+再一條顯示訊息的 message bar。
+根本吃超多，不過那大概是我不會調的關係。</p>
+<p>在 emacs wiki 找到設定。
+但這樣調的缺點是 <code>C-x 2</code>
+時上下的邊界會不見。</p>
+<p>   (menu<s>bar</s>mode -1)
+   (setq-default mode<s>line</s>format nil)</p>
+<p>我在用 tmux 時也會把狀態列調掉，
+空出多一點空間，就可以把字調大。
+說實在我覺得狀態列很難用，
+而且 xwindow 已經有一條 docker，
+該有的都有了。</p>
+<h2 id="GUI 下的 emacs">GUI 下的 emacs</h2>
+<p>後來突然想到其實用 GUI 版的 emacs 也不錯。
+如果是要把 emacs 當 tmux 用的話，
+當然可以用 GUI 版的。
+而且只有在 GUI 下可以完整組合所有鍵： <code>Esc</code> 、
+<code>Meta</code> 、 <code>Alt</code> 、 <code>Ctrl</code> 、 <code>Shift</code> ，
+ansi shell 因為把 Ctrl 的組合視為 ascii code，
+就有些組合沒有對應的 code，
+就無法被看到。</p>
+
+<script src="system/meeta.js" defer></script>
+
+</body>
+</html>
+
+

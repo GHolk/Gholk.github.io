@@ -19,7 +19,10 @@ tags.txt: $(text_files)
 	$(text_to_html) $< > $@
 	xdg-open $@
 
-upload: $(html_files) mirror-reverse.lftp
-	lftp -f mirror-reverse.lftp
+upload: $(html_files)
+	cd .. ; \
+	git add . ; \
+	git commit ; \
+	git push
 
 .PHONY: all upload

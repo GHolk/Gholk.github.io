@@ -6,7 +6,11 @@ html_files := $(patsubst ../text/%,../%,$(text_files))
 html_files := $(html_files:.txt=.html)
 
 
-all: $(html_files) tags.txt upload $(text_to_html)
+all: $(html_files) tags.txt $(text_to_html) ../index.html upload
+
+../index.html: $(html_files)
+	cd .. ; \
+	index
 
 %.js: %.coffee
 	coffee -c $<
@@ -19,7 +23,7 @@ tags.txt: $(text_files)
 	$(text_to_html) $< > $@
 	xdg-open $@
 
-upload: $(html_files)
+upload: $(html_files) ../index.html tags.txt
 	cd .. ; \
 	git add . ; \
 	git commit ; \

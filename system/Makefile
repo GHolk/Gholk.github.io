@@ -21,12 +21,13 @@ tags.txt: $(text_files)
 
 %.html: text/%.txt $(text_to_html)
 	$(text_to_html) $< > $@
+	basename $@ >>list.txt
 	xdg-open $@
 
 upload: $(html_files) ../index.html tags.txt
-	cd .. ; \
-	git add . ; \
-	git commit ; \
+	cd .. && \
+	git add . && \
+	git commit && \
 	git push
 
 .PHONY: all upload

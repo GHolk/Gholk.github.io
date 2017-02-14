@@ -22,12 +22,13 @@ $(tags_file): $(text_files)
 	$(generate_tags) > $@
 
 %.html: text/%.txt $(text_to_html)
-	$(text_to_html) $< > $@
 	if ! grep -q `basename $@` $(list_file) ; \
-	then echo `basename $@` >>$(list_file) ; \
+	then basename $@ >>$(list_file) ; \
 	fi
 
-	xdg-open $@
+	$(text_to_html) $< > $@
+
+	-xdg-open $@
 
 
 upload: $(html_files) ../index.html $(tags_file)

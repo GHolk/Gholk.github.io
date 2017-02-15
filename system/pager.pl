@@ -3,8 +3,14 @@
 use strict;
 use warnings;
 
+use File::Basename qw(dirname);
+use Cwd  qw(abs_path);
+use lib dirname abs_path $0;
+use Meta;
+
 my %filename = (
-    template => "system/template.html"
+    template => "template.html",
+    html => $ARGV[0],
 );
 
 my %text = (
@@ -32,9 +38,8 @@ sub template_engine {
     }
 }
 
-my %meal = (
-    main => 'THE MAIN'
-);
+my %meal = %{Meta::parse($filename{html})};
+$meal{main} = 'this is main';
 
 template_engine(\%meal);
 

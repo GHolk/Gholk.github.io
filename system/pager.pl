@@ -13,16 +13,6 @@ my %filename = (
     html => $ARGV[0],
 );
 
-my %text = (
-    template => do {
-    open(my $fh, $filename{'template'}) or
-        die "can't open html template: $filename{'template'}\n$!";
-
-    local $/ = undef;
-    <$fh>;
-    }
-);
-
 sub template_engine {
 
     my $meal_ref = shift;
@@ -36,6 +26,8 @@ sub template_engine {
         s/\{\{(.*)\}\}/$meal{$1}/g;
         print;
     }
+
+    close $template_fh;
 }
 
 my %meal = %{Meta::parse($filename{html})};

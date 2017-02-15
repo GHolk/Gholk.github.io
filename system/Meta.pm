@@ -8,15 +8,10 @@ use warnings;
 use HTML::Parser ();
 use POSIX qw(strftime);
 
-my $VERSION = 1;
-my %meta = (
-    date => strftime("%Y-%m-%d", localtime()),
-    tags => '',
-);
 
-
-sub parse {
-    my $filename = shift;
+sub parse_html {
+    my ($filename, $meal_ref) = @_;
+    my %meal = %{$meal_ref};
 
     my $parser = HTML::Parser->new(
         api_version => 3,
@@ -24,8 +19,6 @@ sub parse {
     );
     $parser->parse_file($filename) or
         print STDERR "html file $filename not exist!\n";
-
-    return \%meta;
 }
 
 sub start_handler {
@@ -41,6 +34,11 @@ sub start_handler {
             }
         }
     }
+}
+
+sub parse_text {
+    my ($filename, $meal_ref) = @_;
+    my %meal = %{$meal_ref};
 }
 
 "perl module suck";

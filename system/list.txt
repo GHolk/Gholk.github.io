@@ -11,3 +11,4 @@ rule-your-game.html
 my-girlfriend-in-multiverse.html
 baidu-translate-evil.html
 call-female-right.html
+fluent-novel-text.html

@@ -6,9 +6,10 @@ tags_file := ./tags.txt
 text_files := $(wildcard ../text/*.txt)
 html_files := $(patsubst ../text/%,../%,$(text_files))
 html_files := $(html_files:.txt=.html)
+coffee_files := $(wildcard *.coffee)
+js_files := $(coffee_files:.coffee=.js)
 
-
-all: $(html_files) $(tags_file) $(text_to_html) ../index.html
+all: $(html_files) $(tags_file) $(text_to_html) ../index.html $(js_files)
 
 ../index.html: $(html_files)
 	cd .. && \

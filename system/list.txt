@@ -16,3 +16,5 @@ scadual-105-2.html
 expect-big-liar-what.html
 modern-gender-interact.html
 hometown-change.html
+book-and-so-on.html
+sad-manipulate.html

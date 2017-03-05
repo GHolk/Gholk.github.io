@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" prefix="og: http://ogp.me/ns#">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="c34031328">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="vim, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-03-05T12:44:24.970Z">
+<meta name="keywords" property="og:article:tag" content="dns,github,www,twbbs,blog">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="system/icon.png">
+<meta property="og:image" content="system/icon.png">
+<link rel="stylesheet" type="text/css" href="system/style.css">
+<link rel="help" title="comment board" type="text/html" href="comment.html">
+
+<title>github 設 twbbs 的域名</title>
+</head>
+<body>
+<main><h1 id="github 設 twbbs 的域名">github 設 twbbs 的域名</h1>
+<p><a href="twbbs-dinshin.html">之前申請的 twbbs 域名</a> 終於好了！
+大概一個月內會好吧，沒有看到核可的日期。
+昨天突然想到，去看才發現好了。</p>
+<p>之後就是把 github 的網頁
+<a href="https://gholk.github.io">https://gholk.github.io</a> 掛到新網域
+<a href="http://loco.twgg.org">http://loco.twgg.org</a> 下面啦。
+超簡單兩步就好了。</p>
+<ol>
+<li><p>去 twbbs 的網頁介面上，
+設定 CNAME 到 gholk.github.io 。</p>
+<pre><code>loco.twgg.org in CNAME gholk.github.io 
+</code></pre></li>
+<li><p>在 github repo 下新增一個檔案取名 <code>CNAME</code> ，
+內容一行， <code>loco.twgg.org</code> ，
+之後再 push 到 github 。</p>
+<p>或是可以直接在 github 網頁介面中設定，
+會直接建立 CNAME 檔案。
+但之後會更新一個提交，要 pull 下來。</p>
+<p>兩種結果一樣，但只要選一個做。</p>
+</li>
+</ol>
+<p>之後等個半天，就可以用新域名了！
+而且連 <a href="https://gholk.github.io">https://gholk.github.io</a>
+會被自動導到 <a href="http://loco.twgg.org">http://loco.twgg.org</a> 。</p>
+<p>twbbs 申請一次可以用半年，
+但考量申請要等一二個月，
+應該要在結束前一個月左右申請續用。</p>
+</main>
+
+<script src="system/meeta.js" defer></script>
+
+</body>
+</html>
+

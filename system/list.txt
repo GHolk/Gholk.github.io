@@ -18,3 +18,4 @@ modern-gender-interact.html
 hometown-change.html
 book-and-so-on.html
 sad-manipulate.html
+riot-politician.html

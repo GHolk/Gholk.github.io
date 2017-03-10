@@ -101,6 +101,8 @@ var dl = (function(headArray) {
 */
 
 /** do comment board and links *************/
+
+/* no comment board now
 (function(links, dl) {
 
     function findCommentUrl(links) {
@@ -144,6 +146,7 @@ var dl = (function(headArray) {
     }
 
 })(headArray[1], dl);
+*/
 
 
 /** markdown link and use. **/

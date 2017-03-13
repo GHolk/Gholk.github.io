@@ -1,6 +1,6 @@
 
 #text_to_html := ./text-to-html-page.js
-text_to_html := ./pager.js
+text_to_html := node pager.js
 generate_tags := ./generate_tags.sh
 list_file := ./list.txt
 tags_file := ./tags.txt
@@ -10,7 +10,7 @@ html_files := $(html_files:.txt=.html)
 coffee_files := $(wildcard *.coffee)
 js_files := $(coffee_files:.coffee=.js)
 
-all: $(html_files) $(tags_file) $(text_to_html) ../index.html $(js_files)
+all: $(html_files) $(tags_file) ../index.html $(js_files)
 
 ../index.html: $(html_files)
 	cd .. && \
@@ -18,12 +18,11 @@ all: $(html_files) $(tags_file) $(text_to_html) ../index.html $(js_files)
 
 %.js: %.coffee
 	coffee -c $<
-	sed -i '1i#!/usr/bin/env node' $@
 
 $(tags_file): $(text_files)
 	$(generate_tags) > $@
 
-%.html: text/%.txt $(text_to_html)
+%.html: text/%.txt
 	if ! grep -q `basename $@` $(list_file) ; \
 	then basename $@ >>$(list_file) ; \
 	fi

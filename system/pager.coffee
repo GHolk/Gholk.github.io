@@ -64,8 +64,58 @@ whenTextFileReady = (err, rawText) ->
         throw err if err
     
         HTMLLoader = new Loader HTMLText
+
+        updatePrevNext = (oldHTMLPath, nextFileName) ->
+            whenOldHTMLRead = (err, HTMLText) ->
+                throw err if err
+
+                oldHTMLLoader = new Loader HTMLText
+                oldHTMLLoader.next nextFileName
+
+                try
+                    fs.writeFile(
+                        oldHTMLPath
+                        oldHTMLLoader.toString()
+                        'utf8'
+                        (err) -> throw err if err
+                    )
+                catch err
+                    console.error err
+                    console.error "can't write to `#{oldHTMLPath}` . "
+            try
+                fs.readFile oldHTMLPath, 'utf8', whenOldHTMLRead
+            catch err
+                console.error err
+                console.error "have no prev html file `#{oldHTMLPath}` . "
+
+        updatePrevNext(
+            '../' + HTMLLoader.prev()
+            fileNames.html.slice 3
+        )
+
         HTMLLoader.update textLoader
-        fs.writeFile fileNames.html, HTMLLoader.toString(), 'utf8', ->
+
+        whenHTMLWrite = (err) ->
+            throw err if err
+
+            HTMLLoader.clear()
+
+            # from '../foo.html' to 'foo.html'
+            HTMLLoader.prev fileNames.html.slice 3
+
+            fs.writeFile(
+                fileNames.template
+                HTMLLoader.toString()
+                'utf8'
+                (err) -> throw err if err
+            )
+
+        fs.writeFile(
+            fileNames.html
+            HTMLLoader.toString()
+            'utf8'
+            whenHTMLWrite
+        )
 
     fs.readFile fileNames.html, 'utf8', whenHTMLFileReady
 

@@ -11,49 +11,60 @@ class LoaderByCheerio
         }
 
     date: (setDate) ->
-        if setDate
-            @selector('meta[name=date]').attr 'content', setDate
+        query = 'meta[name=date]'
+        if setDate?
+            @selector(query).attr 'content', setDate
         else
-            @selector('meta[name=date]').attr 'content'
+            @selector(query).attr 'content'
 
     index: (setIndex) ->
-        if setIndex
-            @selector('link[rel=index]').attr 'href', setIndex
+        query = 'link[rel=index]'
+        if setIndex?
+            @selector(query).attr 'href', setIndex
         else
-            @selector('link[rel=index]').attr 'href'
+            @selector(query).attr 'href'
 
     prev: (setPrev) ->
-        if setPrev
-            @selector('link[rel=prev]').attr 'href', setPrev
+        query = 'link[rel=prev]'
+        if setPrev?
+            @selector(query).attr 'href', setPrev
         else
-            @selector('link[rel=prev]').attr 'href'
+            @selector(query).attr 'href'
 
     next: (setNext) ->
-        if setNext
-            @selector('link[rel=next]').attr 'href', setNext
+        query = 'link[rel=next]'
+        if setNext?
+            @selector(query).attr 'href', setNext
         else
-            @selector('link[rel=next]').attr 'href'
+            @selector(query).attr 'href'
 
     title: (setTitle) ->
-        if setTitle
-            @selector('title').text setTitle
+        query = 'title'
+        if setTitle?
+            @selector(query).text setTitle
         else
-            @selector('title').text()
+            @selector(query).text()
 
     main: (setMain) ->
-        if setMain
-            @selector('main').html setMain
+        query = 'main'
+        if setMain?
+            @selector(query).html setMain
         else
-            @selector('main').html
+            @selector(query).html()
 
     tags: (setTags) ->
-        if setTags
-            @selector 'meta[name=keywords]'
+        query = 'meta[name=keywords]'
+        setTags = setTags.join ',' if Array.isArray setTags
+        if setTags?
+            @selector query
                 .attr 'content', setTags
         else
-            @selector 'meta[name=keywords]'
+            @selector query
                 .attr 'content'
-                .join ','
+
+    clear: ->
+        for attr in ['main', 'title', 'tags', 'date', 'prev', 'next']
+            @[attr] ''
 
     update: (newText) ->
         for mustUpdate in ['main', 'title', 'tags']

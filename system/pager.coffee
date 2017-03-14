@@ -62,8 +62,8 @@ whenTextFileReady = (err, rawText) ->
     
     whenTemplateFileReady = (err, HTMLText) ->
         throw err if err
-    
-        HTMLLoader = new Loader HTMLText
+
+        templateLoader = new Loader HTMLText
 
         updatePrevNext = (oldHTMLPath, nextFileName) ->
             whenOldHTMLRead = (err, HTMLText) ->
@@ -88,33 +88,41 @@ whenTextFileReady = (err, rawText) ->
                 console.error err
                 console.error "have no prev html file `#{oldHTMLPath}` . "
 
-        updatePrevNext(
-            '../' + HTMLLoader.prev()
-            fileNames.html.slice 3
-        )
+        isHide = textLoader.tags().split(',').indexOf('hide') == -1
+        if isHide
+            templateLoader.prev 'remove'
+            templateLoader.next 'remove'
+        else
+            updatePrevNext(
+                '../' + templateLoader.prev()
+                fileNames.html.slice 3
+            )
 
-        HTMLLoader.update textLoader
+        templateLoader.update textLoader
 
         whenHTMLWrite = (err) ->
             throw err if err
 
-            HTMLLoader.clear()
+            templateLoader.clear()
 
             # from '../foo.html' to 'foo.html'
-            HTMLLoader.prev fileNames.html.slice 3
+            templateLoader.prev fileNames.html.slice 3
 
             fs.writeFile(
                 fileNames.template
-                HTMLLoader.toString()
+                templateLoader.toString()
                 'utf8'
                 (err) -> throw err if err
             )
 
         fs.writeFile(
             fileNames.html
-            HTMLLoader.toString()
+            templateLoader.toString()
             'utf8'
-            whenHTMLWrite
+
+            if isHide 
+            then (err) -> throw err if err
+            else whenHTMLWrite
         )
 
     fs.readFile fileNames.html, 'utf8', whenHTMLFileReady

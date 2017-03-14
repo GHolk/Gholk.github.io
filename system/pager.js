@@ -80,11 +80,11 @@
       }
     };
     whenTemplateFileReady = function(err, HTMLText) {
-      var HTMLLoader, updatePrevNext, whenHTMLWrite;
+      var isHide, templateLoader, updatePrevNext, whenHTMLWrite;
       if (err) {
         throw err;
       }
-      HTMLLoader = new Loader(HTMLText);
+      templateLoader = new Loader(HTMLText);
       updatePrevNext = function(oldHTMLPath, nextFileName) {
         var whenOldHTMLRead;
         whenOldHTMLRead = function(err, HTMLText) {
@@ -114,21 +114,31 @@
           return console.error("have no prev html file `" + oldHTMLPath + "` . ");
         }
       };
-      updatePrevNext('../' + HTMLLoader.prev(), fileNames.html.slice(3));
-      HTMLLoader.update(textLoader);
+      isHide = textLoader.tags().split(',').indexOf('hide') === -1;
+      if (isHide) {
+        templateLoader.prev('remove');
+        templateLoader.next('remove');
+      } else {
+        updatePrevNext('../' + templateLoader.prev(), fileNames.html.slice(3));
+      }
+      templateLoader.update(textLoader);
       whenHTMLWrite = function(err) {
         if (err) {
           throw err;
         }
-        HTMLLoader.clear();
-        HTMLLoader.prev(fileNames.html.slice(3));
-        return fs.writeFile(fileNames.template, HTMLLoader.toString(), 'utf8', function(err) {
+        templateLoader.clear();
+        templateLoader.prev(fileNames.html.slice(3));
+        return fs.writeFile(fileNames.template, templateLoader.toString(), 'utf8', function(err) {
           if (err) {
             throw err;
           }
         });
       };
-      return fs.writeFile(fileNames.html, HTMLLoader.toString(), 'utf8', whenHTMLWrite);
+      return fs.writeFile(fileNames.html, templateLoader.toString(), 'utf8', isHide ? function(err) {
+        if (err) {
+          throw err;
+        }
+      } : whenHTMLWrite);
     };
     return fs.readFile(fileNames.html, 'utf8', whenHTMLFileReady);
   };

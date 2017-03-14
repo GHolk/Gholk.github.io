@@ -1,7 +1,7 @@
 how-friend.html
 emacs-screen-tmux.html
 cosine-friend.html
-cosine-beauty.html
+#cosine-beauty.html
 color-direction-language.html
 cold-shower-suspend.html
 believe-so-exist.html
@@ -10,7 +10,7 @@ twbbs-dinshin.html
 rule-your-game.html
 my-girlfriend-in-multiverse.html
 baidu-translate-evil.html
-call-female-right.html
+#call-female-right.html
 fluent-novel-text.html
 scadual-105-2.html
 expect-big-liar-what.html
@@ -23,4 +23,4 @@ github-cname-twbbs.html
 avalon-questionnaire-prize.html
 calture-gap-darrenshan.html
 ptt-network-bully-gossiping.html
-widow-for-future.html
+#widow-for-future.html

@@ -11,56 +11,58 @@ class LoaderByCheerio
         }
 
     date: (setDate) ->
-        query = 'meta[name=date]'
+        node = @selector 'meta[name=date]'
         if setDate?
-            @selector(query).attr 'content', setDate
+            node.attr 'content', setDate
         else
-            @selector(query).attr 'content'
+            node.attr 'content'
 
     index: (setIndex) ->
-        query = 'link[rel=index]'
+        node = @selector 'link[rel=index]'
         if setIndex?
-            @selector(query).attr 'href', setIndex
+            node.attr 'href', setIndex
         else
-            @selector(query).attr 'href'
+            node.attr 'href'
 
     prev: (setPrev) ->
-        query = 'link[rel=prev]'
-        if setPrev?
-            @selector(query).attr 'href', setPrev
+        node = @selector 'link[rel=prev]'
+        if setPrev == 'remove'
+            node.remove()
+        else if setPrev?
+            node.attr 'href', setPrev
         else
-            @selector(query).attr 'href'
+            node.attr 'href'
 
     next: (setNext) ->
-        query = 'link[rel=next]'
-        if setNext?
-            @selector(query).attr 'href', setNext
+        node = @selector 'link[rel=next]'
+        if setNext == 'remove'
+            node.remove()
+        else if setNext?
+            node.attr 'href', setNext
         else
-            @selector(query).attr 'href'
+            node.attr 'href'
 
     title: (setTitle) ->
-        query = 'title'
+        node = @selector 'title'
         if setTitle?
-            @selector(query).text setTitle
+            node.text setTitle
         else
-            @selector(query).text()
+            node.text()
 
     main: (setMain) ->
-        query = 'main'
+        node = @selector 'main'
         if setMain?
-            @selector(query).html setMain
+            node.html setMain
         else
-            @selector(query).html()
+            node.html()
 
     tags: (setTags) ->
-        query = 'meta[name=keywords]'
+        node = @selector 'meta[name=keywords]'
         setTags = setTags.join ',' if Array.isArray setTags
         if setTags?
-            @selector query
-                .attr 'content', setTags
+            node.attr 'content', setTags
         else
-            @selector query
-                .attr 'content'
+            node.attr 'content'
 
     clear: ->
         for attr in ['main', 'title', 'tags', 'date', 'prev', 'next']

@@ -15,75 +15,79 @@
     }
 
     LoaderByCheerio.prototype.date = function(setDate) {
-      var query;
-      query = 'meta[name=date]';
+      var node;
+      node = this.selector('meta[name=date]');
       if (setDate != null) {
-        return this.selector(query).attr('content', setDate);
+        return node.attr('content', setDate);
       } else {
-        return this.selector(query).attr('content');
+        return node.attr('content');
       }
     };
 
     LoaderByCheerio.prototype.index = function(setIndex) {
-      var query;
-      query = 'link[rel=index]';
+      var node;
+      node = this.selector('link[rel=index]');
       if (setIndex != null) {
-        return this.selector(query).attr('href', setIndex);
+        return node.attr('href', setIndex);
       } else {
-        return this.selector(query).attr('href');
+        return node.attr('href');
       }
     };
 
     LoaderByCheerio.prototype.prev = function(setPrev) {
-      var query;
-      query = 'link[rel=prev]';
-      if (setPrev != null) {
-        return this.selector(query).attr('href', setPrev);
+      var node;
+      node = this.selector('link[rel=prev]');
+      if (setPrev === 'remove') {
+        return node.remove();
+      } else if (setPrev != null) {
+        return node.attr('href', setPrev);
       } else {
-        return this.selector(query).attr('href');
+        return node.attr('href');
       }
     };
 
     LoaderByCheerio.prototype.next = function(setNext) {
-      var query;
-      query = 'link[rel=next]';
-      if (setNext != null) {
-        return this.selector(query).attr('href', setNext);
+      var node;
+      node = this.selector('link[rel=next]');
+      if (setNext === 'remove') {
+        return node.remove();
+      } else if (setNext != null) {
+        return node.attr('href', setNext);
       } else {
-        return this.selector(query).attr('href');
+        return node.attr('href');
       }
     };
 
     LoaderByCheerio.prototype.title = function(setTitle) {
-      var query;
-      query = 'title';
+      var node;
+      node = this.selector('title');
       if (setTitle != null) {
-        return this.selector(query).text(setTitle);
+        return node.text(setTitle);
       } else {
-        return this.selector(query).text();
+        return node.text();
       }
     };
 
     LoaderByCheerio.prototype.main = function(setMain) {
-      var query;
-      query = 'main';
+      var node;
+      node = this.selector('main');
       if (setMain != null) {
-        return this.selector(query).html(setMain);
+        return node.html(setMain);
       } else {
-        return this.selector(query).html();
+        return node.html();
       }
     };
 
     LoaderByCheerio.prototype.tags = function(setTags) {
-      var query;
-      query = 'meta[name=keywords]';
+      var node;
+      node = this.selector('meta[name=keywords]');
       if (Array.isArray(setTags)) {
         setTags = setTags.join(',');
       }
       if (setTags != null) {
-        return this.selector(query).attr('content', setTags);
+        return node.attr('content', setTags);
       } else {
-        return this.selector(query).attr('content');
+        return node.attr('content');
       }
     };
 

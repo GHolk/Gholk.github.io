@@ -51,6 +51,10 @@ var dl = (function(headArray) {
 
         var dd = document.createElement('dd');
         dd.appendChild(itemValue);
+
+        if (itemName == 'all metadata') {
+            dt.className = dd.className = 'browser-only';
+        }
         this.appendChild(dd);
     }
 
@@ -246,6 +250,7 @@ footer.id = "meeta-js";
         ul = document.createElement('ul');
 
     ul.id = 'page';
+    ul.className = 'browser-only';
 
 
     for(var i=0, l=list.length; i<l; i++)

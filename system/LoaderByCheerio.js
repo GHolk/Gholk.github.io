@@ -37,19 +37,17 @@
     };
 
     linkNextPrev = function(rel) {
-      return function() {
-        return function(filename, title) {
-          var node;
-          node = this.selector("link[rel=" + rel + "]");
-          if (filename === 'remove') {
-            return node.remove();
-          } else if (filename != null) {
-            node.attr('href', filename);
-            return node.attr('title', title);
-          } else {
-            return node.attr('href');
-          }
-        };
+      return function(filename, title) {
+        var node;
+        node = this.selector("link[rel=" + rel + "]");
+        if (filename === 'remove') {
+          return node.remove();
+        } else if (filename != null) {
+          node.attr('href', filename);
+          return node.attr('title', title);
+        } else {
+          return node.attr('href');
+        }
       };
     };
 

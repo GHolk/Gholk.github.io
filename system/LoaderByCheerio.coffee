@@ -25,7 +25,7 @@ class LoaderByCheerio
             node.attr 'href'
 
     linkNextPrev = (rel) ->
-        return -> (filename, title) ->
+        return (filename, title) ->
             node = @selector "link[rel=#{rel}]"
             if filename == 'remove'
                 node.remove()

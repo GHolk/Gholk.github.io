@@ -5,6 +5,8 @@
   cheerio = require('cheerio');
 
   LoaderByCheerio = (function() {
+    var linkNextPrev;
+
     function LoaderByCheerio(HTMLText) {
       this.selector = cheerio.load(HTMLText, {
         decodeEntities: false,
@@ -34,29 +36,26 @@
       }
     };
 
-    LoaderByCheerio.prototype.prev = function(setPrev) {
-      var node;
-      node = this.selector('link[rel=prev]');
-      if (setPrev === 'remove') {
-        return node.remove();
-      } else if (setPrev != null) {
-        return node.attr('href', setPrev);
-      } else {
-        return node.attr('href');
-      }
+    linkNextPrev = function(rel) {
+      return function() {
+        return function(filename, title) {
+          var node;
+          node = this.selector("link[rel=" + rel + "]");
+          if (filename === 'remove') {
+            return node.remove();
+          } else if (filename != null) {
+            node.attr('href', filename);
+            return node.attr('title', title);
+          } else {
+            return node.attr('href');
+          }
+        };
+      };
     };
 
-    LoaderByCheerio.prototype.next = function(setNext) {
-      var node;
-      node = this.selector('link[rel=next]');
-      if (setNext === 'remove') {
-        return node.remove();
-      } else if (setNext != null) {
-        return node.attr('href', setNext);
-      } else {
-        return node.attr('href');
-      }
-    };
+    LoaderByCheerio.prototype.prev = linkNextPrev('prev');
+
+    LoaderByCheerio.prototype.next = linkNextPrev('next');
 
     LoaderByCheerio.prototype.title = function(setTitle) {
       var node;

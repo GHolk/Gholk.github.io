@@ -24,23 +24,19 @@ class LoaderByCheerio
         else
             node.attr 'href'
 
-    prev: (setPrev) ->
-        node = @selector 'link[rel=prev]'
-        if setPrev == 'remove'
-            node.remove()
-        else if setPrev?
-            node.attr 'href', setPrev
-        else
-            node.attr 'href'
+    linkNextPrev = (rel) ->
+        return -> (filename, title) ->
+            node = @selector "link[rel=#{rel}]"
+            if filename == 'remove'
+                node.remove()
+            else if filename?
+                node.attr 'href', filename
+                node.attr 'title', title
+            else
+                node.attr 'href'
 
-    next: (setNext) ->
-        node = @selector 'link[rel=next]'
-        if setNext == 'remove'
-            node.remove()
-        else if setNext?
-            node.attr 'href', setNext
-        else
-            node.attr 'href'
+    prev: linkNextPrev 'prev'
+    next: linkNextPrev 'next'
 
     title: (setTitle) ->
         node = @selector 'title'

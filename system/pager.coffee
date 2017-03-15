@@ -65,12 +65,12 @@ whenTextFileReady = (err, rawText) ->
 
         templateLoader = new Loader HTMLText
 
-        updatePrevNext = (oldHTMLPath, nextFileName) ->
+        updatePrevNext = (oldHTMLPath, nextFileName, nextFileTitle) ->
             whenOldHTMLRead = (err, HTMLText) ->
                 throw err if err
 
                 oldHTMLLoader = new Loader HTMLText
-                oldHTMLLoader.next nextFileName
+                oldHTMLLoader.next nextFileName, nextFileTitle
 
                 try
                     fs.writeFile(
@@ -96,6 +96,7 @@ whenTextFileReady = (err, rawText) ->
             updatePrevNext(
                 '../' + templateLoader.prev()
                 fileNames.html.slice 3
+                textLoader.title()
             )
 
         templateLoader.update textLoader
@@ -120,7 +121,7 @@ whenTextFileReady = (err, rawText) ->
             templateLoader.toString()
             'utf8'
 
-            if isHide 
+            if isHide
             then (err) -> throw err if err
             else whenHTMLWrite
         )

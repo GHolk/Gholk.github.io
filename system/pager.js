@@ -85,7 +85,7 @@
         throw err;
       }
       templateLoader = new Loader(HTMLText);
-      updatePrevNext = function(oldHTMLPath, nextFileName) {
+      updatePrevNext = function(oldHTMLPath, nextFileName, nextFileTitle) {
         var whenOldHTMLRead;
         whenOldHTMLRead = function(err, HTMLText) {
           var oldHTMLLoader;
@@ -93,7 +93,7 @@
             throw err;
           }
           oldHTMLLoader = new Loader(HTMLText);
-          oldHTMLLoader.next(nextFileName);
+          oldHTMLLoader.next(nextFileName, nextFileTitle);
           try {
             return fs.writeFile(oldHTMLPath, oldHTMLLoader.toString(), 'utf8', function(err) {
               if (err) {
@@ -119,7 +119,7 @@
         templateLoader.prev('remove');
         templateLoader.next('remove');
       } else {
-        updatePrevNext('../' + templateLoader.prev(), fileNames.html.slice(3));
+        updatePrevNext('../' + templateLoader.prev(), fileNames.html.slice(3), textLoader.title());
       }
       templateLoader.update(textLoader);
       whenHTMLWrite = function(err) {

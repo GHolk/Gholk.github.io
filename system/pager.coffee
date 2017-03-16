@@ -33,8 +33,8 @@ class HTMLFromText
 
     tags: ->
         tagsMatch = (@rawText.match /\n#\S+/g) || []
-        for tag in tagsMatch
-            tag.substr 2
+        (tag.substr 2 for tag in tagsMatch).join ','
+        # strip leading '#hashtag'
 
     title: ->
         (@rawText.match /.+/)[0]
@@ -88,7 +88,7 @@ whenTextFileReady = (err, rawText) ->
                 console.error err
                 console.error "have no prev html file `#{oldHTMLPath}` . "
 
-        isHide = textLoader.tags().split(',').indexOf('hide') == -1
+        isHide = textLoader.tags().split(',').indexOf('hide') != -1
         if isHide
             templateLoader.prev 'remove'
             templateLoader.next 'remove'

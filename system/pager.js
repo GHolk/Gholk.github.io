@@ -35,14 +35,17 @@
     }
 
     HTMLFromText.prototype.tags = function() {
-      var i, len, results, tag, tagsMatch;
+      var tag, tagsMatch;
       tagsMatch = (this.rawText.match(/\n#\S+/g)) || [];
-      results = [];
-      for (i = 0, len = tagsMatch.length; i < len; i++) {
-        tag = tagsMatch[i];
-        results.push(tag.substr(2));
-      }
-      return results;
+      return ((function() {
+        var i, len, results;
+        results = [];
+        for (i = 0, len = tagsMatch.length; i < len; i++) {
+          tag = tagsMatch[i];
+          results.push(tag.substr(2));
+        }
+        return results;
+      })()).join(',');
     };
 
     HTMLFromText.prototype.title = function() {
@@ -114,7 +117,7 @@
           return console.error("have no prev html file `" + oldHTMLPath + "` . ");
         }
       };
-      isHide = textLoader.tags().split(',').indexOf('hide') === -1;
+      isHide = textLoader.tags().split(',').indexOf('hide') !== -1;
       if (isHide) {
         templateLoader.prev('remove');
         templateLoader.next('remove');

@@ -1,0 +1,52 @@
+body {
+    max-width: 30em;
+    margin: auto;
+}
+
+
+
+main {
+    margin: 1em;
+}
+
+main > p {
+    text-indent: 2em;
+}
+
+main > hr {
+    width: 60%;
+    margin: 3em auto;
+}
+
+
+
+
+
+footer {
+    margin: 2em 1em;
+    border-radius: 1em;
+    border-top: solid;
+    border-bottom: solid;
+}
+
+footer dl {
+    margin: 0.5em 2em;
+    padding-bottom: 1em;
+}
+
+/** hr in footer between dl and ul **/
+footer dl {
+    border-bottom: solid;
+}
+
+#page {
+    text-align: center;
+    padding: 0;
+    margin: 0.5em;
+}
+
+#page li {
+    display: inline-block;
+    padding: 0 1em;
+}
+

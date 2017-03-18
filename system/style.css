@@ -18,7 +18,12 @@ main > hr {
     margin: 3em auto;
 }
 
-
+blockquote {
+    margin: 1em;
+    padding: 1em;
+    border: solid 1px;
+    border-left: solid 0.5em #BBB;
+}
 
 
 

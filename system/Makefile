@@ -10,11 +10,7 @@ html_files := $(html_files:.txt=.html)
 coffee_files := $(wildcard *.coffee)
 js_files := $(coffee_files:.coffee=.js)
 
-all: $(js_files) $(html_files) $(tags_file) ../index.html
-
-../index.html: $(html_files)
-	cd .. && \
-	index
+all: $(js_files) $(html_files) $(tags_file)
 
 %.js: %.coffee
 	coffee -c $<

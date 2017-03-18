@@ -123,6 +123,10 @@
       return this.selector.html();
     };
 
+    LoaderByCheerio.prototype.description = function() {
+      return this.selector('main').children().not('h1').text().slice(0, 40);
+    };
+
     return LoaderByCheerio;
 
   })();

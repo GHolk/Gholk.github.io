@@ -74,5 +74,9 @@ class LoaderByCheerio
 
     toString: -> @selector.html()
 
+    description: () ->
+        @selector('main').children().not('h1').text().slice(0,40)
+
+
 module.exports = LoaderByCheerio
 

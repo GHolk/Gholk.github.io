@@ -32,8 +32,8 @@ class HTMLFromText
         @rawText = text
 
     tags: ->
-        tagsMatch = (@rawText.match /\n#\S+/g) || []
-        (tag.substr 2 for tag in tagsMatch).join ','
+        tagsMatch = (@rawText.match /^#\S+$/gm) || []
+        (tag.substr 1 for tag in tagsMatch).join ','
         # strip leading '#hashtag'
 
     title: ->

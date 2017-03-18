@@ -36,13 +36,13 @@
 
     HTMLFromText.prototype.tags = function() {
       var tag, tagsMatch;
-      tagsMatch = (this.rawText.match(/\n#\S+/g)) || [];
+      tagsMatch = (this.rawText.match(/^#\S+$/gm)) || [];
       return ((function() {
         var i, len, results;
         results = [];
         for (i = 0, len = tagsMatch.length; i < len; i++) {
           tag = tagsMatch[i];
-          results.push(tag.substr(2));
+          results.push(tag.substr(1));
         }
         return results;
       })()).join(',');

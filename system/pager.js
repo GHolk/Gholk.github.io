@@ -6,9 +6,9 @@
 
   path = require('path');
 
-  Loader = require('./LoaderByCheerio.js');
+  Loader = require('./LoaderByCheerio');
 
-  marked = require('/home/c34031328/code/marked');
+  marked = require('marked');
 
   fileNames = (function() {
     var htmlFileName, pathObject, templateFileName, textFileName;
@@ -59,7 +59,7 @@
     };
 
     HTMLFromText.prototype.main = function() {
-      return marked(this.rawText.replace(/\n#\S+/g, ''));
+      return marked(this.rawText.replace(/^#\S+$/gm, ''));
     };
 
     return HTMLFromText;

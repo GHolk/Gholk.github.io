@@ -2,10 +2,9 @@
 
 fs = require 'fs'
 path = require 'path'
-Loader = require './LoaderByCheerio.js'
+Loader = require './LoaderByCheerio'
 
-# escape version marked
-marked = require '/home/c34031328/code/marked'
+marked = require 'marked'
 
 # get filenames
 fileNames = do ->
@@ -44,7 +43,7 @@ class HTMLFromText
         date.toISOString()
 
     main: ->
-        marked @rawText.replace /\n#\S+/g, ''
+        marked @rawText.replace /^#\S+$/gm, ''
 
 
 whenTextFileReady = (err, rawText) ->

@@ -9,7 +9,7 @@
   printFileItem = function(filename) {
     var whenFileRead;
     whenFileRead = function(err, data) {
-      var i, itemLoader, len, ref, template, templateName;
+      var i, itemLoader, itemTags, len, template, templateName, templateNames;
       if (err) {
         throw err;
       }
@@ -17,13 +17,20 @@
       itemLoader.filename = function() {
         return filename;
       };
-      template = "<h2><a href=\"{{filename}}\">{{title}}</a></h2>\n<small>{{date}}</small>\n<p>\n{{description}}\n</p>";
-      ref = ['filename', 'title', 'date', 'description'];
-      for (i = 0, len = ref.length; i < len; i++) {
-        templateName = ref[i];
+      itemTags = itemLoader.tags().split(/,/g).map(function(tag) {
+        return "<li>" + tag + "</li>";
+      }).join('\n');
+      itemLoader.tags = function() {
+        return itemTags;
+      };
+      template = "<article>\n<h2><a href=\"{{filename}}\">{{title}}</a></h2>\n<small>{{date}}</small>\n<p>\n{{description}}\n</p>\n<ul>\n{{tags}}\n</ul>\n</article>";
+      templateNames = ['filename', 'title', 'date', 'description', 'tags'];
+      for (i = 0, len = templateNames.length; i < len; i++) {
+        templateName = templateNames[i];
         template = template.replace("{{" + templateName + "}}", itemLoader[templateName]());
       }
-      return console.log(template);
+      console.log(template);
+      return console.log('\n<hr>\n');
     };
     return fs.readFile(filename, 'utf8', whenFileRead);
   };

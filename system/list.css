@@ -1,0 +1,18 @@
+body {
+    max-width: 30em;
+    margin: auto;
+}
+
+
+article ul {
+    padding: 0;
+}
+article ul li {
+    display: inline;
+    color: grey;
+}
+
+article ul li:before {
+    content: '#';
+}
+

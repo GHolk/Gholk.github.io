@@ -8,22 +8,35 @@ printFileItem = (filename) ->
     
         itemLoader = new Loader data
         itemLoader.filename = -> filename
-        
+        itemTags = itemLoader
+            .tags()
+            .split /,/g
+            .map (tag) -> "<li>#{tag}</li>"
+            .join '\n'
+        itemLoader.tags = -> itemTags
+
         template = """
+            <article>
             <h2><a href="{{filename}}">{{title}}</a></h2>
             <small>{{date}}</small>
             <p>
             {{description}}
             </p>
+            <ul>
+            {{tags}}
+            </ul>
+            </article>
         """
-        
-        for templateName in ['filename', 'title', 'date', 'description']
+
+        templateNames = ['filename', 'title', 'date', 'description', 'tags']
+        for templateName in templateNames
             template = template.replace(
                 "{{#{templateName}}}"
                 itemLoader[templateName]()
             )
         
         console.log template
+        console.log '\n<hr>\n'
 
     fs.readFile filename, 'utf8', whenFileRead
 

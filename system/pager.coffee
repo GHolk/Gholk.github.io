@@ -3,6 +3,7 @@
 fs = require 'fs'
 path = require 'path'
 Loader = require './LoaderByCheerio'
+IndexLoader = require '../backend/IndexLoaderByCheerio'
 
 marked = require 'marked'
 
@@ -45,6 +46,9 @@ class HTMLFromText
     main: ->
         marked @rawText.replace /^#\S+$/gm, ''
 
+    description: ->
+        @rawText.replace(/[\s\S]+=\n/,'').slice(0,40)
+
 
 whenTextFileReady = (err, rawText) ->
     throw err if err
@@ -58,7 +62,7 @@ whenTextFileReady = (err, rawText) ->
             HTMLLoader = new Loader HTMLText
             HTMLLoader.update textLoader
             fs.writeFile fileNames.html, HTMLLoader.toString(), 'utf8', ->
-    
+
     whenTemplateFileReady = (err, HTMLText) ->
         throw err if err
 
@@ -124,6 +128,12 @@ whenTextFileReady = (err, rawText) ->
             then (err) -> throw err if err
             else whenHTMLWrite
         )
+
+        # update index.html
+        templateLoader.path = -> path.basename fileNames.html
+        index = new IndexLoader '../index.html'
+        index.add templateLoader
+        index.write()
 
     fs.readFile fileNames.html, 'utf8', whenHTMLFileReady
 

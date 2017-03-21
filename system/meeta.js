@@ -44,7 +44,7 @@ var dl = (function(headArray) {
             'copyright': ['copyright']
         };
 
-    dl.defineItem = function (itemName, itemValue) {
+    dl.defineItem = function (itemName, itemValue, className) {
         var dt = document.createElement('dt');
         dt.textContent = itemName;
         this.appendChild(dt);
@@ -52,8 +52,8 @@ var dl = (function(headArray) {
         var dd = document.createElement('dd');
         dd.appendChild(itemValue);
 
-        if (itemName == 'all metadata') {
-            dt.className = dd.className = 'browser-only';
+        if (className) {
+            dt.className = dd.className = className
         }
         this.appendChild(dd);
     }
@@ -82,7 +82,7 @@ var dl = (function(headArray) {
             } else
                 text = document.createTextNode( metas[metaProperty] );
 
-            dl.defineItem(name, text, dl);
+            dl.defineItem(name, text);
         }
     }
 
@@ -189,7 +189,7 @@ var dl = (function(headArray) {
         var a = document.createElement('a');
         a.href = '#markdown';
         a.textContent = '#markdown';
-        dl.defineItem('raw', a);
+        dl.defineItem('raw', a, 'browser-only');
     }
 
 })(dl);
@@ -226,7 +226,7 @@ footer.id = "meeta-js";
     a.href = '#metadata';
     a.textContent = 'show all metadata';
 
-    dl.defineItem('all metadata', a);
+    dl.defineItem('all metadata', a, 'browser-only');
 
 })(headArray[0], headArray[1], dl);
 

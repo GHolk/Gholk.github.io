@@ -5,6 +5,7 @@ fs = require 'fs'
 class FileLoaderByCheerio
     constructor: (path) ->
         @path = path
+        @file = path.replace /^.*\//, ''
         @selector = cheerio.load fs.readFileSync path, 'utf8'
         @parse()
 
@@ -25,7 +26,7 @@ class FileLoaderByCheerio
         @selector('main').html @main
 
     update: (newLoader) ->
-        for key in ['date', 'tags', 'prev', 'next', 'title', 'main']
+        for key in ['tags', 'title', 'main']
             @[key] = newLoader[key]
 
     write: (path) ->

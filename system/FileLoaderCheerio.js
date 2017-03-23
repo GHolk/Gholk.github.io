@@ -9,7 +9,13 @@
   FileLoaderByCheerio = (function() {
     function FileLoaderByCheerio(path) {
       this.path = path;
-      this.selector = cheerio.load(fs.readFileSync(path, 'utf8'));
+      this.file = path.replace(/^.*\//, '');
+      this.selector = cheerio.load(fs.readFileSync(path, 'utf8'), {
+        decodeEntities: false,
+        xmlMode: false,
+        withDomLvl1: true,
+        normalizeWhitespace: false
+      });
       this.parse();
     }
 
@@ -28,12 +34,12 @@
       this.selector('title').text(this.title);
       this.selector('link[rel=prev]').attr('href', this.prev);
       this.selector('link[rel=next]').attr('href', this.next);
-      return this.main = this.selector('main').html(this.main);
+      return this.selector('main').html(this.main);
     };
 
     FileLoaderByCheerio.prototype.update = function(newLoader) {
       var i, key, len, ref, results;
-      ref = ['date', 'tags', 'prev', 'next', 'title', 'main'];
+      ref = ['tags', 'title', 'main'];
       results = [];
       for (i = 0, len = ref.length; i < len; i++) {
         key = ref[i];
@@ -43,10 +49,10 @@
     };
 
     FileLoaderByCheerio.prototype.write = function(path) {
-      if (path) {
-        this.path = path;
+      if (path == null) {
+        path = this.path;
       }
-      return fs.writeFileSync(this.path, this.selector.html(), 'utf8');
+      return fs.writeFileSync(path, this.selector.html(), 'utf8');
     };
 
     return FileLoaderByCheerio;

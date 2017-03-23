@@ -6,7 +6,12 @@ class FileLoaderByCheerio
     constructor: (path) ->
         @path = path
         @file = path.replace /^.*\//, ''
-        @selector = cheerio.load fs.readFileSync path, 'utf8'
+        @selector = cheerio.load (fs.readFileSync path, 'utf8'), {
+            decodeEntities: false
+            xmlMode: false
+            withDomLvl1: true
+            normalizeWhitespace: false
+        }
         @parse()
 
     parse: ->
@@ -29,8 +34,7 @@ class FileLoaderByCheerio
         for key in ['tags', 'title', 'main']
             @[key] = newLoader[key]
 
-    write: (path) ->
-        @path = path if path
-        fs.writeFileSync @path, @selector.html(), 'utf8'
+    write: (path = @path) ->
+        fs.writeFileSync path, @selector.html(), 'utf8'
 
 module.exports = FileLoaderByCheerio

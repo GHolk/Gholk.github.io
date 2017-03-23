@@ -25,12 +25,49 @@ class TextLoader
 
 textLoader = new TextLoader filePath.text
 
+createTemplateLoader = ->
+    templateLoader = new HTMLLoader 'template.html'
+
+    updateRel = (prevPath, nextFile) ->
+        prevLoader = new HTMLLoader "../#{prevPath}"
+        prevLoader.next = nextFile
+        prevLoader.sync()
+        prevLoader.write()
+    updateRel templateLoader.prev, filePath.html
+
+    updateTemplateLoader = (templateLoader, nextFile) ->
+        oldPrev = templateLoader.prev
+        templateLoader.prev = nextFile
+        templateLoader.sync()
+        templateLoader.write()
+        templateLoader.prev = oldPrev
+    updateTemplateLoader templateLoader, filePath.html
+
+    temp = filePath.html.replace '^.*/', ''
+    [templateLoader.prev, temp] = [temp, templateLoader.prev]
+    templateLoader.sync()
+    templateLoader.write()
+
+    [templateLoader.prev, temp] = [temp, templateLoader.prev]
+    templateLoader.path = filePath.html
+
+    templateLoader.update = (newLoader) ->
+        HTMLLoader.prototype.update.call this, newLoader
+        @date = (new Date()).toISOString()
+
+    templateLoader.sync = ->
+        HTMLLoader.prototype.sync.call this
+        updateRel()
+
+    return templateLoader
+
+
 try
     htmlLoader = new HTMLLoader filePath.html
 catch err
     console.error err
     console.error 'no html file, read `template.html`. '
-    useTemplate()
+    htmlLoader = createTemplateLoader()
 finally
     htmlLoader.update textLoader
     htmlLoader.sync()

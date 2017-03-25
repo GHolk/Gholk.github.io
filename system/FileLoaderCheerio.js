@@ -20,11 +20,14 @@
     }
 
     FileLoaderByCheerio.prototype.parse = function() {
+      this.file = this.path.replace(/^.*\//, '');
       this.date = this.selector('meta[name=date]').attr('content');
       this.tags = this.selector('meta[name=keywords]').attr('content');
       this.title = this.selector('title').text();
       this.prev = this.selector('link[rel=prev]').attr('href');
+      this.prevTitle = this.selector('link[rel=prev]').attr('title');
       this.next = this.selector('link[rel=next]').attr('href');
+      this.nextTitle = this.selector('link[rel=next]').attr('title');
       return this.main = this.selector('main').html();
     };
 
@@ -33,7 +36,9 @@
       this.selector('meta[name=keywords]').attr('content', this.tags);
       this.selector('title').text(this.title);
       this.selector('link[rel=prev]').attr('href', this.prev);
+      this.selector('link[rel=prev]').attr('title', this.prevTitle);
       this.selector('link[rel=next]').attr('href', this.next);
+      this.selector('link[rel=next]').attr('title', this.nextTitle);
       return this.selector('main').html(this.main);
     };
 

@@ -15,11 +15,14 @@ class FileLoaderByCheerio
         @parse()
 
     parse: ->
+        @file = @path.replace /^.*\//, ''
         @date = @selector('meta[name=date]').attr 'content'
         @tags = @selector('meta[name=keywords]').attr 'content'
         @title = @selector('title').text()
         @prev = @selector('link[rel=prev]').attr 'href'
+        @prevTitle = @selector('link[rel=prev]').attr 'title'
         @next = @selector('link[rel=next]').attr 'href'
+        @nextTitle = @selector('link[rel=next]').attr 'title'
         @main = @selector('main').html()
 
     sync: ->
@@ -27,7 +30,9 @@ class FileLoaderByCheerio
         @selector('meta[name=keywords]').attr 'content', @tags
         @selector('title').text @title
         @selector('link[rel=prev]').attr 'href', @prev
+        @selector('link[rel=prev]').attr 'title', @prevTitle
         @selector('link[rel=next]').attr 'href', @next
+        @selector('link[rel=next]').attr 'title', @nextTitle
         @selector('main').html @main
 
     update: (newLoader) ->

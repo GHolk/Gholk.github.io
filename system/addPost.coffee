@@ -25,42 +25,33 @@ class TextLoader
 
 textLoader = new TextLoader filePath.text
 
-createTemplateLoader = ->
-    templateLoader = new HTMLLoader 'template.html'
-
-    updateRel = (prevPath, nextFile) ->
+maintainTemplate = (templateLoader, thisFile, thisTitle) ->
+    updateRel = (prevPath, thisFile, thisTitle) ->
         prevLoader = new HTMLLoader "../#{prevPath}"
-        prevLoader.next = nextFile
+        prevLoader.next = thisFile
+        prevLoader.nextTitle = thisTitle
         prevLoader.sync()
         prevLoader.write()
-    updateRel templateLoader.prev, filePath.html
 
-    updateTemplateLoader = (templateLoader, nextFile) ->
+    updateTemplateLoader = (templateLoader, thisFile, thisTitle) ->
         oldPrev = templateLoader.prev
-        templateLoader.prev = nextFile
+        templateLoader.prev = thisFile
+        templateLoader.prevTitle = thisTitle
         templateLoader.sync()
         templateLoader.write()
         templateLoader.prev = oldPrev
-    updateTemplateLoader templateLoader, filePath.html
 
-    temp = filePath.html.replace '^.*/', ''
-    [templateLoader.prev, temp] = [temp, templateLoader.prev]
-    templateLoader.sync()
-    templateLoader.write()
+    updateRel templateLoader.prev, thisFile, thisTitle
+    updateTemplateLoader templateLoader, thisFile, thisTitle
 
-    [templateLoader.prev, temp] = [temp, templateLoader.prev]
-    templateLoader.path = filePath.html
+createTemplateLoader = ->
+    templateLoader = new HTMLLoader 'template.html'
 
     templateLoader.update = (newLoader) ->
         HTMLLoader.prototype.update.call this, newLoader
         @date = (new Date()).toISOString()
 
-    templateLoader.sync = ->
-        HTMLLoader.prototype.sync.call this
-        updateRel()
-
     return templateLoader
-
 
 try
     htmlLoader = new HTMLLoader filePath.html
@@ -68,6 +59,8 @@ catch err
     console.error err
     console.error 'no html file, read `template.html`. '
     htmlLoader = createTemplateLoader()
+    maintainTemplate htmlLoader, textLoader
+    htmlLoader.path = filePath.html
 finally
     htmlLoader.update textLoader
     htmlLoader.sync()

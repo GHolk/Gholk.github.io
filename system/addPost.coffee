@@ -1,6 +1,6 @@
 
 fs = require 'fs'
-HTMLLoader = require 'FileLoaderCheerio'
+HTMLLoader = require './FileLoaderCheerio'
 marked = require 'marked'
 
 filePath = do ->
@@ -8,7 +8,7 @@ filePath = do ->
     text = "../text/#{name}.txt"
     html = "../#{name}.html"
     template = 'template.html'
-    return {text,html}
+    return {text,html,template}
 
 class TextLoader
     constructor: (path) ->
@@ -34,18 +34,18 @@ maintainTemplate = (templateLoader, thisFile, thisTitle) ->
         prevLoader.write()
 
     updateTemplateLoader = (templateLoader, thisFile, thisTitle) ->
-        oldPrev = templateLoader.prev
+        oldPrev = [templateLoader.prev, templateLoader.prevTitle]
         templateLoader.prev = thisFile
         templateLoader.prevTitle = thisTitle
         templateLoader.sync()
         templateLoader.write()
-        templateLoader.prev = oldPrev
+        [templateLoader.prev, templateLoader.prevTitle] = oldPrev
 
     updateRel templateLoader.prev, thisFile, thisTitle
     updateTemplateLoader templateLoader, thisFile, thisTitle
 
 createTemplateLoader = ->
-    templateLoader = new HTMLLoader 'template.html'
+    templateLoader = new HTMLLoader filePath.template
 
     templateLoader.update = (newLoader) ->
         HTMLLoader.prototype.update.call this, newLoader
@@ -59,7 +59,11 @@ catch err
     console.error err
     console.error 'no html file, read `template.html`. '
     htmlLoader = createTemplateLoader()
-    maintainTemplate htmlLoader, textLoader
+    maintainTemplate(
+        htmlLoader
+        textLoader.file.replace /\.txt$/, '.html'
+        textLoader.title
+    )
     htmlLoader.path = filePath.html
 finally
     htmlLoader.update textLoader

@@ -4,7 +4,7 @@
 
   fs = require('fs');
 
-  HTMLLoader = require('FileLoaderCheerio');
+  HTMLLoader = require('./FileLoaderCheerio');
 
   marked = require('marked');
 
@@ -16,7 +16,8 @@
     template = 'template.html';
     return {
       text: text,
-      html: html
+      html: html,
+      template: template
     };
   })();
 
@@ -54,12 +55,12 @@
     };
     updateTemplateLoader = function(templateLoader, thisFile, thisTitle) {
       var oldPrev;
-      oldPrev = templateLoader.prev;
+      oldPrev = [templateLoader.prev, templateLoader.prevTitle];
       templateLoader.prev = thisFile;
       templateLoader.prevTitle = thisTitle;
       templateLoader.sync();
       templateLoader.write();
-      return templateLoader.prev = oldPrev;
+      return templateLoader.prev = oldPrev[0], templateLoader.prevTitle = oldPrev[1], oldPrev;
     };
     updateRel(templateLoader.prev, thisFile, thisTitle);
     return updateTemplateLoader(templateLoader, thisFile, thisTitle);
@@ -67,7 +68,7 @@
 
   createTemplateLoader = function() {
     var templateLoader;
-    templateLoader = new HTMLLoader('template.html');
+    templateLoader = new HTMLLoader(filePath.template);
     templateLoader.update = function(newLoader) {
       HTMLLoader.prototype.update.call(this, newLoader);
       return this.date = (new Date()).toISOString();
@@ -82,7 +83,7 @@
     console.error(err);
     console.error('no html file, read `template.html`. ');
     htmlLoader = createTemplateLoader();
-    maintainTemplate(htmlLoader, textLoader);
+    maintainTemplate(htmlLoader, textLoader.file.replace(/\.txt$/, '.html'), textLoader.title);
     htmlLoader.path = filePath.html;
   } finally {
     htmlLoader.update(textLoader);

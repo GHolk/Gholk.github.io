@@ -28,7 +28,8 @@
       this.prevTitle = this.selector('link[rel=prev]').attr('title');
       this.next = this.selector('link[rel=next]').attr('href');
       this.nextTitle = this.selector('link[rel=next]').attr('title');
-      return this.main = this.selector('main').html();
+      this.main = this.selector('main').html();
+      return this.description = this.selector('main').children().not('h1').text().slice(0, 80);
     };
 
     FileLoaderByCheerio.prototype.sync = function() {
@@ -39,7 +40,8 @@
       this.selector('link[rel=prev]').attr('title', this.prevTitle);
       this.selector('link[rel=next]').attr('href', this.next);
       this.selector('link[rel=next]').attr('title', this.nextTitle);
-      return this.selector('main').html(this.main);
+      this.selector('main').html(this.main);
+      return this.description = this.selector('main').children().not('h1').text().slice(0, 80);
     };
 
     FileLoaderByCheerio.prototype.update = function(newLoader) {

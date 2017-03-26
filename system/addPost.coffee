@@ -1,14 +1,15 @@
 
 fs = require 'fs'
 HTMLLoader = require './FileLoaderCheerio'
+IndexLoader = require './IndexLoader'
 marked = require 'marked'
 
 filePath = do ->
-    name = process.argv.slice -1
-    text = "../text/#{name}.txt"
-    html = "../#{name}.html"
+    text = process.argv.slice(-1)[0]
+    html = text.replace('text/','').replace('.txt','.html')
     template = 'template.html'
-    return {text,html,template}
+    index = '../index.html'
+    return {text,html,template,index}
 
 class TextLoader
     constructor: (path) ->
@@ -69,4 +70,9 @@ finally
     htmlLoader.update textLoader
     htmlLoader.sync()
     htmlLoader.write()
+
+
+index = new IndexLoader filePath.index
+index.add htmlLoader
+index.write()
 

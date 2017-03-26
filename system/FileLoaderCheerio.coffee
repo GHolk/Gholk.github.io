@@ -24,6 +24,8 @@ class FileLoaderByCheerio
         @next = @selector('link[rel=next]').attr 'href'
         @nextTitle = @selector('link[rel=next]').attr 'title'
         @main = @selector('main').html()
+        @description =
+            @selector('main').children().not('h1').text().slice(0,80)
 
     sync: ->
         @selector('meta[name=date]').attr 'content', @date
@@ -34,6 +36,8 @@ class FileLoaderByCheerio
         @selector('link[rel=next]').attr 'href', @next
         @selector('link[rel=next]').attr 'title', @nextTitle
         @selector('main').html @main
+        @description =
+            @selector('main').children().not('h1').text().slice(0,80)
 
     update: (newLoader) ->
         for key in ['tags', 'title', 'main']

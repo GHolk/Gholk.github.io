@@ -1,6 +1,6 @@
 
 #text_to_html := ./text-to-html-page.js
-text_to_html := node pager.js
+text_to_html := node addPost.js
 generate_tags := ./generate_tags.sh
 list_file := ./list.txt
 tags_file := ./tags.txt

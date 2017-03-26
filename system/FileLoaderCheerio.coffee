@@ -38,6 +38,7 @@ class FileLoaderByCheerio
         @selector('main').html @main
         @description =
             @selector('main').children().not('h1').text().slice(0,80)
+        @file = @path.replace /^.*\//, ''
 
     update: (newLoader) ->
         for key in ['tags', 'title', 'main']

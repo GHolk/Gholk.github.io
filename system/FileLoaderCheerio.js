@@ -41,7 +41,8 @@
       this.selector('link[rel=next]').attr('href', this.next);
       this.selector('link[rel=next]').attr('title', this.nextTitle);
       this.selector('main').html(this.main);
-      return this.description = this.selector('main').children().not('h1').text().slice(0, 80);
+      this.description = this.selector('main').children().not('h1').text().slice(0, 80);
+      return this.file = this.path.replace(/^.*\//, '');
     };
 
     FileLoaderByCheerio.prototype.update = function(newLoader) {

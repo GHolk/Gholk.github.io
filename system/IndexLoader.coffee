@@ -13,6 +13,10 @@ class IndexLoader
         }
 
     add: (loader) ->
+        tagsArray = loader.tags.split /,/g
+        if tagsArray.some((tag) -> tag == 'hide')
+            return 'hide post.'
+
         @selector("""
             <article>
                 <h2><a href="#{loader.file}">#{loader.title}</a></h2>
@@ -21,9 +25,10 @@ class IndexLoader
                 #{loader.description}
                 </p>
                 <ul>
-                <li>#{loader.tags.replace /,/g, "</li>\n<li>"}</li>
+                #{tagsArray.map((tag) -> "<li>#{tag}</li>").join('\n')}
                 </ul>
             </atricle>
+            <hr>
         """).insertAfter 'h1'
 
     write: (path = @path) ->

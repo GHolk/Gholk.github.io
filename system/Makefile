@@ -1,6 +1,6 @@
 
 #text_to_html := ./text-to-html-page.js
-text_to_html := node addPost.js
+text_to_html := ./pager.sh
 generate_tags := ./generate_tags.sh
 list_file := ./list.txt
 tags_file := ./tags.txt
@@ -23,7 +23,7 @@ $(tags_file): $(text_files)
 	then basename $@ >>$(list_file) ; \
 	fi
 
-	$(text_to_html) $<
+	$(text_to_html) $@
 
 	-xdg-open $@
 

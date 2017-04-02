@@ -2,7 +2,7 @@
 cheerio = require 'cheerio'
 fs = require 'fs'
 
-class FileLoaderByCheerio
+class FileLoaderCheerio
     constructor: (path) ->
         @path = path
         @file = path.replace /^.*\//, ''
@@ -47,4 +47,5 @@ class FileLoaderByCheerio
     write: (path = @path) ->
         fs.writeFileSync path, @selector.html(), 'utf8'
 
-module.exports = FileLoaderByCheerio
+module.exports = FileLoaderCheerio
+

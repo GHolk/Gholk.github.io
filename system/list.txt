@@ -32,3 +32,4 @@ sing-out-sad.html
 virtual-joystick-suck.html
 vector-fighter-intro.html
 wansei-tendrum.html
+wansei-tendrum-rewrite.html

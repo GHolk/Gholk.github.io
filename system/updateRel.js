@@ -13,7 +13,7 @@
 
   newHTML = new HTMLLoader(process.argv.slice(-1)[0]);
 
-  prevHTML = new HTMLLoader(newHTML.prev);
+  prevHTML = new HTMLLoader("../" + newHTML.prev);
 
   updateRel(prevHTML, 'next', newHTML);
 

@@ -58,6 +58,14 @@ footer dd li:before {
     content: '#';
 }
 
+#rel-page {
+    margin: 1em 0.5em;
+}
+
+#rel-page dl {
+    margin: 0.2em;
+}
+
 #rel-page dt, #rel-page dd {
     display: inline;
 }

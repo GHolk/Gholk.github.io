@@ -70,33 +70,33 @@ MetaItem.createTags = (tagsString) ->
     value.toNode = -> arrayToUl this
     new MetaItem 'tags', value
 
-metaMap = []
+metaMap = for meta in metas
+    switch meta.name
+        when 'keywords'
+            MetaItem.createTags meta.content
+        when 'date'
+            MetaItem.createDate meta.content
+        when 'copyright', 'author'
+            new MetaItem meta.name, meta.content
+
 metaMap.toNode = ->
     div = document.createElement 'div'
-    for meta in this
+    for meta in this when meta
         div.appendChild meta.toNode()
     return div
 
-for meta in metas
-    switch meta.name
-        when 'keywords'
-            metaMap.push MetaItem.createTags meta.content
-        when 'date'
-            metaMap.push MetaItem.createDate meta.content
-        when 'copyright', 'author'
-            metaMap.push new MetaItem meta.name, meta.content
 
-
-linkMap = []
-linkMap.toNode = ->
-    node = arrayToUl this
-    node.className = 'browser-only'
-    return node
-
-for link in links
+linkMap = for link in links
     switch link.rel
-        when 'prev', 'next', 'index'
-            linkMap.push HyperLink.fromLink link
+        when 'prev', 'index', 'next'
+            new MetaItem link.rel, new HyperLink.fromLink link
+linkMap.toNode = ->
+    div = document.createElement 'div'
+    for link in this when link
+        div.appendChild link.toNode()
+    div.id = 'rel-page'
+    div.className = 'browser-only'
+    return div
 
 footer = document.createElement 'footer'
 

@@ -5,6 +5,9 @@ body {
 }
 
 
+a {
+    text-decoration: none;
+}
 
 main {
     margin: 1em;
@@ -43,23 +46,27 @@ footer {
 }
 
 footer dl {
-    margin: 0.5em 2em;
-    padding-bottom: 1em;
-}
-
-/** hr in footer between dl and ul **/
-footer dl {
-    border-bottom: solid;
-}
-
-#page {
-    text-align: center;
-    padding: 0;
     margin: 0.5em;
 }
 
-#page li {
-    display: inline-block;
-    padding: 0 1em;
+footer dd li {
+    display: inline;
+    margin: 0.3em;
+}
+
+footer dd li:before {
+    content: '#';
+}
+
+#rel-page dt, #rel-page dd {
+    display: inline;
+}
+
+#rel-page dt:after {
+    content: ": ";
+}
+
+#rel-page dd {
+    margin: 0;
 }
 

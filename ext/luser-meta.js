@@ -28,6 +28,38 @@
     return ul;
   };
 
+  HyperLink = (function() {
+    function HyperLink(text, url, title) {
+      this.text = text;
+      this.url = url;
+      if (title) {
+        this.title = title;
+      }
+    }
+
+    HyperLink.prototype.toNode = function() {
+      var node;
+      node = document.createElement('a');
+      node.href = this.url;
+      node.textContent = this.text;
+      if (this.title) {
+        node.title = this.title;
+      }
+      return node;
+    };
+
+    return HyperLink;
+
+  })();
+
+  HyperLink.fromLink = function(link) {
+    return new HyperLink(link.title, link.href, link.rel);
+  };
+
+  HyperLink.fromTag = function(tag) {
+    return new HyperLink(tag, "index.html?tags=" + tag);
+  };
+
   MetaItem = (function() {
     function MetaItem(name, value) {
       this.name = name;
@@ -75,38 +107,6 @@
     return new MetaItem('tags', value);
   };
 
-  HyperLink = (function() {
-    function HyperLink(text, url, title) {
-      this.text = text;
-      this.url = url;
-      if (title) {
-        this.title = title;
-      }
-    }
-
-    HyperLink.prototype.toNode = function() {
-      var node;
-      node = document.createElement('a');
-      node.href = this.url;
-      node.textContent = this.text;
-      if (this.title) {
-        node.title = this.title;
-      }
-      return node;
-    };
-
-    return HyperLink;
-
-  })();
-
-  HyperLink.fromLink = function(link) {
-    return new HyperLink(link.title, link.href, link.rel);
-  };
-
-  HyperLink.fromTag = function(tag) {
-    return new HyperLink(tag, "index.html?tags=" + tag);
-  };
-
   metaMap = [];
 
   metaMap.toNode = function() {
@@ -138,7 +138,10 @@
   linkMap = [];
 
   linkMap.toNode = function() {
-    return arrayToUl(this);
+    var node;
+    node = arrayToUl(this);
+    node.className = 'browser-only';
+    return node;
   };
 
   for (k = 0, len1 = links.length; k < len1; k++) {

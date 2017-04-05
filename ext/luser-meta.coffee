@@ -18,6 +18,25 @@ arrayToUl = (array) ->
         ul.appendChild wrapLi i
     return ul
 
+class HyperLink
+    constructor: (text, url, title) ->
+        @text = text
+        @url = url
+        @title = title if title
+    toNode: ->
+        node = document.createElement 'a'
+        node.href = @url
+        node.textContent = @text
+        node.title = @title if @title
+        return node
+
+HyperLink.fromLink = (link) ->
+    new HyperLink link.title, link.href, link.rel
+
+HyperLink.fromTag = (tag) ->
+    new HyperLink tag, "index.html?tags=#{tag}"
+
+
 class MetaItem
     constructor: (name, value) ->
         @name = name
@@ -51,24 +70,6 @@ MetaItem.createTags = (tagsString) ->
     value.toNode = -> arrayToUl this
     new MetaItem 'tags', value
 
-class HyperLink
-    constructor: (text, url, title) ->
-        @text = text
-        @url = url
-        @title = title if title
-    toNode: ->
-        node = document.createElement 'a'
-        node.href = @url
-        node.textContent = @text
-        node.title = @title if @title
-        return node
-
-HyperLink.fromLink = (link) ->
-    new HyperLink link.title, link.href, link.rel
-
-HyperLink.fromTag = (tag) ->
-    new HyperLink tag, "index.html?tags=#{tag}"
-
 metaMap = []
 metaMap.toNode = ->
     div = document.createElement 'div'
@@ -90,6 +91,7 @@ linkMap = []
 linkMap.toNode = ->
     node = arrayToUl this
     node.className = 'browser-only'
+    return node
 
 for link in links
     switch link.rel

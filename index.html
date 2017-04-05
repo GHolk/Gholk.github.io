@@ -20,7 +20,14 @@
 <title>文章列表</title>
 </head>
 <body>
-<h1>文章列表</h1><article>
+<h1>文章列表</h1>
+<form method="get">
+    <input name="tags" type="search" autocomplete>
+    <button type="submit">search</button>
+</form>
+
+<div id="article-list">
+<article>
     <h2><a href="man-pain-for-woman.html">男生痛苦好過女生痛苦</a></h2>
     <small class="date">2017-04-04T13:27:49.960Z</small>
     <p>
@@ -768,7 +775,7 @@
 <li>人生</li>
 </ul>
 </article>
-
+</div>
 <script defer src="ext/searcher.js"></script>
 </body>
 </html>

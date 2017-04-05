@@ -14,9 +14,6 @@ class IndexLoader
 
     add: (loader) ->
         tagsArray = loader.tags.split /,/g
-        wrapTag = (tag) -> """
-            <li><a href="index.html?tags=#{tag}">#{tag}</a></li>
-        """
         if tagsArray.some((tag) -> tag == 'hide')
             return 'hide post.'
 
@@ -27,8 +24,8 @@ class IndexLoader
                 <p>
                 #{loader.description}
                 </p>
-                <ul class="tag-list">
-                #{tagsArray.map(wrapTag).join('\n')}
+                <ul>
+                #{tagsArray.map((tag) -> "<li>#{tag}</li>").join('\n')}
                 </ul>
             </atricle>
             <hr>

@@ -74,10 +74,19 @@
   };
 
   SearchCondition = (function() {
-    var createFromFormNode, createFromQueryString, xWwwUrlEncode;
+    var addKeyValue, createFromFormNode, createFromQueryString, xWwwUrlEncode;
 
     xWwwUrlEncode = function(string) {
       return encodeURIComponent(string).replace(/%20/g, '+');
+    };
+
+    addKeyValue = function(target, key, value) {
+      switch (key) {
+        case 'tags':
+          return target[key] = value.split(/\+/g).map(decodeURIComponent);
+        default:
+          return target[key] = decodeURIComponent(value);
+      }
     };
 
     createFromQueryString = function(string) {
@@ -87,13 +96,7 @@
       for (i = 0, len = ref.length; i < len; i++) {
         keyAndValue = ref[i];
         ref1 = keyAndValue.split('='), key = ref1[0], value = ref1[1];
-        switch (key) {
-          case 'tags':
-            results.push(this[key] = value.split(/\+/g).map(decodeURIComponent));
-            break;
-          default:
-            results.push(this[key] = decodeURIComponent(value));
-        }
+        results.push(addKeyValue(this, key, value));
       }
       return results;
     };
@@ -104,7 +107,7 @@
       results = [];
       for (i = 0, len = ref.length; i < len; i++) {
         input = ref[i];
-        results.push(this[input.name] = input.value);
+        results.push(addKeyValue(this, input.name, input.value));
       }
       return results;
     };
@@ -147,13 +150,16 @@
 
   form = document.getElementsByTagName('form')[0];
 
-  form.onsubmit = function() {
+  form.onsubmit = function(evt) {
     var query;
+    evt.preventDefault();
     query = new SearchCondition(this);
-    window.history.pushState({}, 'searching...', query.toString());
-    searchHandler(query);
-    window.query = query;
-    return false;
+    window.history.pushState(query, 'searching...', query.toString());
+    return searchHandler(query);
+  };
+
+  window.onpopstate = function() {
+    return searchHandler(new SearchCondition(this.location.search));
   };
 
   if (window.location.search) {

@@ -46,17 +46,20 @@ window.searchShower =
 class SearchCondition
     xWwwUrlEncode = (string) ->
         encodeURIComponent(string).replace(/%20/g,'+')
+    addKeyValue = (target, key, value) ->
+        switch key
+            when 'tags'
+                target[key] = value.split(/\+/g).map decodeURIComponent
+            else
+                target[key] = decodeURIComponent value
+
     createFromQueryString = (string) ->
         for keyAndValue in string.replace(/^\?/,'').split(/&/g)
             [key,value] = keyAndValue.split '='
-            switch key
-                when 'tags'
-                    @[key] = value.split(/\+/g).map decodeURIComponent
-                else
-                    @[key] = decodeURIComponent value
+            addKeyValue this, key, value
     createFromFormNode = (node) ->
         for input in node.getElementsByTagName 'input'
-            @[input.name] = input.value
+            addKeyValue this, input.name, input.value
     constructor: (nodeOrUrl) ->
         if typeof nodeOrUrl == 'string'
             createFromQueryString.call this, nodeOrUrl
@@ -76,12 +79,15 @@ searchHandler = (query) ->
     )
 
 [form] = document.getElementsByTagName 'form'
-form.onsubmit = ->
+form.onsubmit = (evt) ->
+    evt.preventDefault()
     query = new SearchCondition this
-    window.history.pushState {}, 'searching...', query.toString()
+    window.history.pushState query, 'searching...', query.toString()
     searchHandler query
-    window.query = query
-    return false
+
+window.onpopstate = ->
+    searchHandler new SearchCondition this.location.search
 
 if window.location.search
     searchHandler new SearchCondition window.location.search
+

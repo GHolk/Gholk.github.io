@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" prefix="og: http://ogp.me/ns#">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="c34031328">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="vim, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-04-07T12:48:49.670Z">
+<meta name="keywords" property="og:article:tag" content="期刊,試誤,ccns,心得,程式,css,m-expression,w3c">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="" title="">
+<link rel="prev" type="text/html" href="easy-m-expression-syntax.html" title="簡單的 M 表達式">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<meta property="og:image" content="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<title>CCNS 第一次雙周刊雜文</title>
+</head>
+<body>
+<main><h1 id="ccns-">CCNS 第一次雙周刊雜文</h1>
+<p>CCNS <abbr title="成功大學電腦與網路愛好社">成大網愛社</abbr>
+想辦一份雙周刊，聽他們講就是收集一些文章，
+加上一點心得，半個月發一次。
+周刊的排版、發行已經完成了，
+只要推薦文章、寫心得就好了。
+<a href="https://hackmd.io/s/HyFdXyRhg">雙周刊跳坑</a></p>
+<p>我就隨便推了幾篇，
+但陳大立說我寫得太多太亂，
+要寫得制式一點，只好重寫。
+這些就是太多太亂的。</p>
+<h2 id="-lambda-http-www-jianshu-com-p-e7db2f50b012-"><a href="http://www.jianshu.com/p/e7db2f50b012">lambda 表達式創世紀</a></h2>
+<p>這篇我沒有讀完，到後面有點難了。
+她用 lambda 實現了數學世界。
+（是實現圖靈機嗎？不太確定，沒讀過相關理論。）
+一開始實現 boolen 運算很神奇，
+到有理數就有點看不懂了。</p>
+<p>可以理解 lisp 和 scheme 到底強大在哪。
+兩者都是上古時代的高階語言，
+都有資料與程式用同一方式儲存的特性。</p>
+<pre><code>printf &quot;1+2+5! = %d\n&quot; (sum &#39;(1 2 (frac 5))
+</code></pre><p>printf 、 sum 、 frac 是函數，
+把之後的變數當參數呼叫，
+括號只是用來改變優先順序。</p>
+<p>frac 的參數是 5 ， <code>(frac 5)</code> 返回 <code>120</code> 。
+sum 的參數是一個 list ，也是用括號和空格表示。
+但為了避免被當作函數呼叫，所以 <code>quote</code> 起來。
+（簡寫成 <code>&#39;</code> 。）
+<code>quote a</code> 會返回 a 本身，
+不然只寫 <code>a</code> 會被當作函數執行。</p>
+<h2 id="-tonyq-https-speakerdeck-com-bobbytung-ji-ge-zhong-wen-pai-ban-jue-qiao-you-xiao-gai-shan-yue-du-ti-yan-"><a href="https://speakerdeck.com/bobbytung/ji-ge-zhong-wen-pai-ban-jue-qiao-you-xiao-gai-shan-yue-du-ti-yan">TonyQ 講政府資訊系統時，隔避棚的中文排版</a></h2>
+<p>我心中的 css 不是要弄那些很炫的特效、動畫，
+只是要弄出 <em>正確的排版</em> 。
+什麼叫正確的排版？
+可以是中文印書時的排版習慣，
+或是像論文的格式，報告、企劃書的格式；
+但最重要的是 <em>看起來舒服</em> 。</p>
+<p>css 中一些特殊的樣式，也是為了排版習慣而加的，
+像偽元素 <code>::first-line</code> 、 <code>::first-character</code> ，
+是因為英文一些排版習慣把第一個字加大，
+或把第一行突出顯示。</p>
+<p>現在 w3c 正在徵求各文字的排版習慣，
+才能定出合適的 css 規格，
+方能符合各文化排版的需求。</p>
+<p>英文中習慣用斜體、粗體強調，但中文沒有斜體。
+其實英文的斜體應該是從一般內文的 <em>印刷體</em> 換成 <em>書寫體</em> ，
+比較像 <em>行書</em> 或 <em>草書</em> ，
+但因為英文直接把字弄斜就和行書很像了，
+所以就這樣了。</p>
+<p>中文的強調早期有在底下 <strong>著重點</strong> 的作法，
+如果要斜體可以像把楷體換行書之類的作法。
+所以 html 的 <code>&lt;em&gt;</code> 、 <code>&lt;strong&gt;</code>
+不應該是單純把字弄斜、弄粗，
+應該思考中文習慣用什麼方式去強調？
+加大字？加粗？換字型？換顏色？加底線？</p>
+<p>我一直覺得 word 很難用，
+我用 css ，可以簡單定好規則，
+word 好像也可以，但我不知道怎麼調。</p>
+<pre><code>/* 段茖 */
+p {
+    text-indent: 2em;  /* 首行縮排兩個字宽 */
+    margin: 0.5em 0;  /* 段距半個字宽 */
+}
+
+/* 全部 */
+body {
+    font-size: 12pt;  /* 一個字 12pt 大 */
+    padding: 2em;  /* 邊界二個字宽 */
+}
+</code></pre><h2 id="-houdini-css-patch-http-top-css88-com-archives-854-"><a href="http://top.css88.com/archives/854">Houdini: 為 CSS 上 patch</a></h2>
+<p>你記得在各種瀏覽器上測試
+各種 CSS 規則適不適用時的感覺嗎？
+你有沒有為少數瀏覽器的 <strong>不支援</strong>
+而棄用過中意的樣式？
+Houdini 嘗試用 JS 的方式解決問題！</p>
+<p>當你的瀏覽器因為過舊而不能用一些新的 dom 函數時，
+你會嘗試引用一些 library 來兼容舊瀏覽器，
+或自己實現一些函數，像 ES3 中沒有的 <code>Array.prototype.forEach</code> ：</p>
+<pre><code>Array.prototype.forEach = function forEach(callback) {
+    for (var i=0, l=this.length; i&lt;l; i++)
+        callback(this[i],i,this)
+}
+</code></pre><p>那 css 為什麼不能做到呢？
+為什麼不能自己手動實現新的功能呢？
+Houdini 嘗試為瀏覽器的 render engine 打造統一的 API ，
+讓開發者可以去調用這些 API ，
+自行實現新潮的功能，就像對 JS patch 那樣。</p>
+</main>
+
+<script src="ext/luser-meta.js" defer></script>
+
+</body>
+</html>
+

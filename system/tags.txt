@@ -1,11 +1,11 @@
       9 #抒發
       7 #愛情
       7 #女生
+      5 #心得
       4 #遊戲
       4 #轉
       4 #書
       4 #心情
-      4 #心得
       4 #小說
       3 #成句
       3 #憂鬱
@@ -29,6 +29,7 @@
       2 #人生
       2 #twbbs
       2 #soul-knight
+      2 #m-expression
       2 #github
       2 #dns
       2 #blog
@@ -47,6 +48,8 @@
       1 #轉#
       1 #課表
       1 #語言學
+      1 #語法
+      1 #試誤
       1 #覺青
       1 #西遊記
       1 #色彩學
@@ -54,6 +57,8 @@
       1 #翻譯
       1 #美
       1 #累
+      1 #程式語言
+      1 #程式
       1 #科普
       1 #禁慾
       1 #真實
@@ -63,12 +68,14 @@
       1 #演化
       1 #死
       1 #歷史
+      1 #期刊
       1 #時代力量
       1 #日本
       1 #施明德
       1 #新莊
       1 #文化
       1 #政治
+      1 #政府
       1 #操作
       1 #擁抱
       1 #成熟
@@ -105,19 +112,27 @@
       1 #中國
       1 #下學期
       1 #youtube
+      1 #xdite
       1 #www
+      1 #website
+      1 #w3c
       1 #vector-fighter
+      1 #tonyq
       1 #tmux
       1 #screen
       1 #scadual
       1 #ptt
+      1 #luser
+      1 #lisp
       1 #imgur
       1 #Hillary_Herrington
       1 #gui
       1 #funny
       1 #email
       1 #emacs
+      1 #css
       1 #config
       1 #cli
+      1 #ccns
       1 #apk
       1 #105學年

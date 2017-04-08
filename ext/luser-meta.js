@@ -100,7 +100,10 @@
 
   MetaItem.createTags = function(tagsString) {
     var value;
-    value = tagsString.split(/,/g).map(HyperLink.fromTag);
+    value = tagsString.split(/,/g);
+    if (/^\/[^\/]*$/.test(window.location.pathname)) {
+      value = value.map(HyperLink.fromTag);
+    }
     value.toNode = function() {
       return arrayToUl(this);
     };
@@ -172,6 +175,7 @@
       }
     }
     div.id = 'rel-page';
+    div.className = 'browser-only';
     return div;
   };
 

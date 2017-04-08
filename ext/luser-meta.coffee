@@ -66,7 +66,9 @@ MetaItem.createDate = (dateString) ->
     new MetaItem 'date', date
 
 MetaItem.createTags = (tagsString) ->
-    value = tagsString.split(/,/g).map HyperLink.fromTag
+    value = tagsString.split(/,/g)
+    if /^\/[^\/]*$/.test window.location.pathname
+        value = value.map HyperLink.fromTag
     value.toNode = -> arrayToUl this
     new MetaItem 'tags', value
 

@@ -15,7 +15,12 @@
 
 @media print {
 
-    @page { margin: 2em; }
+    @page {
+        margin: 3em 0;
+    }
+    body {
+        font-size: 12pt;
+    }
     /*a:after { content: " (" attr(href) ") " ; }*/
     /*@page:left, @page:right { content: "my cockroch" ; }*/
     /* h1 { page-break-before: always ; } */
@@ -33,25 +38,6 @@
 
 }
 
-
-
-/*
-header dt {
-    float: left;
-    clear: left; 
-    margin-right: 0.5ex; 
-    }
-
-header dt:after {
-    content: ": "; 
-    }
-
-header dd {
-    display: table; 
-    margin-bottom: 0.5em; 
-    }
-
-body { display: table; }*/
 
 dt { font-weight: 500; }
 header dt { display: inline; }
@@ -149,7 +135,19 @@ q.me { quotes: "\2018" "\2019" "\201C" "\201D" ; }
 
 /* dl inline ***************************************/
 
-dl { padding-left: 1em; }
+footer dl {
+    margin: 0.5em 1em;
+}
+
+dl ul {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+dl li {
+    display: inline;
+    margin: 0 0.3em;
+}
 
 dt {
     font-weight: 200; 
@@ -226,6 +224,10 @@ figcaption { /*    remove box shadow. */
     margin: 0.5ex; 
     text-align: center;
     }
+
+math {
+    margin: 2em;
+}
 
 .math {
     font-style: italic; 

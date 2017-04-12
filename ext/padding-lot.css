@@ -29,12 +29,16 @@ blockquote {
     border-left: solid 0.5em #BBB;
 }
 
-main pre {
-    white-space: pre-wrap;
+main pre > code {
+    display: block;
     padding: 1em;
     width: 45em;
     font-size: 1rem;
     border: solid 1px;
+}
+
+pre {
+    white-space: pre-wrap;
 }
 
 

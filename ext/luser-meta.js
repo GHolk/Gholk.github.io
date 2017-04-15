@@ -179,12 +179,14 @@
     return div;
   };
 
-  footer = document.createElement('footer');
+  footer = (function() {
+    var footerList;
+    footerList = document.getElementsByTagName('footer');
+    return footerList[footerList.length - 1];
+  })();
 
   footer.appendChild(metaMap.toNode());
 
   footer.appendChild(linkMap.toNode());
-
-  document.body.appendChild(footer);
 
 }).call(this);

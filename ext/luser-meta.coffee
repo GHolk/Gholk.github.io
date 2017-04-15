@@ -100,9 +100,10 @@ linkMap.toNode = ->
     div.className = 'browser-only'
     return div
 
-footer = document.createElement 'footer'
+footer = do ->
+    footerList = document.getElementsByTagName 'footer'
+    return footerList[footerList.length - 1]
 
 footer.appendChild metaMap.toNode()
 footer.appendChild linkMap.toNode()
-document.body.appendChild footer
 

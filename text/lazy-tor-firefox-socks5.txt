@@ -1,0 +1,81 @@
+使用 tor 與 firefox 上洋蔥網
+============================
+無聊掃了一下 [冷梗研究社] 的分支：
+[地獄梗研究社] 的管理員頭貼。
+他是用一個 QRcode 作頭貼，
+之前都沒想到要去掃他的頭貼，
+結果發現是 `.onion` 域名，是暗網：
+<http://kpvz7ki2lzvnwve7.onion> 。
+
+[冷梗研究社]: https://www.facebook.com/groups/coldstem
+[地獄梗研究社]: https://www.facebook.com/groups/hell0humor0research0Club
+
+
+於是我就開了 tor： `systemctl start tor` ，
+再設定 firefox 連線到 tor 的 SOCKS，
+網址是 `localhost:9050` 。
+然後滿心歡喜的開啟了連結，
+結果找不到域名。
+
+
+讓 tor 代理 dns 查詢
+--------------------
+稍微搜尋了一下，浪費了一堆時間才發現
+[要連上 `.onion` 要把 domain name
+直接傳給 tor][pass domain name to tor] 。
+要怎麼做呢？在 firefox 設定如何連結到網路的地方，
+也就是設 proxy 的地方、你輸入 port 9050 的地方，
+下面有個小小的選項： *使用 SOCKSv5 時也代理 dns 查詢* ，
+把她勾起來，就結了。
+
+<a data-flickr-embed="true"  href="https://www.flickr.com/photos/135370742@N08/34011218726/in/dateposted-public/" title="tor-proxy-dns"><img src="https://c1.staticflickr.com/3/2938/34011218726_dfdb5e43b4_b.jpg" width="1024" height="576" alt="tor-proxy-dns"></a><script async src="//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script>
+
+[pass domain name to tor]: https://www.torproject.org/docs/faq.html.en#AccessHiddenServices
+
+
+其實也沒有找很久，只是這點沒幾個人會發現，
+google 也沒看到相關的資料，
+自己也是無意間發現的。
+一般人都是直接裝了 tor 代理，
+再裝了 tor browser，就直接上了，
+不會想設定用 firefox 連 tor proxy。
+
+意思就是 `.onion` 不是查 dns 後用 IP 連，
+是直接用那串以 onion 結尾的網址當 IP，
+然後 tor 就會幫你找到資料丟回來了。
+但到 SOCKSv4 為止，都只能代理 IP 服務，
+也就沒辦法連 onion 網址了。
+
+
+tor 的 ubuntu package
+---------------------
+也順便發現 tor project 的官網靠北了
+ubuntu (mul 包的 tor package 很爛，
+[建議 ubuntu user 用他們自己包的。][tor for ubuntu by tor project]
+我就照做，結果發現她給的 gpg 金鑰庫連不上。
+
+    gpg --keyserver keys.gnupg.net --recv A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
+    gpg --export A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 | sudo apt-key add -
+
+[tor for ubuntu by tor project]: https://www.torproject.org/docs/debian.html.en
+
+
+隨便 google 一下，
+找到一個 MIT 的金鑰庫 `pgp.mit.edu` ，
+取代上面的 `keys.gnupg.net` 就 OK 了。
+
+****
+
+最後那個管理員的 QRcode 是什麼呢？
+只是暗網百科 *the hidden wiki* 的首頁而已。
+
+另外提醒，用 firefox 連暗網沒有安全的匿名！
+所以仍有被追蹤、監聽的風險。
+
+#tor
+#firefox
+#browser
+#網路
+#ubuntu
+#linux
+#wiki

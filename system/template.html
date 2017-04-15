@@ -37,7 +37,7 @@
 
 var disqus_config = function () {
 this.page.url = window.location;
-this.page.identifier = window.location.replace(/.*\//,'');
+this.page.identifier = window.location.toString().replace(/.*\//,'');
 };
 
 (function() { // DON'T EDIT BELOW THIS LINE

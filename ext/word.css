@@ -28,16 +28,31 @@
     header { page-break-after: always; }
     main { margin: 0; }
 
-    pre code { page-break-inside: avoid ; }
-
     hr.structure { display: none; }
 
     figure { page-break-inside: avoid; }
 
-    .browser-only { display: none ; }
+    a:after {
+        content: "(" attr(href) ")";
+    }
+
+    .browser-only { display: none; }
+    .print-only { display: initial; }
+    figure.print-only { display: block; }
 
 }
 
+.url-qrcode {
+    float: right;
+    margin: 0;
+    padding: 0;
+    text-indent: 0;
+    clear: right;
+}
+
+.print-only {
+    display: none;
+}
 
 dt { font-weight: 500; }
 header dt { display: inline; }

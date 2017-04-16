@@ -61,9 +61,12 @@
   };
 
   MetaItem = (function() {
-    function MetaItem(name, value) {
+    function MetaItem(name, value, className) {
       this.name = name;
       this.value = value;
+      if (className) {
+        this.className = className;
+      }
     }
 
     MetaItem.prototype.toNode = function() {
@@ -155,7 +158,7 @@
         case 'prev':
         case 'index':
         case 'next':
-          results.push(new MetaItem(link.rel, new HyperLink.fromLink(link)));
+          results.push(new MetaItem(link.rel, new HyperLink.fromLink(link), 'browser-only'));
           break;
         default:
           results.push(void 0);
@@ -163,6 +166,8 @@
     }
     return results;
   })();
+
+  linkMap.push(new MetaItem('url', new HyperLink(window.location, window.location, 'this page url'), 'print-only'));
 
   linkMap.toNode = function() {
     var div, j, len, ref;
@@ -175,7 +180,6 @@
       }
     }
     div.id = 'rel-page';
-    div.className = 'browser-only';
     return div;
   };
 

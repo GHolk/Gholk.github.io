@@ -38,9 +38,10 @@ HyperLink.fromTag = (tag) ->
 
 
 class MetaItem
-    constructor: (name, value) ->
+    constructor: (name, value, className) ->
         @name = name
         @value = value
+        @className = className if className
     toNode: ->
         dl = document.createElement 'dl'
         dl.className = @className if @className
@@ -91,13 +92,23 @@ metaMap.toNode = ->
 linkMap = for link in links
     switch link.rel
         when 'prev', 'index', 'next'
-            new MetaItem link.rel, new HyperLink.fromLink link
+            new MetaItem(
+                link.rel
+                (new HyperLink.fromLink link)
+                'browser-only'
+            )
+
+linkMap.push new MetaItem(
+    'url'
+    new HyperLink window.location, window.location, 'this page url'
+    'print-only'
+)
+
 linkMap.toNode = ->
     div = document.createElement 'div'
     for link in this when link
         div.appendChild link.toNode()
     div.id = 'rel-page'
-    div.className = 'browser-only'
     return div
 
 footer = do ->

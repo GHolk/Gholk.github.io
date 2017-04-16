@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" prefix="og: http://ogp.me/ns#">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="c34031328">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="vim, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-04-16T16:38:57.640Z">
+<meta name="keywords" property="og:article:tag" content="js,coffee-script,live-script,makefile,vim,ide,cli,分號,直譯,程式,電腦,ethercalc,試算表">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="into-javascript-trend.html" title="捲入 JS 的大熱潮">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<meta property="og:image" content="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<title>對直譯式語言編譯是否搞錯了什麼</title>
+</head>
+<body>
+<main><h1 id="-">對直譯式語言編譯是否搞錯了什麼</h1>
+<p>之前看到一個評論，寫 coffee script 的人是 2 嗎？
+直譯式語言的優點就是隨寫隨執行，
+如果又要編譯成另一種語言才能跑，
+不是很奇怪嗎？</p>
+<p>最近讀了一篇 <a href="http://standardjs.com/readme-zhtw">推廣統一 JS 風格</a> 的文章，
+也打算從此不寫分號。
+（去年去 CCNS DC 就提過可以不寫分號，
+那時我還有反對。）</p>
+<p>然後 coffee script 最主要優點是
+可省呼叫函數時的括號，
+但其實有時要鏈式呼叫，也是還是要寫；
+而且 js 不是適合這種風格的語言。</p>
+<p>又覺得編譯好麻煩，
+（其實是最近檔案架構越來越亂，
+Makefile 懶得更新不能用。）
+直接存檔再 F5 不是很方便嗎？</p>
+<p>但其實 vim 中可以直接 <code>:make</code> ，
+再加一點 config 就能 make 時自動存檔，
+如果 Makefile 裡有寫，
+還能自動開網頁！</p>
+<p>現在 IDE 都這麼進步了，
+搞得同學 C 都當直譯式語言在寫了。
+用 CLI 當然也能做到，
+只是有點麻煩而已。</p>
+<p>搞不好會跳槽到 LiveScript，
+之前看了一個唐鳳 <a href="http://ethercalc.tw">很神奇的共享試算表專案</a>
+是用 LiveScript 做的，有點吸引人。</p>
+</main>
+
+<footer></footer>
+<script src="ext/luser-meta.js" defer></script>
+
+<div id="disqus_thread"></div>
+<script defer>
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+var disqus_config = function () {
+this.page.url = window.location;
+this.page.identifier = window.location.toString().replace(/.*\//,'');
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://gholk-gh.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+</body>
+</html>
+

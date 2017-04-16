@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" prefix="og: http://ogp.me/ns#">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="c34031328">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="vim, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-04-16T15:57:46.931Z">
+<meta name="keywords" property="og:article:tag" content="js,www,程式,電腦,perl,物件導向">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="lazy-tor-firefox-socks5.html" title="使用 tor 與 firefox 上洋蔥網">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<meta property="og:image" content="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<title>捲入 JS 的大熱潮</title>
+</head>
+<body>
+<main><h1 id="-js-">捲入 JS 的大熱潮</h1>
+<p>我學 <abbr title="JavaScript">JS</abbr>
+是因為網頁開發突然大熱門，
+nodejs 成熟，firefoxOS 又來參一腳。
+加上我學了 HTML 和 CSS，感覺不錯；
+再把 JS 學起來就能寫網頁了。
+又 JS 這個語言至少要到 www 死光才有可能死亡，
+應該蠻有學的價值的。</p>
+<h2 id="js-suck">JS suck</h2>
+<p>一開始是看了 PTT 上一篇 <a href="https://www.ptt.cc/bbs/Translate-CS/M.1429784156.A.E7D.html">吹捧 JS 的文章</a>
+才覺得 JS 好棒棒，就跳坑了。
+結果一開始入坑超不習慣的！
+一堆詭異的語法， <em>大括號不能定義 scope</em> 之類的，
+還有詭異的 <code>this</code> 、 <code>for in</code> 、 <code>prototype</code> 。</p>
+<p>其實我對 JS 的第一印像很差，
+剛轉到測量系的計概有一堂課要玩 google map，
+要用 JS 加一些東西，我就學得很差，
+一直搞不清楚什麼時候要加分號。</p>
+<p>一段時間熟悉基本語法後，
+就寫了個 <a href="http://gholk.github.io/cjns/">web 版倉頡練習</a> 軟體試刀，
+一試才發現這語言內部不簡單啊，
+才弄懂她內部的繼承、物件導向運作。
+後來那個練習因為一開始的架構太廢了，
+就半放棄的隨便完成了，
+勉強讓她能動，就沒動力寫下去了。</p>
+<h2 id="js-rock">JS rock</h2>
+<p>後來看了一些文章，才主要弄懂 JS
+的物件導向和設計模式。
+<a href="http://top.css88.com/archives/717">JS 是基於原型的物件導向</a> ，
+這篇講得很好，教會你原型繼承
+再加送事件處理模型。
+我看了立馬試作一個自己的事件模型；
+雖然根本沒有用過。</p>
+<p>雖然他講得很好，但我還是沒有用他的寫法。
+因為考量到 <code>Object.create</code> 的支援問題，
+和主流瀏覽器都是針對 <code>new</code> 作優化的。
+（也許最近會改變。）
+他一些觀念影響我很多，
+像把工作分成多個函數，再用另一個函數包裝起來。
+很多我沒想到可以包裝成函數的工作，
+其實都能用 JS 做到，讓我理解到 <em>JS 該怎麼寫</em> 。</p>
+<h2 id="but-js">but JS</h2>
+<p>但隨著對 JS 的理解，我開始分析 JS 的一些設計，
+發現其中的不合理處，像是 <code>this</code> 和 <code>prototype</code> 的問題。
+這語言有好的部份，但有存在一些根本的問題，
+就像為什麼 JavaScript 要用 Java 命名一樣。</p>
+<p>像為什麼 <code>this</code> 是 dynamic scope，
+而不是像其它變數是 lexical scope。
+我會遇到這些問題也與我執意使用 <code>new</code> 關鍵字有關，
+但就算全盤接受了新的語法，
+問題還是存在；只是從另一個角度看。
+JS 的繼承根本和函數作為第一類物件傳遞格格不入。
+（英文 first-class function。）</p>
+<p>我把自己綁上 JS 的風潮，如洪朝貴所說，
+<a href="https://ckhung0.blogspot.tw/2016/04/learn-to-code.html">JS 至少是會存活到 www 死亡的語言</a> ，
+而且在瀏覽器上開發真得很方便，
+我也很喜歡 HTML 和 CSS。
+（也有可能是我沒接觸過其它同等級的標記語言。）
+至少會 JS，不會沒飯吃。</p>
+<hr>
+<p>firefoxOS 沒成功真得很不爽啊！
+根本連玩都沒玩過就掰了。
+雖然我一開始不是很喜歡 JS，
+但現在竟然變成我唯一可以用來寫中、
+大型程式的語言，perl 一直學不好。</p>
+</main>
+
+<footer></footer>
+<script src="ext/luser-meta.js" defer></script>
+
+<div id="disqus_thread"></div>
+<script defer>
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+var disqus_config = function () {
+this.page.url = window.location;
+this.page.identifier = window.location.toString().replace(/.*\//,'');
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://gholk-gh.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+</body>
+</html>
+

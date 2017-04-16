@@ -8,6 +8,7 @@
       4 #心情
       4 #小說
       4 #人生
+      3 #程式
       3 #歌
       3 #故鄉
       3 #成句
@@ -22,7 +23,6 @@
       2 #記憶
       2 #觸控螢幕
       2 #親戚
-      2 #程式
       2 #睡
       2 #營隊
       2 #歌手
@@ -30,10 +30,12 @@
       2 #朋友
       2 #文化差異
       2 #搖桿
+      2 #www
       2 #twbbs
       2 #soul-knight
       2 #m-expression
       2 #lisp
+      2 #js
       2 #gui
       2 #github
       2 #funny
@@ -51,6 +53,7 @@
       1 #頂新
       1 #青春
       1 #需要
+      1 #電腦
       1 #阿瓦隆
       1 #長腿叔叔
       1 #銀河便車指南
@@ -81,6 +84,7 @@
       1 #百度
       1 #理工
       1 #獨中
+      1 #物件導向
       1 #版本
       1 #爸爸
       1 #灣生
@@ -140,7 +144,6 @@
       1 #下學期
       1 #youtube
       1 #xdite
-      1 #www
       1 #wiki
       1 #website
       1 #w3c
@@ -152,10 +155,10 @@
       1 #screen
       1 #scadual
       1 #ptt
+      1 #perl
       1 #matlab
       1 #luser
       1 #linux
-      1 #js
       1 #imgur
       1 #html
       1 #Hillary_Herrington

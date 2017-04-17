@@ -47,3 +47,4 @@ golden-age-in-university.html
 lazy-tor-firefox-socks5.html
 into-javascript-trend.html
 coffee-javascript-or-what.html
+poland-expression-bash-lisp.html

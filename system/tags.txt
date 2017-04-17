@@ -15,6 +15,7 @@
       3 #憂鬱
       3 #女權
       3 #六龜
+      3 #lisp
       3 #js
       3 #hide
       3 #cli
@@ -37,7 +38,6 @@
       2 #twbbs
       2 #soul-knight
       2 #m-expression
-      2 #lisp
       2 #gui
       2 #github
       2 #funny
@@ -78,6 +78,7 @@
       1 #線性
       1 #網路
       1 #累
+      1 #算符
       1 #程式語言
       1 #科普
       1 #禁慾
@@ -137,6 +138,7 @@
       1 #十鼓
       1 #勞動盃
       1 #分號
+      1 #函數
       1 #冷水澡
       1 #作者已死
       1 #作家
@@ -156,6 +158,8 @@
       1 #tor
       1 #tonyq
       1 #tmux
+      1 #shell
+      1 #s-expression
       1 #screen
       1 #scadual
       1 #ptt

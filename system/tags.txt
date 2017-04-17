@@ -9,13 +9,14 @@
       4 #心情
       4 #小說
       4 #人生
+      4 #lisp
       3 #歌
       3 #故鄉
       3 #成句
       3 #憂鬱
       3 #女權
       3 #六龜
-      3 #lisp
+      3 #s-expression
       3 #js
       3 #hide
       3 #cli
@@ -37,7 +38,6 @@
       2 #www
       2 #twbbs
       2 #soul-knight
-      2 #m-expression
       2 #gui
       2 #github
       2 #funny
@@ -159,7 +159,6 @@
       1 #tonyq
       1 #tmux
       1 #shell
-      1 #s-expression
       1 #screen
       1 #scadual
       1 #ptt
@@ -169,6 +168,7 @@
       1 #luser
       1 #live-script
       1 #linux
+      1 #lambda
       1 #imgur
       1 #ide
       1 #html

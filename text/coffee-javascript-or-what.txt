@@ -32,6 +32,12 @@ Makefile 懶得更新不能用。）
 用 CLI 當然也能做到，
 只是有點麻煩而已。
 
+而且 node 裝了 coffee script 後
+可以直接 `coffee script.coffee` 執行，
+如果沒有要發布到瀏覽器上跑，也不需要編譯。
+寫 node server 時基本上是沒差的。
+（剛學會寫 node server 。）
+
 搞不好會跳槽到 LiveScript，
 之前看了一個唐鳳 [很神奇的共享試算表專案]
 是用 LiveScript 做的，有點吸引人。

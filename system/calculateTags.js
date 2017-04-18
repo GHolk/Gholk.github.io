@@ -6,14 +6,14 @@
     function TagsDataBase(path) {
       this.path = path;
       this.file = path.replace(/^.*\//, '');
-      this.dataSet = JSON.parse(fs.readFilsSync(path, 'utf8'));
+      this.dataSet = JSON.parse(fs.readFileSync(path, 'utf8'));
     }
 
     TagsDataBase.prototype.increment = function(key, times) {
       if (times == null) {
         times = 1;
       }
-      if (this.dataSet) {
+      if (this.dataSet[key]) {
         return this.dataSet[key] += times;
       } else {
         return this.dataSet[key] = times;
@@ -31,8 +31,21 @@
       return fs.writeFileSync(path, this.toString(), 'utf8');
     };
 
+    TagsDataBase.prototype.updateFromLoader = function(loader) {
+      var i, len, ref, results, tag;
+      ref = loader.tags.split(/,/g);
+      results = [];
+      for (i = 0, len = ref.length; i < len; i++) {
+        tag = ref[i];
+        results.push(this.increment(tag));
+      }
+      return results;
+    };
+
     return TagsDataBase;
 
   })();
+
+  module.exports = TagsDataBase;
 
 }).call(this);

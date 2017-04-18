@@ -1,4 +1,6 @@
 
+fs = require 'fs'
+
 class TagsDataBase
     constructor: (path) ->
         @path = path

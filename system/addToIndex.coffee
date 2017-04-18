@@ -1,6 +1,7 @@
 
 HTMLLoader = require './FileLoaderCheerio'
 IndexLoader = require './IndexLoader'
+TagsDataBase = require './calculateTags'
 
 [htmlPath] = process.argv.slice(-1)
 indexPath = '../index.html'

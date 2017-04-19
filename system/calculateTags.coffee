@@ -12,7 +12,13 @@ class TagsDataBase
         else
             @dataSet[key] = times
     toString: ->
-        JSON.stringify @dataSet
+        JSON
+            .stringify @dataSet
+            .replace /:/g, ': '
+            .replace /,/g, ',\n    '
+            .replace '{','{\n    '
+            .replace '}','\n}'
+
     write: (path = @path) ->
         fs.writeFileSync path, @toString(), 'utf8'
     updateFromLoader: (loader) ->

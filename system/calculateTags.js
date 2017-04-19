@@ -23,7 +23,7 @@
     };
 
     TagsDataBase.prototype.toString = function() {
-      return JSON.stringify(this.dataSet);
+      return JSON.stringify(this.dataSet).replace(/:/g, ': ').replace(/,/g, ',\n    ').replace('{', '{\n    ').replace('}', '\n}');
     };
 
     TagsDataBase.prototype.write = function(path) {

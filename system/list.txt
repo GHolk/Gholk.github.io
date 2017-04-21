@@ -53,3 +53,5 @@ forgive-for-nothing.html
 low-dependent-map-js.html
 t-short-sleeve-armpit-hair.html
 library-noise-by-stuff.html
+iife-js-void-semicolon.html
+library-noise-by-staff.html

@@ -1,0 +1,290 @@
+JS 中物件繼承的問題
+===================
+js 中的物件導向很奇怪，其實是原型繼承，
+但被包裝成類別繼承的模樣。
+有人提倡 [不應該使用類別繼承][not use new] ，也就是 new 關鍵字，
+而應該使用原型繼承，
+也就是 `Object.create` 來操控原型鏈。
+身為兩者都使用過的人，看來是各有優缺。
+
+[not use new]: http://top.css88.com/archives/717 "為什麼原型繼承很重要"
+
+apply 陣列作為參數
+------------------
+這是上文作者提到的問題，沒辦法為 new 的函數指定參數。
+但其實上文中已有解法了，可以實現一個 new 的函數，
+加在 Function.prototype 裡就行了。
+
+語法不統一
+----------
+忘了使用 new 會造成嚴重的後果，
+這點以前我覺得沒什麼，但現在越來越有感覺；
+為什麼這麼麻煩，還要加一個 new？
+如果不使用 new 也有同樣的效果，不是很好嗎？
+
+new 多重建構函數
+----------------
+上一篇文章中我創造了一個矩陣的 library，
+其中需要多重創建矩陣的方法，
+像從一維陣列、從二維陣列、
+作一個塞滿指定初始值的矩陣。
+這裡用比較簡單的向量作示範。
+
+    function Vector(x,y,z) {
+        this[0] = x
+        this[1] = y
+        this[2] = z
+    }
+
+如果使用 new 關鍵字，你可以在建構函數中作條件判定，
+但這樣會造成建構函數肥大。
+另一個方法是宣告多個建構函數，
+然後把 prototype 都指向同一個。
+
+    function VectorFromNumber(n) {
+        for (var i=0; i<=2; i++) this[i] = n
+    }
+    // 指向同一個原型
+    VectorFromNumber.prototype = Vector.prototype
+
+    function VectorFromArray(a) {
+        for (var i=0; i<=2; i++) this[i] = this[a]
+    }
+    VectorFromArray.prototype = Vector.prototype
+
+    (new VectorFromNumber(1)).__proto__ ==
+        (new VectorFromArray([1,1,1])).__proto__
+
+
+或是運用函數式語言的特性，包裝原始的建構函數，
+在各包裝函數中對不同的輸入作預處理，
+再餵給建構函數。
+
+    function createFromNumber(n) {
+        return new Vector(n,n,n)
+    }
+    function createFromArray(a) {
+        return new Vector(a[0], a[1], a[2])
+    }
+
+但這樣你要把這些不同的函數 *放哪* ？
+要丟到 Vector 建構函數下嗎？
+還是只匯出包裝完的函數就夠了？
+
+
+基於原型的多種建構函數
+----------------------
+基於原型其實也有這個問題，只是面向不同。
+一般會把建構函數封到原型物件內，
+但這樣建立的實例也會繼承到建構函數，
+好像有點怪怪的。
+
+    vector.create = function(x,y,z) {
+        var newVector = Object.create(vector)
+        newVector[0] = x
+        newVector[1] = y
+        newVector[2] = z
+        return newVector
+    }
+    vector.createFromNumber = function(n) {
+        return this.create(n,n,n)
+    }
+    var v1 = vector.createFromNumber(1)
+    typeof v1.createFromNumber == 'function'
+
+所以，也許 library 不應該返回原型對象，
+應該只返回建構函數？
+
+    return {
+        create: function(x,y,z) {
+            var newVector = Object.create(vector)
+            newVector[0] = x
+            newVector[1] = y
+            newVector[2] = z
+            return newVector
+        },
+        createFromNumber: function(n) {
+            return this.create(n,n,n)
+        }
+    }
+
+
+繼承了建構函數的問題
+--------------------
+如果你的建構函數被實例繼承了，
+又被從實例呼叫，可能會有問題。
+
+    vector.create = function(x,y,z) {
+        var newVector = Object.create(this)
+        newVector[0] = x
+        newVector[1] = y
+        newVector[2] = z
+        return newVector
+    }
+    var v1 = vector.create(1,2,3)
+    var vv2 = v1.create(1,2,3)
+    vv2.__proto__ == v1
+
+此時， vv2 的原型會指向 v1 ，
+這樣會導致原型鏈拉長。
+所以不應使用事例呼叫 create 。
+
+
+this 與閉包
+-----------
+使用到 this 的函數，需要注意呼叫時 this 指向誰。
+但這和 **函數式** 的風格不符，
+函數式的其中一個特色就是函數可以作為參數傳遞，
+函數作為參數傳遞時，會丟失她原本 this 指向的對向；
+所以才有 `.bind()` 方法返回一個綁定的函數。
+
+函數式的一個特色就是函數永遠只應返回同樣的結果，
+但使用 this 的函數，會因呼叫者的不同，而有不同的結果；
+而使用閉包則沒這個問題。
+可以這樣說： this 屬於物件導向，閉包屬於函數導向。
+因此，如果你的建構函數使用閉包，
+你儘管把它作為參數丟來丟去，
+不管她怎麼執行，總是會返回相同的結果。
+
+但閉包的問題是不能被共用，
+如果每個物件的方法都是用閉包得來的，
+代表每個物件的方法都是不同的函數，
+會很浪費空間。
+
+
+原型曝露的問題
+--------------
+如果使用原型繼承，一般返回的是原型，
+但這樣等於直接把原型曝露給外部。
+而使用 new 時，是返回建構函數，
+原型是保存在建構函數的 prototype 屬性中。
+
+
+使用閉包綁定建構函數的原型
+--------------------------
+如果用閉包直接把 create 硬綁定到 vector 原型上，
+由於沒有使用到 this ，誰是 caller 都不重要，
+不管被怎麼呼叫，都會返回相同的結果。
+甚至所以我們可以對 create 函數使用 new 關鍵字，
+也不影響結果。
+
+    vector.create = function (x,y,z) {
+        var newVector
+        newVector = Object.create(this)  // 用 this 綁定
+        newVector = Object.create(vector)  // 用閉包綁定
+        return newVector
+    }
+
+    // 當用閉包綁定時，三者意義相同。
+    new vector.create()
+    vector.create()
+    var createVector = vector.create
+    createVector()
+
+
+使用 this 作為建構函數的原型
+----------------------------
+但使用了閉包綁定的問題是，
+該建構函數不可被複用；
+在繼承物件時不能用複用父物件的建構函數。
+使用 this 則可以。
+
+    vector.create = function (x,y,z) {
+        var newVector = Object.create(this)
+        newVector.push(x,y,z)
+        return newVector
+    }
+
+    // vector4 as a prototype of 4d vector,
+    // just as vector as prototype of 3d vector. 
+    vector4 = vector.create()
+    vector4.create = function (x,y,z,t) {
+        var newVector = vector.create.call(this,x,y,z)
+        newVector.push(t)
+        return newVector
+    }
+
+上述的程式會把 vector 包進 vector4 的建構函數中。
+當 vector 的 create 方法被改寫了，
+vector4 的也會受到影響；好壞各有。
+至於把整個 vector 包進 vector4 會不會佔空間，
+我認為是不會；畢竟 `vector4.__proto__` 本來就連到 vector ，
+vector 本來就不會被清掉。
+
+修正 `prototype.constructor`
+----------------------------
+一般原型的物件會有一個 constructor 屬性，
+指向她的 new 建構函數。
+而 constructor 也會有一個屬性 prototype ，
+指向她的原型。
+這個屬性會用作 `instanceof` 算符的查詢，
+所以對我們的 vector 原型，可以這樣修正：
+（但這樣會造成 circular reference ，
+但還不確定會有什麼問題。）
+
+    vector.constructor = vector.create
+    vector.create.prototype = vector
+    vector.create() instanceof vector.create == true
+
+
+其實如果要 `v1 instanceof vector.create` 返回 true ，
+只要修 `vector.create.prototype = vector` 就可以了。
+只是怕有人會調 v1.constructor 來猜，
+那不修正她就會猜錯。
+
+
+修正 `new` 關鍵字
+-----------------
+如果想修正誤用 new 關鍵字的話可以這樣作，
+在建立時會檢查 this 是 new 產生的 this 或 vector 自身。
+這樣可以避免有人看到 vector.constructor 就用 new 造成的慘劇，
+一般 constructor 是個應該使用 new 關鍵字的建構函數。
+
+    vector.create = vector.constructor = function createVector(x,y,z) {
+        var newVector
+        if (this == createVector.prototype) {  // 直接呼叫
+            newVector = Object.create(this)
+        }
+        else {  // 使用 new 關鍵字
+            newVector = this
+        }
+        newVector.push(x,y,z)
+        return newVector
+    }
+    vector.create.prototype = vector
+
+
+或者直接定義一個可以 new 的 constructor 。
+
+    vector.constructor = function Vector(x,y,z) {
+        this.push(x,y,z)
+    }
+    vector.constructor.prototype = vector
+
+
+最佳實踐
+--------
+和開頭那篇文章相比，這篇較為單純，
+只是要搞懂 js 的繼承到底在幹麻，和一些奇淫技巧。
+寫完本文，整理完思緒後，有一些想法：
+
+  - 最佳實踐是使用 Object.create(this) 。
+  - 當你需要傳遞 create 時，使用 `create.bind(vector)` 。
+  - 當你需要繼承時，可以複用父物件的 create 。
+  - 當你想要相容 instanceof 時，把 constructor 、 prototype 搞好。
+
+
+***************
+
+最後還是炮個 js 。
+js 是有缺陷的語言，妄想把物件導向和函數作為第一類公民結合，
+而有了各種意外；又為了模彷 java ，有了詭異的語法。
+我們只是在不同的寫法與包裝函數上掙扎，
+偶爾因為想到了較優雅的實現而沾沾自喜；
+殊不知其它語言根本沒這種問題。
+
+#js
+#程式語言
+#物件導向
+#函數
+#原型

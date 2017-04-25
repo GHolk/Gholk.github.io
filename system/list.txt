@@ -57,3 +57,4 @@ iife-js-void-semicolon.html
 library-noise-by-staff.html
 practice-matrix-object-javascript.html
 js-object-new-prototype.html
+game-passion-maintain.html

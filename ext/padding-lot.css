@@ -1,4 +1,8 @@
 
+.print-only {
+    display: none;
+}
+
 @media print {
     .browser-only {
         display: none;
@@ -9,10 +13,6 @@
     dl.print-only, figure.print-only {
         display: block;
     }
-}
-
-.print-only {
-    display: none;
 }
 
 .url-qrcode {

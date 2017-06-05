@@ -42,6 +42,10 @@
 
 }
 
+h2 {
+    border-bottom: #DDD solid 0.5ex;
+}
+
 .url-qrcode {
     float: right;
     margin: 0;

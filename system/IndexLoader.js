@@ -23,11 +23,6 @@
       wrapTag = function(tag) {
         return "<li><a href=\"index.html?tags=" + tag + "\">" + tag + "</a></li>";
       };
-      if (tagsArray.some(function(tag) {
-        return tag === 'hide';
-      })) {
-        return 'hide post.';
-      }
       return this.selector("<article>\n    <h2><a href=\"" + loader.file + "\">" + loader.title + "</a></h2>\n    <small class=\"date\">" + loader.date + "</small>\n    <p>\n    " + loader.description + "\n    </p>\n    <ul class=\"tag-list\">\n    " + (tagsArray.map(wrapTag).join('\n')) + "\n    </ul>\n</atricle>\n<hr>").insertAfter('h1');
     };
 

@@ -17,8 +17,6 @@ class IndexLoader
         wrapTag = (tag) -> """
             <li><a href="index.html?tags=#{tag}">#{tag}</a></li>
         """
-        if tagsArray.some((tag) -> tag == 'hide')
-            return 'hide post.'
 
         @selector("""
             <article>

@@ -39,31 +39,22 @@ class HrArticle
 articleList = for article in document.getElementsByTagName 'article'
     new HrArticle article
 
-currentList = articleList
-
 queryForm = document.getElementById 'query-article'
 
 outputMatchNumber = queryForm.elements['match-number']
 
 filterByNumberList = (numberList) ->
     document.body.className = '.hide-article'
-    currentList.forEach (article) -> article.show false
-    currentList = numberList.map (index) -> articleList[index]
-    currentList.forEach (article) -> article.show true
+    articleList.forEach (article) -> article.show false
+    numberList
+        .map (index) -> articleList[index]
+        .forEach (article) -> article.show true
     outputMatchNumber.value = numberList.length
-    document.body.className = '.show-article'
-
-filterByList = (listToShow) ->
-    document.body.className = '.hide-article'
-    currentList.forEach (article) -> article.show false
-    currentList = listToShow
-    currentList.forEach (article) -> article.show true
-    outputMatchNumber.value = listToShow.length
     document.body.className = '.show-article'
 
 filterByFunction = (callback) ->
     numberList = []
-    currentList
+    articleList
         .map callback
         .forEach (isTrue, index) -> if isTrue then numberList.push index
     filterByNumberList numberList
@@ -87,14 +78,7 @@ window.onpopstate = (evt) ->
     if evt.state
         if Array.isArray evt.state.list
             filterByNumberList evt.state.list
-    else filterByList articleList
-
-queryForm.elements['show-all'].onclick = (evt) ->
-    evt.preventDefault()
-
-    currentList = articleList
-    filterByList currentList
-    history.pushState null, null, 'index.html'
+    else filterByNumberList articleList.map (x,i) -> i
 
 parseQueryString = (queryString) ->
     keyValue = queryString.split /&/g
@@ -110,5 +94,6 @@ if location.search
         filterByFunction evalFilterFunction queryObject.eval
     else if queryObject.tags
         theTag = queryObject.tags
-        filterByFunction (article) -> article.hasTag theTag
+        list = filterByFunction (article) -> article.hasTag theTag
+        history.pushState {list}, "tag: #{theTag}", ''
 

@@ -41,21 +41,18 @@ articleList = for article in document.getElementsByTagName 'article'
 
 window.articleList = articleList
 
+evalFilterFunction = (conditionStatement) ->
+    (article) ->
+        {title,url,description,tags,date,raw,node} = article
+        hasTag = article.hasTag.bind article
+        return eval conditionStatement
+
 queryForm = document.getElementById 'query-article'
 queryForm.onsubmit = (evt) ->
     evt.preventDefault()
 
     conditionStatement = @elements['query-statement'].value
-    filterByFunction (article) ->
-        title = article.title
-        url = article.url
-        description = article.description
-        tags = article.tags
-        date = article.date
-        raw = article.raw
-        node = article.node
-        hasTag = article.hasTag.bind article
-        return eval conditionStatement
+    filterByFunction evalFilterFunction conditionStatement
 
 outputMatchNumber = queryForm.elements['match-number']
 filterByFunction = (callback) ->
@@ -63,4 +60,20 @@ filterByFunction = (callback) ->
     matchList = articleList.filter callback
     matchList.forEach (article) -> article.show true
     outputMatchNumber.value = matchList.length
+
+parseQueryString = (queryString) ->
+    keyValue = queryString.split /&/g
+    queryObject = {}
+    for pair in keyValue
+        [key, value] = pair.split(/=/).map(decodeURIComponent)
+        queryObject[key] = value
+    return queryObject
+
+if location.search
+    queryObject = parseQueryString location.search.slice 1
+    if queryObject.eval
+        filterByFunction evalFilterFunction queryObject.eval
+    else if queryObject.tags
+        theTag = queryObject.tags
+        filterByFunction (article) -> article.hasTag theTag
 

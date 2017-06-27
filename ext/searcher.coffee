@@ -39,26 +39,31 @@ class HrArticle
 articleList = for article in document.getElementsByTagName 'article'
     new HrArticle article
 
-window.articleList = articleList
+currentList = articleList
 
 queryForm = document.getElementById 'query-article'
 
 outputMatchNumber = queryForm.elements['match-number']
 
 filterByNumberList = (numberList) ->
-    articleList.forEach (article) -> article.show false
-    numberList.forEach (index) -> articleList[index].show true
+    document.body.className = '.hide-article'
+    currentList.forEach (article) -> article.show false
+    currentList = numberList.map (index) -> articleList[index]
+    currentList.forEach (article) -> article.show true
     outputMatchNumber.value = numberList.length
+    document.body.className = '.show-article'
 
 filterByList = (listToShow) ->
-    articleList.forEach (article) -> article.show false
-    listToShow.forEach (article) -> article.show true
+    document.body.className = '.hide-article'
+    currentList.forEach (article) -> article.show false
+    currentList = listToShow
+    currentList.forEach (article) -> article.show true
     outputMatchNumber.value = listToShow.length
-    return listToShow
+    document.body.className = '.show-article'
 
 filterByFunction = (callback) ->
     numberList = []
-    articleList
+    currentList
         .map callback
         .forEach (isTrue, index) -> if isTrue then numberList.push index
     filterByNumberList numberList
@@ -79,8 +84,17 @@ queryForm.onsubmit = (evt) ->
     history.pushState {list}, "eval #{conditionStatement}", queryString
 
 window.onpopstate = (evt) ->
-    if evt.state then filterByNumberList evt.state.list
+    if evt.state
+        if Array.isArray evt.state.list
+            filterByNumberList evt.state.list
     else filterByList articleList
+
+queryForm.elements['show-all'].onclick = (evt) ->
+    evt.preventDefault()
+
+    currentList = articleList
+    filterByList currentList
+    history.pushState null, null, 'index.html'
 
 parseQueryString = (queryString) ->
     keyValue = queryString.split /&/g

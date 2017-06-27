@@ -97,3 +97,14 @@ if location.search
         list = filterByFunction (article) -> article.hasTag theTag
         history.pushState {list}, "tag: #{theTag}", ''
 
+clickTag = (evt) ->
+    evt.preventDefault()
+    queryObject = parseQueryString @href.replace /^.*\?/,''
+    theTag = queryObject.tags
+    list = filterByFunction (article) -> article.hasTag theTag
+    history.pushState {list}, "tag: #{queryObject}", @href
+
+for li in document.getElementsByTagName 'li'
+    if anchor = li.getElementsByTagName('a')[0]
+        anchor.onclick = clickTag
+

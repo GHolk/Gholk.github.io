@@ -15,7 +15,7 @@ class IndexLoader
     add: (loader) ->
         tagsArray = loader.tags.split /,/g
         wrapTag = (tag) -> """
-            <li><a href="index.html?tags=#{tag}">#{tag}</a></li>
+            <li><a href="?tags=#{tag}">#{tag}</a></li>
         """
 
         @selector("""

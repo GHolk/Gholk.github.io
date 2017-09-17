@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" prefix="og: http://ogp.me/ns#">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="c34031328">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="vim, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-09-17T02:40:28.391Z">
+<meta name="keywords" property="og:article:tag" content="lisp,common-lisp,scheme,javascript,函數">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="one-piece-hunter-speed.html" title="用獵人的速度出海賊王">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<meta property="og:image" content="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<title>lisp 系語言的缺陷</title>
+</head>
+<body>
+<main><h1 id="lisp-">lisp 系語言的缺陷</h1>
+<p>之前很嚮往 lisp 系語言，
+像 [[scheme]] 或 [[common lisp]] 。
+我在 javascript 中見識到函數式語言的神奇，
+但 js 又有一些缺陷，所以前往函數式語言的源頭。</p>
+<h2 id="javascript-">javascript 的問題</h2>
+<p>js 中的問題是他仍有 <strong>運算符</strong> 如加減等。
+有了運算符語言就不純，
+運算符就產生優先問題，使括號產生歧義。</p>
+<p>在 es6 中增加的許多新功能，其實都只是 <strong>語法糖</strong> ，
+理論上可以透過巨集實現。
+mozilla 有推出一種為 js 打造的巨集系統，
+但如同絕大多數語言，該巨集系統必須操作語法樹 AST。</p>
+<h2 id="lisp-">lisp 的改進</h2>
+<p>lisp 中的抽象語法樹就是列表，結構簡單好操作。
+而且 lisp 中不分區運算符和函數，
+或說全部都是函數或以函數的語法撰寫。</p>
+<h2 id="lisp-">lisp 的缺陷</h2>
+<p>不知道叫缺陷妥不妥，總之就是一些不合自己意的地方。</p>
+<p>我本來是想學 common lisp，
+但發現他的函數命名空間和變數是分開的，
+在 js 中都是連在一起，整個崩潰。
+要把函數當變數還是 function quote <code>#&#39;</code>，
+呼叫變成變數的函數也要 funcall 或 apply。</p>
+<p>scheme 問題就比較少，但他實在太簡陋了，
+沒有 common lisp 那樣完善的標準庫。
+如果用 scheme 寫程式應該會很辛苦。</p>
+<p>emacs lisp 就不用說了，
+連 lexical scope 都沒有，
+還能稱作函數式語言嗎？</p>
+</main>
+
+<footer></footer>
+<script src="ext/luser-meta.js" defer></script>
+
+<div id="disqus_thread"></div>
+<script defer>
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+var disqus_config = function () {
+this.page.url = window.location;
+this.page.identifier = window.location.toString().replace(/.*\//,'');
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://gholk-gh.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+</body>
+</html>
+

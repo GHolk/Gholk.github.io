@@ -64,3 +64,4 @@ do-my-best-enough-responsibility.html
 magician-honer.html
 angry-childish.html
 one-piece-hunter-speed.html
+lisp-scheme-defect.html

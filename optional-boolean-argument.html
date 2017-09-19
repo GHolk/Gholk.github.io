@@ -9,54 +9,42 @@
 <!-- 以上一般不用改，以下才要改。 -->
 
 <!-- 後設資料 -->
-<meta name="date" property="og:article:public_time" content="2017-09-17T03:00:32.408Z">
-<meta name="keywords" property="og:article:tag" content="lisp,程式語言,括號,go,分號">
+<meta name="date" property="og:article:public_time" content="2017-09-19T16:57:46.470Z">
+<meta name="keywords" property="og:article:tag" content="程式語言">
 <link rel="index" type="text/html" href="index.html" title="首頁">
 <link rel="start" type="text/html" href="index.html" title="首頁">
-<link rel="next" type="text/html" href="optional-boolean-argument.html" title="# 可省略的布林值參數">
-<link rel="prev" type="text/html" href="lisp-scheme-defect.html" title="# lisp 系語言的缺陷">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="if-bracket-syntax.html" title="# if 的語法問題">
 
 <!-- 和網頁位置有關 -->
 <link rel="icon" type="image/png" href="ext/icon.png">
 <meta property="og:image" content="ext/icon.png">
 <link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
 
-<title>if 的語法問題</title>
+<title>可省略的布林值參數</title>
 </head>
 <body>
-<main><h1 id="if-">if 的語法問題</h1>
-<p>最流行的 if 語法來自 C 語言，
-也就是在圓括號裡放表達式。
-我一直以為圓括號有點多餘，
-明明就是表達式了，為什麼要再括起來？</p>
-<pre><code>if (test()) {
-    puts(&quot;test is true&quot;);
-}
-</code></pre><p>後來發現依絕大多數語言的邏輯，
-表達式也是 statement，
-而 statement 應該要用分號結尾，
-或用換行結尾。
-竟然變成我最討厭的 allman 風格。</p>
-<pre><code>if test()
-{
-    puts(&quot;test is true&quot;)
+<main><h1 id="-">可省略的布林值參數</h1>
+<p>有時候一些函數最後會有一個 boolean 參數，
+去微調函數的行為。
+如果程式沒維護好，一不小心就會變很亂。</p>
+<pre><code>form.addField(&#39;username&#39;, name, true)
+// 鬼才知道那個 true 在幹麻
+</code></pre><p>寫 <a href="http://github.com/ccns/quiz-chatbot-discord">discord 的聊天機器人</a> 的時候想到，
+有一種作法讓程式可讀性變高，
+先想想原本函數是怎麼定義，就知道該怎麼寫了。</p>
+<pre><code>function addField(name, value, inline) {
+    if (inline) printf(&quot;%s: %s%s\n&quot;, name, value)
+    else printf(&quot;%s:\n\t%s\n\n&quot;, name, value)
 }
 
-if test(); {
-    puts(&quot;hey&quot;)
-}
-</code></pre><p>go 語言是沒有括號，但看起來反而不習慣。</p>
-<pre><code>if test() != nil {
-    foo();
-}
-</code></pre><p>還是我大 lisp 好看 <code>&lt;3</code>
-因為要比較就要呼叫函數，自然有括號。
-不像其它語言括號有改變優先順序的歧義，
-在 lisp 只有函數一種，沒有優先權問題。</p>
-<pre><code>(if (= a b)
-    (print &quot;a = b&quot;)
-    (print &quot;a != b&quot;))
-</code></pre></main>
+var inline = true
+form.addField(name, value, inline)
+</code></pre><p>雖然看起來還可以，
+但如果 boolean 參數有二三個，
+每次呼叫還是要想一下順序，
+實在是ㄏㄏ</p>
+</main>
 
 <footer></footer>
 <script src="ext/luser-meta.js" defer></script>

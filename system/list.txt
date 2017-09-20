@@ -68,3 +68,4 @@ lisp-scheme-defect.html
 if-bracket-syntax.html
 optional-boolean-argument.html
 android-screen-monitor.html
+different-love.html

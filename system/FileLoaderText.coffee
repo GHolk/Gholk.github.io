@@ -11,7 +11,7 @@ class FileLoaderText
 
     parse: ->
         tagsRegexp = /^#\S+$/gm
-        [@title] = @rawText.match(/.+/)
+        [@title] = @rawText.match(/[^#\n]+/)
         @tags = @rawText.match(tagsRegexp)?.join(',').replace(/#/g, '')
         @main = marked @rawText.replace tagsRegexp, ''
 

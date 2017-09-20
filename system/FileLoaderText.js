@@ -17,7 +17,7 @@
     FileLoaderText.prototype.parse = function() {
       var ref, tagsRegexp;
       tagsRegexp = /^#\S+$/gm;
-      this.title = this.rawText.match(/.+/)[0];
+      this.title = this.rawText.match(/[^#\n]+/)[0];
       this.tags = (ref = this.rawText.match(tagsRegexp)) != null ? ref.join(',').replace(/#/g, '') : void 0;
       return this.main = marked(this.rawText.replace(tagsRegexp, ''));
     };

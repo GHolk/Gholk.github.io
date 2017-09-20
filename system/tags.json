@@ -23,7 +23,7 @@
     "js": 8,
     "hide": 5,
     "cli": 3,
-    "android": 4,
+    "android": 7,
     "電腦": 3,
     "重力感應": 2,
     "課金": 2,
@@ -184,7 +184,7 @@
     "css": 1,
     "config": 1,
     "coffee-script": 1,
-    "ccns": 1,
+    "ccns": 4,
     "browser": 1,
     "apk": 1,
     "105學年": 1,
@@ -247,5 +247,8 @@
     "scheme": 1,
     "javascript": 1,
     "括號": 1,
-    "go": 1
+    "go": 1,
+    "adb": 3,
+    "java": 3,
+    "video": 3
 }

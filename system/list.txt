@@ -69,3 +69,4 @@ if-bracket-syntax.html
 optional-boolean-argument.html
 android-screen-monitor.html
 different-love.html
+adb-over-wifi.html

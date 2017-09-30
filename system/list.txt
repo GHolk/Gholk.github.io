@@ -70,3 +70,4 @@ optional-boolean-argument.html
 android-screen-monitor.html
 different-love.html
 adb-over-wifi.html
+30-day-song.html

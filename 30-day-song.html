@@ -28,6 +28,53 @@
 <p>一開始看到佐榮在推，竟然推了好幾首伍佰！
 然後奇幻社的幾個也開始推，
 我覺得發在 fb 太洗板了，就發在這裡。</p>
+<h2 id="-https-youtu-be-sanqxifs99k-">名字裡有顏色的歌： <a href="https://youtu.be/SaNqXIFS99k">紅色高跟鞋</a></h2>
+<p>好像原本是中國電視劇的歌。
+就覺得很好聽，有點節奏沒在拍子上的感覺。</p>
+<p>蔡健雅的，她的歌有時會出現這種感覺，
+有點隨性，放縱。</p>
+<h2 id="-831-https-youtu-be-ilvlvwle8m0-">名字裡有數字的歌： <a href="https://youtu.be/ILVlVWle8m0">最後的 831</a></h2>
+<p>831 的歌，唱得是暑假最後一天的心聲。
+大學生的最後一個暑假剛結束，
+但我如果沒考上研究所，這就是最後一個暑假了吧。</p>
+<p>我辜負了過去的自己嗎？
+過去的我也沒什麼期待，可能只有仍沒交女友這個問題吧。
+雖然最後的結果和當初差得遠了，
+（根本沒想到會唸測量系。）也沒想過會碰 linux。</p>
+<p>但做了就是做了，是無法改變的，
+只能繼續走下去了，就這樣吧。
+反正過去的我也無法來到現在來後悔了。</p>
+<h2 id="-https-youtu-be-bewjtkhy_l8-">會讓你想起夏天的歌： <a href="https://youtu.be/beWjTKhY_l8">浪花一朵朵</a></h2>
+<p>這首好像和上面那首對調也可以，昨天就在這二首間猶豫。
+今天本來也在想要選 <strong>熱血</strong> 還是真得有 <strong>夏天</strong> 的，
+後來想還是選有夏天的好了，搞不好後面還有熱血。</p>
+<p>其實這首不怎麼熱血，算很平凡溫暖的歌，
+只是她的場景剛好在海邊，海邊就想到夏天。
+mv 不知道在演三小，可能又是某部偶像劇吧。
+講起來歌詞也是有點沙文主義，
+把女生當成必須被守護的；管她去死。</p>
+<h2 id="-https-youtu-be-nsmcslsjsko-">會讓你想起寧願忘記的人的歌：<a href="https://youtu.be/nSmcSLsJSKo">很幼稚嗎</a></h2>
+<p>想忘記的人沒有，不想忘記的倒有一個；
+那麼美好的回憶，幹麻忘掉呢？
+那時候有過幾首，不過後來把思緒理清楚後，
+有幾首就發現情緒不對了。</p>
+<p>妳離開了，我依然在這裡，想著妳說過的話，
+以妳的邏輯思考，用妳的方式生活；
+好像能有什麼意義。
+得不到的總是最美好吧。</p>
+<p>還有考慮聽堂妹唱五月天的 <em>知足</em> ，覺得蠻不錯的。
+可惜我沒能感性到唱到哭，只是個自以為的平凡人而已。
+另一首也覺得不錯是 <em>那女孩對我說</em> ，
+雖然很感動，但情境好像不太合，就沒有選她。
+或 <em>很幼稚嗎</em> 也不錯，但不會讓人唱到想哭。</p>
+<h2 id="-https-youtu-be-kz6fybuvgjm-">需要調高音量的歌：<a href="https://youtu.be/kz6fybUvGJM">天機</a></h2>
+<p>有些歌很嗨，唱得很爽，但不用很大聲；
+這首算是可以用力大聲唱。</p>
+<p>歌不錯，但聽說電影很糞，
+雖然魔幻力量已經 GG 了，反正我也沒看過。</p>
+<h2 id="-">讓你想盡情跳舞的歌</h2>
+<h2 id="-">適合開車時聽的歌</h2>
+<h2 id="-">有關酒精或藥物的歌</h2>
 <style>
 main {
     counter-reset: thirty-day;
@@ -44,61 +91,45 @@ iframe {
 }
 </style>
 
+<script>
+void function loadLazyIframe() {
+    const youtubeAnchor = document.querySelectorAll('h2 a')
+    Array.from(youtubeAnchor).forEach((anchor) => {
+        const embedUrl = youtubeEmbedUrl(anchor.href)
+        const lazyLoadAnchor = createLazyAnchor('open iframe', embedUrl)
+        const h2 = anchor.parentNode
+        h2.parentNode.insertBefore(
+            lazyLoadAnchor,
+            h2.nextSibling
+        )
+    })
 
-<h2 id="-">名字裡有顏色的歌：紅色高跟鞋</h2>
-<iframe src="https://www.youtube.com/embed/SaNqXIFS99k" allowfullscreen></iframe>
+    function youtubeEmbedUrl(short) {
+        const id = short.replace(/^.*\//, '')
+        return `https://www.youtube.com/embed/${id}`
+    }
+    function createLazyAnchor(text, embedUrl) {
+        const anchor = document.createElement('a')
+        anchor.href = embedUrl
+        anchor.textContent = text
+        anchor.addEventListener(
+            'click',
+            function whenLazyAnchorClick(clickAnchor) {
+                clickAnchor.preventDefault()
+                const iframe = document.createElement('iframe')
+                iframe.src = youtubeEmbedUrl(this.href)
+                iframe.allowFullScreen = true
+                this.parentNode.insertBefore(iframe, this.nextSibling)
+            },
+            {once: true}
+        )
+        return anchor
+    }
+}()
+</script>
 
-<p>好像原本是中國電視劇的歌。
-就覺得很好聽，有點節奏沒在拍子上的感覺。</p>
-<p>蔡健雅的，她的歌有時會出現這種感覺，
-有點隨性，放縱。</p>
-<h2 id="-831">名字裡有數字的歌：最後的 831</h2>
-<iframe src="https://www.youtube.com/embed/ILVlVWle8m0" allowfullscreen></iframe>
 
-<p>831 的歌，唱得是暑假最後一天的心聲。
-大學生的最後一個暑假剛結束，
-但我如果沒考上研究所，這就是最後一個暑假了吧。</p>
-<p>我辜負了過去的自己嗎？
-過去的我也沒什麼期待，可能只有仍沒交女友這個問題吧。
-雖然最後的結果和當初差得遠了，
-（根本沒想到會唸測量系。）也沒想過會碰 linux。</p>
-<p>但做了就是做了，是無法改變的，
-只能繼續走下去了，就這樣吧。
-反正過去的我也無法來到現在來後悔了。</p>
-<h2 id="-">會讓你想起夏天的歌：浪花一朵朵</h2>
-<iframe src="https://www.youtube.com/embed/beWjTKhY_l8" allowfullscreen></iframe>
 
-<p>這首好像和上面那首對調也可以，昨天就在這二首間猶豫。
-今天本來也在想要選 <strong>熱血</strong> 還是真得有 <strong>夏天</strong> 的，
-後來想還是選有夏天的好了，搞不好後面還有熱血。</p>
-<p>其實這首不怎麼熱血，算很平凡溫暖的歌，
-只是她的場景剛好在海邊，海邊就想到夏天。
-mv 不知道在演三小，可能又是某部偶像劇吧。
-講起來歌詞也是有點沙文主義，
-把女生當成必須被守護的；管她去死。</p>
-<h2 id="-">會讓你想起寧願忘記的人的歌：很幼稚嗎</h2>
-<iframe src="https://www.youtube.com/embed/nSmcSLsJSKo" allowfullscreen></iframe>
-
-<p>想忘記的人沒有，不想忘記的倒有一個；
-那麼美好的回憶，幹麻忘掉呢？
-那時候有過幾首，不過後來把思緒理清楚後，
-有幾首就發現情緒不對了。</p>
-<p>妳離開了，我依然在這裡，想著妳說過的話，
-以妳的邏輯思考，用妳的方式生活；
-好像能有什麼意義。
-得不到的總是最美好吧。</p>
-<p>還有考慮聽堂妹唱五月天的 <em>知足</em> ，覺得蠻不錯的。
-可惜我沒能感性到唱到哭，只是個自以為的平凡人而已。
-另一首也覺得不錯是 <em>那女孩對我說</em> ，
-雖然很感動，但情境好像不太合，就沒有選她。
-或 <em>很幼稚嗎</em> 也不錯，但不會讓人唱到想哭。</p>
-<h2 id="-">需要調高音量的歌：天機</h2>
-<iframe src="https://www.youtube.com/embed/kz6fybUvGJM" allowfullscreen></iframe>
-
-<p>有些歌很嗨，唱得很爽，但不用很大聲；
-這首算是可以用力大聲唱。</p>
-<p>歌不錯，但聽說電影很糞，
-雖然魔幻力量已經 GG 了，反正我也沒看過。</p>
 </main>
 
 <footer></footer>

@@ -3,6 +3,22 @@
 然後奇幻社的幾個也開始推，
 我覺得發在 fb 太洗板了，就發在這裡。
 
+<style>
+main {
+    counter-reset: thirty-day;
+}
+h2:before {
+    counter-increment: thirty-day;
+    content: "第 " counter(thirty-day) " 天，";
+}
+iframe {
+    display: block;
+    width: 40em;
+    height: 25em;
+    border: none;
+}
+</style>
+
 ## 名字裡有顏色的歌： [紅色高跟鞋](https://youtu.be/SaNqXIFS99k)
 
 好像原本是中國電視劇的歌。
@@ -58,7 +74,6 @@ mv 不知道在演三小，可能又是某部偶像劇吧。
 雖然很感動，但情境好像不太合，就沒有選她。
 或 *很幼稚嗎* 也不錯，但不會讓人唱到想哭。
 
-
 ## 需要調高音量的歌：[天機](https://youtu.be/kz6fybUvGJM)
 
 有些歌很嗨，唱得很爽，但不用很大聲；
@@ -73,22 +88,6 @@ mv 不知道在演三小，可能又是某部偶像劇吧。
 
 ## 有關酒精或藥物的歌
 
-
-<style>
-main {
-    counter-reset: thirty-day;
-}
-h2:before {
-    counter-increment: thirty-day;
-    content: "第 " counter(thirty-day) " 天，";
-}
-iframe {
-    display: block;
-    width: 40em;
-    height: 25em;
-    border: none;
-}
-</style>
 
 <script>
 void function loadLazyIframe() {

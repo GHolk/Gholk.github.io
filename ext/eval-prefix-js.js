@@ -15,6 +15,7 @@ void function () {
         finally {
             if (evalResult) {
                 code.title = jsCode
+                code.textContent = ''
                 showResult(code, evalResult)
             }
         }
@@ -25,6 +26,6 @@ void function () {
         else if (result instanceof Array) {
             result.forEach((x) => showResult(node, x))
         }
-        else node.textContent = result
+        else node.textContent += result
     }
 }()

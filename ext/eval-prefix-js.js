@@ -22,10 +22,19 @@ void function () {
     })
 
     function showResult(node, result) {
-        if (result instanceof Node) node.appendChild(result)
-        else if (result instanceof Array) {
-            result.forEach((x) => showResult(node, x))
+        if (result[Symbol.iterator]) {
+            for (let x of result) {
+                showResult(node, x)
+            }
         }
-        else node.textContent += result
+        else if (typeof result.then == 'function') {
+            result.then((promiseValue) => showResult(node, promiseValue))
+        }
+        else if (typeof result == 'function') result(node)
+        else if (result instanceof Node) node.appendChild(result)
+        else {
+            let textNode = document.createTextNode(String(result))
+            node.appendChild(textNode)
+        }
     }
 }()

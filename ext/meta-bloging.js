@@ -1,6 +1,6 @@
 
 // call in inline script, return the script tag itself.
-function thisPrevNode(selector) {
+function prevQuerySelector(selector) {
     const allMatch = document.querySelectorAll(selector)
     const lastMatch = allMatch[allMatch.length - 1]
     return lastMatch

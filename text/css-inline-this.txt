@@ -1,0 +1,48 @@
+# 行內樣式表的反射
+用 js 醜醜的解決了 inline css 的 this，
+讓 markdown 中的 style 可以用 `:this` 選擇自己。
+這樣就能用 `:this + *` 來選出樣式表的下一個元素，
+做到 *指定下一個段落中的 code 都要用紅字* 之類的功能。
+
+    <style>
+        :this + * code {
+            color: red;
+        }
+    </style>
+    
+<script>
+    void function () {
+        const styleCodeBlock = prevQuerySelector('pre code')
+        document.write(styleCodeBlock.textContent)
+    }()
+</script>
+
+雖然 css 也有 **CSSOM** ，
+但還是直接用 `textContent` 操作 `<style>` 中的文字簡單，
+反正大概也不會有相衝的問題。
+之後有空再來學 cssom，再重寫就好。
+不要花太多時間。
+
+只是簡單為所有 `<style>` 加上 id，
+再把所有 style 中的 `:this` 換成 `#id`。
+id 我是用 `Math.random` 隨機產生，應該不會撞吧。
+
+    // change `:this` to the style id itself
+    function changeStyleThis(style) {
+        let id
+        if (style.id) id = style.id
+        else {
+            const float = Math.random()
+            id = 'random-' + String(float).slice(2)
+            style.id = id
+        }
+    
+        style.textContent =
+            style.textContent.replace(/:this\b/g, `#${id}`)
+    }
+
+#blog
+#巨集
+#css
+#js
+#程式

@@ -1,6 +1,6 @@
 
 void function () {
-    let codeNode = document.querySelectorAll(':not(pre) code')
+    let codeNode = document.querySelectorAll('code:not(:only-child)')
     codeNode = Array.from(codeNode)
         .filter((code) => /^js /.test(code.textContent))
     codeNode.forEach((code) => {
@@ -10,15 +10,11 @@ void function () {
             evalResult = eval(jsCode)
         }
         catch (evalError) {
-            evalResult = null
+            return
         }
-        finally {
-            if (evalResult) {
-                code.title = jsCode
-                code.textContent = ''
-                showResult(code, evalResult)
-            }
-        }
+        code.title = jsCode
+        code.textContent = ''
+        showResult(code, evalResult)
     })
 
     function showResult(node, result) {

@@ -37,10 +37,8 @@
     }
 &lt;/style&gt;
 </code></pre><script>
-    void function () {
-        const styleCodeBlock = prevQuerySelector('pre code')
-        document.write(styleCodeBlock.textContent)
-    }()
+    const nextRedCssCode = prevQuerySelector('pre code')
+    document.write(nextRedCssCode.textContent)
 </script>
 
 <p>雖然 css 也有 <strong>CSSOM</strong> ，

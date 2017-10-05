@@ -11,10 +11,8 @@
     </style>
     
 <script>
-    void function () {
-        const styleCodeBlock = prevQuerySelector('pre code')
-        document.write(styleCodeBlock.textContent)
-    }()
+    const nextRedCssCode = prevQuerySelector('pre code')
+    document.write(nextRedCssCode.textContent)
 </script>
 
 雖然 css 也有 **CSSOM** ，

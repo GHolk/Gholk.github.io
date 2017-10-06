@@ -20,7 +20,45 @@ function changeStyleThis(style) {
         style.textContent.replace(/:this\b/g, `#${id}`)
 }
 
+function evalPrefixJs(node) {
+    const jsCode = node.textContent.replace(/^js /, '')
+    let evalResult
+    try {
+        evalResult = eval(jsCode)
+    }
+    catch (evalError) {
+        console.error(evalError)
+        return
+    }
+    node.title = jsCode
+    node.textContent = ''
+    fillNode(node, evalResult)
+
+}
+
+function fillNode(node, content) {
+    if (typeof content == 'string' && content[Symbol.iterator]) {
+        for (let x of content) {
+            fillNode(node, x)
+        }
+    }
+    else if (typeof content.then == 'function') {
+        content.then((promiseValue) => fillNode(node, promiseValue))
+    }
+    else if (typeof content == 'function') content(node)
+    else if (content instanceof Node) node.appendChild(content)
+    else {
+        let textNode = document.createTextNode(String(content))
+        node.appendChild(textNode)
+    }
+}
+
 window.addEventListener('load', () => {
     let allStyle = document.querySelectorAll('style')
     Array.from(allStyle).forEach(changeStyleThis)
+
+    let evalNode = document.querySelectorAll('code:not(:only-child)')
+    evalNode = Array.from(evalNode)
+        .filter((code) => /^js /.test(code.textContent))
+    evalNode.forEach(evalPrefixJs)
 })

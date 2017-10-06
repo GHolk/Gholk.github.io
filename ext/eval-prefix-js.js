@@ -18,7 +18,7 @@ void function () {
     })
 
     function showResult(node, result) {
-        if (result[Symbol.iterator]) {
+        if (typeof result != 'string' && result[Symbol.iterator]) {
             for (let x of result) {
                 showResult(node, x)
             }

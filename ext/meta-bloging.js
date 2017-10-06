@@ -37,7 +37,7 @@ function evalPrefixJs(node) {
 }
 
 function fillNode(node, content) {
-    if (typeof content == 'string' && content[Symbol.iterator]) {
+    if (typeof content != 'string' && content[Symbol.iterator]) {
         for (let x of content) {
             fillNode(node, x)
         }

@@ -73,3 +73,4 @@ adb-over-wifi.html
 30-day-song.html
 meta-bloging-in-html.html
 css-inline-this.html
+js-eval-macro.html

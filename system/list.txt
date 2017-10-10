@@ -78,3 +78,4 @@ load-disqus-lazy.html
 david-new-classic.html
 emacs-server-client.html
 show-style-javascript.html
+lisp-7-day.html

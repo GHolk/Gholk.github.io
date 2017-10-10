@@ -1,0 +1,162 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" prefix="og: http://ogp.me/ns#">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="c34031328">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="vim, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-10-10T14:27:51.551Z">
+<meta name="keywords" property="og:article:tag" content="lisp,筆記,ccns">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="show-style-javascript.html" title=" 顯示樣式表和 javascript">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<meta property="og:image" content="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title> LISP 七日談</title>
+</head>
+<body>
+<main><h1 id="LISP 七日談">LISP 七日談</h1>
+<p>起初，神創造七個公理，
+於是有了 lisp。</p>
+<ul>
+<li>quote</li>
+<li>atom</li>
+<li>eq</li>
+<li>cons</li>
+<li>car</li>
+<li>cdr</li>
+<li>cond</li>
+</ul>
+<blockquote>
+<h3 id="[[格林斯潘第十定律]]"><a href="http://zh.wikipedia.org/wiki/%E6%A0%BC%E6%9E%97%E6%96%AF%E6%BD%98%E7%AC%AC%E5%8D%81%E5%AE%9A%E5%BE%8B">格林斯潘第十定律</a></h3>
+<p>任何 C 或 Fortran 程序複雜到一定程度之後，
+都會包含一個臨時開發的、不合規範的、
+充滿程序錯誤的、運行速度很慢的、
+只有一半功能的 Common Lisp 實現。</p>
+</blockquote>
+<h2 id="cons">cons</h2>
+<p>神先造了 cons，再用 cons 造出世界萬物。</p>
+<h3 id="列表">列表</h3>
+<h3 id="樹">樹</h3>
+<h2 id="函數">函數</h2>
+<p>神說，函數是好的，於是便不用那算符，只剩餘函數。</p>
+<h3 id="括號的歧義">括號的歧義</h3>
+<h2 id="S 表達式">S 表達式</h2>
+<p>神看那程式和列表相像，就用列表把程式給表示了。</p>
+<h3 id="控制結構">控制結構</h3>
+<p>神說 s 表達式是好的，就用 s 表達式表達控制結構。</p>
+<p>函數是先對參數求值，再把求值結果傳入函數；
+控制結構則沒有一定的做法。
+這些求值順序和函數不同的，稱為 <strong>special form</strong> 。</p>
+<p>同為 s 表達式，讓控制結構看起來很像函數，
+但他們本質仍是不同的。</p>
+<p>例如 and or 如果是 <a href="http://zh.wikipedia.org/wiki/%E7%9F%AD%E8%B7%AF%E6%B1%82%E5%80%BC">短路求值</a> 的則屬 special form，
+也就是先看第一個是否為 true，若有需要才對第二個求值。
+if cond 也都屬 special form。</p>
+<pre><code>(if (= a b)
+    (+ c (* a 2))
+    (+ c a b))
+
+(cond
+    ((&lt; x 10) 1)
+    ((&lt; x 20) 2)
+    ((&lt; x 30) 3)
+    (t 4))
+</code></pre><h2 id="迴圈與遞迴">迴圈與遞迴</h2>
+<p>神說，神不需要迴圈。</p>
+<p>一般程式語言有一種結構叫迴圈，
+用來重複執行直到條件滿足。</p>
+<p>但迴圈並不必要，遞迴可以實現迴圈的功能，
+甚至更多。所以 lisp 沒有迴圈；
+迴圈作為一種巨集形式存在。</p>
+<pre><code class="lang-lisp">(defun while (test do)
+    (if (test)
+        (progn 
+            (do)
+            (while test do))))
+</code></pre>
+<pre><code class="lang-js">function fwhile(test, todo) {
+    if (test()) {
+        todo()
+        fwhile(test, todo)
+    }
+}
+
+let x = 0
+fwhile(
+    () =&gt; x &lt; 10,
+    () =&gt; {
+        alert(x)
+        x++
+    }
+)
+</code></pre>
+<h3 id="遞迴與尾端遞迴">遞迴與尾端遞迴</h3>
+<p>尾端遞迴是遞迴的一種特殊型式。
+特色是只需要追蹤固定數量的變數，和迴圈類似。</p>
+<p>可以最佳化成在常數空間、一次多項式時間內完成，
+也就和迴圈相同。</p>
+<pre><code class="lang-lisp">;f1 f2 counter
+(fib 0 1 5)
+(fib 1 1 4)
+(fib 1 2 3)
+(fib 2 3 2)
+(fib 3 5 1)
+(fib 5 8 0)
+5
+</code></pre>
+<pre><code class="lang-js">let f1 = 0
+let f2 = 1
+for (let i=5; i&gt;0; i--) {
+    let nextF1 = f2
+    let nextF2 = f1 + f2
+    f1 = nextF1
+    f2 = nextF2
+}
+</code></pre>
+<pre><code class="lang-lisp">(fib 5)
+(+ (fib 4) (fib 3))
+(+ (+ (fib 3)
+      (fib 2))
+   (+ (fib 2)
+      (fib 1)))
+(+ (+ (+ (fib 2)
+         (fib 1))
+      (+ (fib 1)
+         (fib 0)))
+   (+ (+ (fib 1)
+         (fib 0))
+      0))
+</code></pre>
+</main>
+
+<footer>
+<script src="ext/luser-meta.js" defer></script>
+</footer>
+
+<div id="disqus_thread">
+  <button>load disqus</button>
+<script defer src="ext/load-disqus.js"></script>
+<noscript>
+  Please enable JavaScript to view the
+  <a href="https://disqus.com/?ref_noscript">
+    comments powered by Disqus.
+  </a>
+</noscript>
+</div>
+
+
+</body>
+</html>
+

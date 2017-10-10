@@ -22,7 +22,7 @@
     "s-expression": 3,
     "js": 10,
     "hide": 5,
-    "cli": 3,
+    "cli": 5,
     "android": 8,
     "電腦": 3,
     "重力感應": 2,
@@ -39,7 +39,7 @@
     "www": 2,
     "twbbs": 2,
     "soul-knight": 3,
-    "gui": 2,
+    "gui": 4,
     "github": 2,
     "funny": 2,
     "dns": 2,
@@ -180,7 +180,7 @@
     "firefox": 1,
     "ethercalc": 1,
     "email": 1,
-    "emacs": 1,
+    "emacs": 3,
     "css": 7,
     "config": 1,
     "coffee-script": 1,
@@ -267,5 +267,6 @@
     "ncku": 3,
     "通識": 3,
     "報告": 3,
-    "藝術": 3
+    "藝術": 3,
+    "systemd": 2
 }

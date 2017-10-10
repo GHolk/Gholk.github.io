@@ -76,3 +76,4 @@ css-inline-this.html
 js-eval-macro.html
 load-disqus-lazy.html
 david-new-classic.html
+emacs-server-client.html

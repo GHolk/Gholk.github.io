@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" prefix="og: http://ogp.me/ns#">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="c34031328">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="vim, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-10-10T04:52:03.410Z">
+<meta name="keywords" property="og:article:tag" content="emacs,gui,cli,systemd">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="david-new-classic.html" title=" 大衛與新古典主義">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<meta property="og:image" content="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title> 用 server client mode 執行 emacs</title>
+</head>
+<body>
+<main><h1 id="用 server client mode 執行 emacs">用 server client mode 執行 emacs</h1>
+<p>emacs 可以用 server client 方式執行，可以加快速度。
+意思是有一個 emacs server，執行 client 時是連上該 server，
+並在該 server 開啟該檔為一個 buffer。
+和我之前想要的命令 <em>在已開啟的 emacs 中編輯</em> 有 87 成像。
+以下簡介一下可能需要的 config。</p>
+<p>具體作法是先開啟一個在背景執行的 <code>emacs --daemon</code>，
+之後要連上去要用 <code>emacsclient</code>，
+<code>-c</code> 選項會開啟一個新 frame，否則要指定檔名；
+<code>-nw</code> 選項是指定在 terminal 中，不然預設會開啟 gui。
+至於 client 和 daemon 是怎麼發現彼此的，
+對我還是個謎 <code>@@</code></p>
+<h2 id="user 的 systemd">user 的 systemd</h2>
+<p>用 systemd 是想把 emacs daemon 掛到 systemd 下，
+變成一個獨立的 service，可以自動啟動，
+也不會因為 terminal 關閉就結束。</p>
+<p>之前就折騰過 user 的 systemd，一直沒有成功。
+之前都放到 <code>~/.config/systemd/user/</code> 裡而已，
+忘了 enable，而且還要加 <code>--user</code> 參數。</p>
+<p>所以就是創一個 <code>js dotEmacs(&#39;emacs.service&#39;)</code>，
+我是從 <a href="https://www.emacswiki.org/emacs/EmacsAsDaemon#toc8">EmacsWiki 上抄來的</a>，
+那時候還想要不要改成 <code>emacs-daemon.service</code> 或 <code>emacs-server.service</code>，
+但考量 emacs wiki 都這樣寫了，為了通用性就不要自己多做怪。
+然後放到 <code>~/.config/systemd/user/</code> 裡，
+再 <code>systemctl --user enable emacs</code> 即可。</p>
+<script>
+function dotEmacs(path, text) {
+    const url = `https://github.com/GHolk/dot-emacs/blob/master/${path}`
+    const a = document.createElement('a')
+    a.href = url
+    a.textContent = text || path
+    return a
+}
+</script>
+
+<h2 id="GUI 可以用了">GUI 可以用了</h2>
+<p>之前就想用 gui 下的 emacs，因為可以通 x-window 的剪貼簿很方便。
+而且還可以用很多只有 gui 下能用的功能，像全色彩、任意字體大小等。</p>
+<p>但之前一直遇到的問題是字體大小會變小，
+我在 <code>js dotEmacs(&#39;init.el#L173&#39;)</code> 裡寫
+<code>(set-face-attribute &#39;default nil :height 200)</code> 。
+但 gui 的 emacs 會無視我設的字體大小，會自己再調一次大小。</p>
+<iframe src="http://youtube.com/embed/MGfkf6HX378">
+<a href="http://youtu.be/MGfkf6HX378">
+之前 emacs 無視設定檔的字體大小</a>
+</iframe>
+
+<p>現在用 daemon 啟動 emacs 後，
+再用 emacsclient 連上就是設好的，
+而且 daemon 好像沒在分 gui 或 cli 的，
+都是同一個，只要在連上去時指定就好。</p>
+<h2 id="從 gui 或 cli 啟動">從 gui 或 cli 啟動</h2>
+<p>本來我是習慣在 cli 用 emacs，
+現在改成 gui 就把 bashrc 裡的 alias 改了。</p>
+<pre><code>#alias emacs=&quot;emacs -nw&quot;
+alias ec=&quot;emacsclient -nw&quot;
+</code></pre><p>要在 cli 可以用 <code>-nw</code> 或 <code>-t</code> ，
+但 nw 和 emacs 原本的選項一樣，
+而 t 在 emacs 是不同的意思，為了統一就用 nw。</p>
+<p>目前 <code>EDITOR=vi</code> 還是沒變，不確定要不要改成 <code>emacsclient -nw</code>，
+畢竟 vi 已經很好用了，很多時候會用到 EDITOR 只是要稍微改一下而已。</p>
+<p>另外還有一個變數是 VISUAL，好像是指定 gui 編輯器，
+可以指定成 emacsclient。但目前是沒有設定。</p>
+<h3 id="桌面 icon">桌面 icon</h3>
+<p>上面在 cli 下的指令都是直接啟動 cli 的 emacs，
+gui 的 emacs 當然是要從 gui 啟動啦。
+於是就在應用程式 menu 裡加了一個 emacsclient 的 entry。</p>
+<p>原本的 menu 只有 emacs gui 和 emacs cli 二種，
+我也 google 不到把 emacsclient 加進 menu 的文章，
+只好看著其它的 menu 自創。</p>
+<p>創建 <code>js dotEmacs(&#39;emacsclient.desktop&#39;)</code>，
+放到 <code>/usr/share/applications</code> 下，
+按 meun 的時候就會出現了。</p>
+<p>都不用其它指令，有點神奇，
+這構造也太簡單了 <code>@@</code></p>
+</main>
+
+<footer>
+<script src="ext/luser-meta.js" defer></script>
+</footer>
+
+<div id="disqus_thread">
+  <button>load disqus</button>
+<script defer src="ext/load-disqus.js"></script>
+<noscript>
+  Please enable JavaScript to view the
+  <a href="https://disqus.com/?ref_noscript">
+    comments powered by Disqus.
+  </a>
+</noscript>
+</div>
+
+
+</body>
+</html>
+

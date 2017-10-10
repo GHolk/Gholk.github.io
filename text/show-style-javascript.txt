@@ -1,0 +1,36 @@
+# 顯示樣式表和 javascript
+之前幾篇文章我想展示代碼，
+想要造出效果，但又想讓人看到程式，
+只好寫一份用來看，再寫一份實際執行。
+
+後來我想到，javascript 和 css 不會顯示出來的原因是，
+他們預設是 `display: none;` ，
+那我只要在 css 中設定他們為顯示，就可以啦！
+`js githubCommit('Gholk.github.io', 'bd25066')`
+
+本來想不要太打擾版面，看能不能 `:hover` 才顯示，
+但太麻煩了，後來決定做成直接顯示，
+但用較淡的顏色。
+
+另外因為 style 有時有 id，
+就順便如果有 id 的話，就會顯示 id。
+但不能顯示原本自創的偽類 `:this` 有點可惜。
+
+只是一些較舊的文章看起來會怪怪的，
+而且也不能在 style 或 javascript 中用語法高亮了；
+因為語法高亮是會改動原本的內容，換成 html tag。
+
+<script>
+function githubCommit(repo, hash, text) {
+    const url = `https://github.com/GHolk/${repo}/commit/${hash}`
+    const a = document.createElement('a')
+    a.href = url
+    a.textContent = text || `${repo} commit ${hash}`
+    return a
+}
+</script>
+
+#css
+#javascript
+#blog
+#巨集

@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" prefix="og: http://ogp.me/ns#">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="c34031328">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="vim, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-10-10T08:49:18.251Z">
+<meta name="keywords" property="og:article:tag" content="css,javascript,blog,巨集">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="emacs-server-client.html" title=" 用 server client mode 執行 emacs">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<meta property="og:image" content="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title> 顯示樣式表和 javascript</title>
+</head>
+<body>
+<main><h1 id="顯示樣式表和 javascript">顯示樣式表和 javascript</h1>
+<p>之前幾篇文章我想展示代碼，
+想要造出效果，但又想讓人看到程式，
+只好寫一份用來看，再寫一份實際執行。</p>
+<p>後來我想到，javascript 和 css 不會顯示出來的原因是，
+他們預設是 <code>display: none;</code> ，
+那我只要在 css 中設定他們為顯示，就可以啦！
+<code>js githubCommit(&#39;Gholk.github.io&#39;, &#39;bd25066&#39;)</code></p>
+<p>本來想不要太打擾版面，看能不能 <code>:hover</code> 才顯示，
+但太麻煩了，後來決定做成直接顯示，
+但用較淡的顏色。</p>
+<p>另外因為 style 有時有 id，
+就順便如果有 id 的話，就會顯示 id。
+但不能顯示原本自創的偽類 <code>:this</code> 有點可惜。</p>
+<p>只是一些較舊的文章看起來會怪怪的，
+而且也不能在 style 或 javascript 中用語法高亮了；
+因為語法高亮是會改動原本的內容，換成 html tag。</p>
+<script>
+function githubCommit(repo, hash, text) {
+    const url = `https://github.com/GHolk/${repo}/commit/${hash}`
+    const a = document.createElement('a')
+    a.href = url
+    a.textContent = text || `${repo} commit ${hash}`
+    return a
+}
+</script>
+
+
+
+
+
+</main>
+
+<footer>
+<script src="ext/luser-meta.js" defer></script>
+</footer>
+
+<div id="disqus_thread">
+  <button>load disqus</button>
+<script defer src="ext/load-disqus.js"></script>
+<noscript>
+  Please enable JavaScript to view the
+  <a href="https://disqus.com/?ref_noscript">
+    comments powered by Disqus.
+  </a>
+</noscript>
+</div>
+
+
+</body>
+</html>
+

@@ -1,5 +1,9 @@
 # LISP 七日談
 
+![caution!! contain lisp!]
+
+[caution!! contain lisp!]: http://www.lisperati.com/lisplogo_fancy_256.png
+
 起初，神創造七個公理，
 於是有了 lisp。
 
@@ -141,6 +145,10 @@ for (let i=5; i>0; i--) {
          (fib 0))
       0))
 ```
+
+
+## 副作用
+lisp 函數
 
 #lisp
 #筆記

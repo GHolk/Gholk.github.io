@@ -23,6 +23,11 @@
 > 充滿程序錯誤的、運行速度很慢的、
 > 只有一半功能的 Common Lisp 實現。
 
+<style>
+h1 + p {
+    float: right;
+}
+</style>
 
 ## cons
 神先造了 cons，再用 cons 造出世界萬物。
@@ -147,8 +152,142 @@ for (let i=5; i>0; i--) {
 ```
 
 
+## 語法樹
+lisp 把程式也看成一個表。
+例如 `(subst (list a b c) a d)` 本身是一份程式，
+也能看成一個 list，其中第二個元素也是一個表。
+
+所以在 lisp 中寫 macro 很容易。
+在其它語言中，要寫 macro 要手動操作語法樹，
+極為麻煩。
+
+```js
+// sweet.js
+syntax let = function (ctx) {
+    let ident = ctx.next().value
+    ctx.next() // eat `=`
+    let init = ctx.expand('expr').value
+    return #`
+        (function (${ident}) {
+            ${ctx} // <2>
+        }(${init}))
+    `
+}
+```
+
+```js
+let x = y
+alert(x+6)
+f(x)
+alert(x*3)
+
+/* produce */
+
+(function (x) {
+    alert(x+6)
+    f(x)
+    alert(x*3)
+}(y))
+```
+
+### quote
+但這裡有個問題，lisp 程式中的那些 if and map 要怎麼表示？
+表示成字串好像可以，但那字串又要怎麼辦？
+如果函數和變數在同一命名空間，
+那 map 可以表示成函數的值，
+但 if and 這些不屬函數的 special form 怎麼辦？
+
+所以發明了 quote 這個系統，
+被 quote 起來的可以視為一段 hash 值。
+（在傳統 lisp 中是記憶體位置。）
+
+```lisp
+(quote s)
+;; 簡寫為
+'s
+```
+
+```lisp
+'(if (= a b)
+     a
+     b)
+```
+
+被 quote 後就不會被求值，
+quote 的結果可以視為一個 **命名空間** 中的一個名字，
+可以在一個 **環境** 被 eval 求值。
+
+### eval
+eval 是一個特殊函數，他 **求值** 一個 list。
+
+quote 可以 quote 名字，也能 qoute list，
+被 quote 的 list 內容不會執行，
+都會視為 symbol。
+
+```lisp
+(setq my-list '(concat "hello, " "world!"))
+(car my-list)    ; 'concat
+(eval my-list)   ; "hello, world!"
+(eval (subst 'concat 'print my-list))  ; 把 my-list 中的 concat 換成 print
+```
+
+### macro
+所以對 lisp 來說，macro 就是收一個 list，
+然後改啊改啊改，再回傳一個 list。
+
+相比其它語言只有字串代換的簡單 macro，
+不然就是要操作複雜的語法；
+lisp 的 macro 如此簡單，
+就是因為 lisp 的語法節單所致。
+
+
 ## 副作用
-lisp 函數
+lisp 函數內是一個或多個 expression，
+一般一個就夠了，
+如果有多個，也會依序執行。
+
+```lisp
+(defun my-function (x y)
+    (+ x y)                   ; 沒有意義的 expression
+    (+ (* x 2) (* y 6))       ; 沒有意義的 expression
+    (setq x 18)               ; 這個 expression 有意義，因為有副作用
+    (* (/ x 2) (- 6 y)))      ; 這個有意義，因為會被 return
+```
+
+除非有 **副作用** ，
+否則只有最後一個 expression 有意義，
+因為其它都不會被 return。
+
+
+## 附錄
+
+### 函數與變數
+傳統 lisp 區分函數與變數的命名空間，
+就和 C 語言差不多。
+
+### 作用域
+作用域體現在程式如何處理 **自由變數** 這個問題上。
+自由變數在呼叫時決定是 **動態作用域** ，
+在定義時決定是 **詞法作用語** 。
+
+```lisp
+(defun user-say (sentence)
+    (format "%s: %s\n" 
+            user        ; user 在這個 scope 中沒有定義，
+                        ; 也就是沒有被綁定某一個值，稱為自由變數。
+            sentence))
+```
+
+傳統 lisp 是動態作用域，
+主要因為傳統 lisp 多半直接把函數看成一個 list，
+直接用類似 eval 的方式執行。
+為了方便，當發現自由變數時，
+直接在執行時找當然是最簡單的作法。
+
+詞法作用域的作法多是在定義函數時
+把定義的 **環境** 作一份快照，
+一個函數就是由快照和函數體二部份組成。
+函數執行時，遇到自由變數就直接回環境中找。
 
 #lisp
 #筆記

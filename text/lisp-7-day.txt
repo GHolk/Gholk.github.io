@@ -15,13 +15,14 @@
 * cdr
 * cond
 
-
 > ### [[格林斯潘第十定律]]
 >
 > 任何 C 或 Fortran 程序複雜到一定程度之後，
 > 都會包含一個臨時開發的、不合規範的、
 > 充滿程序錯誤的、運行速度很慢的、
 > 只有一半功能的 Common Lisp 實現。
+
+<script src="ext/toc.js"></script>
 
 <style>
 h1 + p {

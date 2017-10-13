@@ -56,8 +56,44 @@ h1 + p {
 
 <h2 id="cons">cons</h2>
 <p>神先造了 cons，再用 cons 造出世界萬物。</p>
+<p>cons 是一種資料結構，也是建構函數，
+有二個欄位，分別叫 car cdr。
+欄位內容可以是任何東西，
+例如 number list function 或另一個 cons。</p>
+<pre><code class="lang-lisp">(setq my-cons (cons 1 &quot;hello&quot;)) ; (1 . &quot;hello&quot;)
+(car my-cons)  ; 1
+(cdr my-cons)  ; &quot;hello&quot;
+</code></pre>
 <h3 id="列表">列表</h3>
+<p>列表由 cons 構成，有點像資料結構中的 link list，
+每個 cons 在 cdr 裡存了下一個 cons，但只有單向。</p>
+<p>而最後一個 cons 的 cdr 是一個特殊的值 nil，
+用來標示列表結束。</p>
+<pre><code class="lang-lisp">(1 . (2 . (3 . nil)))  ; dot pair 的寫法
+(1 2 3)                ; list 的寫法
+</code></pre>
+<p>而一個空表則直接表示成 nil。
+想像只有一個元素的表是 <code>(1 . nil)</code> ，
+則空表就是 <code>nil</code> 。</p>
+<p>另外這也造成對一個表取 cdr，
+即是取得除首去元素的子列表。</p>
+<pre><code class="lang-lisp">(1 . (2 . (3 . nil)))
+(1 2 3)
+(car (1 . (2 . (3 . nil))))  ; (2 . (3 . nil))
+(car (3 . nil))              ; nil 也就是空表
+</code></pre>
 <h3 id="樹">樹</h3>
+<p>既然我們有了列表，可以在列表裡存另一個列表，
+形成樹的結構。</p>
+<pre><code class="lang-lisp">(1
+ 2
+ (1 2)
+ (3
+  (4 5)
+  (5 6 7))
+ 5)
+</code></pre>
+<p>附錄： <a href="#nil 與 false">nil 的問題</a></p>
 <h2 id="函數">函數</h2>
 <p>神說，函數是好的，於是便不用那算符，只剩餘函數。</p>
 <h3 id="括號的歧義">括號的歧義</h3>
@@ -231,6 +267,17 @@ lisp 的 macro 如此簡單，
 否則只有最後一個 expression 有意義，
 因為其它都不會被 return。</p>
 <h2 id="附錄">附錄</h2>
+<h3 id="nil 與 false">nil 與 false</h3>
+<p>傳統 lisp 中 nil 和布林值 false 是用同一個符號表示。
+但這樣有個問題，要分辨 <strong>樹</strong> 中的 nil 是表示
+false 還是空表有點麻煩。</p>
+<pre><code class="lang-lisp">(eq nil ()) ; t
+((1 3 5)
+ (t t nil)  ; 這個 nil 是表示空表還是 false？
+ ((1 2)     ; () 和 nil 是同義
+  (3)
+  ()))
+</code></pre>
 <h3 id="函數與變數">函數與變數</h3>
 <p>傳統 lisp 區分函數與變數的命名空間，
 就和 C 語言差不多。</p>

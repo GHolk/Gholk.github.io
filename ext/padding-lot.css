@@ -123,11 +123,11 @@ script, style {
     color: grey;
     font-size: smaller;
 }
-script:empty {
-    display: none;
-}
 script:before {
     content: '<script>';
+}
+script[src]:before {
+    content: '<script src="' attr(src) '">';
 }
 script:after {
     content: '</script>';
@@ -141,3 +141,26 @@ style[id]:before {
 style:after {
     content: '</style>';
 }
+
+
+#toc {
+    border: black solid 1px;
+    padding: 1em;
+    float: right;
+}
+#toc:before {
+    content: 'toc';
+}
+#toc > * {
+    font-size: 1em;
+    margin: 0.2em;
+}
+#toc > *:before {
+    content: '- ';
+}
+#toc > h2 { margin-left: 1em; }
+#toc > h3 { margin-left: 2em; }
+#toc > h4 { margin-left: 3em; }
+#toc > h5 { margin-left: 4em; }
+#toc > h6 { margin-left: 5em; }
+#toc > h7 { margin-left: 6em; }

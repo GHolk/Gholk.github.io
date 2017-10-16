@@ -280,7 +280,24 @@ false 還是空表有點麻煩。</p>
 </code></pre>
 <h3 id="函數與變數">函數與變數</h3>
 <p>傳統 lisp 區分函數與變數的命名空間，
-就和 C 語言差不多。</p>
+就和 C 語言差不多。
+所以上面一些代碼會無法運行 :P</p>
+<p>主流的 common lisp 依然如此，
+而 scheme 則不區分。</p>
+<p>在區分的 lisp 實作中，
+通常要將函數做為值傳遞時，
+需要用一種特殊的 quote 寫法，
+被暱稱為 <em>function quote</em> 。</p>
+<pre><code class="lang-lisp">(defun square (x)
+    (* x x))
+
+(map #&#39;square
+     &#39;(1 2 3 4 5))
+;; (1 4 9 16 25)
+
+(map (lambda (x) (* x x))
+     &#39;(1 2 3 4 5))
+</code></pre>
 <h3 id="作用域">作用域</h3>
 <p>作用域體現在程式如何處理 <strong>自由變數</strong> 這個問題上。
 自由變數在呼叫時決定是 <strong>動態作用域</strong> ，
@@ -317,6 +334,36 @@ let&#39;s talk in lisp!</p>
 <li>成功大學資訊工程舊系館 4202 教室 (1F)</li>
 <li><a href="https://ccns.kktix.cc/events/ccns-lisp-1-day">https://ccns.kktix.cc/events/ccns-lisp-1-day</a></li>
 </ul>
+<h3 id="setq 與 setf">setq 與 setf</h3>
+<p>最初，lisp 只有 set 函數，
+set 函數設置一個符號的值，
+被賦值的必須是 <strong>符號</strong> 。</p>
+<pre><code class="lang-lisp">(set &#39;foo &quot;bar&quot;)        ; 注意，foo 必須被 quote 了
+
+(set &#39;a &#39;b)         ; a 的內容是另一個符號 b
+(set a &quot;bbb&quot;)       ; 這裡 a 沒有被 quote，所以會被 eval 成 b
+(print b)           ; bbb
+</code></pre>
+<h4 id="set quote">set quote</h4>
+<p>但人們覺得每次設值都必須 quote 太麻煩了，
+於是有了 setq，為一個巨集，
+會自動把名稱 quote。</p>
+<pre><code class="lang-lisp">(setq hello &quot;world&quot;)
+;; 被改寫為
+;; (set (quote hello) &quot;world&quot;)
+</code></pre>
+<h4 id="set field">set field</h4>
+<p>然後，有了對物件的欄位賦值的函數 setf。
+模仿 <code>myObj.car = &quot;my car&quot;</code> ，
+寫成 <code>(setf (car myObj) &quot;my car&quot;)</code> 。</p>
+<p>當然也是用巨集達成的，
+而 setf 中的 <code>(car my-cons)</code> 並不被執行，
+只是一種便於閱讀的寫法。</p>
+<pre><code class="lang-lisp">(setf (car my-cons) &quot;the my cons car&quot;)
+;; 相當於
+;; (set-car my-cons &quot;the my cons car&quot;)
+(print (car my-cons))  ; &quot;the my cons car&quot;
+</code></pre>
 </main>
 
 <footer>

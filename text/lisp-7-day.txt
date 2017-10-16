@@ -329,6 +329,28 @@ false 還是空表有點麻煩。
 ### 函數與變數
 傳統 lisp 區分函數與變數的命名空間，
 就和 C 語言差不多。
+所以上面一些代碼會無法運行 :P
+
+主流的 common lisp 依然如此，
+而 scheme 則不區分。
+
+在區分的 lisp 實作中，
+通常要將函數做為值傳遞時，
+需要用一種特殊的 quote 寫法，
+被暱稱為 *function quote* 。
+
+```lisp
+(defun square (x)
+    (* x x))
+
+(map #'square
+     '(1 2 3 4 5))
+;; (1 4 9 16 25)
+
+(map (lambda (x) (* x x))
+     '(1 2 3 4 5))
+```
+
 
 ### 作用域
 作用域體現在程式如何處理 **自由變數** 這個問題上。
@@ -354,6 +376,7 @@ false 還是空表有點麻煩。
 一個函數就是由快照和函數體二部份組成。
 函數執行時，遇到自由變數就直接回環境中找。
 
+
 ### 介紹文案：LISP 一日談
 提起 lisp 你會想到什麼？
 古董級的語言？人工智慧？大量的括號？
@@ -371,6 +394,52 @@ let's talk in lisp!
 * `2017-10-19 19:10~21:00`
 * 成功大學資訊工程舊系館 4202 教室 (1F)
 * <https://ccns.kktix.cc/events/ccns-lisp-1-day>
+
+
+### setq 與 setf
+最初，lisp 只有 set 函數，
+set 函數設置一個符號的值，
+被賦值的必須是 **符號** 。
+
+
+```lisp
+(set 'foo "bar")        ; 注意，foo 必須被 quote 了
+
+(set 'a 'b)         ; a 的內容是另一個符號 b
+(set a "bbb")       ; 這裡 a 沒有被 quote，所以會被 eval 成 b
+(print b)           ; bbb
+```
+
+
+#### set quote
+
+但人們覺得每次設值都必須 quote 太麻煩了，
+於是有了 setq，為一個巨集，
+會自動把名稱 quote。
+
+```lisp
+(setq hello "world")
+;; 被改寫為
+;; (set (quote hello) "world")
+```
+
+
+#### set field
+
+然後，有了對物件的欄位賦值的函數 setf。
+模仿 `myObj.car = "my car"` ，
+寫成 `(setf (car myObj) "my car")` 。
+
+當然也是用巨集達成的，
+而 setf 中的 `(car my-cons)` 並不被執行，
+只是一種便於閱讀的寫法。
+
+```lisp
+(setf (car my-cons) "the my cons car")
+;; 相當於
+;; (set-car my-cons "the my cons car")
+(print (car my-cons))  ; "the my cons car"
+```
 
 #lisp
 #筆記

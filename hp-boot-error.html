@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" prefix="og: http://ogp.me/ns#">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="vim, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-10-17T05:57:47.881Z">
+<meta name="keywords" property="og:article:tag" content="電腦,開機,ram">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="emacs-server-scim.html" title=" gui 下 emacs server 和 scim 輸入法">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<meta property="og:image" content="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title> 惠普 PC 的開機問題</title>
+</head>
+<body>
+<main><h1 id="惠普 PC 的開機問題">惠普 PC 的開機問題</h1>
+<p>最近舊筆電 ferrari one 壽終正寢，
+就先龜在 CCNS 用一台 hp 的桌機。
+但那台 hp 開機會出現 bios error，
+然後要進 setup 裡回複預設設定才能開機。
+最後解決了。</p>
+<h2 id="問題">問題</h2>
+<p>一開機顯示的訊息：</p>
+<pre><code>2048 MB
+
+2211-Memory not configured correctly for proper MEBx execution.
+    Make sure there is a memory module in the black DIMM socket
+
+163-Time &amp; Date Not Set
+    The system time is invalid. This may be a result of a loss in battery
+    power. Set the correct time and date using your operation system. In
+    this message persists. you may need to replace the onboard battery.
+
+initializing Intel(R) Boot Agent GE v1.3.24
+PXE 2.1 Build 086 (WfM 2.0)
+</code></pre><p>然後跳選單要你選：</p>
+<ul>
+<li>F1 正常開機</li>
+<li>F9 選開機裝置</li>
+<li>F10 進設定</li>
+</ul>
+<p>嘗試直接按 F1 開機會顯示此訊息，
+然後只能重開。</p>
+<pre><code>2233-HECI error during MEBx execution]
+    MEBX Status = 0302
+    ME BIOS Extension module halted.
+    Update BIOS or ME firmware if problem persists
+
+2286-End Of POST HECI Failure
+    System halted. Power cycle the system to reboot
+</code></pre><p>得要選 F10，還原成預設設定才行。</p>
+<h2 id="解決">解決</h2>
+<p>我本來以為是主機板電池沒電，
+本來要在老邱買了，只是型號太多，
+不知道是哪一種無法買。</p>
+<p>回社辦用其它台壞的 PC 的電池換上去，
+發現一樣，就暫且不管他。
+反正只要每次開機都選 F10 重設 bios 就還能開機。</p>
+<p>後來打這篇文章，要把訊息照起來，
+仔細看才發現一開始的訊息好像有提到原因。
+之前清 hp 時看到，她有 4 個 ram 插槽，
+其中一個是黑色的，DC 也不知道原因。</p>
+<p>我本來是二條 ram 都插白的，另外一白一黑是空的。
+就把二個 ram 改插到一白一黑那二個，
+開機就沒有錯誤訊息了！
+就直接開機了！</p>
+</main>
+
+<footer>
+<script src="ext/luser-meta.js" defer></script>
+</footer>
+
+<div id="disqus_thread">
+<script defer src="ext/load-disqus.js"></script>
+<noscript>
+  Please enable JavaScript to view the
+  <a href="https://disqus.com/?ref_noscript">
+    comments powered by Disqus.
+  </a>
+</noscript>
+</div>
+
+
+</body>
+</html>
+

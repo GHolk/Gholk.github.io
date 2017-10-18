@@ -441,6 +441,9 @@ set 函數設置一個符號的值，
 (print (car my-cons))  ; "the my cons car"
 ```
 
+### [投影片](lisp-7-day.sozi.html)
+
+
 #lisp
 #筆記
 #ccns

@@ -171,7 +171,7 @@
     "makefile": 1,
     "luser": 1,
     "live-script": 1,
-    "linux": 2,
+    "linux": 3,
     "lambda": 1,
     "imgur": 1,
     "ide": 1,
@@ -275,5 +275,8 @@
     "輸入法": 1,
     "service": 1,
     "開機": 2,
-    "ram": 2
+    "ram": 2,
+    "grub": 1,
+    "lvm": 1,
+    "boot": 1
 }

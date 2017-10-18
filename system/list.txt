@@ -82,3 +82,4 @@ lisp-7-day.html
 deprecate-argument-callee.html
 emacs-server-scim.html
 hp-boot-error.html
+extend-lvm-filesystem.html

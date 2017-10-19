@@ -443,6 +443,17 @@ set 函數設置一個符號的值，
 
 ### [投影片](lisp-7-day.sozi.html)
 
+<script>
+const loadSlideScript = prevQuerySelector('script')
+const slideXhr = new XMLHttpRequest()
+slideXhr.open('GET', prevQuerySelector('a').href)
+slideXhr.responseType = 'document'
+slideXhr.onload = function () {
+    const svg = this.response.querySelector('svg')
+    loadSlideScript.parentNode.insertBefore(svg, loadSlideScript)
+}
+slideXhr.send()
+</script>
 
 #lisp
 #筆記

@@ -62,3 +62,24 @@ window.addEventListener('load', () => {
         .filter((code) => /^js /.test(code.textContent))
     evalNode.forEach(evalPrefixJs)
 })
+
+function ajaxQuery(url, selector) {
+    return new Promise((returnNode, returnError) => {
+        const queryXhr = new XMLHttpRequest()
+        queryXhr.open('GET', url)
+        queryXhr.responseType = 'document'
+        queryXhr.onload = function () {
+            try {
+                const targetNodes = this.response.querySelectorAll(selector)
+                
+                if (targetNodes.length == 1) returnNode(targetNodes[0])
+                else returnNode(targetNodes)
+            }
+            catch (queryError) {
+                returnError(queryError)
+            }
+        }
+        queryXhr.onerror = returnError
+        queryXhr.send()
+    })
+}

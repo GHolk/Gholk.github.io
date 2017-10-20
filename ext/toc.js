@@ -1,46 +1,4 @@
 
-/*
-class TocHead {
-    constructor(level, id, text, children) {
-        this.level = level
-        this.id = id
-        this.text = text
-        this.children = children
-    }
-    static fromNode(node) {
-        const level = node.nodeName.match(/^h(\d)$/i)
-        const id = node.id
-        return new this(level, id, node.textContent, [])
-    }
-    addChildNode(node) {
-        const childToc = new this.constructor.fromNode(node)
-        this.children.push(childToc)
-    }
-    toNode() {
-        const a = document.createElement('a')
-        a.href = '#' + this.id
-        a.textContent = this.text
-        
-        const ul = document.createElement('ul')
-        this.children.map((tocChild) => {
-            const childAnchor = tocChild.toNode()
-            const li = document.createElement('li')
-            li.appendChild(childAnchor)
-            return li
-        }).reduce((ul, liChild) => {
-            ul.appendChild(liChild)
-            return ul
-        }, ul)
-
-        const fragment = document.createDocumentFragment()
-        fragment.appendChild(a)
-        fragment.appendChild(ul)
-
-        return fragment
-    }
-}
-*/
-
 const tocScript = prevQuerySelector('script')
 
 window.addEventListener('load', function () {
@@ -51,7 +9,7 @@ window.addEventListener('load', function () {
     if (!toc) {
         toc = document.createElement('div')
         toc.id = 'toc'
-        tocScript.parentNode.insertBefore(toc, tocScript.nextSibling)
+        tocScript.parentNode.insertBefore(toc, tocScript)
     }
 
     Array.from(allHead).reduce((toc, headNode) => {

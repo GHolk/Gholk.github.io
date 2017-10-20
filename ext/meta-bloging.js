@@ -28,6 +28,7 @@ function evalPrefixJs(node) {
     }
     catch (evalError) {
         console.error(evalError)
+        node.title = String(evalError)
         return
     }
     node.title = jsCode
@@ -57,9 +58,9 @@ window.addEventListener('load', () => {
     let allStyle = document.querySelectorAll('style')
     Array.from(allStyle).forEach(changeStyleThis)
 
-    let evalNode = document.querySelectorAll('code:not(:only-child)')
+    let evalNode = document.querySelectorAll('code')
     evalNode = Array.from(evalNode)
-        .filter((code) => /^js /.test(code.textContent))
+        .filter((code) => /^js[\s\n]/.test(code.textContent))
     evalNode.forEach(evalPrefixJs)
 })
 

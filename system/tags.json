@@ -95,7 +95,7 @@
     "灣生": 1,
     "演化": 1,
     "死": 1,
-    "歷史": 1,
+    "歷史": 2,
     "東南亞": 1,
     "期刊": 1,
     "時代力量": 1,
@@ -179,12 +179,12 @@
     "Hillary_Herrington": 1,
     "firefox": 1,
     "ethercalc": 1,
-    "email": 1,
+    "email": 2,
     "emacs": 4,
     "css": 8,
     "config": 1,
     "coffee-script": 1,
-    "ccns": 45,
+    "ccns": 46,
     "browser": 1,
     "apk": 1,
     "105學年": 1,
@@ -278,5 +278,6 @@
     "ram": 2,
     "grub": 1,
     "lvm": 1,
-    "boot": 1
+    "boot": 1,
+    "git": 1
 }

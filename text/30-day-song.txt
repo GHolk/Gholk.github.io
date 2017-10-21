@@ -191,7 +191,21 @@ girl 和 pretty boys 是性，大麻是哪就忘了；
 脫拉庫就是很直接的芭樂歌。
 可能是主唱去當機師了，就不唱了。
 
-## 你出生那年推出的歌
+## 你出生那年推出的歌：[lemon tree](https://youtu.be/HfdEk5RbzrA)
+不知道怎麼找，直接 google，
+google 丟給我 [[Category:1996 年音樂專輯]] ，
+就從裡面找了。
+
+挑半天，最後選了 _蘇慧倫_ 翻唱的 lemon tree 中文版。
+以前覺得很好聽，但還是更喜歡原版。
+有時候想唱原版，但 ktv 沒收，
+就點翻唱的然後直接唱英文歌詞 :P
+
+<script>
+const spaceWikiAnchor = prevQuerySelector('a')
+spaceWikiAnchor.href = spaceWikiAnchor.href.replace(/_/g, '')
+</script>
+
 ## 使你開始思考生活的歌
 ## 對你有很多意義的歌
 ## 歌名中帶有人名的歌

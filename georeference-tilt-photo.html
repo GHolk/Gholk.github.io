@@ -1,0 +1,178 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" prefix="og: http://ogp.me/ns#">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="vim, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-10-24T14:31:57.977Z">
+<meta name="keywords" property="og:article:tag" content="程式,ncku,測量,作業">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="github-email-address.html" title=" github 因為 email 不同無法辨識帳號">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<meta property="og:image" content="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title> 影像改正</title>
+</head>
+<body>
+<main><h1 id="影像改正">影像改正</h1>
+<p>將影像用幾何方式改正。</p>
+<p>這次程式包括</p>
+<ul>
+<li>共用函數 transform.js reference-image.js</li>
+<li>包裝共用函數的腳本 convert.js </li>
+<li>所有轉換程式 affine-angle.js
+affine-transform.js
+polynomial-d1.js
+polynomial-transform.js
+project-transform.js</li>
+<li>p339.js p340.js p341.js 各影像的轉換腳本與控制點</li>
+</ul>
+<p>引用的函式庫包括 Jimp 提供影像處理，
+與 mathjs 提供矩陣運算功能。</p>
+<script src="ext/toc.js"></script>
+
+<script> const pathPrefix = '.' </script>
+
+<h3 id="程式">程式</h3>
+<h3 id="transform.js">transform.js</h3>
+<p>我擴充了 mathjs 的功能，
+然後定義了幾個基礎的類別與常數。</p>
+<h3 id="reference-image.js">reference-image.js</h3>
+<p>把 jimp 包裝成可以直接用的物件，
+並定義了遍歷 pixel 的 method。
+另外 jimp 本身提供了 pixel 的內插功能，
+所以我沒有額外自己寫。</p>
+<h3 id="轉換的函式庫">轉換的函式庫</h3>
+<p>把每種轉換寫成一個 js，方便引用。
+每個函式庫需要輸入數個控制點物件 Gcp，
+然後會回傳用最小二乘解得的轉換物件。
+物件的 <code>.error</code> 屬性有最小二乘的誤差。</p>
+<p>每個物件有 <code>.pixelToReal</code> 和 <code>.realToPixel</code> 二方法，
+分別輸入 <code>[x, y]</code> 會回傳轉換後的結果。</p>
+<h4 id="affine-transform.js">affine-transform.js</h4>
+<p>四參數正形轉換，只有旋轉、平移、縮放。
+需要至少二個點。</p>
+<h4 id="affine-angle.js">affine-angle.js</h4>
+<p>六參數正形轉換，X Y 方向的旋轉角不同。
+需要至少三個點。</p>
+<h4 id="polynomial-d1.js">polynomial-d1.js</h4>
+<p>一階多項式轉換，多項式 X Y 分別有
+1 x y xy 四項系數，共八項系數。
+需要至少四個點。</p>
+<h4 id="polynomial-transform.js">polynomial-transform.js</h4>
+<p>二階多項式轉換，X Y 分別有 1 x y xy x² y² 六項系數，
+共 12 個系數，需要至少六個點。</p>
+<h4 id="project-transform.js">project-transform.js</h4>
+<p>平面投影轉換，最好控制點都要在同一平面上。
+共八參數，需要至少四個點。</p>
+<h3 id="各影像的處理腳本">各影像的處理腳本</h3>
+<p>分別對應同一編號的圖片。
+裡面有控制點和要轉換區域的 pixel。</p>
+<h4 id="p339.js">p339.js</h4>
+<h4 id="p340.js">p340.js</h4>
+<h4 id="p341.js">p341.js</h4>
+<h3 id="convert.js">convert.js</h3>
+<p>這個腳本就是輸入控制點、圖片檔名、
+要使用的轉換 library 即會完成轉換。
+上面那四個腳本就是呼叫 convert.js 轉換的。</p>
+<script>
+const head34 = document.querySelectorAll('h3, h4')
+Array.from(head34).forEach((head) => {
+    const text = head.textContent
+    if (text.match(/^[\w-]+\.js$/)) {
+        head.firstChild.remove()
+        const a = document.createElement('a')
+        a.href = pathPrefix + '/' + text
+        a.textContent = text
+        head.appendChild(a)
+    }
+})
+</script>
+
+<h2 id="轉換成果">轉換成果</h2>
+<style>
+img {
+    max-width: 45%;
+    margin: 2px;
+}
+:this + p,
+:this + p + p,
+:this + p + p + p {
+    text-indent: 0;
+    border: 1px solid black;
+}
+</style>
+
+
+<p><img src="DJI_0339.jpg" alt="photo">
+<img src="DJI_0339-affine-angle.png" alt="photo">
+<img src="DJI_0339-affine-transform.png" alt="photo">
+<img src="DJI_0339-polynomial-d1.png" alt="photo">
+<img src="DJI_0339-polynomial-transform.png" alt="photo">
+<img src="DJI_0339-project-transform.png" alt="photo"></p>
+<p><img src="DJI_0340.jpg" alt="photo">
+<img src="DJI_0340-affine-angle.png" alt="photo">
+<img src="DJI_0340-affine-transform.png" alt="photo">
+<img src="DJI_0340-polynomial-d1.png" alt="photo">
+<img src="DJI_0340-polynomial-transform.png" alt="photo">
+<img src="DJI_0340-project-transform.png" alt="photo"></p>
+<p><img src="DJI_0341.jpg" alt="photo">
+<img src="DJI_0341-affine-angle.png" alt="photo">
+<img src="DJI_0341-affine-transform.png" alt="photo">
+<img src="DJI_0341-polynomial-d1.png" alt="photo">
+<img src="DJI_0341-polynomial-transform.png" alt="photo">
+<img src="DJI_0341-project-transform.png" alt="photo"></p>
+<script>
+const photoHeadId = prevQuerySelector('h2').id
+const photos = document.querySelectorAll('#' + photoHeadId + ' ~ * img')
+Array.from(photos).forEach((photo) => {
+    const filename = photo.src.match(/[^\/]+$/)[0]
+    photo.src = pathPrefix + '/' + filename
+    photo.title = filename.replace('.png', '').replace(/[-]/, ' ')
+})
+</script>
+
+
+<h2 id="印成pdf">印成pdf</h2>
+<p>結果做好，用firefox印，超連結不能點；
+用chromium印是可以了，但相對連結變成絕對連結。
+算了，反正這事本來就很難處理。</p>
+<p>最後要上傳，moodle說只能傳200MB以下的，
+chromium印出來就165MB，圖檔再加一加就超過了。
+就便google到一個 <a href="http://smallpdf.com">http://smallpdf.com</a> ，
+結果把我165MB壓成667KB，根本黑科技！</p>
+<p>應該是把裡面那幾張圖做壓縮吧，
+反正在pdf裡的只要能看就好了，
+畫質不用太好；要好直接看原始檔就好了。</p>
+</main>
+
+<footer>
+<script src="ext/luser-meta.js" defer></script>
+</footer>
+
+<div id="disqus_thread">
+<script defer src="ext/load-disqus.js"></script>
+<noscript>
+  Please enable JavaScript to view the
+  <a href="https://disqus.com/?ref_noscript">
+    comments powered by Disqus.
+  </a>
+</noscript>
+</div>
+
+
+</body>
+</html>
+

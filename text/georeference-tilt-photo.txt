@@ -1,0 +1,157 @@
+# 影像改正
+將影像用幾何方式改正。
+
+這次程式包括
+
+* 共用函數 transform.js reference-image.js
+* 包裝共用函數的腳本 convert.js 
+* 所有轉換程式 affine-angle.js
+  affine-transform.js
+  polynomial-d1.js
+  polynomial-transform.js
+  project-transform.js
+* p339.js p340.js p341.js 各影像的轉換腳本與控制點
+
+引用的函式庫包括 Jimp 提供影像處理，
+與 mathjs 提供矩陣運算功能。
+
+<script src="ext/toc.js"></script>
+
+<script> const pathPrefix = '.' </script>
+
+### 程式
+
+### transform.js
+我擴充了 mathjs 的功能，
+然後定義了幾個基礎的類別與常數。
+
+### reference-image.js
+把 jimp 包裝成可以直接用的物件，
+並定義了遍歷 pixel 的 method。
+另外 jimp 本身提供了 pixel 的內插功能，
+所以我沒有額外自己寫。
+
+### 轉換的函式庫
+把每種轉換寫成一個 js，方便引用。
+每個函式庫需要輸入數個控制點物件 Gcp，
+然後會回傳用最小二乘解得的轉換物件。
+物件的 `.error` 屬性有最小二乘的誤差。
+
+每個物件有 `.pixelToReal` 和 `.realToPixel` 二方法，
+分別輸入 `[x, y]` 會回傳轉換後的結果。
+
+#### affine-transform.js
+四參數正形轉換，只有旋轉、平移、縮放。
+需要至少二個點。
+
+#### affine-angle.js
+六參數正形轉換，X Y 方向的旋轉角不同。
+需要至少三個點。
+
+#### polynomial-d1.js
+一階多項式轉換，多項式 X Y 分別有
+1 x y xy 四項系數，共八項系數。
+需要至少四個點。
+
+#### polynomial-transform.js
+二階多項式轉換，X Y 分別有 1 x y xy x² y² 六項系數，
+共 12 個系數，需要至少六個點。
+
+#### project-transform.js
+平面投影轉換，最好控制點都要在同一平面上。
+共八參數，需要至少四個點。
+
+### 各影像的處理腳本
+分別對應同一編號的圖片。
+裡面有控制點和要轉換區域的 pixel。
+
+#### p339.js
+#### p340.js
+#### p341.js
+
+### convert.js
+這個腳本就是輸入控制點、圖片檔名、
+要使用的轉換 library 即會完成轉換。
+上面那四個腳本就是呼叫 convert.js 轉換的。
+
+<script>
+const head34 = document.querySelectorAll('h3, h4')
+Array.from(head34).forEach((head) => {
+    const text = head.textContent
+    if (text.match(/^[\w-]+\.js$/)) {
+        head.firstChild.remove()
+        const a = document.createElement('a')
+        a.href = pathPrefix + '/' + text
+        a.textContent = text
+        head.appendChild(a)
+    }
+})
+</script>
+
+## 轉換成果
+
+<style>
+img {
+    max-width: 45%;
+    margin: 2px;
+}
+:this + p,
+:this + p + p,
+:this + p + p + p {
+    text-indent: 0;
+    border: 1px solid black;
+}
+</style>
+
+
+![photo](DJI_0339.jpg)
+![photo](DJI_0339-affine-angle.png)
+![photo](DJI_0339-affine-transform.png)
+![photo](DJI_0339-polynomial-d1.png)
+![photo](DJI_0339-polynomial-transform.png)
+![photo](DJI_0339-project-transform.png)
+
+![photo](DJI_0340.jpg)
+![photo](DJI_0340-affine-angle.png)
+![photo](DJI_0340-affine-transform.png)
+![photo](DJI_0340-polynomial-d1.png)
+![photo](DJI_0340-polynomial-transform.png)
+![photo](DJI_0340-project-transform.png)
+
+![photo](DJI_0341.jpg)
+![photo](DJI_0341-affine-angle.png)
+![photo](DJI_0341-affine-transform.png)
+![photo](DJI_0341-polynomial-d1.png)
+![photo](DJI_0341-polynomial-transform.png)
+![photo](DJI_0341-project-transform.png)
+
+<script>
+const photoHeadId = prevQuerySelector('h2').id
+const photos = document.querySelectorAll('#' + photoHeadId + ' ~ * img')
+Array.from(photos).forEach((photo) => {
+    const filename = photo.src.match(/[^\/]+$/)[0]
+    photo.src = pathPrefix + '/' + filename
+    photo.title = filename.replace('.png', '').replace(/[-]/, ' ')
+})
+</script>
+
+
+## 印成pdf
+結果做好，用firefox印，超連結不能點；
+用chromium印是可以了，但相對連結變成絕對連結。
+算了，反正這事本來就很難處理。
+
+最後要上傳，moodle說只能傳200MB以下的，
+chromium印出來就165MB，圖檔再加一加就超過了。
+就便google到一個 <http://smallpdf.com> ，
+結果把我165MB壓成667KB，根本黑科技！
+
+應該是把裡面那幾張圖做壓縮吧，
+反正在pdf裡的只要能看就好了，
+畫質不用太好；要好直接看原始檔就好了。
+
+
+#程式
+#ncku
+#測量
+#作業

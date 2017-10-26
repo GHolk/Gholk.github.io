@@ -1,5 +1,5 @@
 let disqus_config = function () {
-    this.page.url = window.location
+    this.page.url = window.location.toString()
     this.page.identifier = window.location.toString().replace(/.*\//,'')
 }
 

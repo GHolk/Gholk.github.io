@@ -80,6 +80,11 @@ project-transform.js</li>
 <h3 id="各影像的處理腳本">各影像的處理腳本</h3>
 <p>分別對應同一編號的圖片。
 裡面有控制點和要轉換區域的 pixel。</p>
+<p>除了投影轉換，都是用 7 個控制點。
+一個在大學路的人行道，二個在東邊的球場，
+四個在西邊的球場。</p>
+<p>投影轉換只用西邊四個結果怪怪的，
+只好把東邊球場二個也加進去。</p>
 <h4 id="p339.js">p339.js</h4>
 <h4 id="p340.js">p340.js</h4>
 <h4 id="p341.js">p341.js</h4>
@@ -140,21 +145,39 @@ const photos = document.querySelectorAll('#' + photoHeadId + ' ~ * img')
 Array.from(photos).forEach((photo) => {
     const filename = photo.src.match(/[^\/]+$/)[0]
     photo.src = pathPrefix + '/' + filename
-    photo.title = filename.replace('.png', '').replace(/[-]/, ' ')
+    photo.title = filename.replace('.png', '').replace(/-/g, ' ')
 })
 </script>
 
-
-<h2 id="印成pdf">印成pdf</h2>
-<p>結果做好，用firefox印，超連結不能點；
-用chromium印是可以了，但相對連結變成絕對連結。
-算了，反正這事本來就很難處理。</p>
-<p>最後要上傳，moodle說只能傳200MB以下的，
-chromium印出來就165MB，圖檔再加一加就超過了。
-就便google到一個 <a href="http://smallpdf.com">http://smallpdf.com</a> ，
-結果把我165MB壓成667KB，根本黑科技！</p>
+<p>有點問題是我轉換的成果都會有偏移，
+也就是球場會超過我選的轉換區域，跑到圖片外。
+我選區域是在影像中選出 pixel 的 row 和 col，
+分別是左上作為開始點座標，右下作為結束點座標。</p>
+<p>然後在計算時將二點轉成物空間座標，
+從最小的 EN 開始，間隔 5cm，遍歷到最大的 EN。
+在每取樣點先把物座標轉成像座標，
+再去取該像座標的色彩值，填入新的影像。</p>
+<p>但不知道為什麼轉換後的球場，
+會超出我在原影片像取的球場邊界座標。
+可能是來回轉換的誤差吧？
+但我平差的誤差都在一公尺內，
+偏移卻會到近十公尺。</p>
+<p>各影像偏移的方向也不同，
+正形轉換會超出西方的邊界，
+其它都是超出南方的邊界。
+最後我是把轉換的區域調大，
+讓偏移後還是在區域內。
+但還是有些超過，懶得調。</p>
+<h2 id="印成 pdf">印成 pdf</h2>
+<p>結果做好，用 firefox 印，超連結不能點；
+用 chromium 印是可以了，但相對連結變成絕對連結。
+最後再手動編輯 pdf，把絕對連結改回相對。</p>
+<p>最後要上傳，moodle 說只能傳 200MB 以下的，
+chromium 印出來就 165MB，圖檔再加一加就超過了。
+就便 google 到一個 <a href="http://smallpdf.com">http://smallpdf.com</a> ，
+結果把我 165MB 壓成 667KB，根本黑科技！</p>
 <p>應該是把裡面那幾張圖做壓縮吧，
-反正在pdf裡的只要能看就好了，
+反正在 pdf 裡的只要能看就好了，
 畫質不用太好；要好直接看原始檔就好了。</p>
 </main>
 

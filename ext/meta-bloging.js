@@ -84,3 +84,49 @@ function ajaxQuery(url, selector) {
         queryXhr.send()
     })
 }
+
+function github(author){}
+
+let flk = {}
+flk.map = null
+flk.set = function (names, infos) {
+    this.map = {}
+    names.forEach((name, i) => {
+        this.map[name] = infos[i]
+    })
+}
+flk.getNode = function (test) {
+    const map = this.map
+    if (map[test]) return this.toNode(map[test])
+    else {
+        for (let name in map) {
+            if (name.match(test)) {
+                return this.toNode(map[test])
+            }
+        }
+    }
+}
+
+flk.toNode = function (info) {
+    const i = info
+    const page = `https://flickr.com/photos/${i.user}/${i.photo}`
+    const image =
+          `https://${i.farm}.staticflickr.com/${i.server}/${i.photo}_${i.secret}.jpg`
+    const embedScript = 'https://embedr.flickr.com/assets/client-code.js'
+
+    const a = document.createElement('a')
+    a.href = page
+    a.setAttribute('data-flickr-embed', true)
+
+    const img = document.createElement('img')
+    img.src = image
+    a.appendChild(img)
+
+    const script = document.createElement('script')
+    script.src = embedScript
+    script['async'] = true
+    script.charset = 'utf-8'
+    a.appendChild(script)
+
+    return a
+}

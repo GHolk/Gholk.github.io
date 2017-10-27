@@ -17,7 +17,7 @@
 
 <script src="ext/toc.js"></script>
 
-<script> const pathPrefix = '.' </script>
+<script src="ext/flickr.js"></script>
 
 ### 程式
 
@@ -83,19 +83,6 @@
 要使用的轉換 library 即會完成轉換。
 上面那四個腳本就是呼叫 convert.js 轉換的。
 
-<script>
-const head34 = document.querySelectorAll('h3, h4')
-Array.from(head34).forEach((head) => {
-    const text = head.textContent
-    if (text.match(/^[\w-]+\.js$/)) {
-        head.firstChild.remove()
-        const a = document.createElement('a')
-        a.href = pathPrefix + '/' + text
-        a.textContent = text
-        head.appendChild(a)
-    }
-})
-</script>
 
 ## 轉換成果
 
@@ -144,9 +131,12 @@ img {
 const wrongImage = Array.from(document.querySelectorAll('img'))
 flk.set(wrongImage.map((img) => img.src.match(/[^/]*$/)[0]), 
 [{"farm":"farm5","server":"4463","photo":"37886284742","secret":"1daafb51c2","user":"135370742@N08"},{"farm":"farm5","server":"4469","photo":"37207730984","secret":"068c63fb03","user":"135370742@N08"},{"farm":"farm5","server":"4473","photo":"37917142821","secret":"f09a956810","user":"135370742@N08"},{"farm":"farm5","server":"4502","photo":"24065971218","secret":"7ab0fdacb5","user":"135370742@N08"},{"farm":"farm5","server":"4498","photo":"37207735814","secret":"4294958c3c","user":"135370742@N08"},{"farm":"farm5","server":"4497","photo":"24065973798","secret":"b6258d08e9","user":"135370742@N08"},{"farm":"farm5","server":"4504","photo":"26141347759","secret":"5e1930a212","user":"135370742@N08"},{"farm":"farm5","server":"4452","photo":"37917149961","secret":"44ea6919d2","user":"135370742@N08"},{"farm":"farm5","server":"4469","photo":"26141351369","secret":"6d49befbe6","user":"135370742@N08"},{"farm":"farm5","server":"4485","photo":"24065983648","secret":"66c318927d","user":"135370742@N08"},{"farm":"farm5","server":"4513","photo":"26141357279","secret":"f68bc51af5","user":"135370742@N08"},{"farm":"farm5","server":"4443","photo":"37886311612","secret":"3d0369e0c9","user":"135370742@N08"},{"farm":"farm5","server":"4506","photo":"37886315322","secret":"de5dc9c954","user":"135370742@N08"},{"farm":"farm5","server":"4451","photo":"37207745354","secret":"89df8455c2","user":"135370742@N08"},{"farm":"farm5","server":"4485","photo":"37207747554","secret":"eb58d24c45","user":"135370742@N08"},{"farm":"farm5","server":"4458","photo":"37207748444","secret":"13f9230e83","user":"135370742@N08"},{"farm":"farm5","server":"4475","photo":"37886328602","secret":"b9cd8523d4","user":"135370742@N08"},{"farm":"farm5","server":"4465","photo":"37207750834","secret":"1ac62045cd","user":"135370742@N08"}])
+
+flk.set(["DJI_0341-affine-angle.png","DJI_0341-affine-transform.png","DJI_0341-polynomial-d1.png","DJI_0341-polynomial-transform.png","DJI_0341-project-transform.png"],
+[{"farm":"farm5","server":"4506","photo":"37912982916","secret":"353a474025","user":"135370742@N08"},{"farm":"farm5","server":"4462","photo":"37935727972","secret":"94ce6d5ffb","user":"135370742@N08"},{"farm":"farm5","server":"4450","photo":"37912984516","secret":"10200fbd15","user":"135370742@N08"},{"farm":"farm5","server":"4476","photo":"24115368398","secret":"2fe7c09313","user":"135370742@N08"},{"farm":"farm5","server":"4477","photo":"37256574344","secret":"13e3822e79","user":"135370742@N08"}])
+
 wrongImage.forEach((img) => img.replaceWith(flk.getNode(img.src.match(/[^/]*$/)[0])))
 </script>
-
 
 有點問題是我轉換的成果都會有偏移，
 也就是球場會超過我選的轉換區域，跑到圖片外。
@@ -185,6 +175,7 @@ chromium 印出來就 165MB，圖檔再加一加就超過了。
 應該是把裡面那幾張圖做壓縮吧，
 反正在 pdf 裡的只要能看就好了，
 畫質不用太好；要好直接看原始檔就好了。
+
 
 #程式
 #ncku

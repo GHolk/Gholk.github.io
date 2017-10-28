@@ -6,13 +6,8 @@ list_file := ./list.txt
 text_files := $(wildcard ../text/*.txt)
 html_files := $(patsubst ../text/%,../%,$(text_files))
 html_files := $(html_files:.txt=.html)
-coffee_files := $(wildcard *.coffee)
-js_files := $(coffee_files:.coffee=.js)
 
-all: $(js_files) $(html_files) ../ext/*.js
-
-%.js: %.coffee
-	coffee -c $<
+all: $(html_files)
 
 %.html: text/%.txt
 	if ! grep -q `basename $@` $(list_file) ; \

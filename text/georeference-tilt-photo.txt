@@ -83,6 +83,24 @@
 要使用的轉換 library 即會完成轉換。
 上面那四個腳本就是呼叫 convert.js 轉換的。
 
+<script>
+const heads = document.querySelectorAll('h2, h3, h4')
+Array.from(heads)
+    .filter((head) => /^[\w-]+\.js$/.test(head.textContent))
+    .forEach((head) => {
+        const filename = head.textContent
+        head.textContent = ''
+        head.appendChild(findGithubFile(filename))
+    })
+
+function findGithubFile(filename) {
+    const repo = 'https://github.com/GHolk/wstd/tree/master/photo-remote/geometry-reference'
+    const a = document.createElement('a')
+    a.href = `${repo}/${filename}`
+    a.textContent = filename
+    return a
+}
+</script>
 
 ## 轉換成果
 

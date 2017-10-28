@@ -163,3 +163,12 @@ style:after {
 #toc > h5 { margin-left: 4em; }
 #toc > h6 { margin-left: 5em; }
 #toc > h7 { margin-left: 6em; }
+
+/* iframe in p most mean `js flk.gn()`,
+ * which is flickr iframe.
+ */
+p iframe {
+    margin: auto !important;
+    /* overwrite flickr inline style */
+}
+                

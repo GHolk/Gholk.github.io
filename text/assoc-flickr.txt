@@ -3,7 +3,9 @@
 到底部落格該怎麼貼圖這件事。
 我一直用 flickr 當圖床，
 但他的上傳面和內嵌介面不好用，
-只好自己寫一個腳本 <./ext/assocr.js> 來用。
+只好自己寫一個腳本 [assocr] 來用。
+
+[assocr]: https://github.com/GHolk/loco/blob/eccc8930/bin/assocr.js
 
 flickr 的上傳介面還不錯，
 但要一次取得一堆圖片的內嵌就很不方便。

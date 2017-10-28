@@ -43,14 +43,17 @@ function fillNode(node, content) {
             fillNode(node, x)
         }
     }
+    else if (typeof content.toNode == 'function') {
+        fillNode(node, content.toNode())
+    }
     else if (typeof content.then == 'function') {
         content.then((promiseValue) => fillNode(node, promiseValue))
     }
     else if (typeof content == 'function') content(node)
     else if (content instanceof Node) node.appendChild(content)
     else {
-        let textNode = document.createTextNode(String(content))
-        node.appendChild(textNode)
+        const textNode = document.createTextNode(String(content))
+        fillNode(node, textNode)
     }
 }
 

@@ -85,3 +85,4 @@ hp-boot-error.html
 extend-lvm-filesystem.html
 github-email-address.html
 georeference-tilt-photo.html
+assoc-flickr.html

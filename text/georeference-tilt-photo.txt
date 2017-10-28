@@ -15,8 +15,9 @@
 引用的函式庫包括 Jimp 提供影像處理，
 與 mathjs 提供矩陣運算功能。
 
-<script src="ext/toc.js"></script>
+<link rel="canonical" href="http://gholk.github.io/georeference-tilt-photo.html">
 
+<script src="ext/toc.js"></script>
 <script src="ext/flickr.js"></script>
 
 ### 程式

@@ -114,7 +114,7 @@ iframe {
 }
 
 
-script, style, meta, link {
+script, style {
     display: block;
     margin: 1em;
     white-space: pre;

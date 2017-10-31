@@ -261,7 +261,7 @@ spaceWikiAnchor.href = spaceWikiAnchor.href.replace(/_/g, '')
 
 ## 已逝去藝術家的歌：[野店](https://youtu.be/TN7UGxFB4Tw)
 這是一個原住民歌手 [[李泰祥]] ，
-把很多 [[鄭予愁]] 的詩唱成歌；
+把很多 [[鄭愁予]] 的詩唱成歌；
 也包括這首野店，原本是鄭予愁的詩。
 
 這首歌是之前用下載音樂的軟體隨便找，

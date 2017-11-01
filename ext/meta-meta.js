@@ -113,7 +113,8 @@ allList.toNode = function () {
 let footer = document.querySelector('footer')
 if (!footer) {
     footer = document.createElement('footer')
-    document.body.appendChild(footer)
+    const script = document.querySelector('script[src *= "meta-meta.js"]')
+    script.parentNode.insertBefore(footer, script.nextSibling)
 }
 
 fillNode(footer, allList)

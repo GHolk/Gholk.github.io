@@ -82,9 +82,9 @@ mv 不知道在演三小，可能又是某部偶像劇吧。
 以妳的邏輯思考，用妳的方式生活；
 好像能有什麼意義。
 得不到的總是最美好吧。</p>
-<p>還有考慮聽堂妹唱五月天的 <em>知足</em> ，覺得蠻不錯的。
+<p>還有考慮聽堂妹唱五月天的 <cite>知足</cite> ，覺得蠻不錯的。
 可惜我沒能感性到唱到哭，只是個自以為的平凡人而已。
-另一首也覺得不錯是 <em>那女孩對我說</em> ，
+另一首也覺得不錯是 <cite>那女孩對我說</cite> ，
 雖然很感動，但情境好像不太合，就沒有選她。
 或 <em>很幼稚嗎</em> 也不錯，但不會讓人唱到想哭。</p>
 <h2 id="需要調高音量的歌：[天機](https://youtu.be/kz6fybUvGJM)">需要調高音量的歌：<a href="https://youtu.be/kz6fybUvGJM">天機</a></h2>
@@ -260,8 +260,44 @@ spaceWikiAnchor.href = spaceWikiAnchor.href.replace(/_/g, '')
 <p>本來第一個想選三無，但上面選過了；
 也有想過順子或張韶涵；
 最後覺得白安好像比較棒。</p>
-<h2 id="在你童年裡的歌">在你童年裡的歌</h2>
+<h2 id="在你童年裡的歌：[天黑黑](https://youtu.be/zi8z6RPYGV0)">在你童年裡的歌：<a href="https://youtu.be/zi8z6RPYGV0">天黑黑</a></h2>
+<p>這首應該可以，有點童年的感覺，
+雖然我好像不是童年聽到她的。
+那時候覺得和 <cite>聽見牛在哭</cite> 曲風有點像，
+都像在歌裡唱另一首歌。</p>
+<p>另一首想選的是萬芳的 <cite>月亮公園</cite> ，
+但問題是這首是我長大後才聽到的，
+不是童年的時候，就我對題意的理解，
+應該不適合選這首。</p>
 <h2 id="讓你想起自己的歌">讓你想起自己的歌</h2>
+<p><style>
+cite a.search-in-youtube, u a.search-in-youtube {
+    display: none;
+}
+cite:hover a.search-in-youtube, u:hover a.search-in-youtube {
+    display: inline;
+}
+</style></p>
+<script>
+const maybeSong = document.querySelectorAll('cite, u')
+Array.from(maybeSong).forEach((song) => {
+    const message = '在 youtube 中搜尋'
+    const a = document.createElement('a')
+    const name = song.textContent
+
+    a.classList.add('search-in-youtube')
+    // a.title = message
+    a.href = youtubeSearchUrl(name)
+    a.textContent = message
+
+    song.appendChild(a)
+})
+function youtubeSearchUrl(text) {
+    const youtube = 'https://www.youtube.com/results?search_query='
+    return youtube + encodeURIComponent(text)
+}
+</script>
+
 <script>
 void function loadLazyIframe() {
     const youtubeAnchor = document.querySelectorAll('h2 a')

@@ -70,9 +70,9 @@ mv 不知道在演三小，可能又是某部偶像劇吧。
 好像能有什麼意義。
 得不到的總是最美好吧。
 
-還有考慮聽堂妹唱五月天的 *知足* ，覺得蠻不錯的。
+還有考慮聽堂妹唱五月天的 ~知足~ ，覺得蠻不錯的。
 可惜我沒能感性到唱到哭，只是個自以為的平凡人而已。
-另一首也覺得不錯是 *那女孩對我說* ，
+另一首也覺得不錯是 ~那女孩對我說~ ，
 雖然很感動，但情境好像不太合，就沒有選她。
 或 *很幼稚嗎* 也不錯，但不會讓人唱到想哭。
 
@@ -307,8 +307,46 @@ spaceWikiAnchor.href = spaceWikiAnchor.href.replace(/_/g, '')
 最後覺得白安好像比較棒。
 
 
-## 在你童年裡的歌
+## 在你童年裡的歌：[天黑黑](https://youtu.be/zi8z6RPYGV0)
+這首應該可以，有點童年的感覺，
+雖然我好像不是童年聽到她的。
+那時候覺得和 ~聽見牛在哭~ 曲風有點像，
+都像在歌裡唱另一首歌。
+
+另一首想選的是萬芳的 ~月亮公園~ ，
+但問題是這首是我長大後才聽到的，
+不是童年的時候，就我對題意的理解，
+應該不適合選這首。
+
 ## 讓你想起自己的歌
+
+<style>
+cite a.search-in-youtube, u a.search-in-youtube {
+    display: none;
+}
+cite:hover a.search-in-youtube, u:hover a.search-in-youtube {
+    display: inline;
+}
+</style>
+<script>
+const maybeSong = document.querySelectorAll('cite, u')
+Array.from(maybeSong).forEach((song) => {
+    const message = '在 youtube 中搜尋'
+    const a = document.createElement('a')
+    const name = song.textContent
+
+    a.classList.add('search-in-youtube')
+    // a.title = message
+    a.href = youtubeSearchUrl(name)
+    a.textContent = message
+
+    song.appendChild(a)
+})
+function youtubeSearchUrl(text) {
+    const youtube = 'https://www.youtube.com/results?search_query='
+    return youtube + encodeURIComponent(text)
+}
+</script>
 
 <script>
 void function loadLazyIframe() {

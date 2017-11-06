@@ -28,6 +28,9 @@ del 是日後和 ins 搭配做修改用的 tag。
 只規定減號中不能有空白，像 `-this-text-delete-` 。
 其它二種也是類似的做法，只是空白要換成波浪符和底線。
 
+因為是用 javascript 寫的，
+可以 [直接在網頁上試玩](marked) 。
+
 ## marked 的 lex
 lex 是詞法分析，就是斷詞的步驟，
 把字串拆成 token。

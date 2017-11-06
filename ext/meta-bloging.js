@@ -8,16 +8,38 @@ function prevQuerySelector(selector) {
 
 // change `:this` to the style id itself
 function changeStyleThis(style) {
-    let id
-    if (style.id) id = style.id
-    else {
-        const float = Math.random()
-        id = 'random-' + String(float).slice(2)
-        style.id = id
+    const thisRegexp = /:this\b/g
+    const sheet = style.sheet
+    const ruleWithinThis = Array.from(sheet.cssRules)
+        .filter((rule) => thisRegexp.test(rule.selectorText))
+    if (ruleWithinThis.length > 0) {
+        const id = getOrSetId(style)
+        ruleWithinThis.forEach((rule) => {
+            const newRuleText = ruleDealThis(rule, id)
+            const oldRuleIndex = ruleIndex(rule)
+            sheet.deleteRule(oldRuleIndex)
+            sheet.insertRule(newRuleText, oldRuleIndex)
+        })
     }
-
-    style.textContent =
-        style.textContent.replace(/:this\b/g, `#${id}`)
+    function getOrSetId(style) {
+        if (style.id) return style.id
+        else {
+            const float = Math.random()
+            const id = 'random-' + String(float).slice(2)
+            style.id = id
+            return id
+        }
+    }
+    function ruleIndex(rule) {
+        return Array.from(sheet.cssRules).indexOf(rule)
+    }
+    function ruleDealThis(rule, newId) {
+        const idSelector = '#' + newId
+        const oldSelector = rule.selectorText
+        const newSelector = oldSelector.replace(thisRegexp, idSelector)
+        const newRuleText = rule.cssText.replace(oldSelector, newSelector)
+        return newRuleText
+    }
 }
 
 function evalPrefixJs(node) {

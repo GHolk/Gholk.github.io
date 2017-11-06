@@ -8,16 +8,22 @@ function prevQuerySelector(selector) {
 
 // change `:this` to the style id itself
 function changeStyleThis(style) {
-    let id
-    if (style.id) id = style.id
-    else {
-        const float = Math.random()
-        id = 'random-' + String(float).slice(2)
-        style.id = id
+    const thisRegexp = /:this\b/g
+    const cssText = style.textContent
+    if (thisRegexp.test(cssText)) {
+        const id = haveId(style)
+        style.textContent = cssText.replace(thisRegexp, '#' + id)
     }
 
-    style.textContent =
-        style.textContent.replace(/:this\b/g, `#${id}`)
+    function haveId(style) {
+        if (style.id) return style.id
+        else {
+            const float = Math.random()
+            const id = 'random-' + String(float).slice(2)
+            style.id = id
+            return id
+        }
+    }
 }
 
 function evalPrefixJs(node) {

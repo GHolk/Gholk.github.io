@@ -174,3 +174,8 @@ p iframe {
     /* overwrite flickr inline style */
 }
                 
+
+#disqus_thread {
+    margin: 0.5em;
+    padding: 0.5em;
+}

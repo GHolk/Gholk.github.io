@@ -3,6 +3,13 @@ let disqus_config = function () {
     this.page.identifier = window.location.toString().replace(/.*\//,'')
 }
 
+let disqus_thread = document.querySelector('#disqus_thread')
+if (!disqus_thread) {
+    disqus_thread = document.createElement('div')
+    disqus_thread.id = 'disqus_thread'
+    document.body.appendChild(disqus_thread)
+}
+
 void function() {
     const d = document
     const s = d.createElement('script')

@@ -318,9 +318,20 @@ spaceWikiAnchor.href = spaceWikiAnchor.href.replace(/_/g, '')
 不是童年的時候，就我對題意的理解，
 應該不適合選這首。
 
-## 讓你想起自己的歌
-針
-蟑螂小強
+## 讓你想起自己的歌：[蟑螂小強](https://youtu.be/c7SqcVElm9A)
+小學聽同學唱過，但沒有什麼感覺，
+到大學再聽才覺得很棒。
+主唱 tank 因為健康因素沒有發展很好，
+但還是紅了很多經典歌。
+
+講述一種奇異的自尊，自認不凡的心態，
+但又覺得不太可能被認同，
+所以習慣別人的輕視。
+
+另一首候選是卓文萱的 ~針~ ，
+國高中蠻喜歡的，到大學就還好了。
+畢竟我還算喜歡與人互動，
+並非如歌中所唱。
 
 <style>
 cite a.search-in-youtube, u a.search-in-youtube {
@@ -330,6 +341,7 @@ cite:hover a.search-in-youtube, u:hover a.search-in-youtube {
     display: inline;
 }
 </style>
+
 <script>
 const maybeSong = document.querySelectorAll('cite, u')
 Array.from(maybeSong).forEach((song) => {

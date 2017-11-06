@@ -88,3 +88,4 @@ georeference-tilt-photo.html
 assoc-flickr.html
 evil-selection-x-window.html
 lexer-space-marked.html
+comment.html

@@ -319,6 +319,8 @@ spaceWikiAnchor.href = spaceWikiAnchor.href.replace(/_/g, '')
 應該不適合選這首。
 
 ## 讓你想起自己的歌
+針
+蟑螂小強
 
 <style>
 cite a.search-in-youtube, u a.search-in-youtube {

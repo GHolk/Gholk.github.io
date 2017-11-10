@@ -57,6 +57,7 @@ const metaList = function () {
             break
         case 'keywords':
             const tags = node.content.split(/,/g)
+            tags.toNode = tags.toString
             addMeta('tags', tags)
             break
         case 'copyright':

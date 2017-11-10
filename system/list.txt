@@ -90,3 +90,4 @@ evil-selection-x-window.html
 lexer-space-marked.html
 comment.html
 ferrari-one-death.html
+new-classic-discus-answer.html

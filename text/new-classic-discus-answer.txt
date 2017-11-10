@@ -13,8 +13,10 @@
 
 我先把我記下的每個問題打好，
 回答完我的部份，
-然後丟到 google 文件上，
+然後丟到 [google 文件] 上，
 大家再回答自己的部份。
+
+[google 文件]: https://docs.google.com/document/d/1sdS386lmZCQWiXY5j0aQiyH0gZrFNY5pad4RdXu_a2I/edit
 
 <style>
 h3 {

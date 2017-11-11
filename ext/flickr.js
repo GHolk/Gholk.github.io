@@ -14,28 +14,36 @@ flk.set = function (names, infos) {
             this.map[name] = infos
         })
     }
+    else if (typeof infos == 'string' || infos instanceof RegExp) {
+        flk.set(names, flk.get(infos))
+    }
     else this.map[names] = infos
 }
 flk.get = function (test) {
-    const map = this.map
-    if (map[test]) return map[test]
+    if (arguments.length > 1) {
+        return Array.from(arguments).map((test) => flk.get(test))
+    }
     else {
-        const matchFlickr = []
-        for (let name in map) {
-            if (name.match(test)) {
-                if (test.global) {
-                    matchFlickr.push(map[name])
+        const map = this.map
+        if (map[test]) return map[test]
+        else {
+            const matchFlickr = []
+            for (let name in map) {
+                if (name.match(test)) {
+                    if (test.global) {
+                        matchFlickr.push(map[name])
+                    }
+                    else return map[name]
                 }
-                else return map[name]
             }
+            if (test.global) return matchFlickr
+            else return undefined
         }
-        if (test.global) return matchFlickr
-        else return undefined
     }
 }
 
-flk.getNode = function (test) {
-    const match = this.get(test)
+flk.getNode = function () {
+    const match = this.get.apply(this, arguments)
     if (match) {
         if (Array.isArray(match)) {
             return match.map((info) => this.toNode(info))

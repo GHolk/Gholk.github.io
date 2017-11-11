@@ -44,13 +44,13 @@ function evalPrefixJs(node) {
 }
 
 function fillNode(node, content) {
-    if (typeof content != 'string' && content[Symbol.iterator]) {
+    if (typeof content.toNode == 'function') {
+        fillNode(node, content.toNode())
+    }
+    else if (typeof content != 'string' && content[Symbol.iterator]) {
         for (let x of content) {
             fillNode(node, x)
         }
-    }
-    else if (typeof content.toNode == 'function') {
-        fillNode(node, content.toNode())
     }
     else if (typeof content.then == 'function') {
         content.then((promiseValue) => fillNode(node, promiseValue))

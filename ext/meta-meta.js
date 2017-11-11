@@ -105,12 +105,6 @@ const url = function () {
 
 const allList = metaList.concat(linkList).concat(url)
 
-allList.toNode = function () {
-    const div = document.createElement('div')
-    fillNode(div, this)
-    return div
-}
-
 let footer = document.querySelector('footer')
 if (!footer) {
     footer = document.createElement('footer')

@@ -188,3 +188,7 @@ figcaption {
     margin: 0.5em;
     padding: 0.5em;
 }
+
+img {
+    max-width: 100%;
+}

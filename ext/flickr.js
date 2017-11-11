@@ -23,6 +23,11 @@ flk.get = function (test) {
     if (arguments.length > 1) {
         return Array.from(arguments).map((test) => flk.get(test))
     }
+    else if (typeof test == 'function') {
+        return Object.keys(this.map)
+            .filter(test)
+            .map((key) => this.map[key])
+    }
     else {
         const map = this.map
         if (map[test]) return map[test]
@@ -44,13 +49,10 @@ flk.get = function (test) {
 
 flk.getNode = function () {
     const match = this.get.apply(this, arguments)
-    if (match) {
-        if (Array.isArray(match)) {
-            return match.map((info) => this.toNode(info))
-        }
-        else return this.toNode(match)
+    if (Array.isArray(match)) {
+        return match.map((info) => this.toNode(info))
     }
-    else return undefined
+    else return this.toNode(match)
 }
 
 flk.toNode = function (info) {
@@ -72,9 +74,20 @@ flk.toNode = function (info) {
 
 flk.gn = flk.getNode
 
+flk.fig = function (name, text) {
+    const fig = document.createElement('figure')
+    const img = this.getNode(name)
+    fillNode(fig, img)
+    
+    const caption = document.createElement('figcaption')
+    fillNode(caption, text)
+    fillNode(fig, caption)
+    return fig
+}
+
 flk.script =  document.createElement('script')
 flk.script.async = true
-flk.script.src = 'https://embedr.flickr.com/assets/client-code.js'
+flk.script.src = '//embedr.flickr.com/assets/client-code.js'
 flk.script.charset = 'utf-8'
 
 window.addEventListener(

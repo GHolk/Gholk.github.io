@@ -3,25 +3,46 @@ let flk = {}
 
 flk.map = {}
 flk.set = function (names, infos) {
-    names.forEach((name, i) => {
-        this.map[name] = infos[i]
-    })
+    if (Array.isArray(names) && Array.isArray(infos)) {
+        names.forEach((name, i) => {
+            this.set(name, infos[i])
+        })
+    }
+    else if (Array.isArray(names)) {
+        names.forEach((name, i) => {
+            this.set(name, infos)
+            this.map[name] = infos
+        })
+    }
+    else this.map[names] = infos
 }
-flk.getNode = function (test) {
+flk.get = function (test) {
     const map = this.map
-    if (map[test]) return this.toNode(map[test])
+    if (map[test]) return map[test]
     else {
         const matchFlickr = []
         for (let name in map) {
             if (name.match(test)) {
                 if (test.global) {
-                    matchFlickr.push(this.toNode(map[name]))
+                    matchFlickr.push(map[name])
                 }
-                else return this.toNode(map[name])
+                else return map[name]
             }
         }
-        return matchFlickr
+        if (test.global) return matchFlickr
+        else return undefined
     }
+}
+
+flk.getNode = function (test) {
+    const match = this.get(test)
+    if (match) {
+        if (Array.isArray(match)) {
+            return match.map((info) => this.toNode(info))
+        }
+        else return this.toNode(match)
+    }
+    else return undefined
 }
 
 flk.toNode = function (info) {

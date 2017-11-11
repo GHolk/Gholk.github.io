@@ -13,6 +13,12 @@
     dl.print-only, figure.print-only {
         display: block;
     }
+    script, style {
+        display: none;
+    }
+    #disqus_thread {
+        display: none;
+    }
 }
 
 .url-qrcode {
@@ -166,14 +172,17 @@ style:after {
 #toc > h6 { margin-left: 5em; }
 #toc > h7 { margin-left: 6em; }
 
-/* iframe in p most mean `js flk.gn()`,
- * which is flickr iframe.
- */
-p iframe {
-    margin: auto !important;
+iframe.flickr-embed-frame {
     /* overwrite flickr inline style */
+    margin: auto !important;
 }
-                
+figure > *:first-child {
+    display: block;
+    margin: auto;
+}
+figcaption {
+    text-align: center;
+}
 
 #disqus_thread {
     margin: 0.5em;

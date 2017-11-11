@@ -33,6 +33,7 @@ function evalPrefixJs(node) {
         evalResult = eval(jsCode)
     }
     catch (evalError) {
+        console.error(jsCode)
         console.error(evalError)
         node.title = String(evalError)
         return

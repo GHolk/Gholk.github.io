@@ -1,0 +1,77 @@
+# github 因為 email 不同無法辨識帳號
+發現 github 上 commit 記錄裡我的帳號都不能點，
+頭像無法顯示，其它統計也都看不到我。
+最後發現是 github 是認 git commit 中的 email，
+所以如果本機和 github 的不同，就會這樣。
+
+
+yuri 在看社團一些專案的時候發現的，
+我的頭像都無法顯示，帳號也不能點。
+連我自己的專案也是，
+其中 emacs 的設定 repo `js github('dot-emacs')`
+連 contributor 都是 0，
+但仍有一堆作者是 gholk 的 commit 記錄，
+只是都不能點。
+
+後來就發 email 給 github 問，
+結果蠻快就回我了。
+說是因為我 commit 時的 email 和 github 的不同。
+
+可能是之前我某次重裝系統時，
+git 的設定被洗掉了，
+重新設定時就設成成大的 email，
+而 github 一直是用 gmail。
+
+我也因此發現 github 是很 **原始** 的東西，
+對 git 沒有做太多的包裝。（應該吧？）
+像 `js github('dot-emacs/commits')` 就很明顯是 `git log` ，
+再點進去就是 `git log -p $HASH` 的內容。
+
+因此每個 commit 就直接用 commit 中的 author 欄位認人，
+其它欄位應該也一樣。
+github 應該是用 author 的 email 去對所有帳號的 email，
+然後把對到的顯示出來。
+我因為沒把成大的 email 填到我的帳號裡，
+所以認不出我。
+
+github 的 commit 可以用 ssh 或 https，
+https 要輸入帳號密碼，可能比較不容易錯。
+ssh 只要 github 帳號裡有公鑰，
+就能 push，所以不同人的機率更大。
+
+最後有二個解法：
+
+ 1. 重寫所有 commit 記錄，把其中的 author 改成 gmail。
+ 
+    但我不喜歡重寫 commit 這種事，
+    commit 了就是歷史，不要隨便改寫歷史；
+    雖然機會不大，但可能會造成奇怪的結果。
+    
+ 2. 把成大的 email 加到我的 github 帳號裡。
+ 
+    很不巧，我也不想這麼做。
+    我不想讓別人可以搜到一個帳號，
+    讓搜到我的所有帳號；
+    所以不想把成大和 github 關聯。
+
+
+總之就這樣吧，反正那也算一種歷史。
+之後我把本機的 git email 換成 gmail，
+繼續 commit，新的 gholk 就會正確的，
+別人應該就會找到同名的我吧。
+
+
+<script>
+function github(path, text) {
+    const base = 'http://github.com/GHolk'
+    const a = document.createElement('a')
+    a.href = `${base}/${path}`
+    a.textContent = text || path
+    return a
+}
+</script>
+
+#git
+#email
+#歷史
+#ccns

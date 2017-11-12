@@ -1,0 +1,32 @@
+# gui 下 emacs server 和 scim 輸入法
+gui 下的 emacs 很棒，和剪貼簿互通真得很方便。
+但 scim 怪怪的，通常開啟後會無法輸入中文。
+最後用 restart emacs server 的方式解決了。
+
+好像是 emacs.service 是掛在 default.target 下，
+一登入就會啟動。
+而 scim 是掛 x-session 下，
+所以 emacs 啟動時 scim 還沒啟動。
+
+scim 可能是只有在他啟動後再啟動的程式才能用，
+所以 emacs 無法。
+要重開 emacs server 才可以。
+
+但我也不能把 emacs server 掛在 x session 下，
+這樣 terminal 登入就不會啟動了。
+我最後想出的辦法是 x session 啟動後
+就重啟一次 emacs。
+[於是寫了一個 script][start emacs with scim]
+來做這件事。
+
+[start emacs with scim]: https://github.com/GHolk/dot-emacs/commit/33da66
+
+然後把這個 script 掛到 `xfce4-session-settings` 下
+的工作階段初始啟動裡，
+xfce4 啟動時，就會自動重啟 emacs server，
+並開啟 emacs client。
+
+#emacs
+#gui
+#輸入法
+#service

@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" prefix="og: http://ogp.me/ns#">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="c34031328">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="vim, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-04-13T16:20:19.054Z">
+<meta name="keywords" property="og:article:tag" content="js,html,gui,cli,lisp,matlab,程式">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="golden-age-in-university.html" title="我的大學黃金年代">
+<link rel="prev" type="text/html" href="black-sky-no-forget.html" title="拒絕遺忘的回憶">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<meta property="og:image" content="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<title>該死的 UI 設計</title>
+</head>
+<body>
+<main><h1 id="-ui-">該死的 UI 設計</h1>
+<p>UI 設計真是最麻煩的事。
+這裡的 UI 只是像 parse 文字檔、
+解析參數之類的，
+結果比原本核心的 code 還長，
+難怪要出一堆函式庫。
+不過終極解法還是 Lisp Machine 吧，
+可以直接 call function 。</p>
+<p>寫了一個矩陣乘法的程式，
+因為是用 JS 寫的，
+就用 <strong>物件導向</strong> 來寫，
+宣告什麼是矩陣，什麼是矩陣的乘法，
+再把繞 x 、 y 、 z 的旋轉矩陣
+定義好乘起來就結了。</p>
+<h2 id="ui-">UI 設計</h2>
+<p>然後想到既然是 js ，就包成 html 的 GUI 吧，
+用瀏覽器就可以跑了，也不用 nodejs 。
+結果寫完比原本的矩陣乘還多，又臭又長。</p>
+<p>可能因為矩陣乘法是用 js 方言
+coffee script 寫的，有很多簡寫。
+而包 GUI 我沒有用 coffee script 。</p>
+<p>parse 文字檔本來就很麻煩，
+只有 perl 很神奇的把這作事作很好，
+perl 的確是一種擅長處理文字的語言。</p>
+<p>最開始寫好後，又花了幾行包成可以被引用的 package ，
+如果要包成可以從命令列執行又要再多幾行。
+之前用 matlab 寫，雖然主程式超短，
+但解析參數又更麻煩；他在這方面沒有做得好好。
+（其實是 octave ，我不確定
+matlab 能不能被當作腳本執行。）</p>
+<p>要是可以簡單 eval 就直接執行多好，
+node 的 package 模型已經有點像了。
+但這樣又要多開一個 [[repl]] 環境。</p>
+<p>不論是 CLI 或 GUI ，應該都可以稱 UI 設計，
+都不簡單；尤其是 GUI 根本是坨屎坑。
+（但 UI 的 U 是 user ，但有時不是設計給人的，
+是給其它程式 call 的。）</p>
+<p>所以人發明了更多函式庫包裝，
+甚至有跨平台、跨語言的。
+包一次可以運行在 browser 、 windows 上。</p>
+<h2 id="lisp-machine">Lisp Machine</h2>
+<p>但終極解決辦法還是 Lisp machine ，
+像王垠說的，一種系統、一種語言，
+所有 app 都只是副函數呼叫，
+又加上 lisp 的可擴充性，根本無敵。</p>
+<p>但單一終究比不上多樣，因為 lisp 不夠快，
+只有 C 夠快，所以 unix 贏了。
+unix 是只能執行機器語言的機器，
+lisp machine 是只能執行 lisp ；
+其它語言編譯成機器語言再跑還行，
+但給 lisp 跑就太慢了。</p>
+<p>unix 的作法是編碼成純文字，
+而 lisp 是避免任何編碼。
+因為整台機器內資料格式都是通用的，
+不太需要編碼。
+unix 是認識到有太多的電腦誕生又死亡，
+沒有一種格式是恆長久的，
+只有純文字，人可讀的純文字是永恆的。</p>
+</main>
+
+<footer></footer>
+<script src="ext/luser-meta.js" defer></script>
+
+<div id="disqus_thread"></div>
+<script>
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+var disqus_config = function () {
+this.page.url = window.location;
+this.page.identifier = window.location.toString().replace(/.*\//,'');
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://gholk-gh.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+</body>
+</html>
+

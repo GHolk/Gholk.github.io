@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" prefix="og: http://ogp.me/ns#">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="c34031328">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="vim, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-04-15T15:22:12.172Z">
+<meta name="keywords" property="og:article:tag" content="tor,firefox,browser,網路,ubuntu,linux,wiki">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="into-javascript-trend.html" title="捲入 JS 的大熱潮">
+<link rel="prev" type="text/html" href="golden-age-in-university.html" title="我的大學黃金年代">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<meta property="og:image" content="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<title>使用 tor 與 firefox 上洋蔥網</title>
+</head>
+<body>
+<main><h1 id="-tor-firefox-">使用 tor 與 firefox 上洋蔥網</h1>
+<p>無聊掃了一下 <a href="https://www.facebook.com/groups/coldstem">冷梗研究社</a> 的分支：
+<a href="https://www.facebook.com/groups/hell0humor0research0Club">地獄梗研究社</a> 的管理員頭貼。
+他是用一個 QRcode 作頭貼，
+之前都沒想到要去掃他的頭貼，
+結果發現是 <code>.onion</code> 域名，是暗網：
+<a href="http://kpvz7ki2lzvnwve7.onion">http://kpvz7ki2lzvnwve7.onion</a> 。</p>
+<p>於是我就開了 tor： <code>systemctl start tor</code> ，
+再設定 firefox 連線到 tor 的 SOCKS，
+網址是 <code>localhost:9050</code> 。
+然後滿心歡喜的開啟了連結，
+結果找不到域名。</p>
+<h2 id="-tor-dns-">讓 tor 代理 dns 查詢</h2>
+<p>稍微搜尋了一下，浪費了一堆時間才發現
+<a href="https://www.torproject.org/docs/faq.html.en#AccessHiddenServices">要連上 <code>.onion</code> 要把 domain name
+直接傳給 tor</a> 。
+要怎麼做呢？在 firefox 設定如何連結到網路的地方，
+也就是設 proxy 的地方、你輸入 port 9050 的地方，
+下面有個小小的選項： <em>使用 SOCKSv5 時也代理 dns 查詢</em> ，
+把她勾起來，就結了。</p>
+<p><a data-flickr-embed="true" href="https://www.flickr.com/photos/135370742@N08/34011218726/in/dateposted-public/" title="tor-proxy-dns"><img src="https://c1.staticflickr.com/3/2938/34011218726_dfdb5e43b4_b.jpg" width="1024" height="576" alt="tor-proxy-dns"></a><script async src="//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script></p>
+<p>其實也沒有找很久，只是這點沒幾個人會發現，
+google 也沒看到相關的資料，
+自己也是無意間發現的。
+一般人都是直接裝了 tor 代理，
+再裝了 tor browser，就直接上了，
+不會想設定用 firefox 連 tor proxy。</p>
+<p>意思就是 <code>.onion</code> 不是查 dns 後用 IP 連，
+是直接用那串以 onion 結尾的網址當 IP，
+然後 tor 就會幫你找到資料丟回來了。
+但到 SOCKSv4 為止，都只能代理 IP 服務，
+也就沒辦法連 onion 網址了。</p>
+<h2 id="tor-ubuntu-package">tor 的 ubuntu package</h2>
+<p>也順便發現 tor project 的官網靠北了
+ubuntu (mul 包的 tor package 很爛，
+<a href="https://www.torproject.org/docs/debian.html.en">建議 ubuntu user 用他們自己包的。</a>
+我就照做，結果發現她給的 gpg 金鑰庫連不上。</p>
+<pre><code>gpg --keyserver keys.gnupg.net --recv A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
+gpg --export A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 | sudo apt-key add -
+</code></pre><p>隨便 google 一下，
+找到一個 MIT 的金鑰庫 <code>pgp.mit.edu</code> ，
+取代上面的 <code>keys.gnupg.net</code> 就 OK 了。</p>
+<hr>
+<p>最後那個管理員的 QRcode 是什麼呢？
+只是暗網百科 <em>the hidden wiki</em> 的首頁而已。</p>
+<p>另外提醒，用 firefox 連暗網沒有安全的匿名！
+所以仍有被追蹤、監聽的風險。</p>
+</main>
+
+<footer></footer>
+<script src="ext/luser-meta.js" defer></script>
+
+<div id="disqus_thread"></div>
+<script defer>
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+var disqus_config = function () {
+this.page.url = window.location;
+this.page.identifier = window.location.toString().replace(/.*\//,'');
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://gholk-gh.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+</body>
+</html>
+

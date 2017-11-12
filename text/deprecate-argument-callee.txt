@@ -1,0 +1,53 @@
+# argument.callee 被廢棄的原因
+在 js 中函數要遞迴呼叫，就直接呼叫自己名字。
+從前從前，函數中特殊的 arguments 變數
+有一個叫 callee 的函數，是指向函數本身。
+但後來被廢棄了。此後如果是匿名函數，則必須取一個名字，
+才能遞迴呼叫。
+
+<button onclick="theVoid()">the void</button>
+<script>
+function theVoid(i) {
+    alert(typeof theVoid) // function
+    alert(theVoid == arguments.callee) // true 如果你的 js
+                                       // 仍支援 argument.callee 的話
+}
+</script>
+
+廢棄的主要原因是一般會習慣直接呼叫 `arguments.callee(foo)` ，
+然後造成函數的 this 對像指到 arguments。
+
+<button onclick="testCallee()">test callee</button>
+<script>
+function testCallee(showArguments) {
+    if (showArguments) {
+        alert(this[0], this[1])
+    }
+    else {
+        let show = true
+        arguments.callee(show, ["hello", "world!"])
+    }
+}
+</script>
+
+然後因為這種引用，隨遞迴次數，
+arguments 會越堆越多，都不能回收。
+所以很麻煩。我猜的啦。
+
+雖然可以簡單把 callee 抓出來，
+讓 this 不要指向 arguments 即可。
+
+```js
+let callee = arguments.callee
+callee() // 這樣 this 會不會指向 arguments
+         // 但會指向 window
+```
+
+總之，js 最後用了 *為匿名函數取名字* 這樣奇葩的作法，
+有點宣告，但那個名字只能在該函數裡看到，
+所以不是宣告，還是函數表達式。
+
+#js
+#deprecate
+#遞迴
+#程式

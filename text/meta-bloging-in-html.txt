@@ -1,0 +1,183 @@
+# 部落格的 html 元寫作
+[[元編程]] 就是用程式產生程式，像是用巨集；
+而 **元寫作** ，解作用程式寫作，
+也就是在寫 html 的時候，
+使用一些像巨集的手法來減少重覆工作或達到更好的互動性。
+
+簡單來說，就是把 javascript 和 css 都當成 markdown 的功能。
+把 javascript 當成 markdown 的巨集語言，
+（雖然這個巨集是在瀏覽時執行，而且還可以改變瀏覽器行為。）
+把 css 當成 markdown 的皮，
+（css 有了偽類偽元素後，可以稱得上是程式語言了。
+我認為 css 比較像傳統的文件中的巨集，
+單純改變顯示的方式，少量改變內容。）
+
+而且為了方便，markdown js css 還能寫在同一個檔案裡，
+不做多餘的引用動作。
+
+
+## css
+css 就是一種十分常見的元寫作手法，
+像如果想要每個項目加上數字，除了直接用 `<li>` ，
+可以在文章裡現寫 css counter，
+然後指定到想要的元素上。
+
+例如我以 markdown 寫作，
+可以直接在 markdown 內嵌 html 語法，
+當然包含 `<style>` 元素，
+於是就直接在 markdown 裡用 css 指定了每個標題要以 `第 $n 天` 開頭，
+而不用每次都手動打 `## 第 3 天`。
+
+```css
+main {
+    counter-reset: thirty-day;
+}
+h2:before {
+    counter-increment: thirty-day;
+    content: "第 " counter(thirty-day) " 天，";
+}
+```
+
+```html
+<style>
+    style:this + p em {
+        color: red;
+    }
+</style>
+```
+
+其它我還希望可以加入像 `:this` 的偽類，
+用來選出該 css 自身，
+搭配 `+` 就能用來選出現在所在位置的下一個元素。
+這樣就能做到像 *指定某區塊的斜體要上紅色* 之類的。
+這應該是屬於元編程中的 [[反射 (電腦科學)]] 。
+
+## JavaScript
+js 的功能就更廣了，甚至可以做到動態產生內容之類的。
+像我希望本篇文章要有一個表格記錄費氏數列前 100 項，
+我當然可以先算好後放到文件裡，
+也可以用 JavaScript 現場算出 100 項，
+用 `document.write` 顯示。
+
+或是像上一篇文章，
+希望每個 youtube 連結都能用 iframe 看；
+但又懶得打二次連結。
+於是就用 js 動態抓出所有 youtube 超連結，
+然後轉換成嵌入 url，再做成 iframe，一一加到標題後。
+
+然後又想全部都載入會拖很慢，
+尤其我又打算把 30 部 mv 都放在同一頁。
+於是就不直接做成 iframe，而是做成按鈕，
+按了才會載入 iframe。
+
+## css 的彈性
+也許有人說，那個 counter 可以寫成一個 css class，
+在 html 裡直接指定 h2 為那個 class 就可以計數了，
+不用動態寫 css 產生。
+
+但這樣要直接手寫 html，才能為 h2 加上 class，
+在 markdown 裡加 class 的語法還不是很普遍，
+因為也沒這個需求。
+
+而且每次可能 counter 的樣式都不同，
+像我是需要產生 `第 0 天` 的計數器，
+下次可能變成 `已經試了 0 次` 。
+那 css 可能無法實現了，要做在 markdown 的 converter 裡。
+這變成一個像是 macro 或 wiki 語法的東西，
+呼叫時要指定 counter 樣式，像 `第 %d 天` 之類的。
+
+知道 `printf` 的格式語法嗎？
+也許有一天，我們會要求要前綴 0，
+或從指定數字開始，或輸出成 16 進位。
+前面二項 css 做到了，後面一項實在少見，
+可以直接用 js 自幹一個，
+或 css 中 [counter 可以指定用循環計數] 可以做到。
+
+```css
+@counter-style octal {
+    system: numeric;
+    symbols: "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "A" "B" "C" "D" "E" "F";
+}
+```
+
+[counter 可以指定用循環計數]: https://developer.mozilla.org/en-US/docs/Web/CSS/@counter-style/system#Alphabetic_example
+
+我想說的是，如果 css 已經這麼優質，
+何不直接用了？而要自己再幹一個 markdown counter？
+而且 markdown 已經這麼彈性，允許你在任何地方插入 html，
+就直接插入吧。
+
+## js 的彈性
+何況是 js，我甚至可以用 js 直接用 `document.write` 產出樣式表，
+像上面那個 `:this` ，可以用 js 動態為每個 style 指定 id，
+然後把內容的 `:this` 換成 `#the-id` 。
+甚至實現 `:prev` `:next` `:parent` 。
+
+所有 css 能做到的，都能用 js 實現。
+我之前還在想要不要不用 `<script>` ，
+改用 `<pre class="javascript-eval">` 之類的，然後 
+`$('pre.javascript-eval').text(function () { return eval($(this).text()) })` ，
+或偵測返回值，看是 node 要 append 或 html fragment 直接用 innerHTML。
+
+一個例子，是 js 用來互動，
+用 js 寫了某段示範程式，點一下直接執行，
+甚至用 prompt 接受使用者輸入。
+（這是我最初的想法。）
+
+或像單純的巨集，用來減少重覆工作。
+像你希望本篇文章的超連結都要在新分頁開啟，
+於是就寫了 `$('a').attr('target', '_blankk')` 。
+或是過濾符合某些條件的超連結。
+
+如果要透過 markdown converter 執行，
+就必須創造一個 url 的語法，指定該 url 要如何被開啟。
+這絕不是個小工程，而且有時只用到幾次，
+卻花了大量時間在 markdown 中實現的這個語法。
+另一種作法，是用像 vi 這樣有 batch 功能的編輯器專屬的，
+就是用 `:%s` 全域取代，做簡單的代換。
+（但工作量也很驚人。）
+
+我想這是 markdown 允許直接嵌入 html 的原因，
+可以大大加強 markdown 能表現的內容。
+另外也因此，markdown 中可以嵌入 css 和 js；
+css 使 markdown 能為自己指定樣式，
+而 js 使 markdown 像是擁有了自己的巨集語言。
+像 TeX 或 man-page 一樣，自定義簡寫。
+（雖然巨集應該是在程式編譯時就決定，
+js 卻是反過來在 html 被瀏覽時才執行，
+因此多了一些問題，也多了一些功能。）
+
+也許一些常用的 js 可以寫成單獨的檔案，減少重覆作業。
+但我想大部份都不會是類似的，也無法重用。
+那與其寫一個超大的 js 或很複雜的 markdown converter，
+不如直接用可以直接執行的 js，
+簡單但醜陋的實現這些功能。
+
+## 與 wiki 比較
+wiki 有類似的概念，但不允許動態產生。
+你可以創建一個模版；本身也是一個 wiki page，
+然後在其它頁面像呼叫函數一樣使用該模版。
+
+js 要做到的話，可能用用 ajax 請求另一篇 blog 內的文章，
+然後 query 出需要的原始碼片段，eval 她。
+（不要忘記 eval 這個神奇的小玩意 `;)`）
+
+## 上一篇的 markdown 原始碼
+提供參考，裡面用了二個手法：
+
+ 1. css counter
+ 2. js 動態從 youtube 超連結產生嵌入用影片
+
+<iframe src="text/30-day-song.txt">
+你的瀏覽器不支援 iframe，
+請透過超連前往：
+<a href="text/30-day-song.txt">30 日推歌挑戰</a>
+</iframe>
+
+#巨集
+#html
+#blog
+#wiki
+#javascript
+#css
+#程式

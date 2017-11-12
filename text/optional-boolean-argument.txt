@@ -1,0 +1,28 @@
+# 可省略的布林值參數
+有時候一些函數最後會有一個 boolean 參數，
+去微調函數的行為。
+如果程式沒維護好，一不小心就會變很亂。
+
+    form.addField('username', name, true)
+    // 鬼才知道那個 true 在幹麻
+
+寫 [discord 的聊天機器人] 的時候想到，
+有一種作法讓程式可讀性變高，
+先想想原本函數是怎麼定義，就知道該怎麼寫了。
+
+[discord 的聊天機器人]: http://github.com/ccns/quiz-chatbot-discord
+
+    function addField(name, value, inline) {
+        if (inline) printf("%s: %s%s\n", name, value)
+        else printf("%s:\n\t%s\n\n", name, value)
+    }
+    
+    var inline = true
+    form.addField(name, value, inline)
+
+雖然看起來還可以，
+但如果 boolean 參數有二三個，
+每次呼叫還是要想一下順序，
+實在是ㄏㄏ
+
+#程式語言

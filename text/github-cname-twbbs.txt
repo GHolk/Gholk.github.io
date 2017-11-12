@@ -1,0 +1,42 @@
+github 設 twbbs 的域名
+======================
+[之前申請的 twbbs 域名][registry-twbbs] 終於好了！
+大概一個月內會好吧，沒有看到核可的日期。
+昨天突然想到，去看才發現好了。
+
+[registry-twbbs]: twbbs-dinshin.html
+
+之後就是把 github 的網頁
+<https://gholk.github.io> 掛到新網域
+<http://loco.twgg.org> 下面啦。
+超簡單兩步就好了。
+
+ 1. 去 twbbs 的網頁介面上，
+    設定 CNAME 到 gholk.github.io 。
+
+        loco.twgg.org in CNAME gholk.github.io 
+
+ 2. 在 github repo 下新增一個檔案取名 `CNAME` ，
+    內容一行， `loco.twgg.org` ，
+    之後再 push 到 github 。
+
+    或是可以直接在 github 網頁介面中設定，
+    會直接建立 CNAME 檔案。
+    但之後會更新一個提交，要 pull 下來。
+
+    兩種結果一樣，但只要選一個做。
+
+之後等個半天，就可以用新域名了！
+而且連 <https://gholk.github.io>
+會被自動導到 <http://loco.twgg.org> 。
+
+twbbs 申請一次可以用半年，
+但考量申請要等一二個月，
+應該要在結束前一個月左右申請續用。
+
+
+#dns
+#github
+#www
+#twbbs
+#blog

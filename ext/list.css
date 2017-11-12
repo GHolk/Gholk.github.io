@@ -1,0 +1,35 @@
+body {
+    max-width: 30em;
+    margin: auto;
+}
+
+
+article ul {
+    padding: 0;
+}
+article ul li {
+    display: inline;
+    color: grey;
+}
+
+article ul li:before {
+    content: '#';
+}
+
+.hide-article {
+    display: none;
+}
+
+form {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+}
+textarea {
+    display: block;
+    width: 20em;
+    height: 8em;
+}
+label {
+    display: block;
+}

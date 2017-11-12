@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" prefix="og: http://ogp.me/ns#">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="vim, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-10-21T14:01:28.456Z">
+<meta name="keywords" property="og:article:tag" content="git,email,歷史,ccns">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="georeference-tilt-photo.html" title=" 影像改正">
+<link rel="prev" type="text/html" href="extend-lvm-filesystem.html" title=" 單人維護模式下擴大 usr 分割">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<meta property="og:image" content="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title> github 因為 email 不同無法辨識帳號</title>
+</head>
+<body>
+<main><h1 id="github 因為 email 不同無法辨識帳號">github 因為 email 不同無法辨識帳號</h1>
+<p>發現 github 上 commit 記錄裡我的帳號都不能點，
+頭像無法顯示，其它統計也都看不到我。
+最後發現是 github 是認 git commit 中的 email，
+所以如果本機和 github 的不同，就會這樣。</p>
+<p>yuri 在看社團一些專案的時候發現的，
+我的頭像都無法顯示，帳號也不能點。
+連我自己的專案也是，
+其中 emacs 的設定 repo <code>js github(&#39;dot-emacs&#39;)</code>
+連 contributor 都是 0，
+但仍有一堆作者是 gholk 的 commit 記錄，
+只是都不能點。</p>
+<p>後來就發 email 給 github 問，
+結果蠻快就回我了。
+說是因為我 commit 時的 email 和 github 的不同。</p>
+<p>可能是之前我某次重裝系統時，
+git 的設定被洗掉了，
+重新設定時就設成成大的 email，
+而 github 一直是用 gmail。</p>
+<p>我也因此發現 github 是很 <strong>原始</strong> 的東西，
+對 git 沒有做太多的包裝。（應該吧？）
+像 <code>js github(&#39;dot-emacs/commits&#39;)</code> 就很明顯是 <code>git log</code> ，
+再點進去就是 <code>git log -p $HASH</code> 的內容。</p>
+<p>因此每個 commit 就直接用 commit 中的 author 欄位認人，
+其它欄位應該也一樣。
+github 應該是用 author 的 email 去對所有帳號的 email，
+然後把對到的顯示出來。
+我因為沒把成大的 email 填到我的帳號裡，
+所以認不出我。</p>
+<p>github 的 commit 可以用 ssh 或 https，
+https 要輸入帳號密碼，可能比較不容易錯。
+ssh 只要 github 帳號裡有公鑰，
+就能 push，所以不同人的機率更大。</p>
+<p>最後有二個解法：</p>
+<ol>
+<li><p>重寫所有 commit 記錄，把其中的 author 改成 gmail。</p>
+<p>但我不喜歡重寫 commit 這種事，
+commit 了就是歷史，不要隨便改寫歷史；
+雖然機會不大，但可能會造成奇怪的結果。</p>
+</li>
+<li><p>把成大的 email 加到我的 github 帳號裡。</p>
+<p>很不巧，我也不想這麼做。
+我不想讓別人可以搜到一個帳號，
+讓搜到我的所有帳號；
+所以不想把成大和 github 關聯。</p>
+</li>
+</ol>
+<p>總之就這樣吧，反正那也算一種歷史。
+之後我把本機的 git email 換成 gmail，
+繼續 commit，新的 gholk 就會正確的，
+別人應該就會找到同名的我吧。</p>
+<script>
+function github(path, text) {
+    const base = 'http://github.com/GHolk'
+    const a = document.createElement('a')
+    a.href = `${base}/${path}`
+    a.textContent = text || path
+    return a
+}
+</script>
+
+
+
+
+
+</main>
+
+<footer>
+<script src="ext/luser-meta.js" defer></script>
+</footer>
+
+<div id="disqus_thread">
+<script defer src="ext/load-disqus.js"></script>
+<noscript>
+  Please enable JavaScript to view the
+  <a href="https://disqus.com/?ref_noscript">
+    comments powered by Disqus.
+  </a>
+</noscript>
+</div>
+
+
+</body>
+</html>
+

@@ -30,7 +30,7 @@ class IndexLoader
                 </ul>
             </atricle>
             <hr>
-        """).insertAfter 'h1'
+        """).prependTo 'main'
 
     write: (path = @path) ->
         fs.writeFileSync path, @selector.html(), 'utf8'

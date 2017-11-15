@@ -39,7 +39,7 @@
     "www": 2,
     "twbbs": 2,
     "soul-knight": 3,
-    "gui": 7,
+    "gui": 8,
     "github": 2,
     "funny": 2,
     "dns": 2,
@@ -298,8 +298,8 @@
     "問答": 9,
     "遊記": 14,
     "病": 14,
-    "ssh": 1,
-    "x-window": 1,
-    "windows": 1,
-    "ip": 1
+    "ssh": 2,
+    "x-window": 2,
+    "windows": 2,
+    "ip": 2
 }

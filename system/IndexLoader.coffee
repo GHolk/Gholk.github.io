@@ -18,19 +18,20 @@ class IndexLoader
             <li><a href="?tags=#{tag}">#{tag}</a></li>
         """
 
-        @selector("""
-            <article>
-                <h2><a href="#{loader.file}">#{loader.title}</a></h2>
-                <small class="date">#{loader.date}</small>
-                <p>
-                #{loader.description}
-                </p>
-                <ul class="tag-list">
-                #{tagsArray.map(wrapTag).join('\n')}
-                </ul>
-            </atricle>
-            <hr>
-        """).prependTo 'main'
+        @selector 'main'
+            .prepend 'hr'
+            .prepend """
+                <article>
+                    <h2><a href="#{loader.file}">#{loader.title}</a></h2>
+                    <small class="date">#{loader.date}</small>
+                    <p>
+                    #{loader.description}
+                    </p>
+                    <ul class="tag-list">
+                    #{tagsArray.map(wrapTag).join('\n')}
+                    </ul>
+                </atricle>
+            """
 
     write: (path = @path) ->
         fs.writeFileSync path, @selector.html(), 'utf8'

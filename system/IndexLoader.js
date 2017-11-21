@@ -23,7 +23,7 @@
       wrapTag = function(tag) {
         return "<li><a href=\"?tags=" + tag + "\">" + tag + "</a></li>";
       };
-      return this.selector("<article>\n    <h2><a href=\"" + loader.file + "\">" + loader.title + "</a></h2>\n    <small class=\"date\">" + loader.date + "</small>\n    <p>\n    " + loader.description + "\n    </p>\n    <ul class=\"tag-list\">\n    " + (tagsArray.map(wrapTag).join('\n')) + "\n    </ul>\n</atricle>\n<hr>").prependTo('main');
+        return this.selector("main").prepend("<hr>").prepend("<article>\n    <h2><a href=\"" + loader.file + "\">" + loader.title + "</a></h2>\n    <small class=\"date\">" + loader.date + "</small>\n    <p>\n    " + loader.description + "\n    </p>\n    <ul class=\"tag-list\">\n    " + (tagsArray.map(wrapTag).join('\n')) + "\n    </ul>\n</atricle>");
     };
 
     IndexLoader.prototype.write = function(path) {

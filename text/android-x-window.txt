@@ -1,0 +1,41 @@
+# x window 在 android 上
+x window 是分工很細，易剝離的架構，
+所以可以用 ssh -X 這種神奇的方式工作；
+但把 x server 和 window manager 分離也造成一些麻煩的事。
+之前我 raiso 在手機上用 ssh 連到 server，
+接鍵盤寫 code，於是便想在手機上用 x window。
+
+## x window 與 window manager
+x window 只是協議，
+各程式用 x window 協議和 x server 溝通，
+x server 再把畫面 render 出來。
+對 x server 來說程式都是 client，
+螢幕和顯卡也是 client，
+鍵盤和滑鼠也都 client。
+
+但 x window 並無規範 window manager，
+也就是 x server 只會直接顯示 render 視窗，
+如果要調視窗大小、切換不同視窗、關閉，
+都要通過 x window 協議去和 x server 溝通；
+也就是發訊息給 x server。
+
+所以你要關閉一個視窗，可能要打開終端機，
+`kill -SIGTERM $pid` 。
+但如果你已經在 x 下，
+你又要怎麼通知 x 再開一個終端機，
+並執行 kill 命令？
+可以是各程式內會寫好，
+像寫一個按扭按下去會發訊息給 x server，看要切視窗或關掉自己。
+
+但每個程式都這樣寫太麻煩，
+而且之前還要能互相溝通，
+於是有了 window manager。
+讓每個程式啟動後，
+都被關在另一個 window manager 創造出來的盒子裡，
+在互動時，要通過 window manager，
+也能通過 window manager 處理 resize close move 等事，
+程式就不需要自己處理。
+
+## 在其它作業系統中
+windows 下有window manager
+android下很奇怪

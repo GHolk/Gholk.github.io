@@ -97,3 +97,4 @@ dt13-start-up.html
 bullshit-assault-harm.html
 android-x-window.html
 xkbcomp-custome-keyboard.html
+qemu-live-dual-boot-windows.html

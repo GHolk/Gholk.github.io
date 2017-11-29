@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-11-29T15:43:22.085Z">
+<meta name="keywords" property="og:article:tag" content="gimp,wallpaper,photo,夜">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="qemu-live-dual-boot-windows.html" title=" linux 下用虛擬機開雙開機的 windows 分區">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<meta property="og:image" content="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title> 七彩路燈修圖練習</title>
+</head>
+<body>
+<main><h1 id="七彩路燈修圖練習">七彩路燈修圖練習</h1>
+<p>朋友在臉書貼了一張夜晚路燈的照片，
+其中幾個路燈微微照成不同顏色。
+覺得很有意思，就練習修圖，
+看能不能修得更好看。</p>
+<iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3D1581060695309049%26id%3D100002154015169&width=500" allowtransparency="true">
+<a href="https://www.facebook.com/photo.php?fbid=1581060671975718&set=a.1544510258964093.1073741836.100002154015169&type=3&theater">
+作了一場很美很美的夢
+</a>
+</iframe>
+
+<script src="ext/flickr.js"></script>
+<script>
+flk.set(["colorful","origin"],
+[{"farm":"farm5","server":"4586","photo":"38647954876","secret":"c4e4f59215","user":"135370742@N08"},{"farm":"farm5","server":"4576","photo":"37986013104","secret":"3a7e26d9cd","user":"135370742@N08"}])
+</script>
+
+<h2 id="原圖">原圖</h2>
+<p><code>js flk.gn('origin')</code></p>
+<p>原圖中右一燈不知道為什麼帶著微微綠色，
+顯得右二有點藍色，給人奇異的感覺。
+於是就想試著修圖把顏色變更明顯。</p>
+<h2 id="目標">目標</h2>
+<p><code>js flk.gn('color')</code></p>
+<p>我把右二變更藍，左一上紅色，
+右一就不處理，本來的綠色就不錯看了。</p>
+<h2 id="步驟">步驟</h2>
+<p>右二的藍色是開一個新圖層，疊在原本的上面；
+用漸層工具調藍到透明的漸層，
+拉一個藍到透明的圓在路燈的位置。
+但顏色太重，又把調該圖層透明度。</p>
+<p>左一本來也用一樣的作法，但覺得不好看。
+後來覺得用色彩曲線工具把紅色拉高，
+出來的效果不錯，就決定這樣作。</p>
+<p>希望是整張的紅色在左一路燈最高，
+然後漸層到普通；但漸層沒辦法弄那麼細。
+後來發現可以用圖層遮罩做：
+先重製一次原圖，把整張的紅色都調高；
+然後加全透明的黑色圖層遮罩。</p>
+<p>遮罩全黑是該圖層不顯示，
+也就是透明，白色是不透明。
+所以把要顯示的地方塗白，不顯示的塗黑即可。
+因為本來是全黑，用黑到白的漸層從左一路燈放射，
+這樣就是路燈部份漸層到其它部份透明，
+最後疊到原圖上即可。</p>
+<h2 id="flickr">flickr</h2>
+<p>flickr 我上傳 gimp 的中間檔 xcf，
+會被變成 jpg，就只放原圖和改圖了。
+也許考慮之後直接用 github 來存 blob？</p>
+<p>結果我認為是不錯的桌布，有上 wallpaper 標籤。
+但轉 jpg 二次好像有糊掉，不知道怎麼改，
+就這樣吧。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer src="ext/load-disqus.js"></script>
+
+
+
+
+</body></html>

@@ -33,13 +33,9 @@
 不過很可能是 cpu 太差跑不動，
 換 thinkpad 13 才又試了，
 最後在 <a href="https://www.ptt.cc/bbs/Linux/M.1511707620.A.5B2.html">ptt 板友的協助下弄出來了！</a></p>
-<script>
-const qemu = 'qemu-system-x86_64 -enable-kvm'
-</script>
-
 <p>qemu 我多用 <code>qemu-system-x86_64 -enable-kvm</code> ，
 詳細為什麼要用 system 我也沒查。
-一開始直接試 <code>js `${qemu} -hda /dev/sda` </code> ，
+一開始直接試 <code>qemu-system-x86_64 -enable-kvm -hda /dev/sda</code> ，
 結果不签。
 不確定是因為 sda 正在使用，（linux 也在 sda 裡。）
 還是 uefi 的問題，就去 ptt linux 板問。</p>
@@ -77,6 +73,12 @@ drive 好像是定義一個裝置，
 免得每次都要打一堆選項麻煩，也省得忘記。
 這裡可以直接用 <code>/usr/share/ovmf/OVMF.fd</code> 是因為我開了 snapshot 選項，
 對 OVMF.fd 不會直接寫入，也只會寫入暫存檔。</p>
+<p><ins datetime="2017-11-30">
+但不知道為什麼我開機後是直接進 windows。
+我有裝 grub，應該會先進 grub，
+然後有選單可以進 debian 或 windows。
+沒有仔細研究，總之不想管。
+</ins></p>
 </main>
 
 <script defer src="ext/meta-meta.js"></script>

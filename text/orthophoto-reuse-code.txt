@@ -1,0 +1,116 @@
+# 正射影像
+~攝影測量~ 的第二個作業，不只幾何改正，
+把傾斜攝影的照片作成正射影像。
+我就用上學期的 code，
+加上上次作業寫的影像取樣，
+組合成影像正射化的程式。
+
+## [上學期的 bottom up 共線式][bottom up]
+上學期 ~航遙測概論~ 最後產出是一個 bottom up 共線式，
+輸入內外方位參數，能把物空間座標轉到相空間；
+或把相空間座標和高程，轉成物空間；
+並作透鏡畸變改正。
+
+[bottom up]: https://github.com/GHolk/wstd/blob/master/photo-remote/rotate-program/node_modules/colinearityEquation.coffee
+
+上學期是用 coffee script 寫的，
+寫太爛現在根本不忍直視，就不改了，直接引用。
+反正結果是對的就好。
+
+### 範例
+```js
+// 引用
+const ColinearityEquation = require('colinearityEquation')
+
+// 下面是使用方法
+
+// 外方位參數
+const eop = {
+    // 平移減少計算誤差
+    // xo: 169570.443932,
+    xo: 570.443932,
+    // yo: 2544089.886767,
+    yo: 89.886767,
+    zo: 116.355578,
+    // 角度轉弧度
+    omega: 25.769170/180*Math.PI,
+    phi: -0.478151/180*Math.PI,
+    kappa:-4.904690/180*Math.PI
+}
+
+// 內方位參數
+const xp = 0.00797976759482130898
+const yp = -0.01632040141493363086
+const c = 3.68128070687046982101
+const iop = [xp, yp, -c]
+
+// 透鏡畸變
+iop.k = [
+    -0.00261341937662040030,
+    0.00015213497306022675,
+    -0.00000127943044334018
+]
+iop.p = [0.00002392585197592054, 0.00001764654855396589]
+
+
+// 輸入內外方位參數，創建共線式物件
+const ce = new ColinearityEquation(eop, iop)
+
+// tw97 (2544200, 169100, 19)
+ce.groundToPhoto([200, 100, 19]) // 輸出像座標 [0.3, 0.1, 0]
+
+// 像空間到物空間未知數不足，
+// 要物空間 X Y Z 任一已知，這裡是高程 Z 已知為正高 19m。
+ce.photoToGround([0.3, 0.1, 0], [NaN, NaN, 19]) // 輸出物座標 [200, 100, 19]
+```
+
+## [上次作業的影像處理程式][jimp wrap]
+上次作業寫的程式：
+輸入物空間到像空間的轉換函數，
+和物空間轉換範圍、取樣距離；
+就能把從該範圍自動取樣，
+把每個地物座標用輸入的函數轉到像座標，
+取該像座標的顏色填到物空間。
+
+[jimp wrap]: https://github.com/GHolk/wstd/blob/master/photogrammetry/geometry-reference/reference-image.js
+
+```js
+// 引用
+const ReferenceImage = require('reference-image').ReferenceImage
+
+// 輸入檔名和物空間到像空間的轉換函數，
+// 構造一個 reference image 物件。
+const imgp = new ReferenceImage('DJI_0339.jpg', groundToPhoto)
+
+imgp.then((img) => {
+    // 轉換範圍，座標是平移 (-2544000, -169000, 0) 的 twd97
+    const start = [100, 300]
+    const end = [200, 500]
+    img.gsd = 0.1 // 0.1m = 10cm 約要跑半小時
+    return img.reference(start, end)
+}).then((referenceImage) => {
+    // 轉換完存檔
+    referenceImage.write('DJI_0339-ortho.png')
+})
+```
+
+## 包裝
+之後因為有三張影像，就把共同的部份抽出來，寫成一個函數。
+輸入檔名、內外方位、範圍、取樣區間，就能轉換好。
+[github 原始碼](https://github.com/GHolk/wstd/tree/master/photogrammetry/orthophoto) 。
+
+```js
+const ortho = require('./ortho')
+ortho.run(file, eop, iop, [start, end], gsd)
+```
+
+轉換一張 250x200，gsd 設 0.1m，
+也就是 2500x2000=5000000 個點，
+約耗時 30 分鐘；一秒轉換 2777 個點。
+
+
+#測量
+#作業
+#ncku
+#程式
+#javascript

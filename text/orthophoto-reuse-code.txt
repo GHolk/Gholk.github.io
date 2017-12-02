@@ -109,6 +109,26 @@ ortho.run(file, eop, iop, [start, end], gsd)
 約耗時 30 分鐘；一秒轉換 2777 個點。
 
 
+## 成果
+轉換成果是扇型，因為是傾斜攝影。
+有些樹或建築被壓到地上，
+因為沒有 dtm，轉換時一律把高程設成 19.6，
+差不多是球場的高度。
+
+超出相片範圍我沒有處理，
+Jimp 的作法還是一樣內插，就用最近的點，
+就變成從邊界延伸一條一條的了。
+
+<script src="ext/flickr.js"></script>
+<script>
+flk.set(["DJI_0339-ortho.png","DJI_0340-ortho.png","DJI_0341-ortho.png"],
+[{"farm":"farm5","server":"4558","photo":"37893236365","secret":"31e79df11f","user":"135370742@N08"},{"farm":"farm5","server":"4521","photo":"37893272605","secret":"15302d5e95","user":"135370742@N08"},{"farm":"farm5","server":"4531","photo":"38748911222","secret":"e0c04a58a4","user":"135370742@N08"}])
+</script>
+
+`js [flk.fig(339, 'DJI_0339-ortho'),
+     flk.fig(340, 'DJI_0340-ortho'),
+     flk.fig(341, 'DJI_0341-ortho')]`
+
 #測量
 #作業
 #ncku

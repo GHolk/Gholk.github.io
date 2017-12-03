@@ -100,3 +100,4 @@ xkbcomp-custome-keyboard.html
 qemu-live-dual-boot-windows.html
 colorful-street-lamp.html
 orthophoto-reuse-code.html
+programmer-beauty-sense.html

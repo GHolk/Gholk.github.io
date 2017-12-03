@@ -6,7 +6,7 @@
     "心得": 6,
     "遊戲": 5,
     "轉": 4,
-    "程式": 51,
+    "程式": 52,
     "書": 4,
     "憂鬱": 6,
     "小說": 4,
@@ -39,7 +39,7 @@
     "www": 2,
     "twbbs": 2,
     "soul-knight": 3,
-    "gui": 9,
+    "gui": 10,
     "github": 2,
     "funny": 2,
     "dns": 2,
@@ -175,7 +175,7 @@
     "lambda": 1,
     "imgur": 1,
     "ide": 1,
-    "html": 5,
+    "html": 6,
     "Hillary_Herrington": 1,
     "firefox": 1,
     "ethercalc": 1,
@@ -311,5 +311,6 @@
     "gimp": 1,
     "wallpaper": 1,
     "photo": 1,
-    "夜": 1
+    "夜": 1,
+    "排版": 1
 }

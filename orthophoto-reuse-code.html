@@ -90,12 +90,32 @@ ce.photoToGround([0.3, 0.1, 0], [NaN, NaN, 19]) // 輸出物座標 [200, 100, 19
 就能把從該範圍自動取樣，
 把每個地物座標用輸入的函數轉到像座標，
 取該像座標的顏色填到物空間。</p>
+<p>但上學期轉出來的結果是像空間座標，
+要轉成 pixel 要乘上 pixel size 再平移，
+所以要多一層轉換函數。</p>
 <pre><code class="lang-js">// 引用
 const ReferenceImage = require('reference-image').ReferenceImage
+const X = 0
+const Y = 1
+const Z = 2
 
 // 輸入檔名和物空間到像空間的轉換函數，
 // 構造一個 reference image 物件。
 const imgp = new ReferenceImage('DJI_0339.jpg', groundToPhoto)
+
+function groundToPhoto(ground) {
+    // 補上高程座標
+    ground[Z] = 19.7
+    // 甪上面的共線式轉換物空間到像空間
+    const photo = ce.groundToPhoto(ground)
+
+    // 從像空間轉到 pixel 值
+    const scale = 631.8955603017934
+    const pixel = point.map((length) => length * scale)
+    scalePoint[X] = 1995.5 - scalePoint[X]
+    scalePoint[Y] = 1495.5 + scalePoint[Y]
+    return scalePoint
+}
 
 imgp.then((img) => {
     // 轉換範圍，座標是平移 (-2544000, -169000, 0) 的 twd97
@@ -108,6 +128,15 @@ imgp.then((img) => {
     referenceImage.write('DJI_0339-ortho.png')
 })
 </code></pre>
+<h3 id="方向相反"><ins datetime="2017-12-04">方向相反</ins></h3>
+<p>發現之前寫的程式有部份寫錯，
+造成轉出來的結果上下相反。所以就改了。
+上一次的作業沒有要比較實際座標，
+這次才有，才發現數字不太對；
+不然都只關注有沒有扭曲而已。</p>
+<p>主要是像空間是原點在光軸中心，
+而數位影像是用 pixel，原點在左上角，
+Y 座標方向是相反的。</p>
 <h2 id="包裝">包裝</h2>
 <p>之後因為有三張影像，就把共同的部份抽出來，寫成一個函數。
 輸入檔名、內外方位、範圍、取樣區間，就能轉換好。
@@ -128,13 +157,25 @@ Jimp 的作法還是一樣內插，就用最近的點，
 就變成從邊界延伸一條一條的了。</p>
 <script src="ext/flickr.js"></script>
 <script>
+
 flk.set(["DJI_0339-ortho.png","DJI_0340-ortho.png","DJI_0341-ortho.png"],
-[{"farm":"farm5","server":"4558","photo":"37893236365","secret":"31e79df11f","user":"135370742@N08"},{"farm":"farm5","server":"4521","photo":"37893272605","secret":"15302d5e95","user":"135370742@N08"},{"farm":"farm5","server":"4531","photo":"38748911222","secret":"e0c04a58a4","user":"135370742@N08"}])
+[{"farm":"farm5","server":"4543","photo":"38111535434","secret":"ba2ebd33d3","user":"135370742@N08"},{"farm":"farm5","server":"4578","photo":"38111537324","secret":"f16b28b705","user":"135370742@N08"},{"farm":"farm5","server":"4563","photo":"27051385109","secret":"3d42099d30","user":"135370742@N08"}])
 </script>
 
 <p><code>js [flk.fig(339, 'DJI_0339-ortho'),
      flk.fig(340, 'DJI_0340-ortho'),
      flk.fig(341, 'DJI_0341-ortho')]</code></p>
+<p>可以看出各張影像有些微不同，
+像是從不同角度傾斜拍攝。
+可能是因為沒有用 dtm，高程用同一數值的結果。</p>
+<script>
+flk.set(["gcp-error-map.png"],
+[{"farm":"farm5","server":"4540","photo":"38827707981","secret":"40d4d38303","user":"135370742@N08"}])
+</script>
+
+<p>之後放到 QGIS 裡，點出各控制點在不同照片的座標，
+再真實座標比較：</p>
+<p><code>js flk.gn('map')</code></p>
 </main>
 
 <script defer src="ext/meta-meta.js"></script>

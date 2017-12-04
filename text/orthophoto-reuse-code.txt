@@ -115,6 +115,17 @@ imgp.then((img) => {
 })
 ```
 
+### <ins datetime="2017-12-04">方向相反</ins>
+發現之前寫的程式有部份寫錯，
+造成轉出來的結果上下相反。所以就改了。
+上一次的作業沒有要比較實際座標，
+這次才有，才發現數字不太對；
+不然都只關注有沒有扭曲而已。
+
+主要是像空間是原點在光軸中心，
+而數位影像是用 pixel，原點在左上角，
+Y 座標方向是相反的。
+
 ## 包裝
 之後因為有三張影像，就把共同的部份抽出來，寫成一個函數。
 輸入檔名、內外方位、範圍、取樣區間，就能轉換好。
@@ -129,7 +140,6 @@ ortho.run(file, eop, iop, [start, end], gsd)
 也就是 2500x2000=5000000 個點，
 約耗時 30 分鐘；一秒轉換 2777 個點。
 
-
 ## 成果
 轉換成果是扇型，因為是傾斜攝影。
 有些樹或建築被壓到地上，
@@ -142,13 +152,29 @@ Jimp 的作法還是一樣內插，就用最近的點，
 
 <script src="ext/flickr.js"></script>
 <script>
+
 flk.set(["DJI_0339-ortho.png","DJI_0340-ortho.png","DJI_0341-ortho.png"],
-[{"farm":"farm5","server":"4558","photo":"37893236365","secret":"31e79df11f","user":"135370742@N08"},{"farm":"farm5","server":"4521","photo":"37893272605","secret":"15302d5e95","user":"135370742@N08"},{"farm":"farm5","server":"4531","photo":"38748911222","secret":"e0c04a58a4","user":"135370742@N08"}])
+[{"farm":"farm5","server":"4543","photo":"38111535434","secret":"ba2ebd33d3","user":"135370742@N08"},{"farm":"farm5","server":"4578","photo":"38111537324","secret":"f16b28b705","user":"135370742@N08"},{"farm":"farm5","server":"4563","photo":"27051385109","secret":"3d42099d30","user":"135370742@N08"}])
 </script>
 
 `js [flk.fig(339, 'DJI_0339-ortho'),
      flk.fig(340, 'DJI_0340-ortho'),
      flk.fig(341, 'DJI_0341-ortho')]`
+     
+可以看出各張影像有些微不同，
+像是從不同角度傾斜拍攝。
+可能是因為沒有用 dtm，高程用同一數值的結果。
+
+<script>
+flk.set(["gcp-error-map.png"],
+[{"farm":"farm5","server":"4540","photo":"38827707981","secret":"40d4d38303","user":"135370742@N08"}])
+</script>
+
+之後放到 QGIS 裡，點出各控制點在不同照片的座標，
+再真實座標比較：
+
+`js flk.gn('map')`
+
 
 #測量
 #作業

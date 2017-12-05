@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-12-05T07:41:24.643Z">
+<meta name="keywords" property="og:article:tag" content="lisp,scheme,scope,closure">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="programmer-beauty-sense.html" title=" 程式設計師的美感">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<meta property="og:image" content="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title> lisp、閉包與 scheme</title>
+</head>
+<body>
+<main><h1 id="lisp、閉包與 scheme">lisp、閉包與 scheme</h1>
+<p>傳統 lisp 是動態作用域，沒有閉包的概念，
+但現代詞法作用域 lexical scope 似乎是主流。
+其實回到最初，是沒有 scope 這個問題的。
+lisp 就只是一個純粹的用列表表示的語言，
+似乎動態作用域才是主流。</p>
+<h2 id="程式的直覺或人的直覺">程式的直覺或人的直覺</h2>
+<p>一群鼓吹函數式編程與 lexical scope 的人創造了 scheme；
+到現在另一大 lisp 分支 common lisp 也採用了動態作用域。
+我也一直以為 scheme 較先進，
+直到我讀了 <a href="http://daiyuwen.freeshell.org/gb/rol/roots_of_lisp.html">lisp 之根源</a> ，
+才知道 lisp 並不是有意的選擇了 dynamic 或 lexical，
+而是他什麼都沒做，便成了 dynamic。</p>
+<p>似乎 dynamic 是較自然的作法，
+lisp 最初很簡單的把函數表示為一個列表，
+自然沒有多餘的地方放所謂閉包。
+lexical 則是要在每一函數宣告時，
+將目前的 scope 保存一份到函數內。</p>
+<p>這似乎是友善或優雅的對立。
+dynamic 的實現較簡單直覺優雅，但使用上為人詬病；
+lexical 的使用直覺，但實作上有難處。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer src="ext/load-disqus.js"></script>
+
+
+
+
+</body></html>

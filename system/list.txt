@@ -102,3 +102,4 @@ colorful-street-lamp.html
 orthophoto-reuse-code.html
 programmer-beauty-sense.html
 lisp-lexical-scheme.html
+expose-internal-state.html

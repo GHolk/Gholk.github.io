@@ -128,7 +128,7 @@ imgp.then((img) => {
     referenceImage.write('DJI_0339-ortho.png')
 })
 </code></pre>
-<h3 id="方向相反"><ins datetime="2017-12-04">方向相反</ins></h3>
+<h3 id="<ins datetime=" 2017-12-04"="">方向相反"><ins datetime="2017-12-04">方向相反</ins></h3>
 <p>發現之前寫的程式有部份寫錯，
 造成轉出來的結果上下相反。所以就改了。
 上一次的作業沒有要比較實際座標，
@@ -171,15 +171,19 @@ flk.set(["DJI_0339-ortho.png","DJI_0340-ortho.png","DJI_0341-ortho.png"],
 <script>
 flk.set(["gcp-error-map.png"],
 [{"farm":"farm5","server":"4540","photo":"38827707981","secret":"40d4d38303","user":"135370742@N08"}])
+flk.set("gcp-error-vector-map.png",
+{"farm":"farm5","server":"4516","photo":"24997532638","secret":"e2ca312ed2","user":"135370742@N08"})
+
 </script>
 
 <p>之後放到 QGIS 裡，點出各控制點在不同照片的座標，
 再真實座標比較：</p>
-<p><code>js flk.gn('map')</code></p>
+<p><code>js flk.gn('vector-map')</code></p>
 </main>
 
 <script defer src="ext/meta-meta.js"></script>
 <script defer src="ext/load-disqus.js"></script>
+
 
 
 

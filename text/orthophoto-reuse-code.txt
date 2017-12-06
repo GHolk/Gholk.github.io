@@ -168,12 +168,15 @@ flk.set(["DJI_0339-ortho.png","DJI_0340-ortho.png","DJI_0341-ortho.png"],
 <script>
 flk.set(["gcp-error-map.png"],
 [{"farm":"farm5","server":"4540","photo":"38827707981","secret":"40d4d38303","user":"135370742@N08"}])
+flk.set("gcp-error-vector-map.png",
+{"farm":"farm5","server":"4516","photo":"24997532638","secret":"e2ca312ed2","user":"135370742@N08"})
+
 </script>
 
 之後放到 QGIS 裡，點出各控制點在不同照片的座標，
 再真實座標比較：
 
-`js flk.gn('map')`
+`js flk.gn('vector-map')`
 
 
 #測量

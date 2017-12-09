@@ -103,3 +103,4 @@ orthophoto-reuse-code.html
 programmer-beauty-sense.html
 lisp-lexical-scheme.html
 expose-internal-state.html
+linux-play-dvd-movie.html

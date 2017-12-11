@@ -36,7 +36,7 @@ usb 轉網路孔則比較晚，試用 [HexRabbit] 確定能用，
 就去北門走一圈，在宏華資訊買了個 500 的 type c 轉 ethernet。
 在日本橋有 200 多的，後來看好像只有 usb 2.0 的速度，就沒有買。
 
-[HexRabbit]: github.com/HexRabbit "現任 ccns 社長"
+[HexRabbit]: //github.com/HexRabbit "現任 ccns 社長"
 
 ## 小紅點
 小紅點裝了 xinput 就抓到了，只是速度還是有點慢，

@@ -3,8 +3,9 @@
 <?xml-stylesheet href="http://www.blogger.com/styles/atom.css"
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xmlns:openSearch="http://a9.com/-/spec/opensearchrss/1.0/" xmlns:blogger="http://schemas.google.com/blogger/2008" xmlns:georss="http://www.georss.org/georss" xmlns:gd="http://schemas.google.com/g/2005" xmlns:thr="http://purl.org/syndication/thread/1.0">
-  <id>tag:blogger.com,1999:blog-751586915633123067</id>
-  <updated>2017-11-18T15:48:35.004+08:00</updated>
+  <id>gholk.github.io</id>
+  <updated>2017-12-14T16:53:41.629Z</updated>
+
 <category term="105 學年"/>
 <category term="106 學年"/>
 <category term="ACG"/>
@@ -347,7 +348,6 @@
 <id>depress-mood-cause-nothing.html</id>
 <title> 精神的壓力無法壓垮一個人</title>
 <published>2017-12-10T14:55:49.885Z</published>
-<updated>2017-12-14T16:51:28.847Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/depress-mood-cause-nothing.html"/>
 <summary>
     精神的壓力，不管再怎麼大，再怎麼崩潰，
@@ -363,7 +363,6 @@
 <id>comment.html</id>
 <title> 留言板</title>
 <published>2017-11-06T05:07:50.771Z</published>
-<updated>2017-12-14T16:53:41.143Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/comment.html"/>
 <summary>
     本網站的通用留言板。
@@ -379,7 +378,6 @@
 <id>dt13-start-up.html</id>
 <title> dt13 使用小感</title>
 <published>2017-11-19T05:23:31.768Z</published>
-<updated>2017-12-14T16:53:41.153Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/dt13-start-up.html"/>
 <summary>
     thinkpad 總算到了，配件和我選的一樣很少，
@@ -396,7 +394,6 @@
 <id>swap-usage-same-memory.html</id>
 <title> debian swap 在暫停的用途</title>
 <published>2017-12-11T12:07:06.778Z</published>
-<updated>2017-12-14T16:53:41.159Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/swap-usage-same-memory.html"/>
 <summary>
     在暫停時，debian 好像是把系統放到 swap 裡，
@@ -415,7 +412,6 @@
 <id>depress-mood-cause-nothing.html</id>
 <title> 精神的壓力無法壓垮一個人</title>
 <published>2017-12-10T14:55:49.885Z</published>
-<updated>2017-12-14T16:53:41.167Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/depress-mood-cause-nothing.html"/>
 <summary>
     精神的壓力，不管再怎麼大，再怎麼崩潰，
@@ -431,7 +427,6 @@
 <id>linux-play-dvd-movie.html</id>
 <title> linux 下播放租來的 dvd 全面啟動</title>
 <published>2017-12-09T07:54:05.174Z</published>
-<updated>2017-12-14T16:53:41.175Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/linux-play-dvd-movie.html"/>
 <summary>
     租了 全面啟動 dvd 來看，結果用外接光碟機，
@@ -451,7 +446,6 @@ debian 裝了 libdvd-pkg 後才能看。
 <id>orthophoto-reuse-code.html</id>
 <title> 正射影像</title>
 <published>2017-12-02T07:00:37.388Z</published>
-<updated>2017-12-14T16:53:41.180Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/orthophoto-reuse-code.html"/>
 <summary>
     攝影測量 的第二個作業，不只幾何改正，
@@ -469,7 +463,6 @@ debian 裝了 libdvd-pkg 後才能看。
 <id>expose-internal-state.html</id>
 <title> 儲存與暴露程式的內部狀態</title>
 <published>2017-12-05T12:32:06.444Z</published>
-<updated>2017-12-14T16:53:41.183Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/expose-internal-state.html"/>
 <summary>
     物件導向的精神之一，
@@ -490,7 +483,6 @@ debian 裝了 libdvd-pkg 後才能看。
 <id>lisp-lexical-scheme.html</id>
 <title> lisp、閉包與 scheme</title>
 <published>2017-12-05T07:41:24.643Z</published>
-<updated>2017-12-14T16:53:41.186Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/lisp-lexical-scheme.html"/>
 <summary>
     傳統 lisp 是動態作用域，沒有閉包的概念，
@@ -506,7 +498,6 @@ li
 <id>programmer-beauty-sense.html</id>
 <title> 程式設計師的美感</title>
 <published>2017-12-03T06:50:54.381Z</published>
-<updated>2017-12-14T16:53:41.189Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/programmer-beauty-sense.html"/>
 <summary>
     程式員普遍被認為沒有美感，
@@ -523,7 +514,6 @@ li
 <id>orthophoto-reuse-code.html</id>
 <title> 正射影像</title>
 <published>2017-12-02T07:00:37.388Z</published>
-<updated>2017-12-14T16:53:41.191Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/orthophoto-reuse-code.html"/>
 <summary>
     攝影測量 的第二個作業，不只幾何改正，
@@ -541,7 +531,6 @@ li
 <id>georeference-tilt-photo.html</id>
 <title> 影像改正</title>
 <published>2017-10-24T14:31:57.977Z</published>
-<updated>2017-12-14T16:53:41.198Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/georeference-tilt-photo.html"/>
 <summary>
     將影像用幾何方式改正。這次程式包括
@@ -558,7 +547,6 @@ li
 <id>colorful-street-lamp.html</id>
 <title> 七彩路燈修圖練習</title>
 <published>2017-11-29T15:43:22.085Z</published>
-<updated>2017-12-14T16:53:41.201Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/colorful-street-lamp.html"/>
 <summary>
     朋友在臉書貼了一張夜晚路燈的照片，
@@ -574,7 +562,6 @@ li
 <id>qemu-live-dual-boot-windows.html</id>
 <title> linux 下用虛擬機開雙開機的 windows 分區</title>
 <published>2017-11-28T05:33:16.455Z</published>
-<updated>2017-12-14T16:53:41.204Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/qemu-live-dual-boot-windows.html"/>
 <summary>
     很多 linux user 都把電腦做成雙開機，
@@ -592,7 +579,6 @@ li
 <id>xkbcomp-custom-keyboard.html</id>
 <title> xkbcomp 自訂鍵盤按鍵</title>
 <published>2017-11-25T11:10:14.516Z</published>
-<updated>2017-12-14T16:53:41.207Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/xkbcomp-custom-keyboard.html"/>
 <summary>
     thinkpad 的 home 鍵太遠了不好按，
@@ -607,7 +593,6 @@ home end 的效果，但只是抄來的 c
 <id>android-x-window.html</id>
 <title> x window 在 android 上</title>
 <published>2017-11-23T04:03:28.010Z</published>
-<updated>2017-12-14T16:53:41.210Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/android-x-window.html"/>
 <summary>
     x window 是分工很細，易剝離的架構，
@@ -623,7 +608,6 @@ home end 的效果，但只是抄來的 c
 <id>bullshit-assault-harm.html</id>
 <title> 人的爭鬥本性</title>
 <published>2017-11-21T14:17:08.774Z</published>
-<updated>2017-12-14T16:53:41.212Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/bullshit-assault-harm.html"/>
 <summary>
     人有一種血腥暴力的本能，
@@ -638,7 +622,6 @@ home end 的效果，但只是抄來的 c
 <id>dt13-start-up.html</id>
 <title> dt13 使用小感</title>
 <published>2017-11-19T05:23:31.768Z</published>
-<updated>2017-12-14T16:53:41.217Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/dt13-start-up.html"/>
 <summary>
     thinkpad 總算到了，配件和我選的一樣很少，
@@ -655,7 +638,6 @@ home end 的效果，但只是抄來的 c
 <id>cygwin-x-server.html</id>
 <title> 在 cygwin 下使用 x server</title>
 <published>2017-11-12T14:57:01.310Z</published>
-<updated>2017-12-14T16:53:41.221Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/cygwin-x-server.html"/>
 <summary>
     剛學會 ssh -X 選項，能遠端用 shell 登入，
@@ -672,7 +654,6 @@ home end 的效果，但只是抄來的 c
 <id>kaohsiung-art-travel.html</id>
 <title> 高雄藝術之旅</title>
 <published>2017-11-11T04:58:36.028Z</published>
-<updated>2017-12-14T16:53:41.224Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/kaohsiung-art-travel.html"/>
 <summary>
     藝術史與藝術批評 的校外教學，
@@ -689,7 +670,6 @@ home end 的效果，但只是抄來的 c
 <id>new-classic-discus-answer.html</id>
 <title> 新主古典主義的討論回答</title>
 <published>2017-11-10T03:23:04.723Z</published>
-<updated>2017-12-14T16:53:41.229Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/new-classic-discus-answer.html"/>
 <summary>
     成大的通識課 藝術史與藝術批評 這周是我們報告，
@@ -705,7 +685,6 @@ home end 的效果，但只是抄來的 c
 <id>ferrari-one-death.html</id>
 <title> ferrari one 壽終正寢</title>
 <published>2017-11-08T04:35:36.747Z</published>
-<updated>2017-12-14T16:53:41.233Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/ferrari-one-death.html"/>
 <summary>
     大概十月中一次隨身碟開機意外，
@@ -725,7 +704,6 @@ ferrari one 就無法開機了。
 <id>30-day-song.html</id>
 <title> 30 日推歌挑戰</title>
 <published>2017-09-30T17:01:39.678Z</published>
-<updated>2017-12-14T16:53:41.236Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/30-day-song.html"/>
 <summary>
     一開始看到佐榮在推，竟然推了好幾首伍佰！
@@ -740,7 +718,6 @@ h1 {
 <id>lexer-space-marked.html</id>
 <title> 幫 marked 加上空格限制</title>
 <published>2017-11-01T14:00:59.182Z</published>
-<updated>2017-12-14T16:53:41.239Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/lexer-space-marked.html"/>
 <summary>
     我的 markdown 有自訂新語法，
@@ -758,7 +735,6 @@ h1 {
 <id>evil-selection-x-window.html</id>
 <title> emacs evil 與 x window 選擇文字相通</title>
 <published>2017-10-31T14:24:56.391Z</published>
-<updated>2017-12-14T16:53:41.241Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/evil-selection-x-window.html"/>
 <summary>
     之前 evil 的選擇文字一直和 x-window 不相通，
@@ -773,7 +749,6 @@ h1 {
 <id>georeference-tilt-photo.html</id>
 <title> 影像改正</title>
 <published>2017-10-24T14:31:57.977Z</published>
-<updated>2017-12-14T16:53:41.243Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/georeference-tilt-photo.html"/>
 <summary>
     將影像用幾何方式改正。這次程式包括
@@ -789,7 +764,6 @@ h1 {
 <id>assoc-flickr.html</id>
 <title> flickr 圖床腳本 assocr</title>
 <published>2017-10-28T02:27:34.392Z</published>
-<updated>2017-12-14T16:53:41.246Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/assoc-flickr.html"/>
 <summary>
     寫上一篇作業終於得面對圖片的問題，
@@ -807,7 +781,6 @@ h1 {
 <id>30-day-song.html</id>
 <title> 30 日推歌挑戰</title>
 <published>2017-09-30T17:01:39.678Z</published>
-<updated>2017-12-14T16:53:41.248Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/30-day-song.html"/>
 <summary>
     一開始看到佐榮在推，竟然推了好幾首伍佰！
@@ -822,7 +795,6 @@ h1 {
 <id>georeference-tilt-photo.html</id>
 <title> 影像改正</title>
 <published>2017-10-24T14:31:57.977Z</published>
-<updated>2017-12-14T16:53:41.250Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/georeference-tilt-photo.html"/>
 <summary>
     將影像用幾何方式改正。這次程式包括
@@ -838,7 +810,6 @@ h1 {
 <id>github-email-address.html</id>
 <title> github 因為 email 不同無法辨識帳號</title>
 <published>2017-10-21T14:01:28.456Z</published>
-<updated>2017-12-14T16:53:41.252Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/github-email-address.html"/>
 <summary>
     發現 github 上 commit 記錄裡我的帳號都不能點，
@@ -853,7 +824,6 @@ h1 {
 <id>extend-lvm-filesystem.html</id>
 <title> 單人維護模式下擴大 usr 分割</title>
 <published>2017-10-18T06:34:52.300Z</published>
-<updated>2017-12-14T16:53:41.254Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/extend-lvm-filesystem.html"/>
 <summary>
     原本 toshiba 的硬碟裡裝的 debian stretch
@@ -869,7 +839,6 @@ h1 {
 <id>hp-boot-error.html</id>
 <title> 惠普 PC 的開機問題</title>
 <published>2017-10-17T05:57:47.881Z</published>
-<updated>2017-12-14T16:53:41.256Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/hp-boot-error.html"/>
 <summary>
     最近舊筆電 ferrari one 壽終正寢，
@@ -884,7 +853,6 @@ h1 {
 <id>emacs-server-scim.html</id>
 <title> gui 下 emacs server 和 scim 輸入法</title>
 <published>2017-10-16T14:40:56.628Z</published>
-<updated>2017-12-14T16:53:41.260Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/emacs-server-scim.html"/>
 <summary>
     gui 下的 emacs 很棒，和剪貼簿互通真得很方便。
@@ -899,7 +867,6 @@ h1 {
 <id>deprecate-argument-callee.html</id>
 <title> argument.callee 被廢棄的原因</title>
 <published>2017-10-16T07:17:43.158Z</published>
-<updated>2017-12-14T16:53:41.262Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/deprecate-argument-callee.html"/>
 <summary>
     在 js 中函數要遞迴呼叫，就直接呼叫自己名字。
@@ -915,7 +882,6 @@ h1 {
 <id>30-day-song.html</id>
 <title> 30 日推歌挑戰</title>
 <published>2017-09-30T17:01:39.678Z</published>
-<updated>2017-12-14T16:53:41.264Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/30-day-song.html"/>
 <summary>
     一開始看到佐榮在推，竟然推了好幾首伍佰！
@@ -930,7 +896,6 @@ h1 {
 <id>lisp-7-day.html</id>
 <title> LISP 七日談</title>
 <published>2017-10-10T14:27:51.551Z</published>
-<updated>2017-12-14T16:53:41.266Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/lisp-7-day.html"/>
 <summary>
     起初，神創造七個公理，
@@ -953,7 +918,6 @@ cond
 <id>show-style-javascript.html</id>
 <title> 顯示樣式表和 javascript</title>
 <published>2017-10-10T08:49:18.251Z</published>
-<updated>2017-12-14T16:53:41.269Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/show-style-javascript.html"/>
 <summary>
     之前幾篇文章我想展示代碼，
@@ -968,7 +932,6 @@ cond
 <id>emacs-server-client.html</id>
 <title> 用 server client mode 執行 emacs</title>
 <published>2017-10-10T04:52:03.410Z</published>
-<updated>2017-12-14T16:53:41.271Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/emacs-server-client.html"/>
 <summary>
     emacs 可以用 server client 方式執行，可以加快速度。
@@ -982,7 +945,6 @@ cond
 <id>david-new-classic.html</id>
 <title> 大衛與新古典主義</title>
 <published>2017-10-09T06:20:16.556Z</published>
-<updated>2017-12-14T16:53:41.274Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/david-new-classic.html"/>
 <summary>
     藝術史與藝術批評的報告主題。新古典主義新古典主義緬懷古希臘時期，簡單展現純粹力與美的樸素風格，
@@ -996,7 +958,6 @@ cond
 <id>load-disqus-lazy.html</id>
 <title> 載入 disqus</title>
 <published>2017-10-08T06:19:41.393Z</published>
-<updated>2017-12-14T16:53:41.276Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/load-disqus-lazy.html"/>
 <summary>
     由於 blog 是 github page，就用 disqus 當留言系統。
@@ -1010,7 +971,6 @@ cond
 <id>js-eval-macro.html</id>
 <title> markdown 中簡單使用 js 巨集</title>
 <published>2017-10-06T15:23:41.951Z</published>
-<updated>2017-12-14T16:53:41.279Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/js-eval-macro.html"/>
 <summary>
     之前加了一個像巨集的功能，能用比較簡短的語法寫 js 巨集。
@@ -1026,7 +986,6 @@ cond
 <id>css-inline-this.html</id>
 <title> 行內樣式表的反射</title>
 <published>2017-10-05T15:46:58.729Z</published>
-<updated>2017-12-14T16:53:41.281Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/css-inline-this.html"/>
 <summary>
     用 js 醜醜的解決了 inline css 的 this，
@@ -1042,7 +1001,6 @@ cond
 <id>meta-bloging-in-html.html</id>
 <title> 部落格的 html 元寫作</title>
 <published>2017-10-04T16:50:43.147Z</published>
-<updated>2017-12-14T16:53:41.284Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/meta-bloging-in-html.html"/>
 <summary>
     [[元編程]] 就是用程式產生程式，像是用巨集；
@@ -1061,7 +1019,6 @@ cond
 <id>30-day-song.html</id>
 <title> 30 日推歌挑戰</title>
 <published>2017-09-30T17:01:39.678Z</published>
-<updated>2017-12-14T16:53:41.288Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/30-day-song.html"/>
 <summary>
     一開始看到佐榮在推，竟然推了好幾首伍佰！
@@ -1074,7 +1031,6 @@ cond
 <id>course-106-1.html</id>
 <title>106 學年度下學期課表</title>
 <published>2017-09-27</published>
-<updated>2017-12-14T16:53:41.292Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/course-106-1.html"/>
 <summary>
     有換過幾次課表，
@@ -1091,7 +1047,6 @@ cond
 <id>scadual-106-1.html</id>
 <title> 成功大學 106 學年上學期行事曆 </title>
 <published>2017-09-20</published>
-<updated>2017-12-14T16:53:41.297Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/scadual-106-1.html"/>
 <summary>
     
@@ -1110,7 +1065,6 @@ cond
 <id>adb-over-wifi.html</id>
 <title> 透過 wifi 執行 adb</title>
 <published>2017-09-20T12:38:27.641Z</published>
-<updated>2017-12-14T16:53:41.302Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/adb-over-wifi.html"/>
 <summary>
     Android Debug Bridge 是刷 android 系統
@@ -1126,7 +1080,6 @@ adb 底層是透過 t
 <id>different-love.html</id>
 <title> 愛情也有不一樣的</title>
 <published>2017-09-20T12:10:39.835Z</published>
-<updated>2017-12-14T16:53:41.305Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/different-love.html"/>
 <summary>
     大一在上英文課時，有幸和某潮潮同堂，做了個對話練習。
@@ -1142,7 +1095,6 @@ adb 底層是透過 t
 <id>android-screen-monitor.html</id>
 <title> 透過 adb 把 android 畫面顯示到 PC 上</title>
 <published>2017-09-20T05:07:20.224Z</published>
-<updated>2017-12-14T16:53:41.307Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/android-screen-monitor.html"/>
 <summary>
     asm.jar 全名 Android Screen Monitor，
@@ -1158,7 +1110,6 @@ adb 底層是透過 t
 <id>android-screen-monitor.html</id>
 <title> 透過 adb 把 android 畫面顯示到 PC 上</title>
 <published>2017-09-20T05:06:35.740Z</published>
-<updated>2017-12-14T16:53:41.311Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/android-screen-monitor.html"/>
 <summary>
     asm.jar 全名 Android Screen Monitor，
@@ -1174,7 +1125,6 @@ adb 底層是透過 t
 <id>android-screen-monitor.html</id>
 <title># 透過 adb 把 android 畫面顯示到 PC 上</title>
 <published>2017-09-20T05:00:33.067Z</published>
-<updated>2017-12-14T16:53:41.314Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/android-screen-monitor.html"/>
 <summary>
     asm.jar 全名 Android Screen Monitor，
@@ -1190,7 +1140,6 @@ adb 底層是透過 t
 <id>optional-boolean-argument.html</id>
 <title># 可省略的布林值參數</title>
 <published>2017-09-19T16:57:46.470Z</published>
-<updated>2017-12-14T16:53:41.317Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/optional-boolean-argument.html"/>
 <summary>
     有時候一些函數最後會有一個 boolean 參數，
@@ -1202,7 +1151,6 @@ adb 底層是透過 t
 <id>if-bracket-syntax.html</id>
 <title># if 的語法問題</title>
 <published>2017-09-17T03:00:32.408Z</published>
-<updated>2017-12-14T16:53:41.320Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/if-bracket-syntax.html"/>
 <summary>
     最流行的 if 語法來自 C 語言，
@@ -1220,7 +1168,6 @@ adb 底層是透過 t
 <id>lisp-scheme-defect.html</id>
 <title># lisp 系語言的缺陷</title>
 <published>2017-09-17T02:40:28.391Z</published>
-<updated>2017-12-14T16:53:41.323Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/lisp-scheme-defect.html"/>
 <summary>
     之前很嚮往 lisp 系語言，
@@ -1237,7 +1184,6 @@ adb 底層是透過 t
 <id>one-piece-hunter-speed.html</id>
 <title>用獵人的速度出海賊王</title>
 <published>2017-06-24T12:46:58.473Z</published>
-<updated>2017-12-14T16:53:41.326Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/one-piece-hunter-speed.html"/>
 <summary>
     之前在八卦戰獵人和海賊王，
@@ -1256,7 +1202,6 @@ adb 底層是透過 t
 <id>angry-childish.html</id>
 <title>生氣拒絕溝通很幼稚</title>
 <published>2017-06-12T13:31:08.568Z</published>
-<updated>2017-12-14T16:53:41.330Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/angry-childish.html"/>
 <summary>
     有時候意見不合，吵一吵，
@@ -1272,7 +1217,6 @@ adb 底層是透過 t
 <id>magician-honer.html</id>
 <title>魔術師的名聲</title>
 <published>2017-06-10T15:51:50.920Z</published>
-<updated>2017-12-14T16:53:41.333Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/magician-honer.html"/>
 <summary>
     魔術本來就是詐術，運用各種手段欺騙人的感官。
@@ -1291,7 +1235,6 @@ adb 底層是透過 t
 <id>worship-greater-love.html</id>
 <title>崇拜更好的自己</title>
 <published>2017-06-10T14:11:42.686Z</published>
-<updated>2017-12-14T16:53:41.336Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/worship-greater-love.html"/>
 <summary>
     當你遇見一個人，和你有類似的性格，
@@ -1309,7 +1252,6 @@ adb 底層是透過 t
 <id>do-my-best-enough-responsibility.html</id>
 <title>盡人事，聽天命</title>
 <published>2017-05-07T14:38:42.899Z</published>
-<updated>2017-12-14T16:53:41.339Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/do-my-best-enough-responsibility.html"/>
 <summary>
     既然我已經做了所有我能做的，
@@ -1330,7 +1272,6 @@ adb 底層是透過 t
 <id>open-sex-love-rape.html</id>
 <title>性保守的災難</title>
 <published>2017-04-29T16:44:49.109Z</published>
-<updated>2017-12-14T16:53:41.343Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/open-sex-love-rape.html"/>
 <summary>
     越保護女性，只會讓女性在受傷時傷的更重；
@@ -1350,7 +1291,6 @@ adb 底層是透過 t
 <id>seek-kind-of-forever.html</id>
 <title>什麼時候我也追求永遠了</title>
 <published>2017-04-26T16:54:14.728Z</published>
-<updated>2017-12-14T16:53:41.347Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/seek-kind-of-forever.html"/>
 <summary>
     從高中時期，我已經明白沒什麼是不會失去的。
@@ -1370,7 +1310,6 @@ adb 底層是透過 t
 <id>game-passion-maintain.html</id>
 <title>維持遊戲的熱情不膩</title>
 <published>2017-04-25T15:12:59.511Z</published>
-<updated>2017-12-14T16:53:41.351Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/game-passion-maintain.html"/>
 <summary>
     如何維持玩家的熱情有很大的學問。
@@ -1389,7 +1328,6 @@ adb 底層是透過 t
 <id>js-object-new-prototype.html</id>
 <title>JS 中物件繼承的問題</title>
 <published>2017-04-23T16:41:46.714Z</published>
-<updated>2017-12-14T16:53:41.355Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/js-object-new-prototype.html"/>
 <summary>
     js 中的物件導向很奇怪，其實是原型繼承，
@@ -1407,7 +1345,6 @@ adb 底層是透過 t
 <id>practice-matrix-object-javascript.html</id>
 <title>在 JS 中實作矩陣</title>
 <published>2017-04-23T10:38:13.128Z</published>
-<updated>2017-12-14T16:53:41.359Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/practice-matrix-object-javascript.html"/>
 <summary>
     js 中只有一維陣列，
@@ -1430,7 +1367,6 @@ adb 底層是透過 t
 <id>iife-js-void-semicolon.html</id>
 <title>JS 中 IIFE 與分號的最酷寫法</title>
 <published>2017-04-21T15:15:12.718Z</published>
-<updated>2017-12-14T16:53:41.363Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/iife-js-void-semicolon.html"/>
 <summary>
     IIFE
@@ -1452,7 +1388,6 @@ ASI
 <id>library-noise-by-staff.html</id>
 <title>圖書館中來自館員的打擾</title>
 <published>2017-04-20T16:42:34.748Z</published>
-<updated>2017-12-14T16:53:41.367Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/library-noise-by-staff.html"/>
 <summary>
     一開始我進圖書館中控室，
@@ -1470,7 +1405,6 @@ ASI
 <id>iife-js-void-semicolon.html</id>
 <title>JS 中 IIFE 與分號的最酷寫法</title>
 <published>2017-04-21T15:15:12.718Z</published>
-<updated>2017-12-14T16:53:41.371Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/iife-js-void-semicolon.html"/>
 <summary>
     IIFE
@@ -1492,7 +1426,6 @@ ASI
 <id>library-noise-by-staff.html</id>
 <title>圖書館中來自館員的打擾</title>
 <published>2017-04-20T16:42:34.748Z</published>
-<updated>2017-12-14T16:53:41.374Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/library-noise-by-staff.html"/>
 <summary>
     一開始我進圖書館中控室，
@@ -1510,7 +1443,6 @@ ASI
 <id>t-short-sleeve-armpit-hair.html</id>
 <title>短袖的袖子是為了腋毛而存在的</title>
 <published>2017-04-20T12:38:20.996Z</published>
-<updated>2017-12-14T16:53:41.378Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/t-short-sleeve-armpit-hair.html"/>
 <summary>
     夏天到了，一些人開始穿短袖，甚至無袖。
@@ -1528,7 +1460,6 @@ ASI
 <id>low-dependent-map-js.html</id>
 <title>在低耦合抽換函式庫</title>
 <published>2017-04-19T16:01:37.755Z</published>
-<updated>2017-12-14T16:53:41.383Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/low-dependent-map-js.html"/>
 <summary>
     之前作專題要用到地圖的 js api，
@@ -1551,7 +1482,6 @@ ASI
 <id>forgive-for-nothing.html</id>
 <title>為過去嘆息、原諒</title>
 <published>2017-04-18T14:22:51.864Z</published>
-<updated>2017-12-14T16:53:41.387Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/forgive-for-nothing.html"/>
 <summary>
     世界已經那麼糟糕，現實已經那麼殘酷；
@@ -1570,7 +1500,6 @@ ASI
 <id>malice-world-fact-mind.html</id>
 <title>世界的惡意與人的心</title>
 <published>2017-04-18T11:41:27.249Z</published>
-<updated>2017-12-14T16:53:41.391Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/malice-world-fact-mind.html"/>
 <summary>
     現實是殘酷的，世界是黑暗的。
@@ -1592,7 +1521,6 @@ ASI
 <id>coffee-javascript-or-what.html</id>
 <title>對直譯式語言編譯是否搞錯了什麼</title>
 <published>2017-04-16T16:38:57.640Z</published>
-<updated>2017-12-14T16:53:41.395Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/coffee-javascript-or-what.html"/>
 <summary>
     之前看到一個評論，寫 coffee script 的人是 2 嗎？
@@ -1617,7 +1545,6 @@ ASI
 <id>half-month-so-lot-first.html</id>
 <title>CCNS 第一次雙周刊雜文</title>
 <published>2017-04-07T12:48:49.670Z</published>
-<updated>2017-12-14T16:53:41.399Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/half-month-so-lot-first.html"/>
 <summary>
     CCNS 成大網愛社
@@ -1641,7 +1568,6 @@ ASI
 <id>easy-m-expression-syntax.html</id>
 <title>簡單的 S 表達式</title>
 <published>2017-04-07T07:10:28.433Z</published>
-<updated>2017-12-14T16:53:41.403Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/easy-m-expression-syntax.html"/>
 <summary>
     S 表達式是 LISP 的語法，
@@ -1657,7 +1583,6 @@ ASI
 <id>poland-expression-bash-lisp.html</id>
 <title>bash 中的波蘭表示法</title>
 <published>2017-04-17T02:47:35.874Z</published>
-<updated>2017-12-14T16:53:41.406Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/poland-expression-bash-lisp.html"/>
 <summary>
     看了維基百科上的 [[波蘭表示法]] 一條，
@@ -1674,7 +1599,6 @@ ASI
 <id>coffee-javascript-or-what.html</id>
 <title>對直譯式語言編譯是否搞錯了什麼</title>
 <published>2017-04-16T16:38:57.640Z</published>
-<updated>2017-12-14T16:53:41.411Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/coffee-javascript-or-what.html"/>
 <summary>
     之前看到一個評論，寫 coffee script 的人是 2 嗎？
@@ -1699,7 +1623,6 @@ ASI
 <id>into-javascript-trend.html</id>
 <title>捲入 JS 的大熱潮</title>
 <published>2017-04-16T15:57:46.931Z</published>
-<updated>2017-12-14T16:53:41.414Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/into-javascript-trend.html"/>
 <summary>
     我學 JS
@@ -1718,7 +1641,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>lazy-tor-firefox-socks5.html</id>
 <title>使用 tor 與 firefox 上洋蔥網</title>
 <published>2017-04-15T15:22:12.172Z</published>
-<updated>2017-12-14T16:53:41.418Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/lazy-tor-firefox-socks5.html"/>
 <summary>
     無聊掃了一下 冷梗研究社 的分支：
@@ -1738,7 +1660,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>golden-age-in-university.html</id>
 <title>我的大學黃金年代</title>
 <published>2017-04-15T12:24:39.391Z</published>
-<updated>2017-12-14T16:53:41.422Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/golden-age-in-university.html"/>
 <summary>
     幻想中，大學是那麼美好的地方。
@@ -1757,7 +1678,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>suck-ui-design-long-code.html</id>
 <title>該死的 UI 設計</title>
 <published>2017-04-13T16:20:19.054Z</published>
-<updated>2017-12-14T16:53:41.426Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/suck-ui-design-long-code.html"/>
 <summary>
     UI 設計真是最麻煩的事。
@@ -1778,7 +1698,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>black-sky-no-forget.html</id>
 <title>拒絕遺忘的回憶</title>
 <published>2017-04-12T05:12:39.379Z</published>
-<updated>2017-12-14T16:53:41.431Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/black-sky-no-forget.html"/>
 <summary>
     昨天台南陰了一整天，晚上下雨，
@@ -1797,7 +1716,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>engineer-linear-logic.html</id>
 <title>理工邏輯</title>
 <published>2017-04-10T14:15:03.607Z</published>
-<updated>2017-12-14T16:53:41.435Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/engineer-linear-logic.html"/>
 <summary>
     理工邏輯就是對了就好，符合實驗結果就好，
@@ -1814,7 +1732,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>namewee-taiwan-think-hometown.html</id>
 <title>我以台灣人看黃志明</title>
 <published>2017-04-09T14:07:07.966Z</published>
-<updated>2017-12-14T16:53:41.439Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/namewee-taiwan-think-hometown.html"/>
 <summary>
     馬來西亞歌手 黃志明 ，最近才開始知道他。
@@ -1837,7 +1754,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>the-great-proud-architect.html</id>
 <title>大建築師，抬起你的頭！</title>
 <published>2017-04-08T12:47:04.277Z</published>
-<updated>2017-12-14T16:53:41.443Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/the-great-proud-architect.html"/>
 <summary>
     你沒有虧欠這個世界，不需要低著頭；
@@ -1854,7 +1770,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>name-after-no-sense.html</id>
 <title>無意義命名法</title>
 <published>2017-04-07T16:30:43.672Z</published>
-<updated>2017-12-14T16:53:41.447Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/name-after-no-sense.html"/>
 <summary>
     有時候命名就只是名字，不需要有意義。
@@ -1869,7 +1784,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>half-month-so-lot-first.html</id>
 <title>CCNS 第一次雙周刊雜文</title>
 <published>2017-04-07T12:48:49.670Z</published>
-<updated>2017-12-14T16:53:41.452Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/half-month-so-lot-first.html"/>
 <summary>
     CCNS 成大網愛社
@@ -1891,7 +1805,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>easy-m-expression-syntax.html</id>
 <title>簡單的 M 表達式</title>
 <published>2017-04-07T07:10:28.433Z</published>
-<updated>2017-12-14T16:53:41.456Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/easy-m-expression-syntax.html"/>
 <summary>
     M 表達式是 LISP 的語法，
@@ -1907,7 +1820,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>suck-government-website-computer.html</id>
 <title>政府的資訊系統</title>
 <published>2017-04-06T18:32:41.525Z</published>
-<updated>2017-12-14T16:53:41.460Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/suck-government-website-computer.html"/>
 <summary>
     TonyQ 來 sitcon 台南定期聚演講，
@@ -1925,7 +1837,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>wansei-tendrum.html</id>
 <title>十鼓仁糖與灣生</title>
 <published>2017-03-31T17:08:14.343Z</published>
-<updated>2017-12-14T16:53:41.464Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/wansei-tendrum.html"/>
 <summary>
     在台南仁糖十鼓混了半天，
@@ -1945,7 +1856,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>soul-knight-joystick.html</id>
 <title>元氣騎士 soul knight</title>
 <published>2017-03-18T14:01:54.080Z</published>
-<updated>2017-12-14T16:53:41.468Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/soul-knight-joystick.html"/>
 <summary>
     元氣騎士 是一款 andriod 上的 2d 俯視類射擊遊戲。
@@ -1962,7 +1872,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>sad-manipulate.html</id>
 <title>悲傷的處理</title>
 <published>2017-03-01T12:57:19.252Z</published>
-<updated>2017-12-14T16:53:41.472Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/sad-manipulate.html"/>
 <summary>
     情傷讓心情很差，
@@ -1981,7 +1890,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>scadual-105-2.html</id>
 <title> 成功大學 105 學年下學期行事曆 </title>
 <published>2017-03-27</published>
-<updated>2017-12-14T16:53:41.477Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/scadual-105-2.html"/>
 <summary>
     
@@ -2001,7 +1909,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>vector-fighter-intro.html</id>
 <title>向量戰機 Vector Fighter</title>
 <published>2017-03-26T06:34:20.914Z</published>
-<updated>2017-12-14T16:53:41.482Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/vector-fighter-intro.html"/>
 <summary>
     Vector Fighter 是 android 上很舊的遊戲，
@@ -2019,7 +1926,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>virtual-joystick-suck.html</id>
 <title>虛擬搖桿真他媽糞</title>
 <published>2017-03-25T15:08:48.752Z</published>
-<updated>2017-12-14T16:53:41.487Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/virtual-joystick-suck.html"/>
 <summary>
     對，就是手機遊戲常用的虛擬搖桿，
@@ -2037,7 +1943,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>taiwoman.html</id>
 <title>台女真得棒</title>
 <published>2017-03-25</published>
-<updated>2017-12-14T16:53:41.492Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/taiwoman.html"/>
 <summary>
 我是說，台女真得很棒；我真得很希望娶到台灣人。
@@ -2051,7 +1956,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>sing-out-sad.html</id>
 <title>陪我走過低潮的歌</title>
 <published>2017-03-25T03:14:26.139Z</published>
-<updated>2017-12-14T16:53:41.496Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/sing-out-sad.html"/>
 <summary>
     聽情歌會讓心情變純淨，
@@ -2068,7 +1972,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>unbalance-hair-style.html</id>
 <title>不對稱髮型</title>
 <published>2017-03-21T17:03:20.119Z</published>
-<updated>2017-12-14T16:53:41.501Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/unbalance-hair-style.html"/>
 <summary>
     晚上吃 長腿叔叔 ，
@@ -2085,7 +1988,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>avalon-questionnaire-prize.html</id>
 <title>問卷抽獎抽到阿瓦隆</title>
 <published>2017-03-06T17:05:03.511Z</published>
-<updated>2017-12-14T16:53:41.506Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/avalon-questionnaire-prize.html"/>
 <summary>
 之前做期末報告時，弄了一個問卷調查。
@@ -2101,7 +2003,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>baidu-translate-evil.html</id>
 <title>百度示範翻譯 Be Evil</title>
 <published>2017-02-15</published>
-<updated>2017-12-14T16:53:41.510Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/baidu-translate-evil.html"/>
 <summary>
 2016-05 左右商業周刊（businessweek）以百度為封面，
@@ -2118,7 +2019,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>believe-so-exist.html</id>
 <title>相信就會存在</title>
 <published>2017-02-06</published>
-<updated>2017-12-14T16:53:41.515Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/believe-so-exist.html"/>
 <summary>
 ""相信就會存在"" 是 北極特快車 結
@@ -2133,7 +2033,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>book-and-so-on.html</id>
 <title>如果牆上有把槍</title>
 <published>2017-03-01T12:57:18.027Z</published>
-<updated>2017-12-14T16:53:41.519Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/book-and-so-on.html"/>
 <summary>
 如果牆上有把槍，那在結束前她必須發射。舊俄作家契訶夫當我看見你穿著那破爛的外衣走
@@ -2143,7 +2042,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>calture-gap-darrenshan.html</id>
 <title>歧視與地獄梗</title>
 <published>2017-03-10T07:16:48.510Z</published>
-<updated>2017-12-14T16:53:41.523Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/calture-gap-darrenshan.html"/>
 <summary>
 有些梗被稱為 地獄梗 ，
@@ -2159,7 +2057,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>cold-shower-suspend.html</id>
 <title>冷水澡爆血管</title>
 <published>2017-02-06</published>
-<updated>2017-12-14T16:53:41.528Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/cold-shower-suspend.html"/>
 <summary>
 有時候很累的時候才回到宿舍，
@@ -2173,7 +2070,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>color-direction-language.html</id>
 <title>語言、文化與色彩</title>
 <published>2017-02-04</published>
-<updated>2017-12-14T16:53:41.533Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/color-direction-language.html"/>
 <summary>
 一本語言學的書，卻花了快一半在講色彩。
@@ -2189,7 +2085,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>emacs-screen-tmux.html</id>
 <title>emacs 當 tmux 用</title>
 <published>2017-02-03</published>
-<updated>2017-12-14T16:53:41.538Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/emacs-screen-tmux.html"/>
 <summary>
 發現 emacs 根本可以直當 tmux 用了，
@@ -2205,7 +2100,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>expect-big-liar-what.html</id>
 <title>閱讀《大說謊家》的正確態度</title>
 <published>2017-02-19</published>
-<updated>2017-12-14T16:53:41.542Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/expect-big-liar-what.html"/>
 <summary>
 對於 張大春 的這本小說 大說謊家 ，
@@ -2222,7 +2116,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>fluent-novel-text.html</id>
 <title>小說潤筆對我是很重要的</title>
 <published>2017-02-20</published>
-<updated>2017-12-14T16:53:41.547Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/fluent-novel-text.html"/>
 <summary>
 看過一些小說，語句很做作或不通順，
@@ -2236,7 +2129,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>github-cname-twbbs.html</id>
 <title>github 設 twbbs 的域名</title>
 <published>2017-03-05T12:44:24.970Z</published>
-<updated>2017-12-14T16:53:41.552Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/github-cname-twbbs.html"/>
 <summary>
 之前申請的 twbbs 域名 終於好了！
@@ -2251,7 +2143,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>giveup-mature.html</id>
 <title>接受就叫做成熟</title>
 <published>2017-03-17T15:38:32.759Z</published>
-<updated>2017-12-14T16:53:41.557Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/giveup-mature.html"/>
 <summary>
 
@@ -2269,7 +2160,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>hometown-change.html</id>
 <title>我所以為的故鄉</title>
 <published>2017-02-28T16:25:28.908Z</published>
-<updated>2017-12-14T16:53:41.562Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/hometown-change.html"/>
 <summary>
 我對故鄉沒什麼感覺。我到國中畢業為止，
@@ -2285,7 +2175,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>how-friend.html</id>
 <title>交友方法</title>
 <published>2017-02-03</published>
-<updated>2017-12-14T16:53:41.567Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/how-friend.html"/>
 <summary>
 其實交友這種東西，真得是憑感覺。
@@ -2299,7 +2188,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>lost-love-lost-life.html</id>
 <title>失去生活重心</title>
 <published>2017-03-16T10:03:36.267Z</published>
-<updated>2017-12-14T16:53:41.572Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/lost-love-lost-life.html"/>
 <summary>
 之前心情一直很差，
@@ -2315,7 +2203,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>modern-gender-interact.html</id>
 <title>台灣現代男女互動</title>
 <published>2017-02-21T08:27:38.043Z</published>
-<updated>2017-12-14T16:53:41.577Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/modern-gender-interact.html"/>
 <summary>
 台灣在傳統上是男追女，
@@ -2331,7 +2218,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>my-girlfriend-in-multiverse.html</id>
 <title>沒有女友的話</title>
 <published>2017-02-14</published>
-<updated>2017-12-14T16:53:41.582Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/my-girlfriend-in-multiverse.html"/>
 <summary>
 我和女友正談著遠距離戀愛，
@@ -2343,7 +2229,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>ptt-network-bully-gossiping.html</id>
 <title>高中同人女作家在八卦板崩潰</title>
 <published>2017-03-10T08:02:15.499Z</published>
-<updated>2017-12-14T16:53:41.587Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/ptt-network-bully-gossiping.html"/>
 <summary>
 一個同人作家繁星上了清大中文系，
@@ -2361,7 +2246,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>riot-politician.html</id>
 <title>曾經的覺青</title>
 <published>2017-03-05T10:31:54.912Z</published>
-<updated>2017-12-14T16:53:41.595Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/riot-politician.html"/>
 <summary>
 想起來，民進黨的創黨元老，
@@ -2378,7 +2262,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>rule-your-game.html</id>
 <title>錯誤的遊戲心態</title>
 <published>2017-02-09</published>
-<updated>2017-12-14T16:53:41.602Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/rule-your-game.html"/>
 <summary>
 人生是個糞 game，而且存在課金玩家。
@@ -2393,7 +2276,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>sad-manipulate.html</id>
 <title>悲傷的處理</title>
 <published>2017-03-01T12:57:19.252Z</published>
-<updated>2017-12-14T16:53:41.608Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/sad-manipulate.html"/>
 <summary>
 情傷讓心情很差，
@@ -2410,7 +2292,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>course-105-2.html</id>
 <title>105 學年度下學期課表</title>
 <published>2017-02-19</published>
-<updated>2017-12-14T16:53:41.613Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/course-105-2.html"/>
 <summary>
 
@@ -2444,7 +2325,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>soul-knight-joystick.html</id>
 <title>元氣騎士 soul knight</title>
 <published>2017-03-18T14:01:54.080Z</published>
-<updated>2017-12-14T16:53:41.618Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/soul-knight-joystick.html"/>
 <summary>
 元氣騎士 是一款 andriod 上的 2d 俯視類射擊遊戲。
@@ -2458,7 +2338,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>twbbs-dinshin.html</id>
 <title>twbbs 域名</title>
 <published>2017-02-07</published>
-<updated>2017-12-14T16:53:41.624Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/twbbs-dinshin.html"/>
 <summary>
 最初開始自幹部落格時，
@@ -2475,7 +2354,6 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <id>wukoung-novel.html</id>
 <title>憶悟空傳</title>
 <published>2017-02-04</published>
-<updated>2017-12-14T16:53:41.629Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/wukoung-novel.html"/>
 <summary>
 中國網路紅人 今何在 寫得，

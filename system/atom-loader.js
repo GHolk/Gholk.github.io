@@ -27,7 +27,7 @@ class AtomLoader {
 <entry>
 <id>${loader.file}</id>
 <title>${loader.title}</title>
-<published>${loader.date}</publish>
+<published>${loader.date}</published>
 <updated>${currentDate.toISOString()}</updated>
 <link rel="alternate" type="text/html"
       href="${this.baseUri}/${loader.file}" />

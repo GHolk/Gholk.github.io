@@ -14,6 +14,8 @@ class AtomLoader {
         this.baseUri = 'http://gholk.github.io'
     }
     write() {
+        const current = new Date()
+        this.selector('updated:first-of-type').text(current.toISOString())
         fs.writeFileSync(
             this.path,
             this.selector.html(),

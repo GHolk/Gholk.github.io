@@ -1,0 +1,2492 @@
+<?xml version='1.0'
+      encoding='UTF-8'?>
+<?xml-stylesheet href="http://www.blogger.com/styles/atom.css"
+                 type="text/css"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:openSearch="http://a9.com/-/spec/opensearchrss/1.0/" xmlns:blogger="http://schemas.google.com/blogger/2008" xmlns:georss="http://www.georss.org/georss" xmlns:gd="http://schemas.google.com/g/2005" xmlns:thr="http://purl.org/syndication/thread/1.0">
+  <id>tag:blogger.com,1999:blog-751586915633123067</id>
+  <updated>2017-11-18T15:48:35.004+08:00</updated>
+<category term="105 學年"/>
+<category term="106 學年"/>
+<category term="ACG"/>
+<category term="Hillary_Herrington"/>
+<category term="adb"/>
+<category term="android"/>
+<category term="api"/>
+<category term="apk"/>
+<category term="blog"/>
+<category term="boot"/>
+<category term="browser"/>
+<category term="ccns"/>
+<category term="cjns"/>
+<category term="cli"/>
+<category term="closure"/>
+<category term="coffee"/>
+<category term="coffee-script"/>
+<category term="common-lisp"/>
+<category term="config"/>
+<category term="css"/>
+<category term="debian"/>
+<category term="deprecate"/>
+<category term="disqus"/>
+<category term="dns"/>
+<category term="emacs"/>
+<category term="email"/>
+<category term="ethercalc"/>
+<category term="evil"/>
+<category term="expression"/>
+<category term="firefox"/>
+<category term="flickr"/>
+<category term="funny"/>
+<category term="gimp"/>
+<category term="git"/>
+<category term="github"/>
+<category term="go"/>
+<category term="grub"/>
+<category term="gui"/>
+<category term="hide"/>
+<category term="html"/>
+<category term="ide"/>
+<category term="iife"/>
+<category term="imgur"/>
+<category term="ip"/>
+<category term="java"/>
+<category term="javascript"/>
+<category term="js"/>
+<category term="lambda"/>
+<category term="library"/>
+<category term="linux"/>
+<category term="lisp"/>
+<category term="live-script"/>
+<category term="luser"/>
+<category term="lvm"/>
+<category term="makefile"/>
+<category term="man-page"/>
+<category term="map"/>
+<category term="markdown"/>
+<category term="marked"/>
+<category term="matlab"/>
+<category term="matrix"/>
+<category term="ncku"/>
+<category term="oauth"/>
+<category term="perl"/>
+<category term="photo"/>
+<category term="plan9"/>
+<category term="ptt"/>
+<category term="ram"/>
+<category term="s-expression"/>
+<category term="scadual"/>
+<category term="scheme"/>
+<category term="scope"/>
+<category term="screen"/>
+<category term="service"/>
+<category term="shell"/>
+<category term="size"/>
+<category term="soul-knight"/>
+<category term="spexif"/>
+<category term="ssh"/>
+<category term="swap"/>
+<category term="systemd"/>
+<category term="t-shirt"/>
+<category term="tmux"/>
+<category term="tonyq"/>
+<category term="tor"/>
+<category term="twbbs"/>
+<category term="ubuntu"/>
+<category term="user"/>
+<category term="vector-fighter"/>
+<category term="video"/>
+<category term="vim"/>
+<category term="w3c"/>
+<category term="wallpaper"/>
+<category term="website"/>
+<category term="wifi"/>
+<category term="wiki"/>
+<category term="windows"/>
+<category term="www"/>
+<category term="x-window"/>
+<category term="xdite"/>
+<category term="youtube"/>
+<category term="下學期"/>
+<category term="中國"/>
+<category term="中華"/>
+<category term="人性"/>
+<category term="人性本善"/>
+<category term="人性本賤"/>
+<category term="人生"/>
+<category term="仇女"/>
+<category term="作家"/>
+<category term="作業"/>
+<category term="作者已死"/>
+<category term="信仰"/>
+<category term="信用"/>
+<category term="個性"/>
+<category term="光碟"/>
+<category term="六龜"/>
+<category term="冨堅"/>
+<category term="冷水澡"/>
+<category term="函式庫"/>
+<category term="函數"/>
+<category term="分號"/>
+<category term="刷機"/>
+<category term="加拿大"/>
+<category term="勞動盃"/>
+<category term="匿名"/>
+<category term="十鼓"/>
+<category term="原型"/>
+<category term="原諒"/>
+<category term="反智"/>
+<category term="口音"/>
+<category term="可能鍋"/>
+<category term="台灣"/>
+<category term="同人"/>
+<category term="名字"/>
+<category term="向達倫"/>
+<category term="吵"/>
+<category term="咖哩"/>
+<category term="哲學"/>
+<category term="哲學哲學雞蛋糕"/>
+<category term="唸書"/>
+<category term="問卷"/>
+<category term="問答"/>
+<category term="國籍"/>
+<category term="圖"/>
+<category term="圖書館"/>
+<category term="地獄列車"/>
+<category term="地獄梗"/>
+<category term="基督"/>
+<category term="報告"/>
+<category term="外接"/>
+<category term="外表"/>
+<category term="外貌"/>
+<category term="夜"/>
+<category term="大學"/>
+<category term="大說謊家"/>
+<category term="女權"/>
+<category term="女生"/>
+<category term="孤獨"/>
+<category term="家"/>
+<category term="審查"/>
+<category term="專利"/>
+<category term="小城市"/>
+<category term="小說"/>
+<category term="工作"/>
+<category term="工程"/>
+<category term="巨集"/>
+<category term="床"/>
+<category term="張大春"/>
+<category term="心得"/>
+<category term="心情"/>
+<category term="心理"/>
+<category term="思辦"/>
+<category term="思辨"/>
+<category term="思辯"/>
+<category term="性"/>
+<category term="悟空傳"/>
+<category term="情歌"/>
+<category term="惡意"/>
+<category term="愛情"/>
+<category term="態度"/>
+<category term="慢歌"/>
+<category term="憂鬱"/>
+<category term="憤青"/>
+<category term="懲罰"/>
+<category term="成句"/>
+<category term="成大"/>
+<category term="成熟"/>
+<category term="手打 html"/>
+<category term="手機"/>
+<category term="抒發"/>
+<category term="括號"/>
+<category term="指紋"/>
+<category term="排版"/>
+<category term="搖桿"/>
+<category term="擁抱"/>
+<category term="操作"/>
+<category term="政府"/>
+<category term="政治"/>
+<category term="故鄉"/>
+<category term="文化"/>
+<category term="文化差異"/>
+<category term="新莊"/>
+<category term="施明德"/>
+<category term="日本"/>
+<category term="時代力量"/>
+<category term="書"/>
+<category term="朋友"/>
+<category term="服裝"/>
+<category term="期刊"/>
+<category term="朱家安"/>
+<category term="東南亞"/>
+<category term="林奕含"/>
+<category term="桌遊"/>
+<category term="檔案"/>
+<category term="歌"/>
+<category term="歌手"/>
+<category term="歷史"/>
+<category term="死"/>
+<category term="毛髮"/>
+<category term="永遠"/>
+<category term="流量"/>
+<category term="海賊王"/>
+<category term="測量"/>
+<category term="溝通"/>
+<category term="演化"/>
+<category term="漫畫"/>
+<category term="灣生"/>
+<category term="無線"/>
+<category term="熱"/>
+<category term="營隊"/>
+<category term="爸爸"/>
+<category term="版本"/>
+<category term="物件導向"/>
+<category term="獨中"/>
+<category term="獵人"/>
+<category term="現實"/>
+<category term="理工"/>
+<category term="生氣"/>
+<category term="留言"/>
+<category term="當下"/>
+<category term="病"/>
+<category term="百度"/>
+<category term="直譯"/>
+<category term="真實"/>
+<category term="睡"/>
+<category term="睡眠"/>
+<category term="硬幣"/>
+<category term="硬碟"/>
+<category term="禁慾"/>
+<category term="科普"/>
+<category term="程式"/>
+<category term="程式設計師"/>
+<category term="程式語言"/>
+<category term="筆記"/>
+<category term="筆電"/>
+<category term="算符"/>
+<category term="累"/>
+<category term="維修"/>
+<category term="網路"/>
+<category term="線性"/>
+<category term="緣份"/>
+<category term="美"/>
+<category term="翻譯"/>
+<category term="自慰"/>
+<category term="色彩學"/>
+<category term="英文"/>
+<category term="華僑"/>
+<category term="藝人"/>
+<category term="藝術"/>
+<category term="虛擬機"/>
+<category term="行事歷"/>
+<category term="西遊記"/>
+<category term="親戚"/>
+<category term="覺青"/>
+<category term="觸控螢幕"/>
+<category term="記憶"/>
+<category term="試算表"/>
+<category term="試誤"/>
+<category term="語法"/>
+<category term="語言學"/>
+<category term="課表"/>
+<category term="課金"/>
+<category term="責任"/>
+<category term="軟體"/>
+<category term="輸入法"/>
+<category term="轉"/>
+<category term="轉#"/>
+<category term="轉很久以前的書上看到"/>
+<category term="轉微博"/>
+<category term="迴圈"/>
+<category term="通識"/>
+<category term="遊戲"/>
+<category term="遊記"/>
+<category term="道歉"/>
+<category term="遞迴"/>
+<category term="邏輯"/>
+<category term="酸民"/>
+<category term="重力感應"/>
+<category term="銀河便車指南"/>
+<category term="鍵盤"/>
+<category term="鐵人賽"/>
+<category term="長大"/>
+<category term="長腿叔叔"/>
+<category term="開始"/>
+<category term="開機"/>
+<category term="開機碟"/>
+<category term="阿瓦隆"/>
+<category term="陰影"/>
+<category term="電影"/>
+<category term="電腦"/>
+<category term="需要"/>
+<category term="青春"/>
+<category term="頂新"/>
+<category term="飛"/>
+<category term="食物"/>
+<category term="馬來西亞"/>
+<category term="驅動"/>
+<category term="驕傲"/>
+<category term="髮型"/>
+<category term="鬍子"/>
+<category term="魔域大冒險"/>
+<category term="魔術"/>
+<category term="黃志明"/>
+   
+    <title type="text">gholk MBlog</title>
+    <subtitle type="text">Mblog is for meta bloging</subtitle>
+    <link rel="self" type="application/atom+xml" href="http://gholk.github.io/atom.xml"/>
+    <link rel="alternate" type="text/html" href="http://gholk.github.io/"/>
+    <link rel="hub" href="http://pubsubhubbub.appspot.com/"/>
+    <author>
+      <name>gholk</name>
+      <uri>http://github.com/GHolk/</uri>
+      <email>85619andy@gmail.com</email>
+      <gd:image rel="http://schemas.google.com/g/2005#thumbnail" src="https://avatars1.githubusercontent.com/u/13307281"/>
+    </author>
+    <generator uri="http://gholk.github.io/system/atom-loader.js">node.js</generator>
+    
+<entry>
+<id>depress-mood-cause-nothing.html</id>
+<title> 精神的壓力無法壓垮一個人</title>
+<published>2017-12-10T14:55:49.885Z</published>
+<updated>2017-12-14T16:51:28.847Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/depress-mood-cause-nothing.html"/>
+<summary>
+    精神的壓力，不管再怎麼大，再怎麼崩潰，
+都無法真實壓垮一個人。
+因為人是活生生，確實存在現實的，
+只有真實的存在，武器、刑具，可以損滅人體。憂鬱，可以把好心情逼
+    </summary>
+<category term="憂鬱"/>
+<category term="思辦"/>
+<category term="抒發"/>
+<category term="心情"/>
+</entry><entry>
+<id>comment.html</id>
+<title> 留言板</title>
+<published>2017-11-06T05:07:50.771Z</published>
+<updated>2017-12-14T16:53:41.143Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/comment.html"/>
+<summary>
+    本網站的通用留言板。
+雖然每篇文章都有留言板，
+但如果不知道要留在哪篇文章，
+就留在這裡吧。留言可以用其它平台上你慣用的帳號登入，
+如果不想登入也可以匿名評論。
+    </summary>
+<category term="留言"/>
+<category term="匿名"/>
+<category term="blog"/>
+</entry><entry>
+<id>dt13-start-up.html</id>
+<title> dt13 使用小感</title>
+<published>2017-11-19T05:23:31.768Z</published>
+<updated>2017-12-14T16:53:41.153Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/dt13-start-up.html"/>
+<summary>
+    thinkpad 總算到了，配件和我選的一樣很少，
+決定重裝系統，沒想到裝 debian 時有些問題，
+硬體是 thinkpad 尊爵不凡特規，
+也有些問題，整
+    </summary>
+<category term="電腦"/>
+<category term="筆電"/>
+<category term="debian"/>
+<category term="linux"/>
+<category term="開始"/>
+</entry><entry>
+<id>swap-usage-same-memory.html</id>
+<title> debian swap 在暫停的用途</title>
+<published>2017-12-11T12:07:06.778Z</published>
+<updated>2017-12-14T16:53:41.159Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/swap-usage-same-memory.html"/>
+<summary>
+    在暫停時，debian 好像是把系統放到 swap 裡，
+（我忘了哪聽來的。）
+所以要是 swap 比 memory 小會出現奇怪的事，
+像是 對觸控的設定 失
+    </summary>
+<category term="筆電"/>
+<category term="ram"/>
+<category term="swap"/>
+<category term="睡眠"/>
+<category term="linux"/>
+<category term="debian"/>
+<category term="size"/>
+</entry><entry>
+<id>depress-mood-cause-nothing.html</id>
+<title> 精神的壓力無法壓垮一個人</title>
+<published>2017-12-10T14:55:49.885Z</published>
+<updated>2017-12-14T16:53:41.167Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/depress-mood-cause-nothing.html"/>
+<summary>
+    精神的壓力，不管再怎麼大，再怎麼崩潰，
+都無法真實壓垮一個人。
+因為人是活生生，確實存在現實的，
+只有真實的存在，武器、刑具，可以損滅人體。憂鬱，可以把好心情逼
+    </summary>
+<category term="憂鬱"/>
+<category term="思辦"/>
+<category term="抒發"/>
+<category term="心情"/>
+</entry><entry>
+<id>linux-play-dvd-movie.html</id>
+<title> linux 下播放租來的 dvd 全面啟動</title>
+<published>2017-12-09T07:54:05.174Z</published>
+<updated>2017-12-14T16:53:41.175Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/linux-play-dvd-movie.html"/>
+<summary>
+    租了 全面啟動 dvd 來看，結果用外接光碟機，
+在 linux 和 windows 下都不能看。
+debian 裝了 libdvd-pkg 後才能看。
+不知道
+    </summary>
+<category term="電影"/>
+<category term="光碟"/>
+<category term="驅動"/>
+<category term="debian"/>
+<category term="linux"/>
+<category term="windows"/>
+<category term="外接"/>
+<category term="筆電"/>
+</entry><entry>
+<id>orthophoto-reuse-code.html</id>
+<title> 正射影像</title>
+<published>2017-12-02T07:00:37.388Z</published>
+<updated>2017-12-14T16:53:41.180Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/orthophoto-reuse-code.html"/>
+<summary>
+    攝影測量 的第二個作業，不只幾何改正，
+把傾斜攝影的照片作成正射影像。
+我就用上學期的 code，
+加上上次作業寫的影像取樣，
+組合成影像正射化的程式。上學期的
+    </summary>
+<category term="測量"/>
+<category term="作業"/>
+<category term="ncku"/>
+<category term="程式"/>
+<category term="javascript"/>
+</entry><entry>
+<id>expose-internal-state.html</id>
+<title> 儲存與暴露程式的內部狀態</title>
+<published>2017-12-05T12:32:06.444Z</published>
+<updated>2017-12-14T16:53:41.183Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/expose-internal-state.html"/>
+<summary>
+    物件導向的精神之一，
+就是讓將物件的內部狀態暴露為屬性，
+讓外部存取。
+其實動態作用域也可以視為一種暴露，
+甚至 貝爾實驗室九號計畫 中將程式暴露為檔案系統，
+
+    </summary>
+<category term="物件導向"/>
+<category term="javascript"/>
+<category term="linux"/>
+<category term="檔案"/>
+<category term="哲學"/>
+<category term="plan9"/>
+<category term="scope"/>
+</entry><entry>
+<id>lisp-lexical-scheme.html</id>
+<title> lisp、閉包與 scheme</title>
+<published>2017-12-05T07:41:24.643Z</published>
+<updated>2017-12-14T16:53:41.186Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/lisp-lexical-scheme.html"/>
+<summary>
+    傳統 lisp 是動態作用域，沒有閉包的概念，
+但現代詞法作用域 lexical scope 似乎是主流。
+其實回到最初，是沒有 scope 這個問題的。
+li
+    </summary>
+<category term="lisp"/>
+<category term="scheme"/>
+<category term="scope"/>
+<category term="closure"/>
+</entry><entry>
+<id>programmer-beauty-sense.html</id>
+<title> 程式設計師的美感</title>
+<published>2017-12-03T06:50:54.381Z</published>
+<updated>2017-12-14T16:53:41.189Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/programmer-beauty-sense.html"/>
+<summary>
+    程式員普遍被認為沒有美感，
+其實是因為他們的美感超脫現實，進化到另一層次了。
+就像佛門理解本質，認為肉身不過臭皮囊；
+程式員理解介面的本質，外觀不過是表像，
+內
+    </summary>
+<category term="gui"/>
+<category term="html"/>
+<category term="排版"/>
+<category term="程式"/>
+</entry><entry>
+<id>orthophoto-reuse-code.html</id>
+<title> 正射影像</title>
+<published>2017-12-02T07:00:37.388Z</published>
+<updated>2017-12-14T16:53:41.191Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/orthophoto-reuse-code.html"/>
+<summary>
+    攝影測量 的第二個作業，不只幾何改正，
+把傾斜攝影的照片作成正射影像。
+我就用上學期的 code，
+加上上次作業寫的影像取樣，
+組合成影像正射化的程式。上學期的
+    </summary>
+<category term="測量"/>
+<category term="作業"/>
+<category term="ncku"/>
+<category term="程式"/>
+<category term="javascript"/>
+</entry><entry>
+<id>georeference-tilt-photo.html</id>
+<title> 影像改正</title>
+<published>2017-10-24T14:31:57.977Z</published>
+<updated>2017-12-14T16:53:41.198Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/georeference-tilt-photo.html"/>
+<summary>
+    將影像用幾何方式改正。這次程式包括
+共用函數 transform.js reference-image.js
+包裝共用函數的腳本 convert.js 
+所有轉
+    </summary>
+<category term="程式"/>
+<category term="ncku"/>
+<category term="測量"/>
+<category term="作業"/>
+<category term="javascript"/>
+</entry><entry>
+<id>colorful-street-lamp.html</id>
+<title> 七彩路燈修圖練習</title>
+<published>2017-11-29T15:43:22.085Z</published>
+<updated>2017-12-14T16:53:41.201Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/colorful-street-lamp.html"/>
+<summary>
+    朋友在臉書貼了一張夜晚路燈的照片，
+其中幾個路燈微微照成不同顏色。
+覺得很有意思，就練習修圖，
+看能不能修得更好看。
+    </summary>
+<category term="gimp"/>
+<category term="wallpaper"/>
+<category term="photo"/>
+<category term="夜"/>
+</entry><entry>
+<id>qemu-live-dual-boot-windows.html</id>
+<title> linux 下用虛擬機開雙開機的 windows 分區</title>
+<published>2017-11-28T05:33:16.455Z</published>
+<updated>2017-12-14T16:53:41.204Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/qemu-live-dual-boot-windows.html"/>
+<summary>
+    很多 linux user 都把電腦做成雙開機，
+可以在開機時選要進 windows 還 linux。
+我又在 linux 下用 qemu 拿 windows 
+    </summary>
+<category term="shell"/>
+<category term="虛擬機"/>
+<category term="windows"/>
+<category term="linux"/>
+<category term="boot"/>
+<category term="硬碟"/>
+<category term="筆電"/>
+</entry><entry>
+<id>xkbcomp-custom-keyboard.html</id>
+<title> xkbcomp 自訂鍵盤按鍵</title>
+<published>2017-11-25T11:10:14.516Z</published>
+<updated>2017-12-14T16:53:41.207Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/xkbcomp-custom-keyboard.html"/>
+<summary>
+    thinkpad 的 home 鍵太遠了不好按，
+用 xkbcomp 把 super page up down 加上
+home end 的效果，但只是抄來的 c
+    </summary>
+<category term="x-window"/>
+<category term="鍵盤"/>
+<category term="筆電"/>
+<category term="config"/>
+</entry><entry>
+<id>android-x-window.html</id>
+<title> x window 在 android 上</title>
+<published>2017-11-23T04:03:28.010Z</published>
+<updated>2017-12-14T16:53:41.210Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/android-x-window.html"/>
+<summary>
+    x window 是分工很細，易剝離的架構，
+所以可以用 ssh -X 這種神奇的方式工作；
+但把 x server 和 window manager 分離也造
+    </summary>
+<category term="gui"/>
+<category term="android"/>
+<category term="ssh"/>
+<category term="x-window"/>
+<category term="windows"/>
+</entry><entry>
+<id>bullshit-assault-harm.html</id>
+<title> 人的爭鬥本性</title>
+<published>2017-11-21T14:17:08.774Z</published>
+<updated>2017-12-14T16:53:41.212Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/bullshit-assault-harm.html"/>
+<summary>
+    人有一種血腥暴力的本能，
+多數電玩、遊戲、小說、漫畫都圍繞這個主題。
+如果在虛擬世界中人的肢體傷害是允許的，
+那言語傷害又有什麼不同？網路酸民文化很多人不了解為
+    </summary>
+<category term="魔域大冒險"/>
+<category term="ptt"/>
+<category term="酸民"/>
+</entry><entry>
+<id>dt13-start-up.html</id>
+<title> dt13 使用小感</title>
+<published>2017-11-19T05:23:31.768Z</published>
+<updated>2017-12-14T16:53:41.217Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/dt13-start-up.html"/>
+<summary>
+    thinkpad 總算到了，配件和我選的一樣很少，
+決定重裝系統，沒想到裝 debian 時有些問題，
+硬體是 thinkpad 尊爵不凡特規，
+也有些問題，整
+    </summary>
+<category term="電腦"/>
+<category term="筆電"/>
+<category term="debian"/>
+<category term="linux"/>
+<category term="開始"/>
+</entry><entry>
+<id>cygwin-x-server.html</id>
+<title> 在 cygwin 下使用 x server</title>
+<published>2017-11-12T14:57:01.310Z</published>
+<updated>2017-12-14T16:53:41.221Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/cygwin-x-server.html"/>
+<summary>
+    剛學會 ssh -X 選項，能遠端用 shell 登入，
+再加上 X window 的圖形介面。
+之後為了在 windows 下也能用，
+得裝了一個 windo
+    </summary>
+<category term="ssh"/>
+<category term="gui"/>
+<category term="x-window"/>
+<category term="windows"/>
+<category term="ip"/>
+</entry><entry>
+<id>kaohsiung-art-travel.html</id>
+<title> 高雄藝術之旅</title>
+<published>2017-11-11T04:58:36.028Z</published>
+<updated>2017-12-14T16:53:41.224Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/kaohsiung-art-travel.html"/>
+<summary>
+    藝術史與藝術批評 的校外教學，
+遊覽 駁二特區 、 高雄美術館 等地，
+事後需交 1000 字報告。
+當天出遊感冒，但仍走完全程。本課程共有三次出遊，
+其中第一
+    </summary>
+<category term="通識"/>
+<category term="遊記"/>
+<category term="藝術"/>
+<category term="病"/>
+</entry><entry>
+<id>new-classic-discus-answer.html</id>
+<title> 新主古典主義的討論回答</title>
+<published>2017-11-10T03:23:04.723Z</published>
+<updated>2017-12-14T16:53:41.229Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/new-classic-discus-answer.html"/>
+<summary>
+    成大的通識課 藝術史與藝術批評 這周是我們報告，
+雖然老師有點龜毛，但總體還不錯。
+只是不確定大家有沒有懂。
+內容比上一組多，但表達沒那麼生動。問題與討論報告完
+    </summary>
+<category term="通識"/>
+<category term="ncku"/>
+<category term="藝術"/>
+<category term="問答"/>
+</entry><entry>
+<id>ferrari-one-death.html</id>
+<title> ferrari one 壽終正寢</title>
+<published>2017-11-08T04:35:36.747Z</published>
+<updated>2017-12-14T16:53:41.233Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/ferrari-one-death.html"/>
+<summary>
+    大概十月中一次隨身碟開機意外，
+ferrari one 就無法開機了。
+檢查後是主機板燒壞了，
+就先借用 CCNS 社辦的電腦，
+直到新買的 thinkpad 
+    </summary>
+<category term="筆電"/>
+<category term="指紋"/>
+<category term="linux"/>
+<category term="ccns"/>
+<category term="電腦"/>
+<category term="開機碟"/>
+<category term="維修"/>
+</entry><entry>
+<id>30-day-song.html</id>
+<title> 30 日推歌挑戰</title>
+<published>2017-09-30T17:01:39.678Z</published>
+<updated>2017-12-14T16:53:41.236Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/30-day-song.html"/>
+<summary>
+    一開始看到佐榮在推，竟然推了好幾首伍佰！
+然後奇幻社的幾個也開始推，
+我覺得發在 fb 太洗板了，就發在這裡。
+h1 {
+    counter-reset: 
+    </summary>
+<category term="歌"/>
+<category term="鐵人賽"/>
+</entry><entry>
+<id>lexer-space-marked.html</id>
+<title> 幫 marked 加上空格限制</title>
+<published>2017-11-01T14:00:59.182Z</published>
+<updated>2017-12-14T16:53:41.239Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/lexer-space-marked.html"/>
+<summary>
+    我的 markdown 有自訂新語法，
+像刪除線和底線，但如果同一行有二個符號就會自動觸發。
+加上新限制條件符號外要加空白，
+就能避免誤判減號成刪除線。我的 m
+    </summary>
+<category term="markdown"/>
+<category term="marked"/>
+<category term="git"/>
+<category term="man-page"/>
+<category term="blog"/>
+<category term="javascript"/>
+</entry><entry>
+<id>evil-selection-x-window.html</id>
+<title> emacs evil 與 x window 選擇文字相通</title>
+<published>2017-10-31T14:24:56.391Z</published>
+<updated>2017-12-14T16:53:41.241Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/evil-selection-x-window.html"/>
+<summary>
+    之前 evil 的選擇文字一直和 x-window 不相通，
+選了沒辦法在外面用中鍵貼上。
+開始用 gui emacs 很大原因就是剪貼簿相通很方便。
+今天終於
+    </summary>
+<category term="emacs"/>
+<category term="gui"/>
+<category term="evil"/>
+</entry><entry>
+<id>georeference-tilt-photo.html</id>
+<title> 影像改正</title>
+<published>2017-10-24T14:31:57.977Z</published>
+<updated>2017-12-14T16:53:41.243Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/georeference-tilt-photo.html"/>
+<summary>
+    將影像用幾何方式改正。這次程式包括
+共用函數 transform.js reference-image.js
+包裝共用函數的腳本 convert.js 
+所有轉
+    </summary>
+<category term="程式"/>
+<category term="ncku"/>
+<category term="測量"/>
+<category term="作業"/>
+</entry><entry>
+<id>assoc-flickr.html</id>
+<title> flickr 圖床腳本 assocr</title>
+<published>2017-10-28T02:27:34.392Z</published>
+<updated>2017-12-14T16:53:41.246Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/assoc-flickr.html"/>
+<summary>
+    寫上一篇作業終於得面對圖片的問題，
+到底部落格該怎麼貼圖這件事。
+我一直用 flickr 當圖床，
+但他的上傳面和內嵌介面不好用，
+只好自己寫一個腳本 asso
+    </summary>
+<category term="flickr"/>
+<category term="api"/>
+<category term="圖"/>
+<category term="oauth"/>
+<category term="blog"/>
+</entry><entry>
+<id>30-day-song.html</id>
+<title> 30 日推歌挑戰</title>
+<published>2017-09-30T17:01:39.678Z</published>
+<updated>2017-12-14T16:53:41.248Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/30-day-song.html"/>
+<summary>
+    一開始看到佐榮在推，竟然推了好幾首伍佰！
+然後奇幻社的幾個也開始推，
+我覺得發在 fb 太洗板了，就發在這裡。
+h1 {
+    counter-reset: 
+    </summary>
+<category term="歌"/>
+<category term="鐵人賽"/>
+</entry><entry>
+<id>georeference-tilt-photo.html</id>
+<title> 影像改正</title>
+<published>2017-10-24T14:31:57.977Z</published>
+<updated>2017-12-14T16:53:41.250Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/georeference-tilt-photo.html"/>
+<summary>
+    將影像用幾何方式改正。這次程式包括
+共用函數 transform.js reference-image.js
+包裝共用函數的腳本 convert.js 
+所有轉
+    </summary>
+<category term="程式"/>
+<category term="ncku"/>
+<category term="測量"/>
+<category term="作業"/>
+</entry><entry>
+<id>github-email-address.html</id>
+<title> github 因為 email 不同無法辨識帳號</title>
+<published>2017-10-21T14:01:28.456Z</published>
+<updated>2017-12-14T16:53:41.252Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/github-email-address.html"/>
+<summary>
+    發現 github 上 commit 記錄裡我的帳號都不能點，
+頭像無法顯示，其它統計也都看不到我。
+最後發現是 github 是認 git commit 中的
+    </summary>
+<category term="git"/>
+<category term="email"/>
+<category term="歷史"/>
+<category term="ccns"/>
+</entry><entry>
+<id>extend-lvm-filesystem.html</id>
+<title> 單人維護模式下擴大 usr 分割</title>
+<published>2017-10-18T06:34:52.300Z</published>
+<updated>2017-12-14T16:53:41.254Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/extend-lvm-filesystem.html"/>
+<summary>
+    原本 toshiba 的硬碟裡裝的 debian stretch
+一開始割很小，usr 一下就快滿了，只剩 500mb。
+但身邊的開機碟都不能用，
+最後嘗試進 
+    </summary>
+<category term="grub"/>
+<category term="lvm"/>
+<category term="linux"/>
+<category term="boot"/>
+</entry><entry>
+<id>hp-boot-error.html</id>
+<title> 惠普 PC 的開機問題</title>
+<published>2017-10-17T05:57:47.881Z</published>
+<updated>2017-12-14T16:53:41.256Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/hp-boot-error.html"/>
+<summary>
+    最近舊筆電 ferrari one 壽終正寢，
+就先龜在 CCNS 用一台 hp 的桌機。
+但那台 hp 開機會出現 bios error，
+然後要進 setu
+    </summary>
+<category term="電腦"/>
+<category term="開機"/>
+<category term="ram"/>
+</entry><entry>
+<id>emacs-server-scim.html</id>
+<title> gui 下 emacs server 和 scim 輸入法</title>
+<published>2017-10-16T14:40:56.628Z</published>
+<updated>2017-12-14T16:53:41.260Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/emacs-server-scim.html"/>
+<summary>
+    gui 下的 emacs 很棒，和剪貼簿互通真得很方便。
+但 scim 怪怪的，通常開啟後會無法輸入中文。
+最後用 restart emacs server 的
+    </summary>
+<category term="emacs"/>
+<category term="gui"/>
+<category term="輸入法"/>
+<category term="service"/>
+</entry><entry>
+<id>deprecate-argument-callee.html</id>
+<title> argument.callee 被廢棄的原因</title>
+<published>2017-10-16T07:17:43.158Z</published>
+<updated>2017-12-14T16:53:41.262Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/deprecate-argument-callee.html"/>
+<summary>
+    在 js 中函數要遞迴呼叫，就直接呼叫自己名字。
+從前從前，函數中特殊的 arguments 變數
+有一個叫 callee 的函數，是指向函數本身。
+但後來被廢
+    </summary>
+<category term="js"/>
+<category term="deprecate"/>
+<category term="遞迴"/>
+<category term="程式"/>
+</entry><entry>
+<id>30-day-song.html</id>
+<title> 30 日推歌挑戰</title>
+<published>2017-09-30T17:01:39.678Z</published>
+<updated>2017-12-14T16:53:41.264Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/30-day-song.html"/>
+<summary>
+    一開始看到佐榮在推，竟然推了好幾首伍佰！
+然後奇幻社的幾個也開始推，
+我覺得發在 fb 太洗板了，就發在這裡。
+h1 {
+    counter-reset: 
+    </summary>
+<category term="歌"/>
+<category term="鐵人賽"/>
+</entry><entry>
+<id>lisp-7-day.html</id>
+<title> LISP 七日談</title>
+<published>2017-10-10T14:27:51.551Z</published>
+<updated>2017-12-14T16:53:41.266Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/lisp-7-day.html"/>
+<summary>
+    起初，神創造七個公理，
+於是有了 lisp。
+quote
+atom
+eq
+cons
+car
+cdr
+cond
+
+格林斯潘第十定律
+任何 C 或 Fortran 
+    </summary>
+<category term="lisp"/>
+<category term="筆記"/>
+<category term="ccns"/>
+</entry><entry>
+<id>show-style-javascript.html</id>
+<title> 顯示樣式表和 javascript</title>
+<published>2017-10-10T08:49:18.251Z</published>
+<updated>2017-12-14T16:53:41.269Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/show-style-javascript.html"/>
+<summary>
+    之前幾篇文章我想展示代碼，
+想要造出效果，但又想讓人看到程式，
+只好寫一份用來看，再寫一份實際執行。後來我想到，javascript 和 css 不會顯示出來的
+    </summary>
+<category term="css"/>
+<category term="javascript"/>
+<category term="blog"/>
+<category term="巨集"/>
+</entry><entry>
+<id>emacs-server-client.html</id>
+<title> 用 server client mode 執行 emacs</title>
+<published>2017-10-10T04:52:03.410Z</published>
+<updated>2017-12-14T16:53:41.271Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/emacs-server-client.html"/>
+<summary>
+    emacs 可以用 server client 方式執行，可以加快速度。
+意思是有一個 emacs server，執行 client 時是連上該 server，
+    </summary>
+<category term="emacs"/>
+<category term="gui"/>
+<category term="cli"/>
+<category term="systemd"/>
+</entry><entry>
+<id>david-new-classic.html</id>
+<title> 大衛與新古典主義</title>
+<published>2017-10-09T06:20:16.556Z</published>
+<updated>2017-12-14T16:53:41.274Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/david-new-classic.html"/>
+<summary>
+    藝術史與藝術批評的報告主題。新古典主義新古典主義緬懷古希臘時期，簡單展現純粹力與美的樸素風格，
+來源於對當時洛可可主義頹廢風格的反撲。洛可可洛可可來源於路易十五
+    </summary>
+<category term="ncku"/>
+<category term="通識"/>
+<category term="報告"/>
+<category term="藝術"/>
+</entry><entry>
+<id>load-disqus-lazy.html</id>
+<title> 載入 disqus</title>
+<published>2017-10-08T06:19:41.393Z</published>
+<updated>2017-12-14T16:53:41.276Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/load-disqus-lazy.html"/>
+<summary>
+    由於 blog 是 github page，就用 disqus 當留言系統。
+之前在想要怎麼載入，因為 disqus 蠻大的，
+我部落格的文章載入很快，但 di
+    </summary>
+<category term="blog"/>
+<category term="disqus"/>
+<category term="流量"/>
+</entry><entry>
+<id>js-eval-macro.html</id>
+<title> markdown 中簡單使用 js 巨集</title>
+<published>2017-10-06T15:23:41.951Z</published>
+<updated>2017-12-14T16:53:41.279Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/js-eval-macro.html"/>
+<summary>
+    之前加了一個像巨集的功能，能用比較簡短的語法寫 js 巨集。
+畢竟直接用 <script> 太麻煩，寫起來也太長不方便。
+可以用 js ejp 的方
+    </script></summary>
+<category term="javascript"/>
+<category term="巨集"/>
+<category term="blog"/>
+<category term="程式"/>
+<category term="函數"/>
+</entry><entry>
+<id>css-inline-this.html</id>
+<title> 行內樣式表的反射</title>
+<published>2017-10-05T15:46:58.729Z</published>
+<updated>2017-12-14T16:53:41.281Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/css-inline-this.html"/>
+<summary>
+    用 js 醜醜的解決了 inline css 的 this，
+讓 markdown 中的 style 可以用 :this 選擇自己。
+這樣就能用 :this +
+    </summary>
+<category term="blog"/>
+<category term="巨集"/>
+<category term="css"/>
+<category term="js"/>
+<category term="程式"/>
+</entry><entry>
+<id>meta-bloging-in-html.html</id>
+<title> 部落格的 html 元寫作</title>
+<published>2017-10-04T16:50:43.147Z</published>
+<updated>2017-12-14T16:53:41.284Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/meta-bloging-in-html.html"/>
+<summary>
+    [[元編程]] 就是用程式產生程式，像是用巨集；
+而 元寫作 ，解作用程式寫作，
+也就是在寫 html 的時候，
+使用一些像巨集的手法來減少重覆工作或達到更好的
+    </summary>
+<category term="巨集"/>
+<category term="html"/>
+<category term="blog"/>
+<category term="wiki"/>
+<category term="javascript"/>
+<category term="css"/>
+<category term="程式"/>
+</entry><entry>
+<id>30-day-song.html</id>
+<title> 30 日推歌挑戰</title>
+<published>2017-09-30T17:01:39.678Z</published>
+<updated>2017-12-14T16:53:41.288Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/30-day-song.html"/>
+<summary>
+    一開始看到佐榮在推，竟然推了好幾首伍佰！
+然後奇幻社的幾個也開始推，
+我覺得發在 fb 太洗板了，就發在這裡。名字裡有顏色的歌：紅色高跟鞋好像原本是中國電視劇的
+    </summary>
+<category term="歌"/>
+<category term="鐵人賽"/>
+</entry><entry>
+<id>course-106-1.html</id>
+<title>106 學年度下學期課表</title>
+<published>2017-09-27</published>
+<updated>2017-12-14T16:53:41.292Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/course-106-1.html"/>
+<summary>
+    有換過幾次課表，
+開學前土地法排在 四[7-8] ，
+我就截圖，結果他開學後才改成 五[7-8] ，
+同學傳訊息給我才知道，只上到一節。國術後來退掉，換成自由車
+    </summary>
+<category term="scadual"/>
+<category term="課表"/>
+<category term="106 學年"/>
+<category term="下學期"/>
+<category term="手打 html"/>
+</entry><entry>
+<id>scadual-106-1.html</id>
+<title> 成功大學 106 學年上學期行事曆 </title>
+<published>2017-09-20</published>
+<updated>2017-12-14T16:53:41.297Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/scadual-106-1.html"/>
+<summary>
+    
+  開始跑 CCNS，覺得他們廢歸廢，
+  還是挺不錯的；也開始有一些動力了。
+  至少我在裡面算強的，只算實作不看理論的話ㄏㄏ
+
+  最近在讀 sicp，還
+    </summary>
+<category term="行事歷"/>
+<category term="成大"/>
+<category term="手打 html"/>
+<category term="106 學年"/>
+<category term="下學期"/>
+</entry><entry>
+<id>adb-over-wifi.html</id>
+<title> 透過 wifi 執行 adb</title>
+<published>2017-09-20T12:38:27.641Z</published>
+<updated>2017-12-14T16:53:41.302Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/adb-over-wifi.html"/>
+<summary>
+    Android Debug Bridge 是刷 android 系統
+和做各種壞事的必要工具。
+其實雖然稱為線刷，但不透過線也是可以的。
+adb 底層是透過 t
+    </summary>
+<category term="刷機"/>
+<category term="android"/>
+<category term="wifi"/>
+<category term="無線"/>
+</entry><entry>
+<id>different-love.html</id>
+<title> 愛情也有不一樣的</title>
+<published>2017-09-20T12:10:39.835Z</published>
+<updated>2017-12-14T16:53:41.305Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/different-love.html"/>
+<summary>
+    大一在上英文課時，有幸和某潮潮同堂，做了個對話練習。
+記得那次的主題是 喜歡的人 ，自然很直覺想成愛情。
+潮潮很坦白說他喜歡班上的，
+而我很狡滑的講了從小時候的
+    </summary>
+<category term="愛情"/>
+<category term="記憶"/>
+<category term="英文"/>
+<category term="思辨"/>
+</entry><entry>
+<id>android-screen-monitor.html</id>
+<title> 透過 adb 把 android 畫面顯示到 PC 上</title>
+<published>2017-09-20T05:07:20.224Z</published>
+<updated>2017-12-14T16:53:41.307Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/android-screen-monitor.html"/>
+<summary>
+    asm.jar 全名 Android Screen Monitor，
+一款搭配 adb 就能把 android 畫面顯示在桌機上的軟體。
+不用裝 Android
+    </summary>
+<category term="ccns"/>
+<category term="android"/>
+<category term="adb"/>
+<category term="java"/>
+<category term="video"/>
+</entry><entry>
+<id>android-screen-monitor.html</id>
+<title> 透過 adb 把 android 畫面顯示到 PC 上</title>
+<published>2017-09-20T05:06:35.740Z</published>
+<updated>2017-12-14T16:53:41.311Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/android-screen-monitor.html"/>
+<summary>
+    asm.jar 全名 Android Screen Monitor，
+一款搭配 adb 就能把 android 畫面顯示在桌機上的軟體。
+不用裝 Android
+    </summary>
+<category term="ccns"/>
+<category term="android"/>
+<category term="adb"/>
+<category term="java"/>
+<category term="video"/>
+</entry><entry>
+<id>android-screen-monitor.html</id>
+<title># 透過 adb 把 android 畫面顯示到 PC 上</title>
+<published>2017-09-20T05:00:33.067Z</published>
+<updated>2017-12-14T16:53:41.314Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/android-screen-monitor.html"/>
+<summary>
+    asm.jar 全名 Android Screen Monitor，
+一款搭配 adb 就能把 android 畫面顯示在桌機上的軟體。
+不用裝 Android
+    </summary>
+<category term="ccns"/>
+<category term="android"/>
+<category term="adb"/>
+<category term="java"/>
+<category term="video"/>
+</entry><entry>
+<id>optional-boolean-argument.html</id>
+<title># 可省略的布林值參數</title>
+<published>2017-09-19T16:57:46.470Z</published>
+<updated>2017-12-14T16:53:41.317Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/optional-boolean-argument.html"/>
+<summary>
+    有時候一些函數最後會有一個 boolean 參數，
+去微調函數的行為。
+如果程式沒維護好，一不小心就會變很亂。form.addField('userna
+    </summary>
+<category term="程式語言"/>
+</entry><entry>
+<id>if-bracket-syntax.html</id>
+<title># if 的語法問題</title>
+<published>2017-09-17T03:00:32.408Z</published>
+<updated>2017-12-14T16:53:41.320Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/if-bracket-syntax.html"/>
+<summary>
+    最流行的 if 語法來自 C 語言，
+也就是在圓括號裡放表達式。
+我一直以為圓括號有點多餘，
+明明就是表達式了，為什麼要再括起來？if (test()) {
+ 
+    </summary>
+<category term="lisp"/>
+<category term="程式語言"/>
+<category term="括號"/>
+<category term="go"/>
+<category term="分號"/>
+</entry><entry>
+<id>lisp-scheme-defect.html</id>
+<title># lisp 系語言的缺陷</title>
+<published>2017-09-17T02:40:28.391Z</published>
+<updated>2017-12-14T16:53:41.323Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/lisp-scheme-defect.html"/>
+<summary>
+    之前很嚮往 lisp 系語言，
+像 [[scheme]] 或 [[common lisp]] 。
+我在 javascript 中見識到函數式語言的神奇，
+但 j
+    </summary>
+<category term="lisp"/>
+<category term="common-lisp"/>
+<category term="scheme"/>
+<category term="javascript"/>
+<category term="函數"/>
+</entry><entry>
+<id>one-piece-hunter-speed.html</id>
+<title>用獵人的速度出海賊王</title>
+<published>2017-06-24T12:46:58.473Z</published>
+<updated>2017-12-14T16:53:41.326Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/one-piece-hunter-speed.html"/>
+<summary>
+    之前在八卦戰獵人和海賊王，
+幾乎一面倒慢跑王糞作，獵人神作。
+但有人說了一句發人深省的話，
+如果海賊王用獵人的速度出，
+現在應該還是神作。如果尾田用冨堅的速度畫
+    </summary>
+<category term="獵人"/>
+<category term="冨堅"/>
+<category term="海賊王"/>
+<category term="ACG"/>
+<category term="漫畫"/>
+<category term="心得"/>
+</entry><entry>
+<id>angry-childish.html</id>
+<title>生氣拒絕溝通很幼稚</title>
+<published>2017-06-12T13:31:08.568Z</published>
+<updated>2017-12-14T16:53:41.330Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/angry-childish.html"/>
+<summary>
+    有時候意見不合，吵一吵，
+對方就惱羞翻桌、封鎖、拒絕溝通。
+覺得很無言，都幾歲的人了，還在那邊生氣。
+後來想想，這種感覺，就和大人看到小孩耍賴一樣；
+知道對方是
+    </summary>
+<category term="生氣"/>
+<category term="長大"/>
+<category term="溝通"/>
+</entry><entry>
+<id>magician-honer.html</id>
+<title>魔術師的名聲</title>
+<published>2017-06-10T15:51:50.920Z</published>
+<updated>2017-12-14T16:53:41.333Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/magician-honer.html"/>
+<summary>
+    魔術本來就是詐術，運用各種手段欺騙人的感官。
+魔術圈常有抄襲、互相指責的醜聞。
+也許對魔術師而言，所謂的名聲，
+也是用魔術變、騙來的，也是表演的一部份吧。之前美
+    </summary>
+<category term="魔術"/>
+<category term="信用"/>
+<category term="專利"/>
+<category term="加拿大"/>
+<category term="台灣"/>
+<category term="國籍"/>
+<category term="硬幣"/>
+</entry><entry>
+<id>worship-greater-love.html</id>
+<title>崇拜更好的自己</title>
+<published>2017-06-10T14:11:42.686Z</published>
+<updated>2017-12-14T16:53:41.336Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/worship-greater-love.html"/>
+<summary>
+    當你遇見一個人，和你有類似的性格，
+她能與你某些程度的心靈相通，因為你們是類似的人，
+那些你引以為傲的，在她身上都更亮眼也更美好。
+而且她是異性，所以你無可救藥
+    </summary>
+<category term="愛情"/>
+<category term="個性"/>
+<category term="孤獨"/>
+<category term="陰影"/>
+<category term="驕傲"/>
+<category term="hide"/>
+</entry><entry>
+<id>do-my-best-enough-responsibility.html</id>
+<title>盡人事，聽天命</title>
+<published>2017-05-07T14:38:42.899Z</published>
+<updated>2017-12-14T16:53:41.339Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/do-my-best-enough-responsibility.html"/>
+<summary>
+    既然我已經做了所有我能做的，
+結局就沒我的事，接受就好了。
+但那個 天命 ，我是不信的，
+可能信了，會過得比較愉快。
+只是我不能接受反智的事。犯錯，我也道歉了，
+    </summary>
+<category term="愛情"/>
+<category term="責任"/>
+<category term="信仰"/>
+<category term="基督"/>
+<category term="反智"/>
+<category term="永遠"/>
+<category term="思辯"/>
+<category term="人性"/>
+</entry><entry>
+<id>open-sex-love-rape.html</id>
+<title>性保守的災難</title>
+<published>2017-04-29T16:44:49.109Z</published>
+<updated>2017-12-14T16:53:41.343Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/open-sex-love-rape.html"/>
+<summary>
+    越保護女性，只會讓女性在受傷時傷的更重；
+且再嚴的法律都有漏洞，也沒辦法做事後的補救。
+我不想再看到女生因為性侵害，憂鬱走不出來甚至自殺。
+最好的作法就是性解放
+    </summary>
+<category term="女權"/>
+<category term="性"/>
+<category term="思辯"/>
+<category term="哲學"/>
+<category term="朱家安"/>
+<category term="哲學哲學雞蛋糕"/>
+<category term="ptt"/>
+<category term="林奕含"/>
+</entry><entry>
+<id>seek-kind-of-forever.html</id>
+<title>什麼時候我也追求永遠了</title>
+<published>2017-04-26T16:54:14.728Z</published>
+<updated>2017-12-14T16:53:41.347Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/seek-kind-of-forever.html"/>
+<summary>
+    從高中時期，我已經明白沒什麼是不會失去的。
+但到了現在，我卻因為貪圖真正的愛情，
+不惜毀掉原有的關係。
+就算是愛情也不會是永遠的，
+與其追求，不如珍惜現在所擁有
+    </summary>
+<category term="愛情"/>
+<category term="永遠"/>
+<category term="悟空傳"/>
+<category term="思辯"/>
+<category term="抒發"/>
+<category term="當下"/>
+<category term="憂鬱"/>
+</entry><entry>
+<id>game-passion-maintain.html</id>
+<title>維持遊戲的熱情不膩</title>
+<published>2017-04-25T15:12:59.511Z</published>
+<updated>2017-12-14T16:53:41.351Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/game-passion-maintain.html"/>
+<summary>
+    如何維持玩家的熱情有很大的學問。
+玩家就是犯賤，太難不玩，太簡單也不玩。
+像 我現在玩的元氣騎士 ，
+用大量不同的武器、技能留住玩家，
+且都只能靠運氣得到，且不
+    </summary>
+<category term="soul-knight"/>
+<category term="人性本賤"/>
+<category term="遊戲"/>
+<category term="心理"/>
+<category term="android"/>
+<category term="手機"/>
+</entry><entry>
+<id>js-object-new-prototype.html</id>
+<title>JS 中物件繼承的問題</title>
+<published>2017-04-23T16:41:46.714Z</published>
+<updated>2017-12-14T16:53:41.355Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/js-object-new-prototype.html"/>
+<summary>
+    js 中的物件導向很奇怪，其實是原型繼承，
+但被包裝成類別繼承的模樣。
+有人提倡 不應該使用類別繼承 ，也就是 new 關鍵字，
+而應該使用原型繼承，
+也就是 
+    </summary>
+<category term="js"/>
+<category term="程式語言"/>
+<category term="物件導向"/>
+<category term="函數"/>
+<category term="原型"/>
+</entry><entry>
+<id>practice-matrix-object-javascript.html</id>
+<title>在 JS 中實作矩陣</title>
+<published>2017-04-23T10:38:13.128Z</published>
+<updated>2017-12-14T16:53:41.359Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/practice-matrix-object-javascript.html"/>
+<summary>
+    js 中只有一維陣列，
+而且它其實不太像陣列，比較像物件。
+總之，我因為 ~航遙測概論~ 的作業，
+需要寫一些有關矩陣的程式，
+至少需要矩陣相乘的函數，
+所以就
+    </summary>
+<category term="js"/>
+<category term="matrix"/>
+<category term="library"/>
+<category term="coffee"/>
+<category term="迴圈"/>
+<category term="函數"/>
+<category term="物件導向"/>
+<category term="原型"/>
+<category term="程式語言"/>
+</entry><entry>
+<id>iife-js-void-semicolon.html</id>
+<title>JS 中 IIFE 與分號的最酷寫法</title>
+<published>2017-04-21T15:15:12.718Z</published>
+<updated>2017-12-14T16:53:41.363Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/iife-js-void-semicolon.html"/>
+<summary>
+    IIFE
+是在 JS 中為了彌補沒有 block scope 而出現的寫法。
+一般人習慣使用括號做為前置，
+但其實括號出現在行首䆟易被
+ASI
+誤判為函數呼叫，
+    </summary>
+<category term="js"/>
+<category term="算符"/>
+<category term="scope"/>
+<category term="函數"/>
+<category term="程式語言"/>
+<category term="iife"/>
+<category term="expression"/>
+<category term="分號"/>
+</entry><entry>
+<id>library-noise-by-staff.html</id>
+<title>圖書館中來自館員的打擾</title>
+<published>2017-04-20T16:42:34.748Z</published>
+<updated>2017-12-14T16:53:41.367Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/library-noise-by-staff.html"/>
+<summary>
+    一開始我進圖書館中控室，
+在讀者區都會放輕聲音，但後來就不會。
+因為我發覺這樣的打擾根本很少出現，
+被打擾的讀者只佔了非常少數，
+甚至根本構不成打擾。一開始巡館
+    </summary>
+<category term="圖書館"/>
+<category term="緣份"/>
+<category term="吵"/>
+<category term="思辯"/>
+<category term="工作"/>
+</entry><entry>
+<id>iife-js-void-semicolon.html</id>
+<title>JS 中 IIFE 與分號的最酷寫法</title>
+<published>2017-04-21T15:15:12.718Z</published>
+<updated>2017-12-14T16:53:41.371Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/iife-js-void-semicolon.html"/>
+<summary>
+    IIFE
+是在 JS 中為了彌補沒有 block scope 而出現的寫法。
+一般人習慣使用括號做為前置，
+但其實括號出現在行首䆟易被
+ASI
+誤判為函數呼叫，
+    </summary>
+<category term="js"/>
+<category term="算符"/>
+<category term="scope"/>
+<category term="函數"/>
+<category term="程式語言"/>
+<category term="iife"/>
+<category term="expression"/>
+<category term="分號"/>
+</entry><entry>
+<id>library-noise-by-staff.html</id>
+<title>圖書館中來自館員的打擾</title>
+<published>2017-04-20T16:42:34.748Z</published>
+<updated>2017-12-14T16:53:41.374Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/library-noise-by-staff.html"/>
+<summary>
+    一開始我進圖書館中控室，
+在讀者區都會放輕聲音，但後來就不會。
+因為我發覺這樣的打擾根本很少出現，
+被打擾的讀者只佔了非常少數，
+甚至根本構不成打擾。一開始巡館
+    </summary>
+<category term="圖書館"/>
+<category term="緣份"/>
+<category term="吵"/>
+<category term="思辯"/>
+<category term="工作"/>
+</entry><entry>
+<id>t-short-sleeve-armpit-hair.html</id>
+<title>短袖的袖子是為了腋毛而存在的</title>
+<published>2017-04-20T12:38:20.996Z</published>
+<updated>2017-12-14T16:53:41.378Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/t-short-sleeve-armpit-hair.html"/>
+<summary>
+    夏天到了，一些人開始穿短袖，甚至無袖。
+穿無袖就會被留意有沒有刮腋毛，沒刮就有點不雅觀。
+問題不是無袖太短，而是為什麼短袖要多那一截，
+不就是為了遮住腋毛嗎？
+
+    </summary>
+<category term="毛髮"/>
+<category term="服裝"/>
+<category term="熱"/>
+<category term="t-shirt"/>
+<category term="思辯"/>
+</entry><entry>
+<id>low-dependent-map-js.html</id>
+<title>在低耦合抽換函式庫</title>
+<published>2017-04-19T16:01:37.755Z</published>
+<updated>2017-12-14T16:53:41.383Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/low-dependent-map-js.html"/>
+<summary>
+    之前作專題要用到地圖的 js api，
+專題的 code 寫得很嚴謹，
+刻意降低程式的耦合度；果然收到效果了！
+把地圖的 api 從 google 換成 lea
+    </summary>
+<category term="linux"/>
+<category term="user"/>
+<category term="spexif"/>
+<category term="cjns"/>
+<category term="電腦"/>
+<category term="程式"/>
+<category term="程式設計師"/>
+<category term="物件導向"/>
+<category term="函式庫"/>
+<category term="js"/>
+<category term="map"/>
+</entry><entry>
+<id>forgive-for-nothing.html</id>
+<title>為過去嘆息、原諒</title>
+<published>2017-04-18T14:22:51.864Z</published>
+<updated>2017-12-14T16:53:41.387Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/forgive-for-nothing.html"/>
+<summary>
+    世界已經那麼糟糕，現實已經那麼殘酷；
+人，為什麼不放寬心一點呢？
+已經發生的事不能再改變，
+選擇原諒，向現實妥協，不為什麼。從事情發生的那一刻起，就已經是過去了
+    </summary>
+<category term="抒發"/>
+<category term="原諒"/>
+<category term="現實"/>
+<category term="長大"/>
+<category term="道歉"/>
+<category term="懲罰"/>
+<category term="思辯"/>
+</entry><entry>
+<id>malice-world-fact-mind.html</id>
+<title>世界的惡意與人的心</title>
+<published>2017-04-18T11:41:27.249Z</published>
+<updated>2017-12-14T16:53:41.391Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/malice-world-fact-mind.html"/>
+<summary>
+    現實是殘酷的，世界是黑暗的。
+當你發現活在鬼島，出社會只有 22K；
+進了職場被慣老闆拗；相愛的人最後分開，
+年紀到了只能隨便找個順眼的人。
+生活已經這麼困難，
+    </summary>
+<category term="孤獨"/>
+<category term="長大"/>
+<category term="惡意"/>
+<category term="心情"/>
+<category term="憂鬱"/>
+<category term="抒發"/>
+<category term="現實"/>
+<category term="朋友"/>
+<category term="愛情"/>
+</entry><entry>
+<id>coffee-javascript-or-what.html</id>
+<title>對直譯式語言編譯是否搞錯了什麼</title>
+<published>2017-04-16T16:38:57.640Z</published>
+<updated>2017-12-14T16:53:41.395Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/coffee-javascript-or-what.html"/>
+<summary>
+    之前看到一個評論，寫 coffee script 的人是 2 嗎？
+直譯式語言的優點就是隨寫隨執行，
+如果又要編譯成另一種語言才能跑，
+不是很奇怪嗎？最近讀了一
+    </summary>
+<category term="js"/>
+<category term="coffee-script"/>
+<category term="live-script"/>
+<category term="makefile"/>
+<category term="vim"/>
+<category term="ide"/>
+<category term="cli"/>
+<category term="分號"/>
+<category term="直譯"/>
+<category term="程式"/>
+<category term="電腦"/>
+<category term="ethercalc"/>
+<category term="試算表"/>
+</entry><entry>
+<id>half-month-so-lot-first.html</id>
+<title>CCNS 第一次雙周刊雜文</title>
+<published>2017-04-07T12:48:49.670Z</published>
+<updated>2017-12-14T16:53:41.399Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/half-month-so-lot-first.html"/>
+<summary>
+    CCNS 成大網愛社
+想辦一份雙周刊，聽他們講就是收集一些文章，
+加上一點心得，半個月發一次。
+周刊的排版、發行已經完成了，
+只要推薦文章、寫心得就好了。
+雙周
+    </summary>
+<category term="期刊"/>
+<category term="試誤"/>
+<category term="ccns"/>
+<category term="心得"/>
+<category term="程式"/>
+<category term="css"/>
+<category term="s-expression"/>
+<category term="lambda"/>
+<category term="lisp"/>
+<category term="w3c"/>
+</entry><entry>
+<id>easy-m-expression-syntax.html</id>
+<title>簡單的 S 表達式</title>
+<published>2017-04-07T07:10:28.433Z</published>
+<updated>2017-12-14T16:53:41.403Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/easy-m-expression-syntax.html"/>
+<summary>
+    S 表達式是 LISP 的語法，
+無意間發現可以用極簡單的語法，
+表現出一般程式語言所有的結構。把元素用空格隔開，像 print apple banana；
+
+    </summary>
+<category term="lisp"/>
+<category term="s-expression"/>
+<category term="語法"/>
+<category term="程式語言"/>
+</entry><entry>
+<id>poland-expression-bash-lisp.html</id>
+<title>bash 中的波蘭表示法</title>
+<published>2017-04-17T02:47:35.874Z</published>
+<updated>2017-12-14T16:53:41.406Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/poland-expression-bash-lisp.html"/>
+<summary>
+    看了維基百科上的 [[波蘭表示法]] 一條，
+才發現 bash 的語法其實和 lisp 有八成像，
+都是把函數、算符放前面，後面都是參數，
+只是 bash 是用
+    </summary>
+<category term="shell"/>
+<category term="s-expression"/>
+<category term="函數"/>
+<category term="算符"/>
+<category term="lisp"/>
+</entry><entry>
+<id>coffee-javascript-or-what.html</id>
+<title>對直譯式語言編譯是否搞錯了什麼</title>
+<published>2017-04-16T16:38:57.640Z</published>
+<updated>2017-12-14T16:53:41.411Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/coffee-javascript-or-what.html"/>
+<summary>
+    之前看到一個評論，寫 coffee script 的人是 2 嗎？
+直譯式語言的優點就是隨寫隨執行，
+如果又要編譯成另一種語言才能跑，
+不是很奇怪嗎？最近讀了一
+    </summary>
+<category term="js"/>
+<category term="coffee-script"/>
+<category term="live-script"/>
+<category term="makefile"/>
+<category term="vim"/>
+<category term="ide"/>
+<category term="cli"/>
+<category term="分號"/>
+<category term="直譯"/>
+<category term="程式"/>
+<category term="電腦"/>
+<category term="ethercalc"/>
+<category term="試算表"/>
+</entry><entry>
+<id>into-javascript-trend.html</id>
+<title>捲入 JS 的大熱潮</title>
+<published>2017-04-16T15:57:46.931Z</published>
+<updated>2017-12-14T16:53:41.414Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/into-javascript-trend.html"/>
+<summary>
+    我學 JS
+是因為網頁開發突然大熱門，
+nodejs 成熟，firefoxOS 又來參一腳。
+加上我學了 HTML 和 CSS，感覺不錯；
+再把 JS 學起來就
+    </summary>
+<category term="js"/>
+<category term="www"/>
+<category term="程式"/>
+<category term="電腦"/>
+<category term="perl"/>
+<category term="物件導向"/>
+</entry><entry>
+<id>lazy-tor-firefox-socks5.html</id>
+<title>使用 tor 與 firefox 上洋蔥網</title>
+<published>2017-04-15T15:22:12.172Z</published>
+<updated>2017-12-14T16:53:41.418Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/lazy-tor-firefox-socks5.html"/>
+<summary>
+    無聊掃了一下 冷梗研究社 的分支：
+地獄梗研究社 的管理員頭貼。
+他是用一個 QRcode 作頭貼，
+之前都沒想到要去掃他的頭貼，
+結果發現是 .onion 域
+    </summary>
+<category term="tor"/>
+<category term="firefox"/>
+<category term="browser"/>
+<category term="網路"/>
+<category term="ubuntu"/>
+<category term="linux"/>
+<category term="wiki"/>
+</entry><entry>
+<id>golden-age-in-university.html</id>
+<title>我的大學黃金年代</title>
+<published>2017-04-15T12:24:39.391Z</published>
+<updated>2017-12-14T16:53:41.422Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/golden-age-in-university.html"/>
+<summary>
+    幻想中，大學是那麼美好的地方。
+自由、玩社團、談戀愛，
+揮灑熱血、青春的地方。我的確度過一段不錯的時間，
+在大二下、大三上，
+有一段時間我真得很開心。
+那段時間
+    </summary>
+<category term="人生"/>
+<category term="青春"/>
+<category term="大學"/>
+<category term="愛情"/>
+<category term="記憶"/>
+</entry><entry>
+<id>suck-ui-design-long-code.html</id>
+<title>該死的 UI 設計</title>
+<published>2017-04-13T16:20:19.054Z</published>
+<updated>2017-12-14T16:53:41.426Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/suck-ui-design-long-code.html"/>
+<summary>
+    UI 設計真是最麻煩的事。
+這裡的 UI 只是像 parse 文字檔、
+解析參數之類的，
+結果比原本核心的 code 還長，
+難怪要出一堆函式庫。
+不過終極解法
+    </summary>
+<category term="js"/>
+<category term="html"/>
+<category term="gui"/>
+<category term="cli"/>
+<category term="lisp"/>
+<category term="matlab"/>
+<category term="程式"/>
+</entry><entry>
+<id>black-sky-no-forget.html</id>
+<title>拒絕遺忘的回憶</title>
+<published>2017-04-12T05:12:39.379Z</published>
+<updated>2017-12-14T16:53:41.431Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/black-sky-no-forget.html"/>
+<summary>
+    昨天台南陰了一整天，晚上下雨，
+想起 ~天烏烏~ 這首歌，心有戚戚焉。
+讓自己陷入，讓自己受傷，
+原來美好的回憶，也可以很苦澀。
+但我仍拒絕遺忘，因為
+    </summary>
+<category term="愛情"/>
+<category term="人生"/>
+<category term="抒發"/>
+<category term="歌手"/>
+<category term="歌"/>
+<category term="記憶"/>
+</entry><entry>
+<id>engineer-linear-logic.html</id>
+<title>理工邏輯</title>
+<published>2017-04-10T14:15:03.607Z</published>
+<updated>2017-12-14T16:53:41.435Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/engineer-linear-logic.html"/>
+<summary>
+    理工邏輯就是對了就好，符合實驗結果就好，
+總之先隨便湊出一條式子，背後的原理事後再想。
+（好像應該說工程邏輯才對。）例如實驗結果是估計的 n 倍，
+那就幫公式乘
+    </summary>
+<category term="理工"/>
+<category term="工程"/>
+<category term="funny"/>
+<category term="線性"/>
+<category term="邏輯"/>
+</entry><entry>
+<id>namewee-taiwan-think-hometown.html</id>
+<title>我以台灣人看黃志明</title>
+<published>2017-04-09T14:07:07.966Z</published>
+<updated>2017-12-14T16:53:41.439Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/namewee-taiwan-think-hometown.html"/>
+<summary>
+    馬來西亞歌手 黃志明 ，最近才開始知道他。
+身份是 大馬 華僑，
+對自己的國家和文化有特殊的認同感。
+既認同大馬這個國家、他所生長的環境，
+又反感腐敗的政府、打
+    </summary>
+<category term="黃志明"/>
+<category term="藝人"/>
+<category term="歌手"/>
+<category term="馬來西亞"/>
+<category term="華僑"/>
+<category term="故鄉"/>
+<category term="口音"/>
+<category term="東南亞"/>
+<category term="中華"/>
+<category term="獨中"/>
+</entry><entry>
+<id>the-great-proud-architect.html</id>
+<title>大建築師，抬起你的頭！</title>
+<published>2017-04-08T12:47:04.277Z</published>
+<updated>2017-12-14T16:53:41.443Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/the-great-proud-architect.html"/>
+<summary>
+    你沒有虧欠這個世界，不需要低著頭；
+你沒有做錯事，不要畏畏縮縮；
+這不好看，沒有人喜歡看你低著頭。
+你可以抬起頭、微笑，你可以抬起下巴、睥睨；
+就是不要低頭認輸
+    </summary>
+<category term="驕傲"/>
+<category term="態度"/>
+<category term="外貌"/>
+<category term="抒發"/>
+</entry><entry>
+<id>name-after-no-sense.html</id>
+<title>無意義命名法</title>
+<published>2017-04-07T16:30:43.672Z</published>
+<updated>2017-12-14T16:53:41.447Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/name-after-no-sense.html"/>
+<summary>
+    有時候命名就只是名字，不需要有意義。
+當然有意義很好，但有意義會造成重覆；
+要懂得區分 名字 和 描述 ，
+像你寫了一個編輯器，你不應該把她取名 編輯器 。像你
+    </summary>
+<category term="名字"/>
+<category term="版本"/>
+<category term="軟體"/>
+</entry><entry>
+<id>half-month-so-lot-first.html</id>
+<title>CCNS 第一次雙周刊雜文</title>
+<published>2017-04-07T12:48:49.670Z</published>
+<updated>2017-12-14T16:53:41.452Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/half-month-so-lot-first.html"/>
+<summary>
+    CCNS 成大網愛社
+想辦一份雙周刊，聽他們講就是收集一些文章，
+加上一點心得，半個月發一次。
+周刊的排版、發行已經完成了，
+只要推薦文章、寫心得就好了。
+雙周
+    </summary>
+<category term="期刊"/>
+<category term="試誤"/>
+<category term="ccns"/>
+<category term="心得"/>
+<category term="程式"/>
+<category term="css"/>
+<category term="m-expression"/>
+<category term="w3c"/>
+</entry><entry>
+<id>easy-m-expression-syntax.html</id>
+<title>簡單的 M 表達式</title>
+<published>2017-04-07T07:10:28.433Z</published>
+<updated>2017-12-14T16:53:41.456Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/easy-m-expression-syntax.html"/>
+<summary>
+    M 表達式是 LISP 的語法，
+無意間發現可以用極簡單的語法，
+表現出一般程式語言所有的結構。把元素用空格隔開，像 print apple banana；
+
+    </summary>
+<category term="lisp"/>
+<category term="m-expression"/>
+<category term="語法"/>
+<category term="程式語言"/>
+</entry><entry>
+<id>suck-government-website-computer.html</id>
+<title>政府的資訊系統</title>
+<published>2017-04-06T18:32:41.525Z</published>
+<updated>2017-12-14T16:53:41.460Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/suck-government-website-computer.html"/>
+<summary>
+    TonyQ 來 sitcon 台南定期聚演講，
+講自己幫助公務員改善資訊系統的過程。
+公務系統就是用 office，
+在紙本和文件格式間奮戰，
+不斷做重覆的事
+    </summary>
+<category term="xdite"/>
+<category term="tonyq"/>
+<category term="政府"/>
+<category term="luser"/>
+<category term="website"/>
+</entry><entry>
+<id>wansei-tendrum.html</id>
+<title>十鼓仁糖與灣生</title>
+<published>2017-03-31T17:08:14.343Z</published>
+<updated>2017-12-14T16:53:41.464Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/wansei-tendrum.html"/>
+<summary>
+    在台南仁糖十鼓混了半天，
+那整理得很不錯。
+十鼓團隊想強調要維護那裡，
+無論是歷史與文物。灣生是歷史的意外，
+他們只是不小心有了錯誤的故鄉，
+而且他們的故鄉也不
+    </summary>
+<category term="灣生"/>
+<category term="歷史"/>
+<category term="日本"/>
+<category term="台灣"/>
+<category term="十鼓"/>
+<category term="故鄉"/>
+</entry><entry>
+<id>soul-knight-joystick.html</id>
+<title>元氣騎士 soul knight</title>
+<published>2017-03-18T14:01:54.080Z</published>
+<updated>2017-12-14T16:53:41.468Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/soul-knight-joystick.html"/>
+<summary>
+    元氣騎士 是一款 andriod 上的 2d 俯視類射擊遊戲。
+風格是 pixel 復古，可以用錢或點數解鍞遊戲內容。遊戲團隊有點懶的編故事，
+就直接套了一個勇
+    </summary>
+<category term="遊戲"/>
+<category term="android"/>
+<category term="心得"/>
+<category term="課金"/>
+<category term="soul-knight"/>
+<category term="搖桿"/>
+</entry><entry>
+<id>sad-manipulate.html</id>
+<title>悲傷的處理</title>
+<published>2017-03-01T12:57:19.252Z</published>
+<updated>2017-12-14T16:53:41.472Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/sad-manipulate.html"/>
+<summary>
+    情傷讓心情很差，
+可以差個一、二個月，實在很悲劇。
+頓時覺得唸大學都沒意義了，
+做什麼事都沒動力，
+但這樣不行，只是浪費時間。睡覺有情傷第一個念頭是睡覺，
+一睡
+    </summary>
+<category term="心情"/>
+<category term="憂鬱"/>
+<category term="小說"/>
+<category term="睡"/>
+<category term="抒發"/>
+</entry><entry>
+<id>scadual-105-2.html</id>
+<title> 成功大學 105 學年下學期行事曆 </title>
+<published>2017-03-27</published>
+<updated>2017-12-14T16:53:41.477Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/scadual-105-2.html"/>
+<summary>
+    
+這學期很沒動力，
+想要認真唸書，認真寫 code，
+但一直提不起勁。
+覺得主科好難，提不起勁；
+寫 code 也不是我的志向，
+我只是一個平凡的 linux
+    </summary>
+<category term="行事歷"/>
+<category term="成大"/>
+<category term="手打 html"/>
+<category term="105 學年"/>
+<category term="下學期"/>
+</entry><entry>
+<id>vector-fighter-intro.html</id>
+<title>向量戰機 Vector Fighter</title>
+<published>2017-03-26T06:34:20.914Z</published>
+<updated>2017-12-14T16:53:41.482Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/vector-fighter-intro.html"/>
+<summary>
+    Vector Fighter 是 android 上很舊的遊戲，
+模仿 iOS 遊戲 Tilt to Life，
+用重力感應來移動，地圖上會一直出現敵人，
+也
+    </summary>
+<category term="vector-fighter"/>
+<category term="遊戲"/>
+<category term="android"/>
+<category term="重力感應"/>
+<category term="觸控螢幕"/>
+<category term="apk"/>
+</entry><entry>
+<id>virtual-joystick-suck.html</id>
+<title>虛擬搖桿真他媽糞</title>
+<published>2017-03-25T15:08:48.752Z</published>
+<updated>2017-12-14T16:53:41.487Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/virtual-joystick-suck.html"/>
+<summary>
+    對，就是手機遊戲常用的虛擬搖桿，
+有夠難用；和虛擬鍵盤一樣難用。
+沒有觸覺反饋，
+    </summary>
+<category term="soul-knight"/>
+<category term="搖桿"/>
+<category term="遊戲"/>
+<category term="android"/>
+<category term="觸控螢幕"/>
+<category term="操作"/>
+<category term="重力感應"/>
+</entry><entry>
+<id>taiwoman.html</id>
+<title>台女真得棒</title>
+<published>2017-03-25</published>
+<updated>2017-12-14T16:53:41.492Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/taiwoman.html"/>
+<summary>
+我是說，台女真得很棒；我真得很希望娶到台灣人。
+台女溫柔婉約，聲音好聽，（外國口音實在是很不喜歡。）
+相處起來很舒服，長相也都很可愛。
+</summary>
+<category term="funny"/>
+<category term="ptt"/>
+<category term="手打 html"/>
+</entry><entry>
+<id>sing-out-sad.html</id>
+<title>陪我走過低潮的歌</title>
+<published>2017-03-25T03:14:26.139Z</published>
+<updated>2017-12-14T16:53:41.496Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/sing-out-sad.html"/>
+<summary>
+    聽情歌會讓心情變純淨，
+那些單純、美好的情歌，
+會再度相信愛情的美好，
+自慰的心
+    </summary>
+<category term="歌"/>
+<category term="心情"/>
+<category term="慢歌"/>
+<category term="情歌"/>
+<category term="長大"/>
+</entry><entry>
+<id>unbalance-hair-style.html</id>
+<title>不對稱髮型</title>
+<published>2017-03-21T17:03:20.119Z</published>
+<updated>2017-12-14T16:53:41.501Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/unbalance-hair-style.html"/>
+<summary>
+    晚上吃 長腿叔叔 ，
+看到一個女生頭髮左右不對稱，
+很特別很好看就多看了幾眼。
+
+    </summary>
+<category term="髮型"/>
+<category term="長腿叔叔"/>
+<category term="食物"/>
+<category term="咖哩"/>
+<category term="女生"/>
+</entry><entry>
+<id>avalon-questionnaire-prize.html</id>
+<title>問卷抽獎抽到阿瓦隆</title>
+<published>2017-03-06T17:05:03.511Z</published>
+<updated>2017-12-14T16:53:41.506Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/avalon-questionnaire-prize.html"/>
+<summary>
+之前做期末報告時，弄了一個問卷調查。
+發了文但看沒幾個人填很桑心，
+就請同組的幫
+</summary>
+<category term="桌遊"/>
+<category term="阿瓦隆"/>
+<category term="問卷"/>
+<category term="六龜"/>
+<category term="email"/>
+</entry><entry>
+<id>baidu-translate-evil.html</id>
+<title>百度示範翻譯 Be Evil</title>
+<published>2017-02-15</published>
+<updated>2017-12-14T16:53:41.510Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/baidu-translate-evil.html"/>
+<summary>
+2016-05 左右商業周刊（businessweek）以百度為封面，
+標題為 
+</summary>
+<category term="翻譯"/>
+<category term="中國"/>
+<category term="百度"/>
+<category term="imgur"/>
+<category term="圖"/>
+<category term="funny"/>
+<category term="審查"/>
+</entry><entry>
+<id>believe-so-exist.html</id>
+<title>相信就會存在</title>
+<published>2017-02-06</published>
+<updated>2017-12-14T16:53:41.515Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/believe-so-exist.html"/>
+<summary>
+""相信就會存在"" 是 北極特快車 結
+</summary>
+<category term="抒發"/>
+<category term="人性本善"/>
+<category term="鬍子"/>
+<category term="長大"/>
+<category term="飛"/>
+<category term="銀河便車指南"/>
+</entry><entry>
+<id>book-and-so-on.html</id>
+<title>如果牆上有把槍</title>
+<published>2017-03-01T12:57:18.027Z</published>
+<updated>2017-12-14T16:53:41.519Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/book-and-so-on.html"/>
+<summary>
+如果牆上有把槍，那在結束前她必須發射。舊俄作家契訶夫當我看見你穿著那破爛的外衣走
+</summary>
+<category term="成句"/>
+</entry><entry>
+<id>calture-gap-darrenshan.html</id>
+<title>歧視與地獄梗</title>
+<published>2017-03-10T07:16:48.510Z</published>
+<updated>2017-12-14T16:53:41.523Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/calture-gap-darrenshan.html"/>
+<summary>
+有些梗被稱為 地獄梗 ，
+有人認為充滿歧視，
+有認為是諷刺現實，
+但也許有人真得
+</summary>
+<category term="地獄梗"/>
+<category term="魔域大冒險"/>
+<category term="向達倫"/>
+<category term="文化差異"/>
+</entry><entry>
+<id>cold-shower-suspend.html</id>
+<title>冷水澡爆血管</title>
+<published>2017-02-06</published>
+<updated>2017-12-14T16:53:41.528Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/cold-shower-suspend.html"/>
+<summary>
+有時候很累的時候才回到宿舍，
+又習慣洗澡才睡覺。但我都洗冷水澡，冬天又超冷。
+有
+</summary>
+<category term="死"/>
+<category term="冷水澡"/>
+<category term="累"/>
+</entry><entry>
+<id>color-direction-language.html</id>
+<title>語言、文化與色彩</title>
+<published>2017-02-04</published>
+<updated>2017-12-14T16:53:41.533Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/color-direction-language.html"/>
+<summary>
+一本語言學的書，卻花了快一半在講色彩。
+小心，別踩到我北方的腳！換個語言，世界就
+</summary>
+<category term="色彩學"/>
+<category term="語言學"/>
+<category term="文化"/>
+<category term="書"/>
+<category term="心得"/>
+<category term="科普"/>
+</entry><entry>
+<id>emacs-screen-tmux.html</id>
+<title>emacs 當 tmux 用</title>
+<published>2017-02-03</published>
+<updated>2017-12-14T16:53:41.538Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/emacs-screen-tmux.html"/>
+<summary>
+發現 emacs 根本可以直當 tmux 用了，
+只是不知道為什麼 emacs 
+</summary>
+<category term="emacs"/>
+<category term="tmux"/>
+<category term="screen"/>
+<category term="gui"/>
+<category term="cli"/>
+<category term="config"/>
+</entry><entry>
+<id>expect-big-liar-what.html</id>
+<title>閱讀《大說謊家》的正確態度</title>
+<published>2017-02-19</published>
+<updated>2017-12-14T16:53:41.542Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/expect-big-liar-what.html"/>
+<summary>
+對於 張大春 的這本小說 大說謊家 ，
+到底我在期態什麼？新聞看不太出來一開始我
+</summary>
+<category term="作者已死"/>
+<category term="大說謊家"/>
+<category term="張大春"/>
+<category term="小城市"/>
+<category term="書"/>
+<category term="心得"/>
+<category term="小說"/>
+</entry><entry>
+<id>fluent-novel-text.html</id>
+<title>小說潤筆對我是很重要的</title>
+<published>2017-02-20</published>
+<updated>2017-12-14T16:53:41.547Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/fluent-novel-text.html"/>
+<summary>
+看過一些小說，語句很做作或不通順，
+就覺得很爛，內容再好都讀不下去。
+以為有些作
+</summary>
+<category term="小說"/>
+<category term="書"/>
+<category term="作家"/>
+</entry><entry>
+<id>github-cname-twbbs.html</id>
+<title>github 設 twbbs 的域名</title>
+<published>2017-03-05T12:44:24.970Z</published>
+<updated>2017-12-14T16:53:41.552Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/github-cname-twbbs.html"/>
+<summary>
+之前申請的 twbbs 域名 終於好了！
+大概一個月內會好吧，沒有看到核可的日期
+</summary>
+<category term="dns"/>
+<category term="github"/>
+<category term="www"/>
+<category term="twbbs"/>
+<category term="blog"/>
+</entry><entry>
+<id>giveup-mature.html</id>
+<title>接受就叫做成熟</title>
+<published>2017-03-17T15:38:32.759Z</published>
+<updated>2017-12-14T16:53:41.557Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/giveup-mature.html"/>
+<summary>
+
+那我懂你意思了 所以我停下來
+是的，接受就是成熟；
+放棄就是成熟；抗拒是幼稚。
+</summary>
+<category term="愛情"/>
+<category term="youtube"/>
+<category term="歌"/>
+<category term="成熟"/>
+<category term="心情"/>
+<category term="憂鬱"/>
+</entry><entry>
+<id>hometown-change.html</id>
+<title>我所以為的故鄉</title>
+<published>2017-02-28T16:25:28.908Z</published>
+<updated>2017-12-14T16:53:41.562Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/hometown-change.html"/>
+<summary>
+我對故鄉沒什麼感覺。我到國中畢業為止，
+住的地方都差不多。
+但有搬過一次家，
+差
+</summary>
+<category term="故鄉"/>
+<category term="家"/>
+<category term="新莊"/>
+<category term="成大"/>
+</entry><entry>
+<id>how-friend.html</id>
+<title>交友方法</title>
+<published>2017-02-03</published>
+<updated>2017-12-14T16:53:41.567Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/how-friend.html"/>
+<summary>
+其實交友這種東西，真得是憑感覺。
+經過這麼多年，對我來說個性、外表都是狗屁。
+（
+</summary>
+<category term="朋友"/>
+<category term="抒發"/>
+<category term="營隊"/>
+</entry><entry>
+<id>lost-love-lost-life.html</id>
+<title>失去生活重心</title>
+<published>2017-03-16T10:03:36.267Z</published>
+<updated>2017-12-14T16:53:41.572Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/lost-love-lost-life.html"/>
+<summary>
+之前心情一直很差，
+大概找到心情差的原因了。
+其實轉來測量系後就過不太好，
+大二
+</summary>
+<category term="愛情"/>
+<category term="心情"/>
+<category term="憂鬱"/>
+<category term="唸書"/>
+</entry><entry>
+<id>modern-gender-interact.html</id>
+<title>台灣現代男女互動</title>
+<published>2017-02-21T08:27:38.043Z</published>
+<updated>2017-12-14T16:53:41.577Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/modern-gender-interact.html"/>
+<summary>
+台灣在傳統上是男追女，
+男生付出心力、錢財，
+感動女生就結了。
+是男生挑女生的狀
+</summary>
+<category term="愛情"/>
+<category term="女生"/>
+<category term="抒發"/>
+<category term="需要"/>
+</entry><entry>
+<id>my-girlfriend-in-multiverse.html</id>
+<title>沒有女友的話</title>
+<published>2017-02-14</published>
+<updated>2017-12-14T16:53:41.582Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/my-girlfriend-in-multiverse.html"/>
+<summary>
+我和女友正談著遠距離戀愛，
+她處於名為未來的時間軸上。""H
+</summary>
+<category term="成句"/>
+<category term="愛情"/>
+</entry><entry>
+<id>ptt-network-bully-gossiping.html</id>
+<title>高中同人女作家在八卦板崩潰</title>
+<published>2017-03-10T08:02:15.499Z</published>
+<updated>2017-12-14T16:53:41.587Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/ptt-network-bully-gossiping.html"/>
+<summary>
+一個同人作家繁星上了清大中文系，
+被記者報上了，就有人 轉到八卦板 。
+下面有不
+</summary>
+<category term="ptt"/>
+<category term="文化差異"/>
+<category term="女生"/>
+<category term="女權"/>
+<category term="仇女"/>
+<category term="同人"/>
+<category term="抒發"/>
+</entry><entry>
+<id>riot-politician.html</id>
+<title>曾經的覺青</title>
+<published>2017-03-05T10:31:54.912Z</published>
+<updated>2017-12-14T16:53:41.595Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/riot-politician.html"/>
+<summary>
+想起來，民進黨的創黨元老，
+都算是當年的 覺青 吧；
+當時還沒有覺青這個詞，要叫
+</summary>
+<category term="政治"/>
+<category term="憤青"/>
+<category term="覺青"/>
+<category term="施明德"/>
+<category term="爸爸"/>
+<category term="時代力量"/>
+</entry><entry>
+<id>rule-your-game.html</id>
+<title>錯誤的遊戲心態</title>
+<published>2017-02-09</published>
+<updated>2017-12-14T16:53:41.602Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/rule-your-game.html"/>
+<summary>
+人生是個糞 game，而且存在課金玩家。
+但至少可以自訂遊戲目標。遊戲目標玩遊戲
+</summary>
+<category term="遊戲"/>
+<category term="桌遊"/>
+<category term="人生"/>
+<category term="抒發"/>
+<category term="課金"/>
+</entry><entry>
+<id>sad-manipulate.html</id>
+<title>悲傷的處理</title>
+<published>2017-03-01T12:57:19.252Z</published>
+<updated>2017-12-14T16:53:41.608Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/sad-manipulate.html"/>
+<summary>
+情傷讓心情很差，
+可以差個一、二個月，實在很悲劇。
+頓時覺得唸大學都沒意義了，
+
+</summary>
+<category term="心情"/>
+<category term="憂鬱"/>
+<category term="小說"/>
+<category term="睡覺"/>
+<category term="抒發"/>
+</entry><entry>
+<id>course-105-2.html</id>
+<title>105 學年度下學期課表</title>
+<published>2017-02-19</published>
+<updated>2017-12-14T16:53:41.613Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/course-105-2.html"/>
+<summary>
+
+
+
+一
+二
+三
+四
+五
+
+
+
+
+
+
+
+
+
+
+
+
+大地測量（二）
+航測及遙測基礎
+</summary>
+<category term="scadual"/>
+<category term="課表"/>
+<category term="105 學年"/>
+<category term="下學期"/>
+</entry><entry>
+<id>soul-knight-joystick.html</id>
+<title>元氣騎士 soul knight</title>
+<published>2017-03-18T14:01:54.080Z</published>
+<updated>2017-12-14T16:53:41.618Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/soul-knight-joystick.html"/>
+<summary>
+元氣騎士 是一款 andriod 上的 2d 俯視類射擊遊戲。
+風格是 pixe
+</summary>
+<category term="遊戲"/>
+<category term="android"/>
+<category term="心得"/>
+<category term="課金"/>
+</entry><entry>
+<id>twbbs-dinshin.html</id>
+<title>twbbs 域名</title>
+<published>2017-02-07</published>
+<updated>2017-12-14T16:53:41.624Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/twbbs-dinshin.html"/>
+<summary>
+最初開始自幹部落格時，
+就想要申請一個域名。
+域名是可以跟著你一輩子的，
+換了部
+</summary>
+<category term="dns"/>
+<category term="github"/>
+<category term="blog"/>
+<category term="twbbs"/>
+<category term="頂新"/>
+</entry><entry>
+<id>wukoung-novel.html</id>
+<title>憶悟空傳</title>
+<published>2017-02-04</published>
+<updated>2017-12-14T16:53:41.629Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/wukoung-novel.html"/>
+<summary>
+中國網路紅人 今何在 寫得，
+一本大概是基於 大話西遊 的再創作；
+雖然我沒看過
+</summary>
+<category term="心得"/>
+<category term="悟空傳"/>
+<category term="成句"/>
+<category term="小說"/>
+<category term="書"/>
+<category term="西遊記"/>
+<category term="人生"/>
+</entry></feed>

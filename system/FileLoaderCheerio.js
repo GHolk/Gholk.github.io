@@ -29,7 +29,7 @@
       this.next = this.selector('link[rel=next]').attr('href');
       this.nextTitle = this.selector('link[rel=next]').attr('title');
       this.main = this.selector('main').html();
-      return this.description = this.selector('main > :not(h1):first-child').text();
+      return this.description = this.selector('main > :not(h1)').first().text();
     };
 
     FileLoaderCheerio.prototype.sync = function() {
@@ -41,7 +41,7 @@
       this.selector('link[rel=next]').attr('href', this.next);
       this.selector('link[rel=next]').attr('title', this.nextTitle);
       this.selector('main').html(this.main);
-      this.description = this.selector('main > :not(h1):first-child').text();
+      this.description = this.selector('main > :not(h1)').first().text();
       return this.file = this.path.replace(/^.*\//, '');
     };
 

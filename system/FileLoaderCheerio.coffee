@@ -25,7 +25,7 @@ class FileLoaderCheerio
         @nextTitle = @selector('link[rel=next]').attr 'title'
         @main = @selector('main').html()
         @description =
-            @selector('main').children().not('h1').text().slice(0,80)
+            @selector('main > :not(h1):first-child').text()
 
     sync: ->
         @selector('meta[name=date]').attr 'content', @date
@@ -37,7 +37,7 @@ class FileLoaderCheerio
         @selector('link[rel=next]').attr 'title', @nextTitle
         @selector('main').html @main
         @description =
-            @selector('main').children().not('h1').text().slice(0,80)
+            @selector('main > :not(h1):first-child').text()
         @file = @path.replace /^.*\//, ''
 
     update: (newLoader) ->

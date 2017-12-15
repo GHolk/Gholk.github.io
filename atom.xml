@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xmlns:openSearch="http://a9.com/-/spec/opensearchrss/1.0/" xmlns:blogger="http://schemas.google.com/blogger/2008" xmlns:georss="http://www.georss.org/georss" xmlns:gd="http://schemas.google.com/g/2005" xmlns:thr="http://purl.org/syndication/thread/1.0">
   <id>gholk.github.io</id>
-  <updated>2017-12-14T16:53:41.629Z</updated>
+  <updated>2017-12-15T14:25:49.155Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
 
 <category term="105 學年"/>
@@ -345,6 +345,22 @@
     </author>
     <generator uri="http://gholk.github.io/system/atom-loader.js">node.js</generator>
     
+
+<entry>
+<id>hackmd-todo-test.html</id>
+<title> todo list 的要求</title>
+<published>2017-12-15T14:25:48.493Z</published>
+<updated>2017-12-15T14:25:49.155Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/hackmd-todo-test.html"/>
+<summary>最近覺得需要一個 todo list，
+要求和我的部落格差不多，要能插入 html；
+但因為是 todo list，還要求要操作簡便。
+hackmd 好像符合要求，試著用看看。</summary>
+<category term="hackmd"/>
+<category term="todo"/>
+<category term="wiki"/>
+<category term="blog"/>
+</entry>
 <entry>
 <id>depress-mood-cause-nothing.html</id>
 <title> 精神的壓力無法壓垮一個人</title>

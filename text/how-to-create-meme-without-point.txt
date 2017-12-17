@@ -4,7 +4,7 @@
 再加上嗆一下用盜版 photo shop 的，
 用 gimp 做成這張。
 
-<meta property="og:image" type="image/jpeg" content="https://farm5.staticflickr.com/4682/39074839922_19ae5e4fa7.jpg" />
+<meta property="og:image" type="image/jpeg" content="https://farm5.staticflickr.com/4682/39074839922_19ae5e4fa7.jpg">
 
 [而且沒人愛你]: https://zh.moegirl.org/zh-tw/%E8%80%8C%E4%B8%94%E6%B2%A1%E6%9C%89%E4%BA%BA%E7%88%B1%E4%BD%A0
 

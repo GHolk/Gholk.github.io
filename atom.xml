@@ -3,7 +3,7 @@
 <?xml-stylesheet href="http://www.blogger.com/styles/atom.css"
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <id>gholk.github.io</id>
+  <id>http://gholk.github.io</id>
   <updated>2017-12-17T12:41:06.966Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title type="text">gholk MBlog</title>
@@ -20,11 +20,11 @@
 
 
 <entry>
-<id>how-to-create-meme-whithout-point.html#alternate</id>
+<id>http://gholk.github.io/how-to-create-meme-without-point.html#alternate</id>
 <title> 如何做做梗圖</title>
 <published>2017-12-17T11:19:37.058Z</published>
 <updated>2017-12-17T11:19:37.709Z</updated>
-<link rel="alternate" type="text/html" href="http://gholk.github.io/how-to-create-meme-whithout-point.html"/>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/how-to-create-meme-without-point.html"/>
 <summary>看到一些用沒梗當梗的梗圖，
 於是就想把沒梗和 [而且沒人愛你] 套在一起，
 再加上嗆一下用盜版 photo shop 的，
@@ -36,11 +36,11 @@
 </entry>
 
 <entry>
-<id>how-to-create-meme-whithout-point.html</id>
+<id>http://gholk.github.io/how-to-create-meme-without-point.html</id>
 <title> 如何做做梗圖</title>
 <published>2017-12-17T11:19:37.058Z</published>
 <updated>2017-12-17T11:19:37.709Z</updated>
-<link rel="alternate" type="text/html" href="http://gholk.github.io/how-to-create-meme-whithout-point.html"/>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/how-to-create-meme-without-point.html"/>
 <summary>看到一些用沒梗當梗的梗圖，
 於是就想把沒梗和 [而且沒人愛你] 套在一起，
 再加上嗆一下用盜版 photo shop 的，
@@ -51,7 +51,7 @@
 <category term="gimp"/>
 </entry>
 <entry>
-<id>hackmd-todo-test.html</id>
+<id>http://gholk.github.io/hackmd-todo-test.html</id>
 <title> todo list 的要求</title>
 <published>2017-12-15T14:25:48.493Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/hackmd-todo-test.html"/>
@@ -65,7 +65,7 @@ hackmd 好像符合要求，試著用看看。</summary>
 <category term="blog"/>
 </entry>
 <entry>
-<id>depress-mood-cause-nothing.html</id>
+<id>http://gholk.github.io/depress-mood-cause-nothing.html</id>
 <title> 精神的壓力無法壓垮一個人</title>
 <published>2017-12-10T14:55:49.885Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/depress-mood-cause-nothing.html"/>
@@ -80,7 +80,7 @@ hackmd 好像符合要求，試著用看看。</summary>
 <category term="抒發"/>
 <category term="心情"/>
 </entry><entry>
-<id>comment.html</id>
+<id>http://gholk.github.io/comment.html</id>
 <title> 留言板</title>
 <published>2017-11-06T05:07:50.771Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/comment.html"/>
@@ -95,7 +95,7 @@ hackmd 好像符合要求，試著用看看。</summary>
 <category term="匿名"/>
 <category term="blog"/>
 </entry><entry>
-<id>dt13-start-up.html</id>
+<id>http://gholk.github.io/dt13-start-up.html</id>
 <title> dt13 使用小感</title>
 <published>2017-11-19T05:23:31.768Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/dt13-start-up.html"/>
@@ -111,7 +111,7 @@ hackmd 好像符合要求，試著用看看。</summary>
 <category term="linux"/>
 <category term="開始"/>
 </entry><entry>
-<id>swap-usage-same-memory.html</id>
+<id>http://gholk.github.io/swap-usage-same-memory.html</id>
 <title> debian swap 在暫停的用途</title>
 <published>2017-12-11T12:07:06.778Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/swap-usage-same-memory.html"/>
@@ -129,7 +129,7 @@ hackmd 好像符合要求，試著用看看。</summary>
 <category term="debian"/>
 <category term="size"/>
 </entry><entry>
-<id>depress-mood-cause-nothing.html</id>
+<id>http://gholk.github.io/depress-mood-cause-nothing.html</id>
 <title> 精神的壓力無法壓垮一個人</title>
 <published>2017-12-10T14:55:49.885Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/depress-mood-cause-nothing.html"/>
@@ -144,7 +144,7 @@ hackmd 好像符合要求，試著用看看。</summary>
 <category term="抒發"/>
 <category term="心情"/>
 </entry><entry>
-<id>linux-play-dvd-movie.html</id>
+<id>http://gholk.github.io/linux-play-dvd-movie.html</id>
 <title> linux 下播放租來的 dvd 全面啟動</title>
 <published>2017-12-09T07:54:05.174Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/linux-play-dvd-movie.html"/>
@@ -163,7 +163,7 @@ debian 裝了 libdvd-pkg 後才能看。
 <category term="外接"/>
 <category term="筆電"/>
 </entry><entry>
-<id>orthophoto-reuse-code.html</id>
+<id>http://gholk.github.io/orthophoto-reuse-code.html</id>
 <title> 正射影像</title>
 <published>2017-12-02T07:00:37.388Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/orthophoto-reuse-code.html"/>
@@ -180,7 +180,7 @@ debian 裝了 libdvd-pkg 後才能看。
 <category term="程式"/>
 <category term="javascript"/>
 </entry><entry>
-<id>expose-internal-state.html</id>
+<id>http://gholk.github.io/expose-internal-state.html</id>
 <title> 儲存與暴露程式的內部狀態</title>
 <published>2017-12-05T12:32:06.444Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/expose-internal-state.html"/>
@@ -200,7 +200,7 @@ debian 裝了 libdvd-pkg 後才能看。
 <category term="plan9"/>
 <category term="scope"/>
 </entry><entry>
-<id>lisp-lexical-scheme.html</id>
+<id>http://gholk.github.io/lisp-lexical-scheme.html</id>
 <title> lisp、閉包與 scheme</title>
 <published>2017-12-05T07:41:24.643Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/lisp-lexical-scheme.html"/>
@@ -215,7 +215,7 @@ li
 <category term="scope"/>
 <category term="closure"/>
 </entry><entry>
-<id>programmer-beauty-sense.html</id>
+<id>http://gholk.github.io/programmer-beauty-sense.html</id>
 <title> 程式設計師的美感</title>
 <published>2017-12-03T06:50:54.381Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/programmer-beauty-sense.html"/>
@@ -231,7 +231,7 @@ li
 <category term="排版"/>
 <category term="程式"/>
 </entry><entry>
-<id>orthophoto-reuse-code.html</id>
+<id>http://gholk.github.io/orthophoto-reuse-code.html</id>
 <title> 正射影像</title>
 <published>2017-12-02T07:00:37.388Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/orthophoto-reuse-code.html"/>
@@ -248,7 +248,7 @@ li
 <category term="程式"/>
 <category term="javascript"/>
 </entry><entry>
-<id>georeference-tilt-photo.html</id>
+<id>http://gholk.github.io/georeference-tilt-photo.html</id>
 <title> 影像改正</title>
 <published>2017-10-24T14:31:57.977Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/georeference-tilt-photo.html"/>
@@ -264,7 +264,7 @@ li
 <category term="作業"/>
 <category term="javascript"/>
 </entry><entry>
-<id>colorful-street-lamp.html</id>
+<id>http://gholk.github.io/colorful-street-lamp.html</id>
 <title> 七彩路燈修圖練習</title>
 <published>2017-11-29T15:43:22.085Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/colorful-street-lamp.html"/>
@@ -279,7 +279,7 @@ li
 <category term="photo"/>
 <category term="夜"/>
 </entry><entry>
-<id>qemu-live-dual-boot-windows.html</id>
+<id>http://gholk.github.io/qemu-live-dual-boot-windows.html</id>
 <title> linux 下用虛擬機開雙開機的 windows 分區</title>
 <published>2017-11-28T05:33:16.455Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/qemu-live-dual-boot-windows.html"/>
@@ -296,7 +296,7 @@ li
 <category term="硬碟"/>
 <category term="筆電"/>
 </entry><entry>
-<id>xkbcomp-custom-keyboard.html</id>
+<id>http://gholk.github.io/xkbcomp-custom-keyboard.html</id>
 <title> xkbcomp 自訂鍵盤按鍵</title>
 <published>2017-11-25T11:10:14.516Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/xkbcomp-custom-keyboard.html"/>
@@ -310,7 +310,7 @@ home end 的效果，但只是抄來的 c
 <category term="筆電"/>
 <category term="config"/>
 </entry><entry>
-<id>android-x-window.html</id>
+<id>http://gholk.github.io/android-x-window.html</id>
 <title> x window 在 android 上</title>
 <published>2017-11-23T04:03:28.010Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/android-x-window.html"/>
@@ -325,7 +325,7 @@ home end 的效果，但只是抄來的 c
 <category term="x-window"/>
 <category term="windows"/>
 </entry><entry>
-<id>bullshit-assault-harm.html</id>
+<id>http://gholk.github.io/bullshit-assault-harm.html</id>
 <title> 人的爭鬥本性</title>
 <published>2017-11-21T14:17:08.774Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/bullshit-assault-harm.html"/>
@@ -339,7 +339,7 @@ home end 的效果，但只是抄來的 c
 <category term="ptt"/>
 <category term="酸民"/>
 </entry><entry>
-<id>dt13-start-up.html</id>
+<id>http://gholk.github.io/dt13-start-up.html</id>
 <title> dt13 使用小感</title>
 <published>2017-11-19T05:23:31.768Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/dt13-start-up.html"/>
@@ -355,7 +355,7 @@ home end 的效果，但只是抄來的 c
 <category term="linux"/>
 <category term="開始"/>
 </entry><entry>
-<id>cygwin-x-server.html</id>
+<id>http://gholk.github.io/cygwin-x-server.html</id>
 <title> 在 cygwin 下使用 x server</title>
 <published>2017-11-12T14:57:01.310Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/cygwin-x-server.html"/>
@@ -371,7 +371,7 @@ home end 的效果，但只是抄來的 c
 <category term="windows"/>
 <category term="ip"/>
 </entry><entry>
-<id>kaohsiung-art-travel.html</id>
+<id>http://gholk.github.io/kaohsiung-art-travel.html</id>
 <title> 高雄藝術之旅</title>
 <published>2017-11-11T04:58:36.028Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/kaohsiung-art-travel.html"/>
@@ -387,7 +387,7 @@ home end 的效果，但只是抄來的 c
 <category term="藝術"/>
 <category term="病"/>
 </entry><entry>
-<id>new-classic-discus-answer.html</id>
+<id>http://gholk.github.io/new-classic-discus-answer.html</id>
 <title> 新主古典主義的討論回答</title>
 <published>2017-11-10T03:23:04.723Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/new-classic-discus-answer.html"/>
@@ -402,7 +402,7 @@ home end 的效果，但只是抄來的 c
 <category term="藝術"/>
 <category term="問答"/>
 </entry><entry>
-<id>ferrari-one-death.html</id>
+<id>http://gholk.github.io/ferrari-one-death.html</id>
 <title> ferrari one 壽終正寢</title>
 <published>2017-11-08T04:35:36.747Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/ferrari-one-death.html"/>
@@ -421,7 +421,7 @@ ferrari one 就無法開機了。
 <category term="開機碟"/>
 <category term="維修"/>
 </entry><entry>
-<id>30-day-song.html</id>
+<id>http://gholk.github.io/30-day-song.html</id>
 <title> 30 日推歌挑戰</title>
 <published>2017-09-30T17:01:39.678Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/30-day-song.html"/>
@@ -435,7 +435,7 @@ h1 {
 <category term="歌"/>
 <category term="鐵人賽"/>
 </entry><entry>
-<id>lexer-space-marked.html</id>
+<id>http://gholk.github.io/lexer-space-marked.html</id>
 <title> 幫 marked 加上空格限制</title>
 <published>2017-11-01T14:00:59.182Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/lexer-space-marked.html"/>
@@ -452,7 +452,7 @@ h1 {
 <category term="blog"/>
 <category term="javascript"/>
 </entry><entry>
-<id>evil-selection-x-window.html</id>
+<id>http://gholk.github.io/evil-selection-x-window.html</id>
 <title> emacs evil 與 x window 選擇文字相通</title>
 <published>2017-10-31T14:24:56.391Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/evil-selection-x-window.html"/>
@@ -466,7 +466,7 @@ h1 {
 <category term="gui"/>
 <category term="evil"/>
 </entry><entry>
-<id>georeference-tilt-photo.html</id>
+<id>http://gholk.github.io/georeference-tilt-photo.html</id>
 <title> 影像改正</title>
 <published>2017-10-24T14:31:57.977Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/georeference-tilt-photo.html"/>
@@ -481,7 +481,7 @@ h1 {
 <category term="測量"/>
 <category term="作業"/>
 </entry><entry>
-<id>assoc-flickr.html</id>
+<id>http://gholk.github.io/assoc-flickr.html</id>
 <title> flickr 圖床腳本 assocr</title>
 <published>2017-10-28T02:27:34.392Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/assoc-flickr.html"/>
@@ -498,7 +498,7 @@ h1 {
 <category term="oauth"/>
 <category term="blog"/>
 </entry><entry>
-<id>30-day-song.html</id>
+<id>http://gholk.github.io/30-day-song.html</id>
 <title> 30 日推歌挑戰</title>
 <published>2017-09-30T17:01:39.678Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/30-day-song.html"/>
@@ -512,7 +512,7 @@ h1 {
 <category term="歌"/>
 <category term="鐵人賽"/>
 </entry><entry>
-<id>georeference-tilt-photo.html</id>
+<id>http://gholk.github.io/georeference-tilt-photo.html</id>
 <title> 影像改正</title>
 <published>2017-10-24T14:31:57.977Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/georeference-tilt-photo.html"/>
@@ -527,7 +527,7 @@ h1 {
 <category term="測量"/>
 <category term="作業"/>
 </entry><entry>
-<id>github-email-address.html</id>
+<id>http://gholk.github.io/github-email-address.html</id>
 <title> github 因為 email 不同無法辨識帳號</title>
 <published>2017-10-21T14:01:28.456Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/github-email-address.html"/>
@@ -541,7 +541,7 @@ h1 {
 <category term="歷史"/>
 <category term="ccns"/>
 </entry><entry>
-<id>extend-lvm-filesystem.html</id>
+<id>http://gholk.github.io/extend-lvm-filesystem.html</id>
 <title> 單人維護模式下擴大 usr 分割</title>
 <published>2017-10-18T06:34:52.300Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/extend-lvm-filesystem.html"/>
@@ -556,7 +556,7 @@ h1 {
 <category term="linux"/>
 <category term="boot"/>
 </entry><entry>
-<id>hp-boot-error.html</id>
+<id>http://gholk.github.io/hp-boot-error.html</id>
 <title> 惠普 PC 的開機問題</title>
 <published>2017-10-17T05:57:47.881Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/hp-boot-error.html"/>
@@ -570,7 +570,7 @@ h1 {
 <category term="開機"/>
 <category term="ram"/>
 </entry><entry>
-<id>emacs-server-scim.html</id>
+<id>http://gholk.github.io/emacs-server-scim.html</id>
 <title> gui 下 emacs server 和 scim 輸入法</title>
 <published>2017-10-16T14:40:56.628Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/emacs-server-scim.html"/>
@@ -584,7 +584,7 @@ h1 {
 <category term="輸入法"/>
 <category term="service"/>
 </entry><entry>
-<id>deprecate-argument-callee.html</id>
+<id>http://gholk.github.io/deprecate-argument-callee.html</id>
 <title> argument.callee 被廢棄的原因</title>
 <published>2017-10-16T07:17:43.158Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/deprecate-argument-callee.html"/>
@@ -599,7 +599,7 @@ h1 {
 <category term="遞迴"/>
 <category term="程式"/>
 </entry><entry>
-<id>30-day-song.html</id>
+<id>http://gholk.github.io/30-day-song.html</id>
 <title> 30 日推歌挑戰</title>
 <published>2017-09-30T17:01:39.678Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/30-day-song.html"/>
@@ -613,7 +613,7 @@ h1 {
 <category term="歌"/>
 <category term="鐵人賽"/>
 </entry><entry>
-<id>lisp-7-day.html</id>
+<id>http://gholk.github.io/lisp-7-day.html</id>
 <title> LISP 七日談</title>
 <published>2017-10-10T14:27:51.551Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/lisp-7-day.html"/>
@@ -635,7 +635,7 @@ cond
 <category term="筆記"/>
 <category term="ccns"/>
 </entry><entry>
-<id>show-style-javascript.html</id>
+<id>http://gholk.github.io/show-style-javascript.html</id>
 <title> 顯示樣式表和 javascript</title>
 <published>2017-10-10T08:49:18.251Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/show-style-javascript.html"/>
@@ -649,7 +649,7 @@ cond
 <category term="blog"/>
 <category term="巨集"/>
 </entry><entry>
-<id>emacs-server-client.html</id>
+<id>http://gholk.github.io/emacs-server-client.html</id>
 <title> 用 server client mode 執行 emacs</title>
 <published>2017-10-10T04:52:03.410Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/emacs-server-client.html"/>
@@ -662,7 +662,7 @@ cond
 <category term="cli"/>
 <category term="systemd"/>
 </entry><entry>
-<id>david-new-classic.html</id>
+<id>http://gholk.github.io/david-new-classic.html</id>
 <title> 大衛與新古典主義</title>
 <published>2017-10-09T06:20:16.556Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/david-new-classic.html"/>
@@ -675,7 +675,7 @@ cond
 <category term="報告"/>
 <category term="藝術"/>
 </entry><entry>
-<id>load-disqus-lazy.html</id>
+<id>http://gholk.github.io/load-disqus-lazy.html</id>
 <title> 載入 disqus</title>
 <published>2017-10-08T06:19:41.393Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/load-disqus-lazy.html"/>
@@ -688,7 +688,7 @@ cond
 <category term="disqus"/>
 <category term="流量"/>
 </entry><entry>
-<id>js-eval-macro.html</id>
+<id>http://gholk.github.io/js-eval-macro.html</id>
 <title> markdown 中簡單使用 js 巨集</title>
 <published>2017-10-06T15:23:41.951Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/js-eval-macro.html"/>
@@ -703,7 +703,7 @@ cond
 <category term="程式"/>
 <category term="函數"/>
 </entry><entry>
-<id>css-inline-this.html</id>
+<id>http://gholk.github.io/css-inline-this.html</id>
 <title> 行內樣式表的反射</title>
 <published>2017-10-05T15:46:58.729Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/css-inline-this.html"/>
@@ -718,7 +718,7 @@ cond
 <category term="js"/>
 <category term="程式"/>
 </entry><entry>
-<id>meta-bloging-in-html.html</id>
+<id>http://gholk.github.io/meta-bloging-in-html.html</id>
 <title> 部落格的 html 元寫作</title>
 <published>2017-10-04T16:50:43.147Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/meta-bloging-in-html.html"/>
@@ -736,7 +736,7 @@ cond
 <category term="css"/>
 <category term="程式"/>
 </entry><entry>
-<id>30-day-song.html</id>
+<id>http://gholk.github.io/30-day-song.html</id>
 <title> 30 日推歌挑戰</title>
 <published>2017-09-30T17:01:39.678Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/30-day-song.html"/>
@@ -748,7 +748,7 @@ cond
 <category term="歌"/>
 <category term="鐵人賽"/>
 </entry><entry>
-<id>course-106-1.html</id>
+<id>http://gholk.github.io/course-106-1.html</id>
 <title>106 學年度下學期課表</title>
 <published>2017-09-27</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/course-106-1.html"/>
@@ -764,7 +764,7 @@ cond
 <category term="下學期"/>
 <category term="手打 html"/>
 </entry><entry>
-<id>scadual-106-1.html</id>
+<id>http://gholk.github.io/scadual-106-1.html</id>
 <title> 成功大學 106 學年上學期行事曆 </title>
 <published>2017-09-20</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/scadual-106-1.html"/>
@@ -782,7 +782,7 @@ cond
 <category term="106 學年"/>
 <category term="下學期"/>
 </entry><entry>
-<id>adb-over-wifi.html</id>
+<id>http://gholk.github.io/adb-over-wifi.html</id>
 <title> 透過 wifi 執行 adb</title>
 <published>2017-09-20T12:38:27.641Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/adb-over-wifi.html"/>
@@ -797,7 +797,7 @@ adb 底層是透過 t
 <category term="wifi"/>
 <category term="無線"/>
 </entry><entry>
-<id>different-love.html</id>
+<id>http://gholk.github.io/different-love.html</id>
 <title> 愛情也有不一樣的</title>
 <published>2017-09-20T12:10:39.835Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/different-love.html"/>
@@ -812,7 +812,7 @@ adb 底層是透過 t
 <category term="英文"/>
 <category term="思辨"/>
 </entry><entry>
-<id>android-screen-monitor.html</id>
+<id>http://gholk.github.io/android-screen-monitor.html</id>
 <title> 透過 adb 把 android 畫面顯示到 PC 上</title>
 <published>2017-09-20T05:07:20.224Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/android-screen-monitor.html"/>
@@ -827,7 +827,7 @@ adb 底層是透過 t
 <category term="java"/>
 <category term="video"/>
 </entry><entry>
-<id>android-screen-monitor.html</id>
+<id>http://gholk.github.io/android-screen-monitor.html</id>
 <title> 透過 adb 把 android 畫面顯示到 PC 上</title>
 <published>2017-09-20T05:06:35.740Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/android-screen-monitor.html"/>
@@ -842,7 +842,7 @@ adb 底層是透過 t
 <category term="java"/>
 <category term="video"/>
 </entry><entry>
-<id>android-screen-monitor.html</id>
+<id>http://gholk.github.io/android-screen-monitor.html</id>
 <title># 透過 adb 把 android 畫面顯示到 PC 上</title>
 <published>2017-09-20T05:00:33.067Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/android-screen-monitor.html"/>
@@ -857,7 +857,7 @@ adb 底層是透過 t
 <category term="java"/>
 <category term="video"/>
 </entry><entry>
-<id>optional-boolean-argument.html</id>
+<id>http://gholk.github.io/optional-boolean-argument.html</id>
 <title># 可省略的布林值參數</title>
 <published>2017-09-19T16:57:46.470Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/optional-boolean-argument.html"/>
@@ -868,7 +868,7 @@ adb 底層是透過 t
     </summary>
 <category term="程式語言"/>
 </entry><entry>
-<id>if-bracket-syntax.html</id>
+<id>http://gholk.github.io/if-bracket-syntax.html</id>
 <title># if 的語法問題</title>
 <published>2017-09-17T03:00:32.408Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/if-bracket-syntax.html"/>
@@ -885,7 +885,7 @@ adb 底層是透過 t
 <category term="go"/>
 <category term="分號"/>
 </entry><entry>
-<id>lisp-scheme-defect.html</id>
+<id>http://gholk.github.io/lisp-scheme-defect.html</id>
 <title># lisp 系語言的缺陷</title>
 <published>2017-09-17T02:40:28.391Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/lisp-scheme-defect.html"/>
@@ -901,7 +901,7 @@ adb 底層是透過 t
 <category term="javascript"/>
 <category term="函數"/>
 </entry><entry>
-<id>one-piece-hunter-speed.html</id>
+<id>http://gholk.github.io/one-piece-hunter-speed.html</id>
 <title>用獵人的速度出海賊王</title>
 <published>2017-06-24T12:46:58.473Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/one-piece-hunter-speed.html"/>
@@ -919,7 +919,7 @@ adb 底層是透過 t
 <category term="漫畫"/>
 <category term="心得"/>
 </entry><entry>
-<id>angry-childish.html</id>
+<id>http://gholk.github.io/angry-childish.html</id>
 <title>生氣拒絕溝通很幼稚</title>
 <published>2017-06-12T13:31:08.568Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/angry-childish.html"/>
@@ -934,7 +934,7 @@ adb 底層是透過 t
 <category term="長大"/>
 <category term="溝通"/>
 </entry><entry>
-<id>magician-honer.html</id>
+<id>http://gholk.github.io/magician-honer.html</id>
 <title>魔術師的名聲</title>
 <published>2017-06-10T15:51:50.920Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/magician-honer.html"/>
@@ -952,7 +952,7 @@ adb 底層是透過 t
 <category term="國籍"/>
 <category term="硬幣"/>
 </entry><entry>
-<id>worship-greater-love.html</id>
+<id>http://gholk.github.io/worship-greater-love.html</id>
 <title>崇拜更好的自己</title>
 <published>2017-06-10T14:11:42.686Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/worship-greater-love.html"/>
@@ -969,7 +969,7 @@ adb 底層是透過 t
 <category term="驕傲"/>
 <category term="hide"/>
 </entry><entry>
-<id>do-my-best-enough-responsibility.html</id>
+<id>http://gholk.github.io/do-my-best-enough-responsibility.html</id>
 <title>盡人事，聽天命</title>
 <published>2017-05-07T14:38:42.899Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/do-my-best-enough-responsibility.html"/>
@@ -989,7 +989,7 @@ adb 底層是透過 t
 <category term="思辯"/>
 <category term="人性"/>
 </entry><entry>
-<id>open-sex-love-rape.html</id>
+<id>http://gholk.github.io/open-sex-love-rape.html</id>
 <title>性保守的災難</title>
 <published>2017-04-29T16:44:49.109Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/open-sex-love-rape.html"/>
@@ -1008,7 +1008,7 @@ adb 底層是透過 t
 <category term="ptt"/>
 <category term="林奕含"/>
 </entry><entry>
-<id>seek-kind-of-forever.html</id>
+<id>http://gholk.github.io/seek-kind-of-forever.html</id>
 <title>什麼時候我也追求永遠了</title>
 <published>2017-04-26T16:54:14.728Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/seek-kind-of-forever.html"/>
@@ -1027,7 +1027,7 @@ adb 底層是透過 t
 <category term="當下"/>
 <category term="憂鬱"/>
 </entry><entry>
-<id>game-passion-maintain.html</id>
+<id>http://gholk.github.io/game-passion-maintain.html</id>
 <title>維持遊戲的熱情不膩</title>
 <published>2017-04-25T15:12:59.511Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/game-passion-maintain.html"/>
@@ -1045,7 +1045,7 @@ adb 底層是透過 t
 <category term="android"/>
 <category term="手機"/>
 </entry><entry>
-<id>js-object-new-prototype.html</id>
+<id>http://gholk.github.io/js-object-new-prototype.html</id>
 <title>JS 中物件繼承的問題</title>
 <published>2017-04-23T16:41:46.714Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/js-object-new-prototype.html"/>
@@ -1062,7 +1062,7 @@ adb 底層是透過 t
 <category term="函數"/>
 <category term="原型"/>
 </entry><entry>
-<id>practice-matrix-object-javascript.html</id>
+<id>http://gholk.github.io/practice-matrix-object-javascript.html</id>
 <title>在 JS 中實作矩陣</title>
 <published>2017-04-23T10:38:13.128Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/practice-matrix-object-javascript.html"/>
@@ -1084,7 +1084,7 @@ adb 底層是透過 t
 <category term="原型"/>
 <category term="程式語言"/>
 </entry><entry>
-<id>iife-js-void-semicolon.html</id>
+<id>http://gholk.github.io/iife-js-void-semicolon.html</id>
 <title>JS 中 IIFE 與分號的最酷寫法</title>
 <published>2017-04-21T15:15:12.718Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/iife-js-void-semicolon.html"/>
@@ -1105,7 +1105,7 @@ ASI
 <category term="expression"/>
 <category term="分號"/>
 </entry><entry>
-<id>library-noise-by-staff.html</id>
+<id>http://gholk.github.io/library-noise-by-staff.html</id>
 <title>圖書館中來自館員的打擾</title>
 <published>2017-04-20T16:42:34.748Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/library-noise-by-staff.html"/>
@@ -1122,7 +1122,7 @@ ASI
 <category term="思辯"/>
 <category term="工作"/>
 </entry><entry>
-<id>iife-js-void-semicolon.html</id>
+<id>http://gholk.github.io/iife-js-void-semicolon.html</id>
 <title>JS 中 IIFE 與分號的最酷寫法</title>
 <published>2017-04-21T15:15:12.718Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/iife-js-void-semicolon.html"/>
@@ -1143,7 +1143,7 @@ ASI
 <category term="expression"/>
 <category term="分號"/>
 </entry><entry>
-<id>library-noise-by-staff.html</id>
+<id>http://gholk.github.io/library-noise-by-staff.html</id>
 <title>圖書館中來自館員的打擾</title>
 <published>2017-04-20T16:42:34.748Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/library-noise-by-staff.html"/>
@@ -1160,7 +1160,7 @@ ASI
 <category term="思辯"/>
 <category term="工作"/>
 </entry><entry>
-<id>t-short-sleeve-armpit-hair.html</id>
+<id>http://gholk.github.io/t-short-sleeve-armpit-hair.html</id>
 <title>短袖的袖子是為了腋毛而存在的</title>
 <published>2017-04-20T12:38:20.996Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/t-short-sleeve-armpit-hair.html"/>
@@ -1177,7 +1177,7 @@ ASI
 <category term="t-shirt"/>
 <category term="思辯"/>
 </entry><entry>
-<id>low-dependent-map-js.html</id>
+<id>http://gholk.github.io/low-dependent-map-js.html</id>
 <title>在低耦合抽換函式庫</title>
 <published>2017-04-19T16:01:37.755Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/low-dependent-map-js.html"/>
@@ -1199,7 +1199,7 @@ ASI
 <category term="js"/>
 <category term="map"/>
 </entry><entry>
-<id>forgive-for-nothing.html</id>
+<id>http://gholk.github.io/forgive-for-nothing.html</id>
 <title>為過去嘆息、原諒</title>
 <published>2017-04-18T14:22:51.864Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/forgive-for-nothing.html"/>
@@ -1217,7 +1217,7 @@ ASI
 <category term="懲罰"/>
 <category term="思辯"/>
 </entry><entry>
-<id>malice-world-fact-mind.html</id>
+<id>http://gholk.github.io/malice-world-fact-mind.html</id>
 <title>世界的惡意與人的心</title>
 <published>2017-04-18T11:41:27.249Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/malice-world-fact-mind.html"/>
@@ -1238,7 +1238,7 @@ ASI
 <category term="朋友"/>
 <category term="愛情"/>
 </entry><entry>
-<id>coffee-javascript-or-what.html</id>
+<id>http://gholk.github.io/coffee-javascript-or-what.html</id>
 <title>對直譯式語言編譯是否搞錯了什麼</title>
 <published>2017-04-16T16:38:57.640Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/coffee-javascript-or-what.html"/>
@@ -1262,7 +1262,7 @@ ASI
 <category term="ethercalc"/>
 <category term="試算表"/>
 </entry><entry>
-<id>half-month-so-lot-first.html</id>
+<id>http://gholk.github.io/half-month-so-lot-first.html</id>
 <title>CCNS 第一次雙周刊雜文</title>
 <published>2017-04-07T12:48:49.670Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/half-month-so-lot-first.html"/>
@@ -1285,7 +1285,7 @@ ASI
 <category term="lisp"/>
 <category term="w3c"/>
 </entry><entry>
-<id>easy-m-expression-syntax.html</id>
+<id>http://gholk.github.io/easy-m-expression-syntax.html</id>
 <title>簡單的 S 表達式</title>
 <published>2017-04-07T07:10:28.433Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/easy-m-expression-syntax.html"/>
@@ -1300,7 +1300,7 @@ ASI
 <category term="語法"/>
 <category term="程式語言"/>
 </entry><entry>
-<id>poland-expression-bash-lisp.html</id>
+<id>http://gholk.github.io/poland-expression-bash-lisp.html</id>
 <title>bash 中的波蘭表示法</title>
 <published>2017-04-17T02:47:35.874Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/poland-expression-bash-lisp.html"/>
@@ -1316,7 +1316,7 @@ ASI
 <category term="算符"/>
 <category term="lisp"/>
 </entry><entry>
-<id>coffee-javascript-or-what.html</id>
+<id>http://gholk.github.io/coffee-javascript-or-what.html</id>
 <title>對直譯式語言編譯是否搞錯了什麼</title>
 <published>2017-04-16T16:38:57.640Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/coffee-javascript-or-what.html"/>
@@ -1340,7 +1340,7 @@ ASI
 <category term="ethercalc"/>
 <category term="試算表"/>
 </entry><entry>
-<id>into-javascript-trend.html</id>
+<id>http://gholk.github.io/into-javascript-trend.html</id>
 <title>捲入 JS 的大熱潮</title>
 <published>2017-04-16T15:57:46.931Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/into-javascript-trend.html"/>
@@ -1358,7 +1358,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="perl"/>
 <category term="物件導向"/>
 </entry><entry>
-<id>lazy-tor-firefox-socks5.html</id>
+<id>http://gholk.github.io/lazy-tor-firefox-socks5.html</id>
 <title>使用 tor 與 firefox 上洋蔥網</title>
 <published>2017-04-15T15:22:12.172Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/lazy-tor-firefox-socks5.html"/>
@@ -1377,7 +1377,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="linux"/>
 <category term="wiki"/>
 </entry><entry>
-<id>golden-age-in-university.html</id>
+<id>http://gholk.github.io/golden-age-in-university.html</id>
 <title>我的大學黃金年代</title>
 <published>2017-04-15T12:24:39.391Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/golden-age-in-university.html"/>
@@ -1395,7 +1395,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="愛情"/>
 <category term="記憶"/>
 </entry><entry>
-<id>suck-ui-design-long-code.html</id>
+<id>http://gholk.github.io/suck-ui-design-long-code.html</id>
 <title>該死的 UI 設計</title>
 <published>2017-04-13T16:20:19.054Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/suck-ui-design-long-code.html"/>
@@ -1415,7 +1415,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="matlab"/>
 <category term="程式"/>
 </entry><entry>
-<id>black-sky-no-forget.html</id>
+<id>http://gholk.github.io/black-sky-no-forget.html</id>
 <title>拒絕遺忘的回憶</title>
 <published>2017-04-12T05:12:39.379Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/black-sky-no-forget.html"/>
@@ -1433,7 +1433,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="歌"/>
 <category term="記憶"/>
 </entry><entry>
-<id>engineer-linear-logic.html</id>
+<id>http://gholk.github.io/engineer-linear-logic.html</id>
 <title>理工邏輯</title>
 <published>2017-04-10T14:15:03.607Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/engineer-linear-logic.html"/>
@@ -1449,7 +1449,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="線性"/>
 <category term="邏輯"/>
 </entry><entry>
-<id>namewee-taiwan-think-hometown.html</id>
+<id>http://gholk.github.io/namewee-taiwan-think-hometown.html</id>
 <title>我以台灣人看黃志明</title>
 <published>2017-04-09T14:07:07.966Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/namewee-taiwan-think-hometown.html"/>
@@ -1471,7 +1471,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="中華"/>
 <category term="獨中"/>
 </entry><entry>
-<id>the-great-proud-architect.html</id>
+<id>http://gholk.github.io/the-great-proud-architect.html</id>
 <title>大建築師，抬起你的頭！</title>
 <published>2017-04-08T12:47:04.277Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/the-great-proud-architect.html"/>
@@ -1487,7 +1487,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="外貌"/>
 <category term="抒發"/>
 </entry><entry>
-<id>name-after-no-sense.html</id>
+<id>http://gholk.github.io/name-after-no-sense.html</id>
 <title>無意義命名法</title>
 <published>2017-04-07T16:30:43.672Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/name-after-no-sense.html"/>
@@ -1501,7 +1501,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="版本"/>
 <category term="軟體"/>
 </entry><entry>
-<id>half-month-so-lot-first.html</id>
+<id>http://gholk.github.io/half-month-so-lot-first.html</id>
 <title>CCNS 第一次雙周刊雜文</title>
 <published>2017-04-07T12:48:49.670Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/half-month-so-lot-first.html"/>
@@ -1522,7 +1522,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="m-expression"/>
 <category term="w3c"/>
 </entry><entry>
-<id>easy-m-expression-syntax.html</id>
+<id>http://gholk.github.io/easy-m-expression-syntax.html</id>
 <title>簡單的 M 表達式</title>
 <published>2017-04-07T07:10:28.433Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/easy-m-expression-syntax.html"/>
@@ -1537,7 +1537,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="語法"/>
 <category term="程式語言"/>
 </entry><entry>
-<id>suck-government-website-computer.html</id>
+<id>http://gholk.github.io/suck-government-website-computer.html</id>
 <title>政府的資訊系統</title>
 <published>2017-04-06T18:32:41.525Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/suck-government-website-computer.html"/>
@@ -1554,7 +1554,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="luser"/>
 <category term="website"/>
 </entry><entry>
-<id>wansei-tendrum.html</id>
+<id>http://gholk.github.io/wansei-tendrum.html</id>
 <title>十鼓仁糖與灣生</title>
 <published>2017-03-31T17:08:14.343Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/wansei-tendrum.html"/>
@@ -1573,7 +1573,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="十鼓"/>
 <category term="故鄉"/>
 </entry><entry>
-<id>soul-knight-joystick.html</id>
+<id>http://gholk.github.io/soul-knight-joystick.html</id>
 <title>元氣騎士 soul knight</title>
 <published>2017-03-18T14:01:54.080Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/soul-knight-joystick.html"/>
@@ -1589,7 +1589,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="soul-knight"/>
 <category term="搖桿"/>
 </entry><entry>
-<id>sad-manipulate.html</id>
+<id>http://gholk.github.io/sad-manipulate.html</id>
 <title>悲傷的處理</title>
 <published>2017-03-01T12:57:19.252Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/sad-manipulate.html"/>
@@ -1607,7 +1607,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="睡"/>
 <category term="抒發"/>
 </entry><entry>
-<id>scadual-105-2.html</id>
+<id>http://gholk.github.io/scadual-105-2.html</id>
 <title> 成功大學 105 學年下學期行事曆 </title>
 <published>2017-03-27</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/scadual-105-2.html"/>
@@ -1626,7 +1626,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="105 學年"/>
 <category term="下學期"/>
 </entry><entry>
-<id>vector-fighter-intro.html</id>
+<id>http://gholk.github.io/vector-fighter-intro.html</id>
 <title>向量戰機 Vector Fighter</title>
 <published>2017-03-26T06:34:20.914Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/vector-fighter-intro.html"/>
@@ -1643,7 +1643,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="觸控螢幕"/>
 <category term="apk"/>
 </entry><entry>
-<id>virtual-joystick-suck.html</id>
+<id>http://gholk.github.io/virtual-joystick-suck.html</id>
 <title>虛擬搖桿真他媽糞</title>
 <published>2017-03-25T15:08:48.752Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/virtual-joystick-suck.html"/>
@@ -1660,7 +1660,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="操作"/>
 <category term="重力感應"/>
 </entry><entry>
-<id>taiwoman.html</id>
+<id>http://gholk.github.io/taiwoman.html</id>
 <title>台女真得棒</title>
 <published>2017-03-25</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/taiwoman.html"/>
@@ -1673,7 +1673,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="ptt"/>
 <category term="手打 html"/>
 </entry><entry>
-<id>sing-out-sad.html</id>
+<id>http://gholk.github.io/sing-out-sad.html</id>
 <title>陪我走過低潮的歌</title>
 <published>2017-03-25T03:14:26.139Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/sing-out-sad.html"/>
@@ -1689,7 +1689,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="情歌"/>
 <category term="長大"/>
 </entry><entry>
-<id>unbalance-hair-style.html</id>
+<id>http://gholk.github.io/unbalance-hair-style.html</id>
 <title>不對稱髮型</title>
 <published>2017-03-21T17:03:20.119Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/unbalance-hair-style.html"/>
@@ -1705,7 +1705,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="咖哩"/>
 <category term="女生"/>
 </entry><entry>
-<id>avalon-questionnaire-prize.html</id>
+<id>http://gholk.github.io/avalon-questionnaire-prize.html</id>
 <title>問卷抽獎抽到阿瓦隆</title>
 <published>2017-03-06T17:05:03.511Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/avalon-questionnaire-prize.html"/>
@@ -1720,7 +1720,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="六龜"/>
 <category term="email"/>
 </entry><entry>
-<id>baidu-translate-evil.html</id>
+<id>http://gholk.github.io/baidu-translate-evil.html</id>
 <title>百度示範翻譯 Be Evil</title>
 <published>2017-02-15</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/baidu-translate-evil.html"/>
@@ -1736,7 +1736,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="funny"/>
 <category term="審查"/>
 </entry><entry>
-<id>believe-so-exist.html</id>
+<id>http://gholk.github.io/believe-so-exist.html</id>
 <title>相信就會存在</title>
 <published>2017-02-06</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/believe-so-exist.html"/>
@@ -1750,7 +1750,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="飛"/>
 <category term="銀河便車指南"/>
 </entry><entry>
-<id>book-and-so-on.html</id>
+<id>http://gholk.github.io/book-and-so-on.html</id>
 <title>如果牆上有把槍</title>
 <published>2017-03-01T12:57:18.027Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/book-and-so-on.html"/>
@@ -1759,7 +1759,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 </summary>
 <category term="成句"/>
 </entry><entry>
-<id>calture-gap-darrenshan.html</id>
+<id>http://gholk.github.io/calture-gap-darrenshan.html</id>
 <title>歧視與地獄梗</title>
 <published>2017-03-10T07:16:48.510Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/calture-gap-darrenshan.html"/>
@@ -1774,7 +1774,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="向達倫"/>
 <category term="文化差異"/>
 </entry><entry>
-<id>cold-shower-suspend.html</id>
+<id>http://gholk.github.io/cold-shower-suspend.html</id>
 <title>冷水澡爆血管</title>
 <published>2017-02-06</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/cold-shower-suspend.html"/>
@@ -1787,7 +1787,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="冷水澡"/>
 <category term="累"/>
 </entry><entry>
-<id>color-direction-language.html</id>
+<id>http://gholk.github.io/color-direction-language.html</id>
 <title>語言、文化與色彩</title>
 <published>2017-02-04</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/color-direction-language.html"/>
@@ -1802,7 +1802,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="心得"/>
 <category term="科普"/>
 </entry><entry>
-<id>emacs-screen-tmux.html</id>
+<id>http://gholk.github.io/emacs-screen-tmux.html</id>
 <title>emacs 當 tmux 用</title>
 <published>2017-02-03</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/emacs-screen-tmux.html"/>
@@ -1817,7 +1817,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="cli"/>
 <category term="config"/>
 </entry><entry>
-<id>expect-big-liar-what.html</id>
+<id>http://gholk.github.io/expect-big-liar-what.html</id>
 <title>閱讀《大說謊家》的正確態度</title>
 <published>2017-02-19</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/expect-big-liar-what.html"/>
@@ -1833,7 +1833,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="心得"/>
 <category term="小說"/>
 </entry><entry>
-<id>fluent-novel-text.html</id>
+<id>http://gholk.github.io/fluent-novel-text.html</id>
 <title>小說潤筆對我是很重要的</title>
 <published>2017-02-20</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/fluent-novel-text.html"/>
@@ -1846,7 +1846,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="書"/>
 <category term="作家"/>
 </entry><entry>
-<id>github-cname-twbbs.html</id>
+<id>http://gholk.github.io/github-cname-twbbs.html</id>
 <title>github 設 twbbs 的域名</title>
 <published>2017-03-05T12:44:24.970Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/github-cname-twbbs.html"/>
@@ -1860,7 +1860,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="twbbs"/>
 <category term="blog"/>
 </entry><entry>
-<id>giveup-mature.html</id>
+<id>http://gholk.github.io/giveup-mature.html</id>
 <title>接受就叫做成熟</title>
 <published>2017-03-17T15:38:32.759Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/giveup-mature.html"/>
@@ -1877,7 +1877,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="心情"/>
 <category term="憂鬱"/>
 </entry><entry>
-<id>hometown-change.html</id>
+<id>http://gholk.github.io/hometown-change.html</id>
 <title>我所以為的故鄉</title>
 <published>2017-02-28T16:25:28.908Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/hometown-change.html"/>
@@ -1892,7 +1892,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="新莊"/>
 <category term="成大"/>
 </entry><entry>
-<id>how-friend.html</id>
+<id>http://gholk.github.io/how-friend.html</id>
 <title>交友方法</title>
 <published>2017-02-03</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/how-friend.html"/>
@@ -1905,7 +1905,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="抒發"/>
 <category term="營隊"/>
 </entry><entry>
-<id>lost-love-lost-life.html</id>
+<id>http://gholk.github.io/lost-love-lost-life.html</id>
 <title>失去生活重心</title>
 <published>2017-03-16T10:03:36.267Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/lost-love-lost-life.html"/>
@@ -1920,7 +1920,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="憂鬱"/>
 <category term="唸書"/>
 </entry><entry>
-<id>modern-gender-interact.html</id>
+<id>http://gholk.github.io/modern-gender-interact.html</id>
 <title>台灣現代男女互動</title>
 <published>2017-02-21T08:27:38.043Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/modern-gender-interact.html"/>
@@ -1935,7 +1935,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="抒發"/>
 <category term="需要"/>
 </entry><entry>
-<id>my-girlfriend-in-multiverse.html</id>
+<id>http://gholk.github.io/my-girlfriend-in-multiverse.html</id>
 <title>沒有女友的話</title>
 <published>2017-02-14</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/my-girlfriend-in-multiverse.html"/>
@@ -1946,7 +1946,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="成句"/>
 <category term="愛情"/>
 </entry><entry>
-<id>ptt-network-bully-gossiping.html</id>
+<id>http://gholk.github.io/ptt-network-bully-gossiping.html</id>
 <title>高中同人女作家在八卦板崩潰</title>
 <published>2017-03-10T08:02:15.499Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/ptt-network-bully-gossiping.html"/>
@@ -1963,7 +1963,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="同人"/>
 <category term="抒發"/>
 </entry><entry>
-<id>riot-politician.html</id>
+<id>http://gholk.github.io/riot-politician.html</id>
 <title>曾經的覺青</title>
 <published>2017-03-05T10:31:54.912Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/riot-politician.html"/>
@@ -1979,7 +1979,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="爸爸"/>
 <category term="時代力量"/>
 </entry><entry>
-<id>rule-your-game.html</id>
+<id>http://gholk.github.io/rule-your-game.html</id>
 <title>錯誤的遊戲心態</title>
 <published>2017-02-09</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/rule-your-game.html"/>
@@ -1993,7 +1993,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="抒發"/>
 <category term="課金"/>
 </entry><entry>
-<id>sad-manipulate.html</id>
+<id>http://gholk.github.io/sad-manipulate.html</id>
 <title>悲傷的處理</title>
 <published>2017-03-01T12:57:19.252Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/sad-manipulate.html"/>
@@ -2009,7 +2009,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="睡覺"/>
 <category term="抒發"/>
 </entry><entry>
-<id>course-105-2.html</id>
+<id>http://gholk.github.io/course-105-2.html</id>
 <title>105 學年度下學期課表</title>
 <published>2017-02-19</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/course-105-2.html"/>
@@ -2042,7 +2042,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="105 學年"/>
 <category term="下學期"/>
 </entry><entry>
-<id>soul-knight-joystick.html</id>
+<id>http://gholk.github.io/soul-knight-joystick.html</id>
 <title>元氣騎士 soul knight</title>
 <published>2017-03-18T14:01:54.080Z</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/soul-knight-joystick.html"/>
@@ -2055,7 +2055,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="心得"/>
 <category term="課金"/>
 </entry><entry>
-<id>twbbs-dinshin.html</id>
+<id>http://gholk.github.io/twbbs-dinshin.html</id>
 <title>twbbs 域名</title>
 <published>2017-02-07</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/twbbs-dinshin.html"/>
@@ -2071,7 +2071,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 <category term="twbbs"/>
 <category term="頂新"/>
 </entry><entry>
-<id>wukoung-novel.html</id>
+<id>http://gholk.github.io/wukoung-novel.html</id>
 <title>憶悟空傳</title>
 <published>2017-02-04</published>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/wukoung-novel.html"/>

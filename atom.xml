@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io</id>
-  <updated>2017-12-17T12:41:06.966Z</updated>
+  <updated>2017-12-17T15:21:41.773Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title type="text">gholk MBlog</title>
   <subtitle type="text">Mblog is for meta bloging</subtitle>
@@ -20,36 +20,48 @@
 
 
 <entry>
-<id>http://gholk.github.io/how-to-create-meme-without-point.html#alternate</id>
+<id>how-to-create-meme-without-point.html</id>
 <title> 如何做做梗圖</title>
 <published>2017-12-17T11:19:37.058Z</published>
-<updated>2017-12-17T11:19:37.709Z</updated>
+<updated>2017-12-17T15:21:41.761Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/how-to-create-meme-without-point.html"/>
 <summary>看到一些用沒梗當梗的梗圖，
-於是就想把沒梗和 [而且沒人愛你] 套在一起，
+於是就想把沒梗和 而且沒人愛你 套在一起，
 再加上嗆一下用盜版 photo shop 的，
 用 gimp 做成這張。</summary>
-<link type="image/jpeg" rel="alternate" href="https://farm5.staticflickr.com/4682/39074839922_19ae5e4fa7.jpg"/>
 <category term="meme"/>
 <category term="flickr"/>
 <category term="gimp"/>
-</entry>
+<category term="自創"/>
+<link rel="enclosure" href="https://farm5.staticflickr.com/4682/39074839922_19ae5e4fa7.jpg"/><content type="html">&lt;h1 id="如何做做梗圖"&gt;如何做做梗圖&lt;/h1&gt;
+&lt;p&gt;看到一些用沒梗當梗的梗圖，
+於是就想把沒梗和 &lt;a href="https://zh.moegirl.org/zh-tw/%E8%80%8C%E4%B8%94%E6%B2%A1%E6%9C%89%E4%BA%BA%E7%88%B1%E4%BD%A0"&gt;而且沒人愛你&lt;/a&gt; 套在一起，
+再加上嗆一下用盜版 photo shop 的，
+用 gimp 做成這張。&lt;/p&gt;
+&lt;meta property="og:image" type="image/jpeg" content="https://farm5.staticflickr.com/4682/39074839922_19ae5e4fa7.jpg"&gt;
 
-<entry>
-<id>http://gholk.github.io/how-to-create-meme-without-point.html</id>
-<title> 如何做做梗圖</title>
-<published>2017-12-17T11:19:37.058Z</published>
-<updated>2017-12-17T11:19:37.709Z</updated>
-<link rel="alternate" type="text/html" href="http://gholk.github.io/how-to-create-meme-without-point.html"/>
-<summary>看到一些用沒梗當梗的梗圖，
-於是就想把沒梗和 [而且沒人愛你] 套在一起，
-再加上嗆一下用盜版 photo shop 的，
-用 gimp 做成這張。</summary>
-<link type="image/jpeg" rel="enclosure" href="https://farm5.staticflickr.com/4682/39074839922_19ae5e4fa7.jpg"/>
-<category term="meme"/>
-<category term="flickr"/>
-<category term="gimp"/>
-</entry>
+&lt;p&gt;&lt;a href="https://www.flickr.com/photos/135370742@N08/39074839922"&gt;&lt;img src="https://farm5.staticflickr.com/4682/39074839922_19ae5e4fa7.jpg" alt="how to create meme.png"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id="創作過程"&gt;創作過程&lt;/h2&gt;
+&lt;p&gt;過程沒什麼好說的，就想哪些素材適合就 google 圖片丟上去。&lt;/p&gt;
+&lt;p&gt;ps 的操作介面裡的 icon 是自己畫的，底圖是 google 的；
+猴子的輸入框也是自己畫的。二者都是用選取區域再用收縮畫出框。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;狂暴微笑殺手&lt;/strong&gt; 想半天想不起來名字，
+最後用以圖搜圖找到該 meme 是叫 &lt;em&gt;hide pain harold&lt;/em&gt; 。&lt;/p&gt;
+&lt;p&gt;沒人回的圖是用一個文字框裡換樣式做的，
+後來才想到用 &lt;em&gt;成為第一個說讚的人&lt;/em&gt; 表示沒人讚。&lt;/p&gt;
+&lt;p&gt;盜版直接用 windows 的，不確定 ps 有沒有自己的盜版警告。&lt;/p&gt;
+&lt;p&gt;桌子那個懶得畫或貼圖，就隨便做一做了事；
+用 SJO 是因為那個抱住自己的人是手往下，
+sto 會變成往上。&lt;/p&gt;
+&lt;p&gt;最後在右上有放自己的 icon ESC，
+不知道有沒有人會注意就是了。&lt;/p&gt;
+&lt;h2 id="發布"&gt;發布&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.facebook.com/groups/MemeSimulators/permalink/1971005656558637"&gt;天堂梗模擬器&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content></entry>
+
+
 <entry>
 <id>http://gholk.github.io/hackmd-todo-test.html</id>
 <title> todo list 的要求</title>

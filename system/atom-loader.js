@@ -15,7 +15,8 @@ class AtomLoader {
     }
     write() {
         const current = new Date()
-        this.selector('updated:first-of-type').text(current.toISOString())
+        this.selector('feed > updated:first-of-type')
+            .text(current.toISOString())
         fs.writeFileSync(
             this.path,
             this.selector.html(),
@@ -25,8 +26,8 @@ class AtomLoader {
     add(loader) {
         const tags = loader.tags.split(/,/g).map(tagToAtom).join('\n')
         const currentDate = new Date()
-        this.selector('entry:first-of-type').before(`
-<entry>
+        const entry = this.selector('<entry>')
+        entry.html(`
 <id>${loader.file}</id>
 <title>${loader.title}</title>
 <published>${loader.date}</published>
@@ -35,8 +36,17 @@ class AtomLoader {
       href="${this.baseUri}/${loader.file}" />
 <summary>${loader.description}</summary>
 ${tags}
-</entry>
 `)
+        const searchOgImage = loader.selector('meta[property="og:image"]')
+        if (searchOgImage.length > 0) {
+            const meta = searchOgImage.last()
+            const link = this.selector('<link rel="alternate">')
+            link.attr('href', meta.attr('content'))
+            link.attr('type', meta.attr('type'))
+            entry.append(link)
+        }
+            
+        this.selector('entry:first-of-type').before(entry)
         function tagToAtom(tag) {
             return `<category term="${tag}" />`
         }

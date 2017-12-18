@@ -40,7 +40,7 @@
       this.selector('link[rel=prev]').attr('title', this.prevTitle);
       this.selector('link[rel=next]').attr('href', this.next);
       this.selector('link[rel=next]').attr('title', this.nextTitle);
-      this.selector('main').html(this.main);
+      this.selector('main').html(this.main).find('meta,link').appendTo('head');
       this.description = this.selector('main > :not(h1)').first().text();
       return this.file = this.path.replace(/^.*\//, '');
     };

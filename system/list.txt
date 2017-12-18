@@ -108,3 +108,4 @@ depress-mood-cause-nothing.html
 swap-usage-same-memory.html
 hackmd-todo-test.html
 how-to-create-meme-whithout-point.html
+ime-simply-chinese-table.html

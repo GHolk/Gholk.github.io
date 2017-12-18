@@ -1,0 +1,38 @@
+# 簡體中文輸入法表格
+雖然中國人大都看得懂繁體字，台灣人也懂簡體，
+但有時候在 linux 下用 find 找檔案就不能混用。
+因為我的輸入法都是用自製的表格，
+只要把整張表格翻譯成簡體，
+就能用一樣的字根碼，打出簡體字了。
+
+因為有時候要在 shell 或一些比較原始的介面找檔案，
+像我的音樂有些沒有標籤，只能用檔名去找。
+沒有自動轉換繁簡的功能，就得打簡體。
+當然也可以用 **cconv** 手動轉，
+但有時候要打一大堆，有個簡體輸入法比較方便。
+
+我的 [cin 格式表格]，整張用 cconv 轉換，
+或隨便 google 繁簡轉換，整張丟進去就好。
+反正繁轉簡是多對一，無歧意。
+轉換變 [supcj-cn.cin] 。
+
+[cin 格式表格]: //github.com/GHolk/loco/blob/master/supcj.cin
+[supcj-cn.cin]: //github.com/GHolk/loco/blob/master/supcj-cn.cin
+
+至於現在用的 scim 輸入法，
+表格格式是： [supcj.scim] ，
+有些地方不同，要改。
+像 uuid 不能相同，名字最好也改，
+我是繁體改簡體。
+icon 也換成一張反白的 esc。
+改完變成 [supcj-cn.scim] 。
+
+[supcj.scim]: //github.com/GHolk/loco/blob/master/supcj-cn.scim
+[supcj-cn.scim]: //github.com/GHolk/loco/blob/master/supcj-cn.scim
+
+#輸入法
+#中國
+#iconv
+#cconv
+#音樂
+#linux

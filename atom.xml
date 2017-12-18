@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io</id>
-  <updated>2017-12-17T15:21:41.773Z</updated>
+  <updated>2017-12-18T06:53:46.008Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title type="text">gholk MBlog</title>
   <subtitle type="text">Mblog is for meta bloging</subtitle>
@@ -20,6 +20,44 @@
 
 
 <entry>
+<id>ime-simply-chinese-table.html</id>
+<title> 簡體中文輸入法表格</title>
+<published>2017-12-18T06:53:45.361Z</published>
+<updated>2017-12-18T06:53:45.998Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/ime-simply-chinese-table.html"/>
+<summary>雖然中國人大都看得懂繁體字，台灣人也懂簡體，
+但有時候在 linux 下用 find 找檔案就不能混用。
+因為我的輸入法都是用自製的表格，
+只要把整張表格翻譯成簡體，
+就能用一樣的字根碼，打出簡體字了。</summary>
+<category term="輸入法"/>
+<category term="中國"/>
+<category term="iconv"/>
+<category term="cconv"/>
+<category term="find"/>
+<category term="音樂"/>
+<content type="html">&lt;h1 id="簡體中文輸入法表格"&gt;簡體中文輸入法表格&lt;/h1&gt;
+&lt;p&gt;雖然中國人大都看得懂繁體字，台灣人也懂簡體，
+但有時候在 linux 下用 find 找檔案就不能混用。
+因為我的輸入法都是用自製的表格，
+只要把整張表格翻譯成簡體，
+就能用一樣的字根碼，打出簡體字了。&lt;/p&gt;
+&lt;p&gt;因為有時候要在 shell 或一些比較原始的介面找檔案，
+像我的音樂有些沒有標籤，只能用檔名去找。
+沒有自動轉換繁簡的功能，就得打簡體。
+當然也可以用 &lt;strong&gt;cconv&lt;/strong&gt; 手動轉，
+但有時候要打一大堆，有個簡體輸入法比較方便。&lt;/p&gt;
+&lt;p&gt;我的 &lt;a href="//github.com/GHolk/loco/blob/master/supcj.cin"&gt;cin 格式表格&lt;/a&gt;，整張用 cconv 轉換，
+或隨便 google 繁簡轉換，整張丟進去就好。
+反正繁轉簡是多對一，無歧意。
+轉換變 &lt;a href="//github.com/GHolk/loco/blob/master/supcj-cn.cin"&gt;supcj-cn.cin&lt;/a&gt; 。&lt;/p&gt;
+&lt;p&gt;至於現在用的 scim 輸入法，
+表格格式是： &lt;a href="//github.com/GHolk/loco/blob/master/supcj-cn.scim"&gt;supcj.scim&lt;/a&gt; ，
+有些地方不同，要改。
+像 uuid 不能相同，名字最好也改，
+我是繁體改簡體。
+icon 也換成一張反白的 esc。&lt;/p&gt;
+</content></entry><entry>
 <id>how-to-create-meme-without-point.html</id>
 <title> 如何做梗圖</title>
 <published>2017-12-17T11:19:37.058Z</published>

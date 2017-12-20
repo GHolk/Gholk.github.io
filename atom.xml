@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io</id>
-  <updated>2017-12-20T13:29:41.136Z</updated>
+  <updated>2017-12-20T14:59:43.573Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -20,9 +20,9 @@
 
 <entry>
 <id>http://gholk.github.io/educate-revolution-affect-nothing.html</id>
-<title> 教育制度的影響不大</title>
+<title>教育制度的影響不大</title>
 <published>2017-12-20T13:29:40.479Z</published>
-<updated>2017-12-20T13:29:41.126Z</updated>
+<updated>2017-12-20T14:59:43.563Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/educate-revolution-affect-nothing.html"/>
 <summary>我高中時期曾很關心教育制度，也處於改革中的一屆。
 到現在制度已經亂到我不想去關心了，
@@ -107,6 +107,17 @@
 但這樣一直減減減，多出來的時數到底去哪了？
 可以接受整體上課時間變少，但以台灣升學至上，
 又會跑去補習班吧，真不知是好還是不好。&lt;/p&gt;
+&lt;h2 id="後記"&gt;後記&lt;/h2&gt;
+&lt;p&gt;我的結論就是，教改其實沒那麼重要；
+怎麼改，其實影響到是少數特殊族群。&lt;/p&gt;
+&lt;p&gt;會寫這篇文章，有幾件事：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://gholk.github.io/ptt/M.1513165805.A.EA1.html"&gt;有人在 ptt 知識最高殿堂 ask-why 發文問教育制度&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;看到 &lt;a href="https://gholk.github.io/ptt/M.1511534761.A.485.html"&gt;紐西蘭數學那麼爛&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;一方面也是因為現在教育制度太亂不想理解，
+所以就往教育制度影響不太的方向思考，
+既然影響不大就沒責任啦。&lt;/li&gt;
+&lt;/ul&gt;
 </content></entry><entry>
 <id>http://gholk.github.io/ime-simply-chinese-table.html</id>
 <title> 簡體中文輸入法表格</title>

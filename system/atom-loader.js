@@ -28,7 +28,7 @@ class AtomLoader {
         const currentDate = new Date()
         const entry = this.selector('<entry>')
         entry.html(`
-<id>${loader.file}</id>
+<id>${this.baseUri}/${loader.file}</id>
 <title>${loader.title}</title>
 <published>${loader.date}</published>
 <updated>${currentDate.toISOString()}</updated>

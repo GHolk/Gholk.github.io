@@ -1,0 +1,89 @@
+feed {
+    display: block;
+    font-size: larger;
+    margin: 1em;
+}
+
+icon, generator {
+    display: none;
+}
+
+author, name, uri, email {
+    display: block;
+}
+author {
+    margin: 1em;
+}
+author:before {
+    content: "author";
+    font-weight: 700;
+}
+name:before {
+    content: "name: ";
+    font-weight: 700;
+}
+email:before {
+    content: "email: ";
+    font-weight: 700;
+}
+uri:before {
+    content: "uri: ";
+    font-weight: 700;
+}
+
+title {
+    display: block;
+    font-weight: 700;
+    font-size: larger;
+}
+subtitle {
+    display: block;
+}
+
+link {
+    display: block;
+    color: blue;
+}
+link:before {
+    content: attr(rel) "(" attr(type) "): ";
+    font-weight: 700;
+}
+link[href]:after {
+    content: attr(href);
+}
+                 
+entry {
+    display: block;
+    margin: 1em;
+    padding: 1em;
+    border: solid 1px black;
+    font-size: smaller;
+}
+
+summary, content {
+    display: block;
+    white-space: pre-wrap;
+    margin: 1em 0;
+}
+
+id:before {
+    content: "id: ";
+    font-weight: 700;
+}
+
+updated, published {
+    display: block;
+}
+published + updated {
+    display: none;
+}
+
+category {
+    color: grey;
+}
+category:before {
+    content: "#";
+}
+category:after {
+    content: attr(term);
+}

@@ -80,14 +80,17 @@ function ajaxQuery(url, selector) {
         queryXhr.open('GET', url)
         queryXhr.responseType = 'document'
         queryXhr.onload = function () {
-            try {
-                const targetNodes = this.response.querySelectorAll(selector)
-                
-                if (targetNodes.length == 1) returnNode(targetNodes[0])
-                else returnNode(targetNodes)
-            }
-            catch (queryError) {
-                returnError(queryError)
+            if (!selector) returnNode(this)
+            else {
+                try {
+                    const targetNodes = this.response.querySelectorAll(selector)
+                    
+                    if (targetNodes.length == 1) returnNode(targetNodes[0])
+                    else returnNode(targetNodes)
+                }
+                catch (queryError) {
+                    returnError(queryError)
+                }
             }
         }
         queryXhr.onerror = returnError

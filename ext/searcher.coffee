@@ -36,8 +36,12 @@ class HrArticle
         else
             return @node.className
 
-articleList = for article in document.getElementsByTagName 'article'
-    new HrArticle article
+if loadArticle
+    articleList = []
+    loadArticle.then (list) -> articleList.push list...
+else
+    articleList = for article in document.getElementsByTagName 'article'
+        new HrArticle article
 
 queryForm = document.getElementById 'query-article'
 

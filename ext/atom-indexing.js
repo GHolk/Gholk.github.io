@@ -38,8 +38,12 @@ class Article {
         listNode.appendChild(node)
     }
     show(bool) {
-        if (bool) this.node.classList.remove('hide-article')
-        else this.node.classList.add('hide-article')
+        const classList = this.node.classList
+        if (bool) classList.remove('hide-article')
+        else classList.add('hide-article')
+    }
+    hasTag(tag) {
+        return this.tags.indexOf(tag) != -1
     }
 }
 
@@ -50,15 +54,10 @@ Article.template = document
     .querySelector('article')
     .cloneNode(deep)
 
-let loadArticle = ajaxQuery('atom.xml', 'entry').then((allEntry) => {
+let loadArticle = ajaxQuery(atom, 'entry').then((allEntry) => {
     allEntry = Array.from(allEntry)
     const articleList = allEntry.map((entry) => Article.fromAtom(entry))
-    window.articleList = articleList
-    articleList.forEach((article) => {
-        article.createNode()
-    })
-    return articleList
-}).then((articleList) => {
-    articleList.slice(0,10).forEach((recent) => recent.show(true))
+    articleList.forEach((article) => article.createNode())
     return articleList
 })
+

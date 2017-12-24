@@ -20,6 +20,7 @@
   </head>
   <body>
     <h1>文章列表</h1>
+    <h2><a href="comment-board.html">留言板</a></h2>
     <main></main>
     <template id="article-template">
       <article>
@@ -32,7 +33,11 @@
     <script src="ext/atom-indexing.js"></script>
     <form id="query-article">
       <h2>query by js</h2>
-      <textarea name="query-statement"></textarea>
+      <textarea name="query-statement">
+title.match(/的/) &&
+date &gt; new Date('2017-08-01') &&
+hasTag('程式')
+      </textarea>
       <label>match number: <output name="match-number"></output></label>
       <input type="submit">
       <script src="ext/searcher.js"></script>

@@ -854,9 +854,9 @@ cond
 <link rel="alternate" type="text/html" href="http://gholk.github.io/js-eval-macro.html"/>
 <summary>
     之前加了一個像巨集的功能，能用比較簡短的語法寫 js 巨集。
-畢竟直接用 <script> 太麻煩，寫起來也太長不方便。
+畢竟直接用 &lt;script&gt; 太麻煩，寫起來也太長不方便。
 可以用 js ejp 的方
-    </script></summary>
+    </summary>
 <category term="javascript"/>
 <category term="巨集"/>
 <category term="blog"/>

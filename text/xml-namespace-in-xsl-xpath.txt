@@ -1,0 +1,138 @@
+# xsl xpath 中的 namespace
+最近在玩 atom，（rss 那個 atom。）
+覺得這東西和 xml 太棒了。
+在練習 xml 的樣式 xsl 時踩坑，
+xsl 1.0 中沒辦法像一般 xml 為 xpath 指定全域的 namespace，
+於是就必須為每個 xpath 裡的元素加上 prefix，根本反智作法。
+
+## namespace 基本概念
+xml 中有 namespace 的概念，
+指定了的話，定義的元素就成為全世界唯一的，
+不會發生別人也定義了同名的元素，
+程式在處理二者時不能區分的情況。
+
+指定 xml namespace 的方法是在任一元素加上 xmlns 屬性，
+如果沒有指定名字，就是 apply 到所有沒有指定 namespace 的子元素。
+
+```xml
+<!-- 此 feed 元素屬 http://www.w3.org/2005/Atom 命名空間 -->
+<feed xmlns="http://www.w3.org/2005/Atom"
+      xmlns:media="http://search.yahoo.com/mrss/">
+  <!-- 本身及所有子元素若沒有指定，也都屬 Atom -->
+  <title> 測試 atom </title>
+  <!-- 此元素指定屬於 media namespace -->
+  <media:content type="image/jpeg"
+                 url="https://i.imgur.com/bRw2TYB.jpg">
+  <>
+</feed>
+```
+
+注意若改為 `xmlns:m="http://search.yahoo.com/mrss/"` ，
+則此處也要改為 `m:content` 。
+其至在不同文件中，定義 `xmlns:m` 和 `xmlns:mda` 都指向同一 url，
+則二者應視為在同一命名空間中的元素。
+
+```xml
+<atom:feed xmlns:atom="http://www.w3.org/2005/Atom">
+  <!-- 沒指定 namespace，title 就不會是 atom namespace 裡的 title -->
+  <title> 測試 </title>
+  
+  <!-- 這個 title 才是 atom namespace 裡的 title -->
+  <atom:title> 測試 </atom:title>
+</atom:feed>
+```
+
+## xsl 的問題
+xsl 裡用 xpath 來選出元素的內容、屬性，填到特定位置。
+xsl 是用 xml 表示，但 xpath 不是；
+xpath 是以字串的方式嵌在 xsl 元素的屬性值裡。
+
+```xml
+標題: <xsl:value-of select="/html/head/title" />
+超連結: <xsl:value-of select="/html/link[@rel='canonical']@href" />
+```
+
+因為 xpath 並不是以元素或屬性的方式存在於 xml 內，
+所以沒辦法用 xmlns 為她指定命名空間。
+xsl 中也沒有特別為 xpath 規定要預設為引用的 namespace
+或同 xsl 的 namespace。
+
+所以如果你的 `atom.xml` 指定了屬於
+`http://www.w3.org/2005/Atom` ，
+那 xsl 裡寫 `/feed/entry` 會抓到 *未指定 namespace* 的 entry，
+而抓不到 atom.xml 裡的 /feed/entry；
+事實上可能是 `/atom:feed/atom:entry` 。
+
+```xml
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <entry>hey</entry>
+</feed>
+```
+
+```xml
+<xsl:stylesheet version="1.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:a="http://www.w3.org/2005/Atom">
+                <!-- 為了簡便，這裡寫成 a，其實你要叫什麼都可以，
+                     反正是指向 http://www.w3.org/2005/Atom 就對了。 -->
+
+  <!-- 抓不到東西 -->
+  <xsl:value-of select="/feed/entry" />
+  
+  <!-- 抓屬於 http://www.w3.org/2005/Atom 下的 feed 和 entry -->
+  <xsl:value-of select="/a:feed/a:entry" />
+</xsl:stylesheet>
+```
+
+就算 xml 寫成這樣，
+上面那份 xsl 還是抓得到東西。
+
+```xml
+<atom:feed xmlns:atom="http://www.w3.org/2005/Atom">
+  <atom:entry>hey</atom:entry>
+</atom:feed>
+```
+
+可以把這幾份丟到 [w3school 的 xsl editor] 裡試試看。
+
+[w3school 的 xsl editor]: https://www.w3schools.com/xml/tryxslt.asp?xmlfile=cdcatalog&xsltfile=cdcatalog_ex3
+
+## 解法
+這就造成如果使用的 xml 有命名空間，
+則所有 xsl 裡的 xpath 都要加上前綴，會變得極冗長。
+
+因為大部份的 xml 都是單一命名空間的，（應該吧？）
+就算在單一命名空間也要手動指定所有的元素，是極為反智的作法。
+
+我 google 找到一串 [stackoverflow 的討論] ，
+唯一有用的建議是 xsl 2.0 中提供了 `xpath-default-namespace` 屬性，
+讓你可以指定不帶 namespace 的自動被歸為某一命名空間；
+但我用 firefox，xsl 2.0 還不能支援。
+
+[stackoverflow 的討論]: https://stackoverflow.com/questions/1344158/xslt-with-xml-source-that-has-a-default-namespace-set-to-xmlns
+
+我是在為 <./atom.xml> 上樣式時，發現這個問題的。
+我一開始是 [用 css 寫] ，但 css 有一些限制，
+像把 attribute 轉為 content 只能放在 `::after` `::before` 裡，
+也不能一一上不同的樣式。
+後來 [玩 xsl] 時有做完，但發現問題。
+
+ 1. 就寫 2.0，管他支援去死。
+ 2. 不要用 xsl 樣式，用 css。
+ 3. 投降，取一個短一點的前綴，乖乖把每個 xpath 裡的元素都上前綴。
+
+我是選 1 2，反正其實也不會有人用瀏覽器看 atom，都用閱讀器了。
+
+
+[用 css 寫]: ext/atom.css
+[玩xsl]: ext/atom.xsl
+
+#html
+#xml
+#rss
+#atom
+#css
+#xsl
+#程式
+#web
+

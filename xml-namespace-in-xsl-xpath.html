@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-12-25T17:11:47.791Z">
+<meta name="keywords" property="og:article:tag" content="html,xml,rss,atom,css,xsl,&#x7A0B;&#x5F0F;,web">
+<link rel="index" type="text/html" href="index.html" title="&#x9996;&#x9801;">
+<link rel="start" type="text/html" href="index.html" title="&#x9996;&#x9801;">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="educate-revolution-affect-nothing.html" title=" &#x6559;&#x80B2;&#x5236;&#x5EA6;&#x7684;&#x5F71;&#x97FF;&#x4E0D;&#x5927;">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title>xsl xpath &#x4E2D;&#x7684; namespace</title>
+</head>
+<body>
+<main><h1 id="xsl xpath &#x4E2D;&#x7684; namespace">xsl xpath &#x4E2D;&#x7684; namespace</h1>
+<p>&#x6700;&#x8FD1;&#x5728;&#x73A9; atom&#xFF0C;&#xFF08;rss &#x90A3;&#x500B; atom&#x3002;&#xFF09;
+&#x89BA;&#x5F97;&#x9019;&#x6771;&#x897F;&#x548C; xml &#x592A;&#x68D2;&#x4E86;&#x3002;
+&#x5728;&#x7DF4;&#x7FD2; xml &#x7684;&#x6A23;&#x5F0F; xsl &#x6642;&#x8E29;&#x5751;&#xFF0C;
+xsl 1.0 &#x4E2D;&#x6C92;&#x8FA6;&#x6CD5;&#x50CF;&#x4E00;&#x822C; xml &#x70BA; xpath &#x6307;&#x5B9A;&#x5168;&#x57DF;&#x7684; namespace&#xFF0C;
+&#x65BC;&#x662F;&#x5C31;&#x5FC5;&#x9808;&#x70BA;&#x6BCF;&#x500B; xpath &#x88E1;&#x7684;&#x5143;&#x7D20;&#x52A0;&#x4E0A; prefix&#xFF0C;&#x6839;&#x672C;&#x53CD;&#x667A;&#x4F5C;&#x6CD5;&#x3002;</p>
+<h2 id="namespace &#x57FA;&#x672C;&#x6982;&#x5FF5;">namespace &#x57FA;&#x672C;&#x6982;&#x5FF5;</h2>
+<p>xml &#x4E2D;&#x6709; namespace &#x7684;&#x6982;&#x5FF5;&#xFF0C;
+&#x6307;&#x5B9A;&#x4E86;&#x7684;&#x8A71;&#xFF0C;&#x5B9A;&#x7FA9;&#x7684;&#x5143;&#x7D20;&#x5C31;&#x6210;&#x70BA;&#x5168;&#x4E16;&#x754C;&#x552F;&#x4E00;&#x7684;&#xFF0C;
+&#x4E0D;&#x6703;&#x767C;&#x751F;&#x5225;&#x4EBA;&#x4E5F;&#x5B9A;&#x7FA9;&#x4E86;&#x540C;&#x540D;&#x7684;&#x5143;&#x7D20;&#xFF0C;
+&#x7A0B;&#x5F0F;&#x5728;&#x8655;&#x7406;&#x4E8C;&#x8005;&#x6642;&#x4E0D;&#x80FD;&#x5340;&#x5206;&#x7684;&#x60C5;&#x6CC1;&#x3002;</p>
+<p>&#x6307;&#x5B9A; xml namespace &#x7684;&#x65B9;&#x6CD5;&#x662F;&#x5728;&#x4EFB;&#x4E00;&#x5143;&#x7D20;&#x52A0;&#x4E0A; xmlns &#x5C6C;&#x6027;&#xFF0C;
+&#x5982;&#x679C;&#x6C92;&#x6709;&#x6307;&#x5B9A;&#x540D;&#x5B57;&#xFF0C;&#x5C31;&#x662F; apply &#x5230;&#x6240;&#x6709;&#x6C92;&#x6709;&#x6307;&#x5B9A; namespace &#x7684;&#x5B50;&#x5143;&#x7D20;&#x3002;</p>
+<pre><code class="lang-xml">&lt;!-- &#x6B64; feed &#x5143;&#x7D20;&#x5C6C; http://www.w3.org/2005/Atom &#x547D;&#x540D;&#x7A7A;&#x9593; --&gt;
+&lt;feed xmlns=&quot;http://www.w3.org/2005/Atom&quot;
+      xmlns:media=&quot;http://search.yahoo.com/mrss/&quot;&gt;
+  &lt;!-- &#x672C;&#x8EAB;&#x53CA;&#x6240;&#x6709;&#x5B50;&#x5143;&#x7D20;&#x82E5;&#x6C92;&#x6709;&#x6307;&#x5B9A;&#xFF0C;&#x4E5F;&#x90FD;&#x5C6C; Atom --&gt;
+  &lt;title&gt; &#x6E2C;&#x8A66; atom &lt;/title&gt;
+  &lt;!-- &#x6B64;&#x5143;&#x7D20;&#x6307;&#x5B9A;&#x5C6C;&#x65BC; media namespace --&gt;
+  &lt;media:content type=&quot;image/jpeg&quot;
+                 url=&quot;https://i.imgur.com/bRw2TYB.jpg&quot;&gt;
+  &lt;&gt;
+&lt;/feed&gt;
+</code></pre>
+<p>&#x6CE8;&#x610F;&#x82E5;&#x6539;&#x70BA; <code>xmlns:m=&quot;http://search.yahoo.com/mrss/&quot;</code> &#xFF0C;
+&#x5247;&#x6B64;&#x8655;&#x4E5F;&#x8981;&#x6539;&#x70BA; <code>m:content</code> &#x3002;
+&#x5176;&#x81F3;&#x5728;&#x4E0D;&#x540C;&#x6587;&#x4EF6;&#x4E2D;&#xFF0C;&#x5B9A;&#x7FA9; <code>xmlns:m</code> &#x548C; <code>xmlns:mda</code> &#x90FD;&#x6307;&#x5411;&#x540C;&#x4E00; url&#xFF0C;
+&#x5247;&#x4E8C;&#x8005;&#x61C9;&#x8996;&#x70BA;&#x5728;&#x540C;&#x4E00;&#x547D;&#x540D;&#x7A7A;&#x9593;&#x4E2D;&#x7684;&#x5143;&#x7D20;&#x3002;</p>
+<pre><code class="lang-xml">&lt;atom:feed xmlns:atom=&quot;http://www.w3.org/2005/Atom&quot;&gt;
+  &lt;!-- &#x6C92;&#x6307;&#x5B9A; namespace&#xFF0C;title &#x5C31;&#x4E0D;&#x6703;&#x662F; atom namespace &#x88E1;&#x7684; title --&gt;
+  &lt;title&gt; &#x6E2C;&#x8A66; &lt;/title&gt;
+
+  &lt;!-- &#x9019;&#x500B; title &#x624D;&#x662F; atom namespace &#x88E1;&#x7684; title --&gt;
+  &lt;atom:title&gt; &#x6E2C;&#x8A66; &lt;/atom:title&gt;
+&lt;/atom:feed&gt;
+</code></pre>
+<h2 id="xsl &#x7684;&#x554F;&#x984C;">xsl &#x7684;&#x554F;&#x984C;</h2>
+<p>xsl &#x88E1;&#x7528; xpath &#x4F86;&#x9078;&#x51FA;&#x5143;&#x7D20;&#x7684;&#x5167;&#x5BB9;&#x3001;&#x5C6C;&#x6027;&#xFF0C;&#x586B;&#x5230;&#x7279;&#x5B9A;&#x4F4D;&#x7F6E;&#x3002;
+xsl &#x662F;&#x7528; xml &#x8868;&#x793A;&#xFF0C;&#x4F46; xpath &#x4E0D;&#x662F;&#xFF1B;
+xpath &#x662F;&#x4EE5;&#x5B57;&#x4E32;&#x7684;&#x65B9;&#x5F0F;&#x5D4C;&#x5728; xsl &#x5143;&#x7D20;&#x7684;&#x5C6C;&#x6027;&#x503C;&#x88E1;&#x3002;</p>
+<pre><code class="lang-xml">&#x6A19;&#x984C;: &lt;xsl:value-of select=&quot;/html/head/title&quot; /&gt;
+&#x8D85;&#x9023;&#x7D50;: &lt;xsl:value-of select=&quot;/html/link[@rel=&apos;canonical&apos;]@href&quot; /&gt;
+</code></pre>
+<p>&#x56E0;&#x70BA; xpath &#x4E26;&#x4E0D;&#x662F;&#x4EE5;&#x5143;&#x7D20;&#x6216;&#x5C6C;&#x6027;&#x7684;&#x65B9;&#x5F0F;&#x5B58;&#x5728;&#x65BC; xml &#x5167;&#xFF0C;
+&#x6240;&#x4EE5;&#x6C92;&#x8FA6;&#x6CD5;&#x7528; xmlns &#x70BA;&#x5979;&#x6307;&#x5B9A;&#x547D;&#x540D;&#x7A7A;&#x9593;&#x3002;
+xsl &#x4E2D;&#x4E5F;&#x6C92;&#x6709;&#x7279;&#x5225;&#x70BA; xpath &#x898F;&#x5B9A;&#x8981;&#x9810;&#x8A2D;&#x70BA;&#x5F15;&#x7528;&#x7684; namespace
+&#x6216;&#x540C; xsl &#x7684; namespace&#x3002;</p>
+<p>&#x6240;&#x4EE5;&#x5982;&#x679C;&#x4F60;&#x7684; <code>atom.xml</code> &#x6307;&#x5B9A;&#x4E86;&#x5C6C;&#x65BC;
+<code>http://www.w3.org/2005/Atom</code> &#xFF0C;
+&#x90A3; xsl &#x88E1;&#x5BEB; <code>/feed/entry</code> &#x6703;&#x6293;&#x5230; <em>&#x672A;&#x6307;&#x5B9A; namespace</em> &#x7684; entry&#xFF0C;
+&#x800C;&#x6293;&#x4E0D;&#x5230; atom.xml &#x88E1;&#x7684; /feed/entry&#xFF1B;
+&#x4E8B;&#x5BE6;&#x4E0A;&#x53EF;&#x80FD;&#x662F; <code>/atom:feed/atom:entry</code> &#x3002;</p>
+<pre><code class="lang-xml">&lt;feed xmlns=&quot;http://www.w3.org/2005/Atom&quot;&gt;
+  &lt;entry&gt;hey&lt;/entry&gt;
+&lt;/feed&gt;
+</code></pre>
+<pre><code class="lang-xml">&lt;xsl:stylesheet version=&quot;1.0&quot;
+                xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;
+                xmlns:a=&quot;http://www.w3.org/2005/Atom&quot;&gt;
+                &lt;!-- &#x70BA;&#x4E86;&#x7C21;&#x4FBF;&#xFF0C;&#x9019;&#x88E1;&#x5BEB;&#x6210; a&#xFF0C;&#x5176;&#x5BE6;&#x4F60;&#x8981;&#x53EB;&#x4EC0;&#x9EBC;&#x90FD;&#x53EF;&#x4EE5;&#xFF0C;
+                     &#x53CD;&#x6B63;&#x662F;&#x6307;&#x5411; http://www.w3.org/2005/Atom &#x5C31;&#x5C0D;&#x4E86;&#x3002; --&gt;
+
+  &lt;!-- &#x6293;&#x4E0D;&#x5230;&#x6771;&#x897F; --&gt;
+  &lt;xsl:value-of select=&quot;/feed/entry&quot; /&gt;
+
+  &lt;!-- &#x6293;&#x5C6C;&#x65BC; http://www.w3.org/2005/Atom &#x4E0B;&#x7684; feed &#x548C; entry --&gt;
+  &lt;xsl:value-of select=&quot;/a:feed/a:entry&quot; /&gt;
+&lt;/xsl:stylesheet&gt;
+</code></pre>
+<p>&#x5C31;&#x7B97; xml &#x5BEB;&#x6210;&#x9019;&#x6A23;&#xFF0C;
+&#x4E0A;&#x9762;&#x90A3;&#x4EFD; xsl &#x9084;&#x662F;&#x6293;&#x5F97;&#x5230;&#x6771;&#x897F;&#x3002;</p>
+<pre><code class="lang-xml">&lt;atom:feed xmlns:atom=&quot;http://www.w3.org/2005/Atom&quot;&gt;
+  &lt;atom:entry&gt;hey&lt;/atom:entry&gt;
+&lt;/atom:feed&gt;
+</code></pre>
+<p>&#x53EF;&#x4EE5;&#x628A;&#x9019;&#x5E7E;&#x4EFD;&#x4E1F;&#x5230; <a href="https://www.w3schools.com/xml/tryxslt.asp?xmlfile=cdcatalog&amp;xsltfile=cdcatalog_ex3">w3school &#x7684; xsl editor</a> &#x88E1;&#x8A66;&#x8A66;&#x770B;&#x3002;</p>
+<h2 id="&#x89E3;&#x6CD5;">&#x89E3;&#x6CD5;</h2>
+<p>&#x9019;&#x5C31;&#x9020;&#x6210;&#x5982;&#x679C;&#x4F7F;&#x7528;&#x7684; xml &#x6709;&#x547D;&#x540D;&#x7A7A;&#x9593;&#xFF0C;
+&#x5247;&#x6240;&#x6709; xsl &#x88E1;&#x7684; xpath &#x90FD;&#x8981;&#x52A0;&#x4E0A;&#x524D;&#x7DB4;&#xFF0C;&#x6703;&#x8B8A;&#x5F97;&#x6975;&#x5197;&#x9577;&#x3002;</p>
+<p>&#x56E0;&#x70BA;&#x5927;&#x90E8;&#x4EFD;&#x7684; xml &#x90FD;&#x662F;&#x55AE;&#x4E00;&#x547D;&#x540D;&#x7A7A;&#x9593;&#x7684;&#xFF0C;&#xFF08;&#x61C9;&#x8A72;&#x5427;&#xFF1F;&#xFF09;
+&#x5C31;&#x7B97;&#x5728;&#x55AE;&#x4E00;&#x547D;&#x540D;&#x7A7A;&#x9593;&#x4E5F;&#x8981;&#x624B;&#x52D5;&#x6307;&#x5B9A;&#x6240;&#x6709;&#x7684;&#x5143;&#x7D20;&#xFF0C;&#x662F;&#x6975;&#x70BA;&#x53CD;&#x667A;&#x7684;&#x4F5C;&#x6CD5;&#x3002;</p>
+<p>&#x6211; google &#x627E;&#x5230;&#x4E00;&#x4E32; <a href="https://stackoverflow.com/questions/1344158/xslt-with-xml-source-that-has-a-default-namespace-set-to-xmlns">stackoverflow &#x7684;&#x8A0E;&#x8AD6;</a> &#xFF0C;
+&#x552F;&#x4E00;&#x6709;&#x7528;&#x7684;&#x5EFA;&#x8B70;&#x662F; xsl 2.0 &#x4E2D;&#x63D0;&#x4F9B;&#x4E86; <code>xpath-default-namespace</code> &#x5C6C;&#x6027;&#xFF0C;
+&#x8B93;&#x4F60;&#x53EF;&#x4EE5;&#x6307;&#x5B9A;&#x4E0D;&#x5E36; namespace &#x7684;&#x81EA;&#x52D5;&#x88AB;&#x6B78;&#x70BA;&#x67D0;&#x4E00;&#x547D;&#x540D;&#x7A7A;&#x9593;&#xFF1B;
+&#x4F46;&#x6211;&#x7528; firefox&#xFF0C;xsl 2.0 &#x9084;&#x4E0D;&#x80FD;&#x652F;&#x63F4;&#x3002;</p>
+<p>&#x6211;&#x662F;&#x5728;&#x70BA; <a href="./atom.xml">./atom.xml</a> &#x4E0A;&#x6A23;&#x5F0F;&#x6642;&#xFF0C;&#x767C;&#x73FE;&#x9019;&#x500B;&#x554F;&#x984C;&#x7684;&#x3002;
+&#x6211;&#x4E00;&#x958B;&#x59CB;&#x662F; <a href="ext/atom.css">&#x7528; css &#x5BEB;</a> &#xFF0C;&#x4F46; css &#x6709;&#x4E00;&#x4E9B;&#x9650;&#x5236;&#xFF0C;
+&#x50CF;&#x628A; attribute &#x8F49;&#x70BA; content &#x53EA;&#x80FD;&#x653E;&#x5728; <code>::after</code> <code>::before</code> &#x88E1;&#xFF0C;
+&#x4E5F;&#x4E0D;&#x80FD;&#x4E00;&#x4E00;&#x4E0A;&#x4E0D;&#x540C;&#x7684;&#x6A23;&#x5F0F;&#x3002;
+&#x5F8C;&#x4F86; [&#x73A9; xsl] &#x6642;&#x6709;&#x505A;&#x5B8C;&#xFF0C;&#x4F46;&#x767C;&#x73FE;&#x554F;&#x984C;&#x3002;</p>
+<ol>
+<li>&#x5C31;&#x5BEB; 2.0&#xFF0C;&#x7BA1;&#x4ED6;&#x652F;&#x63F4;&#x53BB;&#x6B7B;&#x3002;</li>
+<li>&#x4E0D;&#x8981;&#x7528; xsl &#x6A23;&#x5F0F;&#xFF0C;&#x7528; css&#x3002;</li>
+<li>&#x6295;&#x964D;&#xFF0C;&#x53D6;&#x4E00;&#x500B;&#x77ED;&#x4E00;&#x9EDE;&#x7684;&#x524D;&#x7DB4;&#xFF0C;&#x4E56;&#x4E56;&#x628A;&#x6BCF;&#x500B; xpath &#x88E1;&#x7684;&#x5143;&#x7D20;&#x90FD;&#x4E0A;&#x524D;&#x7DB4;&#x3002;</li>
+</ol>
+<p>&#x6211;&#x662F;&#x9078; 1 2&#xFF0C;&#x53CD;&#x6B63;&#x5176;&#x5BE6;&#x4E5F;&#x4E0D;&#x6703;&#x6709;&#x4EBA;&#x7528;&#x700F;&#x89BD;&#x5668;&#x770B; atom&#xFF0C;&#x90FD;&#x7528;&#x95B1;&#x8B80;&#x5668;&#x4E86;&#x3002;</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer src="ext/load-disqus.js"></script>
+
+
+
+
+
+</body></html>

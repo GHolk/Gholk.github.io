@@ -5,6 +5,8 @@
 加上上次作業寫的影像取樣，
 組合成影像正射化的程式。
 
+<script src="ext/toc.js"></script>
+
 ## [上學期的 bottom up 共線式][bottom up]
 上學期 ~航遙測概論~ 最後產出是一個 bottom up 共線式，
 輸入內外方位參數，能把物空間座標轉到相空間；
@@ -170,13 +172,38 @@ flk.set(["gcp-error-map.png"],
 [{"farm":"farm5","server":"4540","photo":"38827707981","secret":"40d4d38303","user":"135370742@N08"}])
 flk.set("gcp-error-vector-map.png",
 {"farm":"farm5","server":"4516","photo":"24997532638","secret":"e2ca312ed2","user":"135370742@N08"})
-
+flk.set(
+'gcp-error-vector-clean-map.png',
+{"farm":"farm5","server":"4689","photo":"24414179417","secret":"62daaa6f75","user":"135370742@N08"}
+)
+flk.set(
+'error-dtm-move.png',
+{"farm":"farm5","server":"4594","photo":"27501276819","secret":"377978948f","user":"135370742@N08"}
+)
 </script>
 
-之後放到 QGIS 裡，點出各控制點在不同照片的座標，
-再真實座標比較：
+### <ins datetime="2017-12-25">分析</ins>
 
-`js flk.gn('vector-map')`
+之後放到 QGIS 裡，點出各控制點在不同照片的座標，
+再和真實座標比較：
+
+`js flk.gn('vector-clean-map')`
+
+圖中向量是從控制點真實座標，
+延伸往正射後影像中量測的控制點位置，
+為了明顯看出系統誤，再延伸五倍的結果。
+而底圖是正射後的 340 影像。
+
+三張正射影像，誤差方向不同，
+也分別在北中南為誤差最小處。
+東邊的球場，因為正高差較多，所以都偏較多。
+
+系統來說，
+預估誤差方向的作法是將共線式的向量投影到地面上，
+高程值如果有誤，就會延向量投影方向移動。
+移動方向和拍攝傾角有關，因傾角會影響共線式的向量。
+
+`js flk.gn('error-dtm')`
 
 
 #測量

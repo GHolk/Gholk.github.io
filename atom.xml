@@ -1,7 +1,7 @@
 <?xml version="1.0"
       encoding="UTF-8"?>
-<?xml-stylesheet href="http://gholk.github.io/ext/atom.css"
-                 type="text/css"?>
+<?xml-stylesheet href="ext/atom.xsl"
+                 type="text/xsl"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io</id>
   <updated>2017-12-25T05:50:08.286Z</updated>
@@ -138,7 +138,7 @@ imgp.then((img) =&gt; {
     referenceImage.write('DJI_0339-ortho.png')
 })
 &lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id="&lt;ins datetime=" 2017-12-04"=""&gt;方向相反"&gt;&lt;ins datetime="2017-12-04"&gt;方向相反&lt;/ins&gt;&lt;/h3&gt;
+&lt;h3 id="方向相反"&gt;&lt;ins datetime="2017-12-04"&gt;方向相反&lt;/ins&gt;&lt;/h3&gt;
 &lt;p&gt;發現之前寫的程式有部份寫錯，
 造成轉出來的結果上下相反。所以就改了。
 上一次的作業沒有要比較實際座標，

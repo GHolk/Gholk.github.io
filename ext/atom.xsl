@@ -1,12 +1,13 @@
 <?xml version="1.0"
       encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform" >
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xpath-default-namespace="http://www.w3.org/2005/Atom">
   <xsl:output method="html"
               encoding="UTF-8"
               indent="yes" />
 
-  <xsl:template match="/feed">
+  <xsl:template match="atom:feed">
     <html lang="zh-TW" prefix="og: http://ogp.me/ns#">
       <head>
         <meta http-equiv="Content-Type"

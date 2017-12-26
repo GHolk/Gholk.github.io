@@ -63,26 +63,77 @@ xsl 中也沒有特別為 xpath 規定要預設為引用的 namespace
 而抓不到 atom.xml 裡的 /feed/entry；
 事實上可能是 `/atom:feed/atom:entry` 。
 
-```xml
-<feed xmlns="http://www.w3.org/2005/Atom">
-  <entry>hey</entry>
-</feed>
-```
 
-```xml
-<xsl:stylesheet version="1.0"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:a="http://www.w3.org/2005/Atom">
-                <!-- 為了簡便，這裡寫成 a，其實你要叫什麼都可以，
-                     反正是指向 http://www.w3.org/2005/Atom 就對了。 -->
 
-  <!-- 抓不到東西 -->
-  <xsl:value-of select="/feed/entry" />
-  
-  <!-- 抓屬於 http://www.w3.org/2005/Atom 下的 feed 和 entry -->
-  <xsl:value-of select="/a:feed/a:entry" />
-</xsl:stylesheet>
-```
+<form id="xsl-area">
+<label> xml:
+<textarea name="xml">
+&lt;feed xmlns=&quot;http://www.w3.org/2005/Atom&quot;&gt;
+  &lt;entry&gt;hey&lt;/entry&gt;
+&lt;/feed&gt;
+</textarea> </label>
+<label> xsl:
+<textarea name="xsl">
+&lt;xsl:stylesheet version=&quot;1.0&quot;
+                xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;
+                xmlns:a=&quot;http://www.w3.org/2005/Atom&quot;&gt;
+                &lt;!-- 為了簡便，這裡寫成 a，其實你要叫什麼都可以，
+                     反正是指向 http://www.w3.org/2005/Atom 就對了。 --&gt;
+  &lt;xsl:output method=&quot;html&quot; /&gt;
+  &lt;xsl:template match=&quot;/&quot;&gt;
+    &lt;!-- 抓不到東西 --&gt;
+    &lt;xsl:value-of select=&quot;/feed/entry&quot; /&gt;
+
+    &lt;!-- 抓屬於 http://www.w3.org/2005/Atom 下的 feed 和 entry --&gt;
+    &lt;xsl:value-of select=&quot;/a:feed/a:entry&quot; /&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;
+</textarea> </label>
+<input type="submit" value="convert">
+<output name="after-transform"></output>
+</form>
+
+<style>
+  #xsl-area textarea {
+    width: 40%;
+    height: 10em;
+    display: inline;
+  }
+  #xsl-area output {
+    display: block;
+    width: 100%;
+    white-space: pre;
+  }
+  #xsl-area output {
+    display: block;
+    border: solid 1px black;
+    width: 100%;
+  }
+  #xsl-area input {
+    display: block;
+  }
+</style>
+
+<script>
+function xmlApplyXsl(xml, xsl) {
+    const xsltProcessor = new XSLTProcessor()
+    xsltProcessor.importStylesheet(xsl)
+    return xsltProcessor.transformToDocument(xml)
+}
+function parseXml(xmlString) {
+    const mime = 'application/xml'
+    const domParser = new DOMParser()
+    return domParser.parseFromString(xmlString, mime)
+}
+document.querySelector('#xsl-area').onsubmit = function (submitEvent) {
+    submitEvent.preventDefault()
+    const xml = parseXml(this.elements['xml'].value)
+    const xsl = parseXml(this.elements['xsl'].value)
+    const result = xmlApplyXsl(xml, xsl)
+    this.elements['after-transform'].textContent =
+        result.documentElement.outerHTML
+}
+</script>
 
 就算 xml 寫成這樣，
 上面那份 xsl 還是抓得到東西。
@@ -93,7 +144,8 @@ xsl 中也沒有特別為 xpath 規定要預設為引用的 namespace
 </atom:feed>
 ```
 
-可以把這幾份丟到 [w3school 的 xsl editor] 裡試試看。
+或者也可以試 [w3school 的 xsl editor] ，錯誤訊息比較友善。
+我用 js 的 dom 介面做的幾乎不報錯。
 
 [w3school 的 xsl editor]: https://www.w3schools.com/xml/tryxslt.asp?xmlfile=cdcatalog&xsltfile=cdcatalog_ex3
 
@@ -125,7 +177,9 @@ xsl 中也沒有特別為 xpath 規定要預設為引用的 namespace
 
 
 [用 css 寫]: ext/atom.css
-[玩xsl]: ext/atom.xsl
+[玩 xsl]: ext/atom.xsl
+
+
 
 #html
 #xml

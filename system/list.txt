@@ -111,3 +111,4 @@ how-to-create-meme-whithout-point.html
 ime-simply-chinese-table.html
 educate-revolution-affect-nothing.html
 xml-namespace-in-xsl-xpath.html
+cheerio-escape-xml-suck.html

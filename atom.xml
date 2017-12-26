@@ -4,7 +4,7 @@
                  type="text/xsl"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io</id>
-  <updated>2017-12-26T11:51:53.269Z</updated>
+  <updated>2017-12-26T16:45:44.436Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -19,6 +19,57 @@
 
 
 <entry>
+<id>http://gholk.github.io/cheerio-escape-xml-suck.html</id>
+<title>cheerio 跳脫 html 的問題</title>
+<published>2017-12-26T15:53:09.010Z</published>
+<updated>2017-12-26T16:45:44.431Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/cheerio-escape-xml-suck.html"/>
+<summary>cheerio 是在 node.js 上模仿 jquery 風格
+操作 html 文件的函式庫。
+但他在跳脫 html entities 上有些問題，
+會將所有非 ascii 字元跳脫，在 xml 的行為也不同；
+設成不跳脫又會讓大小於不正常。</summary>
+<category term="html"/>
+<category term="node"/>
+<category term="javascript"/>
+<category term="cheerio"/>
+<category term="blog"/>
+<content type="html">&lt;h1 id="cheerio 跳脫 html 的問題"&gt;cheerio 跳脫 html 的問題&lt;/h1&gt;
+&lt;p&gt;cheerio 是在 node.js 上模仿 jquery 風格
+操作 html 文件的函式庫。
+但他在跳脫 html entities 上有些問題，
+會將所有非 ascii 字元跳脫，在 xml 的行為也不同；
+設成不跳脫又會讓大小於不正常。&lt;/p&gt;
+&lt;p&gt;用 cheerio 的時候如果不設 &lt;code&gt;decodeEntities: false&lt;/code&gt; ，
+就會把非 ascii 都跳脫為 &lt;code&gt;&amp;amp;#xFFFF;&lt;/code&gt; 的形式，
+中文就會無法閱讀。&lt;/p&gt;
+&lt;p&gt;但 decode entities false 會將 &lt;code&gt;&amp;amp;gt;&lt;/code&gt; &lt;code&gt;&amp;amp;lt;&lt;/code&gt; &lt;code&gt;&amp;amp;amp;&lt;/code&gt;
+也解碼回 &lt;code&gt;&amp;gt;&lt;/code&gt; &lt;code&gt;&amp;lt;&lt;/code&gt; &lt;code&gt;&amp;amp;&lt;/code&gt; ，
+不論是用 &lt;code&gt;.text()&lt;/code&gt; 或 &lt;code&gt;.html()&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;在 jquery 或 dom 中，text 和 html 是不同的。
+&lt;code&gt;a.textContent = &amp;#39;&amp;lt;&amp;amp;&amp;gt;&amp;#39;&lt;/code&gt; 會變成 &lt;code&gt;&amp;lt;a&amp;gt;&amp;amp;lt;&amp;amp;amp;&amp;amp;gt;&amp;lt;/a&amp;gt;&lt;/code&gt; ，
+&lt;code&gt;a.innerHTML = &amp;#39;&amp;lt;&amp;amp;&amp;gt;&amp;#39;&lt;/code&gt; 才是 &lt;code&gt;&amp;lt;a&amp;gt;&amp;lt;&amp;amp;&amp;gt;&amp;lt;/a&amp;gt;&lt;/code&gt; 並語法錯誤。
+因為指定 text 時會自動跳脫。
+指定到 html 時，也只會跳脫一次，
+&lt;code&gt;a.innerHTML = &amp;#39;&amp;amp;gt;&amp;#39;&lt;/code&gt; 就是 &lt;code&gt;&amp;lt;a&amp;gt;&amp;amp;gt;&amp;lt;/a&amp;gt;&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;但 cheerio 指定 decode entities false 後，
+會統一都還原回原字元。
+&lt;code&gt;$a.html(&amp;#39;&amp;amp;amp;&amp;#39;)&lt;/code&gt; 變成 &lt;code&gt;&amp;lt;a&amp;gt;&amp;amp;&amp;lt;/a&amp;gt;&lt;/code&gt; ，
+&lt;code&gt;$a.text(&amp;#39;&amp;gt;&amp;#39;)&lt;/code&gt; 變成 &lt;code&gt;&amp;lt;a&amp;gt;&amp;gt;&amp;lt;/a&amp;gt;&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;我有開 &lt;a href="https://github.com/cheeriojs/cheerio/issues/1124"&gt;issue&lt;/a&gt; 問 cheerio 開發，
+但他們說不是 bug，
+只是因為我指定 decode entities false。&lt;/p&gt;
+&lt;p&gt;我記得以前的版本不會，
+就去找以前在舊 debian 硬碟裡裝的 cheerio，
+果然是正常的，那時候是 &lt;code&gt;0.22.0&lt;/code&gt; ，
+現在是 &lt;code&gt;1.0.0-rc.2&lt;/code&gt; ，只好暫時用以前的。&lt;/p&gt;
+&lt;p&gt;但以前的版本在 xml 裡，一樣 decode false，
+&lt;code&gt;$a.text(&amp;#39;1 &amp;gt; 2&amp;#39;)&lt;/code&gt; 會變 &lt;code&gt;&amp;lt;a&amp;gt;1 &amp;gt; 2&amp;lt;/a&amp;gt;&lt;/code&gt; ，
+一樣要手動跳脫。&lt;/p&gt;
+&lt;p&gt;現在部落格系統暫時舊的 cheerio 頂著用，
+xml 自己跳脫，之後可能改用 jsdom 吧，
+雖然有點大材小用的感覺，或者直接用 parser。&lt;/p&gt;
+</content></entry><entry>
 <id>http://gholk.github.io/xml-namespace-in-xsl-xpath.html</id>
 <title>xsl xpath 中的 namespace</title>
 <published>2017-12-25T17:11:47.791Z</published>

@@ -1,10 +1,10 @@
 <?xml version="1.0"
       encoding="UTF-8"?>
-<?xml-stylesheet href="ext/atom.xsl"
-                 type="text/xsl"?>
+<?xml-stylesheet href="ext/atom.css"
+                 type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io</id>
-  <updated>2017-12-26T16:45:44.436Z</updated>
+  <updated>2017-12-28T16:40:43.853Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -19,6 +19,50 @@
 
 
 <entry>
+<id>http://gholk.github.io/bike-handler-hard-free-hand.html</id>
+<title>腳踏車龍頭鎖太緊不能放手騎</title>
+<published>2017-12-28T16:40:43.618Z</published>
+<updated>2017-12-28T16:40:43.847Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/bike-handler-hard-free-hand.html"/>
+<summary>在大二買了一台還行的二手腳踏車，
+挑時有試騎，選了能放手騎的車。
+但大四下開始，不知道為什麼放手會變很不穩，
+最近龍頭出摩擦聲，上油才發現龍頭鬆緊會改變轉動摩擦力，
+龍頭容不容易轉動又和放手的穩定有關。</summary>
+<category term="bike"/>
+<category term="ncku"/>
+<category term="課"/>
+<content type="html">&lt;h1 id="腳踏車龍頭鎖太緊不能放手騎"&gt;腳踏車龍頭鎖太緊不能放手騎&lt;/h1&gt;
+&lt;p&gt;在大二買了一台還行的二手腳踏車，
+挑時有試騎，選了能放手騎的車。
+但大四下開始，不知道為什麼放手會變很不穩，
+最近龍頭出摩擦聲，上油才發現龍頭鬆緊會改變轉動摩擦力，
+龍頭容不容易轉動又和放手的穩定有關。&lt;/p&gt;
+&lt;p&gt;大二買的二手車，前幾年都沒保養，
+有一次在大二升大三暑假騎到太麻里，
+有騎比較遠，那時還可以。
+後來到大四，放手就變很不穩，也不知道為什麼。&lt;/p&gt;
+&lt;p&gt;最近腳踏車開始有怪聲，
+感覺是龍頭的金屬摩擦聲，之前冬天也有類似的事。
+今天上自由車課，比較晚到，
+組員已經自己出去騎了，
+只能待在車場，就修修看。&lt;/p&gt;
+&lt;p&gt;稍微把龍頭鬆開，就能上油了，
+是噴像 WD40 的潤滑除銹劑。
+有點銹在一起了，所有有邊噴邊轉。
+頂部拆整個龍頭的六角柱孔，快崩成圓孔了，
+只能轉鬆下面前叉的螺絲，但龍頭拆不掉所以拿不起來。&lt;/p&gt;
+&lt;p&gt;但上完油轉回去後，騎起來怪怪的，
+問老師才發現可能鎖太緊了，影響龍頭轉動。
+轉鬆後發現超好放手騎，
+才知道以前很難騎可能是生銹和龍頭變緊的關係。&lt;/p&gt;
+&lt;p&gt;之後就調了一次鬆緊，
+最後龍頭左右各 15° 的地方會卡卡的，
+有點像被限制在 15° 內。
+上一次怪怪的是限制的角度比較奇怪，而且很重；
+現在就很剛好，放手騎很舒服。
+只是騎不夠快的時候，覺得左右規律搖擺有點大。&lt;/p&gt;
+</content></entry><entry>
 <id>http://gholk.github.io/cheerio-escape-xml-suck.html</id>
 <title>cheerio 跳脫 html 的問題</title>
 <published>2017-12-26T15:53:09.010Z</published>

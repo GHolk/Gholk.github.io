@@ -6,24 +6,38 @@ const t = 'textContent'
 const c = 'createElement'
 const deep = true
 
+
 class Article {
+    get title() {
+        return this.entry[q]('title')[t]
+    }
+    get date() {
+        const entry = this.entry
+        const dateNode = entry[q]('updated') || entry[q]('published')
+        return new Date(dateNode[t])
+    }
+    get url() {
+        return this.entry[q]('link[rel=alternate]')[p]('href')
+    }
+    get description() {
+        return this.entry[q]('summary')[t]
+    }
+    get tags() {
+        const tagNode = Array.from(this.entry[q + 'All']('category'))
+        return tagNode.map((c) => c[p]('term'))
+    }
+    get content() {
+        return this.entry[q]('content')[t]
+    }
     static fromAtom(entry) {
         const a = new this()
-        a.title = entry.querySelector('title').textContent
-        let dateNode =  entry.querySelector('updated') ||
-            entry.querySelector('published')
-        a.date = new Date(dateNode.textContent)
-        a.url = entry.querySelector('link[rel=alternate]').getAttribute('href')
-        a.description = entry[q]('summary').textContent
-        a.tags = Array.from(entry.querySelectorAll('category'))
-            .map((c) => c[p]('term'))
+        a.entry = entry
         return a
     }
     createNode() {
         const template = this.constructor.template
         const listNode = this.constructor.listNode
         const node = template.cloneNode(deep)
-        window.cnode = node
         node[q]('a').textContent = this.title
         node[q]('a').href = this.url
         node[q]('small').textContent = this.date.toISOString()

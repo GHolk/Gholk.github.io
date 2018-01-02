@@ -1,0 +1,53 @@
+# 嵌入式的線上即時聊天室
+很久以前在 fc2 看過類似的東西，覺得不錯，
+前幾天又在 <//blog.user.today> 看到，
+就決定自己裝一個。最後選了 [cbox] 這個平台。
+
+[cbox]: //cbox.ws
+
+其實已經有 [disqus] 了，
+理應不用再裝 cbox，總之各有優缺吧。
+cbox 比 disqus 更匿名，更方便。
+有找了幾類似的服務：
+
+[disqus]: //disqus.com
+
+個人認為 cbox 的優勢是輕量快速，但只是感覺而已。
+因為一開始是接觸 cbox，想說紀念一下就用了。
+但他免費版只有 100 則訊息容量，
+實在有點少啊。
+
+<iframe id="index-chatbox"
+        src="https://www2.cbox.ws/box/?boxid=2382262&boxtag=nafllg"
+        allowtransparency="yes">
+  <a href="https://www2.cbox.ws/box/?boxid=2382262&boxtag=nafllg">
+    你的瀏覽器不支援 iframe，請點擊觀看留言。
+  </a>
+</iframe>
+
+[easychat]: //easychat.co
+
+[easychat] 第一次是在 <//blog.user.today> 看到的，
+又讓我想起這種服務，覺得很華麗，
+又發現這種服務是和平台分離的，
+也就是不是特定平台才有；
+就想在自己部落格也放一個。
+
+也想到原來之前那個 fc2 的小聊天室，也是類似的。
+之前在 wikia 有看過，以為是要有 server 才行，
+原來也有提供 iframe 給靜態網站用的。
+
+還有找到一個 [zopim] ，比較偏商業網站。
+easychat 本來好像也是給商業網站用的，
+讓客戶可以直接和公司溝通，處理一些簡單的交流。
+cbox 相比起來超簡陋的，不過也夠用了。
+
+[zopim]: //zopim.com
+
+目前 cbox 是只有放在首頁，因為覺得每篇文章都放一個太佔版面了。
+
+#blog
+#disqus
+#聊天
+#留言
+#cbox

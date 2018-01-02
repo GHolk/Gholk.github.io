@@ -49,7 +49,9 @@ cbox 相比起來超簡陋的，不過也夠用了。
 再回到訊息列按 enter 送出。
 在 username 列按 enter 時會跳錯誤訊息，
 因為在 username 按 enter 是註冊，
-不知道為什麼不能註冊，可能要付費版才有吧。
+但免費版沒有註冊功能，只能不登入自填 id 留言，
+和 k 島、4chan、2ch 一樣。
+（怎麼和 disqus 相反，disqus 是預設不開放匿名。）
 
 #blog
 #disqus

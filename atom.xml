@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io</id>
-  <updated>2018-01-02T14:25:07.168Z</updated>
+  <updated>2018-01-02T14:31:36.466Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -22,7 +22,7 @@
 <id>http://gholk.github.io/online-web-chat-room.html</id>
 <title>嵌入式的線上即時聊天室</title>
 <published>2018-01-02T14:14:13.264Z</published>
-<updated>2018-01-02T14:25:07.164Z</updated>
+<updated>2018-01-02T14:31:36.462Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/online-web-chat-room.html"/>
 <summary>很久以前在 fc2 看過類似的東西，覺得不錯，
 前幾天又在 //blog.user.today 看到，
@@ -45,7 +45,7 @@ cbox 比 disqus 更匿名，更方便。
 但他免費版只有 100 則訊息容量，
 實在有點少啊。&lt;/p&gt;
 &lt;iframe id="index-chatbox" src="https://www2.cbox.ws/box/?boxid=2382262&amp;boxtag=nafllg" allowtransparency="yes"&gt;
-  &lt;a href="https://www2.cbox.ws/box/?boxid=2382262&amp;boxtag=nafllg"&gt;
+  &lt;a href="//my.cbox.ws/gholk"&gt;
     你的瀏覽器不支援 iframe，請點擊觀看留言。
   &lt;/a&gt;
 &lt;/iframe&gt;
@@ -62,7 +62,12 @@ cbox 比 disqus 更匿名，更方便。
 easychat 本來好像也是給商業網站用的，
 讓客戶可以直接和公司溝通，處理一些簡單的交流。
 cbox 相比起來超簡陋的，不過也夠用了。&lt;/p&gt;
-&lt;p&gt;目前 cbox 是只有放在首頁，因為覺得每篇文章都放一個太佔版面了。&lt;/p&gt;
+&lt;p&gt;目前 cbox 是只有放在首頁，因為覺得每篇文章都放一個太佔版面了。
+直接留言他會要你輸入 username，就去上面一列輸入，
+再回到訊息列按 enter 送出。
+在 username 列按 enter 時會跳錯誤訊息，
+因為在 username 按 enter 是註冊，
+不知道為什麼不能註冊，可能要付費版才有吧。&lt;/p&gt;
 </content></entry><entry>
 <id>http://gholk.github.io/bike-handler-hard-free-hand.html</id>
 <title>腳踏車龍頭鎖太緊不能放手騎</title>

@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io</id>
-  <updated>2018-01-02T14:15:42.911Z</updated>
+  <updated>2018-01-02T14:25:07.168Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -22,7 +22,7 @@
 <id>http://gholk.github.io/online-web-chat-room.html</id>
 <title>嵌入式的線上即時聊天室</title>
 <published>2018-01-02T14:14:13.264Z</published>
-<updated>2018-01-02T14:15:42.906Z</updated>
+<updated>2018-01-02T14:25:07.164Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/online-web-chat-room.html"/>
 <summary>很久以前在 fc2 看過類似的東西，覺得不錯，
 前幾天又在 //blog.user.today 看到，

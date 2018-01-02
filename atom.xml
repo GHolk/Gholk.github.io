@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io</id>
-  <updated>2018-01-02T14:31:36.466Z</updated>
+  <updated>2018-01-02T14:45:25.136Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -22,7 +22,7 @@
 <id>http://gholk.github.io/online-web-chat-room.html</id>
 <title>嵌入式的線上即時聊天室</title>
 <published>2018-01-02T14:14:13.264Z</published>
-<updated>2018-01-02T14:31:36.462Z</updated>
+<updated>2018-01-02T14:45:25.132Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/online-web-chat-room.html"/>
 <summary>很久以前在 fc2 看過類似的東西，覺得不錯，
 前幾天又在 //blog.user.today 看到，
@@ -67,7 +67,9 @@ cbox 相比起來超簡陋的，不過也夠用了。&lt;/p&gt;
 再回到訊息列按 enter 送出。
 在 username 列按 enter 時會跳錯誤訊息，
 因為在 username 按 enter 是註冊，
-不知道為什麼不能註冊，可能要付費版才有吧。&lt;/p&gt;
+但免費版沒有註冊功能，只能不登入自填 id 留言，
+和 k 島、4chan、2ch 一樣。
+（怎麼和 disqus 相反，disqus 是預設不開放匿名。）&lt;/p&gt;
 </content></entry><entry>
 <id>http://gholk.github.io/bike-handler-hard-free-hand.html</id>
 <title>腳踏車龍頭鎖太緊不能放手騎</title>

@@ -45,6 +45,11 @@ cbox 相比起來超簡陋的，不過也夠用了。
 [zopim]: //zopim.com
 
 目前 cbox 是只有放在首頁，因為覺得每篇文章都放一個太佔版面了。
+直接留言他會要你輸入 username，就去上面一列輸入，
+再回到訊息列按 enter 送出。
+在 username 列按 enter 時會跳錯誤訊息，
+因為在 username 按 enter 是註冊，
+不知道為什麼不能註冊，可能要付費版才有吧。
 
 #blog
 #disqus

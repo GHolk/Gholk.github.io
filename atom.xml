@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io</id>
-  <updated>2017-12-28T16:40:43.853Z</updated>
+  <updated>2018-01-02T14:15:42.911Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -19,6 +19,51 @@
 
 
 <entry>
+<id>http://gholk.github.io/online-web-chat-room.html</id>
+<title>嵌入式的線上即時聊天室</title>
+<published>2018-01-02T14:14:13.264Z</published>
+<updated>2018-01-02T14:15:42.906Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/online-web-chat-room.html"/>
+<summary>很久以前在 fc2 看過類似的東西，覺得不錯，
+前幾天又在 //blog.user.today 看到，
+就決定自己裝一個。最後選了 cbox 這個平台。</summary>
+<category term="blog"/>
+<category term="disqus"/>
+<category term="聊天"/>
+<category term="留言"/>
+<category term="cbox"/>
+<content type="html">&lt;h1 id="嵌入式的線上即時聊天室"&gt;嵌入式的線上即時聊天室&lt;/h1&gt;
+&lt;p&gt;很久以前在 fc2 看過類似的東西，覺得不錯，
+前幾天又在 &lt;a href="//blog.user.today"&gt;//blog.user.today&lt;/a&gt; 看到，
+就決定自己裝一個。最後選了 &lt;a href="//cbox.ws"&gt;cbox&lt;/a&gt; 這個平台。&lt;/p&gt;
+&lt;p&gt;其實已經有 &lt;a href="//disqus.com"&gt;disqus&lt;/a&gt; 了，
+理應不用再裝 cbox，總之各有優缺吧。
+cbox 比 disqus 更匿名，更方便。
+有找了幾類似的服務：&lt;/p&gt;
+&lt;p&gt;個人認為 cbox 的優勢是輕量快速，但只是感覺而已。
+因為一開始是接觸 cbox，想說紀念一下就用了。
+但他免費版只有 100 則訊息容量，
+實在有點少啊。&lt;/p&gt;
+&lt;iframe id="index-chatbox" src="https://www2.cbox.ws/box/?boxid=2382262&amp;boxtag=nafllg" allowtransparency="yes"&gt;
+  &lt;a href="https://www2.cbox.ws/box/?boxid=2382262&amp;boxtag=nafllg"&gt;
+    你的瀏覽器不支援 iframe，請點擊觀看留言。
+  &lt;/a&gt;
+&lt;/iframe&gt;
+
+&lt;p&gt;&lt;a href="//easychat.co"&gt;easychat&lt;/a&gt; 第一次是在 &lt;a href="//blog.user.today"&gt;//blog.user.today&lt;/a&gt; 看到的，
+又讓我想起這種服務，覺得很華麗，
+又發現這種服務是和平台分離的，
+也就是不是特定平台才有；
+就想在自己部落格也放一個。&lt;/p&gt;
+&lt;p&gt;也想到原來之前那個 fc2 的小聊天室，也是類似的。
+之前在 wikia 有看過，以為是要有 server 才行，
+原來也有提供 iframe 給靜態網站用的。&lt;/p&gt;
+&lt;p&gt;還有找到一個 &lt;a href="//zopim.com"&gt;zopim&lt;/a&gt; ，比較偏商業網站。
+easychat 本來好像也是給商業網站用的，
+讓客戶可以直接和公司溝通，處理一些簡單的交流。
+cbox 相比起來超簡陋的，不過也夠用了。&lt;/p&gt;
+&lt;p&gt;目前 cbox 是只有放在首頁，因為覺得每篇文章都放一個太佔版面了。&lt;/p&gt;
+</content></entry><entry>
 <id>http://gholk.github.io/bike-handler-hard-free-hand.html</id>
 <title>腳踏車龍頭鎖太緊不能放手騎</title>
 <published>2017-12-28T16:40:43.618Z</published>

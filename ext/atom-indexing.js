@@ -1,4 +1,4 @@
-const atom = 'atom.xml'
+const atomUrl = document.querySelector('link[rel=alternate][type="application/atom+xml"]').href
 
 const q = 'querySelector'
 const p = 'getAttribute'
@@ -40,8 +40,8 @@ class Article {
         const node = template.cloneNode(deep)
         node[q]('a').textContent = this.title
         node[q]('a').href = this.url
-        node[q]('small').textContent = this.date.toISOString()
-        node[q]('p')[t] = this.description
+        node[q]('small').textContent = this.date.toJSON()
+        node[q]('.summary')[t] = this.description
         const ul = node[q]('ul')
         this.tags.map((tag) => {
             let li = document.createElement('li')
@@ -68,10 +68,18 @@ Article.template = document
     .querySelector('article')
     .cloneNode(deep)
 
-let loadArticle = ajaxQuery(atom, 'entry').then((allEntry) => {
+const loadArticle = ajaxQuery(atomUrl, 'entry').then((allEntry) => {
     allEntry = Array.from(allEntry)
     const articleList = allEntry.map((entry) => Article.fromAtom(entry))
     articleList.forEach((article) => article.createNode())
     return articleList
+    // return Promise.all(allEntry.map(asyncLoad))
 })
 
+function asyncLoad(entry) {
+    return new Promise((load) => {
+        const article = Article.fromAtom(entry)
+        article.createNode()
+        load(article)
+    })
+}

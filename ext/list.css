@@ -33,3 +33,16 @@ textarea {
 label {
     display: block;
 }
+
+#index-chatbox {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 10em;
+    height: 100%;
+    z-index: -1;
+}
+#index-chatbox:hover {
+    width: 20em;
+    z-index: 2;
+}

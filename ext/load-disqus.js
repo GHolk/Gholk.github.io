@@ -10,10 +10,13 @@ if (!disqus_thread) {
     document.body.appendChild(disqus_thread)
 }
 
-void function() {
+function loadDisqus() {
     const d = document
     const s = d.createElement('script')
     s.src = 'https://gholk-gh.disqus.com/embed.js'
     s.setAttribute('data-timestamp', Number(new Date()))
     d.body.appendChild(s)
-}()
+}
+
+if (!goption.hasOwnProperty('disqus') || eval(goption.disqus)) loadDisqus()
+

@@ -98,3 +98,16 @@ function ajaxQuery(url, selector) {
     })
 }
 
+function parseQueryOption(query) {
+    const keyValue = query.split(/&/g)
+    const result = {}
+    for (const pair of keyValue) {
+        const keyValue = pair.split(/=/)
+        const key = decodeURIComponent(keyValue[0])
+        const value = decodeURIComponent(keyValue[1])
+        result[key] = value
+    }
+    return result
+}
+
+const goption = parseQueryOption(location.search.slice(1))

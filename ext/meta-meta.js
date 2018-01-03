@@ -42,7 +42,7 @@ class MetaItem {
     }
 }
 
-void function () {
+function visualizeMeta() {
 
 const metaList = function () {
     const allMeta = document.querySelectorAll('meta')
@@ -113,4 +113,6 @@ if (!footer) {
 
 fillNode(footer, allList)
 
-}()
+}
+
+if (!goption.hasOwnProperty('meta') || eval(goption['meta'])) visualizeMeta()

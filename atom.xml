@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io</id>
-  <updated>2018-01-03T09:15:02.522Z</updated>
+  <updated>2018-01-04T14:26:08.082Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -19,6 +19,41 @@
 
 
 <entry>
+<id>http://gholk.github.io/shell-script-long-option-friendly.html</id>
+<title>shell script 中使用長選項增加可讀性</title>
+<published>2018-01-04T14:26:07.826Z</published>
+<updated>2018-01-04T14:26:08.076Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/shell-script-long-option-friendly.html"/>
+<summary>GNU 的工具多會有長短選項，
+長選項一看就知道在幹麻，不用再查 man page。
+所以我建議 shell script 中應該統一用長選項，
+增加可讀性，反正寫程式不差那幾劃，
+短選項就在 cli 的時候用起來方便就好了。</summary>
+<category term="cli"/>
+<category term="shell"/>
+<category term="選項"/>
+<category term="coding-style"/>
+<category term="程式"/>
+<content type="html">&lt;h1 id="shell script 中使用長選項增加可讀性"&gt;shell script 中使用長選項增加可讀性&lt;/h1&gt;
+&lt;p&gt;GNU 的工具多會有長短選項，
+長選項一看就知道在幹麻，不用再查 man page。
+所以我建議 shell script 中應該統一用長選項，
+增加可讀性，反正寫程式不差那幾劃，
+短選項就在 cli 的時候用起來方便就好了。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;短選項： &lt;code&gt;-s&lt;/code&gt; &lt;code&gt;-al&lt;/code&gt; &lt;code&gt;-xzf&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;長選項： &lt;code&gt;--after&lt;/code&gt; &lt;code&gt;--remote-file&lt;/code&gt; &lt;code&gt;--no-login&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;以前都不喜歡長選項，
+因為短選項可以寫在一起方便。
+後來才發現長選項可讀性高多了，
+不像短選項都得查 man page 才知道在幹麻。&lt;/p&gt;
+&lt;p&gt;程式就是要讓人看懂，
+如果看 shell script 還要查 man page 也太麻煩了。
+而且只要寫一次，之後都是直接執行，
+不像在 cli 打長選項很麻煩，
+只是短選項要常用才記得住。&lt;/p&gt;
+</content></entry><entry>
 <id>http://gholk.github.io/aborigines-pingtung-timur.html</id>
 <title>高屏瑪家鄉三地門原住民文化之旅</title>
 <published>2018-01-03T03:58:12.294Z</published>

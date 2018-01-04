@@ -115,3 +115,4 @@ cheerio-escape-xml-suck.html
 bike-handler-hard-free-hand.html
 online-web-chat-room.html
 aborigines-pingtung-timur.html
+shell-script-long-option-friendly.html

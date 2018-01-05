@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io</id>
-  <updated>2018-01-04T14:26:08.082Z</updated>
+  <updated>2018-01-05T11:39:59.409Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -19,6 +19,39 @@
 
 
 <entry>
+<id>http://gholk.github.io/cold-rain-running-nose-snot.html</id>
+<title>冬天下雨又感冒流鼻水</title>
+<published>2018-01-05T11:39:59.156Z</published>
+<updated>2018-01-05T11:39:59.403Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/cold-rain-running-nose-snot.html"/>
+<summary>不知道為什麼感冒，冬天第二次了，
+不知道和昨天下雨有沒有關係，有淋一些。
+不過下雨前都計就在流鼻水了，
+也可能是被林傑傳染的。</summary>
+<category term="病"/>
+<category term="ncku"/>
+<category term="出遊"/>
+<category term="雨"/>
+<content type="html">&lt;h1 id="冬天下雨又感冒流鼻水"&gt;冬天下雨又感冒流鼻水&lt;/h1&gt;
+&lt;p&gt;不知道為什麼感冒，冬天第二次了，
+不知道和昨天下雨有沒有關係，有淋一些。
+不過下雨前都計就在流鼻水了，
+也可能是被林傑傳染的。&lt;/p&gt;
+&lt;p&gt;周一林傑感冒，周二和 CCNS 去吃山頭火拉麵，
+周三喉嚨癢癢的。
+周四上午開始流鼻水，
+晚上定期聚 DC 感冒，晚上睡前就確定感冒了，
+一直流鼻水不舒服。&lt;/p&gt;
+&lt;p&gt;周四有淋二場雨，從自由車場騎回成大，
+和土地法下課後騎回宿舍。
+之後去定期聚就撐傘走路，淋一點點而已。&lt;/p&gt;
+&lt;p&gt;覺得感冒就是多睡多吃，能吃就吃，
+然後想睡就睡，儘量多睡。&lt;/p&gt;
+&lt;p&gt;上次感冒碰到 &lt;a href="kaohsiung-art-travel.html"&gt;藝術與藝術批評校外教學&lt;/a&gt; ，
+這次遇到都市計劃去赤崁樓的場地探堪，
+不過曾耀霆也感冒，蠻巧的。
+但只有他戴口罩，感覺不出他感冒。&lt;/p&gt;
+</content></entry><entry>
 <id>http://gholk.github.io/shell-script-long-option-friendly.html</id>
 <title>shell script 中使用長選項增加可讀性</title>
 <published>2018-01-04T14:26:07.826Z</published>

@@ -194,3 +194,9 @@ img {
     display: block;
     margin: auto;
 }
+
+abbr:after {
+    content: " (" attr(title) ")";
+    font-size: smaller;
+    font-style: italic;
+}

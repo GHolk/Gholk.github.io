@@ -48,7 +48,7 @@ ${tags}
                 const $link = this.selector('<link>')
                 $link.attr('rel', 'enclosure')
                 $link.attr('href', $meta.attr('content'))
-                entry.append($link)
+                entry.find('summary').after($link)
             })
 
         this.selector('entry:first-of-type').before(entry)

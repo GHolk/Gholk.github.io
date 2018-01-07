@@ -3,8 +3,8 @@
 <?xml-stylesheet href="ext/atom.css"
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <id>http://gholk.github.io</id>
-  <updated>2018-01-05T11:39:59.409Z</updated>
+  <id>http://gholk.github.io/</id>
+  <updated>2018-01-07T13:32:47.736Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -19,6 +19,61 @@
 
 
 <entry>
+<id>http://gholk.github.io/open-graph-youtube-video.html</id>
+<title>open graph 嵌入 youtube 影片</title>
+<published>2018-01-07T11:41:19.337Z</published>
+<updated>2018-01-07T13:32:47.730Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/open-graph-youtube-video.html"/>
+<link rel="enclosure" href="//youtube.com/embed/p9lNpWa4OXU"/>
+<summary>最近想寫幾篇流行歌的文，
+就想要怎麼用 open graph 顯示 youtube 的影片，
+og:video 應該是要直接放影片檔 url，
+但 youtube 沒有這種直接連結，
+youtube 自己的做法是放 embed 的連結，
+然後把 video type 寫成 text/html 。</summary>
+<category term="html"/>
+<category term="web"/>
+<category term="open-graph"/>
+<category term="youtube"/>
+<category term="video"/>
+<category term="music"/>
+<category term="mv"/>
+<category term="歌"/>
+<content type="html">&lt;h1 id="open graph 嵌入 youtube 影片"&gt;open graph 嵌入 youtube 影片&lt;/h1&gt;
+&lt;p&gt;最近想寫幾篇流行歌的文，
+就想要怎麼用 open graph 顯示 youtube 的影片，
+&lt;code&gt;og:video&lt;/code&gt; 應該是要直接放影片檔 url，
+但 youtube 沒有這種直接連結，
+youtube 自己的做法是放 embed 的連結，
+然後把 video type 寫成 &lt;code&gt;text/html&lt;/code&gt; 。&lt;/p&gt;
+
+
+&lt;p&gt;一開始 google 了一下，但解法都很爛。
+比較多是放 &lt;code&gt;/v/p9lNpWa4OXU&lt;/code&gt; ，
+也就是 shackwave flash 格式。&lt;/p&gt;
+&lt;p&gt;後來想到直接看 youtube 的作法，
+他們是直接放 embed 網址，
+也就是 iframe 連到的格式。&lt;/p&gt;
+&lt;h2 id="flash"&gt;flash&lt;/h2&gt;
+&lt;pre&gt;&lt;code class="lang-html"&gt;&amp;lt;meta property=&amp;quot;og:type&amp;quot; content=&amp;quot;video&amp;quot;&amp;gt;
+&amp;lt;meta property=&amp;quot;og:video:url&amp;quot; content=&amp;quot;//youtube.com/v/p9lNpWa4OXU&amp;quot;&amp;gt;
+&amp;lt;meta property=&amp;quot;og:video:type&amp;quot; content=&amp;quot;text/html&amp;quot;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id="html"&gt;html&lt;/h2&gt;
+&lt;pre&gt;&lt;code class="lang-html"&gt;&amp;lt;meta property=&amp;quot;og:type&amp;quot; content=&amp;quot;video&amp;quot;&amp;gt;
+&amp;lt;meta property=&amp;quot;og:video:url&amp;quot; content=&amp;quot;//youtube.com/embed/p9lNpWa4OXU&amp;quot;&amp;gt;
+&amp;lt;meta property=&amp;quot;og:video:type&amp;quot; content=&amp;quot;text/html&amp;quot;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;雖然影片格式給 &lt;code&gt;text/html&lt;/code&gt; 有點奇怪，
+不過實在不想用 flash，就這樣吧。&lt;/p&gt;
+&lt;p&gt;至於 atom 要怎麼放，我是想用 &lt;code&gt;enclosure&lt;/code&gt; ，
+內容一樣是 embed 的 html。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-xml"&gt;&amp;lt;link rel=&amp;quot;enclosure&amp;quot; 
+      type=&amp;quot;text/html&amp;quot; 
+      href=&amp;quot;//youtube.com/embed/p9lNpWa4OXU&amp;quot; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/cold-rain-running-nose-snot.html</id>
 <title>冬天下雨又感冒流鼻水</title>
 <published>2018-01-05T11:39:59.156Z</published>

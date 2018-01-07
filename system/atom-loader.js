@@ -36,18 +36,20 @@ class AtomLoader {
       href="${this.baseUri}/${loader.file}" />
 <summary>${loader.description}</summary>
 ${tags}
+<content type="html">${escapeHtml(loader.main)}</content>
 `)
-        const searchOgImage = loader.selector('meta[property="og:image"]')
-        if (searchOgImage.length > 0) {
-            const meta = searchOgImage.last()
-            const link = this.selector('<link rel="enclosure">')
-            link.attr('href', meta.attr('content'))
-            entry.append(link)
-        }
-
-        const content = this.selector('<content type="html">')
-        content.text(escapeHtml(loader.main))
-        entry.append(content)
+        const $ = loader.selector
+        $('meta[property]')
+            .filter(
+                (i, meta) => /^og:(video|image)/.test($(meta).attr('property'))
+            )
+            .each((i, meta) => {
+                const $meta = $(meta)
+                const $link = this.selector('<link>')
+                $link.attr('rel', 'enclosure')
+                $link.attr('href', $meta.attr('content'))
+                entry.append($link)
+            })
 
         this.selector('entry:first-of-type').before(entry)
         function tagToAtom(tag) {

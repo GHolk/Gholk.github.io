@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-01-07T13:32:47.736Z</updated>
+  <updated>2018-01-07T14:43:35.813Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -19,6 +19,51 @@
 
 
 <entry>
+<id>http://gholk.github.io/puff-girl-cinderella.html</id>
+<title>劉亦菲：泡芙女孩</title>
+<published>2018-01-07T14:43:35.567Z</published>
+<updated>2018-01-07T14:43:35.808Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/puff-girl-cinderella.html"/>
+<link rel="enclosure" href="https://www.youtube.com/embed/Xm-CI4WQcd4"/>
+<summary>這首感覺是 劉 很早期的歌，還有日語版的。
+以前就很喜歡，這種有童話風格的，還參一二句英文。
+最近才看了 mv，雖然看不懂在演什麼，
+但裡面的劉蠻可愛的，有種小女生賣弄的感覺。</summary>
+<category term="歌"/>
+<category term="日本"/>
+<category term="youtube"/>
+<category term="女"/>
+<content type="html">&lt;h1 id="劉亦菲：泡芙女孩"&gt;劉亦菲：泡芙女孩&lt;/h1&gt;
+&lt;p&gt;這首感覺是 &lt;abbr title="劉亦菲"&gt;劉&lt;/abbr&gt; 很早期的歌，還有日語版的。
+以前就很喜歡，這種有童話風格的，還參一二句英文。
+最近才看了 mv，雖然看不懂在演什麼，
+但裡面的劉蠻可愛的，有種小女生賣弄的感覺。&lt;/p&gt;
+
+
+&lt;iframe src="https://www.youtube.com/embed/Xm-CI4WQcd4"&gt;
+&lt;a href="https://youtu.be/Xm-CI4WQcd4"&gt;泡芙女孩&lt;/a&gt;
+&lt;/iframe&gt;
+
+&lt;p&gt;開頭一段 respberry 很多種莓的繞口令，
+可能是西方的諺語吧。&lt;/p&gt;
+&lt;p&gt;裡面有些小女生可愛誇張的動作：
+像裝成假人模特兒躲避追逐；用手假裝成手槍；
+把戒指放到男生手上，再拿回來，裝成被送禮。&lt;/p&gt;
+&lt;p&gt;劉拉著洋裝跳來跳去的畫面蠻好玩的。
+中間英文男聲的旁白，讓人想到西餐妹，
+但誰不希望這樣一場，像童話故事的浪漫呢。&lt;/p&gt;
+&lt;p&gt;看起來有點像偶像劇，但不知道是不是確有其劇，
+還是 mv 而已。&lt;/p&gt;
+&lt;iframe src="https://www.youtube.com/embed/pzaeOMMOnKg"&gt;
+&lt;a href="https://youtu.be/pzaeOMMOnKg"&gt;真夜中のドア&lt;/a&gt;
+&lt;/iframe&gt;
+
+&lt;p&gt;這首還有日文版，好像原曲是日文，改回中文的。
+裡面的英文部份原曲也就是英文。&lt;/p&gt;
+&lt;p&gt;很久以前就有這首歌，也覺得很有趣。
+一些比較像的有卡通人生、barbie girl。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/open-graph-youtube-video.html</id>
 <title>open graph 嵌入 youtube 影片</title>
 <published>2018-01-07T11:41:19.337Z</published>

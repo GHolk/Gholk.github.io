@@ -41,7 +41,7 @@ ${tags}
         const $ = loader.selector
         $('meta[property]')
             .filter(
-                (i, meta) => /^og:(video|image)/.test($(meta).attr('property'))
+                (i, meta) => /^og:.*:url$/.test($(meta).attr('property'))
             )
             .each((i, meta) => {
                 const $meta = $(meta)

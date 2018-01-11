@@ -120,3 +120,4 @@ cold-rain-running-nose-snot.html
 open-graph-youtube-video.html
 puff-girl-cinderella.html
 sudo-shutdown-mobile.html
+javascript-variable-hoisting-state.html

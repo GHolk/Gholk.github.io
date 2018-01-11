@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-01-08T03:38:27.282Z</updated>
+  <updated>2018-01-11T17:08:07.940Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,132 @@
 
 
 <entry>
+<id>http://gholk.github.io/javascript-variable-hoisting-state.html</id>
+<title>js 中的變量提升與函數狀態</title>
+<published>2018-01-11T17:04:45.797Z</published>
+<updated>2018-01-11T17:08:07.935Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/javascript-variable-hoisting-state.html"/>
+<summary>js 中變數宣告會被提升到函數頂端，但賦值則不會。
+函數宣告則會將宣告和賦值都提升。
+函數體提升是為了能讓函數先使用後宣告，
+而變數提升則是因為函數提升了又得要閉包，
+和為了簡化函數狀態，
+不會執行到某一陳述後變數就變為區域。</summary>
+<category term="javascript"/>
+<category term="closure"/>
+<category term="hoisting"/>
+<category term="宣告"/>
+<category term="演算法"/>
+<content type="html">&lt;h1 id="js 中的變量提升與函數狀態"&gt;js 中的變量提升與函數狀態&lt;/h1&gt;
+&lt;p&gt;js 中變數宣告會被提升到函數頂端，但賦值則不會。
+函數宣告則會將宣告和賦值都提升。
+函數體提升是為了能讓函數先使用後宣告，
+而變數提升則是因為函數提升了又得要閉包，
+和為了簡化函數狀態，
+不會執行到某一陳述後變數就變為區域。&lt;/p&gt;
+&lt;h2 id="var 變數"&gt;var 變數&lt;/h2&gt;
+&lt;p&gt;js 中有一個很奇怪的點，
+所有宣告都會被提升到作用域的頂部，
+稱為 hoisting，但賦值則不會。
+若在宣告並賦值前使用，
+事實上是使用到已宣告但未賦值的變數。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-js"&gt;var ok = true
+
+// 你寫這樣
+function hoisting() {
+    console.log(ok) // undefined
+    var ok = false
+    console.log(ok) // false
+}
+hoisting()
+
+// 事實會變這樣
+function trueHoisting() {
+    var ok
+    console.log(ok)
+    ok = false
+    console.log(ok)
+}
+trueHoisting()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;會這樣做我認為是為了減少函數的狀態，
+也減化函數的節構。
+如果不做 hoisting，
+會發生在宣告前會指向閉包的外部變數，
+宣告後會變成指向內部變數，
+造成函數內部狀態不統一的情況。
+但這只是小部份的原因，我認為函數原因更重要。&lt;/p&gt;
+&lt;h2 id="函數的提升"&gt;函數的提升&lt;/h2&gt;
+&lt;p&gt;另一個更重要的原因是 js 讓函數提升，
+也就是讓函數能先使用後宣告，
+如果變數不跟著提升，
+那函數的閉包根本抓不到宣告的變數。&lt;/p&gt;
+&lt;p&gt;函數的提升是十分好用但難做的功能，
+可以先呼叫函數，而把函數的定義寫在後面。
+像 C 語言就沒這個功能，
+如果函數有互相呼叫就要考慮呼叫時定義了沒，
+或用 header 統一先定義。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-js"&gt;if (array) printArray(array)
+
+function printArray(array) {
+    for (let item in array) {
+        console.log(&amp;#39;%s, &amp;#39;, item)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id="考慮提升函數不提升變數的情況"&gt;考慮提升函數不提升變數的情況&lt;/h2&gt;
+&lt;pre&gt;&lt;code class="lang-js"&gt;var ok = 0
+
+function onlyHoistingFunction() {
+    console.log(ok) // 0
+
+    var ok = 1
+    console.log(ok) // 1
+    printOk()
+
+    function printOk() {
+        console.log(ok)
+    }
+
+    ok = 3
+    printOk()
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;js 允許先使用後宣告，但又有閉包，
+printOk 中的 ok 應該要是宣告時的外部的值。
+那是要包 0 還是 1？
+先使用後宣告事實上就是把函數宣告提升到 scope 最開頭，
+但這時 ok 根本還沒宣告。
+所謂提升，理論上是提升至 scope 中所有 code 前面，
+那根本抓不到任何區域變數。&lt;/p&gt;
+&lt;p&gt;也許可以跟據宣告時的上下文決定閉包抓取的變數，
+仍讓函數可以先執行後宣告。
+但這樣就要先知道到執行到各函數宣告時各先宣告了哪些變數，
+再開始真正執行。
+可能會讓 interpreter 很難做。&lt;/p&gt;
+&lt;p&gt;所以說，變數的提升是因為提升了函數，
+又存在閉包，而不得不做的決定。&lt;/p&gt;
+&lt;h2 id="函數提升與執行"&gt;函數提升與執行&lt;/h2&gt;
+&lt;p&gt;因為函數會提升，也就不能 stream 執行，
+有一句就執行一句。
+因為必須到 scope 結束後，
+才知道哪些函數有定義，內容是什麼，才能開始執行。&lt;/p&gt;
+&lt;p&gt;一句句執行就不可能發生變數提升，
+因為碰到宣告時，之前的程式已經執行完了。&lt;/p&gt;
+&lt;p&gt;至於 C 是動態作用域，
+沒有閉包這種東西，所以沒肴提升這檔事。&lt;/p&gt;
+&lt;h2 id="let 與 const"&gt;let 與 const&lt;/h2&gt;
+&lt;p&gt;let const 和 var 的行為不同，
+除了有 scope 外，還有 dead zone。
+var 提升後到真正賦值為止，值是 undefined，
+而 let const 在宣告前，
+雖然還是存在於該作用域，但求值會拋出 reference error。&lt;/p&gt;
+&lt;p&gt;其實只是多一項檢測而已，說不出是好是壞。
+總之還是一個函數一種狀態，
+只是防止有人試圖在宣告前引用，以為可以得到外部的值，
+卻得到 undefined，拋出錯誤警告而已。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/sudo-shutdown-mobile.html</id>
 <title>免密碼 sudoer 關機</title>
 <published>2018-01-08T03:38:27.039Z</published>

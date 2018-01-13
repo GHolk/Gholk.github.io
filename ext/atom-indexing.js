@@ -68,13 +68,17 @@ Article.template = document
     .querySelector('article')
     .cloneNode(deep)
 
-const loadArticle = ajaxQuery(atomUrl, 'entry').then((allEntry) => {
-    allEntry = Array.from(allEntry)
-    const articleList = allEntry.map((entry) => Article.fromAtom(entry))
-    articleList.forEach((article) => article.createNode())
-    return articleList
-    // return Promise.all(allEntry.map(asyncLoad))
-})
+function loadAtomUrl(url) {
+    return ajaxQuery(url, 'entry').then((allEntry) => {
+        allEntry = Array.from(allEntry)
+        const articleList = allEntry.map((entry) => Article.fromAtom(entry))
+        articleList.forEach((article) => article.createNode())
+        return articleList
+        // return Promise.all(allEntry.map(asyncLoad))
+    })
+}
+
+const loadArticle = loadAtomUrl(atomUrl)
 
 function asyncLoad(entry) {
     return new Promise((load) => {

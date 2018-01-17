@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-01-11T17:08:07.940Z</updated>
+  <updated>2018-01-17T06:24:20.298Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,34 @@
 
 
 <entry>
+<id>http://gholk.github.io/bike-handler-angle.html</id>
+<title>腳踏車龍頭螺帽的角度</title>
+<published>2018-01-17T06:24:20.060Z</published>
+<updated>2018-01-17T06:24:20.293Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/bike-handler-angle.html"/>
+<summary>龍頭的穩定其實和螺帽的角度有關，
+而不單是螺帽的鬆緊。
+螺帽騎久了會在某方向上磨出溝痕，
+所以在該角度就會比較穩定，
+如果螺帽角度不對，騎起來龍頭就會容易歪。</summary>
+<category term="bike"/>
+<category term="ncku"/>
+<category term="課"/>
+<content type="html">&lt;h1 id="腳踏車龍頭螺帽的角度"&gt;腳踏車龍頭螺帽的角度&lt;/h1&gt;
+&lt;p&gt;龍頭的穩定其實和螺帽的角度有關，
+而不單是螺帽的鬆緊。
+螺帽騎久了會在某方向上磨出溝痕，
+所以在該角度就會比較穩定，
+如果螺帽角度不對，騎起來龍頭就會容易歪。&lt;/p&gt;
+&lt;p&gt;第一次調完龍頭後，總覺得只噴一點 wd40，
+之後龍頭還是會鏽，就打算再開一次上黃油。
+但我是直接抹上去，沒有把鏽去掉，
+變成一團紅紅黑黑的，希望這樣沒關係。&lt;/p&gt;
+&lt;p&gt;之後上緊的時候就發現那個角度問題，
+就大概要六角螺帽要平的對前方，
+也就是螺帽前後的面要平行龍頭。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/javascript-variable-hoisting-state.html</id>
 <title>js 中的變量提升與函數狀態</title>
 <published>2018-01-11T17:04:45.797Z</published>

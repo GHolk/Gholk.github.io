@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-01-17T06:24:20.298Z</updated>
+  <updated>2018-01-18T09:28:42.084Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,93 @@
 
 
 <entry>
+<id>http://gholk.github.io/javascript-bind-last-argument.html</id>
+<title>js 綁定最後一個參數</title>
+<published>2018-01-18T09:23:36.252Z</published>
+<updated>2018-01-18T09:28:42.078Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/javascript-bind-last-argument.html"/>
+<summary>js 的 bind 除了綁定 this 外，
+還能綁定從第一個開始的任意個參數。
+但其實用 arguments 和 apply 就能做到，
+甚至可以綁定從後面數來的參數。
+由此就能把最後一個參數是 callback
+的非同步函數自動轉為 promise。</summary>
+<category term="javascript"/>
+<category term="promise"/>
+<category term="es6"/>
+<category term="callback"/>
+<category term="函數"/>
+<content type="html">&lt;h1 id="js 綁定最後一個參數"&gt;js 綁定最後一個參數&lt;/h1&gt;
+&lt;p&gt;js 的 bind 除了綁定 this 外，
+還能綁定從第一個開始的任意個參數。
+但其實用 arguments 和 apply 就能做到，
+甚至可以綁定從後面數來的參數。
+由此就能把最後一個參數是 callback
+的非同步函數自動轉為 promise。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-js"&gt;function callbackToPromise(callbackFunction) {
+    return function returnPromise() {
+        const argumentArray = Array.from(arguments)
+        return new Promise((resolve, reject) =&amp;gt; {
+            argumentArray.push((error, result) =&amp;gt; {
+                if (error) reject(error)
+                else resolve(result)
+            })
+            callbackFunction.apply(this, argumentArray)
+        })
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="lang-js"&gt;fs.readFilePromise = callbackToPromise(fs.readFile.bind(fs))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;要自動很關鍵是要能知道傳入了幾個參數，
+所以要有 arguments 物件，
+或用 es6 的 rest parameter 和 destruct 寫法。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-js"&gt;function callbackToPromise(callbackFunction) {
+    return (...argv) =&amp;gt; new Promise((resolve, reject) =&amp;gt; {
+        callbackFunction(...argv, (error, result) =&amp;gt; {
+            if (error) reject(error)
+            else resolve(result)
+        })
+    })
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;nodejs 的 &lt;code&gt;fs.readFile&lt;/code&gt; 函數是 callback 風格，
+用起來很不順手，用的時候都會自己包成 promise。
+&lt;a href="https://nodejs.org/api/util.html#util_util_promisify_original"&gt;node v8.0.0 後， &lt;code&gt;util.promisify&lt;/code&gt; 
+能把這類函數自動轉成 promise 形式。&lt;/a&gt;&lt;/p&gt;
+</content>
+</entry><entry>
+<id>http://gholk.github.io/javascript-eval-closure.html</id>
+<title>js 的 eval 與閉包</title>
+<published>2018-01-18T03:38:50.554Z</published>
+<updated>2018-01-18T03:38:50.808Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/javascript-eval-closure.html"/>
+<summary>若在閉包所屬的函數中有用到 eval，
+則可以由此存取閉包內的所有變數。
+雖然我不懂 js 的底層是如何運作閉包的，
+但至少不是 只包入有用到的變數 ，
+而是把整個環境都包入。</summary>
+<category term="javascript"/>
+<category term="eval"/>
+<category term="closure"/>
+<content type="html">&lt;h1 id="js 的 eval 與閉包"&gt;js 的 eval 與閉包&lt;/h1&gt;
+&lt;p&gt;若在閉包所屬的函數中有用到 eval，
+則可以由此存取閉包內的所有變數。
+雖然我不懂 js 的底層是如何運作閉包的，
+但至少不是 &lt;em&gt;只包入有用到的變數&lt;/em&gt; ，
+而是把整個環境都包入。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-js"&gt;let f
+{
+    let s = &amp;#39;abc&amp;#39;
+    let i = 0
+    let a = []
+    let o = {}
+    f = (code) =&amp;gt; eval(code)
+}
+typeof f(&amp;#39;o&amp;#39;) // object
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/bike-handler-angle.html</id>
 <title>腳踏車龍頭螺帽的角度</title>
 <published>2018-01-17T06:24:20.060Z</published>

@@ -124,3 +124,4 @@ javascript-variable-hoisting-state.html
 bike-handler-angle.html
 javascript-eval-closure.html
 javascript-bind-last-argument.html
+vlc-screen-record.html

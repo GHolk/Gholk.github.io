@@ -1,0 +1,74 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-01-18T09:23:36.252Z">
+<meta name="keywords" property="og:article:tag" content="javascript,promise,es6,callback,函數">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="javascript-eval-closure.html" title="js 的 eval 與閉包">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title>js 綁定最後一個參數</title>
+</head>
+<body>
+<main><h1 id="js 綁定最後一個參數">js 綁定最後一個參數</h1>
+<p>js 的 bind 除了綁定 this 外，
+還能綁定從第一個開始的任意個參數。
+但其實用 arguments 和 apply 就能做到，
+甚至可以綁定從後面數來的參數。
+由此就能把最後一個參數是 callback
+的非同步函數自動轉為 promise。</p>
+<pre><code class="lang-js">function callbackToPromise(callbackFunction) {
+    return function returnPromise() {
+        const argumentArray = Array.from(arguments)
+        return new Promise((resolve, reject) =&gt; {
+            argumentArray.push((error, result) =&gt; {
+                if (error) reject(error)
+                else resolve(result)
+            })
+            callbackFunction.apply(this, argumentArray)
+        })
+    }
+}
+</code></pre>
+<pre><code class="lang-js">fs.readFilePromise = callbackToPromise(fs.readFile.bind(fs))
+</code></pre>
+<p>要自動很關鍵是要能知道傳入了幾個參數，
+所以要有 arguments 物件，
+或用 es6 的 rest parameter 和 destruct 寫法。</p>
+<pre><code class="lang-js">function callbackToPromise(callbackFunction) {
+    return (...argv) =&gt; new Promise((resolve, reject) =&gt; {
+        callbackFunction(...argv, (error, result) =&gt; {
+            if (error) reject(error)
+            else resolve(result)
+        })
+    })
+}
+</code></pre>
+<p>nodejs 的 <code>fs.readFile</code> 函數是 callback 風格，
+用起來很不順手，用的時候都會自己包成 promise。
+<a href="https://nodejs.org/api/util.html#util_util_promisify_original">node v8.0.0 後， <code>util.promisify</code> 
+能把這類函數自動轉成 promise 形式。</a></p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer src="ext/load-disqus.js"></script>
+
+
+
+
+
+</body></html>

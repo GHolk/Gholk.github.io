@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-01-18T09:28:42.084Z</updated>
+  <updated>2018-01-18T15:54:39.635Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,42 @@
 
 
 <entry>
+<id>http://gholk.github.io/vlc-screen-record.html</id>
+<title>vlc 螢幕錄影</title>
+<published>2018-01-18T15:50:56.349Z</published>
+<updated>2018-01-18T15:54:39.629Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/vlc-screen-record.html"/>
+<summary>vlc 有螢幕錄影的功能，
+但我用 debian 裝好會報錯，
+因為一些工具被放到 vlc-plugin-access-extra 這個包裡，
+要自己手動裝。</summary><link rel="enclosure" href="https://youtube.com/embed/xHEIDI2ncss"/>
+<category term="vlc"/>
+<category term="record"/>
+<category term="debian"/>
+<content type="html">&lt;h1 id="vlc 螢幕錄影"&gt;vlc 螢幕錄影&lt;/h1&gt;
+&lt;p&gt;vlc 有螢幕錄影的功能，
+但我用 debian 裝好會報錯，
+因為一些工具被放到 vlc-plugin-access-extra 這個包裡，
+要自己手動裝。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;media&lt;/li&gt;
+&lt;li&gt;convert/save&lt;/li&gt;
+&lt;li&gt;capture device&lt;/li&gt;
+&lt;li&gt;capture mode: Desktop&lt;/li&gt;
+&lt;li&gt;option: 選你要的 fps，預設 1/s 也太慢&lt;/li&gt;
+&lt;li&gt;destination file: 選輸出檔案&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;iframe src="https://youtube.com/embed/xHEIDI2ncss"&gt;
+&lt;a href="https://youtube.com/xHEIDI2ncss"&gt;vlc screen record&lt;/a&gt;
+&lt;/iframe&gt;
+
+
+
+
+</content>
+</entry><entry>
 <id>http://gholk.github.io/javascript-bind-last-argument.html</id>
 <title>js 綁定最後一個參數</title>
 <published>2018-01-18T09:23:36.252Z</published>
@@ -387,7 +423,7 @@ sudo 本來能指定能執行的指令，
 og:video 應該是要直接放影片檔 url，
 但 youtube 沒有這種直接連結，
 youtube 自己的做法是放 embed 的連結，
-然後把 video type 寫成 text/html 。</summary>
+然後把 video type 寫成 text/html。</summary>
 <category term="html"/>
 <category term="web"/>
 <category term="open-graph"/>

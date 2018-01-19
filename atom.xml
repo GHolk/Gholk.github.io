@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-01-18T15:54:39.635Z</updated>
+  <updated>2018-01-19T14:46:48.071Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,80 @@
 
 
 <entry>
+<id>http://gholk.github.io/spexif-pwa-enhance.html</id>
+<title>spexif 對行動裝置優化與 PWA</title>
+<published>2018-01-19T14:46:47.810Z</published>
+<updated>2018-01-19T14:46:48.065Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/spexif-pwa-enhance.html"/>
+<summary>在這學期專題，我對上學期完成的網頁地圖 spexif
+在手機上的使用體驗做最佳化，參考了 google
+所提出的 Prograssive Web Application 概念。
+使用到 ServiceWorker、Responsive Web Design、
+Single Page Application 的技術與概念。</summary>
+<category term="spexif"/>
+<category term="ncku"/>
+<category term="web"/>
+<category term="pwa"/>
+<category term="report"/>
+<content type="html">&lt;h1 id="spexif 對行動裝置優化與 PWA"&gt;spexif 對行動裝置優化與 PWA&lt;/h1&gt;
+&lt;p&gt;在這學期專題，我對上學期完成的網頁地圖 spexif
+在手機上的使用體驗做最佳化，參考了 google
+所提出的 Prograssive Web Application 概念。
+使用到 ServiceWorker、Responsive Web Design、
+Single Page Application 的技術與概念。&lt;/p&gt;
+&lt;h2 id="Prograssive Web Application"&gt;Prograssive Web Application&lt;/h2&gt;
+&lt;p&gt;pwa 的目的是在瀏覽器上提供類似原生 App 的體驗，
+使用到 service worker、rwd、single page application 等技術。
+其中核心技術是 service worker 與 Fetch API、Cache API，
+使網頁能夠控制瀏覽器暫存網頁，達到離線使用的目的。&lt;/p&gt;
+&lt;h2 id="responsive web design"&gt;responsive web design&lt;/h2&gt;
+&lt;p&gt;rwd 是利用 html 中架構與樣式分離的特性，
+對不同裝置設計不同的樣式表，
+主要是在不同尺寸螢幕上都能有適當的排版，
+防止字體過大過小、網頁內容超出螢幕等缺陷。&lt;/p&gt;
+&lt;p&gt;針對 spexif，我設計了一份適合手機使用的樣式表，
+縮小字體，並收合未使用的工具，
+達到空出最大空間給地圖操作的目的。&lt;/p&gt;
+&lt;h2 id="single page application"&gt;single page application&lt;/h2&gt;
+&lt;p&gt;由於在手機上不像桌面程式，
+可以同時有多視窗共存，切換分頁的體驗十分糟糕。
+所以使用 iframe 讓原先的登入介面，
+可以在同一網頁內進行。&lt;/p&gt;
+&lt;h2 id="service worker"&gt;service worker&lt;/h2&gt;
+&lt;p&gt;servicw worker 是進階版的 web worker，
+能夠在註冊的網頁被訪問時自背景啟動，
+存取暫存的網頁，並處理 http request，
+控制向伺服器發出或以暫存中的版本回應。&lt;/p&gt;
+&lt;p&gt;本來 cache 的控制較無效果，僅能在伺服器端以 HTTP header 控制；
+cache api 能夠精細控制網頁哪些部份應該暫存，
+而 fetch api 則提供發送、攔截 http request 的功能。
+通過 service worker 結合二者，
+即能監聽 http request 發出的 fetch 事件，
+選擇從 cache api 中回應或向 server 請求。&lt;/p&gt;
+&lt;h3 id="流程"&gt;流程&lt;/h3&gt;
+&lt;svg height="1810.5" version="1.1" width="1023" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="overflow: hidden; position: relative; top: -0.116669px;" viewbox="0 0 1023 1810.5" preserveaspectratio="xMidYMid meet"&gt;&lt;desc&gt;Created with Raphaël 2.2.0&lt;/desc&gt;&lt;defs&gt;&lt;path stroke-linecap="round" d="M5,0 0,2.5 5,5z" id="raphael-marker-block"/&gt;&lt;marker id="raphael-marker-endblock33-objpmrp1" markerheight="3" markerwidth="3" orient="auto" refx="1.5" refy="1.5"&gt;&lt;use xlink:href="#raphael-marker-block" transform="rotate(180 1.5 1.5) scale(0.6,0.6)" stroke-width="1.6667" fill="black" stroke="none"/&gt;&lt;/marker&gt;&lt;marker id="raphael-marker-endblock33-objl1q2w" markerheight="3" markerwidth="3" orient="auto" refx="1.5" refy="1.5"&gt;&lt;use xlink:href="#raphael-marker-block" transform="rotate(180 1.5 1.5) scale(0.6,0.6)" stroke-width="1.6667" fill="black" stroke="none"/&gt;&lt;/marker&gt;&lt;marker id="raphael-marker-endblock33-obj294gr" markerheight="3" markerwidth="3" orient="auto" refx="1.5" refy="1.5"&gt;&lt;use xlink:href="#raphael-marker-block" transform="rotate(180 1.5 1.5) scale(0.6,0.6)" stroke-width="1.6667" fill="black" stroke="none"/&gt;&lt;/marker&gt;&lt;marker id="raphael-marker-endblock33-objelbk1" markerheight="3" markerwidth="3" orient="auto" refx="1.5" refy="1.5"&gt;&lt;use xlink:href="#raphael-marker-block" transform="rotate(180 1.5 1.5) scale(0.6,0.6)" stroke-width="1.6667" fill="black" stroke="none"/&gt;&lt;/marker&gt;&lt;marker id="raphael-marker-endblock33-objtat8w" markerheight="3" markerwidth="3" orient="auto" refx="1.5" refy="1.5"&gt;&lt;use xlink:href="#raphael-marker-block" transform="rotate(180 1.5 1.5) scale(0.6,0.6)" stroke-width="1.6667" fill="black" stroke="none"/&gt;&lt;/marker&gt;&lt;marker id="raphael-marker-endblock33-objb84fc" markerheight="3" markerwidth="3" orient="auto" refx="1.5" refy="1.5"&gt;&lt;use xlink:href="#raphael-marker-block" transform="rotate(180 1.5 1.5) scale(0.6,0.6)" stroke-width="1.6667" fill="black" stroke="none"/&gt;&lt;/marker&gt;&lt;marker id="raphael-marker-endblock33-obj9heye" markerheight="3" markerwidth="3" orient="auto" refx="1.5" refy="1.5"&gt;&lt;use xlink:href="#raphael-marker-block" transform="rotate(180 1.5 1.5) scale(0.6,0.6)" stroke-width="1.6667" fill="black" stroke="none"/&gt;&lt;/marker&gt;&lt;marker id="raphael-marker-endblock33-obj91r3x" markerheight="3" markerwidth="3" orient="auto" refx="1.5" refy="1.5"&gt;&lt;use xlink:href="#raphael-marker-block" transform="rotate(180 1.5 1.5) scale(0.6,0.6)" stroke-width="1.6667" fill="black" stroke="none"/&gt;&lt;/marker&gt;&lt;marker id="raphael-marker-endblock33-objkg4ah" markerheight="3" markerwidth="3" orient="auto" refx="1.5" refy="1.5"&gt;&lt;use xlink:href="#raphael-marker-block" transform="rotate(180 1.5 1.5) scale(0.6,0.6)" stroke-width="1.6667" fill="black" stroke="none"/&gt;&lt;/marker&gt;&lt;marker id="raphael-marker-endblock33-objpq9qm" markerheight="3" markerwidth="3" orient="auto" refx="1.5" refy="1.5"&gt;&lt;use xlink:href="#raphael-marker-block" transform="rotate(180 1.5 1.5) scale(0.6,0.6)" stroke-width="1.6667" fill="black" stroke="none"/&gt;&lt;/marker&gt;&lt;/defs&gt;&lt;rect x="0" y="0" width="84" height="80" rx="20" ry="20" fill="none" stroke="#000000" style="" stroke-width="2" class="flowchart" id="st" transform="matrix(1,0,0,1,200.5,83.25)"/&gt;&lt;text style="text-anchor: start; font-family: &amp;quot;Andale Mono&amp;quot;,monospace; font-size: 16px;" x="10" y="40" text-anchor="start" font-family="'Andale Mono', monospace" font-size="16px" stroke="none" fill="#000000" id="stt" class="flowchartt" transform="matrix(1,0,0,1,200.5,83.25)" stroke-width="1"&gt;&lt;tspan dy="5"&gt;進入網頁&lt;/tspan&gt;&lt;/text&gt;&lt;path style="font-family: &amp;quot;Andale Mono&amp;quot;,monospace;" fill="none" stroke="#000000" d="M119.25,59.625L0,119.25L238.5,238.5L477,119.25L238.5,0L0,119.25" stroke-width="2" font-family="'Andale Mono', monospace" id="enter-has" class="flowchart" transform="matrix(1,0,0,1,4,217.25)"/&gt;&lt;text style="text-anchor: start; font-family: &amp;quot;Andale Mono&amp;quot;,monospace; font-size: 16px;" x="124.25" y="119.25" text-anchor="start" font-family="'Andale Mono', monospace" font-size="16px" stroke="none" fill="#000000" id="enter-hast" class="flowchartt" transform="matrix(1,0,0,1,4,217.25)" stroke-width="1"&gt;&lt;tspan dy="5"&gt;網頁屬於任一 Service Worker 下？&lt;/tspan&gt;&lt;/text&gt;&lt;rect x="0" y="0" width="202" height="80" rx="0" ry="0" fill="none" stroke="#000000" style="" stroke-width="2" class="flowchart" id="launch" transform="matrix(1,0,0,1,141.5,589)"/&gt;&lt;text style="text-anchor: start; font-family: &amp;quot;Andale Mono&amp;quot;,monospace; font-size: 16px;" x="10" y="40" text-anchor="start" font-family="'Andale Mono', monospace" font-size="16px" stroke="none" fill="#000000" id="launcht" class="flowchartt" transform="matrix(1,0,0,1,141.5,589)" stroke-width="1"&gt;&lt;tspan dy="5"&gt;啟動 service worker&lt;/tspan&gt;&lt;/text&gt;&lt;rect x="0" y="0" width="84" height="80" rx="20" ry="20" fill="none" stroke="#000000" style="" stroke-width="2" class="flowchart" id="browse" transform="matrix(1,0,0,1,200.5,802.25)"/&gt;&lt;text style="text-anchor: start; font-family: &amp;quot;Andale Mono&amp;quot;,monospace; font-size: 16px;" x="10" y="40" text-anchor="start" font-family="'Andale Mono', monospace" font-size="16px" stroke="none" fill="#000000" id="browset" class="flowchartt" transform="matrix(1,0,0,1,200.5,802.25)" stroke-width="1"&gt;&lt;tspan dy="5"&gt;網頁瀏覽&lt;/tspan&gt;&lt;/text&gt;&lt;rect x="0" y="0" width="204" height="80" rx="0" ry="0" fill="none" stroke="#000000" style="" stroke-width="2" class="flowchart" id="request" transform="matrix(1,0,0,1,140.5,1015.5)"/&gt;&lt;text style="text-anchor: start; font-family: &amp;quot;Andale Mono&amp;quot;,monospace; font-size: 16px;" x="10" y="40" text-anchor="start" font-family="'Andale Mono', monospace" font-size="16px" stroke="none" fill="#000000" id="requestt" class="flowchartt" transform="matrix(1,0,0,1,140.5,1015.5)" stroke-width="1"&gt;&lt;tspan dy="5"&gt;需要載入 html css js&lt;/tspan&gt;&lt;/text&gt;&lt;path style="font-family: &amp;quot;Andale Mono&amp;quot;,monospace;" fill="none" stroke="#000000" d="M113.25,56.625L0,113.25L226.5,226.5L453,113.25L226.5,0L0,113.25" stroke-width="2" font-family="'Andale Mono', monospace" id="load-has" class="flowchart" transform="matrix(1,0,0,1,16,1155.5)"/&gt;&lt;text style="text-anchor: start; font-family: &amp;quot;Andale Mono&amp;quot;,monospace; font-size: 16px;" x="118.25" y="113.25" text-anchor="start" font-family="'Andale Mono', monospace" font-size="16px" stroke="none" fill="#000000" id="load-hast" class="flowchartt" transform="matrix(1,0,0,1,16,1155.5)" stroke-width="1"&gt;&lt;tspan dy="5"&gt;網頁屬於任一 Service Worker 下&lt;/tspan&gt;&lt;/text&gt;&lt;rect x="0" y="0" width="228" height="80" rx="0" ry="0" fill="none" stroke="#000000" style="" stroke-width="2" class="flowchart" id="from-sw" transform="matrix(1,0,0,1,128.5,1515.25)"/&gt;&lt;text style="text-anchor: start; font-family: &amp;quot;Andale Mono&amp;quot;,monospace; font-size: 16px;" x="10" y="40" text-anchor="start" font-family="'Andale Mono', monospace" font-size="16px" stroke="none" fill="#000000" id="from-swt" class="flowchartt" transform="matrix(1,0,0,1,128.5,1515.25)" stroke-width="1"&gt;&lt;tspan dy="5"&gt;從 service worker 載入&lt;/tspan&gt;&lt;/text&gt;&lt;rect x="0" y="0" width="52" height="80" rx="20" ry="20" fill="none" stroke="#000000" style="" stroke-width="2" class="flowchart" id="e" transform="matrix(1,0,0,1,216.5,1728.5)"/&gt;&lt;text style="text-anchor: start; font-family: &amp;quot;Andale Mono&amp;quot;,monospace; font-size: 16px;" x="10" y="40" text-anchor="start" font-family="'Andale Mono', monospace" font-size="16px" stroke="none" fill="#000000" id="et" class="flowchartt" transform="matrix(1,0,0,1,216.5,1728.5)" stroke-width="1"&gt;&lt;tspan dy="5"&gt;關閉&lt;/tspan&gt;&lt;/text&gt;&lt;rect x="0" y="0" width="148" height="80" rx="0" ry="0" fill="none" stroke="#000000" style="" stroke-width="2" class="flowchart" id="server" transform="matrix(1,0,0,1,687.5,1228.75)"/&gt;&lt;text style="text-anchor: start; font-family: &amp;quot;Andale Mono&amp;quot;,monospace; font-size: 16px;" x="10" y="40" text-anchor="start" font-family="'Andale Mono', monospace" font-size="16px" stroke="none" fill="#000000" id="servert" class="flowchartt" transform="matrix(1,0,0,1,687.5,1228.75)" stroke-width="1"&gt;&lt;tspan dy="5"&gt;從 server 載入&lt;/tspan&gt;&lt;/text&gt;&lt;path style="font-family: &amp;quot;Andale Mono&amp;quot;,monospace;" fill="none" stroke="#000000" d="M242.5,163.25C242.5,163.25,242.5,202.90409994125366,242.5,214.25043908460066" stroke-width="2" marker-end="url(#raphael-marker-endblock33-objpmrp1)" font-family="'Andale Mono', monospace"/&gt;&lt;path style="font-family: &amp;quot;Andale Mono&amp;quot;,monospace;" fill="none" stroke="#000000" d="M242.5,455.75C242.5,455.75,242.5,566.2506888508797,242.5,585.9983705498162" stroke-width="2" marker-end="url(#raphael-marker-endblock33-objl1q2w)" font-family="'Andale Mono', monospace"/&gt;&lt;text style="text-anchor: start; font-family: &amp;quot;Andale Mono&amp;quot;,monospace; font-size: 16px;" x="247.5" y="465.75" text-anchor="start" font-family="'Andale Mono', monospace" font-size="16px" stroke="none" fill="#000000" stroke-width="1"&gt;&lt;tspan dy="5.5"&gt;yes&lt;/tspan&gt;&lt;/text&gt;&lt;path style="font-family: &amp;quot;Andale Mono&amp;quot;,monospace;" fill="none" stroke="#000000" d="M481,336.5C481,336.5,506,336.5,506,336.5C506,336.5,506,777.25,506,777.25C506,777.25,242.5,777.25,242.5,777.25C242.5,777.25,242.5,792.6234445571899,242.5,799.2592477742583" stroke-width="2" marker-end="url(#raphael-marker-endblock33-obj294gr)" font-family="'Andale Mono', monospace"/&gt;&lt;text style="text-anchor: start; font-family: &amp;quot;Andale Mono&amp;quot;,monospace; font-size: 16px;" x="486" y="326.5" text-anchor="start" font-family="'Andale Mono', monospace" font-size="16px" stroke="none" fill="#000000" stroke-width="1"&gt;&lt;tspan dy="5.5"&gt;no&lt;/tspan&gt;&lt;/text&gt;&lt;path style="font-family: &amp;quot;Andale Mono&amp;quot;,monospace;" fill="none" stroke="#000000" d="M242.5,669C242.5,669,242.5,779.5006888508797,242.5,799.2483705498162" stroke-width="2" marker-end="url(#raphael-marker-endblock33-objelbk1)" font-family="'Andale Mono', monospace"/&gt;&lt;path style="font-family: &amp;quot;Andale Mono&amp;quot;,monospace;" fill="none" stroke="#000000" d="M242.5,882.25C242.5,882.25,242.5,992.7506888508797,242.5,1012.4983705498162" stroke-width="2" marker-end="url(#raphael-marker-endblock33-objtat8w)" font-family="'Andale Mono', monospace"/&gt;&lt;path style="font-family: &amp;quot;Andale Mono&amp;quot;,monospace;" fill="none" stroke="#000000" d="M242.5,1095.5C242.5,1095.5,242.5,1140.367148399353,242.5,1152.504062565975" stroke-width="2" marker-end="url(#raphael-marker-endblock33-objb84fc)" font-family="'Andale Mono', monospace"/&gt;&lt;path style="font-family: &amp;quot;Andale Mono&amp;quot;,monospace;" fill="none" stroke="#000000" d="M242.5,1382C242.5,1382,242.5,1492.5006888508797,242.5,1512.2483705498162" stroke-width="2" marker-end="url(#raphael-marker-endblock33-obj9heye)" font-family="'Andale Mono', monospace"/&gt;&lt;text style="text-anchor: start; font-family: &amp;quot;Andale Mono&amp;quot;,monospace; font-size: 16px;" x="247.5" y="1392" text-anchor="start" font-family="'Andale Mono', monospace" font-size="16px" stroke="none" fill="#000000" stroke-width="1"&gt;&lt;tspan dy="5.5"&gt;yes&lt;/tspan&gt;&lt;/text&gt;&lt;path style="font-family: &amp;quot;Andale Mono&amp;quot;,monospace;" fill="none" stroke="#000000" d="M469,1268.75C469,1268.75,658.2506279945374,1268.75,684.4943674234673,1268.75" stroke-width="2" marker-end="url(#raphael-marker-endblock33-obj91r3x)" font-family="'Andale Mono', monospace"/&gt;&lt;text style="text-anchor: start; font-family: &amp;quot;Andale Mono&amp;quot;,monospace; font-size: 16px;" x="474" y="1258.75" text-anchor="start" font-family="'Andale Mono', monospace" font-size="16px" stroke="none" fill="#000000" stroke-width="1"&gt;&lt;tspan dy="5.5"&gt;no&lt;/tspan&gt;&lt;/text&gt;&lt;path style="font-family: &amp;quot;Andale Mono&amp;quot;,monospace;" fill="none" stroke="#000000" d="M242.5,1595.25C242.5,1595.25,242.5,1705.7506888508797,242.5,1725.4983705498162" stroke-width="2" marker-end="url(#raphael-marker-endblock33-objkg4ah)" font-family="'Andale Mono', monospace"/&gt;&lt;path style="font-family: &amp;quot;Andale Mono&amp;quot;,monospace;" fill="none" stroke="#000000" d="M761.5,1308.75C761.5,1308.75,761.5,1703.5,761.5,1703.5C761.5,1703.5,242.5,1703.5,242.5,1703.5C242.5,1703.5,242.5,1718.87344455719,242.5,1725.5092477742583" stroke-width="2" marker-end="url(#raphael-marker-endblock33-objpq9qm)" font-family="'Andale Mono', monospace"/&gt;&lt;/svg&gt;
+
+&lt;h2 id="成果展示"&gt;成果展示&lt;/h2&gt;
+&lt;iframe src="https://www.youtube.com/embed/P82g2i6VXU8"&gt;
+&lt;a href="https://youtu.be/P82g2i6VXU8"&gt;spexif pwa 操作影片&lt;/a&gt;
+&lt;/iframe&gt;
+
+&lt;h2 id="缺失"&gt;缺失&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;service worker 必須在 https 環境中運作，
+gisweb.ml 沒有 https。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;leaflet map 是動態載入圖磚，
+就算以 service worker 快取 exifmap 的網頁，
+尚有 leaflet 的圖磚需要連網，
+沒辦法完全離線使用。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;總結起來 exifmap 中只使用了 icon，
+也就是啟動畫面。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/vlc-screen-record.html</id>
 <title>vlc 螢幕錄影</title>
 <published>2018-01-18T15:50:56.349Z</published>

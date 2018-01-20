@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-01-19T14:46:48.071Z</updated>
+  <updated>2018-01-20T09:52:25.027Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,65 @@
 
 
 <entry>
+<id>http://gholk.github.io/virtual-filesystem-rsync.html</id>
+<title>mount ftp 並以 rsync 上傳</title>
+<published>2018-01-20T09:52:24.780Z</published>
+<updated>2018-01-20T09:52:25.020Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/virtual-filesystem-rsync.html"/>
+<summary>寫網頁程式的發佈一直很麻煩，
+一般是會給你 ftp 或 git 登入權限，
+但要一個個複製實在很麻煩。
+於是就用 rsync 上傳，再寫到 Makefile，
+一個指令就完成，愉悅。</summary>
+<category term="linux"/>
+<category term="rsync"/>
+<category term="upload"/>
+<category term="makefile"/>
+<category term="shell"/>
+<content type="html">&lt;h1 id="mount ftp 並以 rsync 上傳"&gt;mount ftp 並以 rsync 上傳&lt;/h1&gt;
+&lt;p&gt;寫網頁程式的發佈一直很麻煩，
+一般是會給你 ftp 或 git 登入權限，
+但要一個個複製實在很麻煩。
+於是就用 rsync 上傳，再寫到 Makefile，
+一個指令就完成，愉悅。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-sh"&gt;rsync --verbose --recursive --update \
+      --exclude &amp;#39;*~&amp;#39; \
+      --exclude &amp;#39;.*&amp;#39; \
+      ./ ~/gvfs/ftp:host=gisweb.ml/www/exifmap/
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;本來 rsync 是走自訂的 procotol，
+但一般的 web host 都不提供，
+只好先用 gvfs 把 ftp mount 成本機的檔案系統，
+再用 rsync 在本機間複製。&lt;/p&gt;
+&lt;p&gt;gvfs mount ftp 大概就是開檔案管理員，
+網址就打 ftp url &lt;a href="ftp://gisweb.ml"&gt;ftp://gisweb.ml&lt;/a&gt; ，
+然後以 debian xfce 來說就是 mount 到
+&lt;code&gt;/run/user/1000/gvfs/ftp:host=gisweb.ml&lt;/code&gt; 。
+我是習慣會 &lt;code&gt;ln -s /run/user/1000/gvfs ~/gvfs&lt;/code&gt; ，
+用起來比較方便。&lt;/p&gt;
+&lt;p&gt;本來我 rsync 是都用 &lt;code&gt;--archive&lt;/code&gt; ，
+但發現 archive 也就是一堆選項的組合，
+但大半都會報錯。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;recuvsive&lt;/li&gt;
+&lt;li&gt;keep link&lt;/li&gt;
+&lt;li&gt;keep permision&lt;/li&gt;
+&lt;li&gt;keep time stamp&lt;/li&gt;
+&lt;li&gt;keep group&lt;/li&gt;
+&lt;li&gt;keep owner&lt;/li&gt;
+&lt;li&gt;copy device&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;基本上一般只會用到 recuvsive，
+permision 不知道為什麼怪怪的，
+可能是因為我用 gvfs 吧，
+對方不是 windows，但卻都是 777。&lt;/p&gt;
+&lt;p&gt;所以整理一下，就剩 recursive 選項能用，
+再加 update 會檢查時間，避免重覆複製。
+verbose 則是讓 rsync 顯示到底幹了什麼。&lt;/p&gt;
+&lt;p&gt;exclude 則是要略過匹配的，
+如果資料夾匹配，內容也會被略過。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/spexif-pwa-enhance.html</id>
 <title>spexif 對行動裝置優化與 PWA</title>
 <published>2018-01-19T14:46:47.810Z</published>

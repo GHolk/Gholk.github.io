@@ -127,3 +127,4 @@ javascript-bind-last-argument.html
 vlc-screen-record.html
 spexif-pwa-enhance.html
 virtual-filesystem-rsync.html
+tmux-link-clipboard.html

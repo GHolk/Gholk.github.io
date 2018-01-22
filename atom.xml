@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-01-21T14:57:24.308Z</updated>
+  <updated>2018-01-22T03:21:21.891Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -28,7 +28,7 @@
 <id>http://gholk.github.io/tmux-link-clipboard.html</id>
 <title>連結 tmux 與 x window 剪貼簿</title>
 <published>2018-01-21T13:04:21.674Z</published>
-<updated>2018-01-21T14:57:24.303Z</updated>
+<updated>2018-01-22T03:21:21.885Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/tmux-link-clipboard.html"/>
 <summary>tmux 有自己的剪貼簿 buffer，x window 也有自己的。
 很討厭是在瀏覽器、emacs 或其它 x window 複製東西，
@@ -75,7 +75,7 @@ copy-selection 換成 copy-pipe，&lt;/a&gt;
 也就是除了複製外，還能 pipe 到命令。&lt;/p&gt;
 &lt;p&gt;然後還發現一個很潮的 hook 功能，
 就把送到 xsel 從依序執行，改成 after 或 before hook 了。
-分別是 &lt;a href="//github.com/gholk/loco/blob/c0916/tmux.conf#L41"&gt;before paste buffer&lt;/a&gt; 和 &lt;a href="//github.com/gholk/loco/blob/c0916/tmux.conf#L31"&gt;after capture pane&lt;/a&gt; 。&lt;/p&gt;
+分別是 &lt;a href="//github.com/gholk/loco/blob/c0916/tmux.conf#L41"&gt;before paste buffer&lt;/a&gt; 和 &lt;a href="//github.com/gholk/loco/blob/c5c03c63/tmux.conf#L31"&gt;after capture pane&lt;/a&gt; 。&lt;/p&gt;
 &lt;h2 id="tmux 內 code 的重用"&gt;tmux 內 code 的重用&lt;/h2&gt;
 &lt;p&gt;tmux 沒有函數，
 所以類似的東西要寫很多次，

@@ -51,7 +51,7 @@ copy-selection 換成 copy-pipe，][copy pipe]
 分別是 [before paste buffer] 和 [after capture pane] 。
 
 [before paste buffer]: //github.com/gholk/loco/blob/c0916/tmux.conf#L41
-[after capture pane]: //github.com/gholk/loco/blob/c0916/tmux.conf#L31
+[after capture pane]: //github.com/gholk/loco/blob/c5c03c63/tmux.conf#L31
 
 ## tmux 內 code 的重用
 tmux 沒有函數，

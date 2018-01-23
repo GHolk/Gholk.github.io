@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-01-22T03:21:21.891Z</updated>
+  <updated>2018-01-23T14:26:48.839Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,80 @@
 
 
 <entry>
+<id>http://gholk.github.io/recent-work-about-ccns.html</id>
+<title>CCNS 前後的程式開發</title>
+<published>2018-01-23T14:19:53.487Z</published>
+<updated>2018-01-23T14:26:48.833Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/recent-work-about-ccns.html"/>
+<summary>ccns 期末社聚，
+各社員都介紹一下最近幹了什麼，
+我其實是從開始學程式後算起。
+對 marked 貢獻 fork、
+loco 一些自用程式、部落格系統、
+pttbackup、專題 spexif。
+原本是簡單一份 hackmd，想說整理成網頁。</summary>
+<category term="blog"/>
+<category term="ccns"/>
+<category term="程式"/>
+<content type="html">&lt;h1 id="CCNS 前後的程式開發"&gt;CCNS 前後的程式開發&lt;/h1&gt;
+&lt;p&gt;ccns 期末社聚，
+各社員都介紹一下最近幹了什麼，
+我其實是從開始學程式後算起。
+對 &lt;a href="//github.com/gholk/marked"&gt;marked&lt;/a&gt; 貢獻 fork、
+loco 一些自用程式、部落格系統、
+&lt;a href="ptt"&gt;pttbackup&lt;/a&gt; 、專題 &lt;a href="spexif/doc/report.html"&gt;spexif&lt;/a&gt; 。
+原本是簡單一份 &lt;a href="https://hackmd.io/s/Skxy6YxSM"&gt;hackmd&lt;/a&gt; ，想說整理成網頁。&lt;/p&gt;
+&lt;h2 id="marked"&gt;marked&lt;/h2&gt;
+&lt;p&gt;一直想找一個 markdown converter，
+再自己改，加入自定義的語法。
+最後選了 &lt;a href="//github.com/gholk/marked"&gt;marked&lt;/a&gt; 。
+（這個好像不是很流行，不過能用就好。）&lt;/p&gt;
+&lt;p&gt;自定義了一些語法，
+然後加嚴了強調的星號旁必須留空格。
+和圖片 url 認定，讓 reference 可以含中括號，
+把 regexp 設成 &lt;code&gt;\[(.*?)\]: ?([^\s]*)\s&amp;quot;(.*)&amp;quot;&lt;/code&gt; ，
+配合貼圖必須附來源的圖床，像 flickr。
+&lt;a href="marked/#Browser"&gt;可以直接在網頁裡試用。&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-markdown"&gt;[image]: https://i.imgur.com/DjwiJDR.jpg
+[![image]]: https://i.imgur.com/DjwiJDR
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id="[loco]"&gt;&lt;a href="//github.com/gholk/loco"&gt;loco&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;這個 repo 是放一些 dot file 和自用的小程式，
+以前創的時候不知道大家會取名 dot-file，
+因為多發行版會把一些設定放在 &lt;code&gt;~/.local&lt;/code&gt;，
+像 &lt;code&gt;~/.local/bin&lt;/code&gt; ，就取諧音 loco。
+大多是 shell script，輸入法也放在這裡。&lt;/p&gt;
+&lt;p&gt;像在 x window 裡廣播的 xwall，
+和用 crontab 定時提示休息。
+xwall 是用 zenity 做的，
+一個能方便顯示視窗的程式。&lt;/p&gt;
+&lt;p&gt;剛做了一個 aclp.sh，能簡化 xsel 的介面。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-sh"&gt;clipboard # 印出目前剪貼簿內容
+clipboard hello world # 把內容換成 hello world
+df | clipboard # 把 df 輸出到 clipboard
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id="[cjns]"&gt;[cjns]&lt;/h2&gt;
+&lt;p&gt;倉頡新星，彷倉頡之星的倉頡教學軟體，網頁版。
+之前有想過重構，但看到初學 js 寫的 code 實在太噁了，放棄。&lt;/p&gt;
+&lt;p&gt;有做成離線版，可以下載放在本機用 &lt;code&gt;file://&lt;/code&gt; 開。
+之後再改成 service worker 的離線版好了，更方便。&lt;/p&gt;
+&lt;h2 id="blog"&gt;blog&lt;/h2&gt;
+&lt;p&gt;這個部落格系統，加了 &lt;a href="./atom.xml"&gt;./atom.xml&lt;/a&gt; ，
+能以 atom 方式訂閱，
+另外連首頁也改成用 js 從 atom 抓資料，
+而不是把內容都寫到 index.html。&lt;/p&gt;
+&lt;h2 id="[spexif]"&gt;&lt;a href="spexif/doc/report.html"&gt;spexif&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;在測量系做的專題，
+能上傳照片、修改 exif 的 gps 資訊。
+在這學期加了 service worker 的功能。&lt;/p&gt;
+&lt;h2 id="[pttbackup]"&gt;&lt;a href="ptt"&gt;pttbackup&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;寫了一些腳本來備份 ptt 文章，
+是備份 web 版的 html。
+備份之後直接存到 github，
+可以用 github page 看。
+現在數量有點多，所以會跑很慢。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/tmux-link-clipboard.html</id>
 <title>連結 tmux 與 x window 剪貼簿</title>
 <published>2018-01-21T13:04:21.674Z</published>

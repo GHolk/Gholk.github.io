@@ -130,3 +130,4 @@ virtual-filesystem-rsync.html
 tmux-link-clipboard.html
 recent-work-about-ccns.html
 new-apt-version-resize-ext4.html
+font-hanazono-symbola-noto.html

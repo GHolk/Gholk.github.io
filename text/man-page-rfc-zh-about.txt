@@ -1,0 +1,144 @@
+# 中文與 rfc 手冊頁
+有把常用的參考資料寫成 man-page 的習慣，
+之前就想把 http status code 寫成手冊頁，
+最近簡單用 http rfc 改了。
+還有中文手冊的問題，把之前找到的解法拿來用，
+重寫了以前的幾份手冊。
+
+## http rfc
+之前寫過 html-char，
+是直接拿 wikipedia 的表格改的。
+主要是大三寫作業，尤其是大地測量學，
+是用 markdown 轉成 html，
+寫公式會用到特殊符號，就會邊查邊寫，
+就寫了一份 html 特殊符號的 man page。
+
+還想寫一個 http-status，
+是寫 [quiz-chatbot-server] 設計 rest api，
+要常常查什麼情況回覆哪個 code 好。
+
+[quiz-chatbot-server]: //github.com/ccns/quiz-chatbot-server
+
+這份想用正式一點，不想從 wikipedia 或 mdn 抄，
+找到定義的文件是 rfc7231，那是完整的 http 規格。
+因為 rfc 格式看來就是 man page 的格式，
+所以又想能不能用 terminal 看，
+結果一直找不到作法。
+
+有個套件是 doc-rfc，但就是純文字檔而已。
+只能用 less 看，也沒有語法高亮。
+當時有點忙，就沒有繼續。
+
+現在也只是簡單用 marked-man，
+把整份 rfc 包成 code block，
+然後放到 `~/.local/share/man/man7` 就能用 man 看了。
+
+```sh
+sed -i -e '1i```rfc' -e '$a```' rfc7321.txt
+marked-man -o rfc7321.7 rfc7321.txt
+ln -s $PWD/rfc7321.7 ~/.local/share/man/man7/rfc7321.7
+ln -s $PWD/rfc7321.7 ~/.local/share/man/man7/http.7
+```
+
+## 中文 man-page
+大概就是 groff 只看空格、换行，来决定在哪裡斷行。
+但中文中幾乎沒有空格，換行就會很彆扭。
+例如原本的 tanet man-pages：
+
+```
+       之網際網路系統，        為台灣第一個網際網路系統，         也是台灣往後
+       發展政府、商用網際網路系統之基礎   。1999  年起，教育部推動  中小學使用
+       ADSL      連線至      TANet，讓資訊教育向下扎根，      迄今       TANet
+       已成為全台灣各級學校網路及資訊教育之平台。
+
+       TANet 初期連接台灣部份的學術單位與研究機構，網路骨幹使用電話 連線，頻寬
+       為 9.6kbps。1991 年 12 月 3 日以 64Kbps 數據專線連接美國 普林斯頓大學的
+       JvNCnet，成為台灣的第一條跨國網路連線。1994  年年初，以 T1 連接架設中的
+       Hinet，成             為台灣第一條網際網路對等              連線（peer‐
+       ing），台灣的網際網路正式進入跨網時     代。同年    6    月以    10Mbps
+       的乙太網路連接         SEEDNet，台灣開始了多網系統的網網相連         。
+       歷經多年來擴充，TANet  網路架構分為國家骨幹網路、地區性網路、  校園網路
+       三個階層，2005 年 TANet 國家骨幹網路全面提昇至 10GE  之  網路環境。截至
+       2008  年 4 月，連美國頻寬為 STM16(2488.32Mbps)， 連台灣其它網路總頻寬達
+       102.718Gbps。
+
+       TANet              的管理組織分為三個階層：「台灣學術網路管理委員會」、
+       「區域網路中心推動小組」以及「縣市教育網路中心推動小組」。
+
+TANet 架構
+       TANet                  在全國各區域選出一個院校單位，成立區域網路中心，
+       協助該區域內相關學校及學術研究單位共享網際網路資源。
+
+ Manual page tanet(7) line 17 (press h for help or q to quit)
+```
+
+後來 google 到中文 man-page 翻譯計劃
+的 github repo，發現他們有解決，[寫在 wiki 裡。][chinese layout]
+只要在 man-page 開頭引入像 header 的檔案即可，
+[也就是在第一行加入 `.mso zh.tmac` 。][include zh.tmac]
+但要注意系統裡有沒有 `zh.tmac` 這個檔案，
+應該會在 `/usr/share/groff/current/tmac/zh.tmac` ，
+沒有就從 wiki 上下載回去。
+
+[include zh.tmac]: //github.com/gholk/loco/blob/663614/man/tanet.7#L1
+[chinese layout]: https://github.com/man-pages-zh/wiki/wiki/%E6%89%8B%E5%86%8C%E9%A1%B5%E7%9A%84%E4%B8%AD%E6%96%87%E6%8E%92%E7%89%88
+
+```
+       機中心邀集 受補助大學成立「台灣學術網路」，建立以 TCP/IP 通訊協定為基礎
+       之網際網路系統， 為台灣第一個網際網路系統， 也是台灣往後 發展政府、商用
+       網際網路系統之基礎  。1999  年起，教育部推動  中小學使用  ADSL   連線至
+       TANet，讓資訊教育向下扎根， 迄今 TANet 已成為全台灣各級學校網路及資訊教
+       育之平台。
+
+       TANet 初期連接台灣部份的學術單位與研究機構，網路骨幹使用電話 連線，頻寬
+       為 9.6kbps。1991 年 12 月 3 日以 64Kbps 數據專線連接美國 普林斯頓大學的
+       JvNCnet，成為台灣的第一條跨國網路連線。1994 年年初，以 T1  連接架設中的
+       Hinet，成  為台灣第一條網際網路對等 連線（peering），台灣的網際網路正式
+       進入跨網時 代。同年 6 月以 10Mbps 的乙太網路連接  SEEDNet，台灣開始了多
+       網系統的網網相連  。 歷經多年來擴充，TANet 網路架構分為國家骨幹網路、地
+       區性網路、 校園網路 三個階層，2005 年 TANet 國家骨幹網路全面提昇至 10GE
+       之  網路環境。截至 2008 年 4 月，連美國頻寬為 STM16(2488.32Mbps)， 連台
+       灣其它網路總頻寬達 102.718Gbps。
+
+       TANet 的管理組織分為三個階層：「台灣學術網路管理委員會」、 「區域網路中
+       心推動小組」以及「縣市教育網路中心推動小組」。
+
+架構
+       TANet 在全國各區域選出一個院校單位，成立區域網路中心， 協助該區域內相關
+       學校及學術研究單位共享網際網路資源。
+
+ Manual page tanet(7) line 15 (press h for help or q to quit)
+```
+
+之後斷行會在任何中文字斷，不只在空白處；
+還加了避頭尾的規則，不會把標點放到單獨句首。
+我記得以前解過類似的問題，
+那時是去看 `zh.tmac` 調了哪些選項，
+然後忘了，也沒有寫到 loco 或 man-page 裡。
+
+[反正現在寫到 makefile 裡了。][man-page makefile]
+makefile 是個不錯的方式，
+有時要一些工具的選項會忘記，
+或簡單的 config 不知道寫在哪，
+如果是 build 相關的就能放 makefile。
+
+[man-page makefile]: //github.com/gholk/loco/blob/663614/man/Makefile
+
+最後重寫了 tanet、ncku-id 這二份，
+二份原本都是用 roff 格式寫的，
+重寫成 markdown，
+再用 [marked-man] 轉成 roff man-page。
+
+[marked-man]: //github.com/kapouer/marked-man
+
+只是 markdown 沒有定義清單的 dl 格式，
+只能寫成表格，比較不方便。
+就會看到一堆只有二欄的表格。
+一直很猶豫， *在 markdown 中我們需要 dl 嗎？*
+
+#markdown
+#marked
+#man-page
+#makefile
+#dl
+#中文

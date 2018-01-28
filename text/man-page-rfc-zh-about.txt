@@ -45,7 +45,23 @@ ln -s $PWD/rfc7321.7 ~/.local/share/man/man7/http.7
 但中文中幾乎沒有空格，換行就會很彆扭。
 例如原本的 tanet man-pages：
 
-```
+```term
+TANET(7)                         PTT 鄉民手冊                         TANET(7)
+
+NAME
+       TANet - 台灣學術網路
+
+DESCRIPTION
+       TANet  為  Taiwan  Academic  Network，即台灣學術網路， 為中華民國教育部
+       與台灣各大學 共同建立的 一個全國性 教學研究用網際網路系統。
+
+HISTORY
+       1980     年代中期，教育部引進     BITNET     大學教學研究網路系統，提供
+       學術界跨國電子         郵件、檔案傳輸等應用服務。1980        年代末期，
+       教育部科技顧問室（1990        年更名為         顧問室）在張進福主任任內
+       編列經費，委由科技顧問陳文村規劃，補助主要國立                 大學建立
+       校園網路、校際網路。於   1990   年    7    月，教育部電子計算機中心邀集
+       受補助大學成立「台灣學術網路」，建立以       TCP/IP      通訊協定為基礎
        之網際網路系統，        為台灣第一個網際網路系統，         也是台灣往後
        發展政府、商用網際網路系統之基礎   。1999  年起，教育部推動  中小學使用
        ADSL      連線至      TANet，讓資訊教育向下扎根，      迄今       TANet
@@ -53,23 +69,7 @@ ln -s $PWD/rfc7321.7 ~/.local/share/man/man7/http.7
 
        TANet 初期連接台灣部份的學術單位與研究機構，網路骨幹使用電話 連線，頻寬
        為 9.6kbps。1991 年 12 月 3 日以 64Kbps 數據專線連接美國 普林斯頓大學的
-       JvNCnet，成為台灣的第一條跨國網路連線。1994  年年初，以 T1 連接架設中的
-       Hinet，成             為台灣第一條網際網路對等              連線（peer‐
-       ing），台灣的網際網路正式進入跨網時     代。同年    6    月以    10Mbps
-       的乙太網路連接         SEEDNet，台灣開始了多網系統的網網相連         。
-       歷經多年來擴充，TANet  網路架構分為國家骨幹網路、地區性網路、  校園網路
-       三個階層，2005 年 TANet 國家骨幹網路全面提昇至 10GE  之  網路環境。截至
-       2008  年 4 月，連美國頻寬為 STM16(2488.32Mbps)， 連台灣其它網路總頻寬達
-       102.718Gbps。
-
-       TANet              的管理組織分為三個階層：「台灣學術網路管理委員會」、
-       「區域網路中心推動小組」以及「縣市教育網路中心推動小組」。
-
-TANet 架構
-       TANet                  在全國各區域選出一個院校單位，成立區域網路中心，
-       協助該區域內相關學校及學術研究單位共享網際網路資源。
-
- Manual page tanet(7) line 17 (press h for help or q to quit)
+ Manual page tanet.7 line 1 (press h for help or q to quit)
 ```
 
 後來 google 到中文 man-page 翻譯計劃
@@ -83,7 +83,21 @@ TANet 架構
 [include zh.tmac]: //github.com/gholk/loco/blob/663614/man/tanet.7#L1
 [chinese layout]: https://github.com/man-pages-zh/wiki/wiki/%E6%89%8B%E5%86%8C%E9%A1%B5%E7%9A%84%E4%B8%AD%E6%96%87%E6%8E%92%E7%89%88
 
-```
+```term
+TANET(7)                           NCKU CCNS                          TANET(7)
+
+NAME
+       TANet - 台灣學術網路
+
+DESCRIPTION
+       TANet  為 Taiwan Academic Network，即台灣學術網路， 為中華民國教育部與
+       台灣各大學共同建立的 一個全國性教學研究用網際網路系統。
+
+HISTORY
+       1980 年代中期，教育部引進 BITNET 大學教學研究網路系統，提供  學術界跨國
+       電子  郵件、檔案傳輸等應用服務。1980  年代末期， 教育部科技顧問室（1990
+       年更名為 顧問室）在張進福主任任內  編列經費，委由科技顧問陳文村規劃，補
+       助主要國立 大學建立 校園網路、校際網路。於 1990 年 7 月，教育部電子計算
        機中心邀集 受補助大學成立「台灣學術網路」，建立以 TCP/IP 通訊協定為基礎
        之網際網路系統， 為台灣第一個網際網路系統， 也是台灣往後 發展政府、商用
        網際網路系統之基礎  。1999  年起，教育部推動  中小學使用  ADSL   連線至
@@ -93,21 +107,7 @@ TANet 架構
        TANet 初期連接台灣部份的學術單位與研究機構，網路骨幹使用電話 連線，頻寬
        為 9.6kbps。1991 年 12 月 3 日以 64Kbps 數據專線連接美國 普林斯頓大學的
        JvNCnet，成為台灣的第一條跨國網路連線。1994 年年初，以 T1  連接架設中的
-       Hinet，成  為台灣第一條網際網路對等 連線（peering），台灣的網際網路正式
-       進入跨網時 代。同年 6 月以 10Mbps 的乙太網路連接  SEEDNet，台灣開始了多
-       網系統的網網相連  。 歷經多年來擴充，TANet 網路架構分為國家骨幹網路、地
-       區性網路、 校園網路 三個階層，2005 年 TANet 國家骨幹網路全面提昇至 10GE
-       之  網路環境。截至 2008 年 4 月，連美國頻寬為 STM16(2488.32Mbps)， 連台
-       灣其它網路總頻寬達 102.718Gbps。
-
-       TANet 的管理組織分為三個階層：「台灣學術網路管理委員會」、 「區域網路中
-       心推動小組」以及「縣市教育網路中心推動小組」。
-
-架構
-       TANet 在全國各區域選出一個院校單位，成立區域網路中心， 協助該區域內相關
-       學校及學術研究單位共享網際網路資源。
-
- Manual page tanet(7) line 15 (press h for help or q to quit)
+ Manual page tanet(7) line 1 (press h for help or q to quit)
 ```
 
 之後斷行會在任何中文字斷，不只在空白處；
@@ -116,7 +116,41 @@ TANet 架構
 那時是去看 `zh.tmac` 調了哪些選項，
 然後忘了，也沒有寫到 loco 或 man-page 裡。
 
-[反正現在寫到 makefile 裡了。][man-page makefile]
+## 斷行警告
+本來亂斷行也沒關係，只是比較難看而已。
+但難斷行時 groff 會丟警告，
+警告出現過長又無法折行的句子。
+這警告平常也不會出現，
+只會出現在 man 的結果 pipe 到另一程式時候；
+例如你要用 grep 直接搜 tanet 某一 ip：
+
+```term
+$ man tanet | grep 128
+<standard input>:8: warning [p 1, 1.5i]: cannot adjust line
+<standard input>:72: warning [p 2, 0.3i]: cannot adjust line
+<standard input>:699: warning [p 2, 9.8i, div `3tbd111,0', 0.0i]: cannot adjust line
+<standard input>:2426: warning [p 2, 88.0i, div `3tbd2,1', 0.0i]: cannot adjust line
+<standard input>:2426: warning [p 2, 88.0i, div `3tbd2,1', 0.2i]: can't break line
+<standard input>:2431: warning [p 2, 88.0i, div `3tbd3,1', 0.0i]: cannot adjust line
+<standard input>:2497: warning [p 3, 5.5i]: cannot adjust line
+<standard input>:2498: warning [p 3, 5.7i]: cannot adjust line
+   │       140.128.1~40                          靜宜大學                  │
+   │       140.128.41~60                         南開科技大學              │
+   │       140.128.61~70                         中國醫藥大學              │
+```
+
+後來 [去 ptt linux 板問，][ptt linux]
+但還是自己想到之前好像看過，
+就上面那個 `.mso zh.tmac` 解決了大半的 warning，
+剩下一些是 table 內排版的 warning，
+就稍微修一下格式解決。
+
+[ptt linux]: https://www.ptt.cc/bbs/Linux/M.1517117385.A.76C.html
+
+
+## config makefile
+
+[之後就寫到 makefile 裡。][man-page makefile]
 makefile 是個不錯的方式，
 有時要一些工具的選項會忘記，
 或簡單的 config 不知道寫在哪，
@@ -124,11 +158,12 @@ makefile 是個不錯的方式，
 
 [man-page makefile]: //github.com/gholk/loco/blob/663614/man/Makefile
 
-最後重寫了 tanet、ncku-id 這二份，
+最後 [重寫了 tanet、ncku-id 這二份][rewrite] ，
 二份原本都是用 roff 格式寫的，
 重寫成 markdown，
 再用 [marked-man] 轉成 roff man-page。
 
+[rewrite]: //github.com/gholk/loco/commit/6636147a6108e07fa13a9658a49add5d860b90ba
 [marked-man]: //github.com/kapouer/marked-man
 
 只是 markdown 沒有定義清單的 dl 格式，

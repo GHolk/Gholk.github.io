@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-01-28T12:08:15.093Z</updated>
+  <updated>2018-01-30T04:57:24.630Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,92 @@
 
 
 <entry>
+<id>http://gholk.github.io/shell-source-in-sub-shell.html</id>
+<title>在子 shell 中引用外部腳本</title>
+<published>2018-01-30T04:57:24.386Z</published>
+<updated>2018-01-30T04:57:24.623Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/shell-source-in-sub-shell.html"/>
+<summary>看 /etc/X11/Xsession.d/ 裡的腳本，
+都要注意使用的變數，因為要改變原本 Xsession 的行為，
+是 source 執行的，但也因此使用的變數都會傳到外面。
+在子 shell () 內引用就可以避免這個問題，
+如果有需要匯出的，就再 $() echo 出來 eval 即可。</summary>
+<category term="sh"/>
+<category term="linux"/>
+<category term="x-window"/>
+<content type="html">&lt;h1 id="在子 shell 中引用外部腳本"&gt;在子 shell 中引用外部腳本&lt;/h1&gt;
+&lt;p&gt;看 &lt;code&gt;/etc/X11/Xsession.d/&lt;/code&gt; 裡的腳本，
+都要注意使用的變數，因為要改變原本 Xsession 的行為，
+是 source 執行的，但也因此使用的變數都會傳到外面。
+在子 shell &lt;code&gt;()&lt;/code&gt; 內引用就可以避免這個問題，
+如果有需要匯出的，就再 &lt;code&gt;$()&lt;/code&gt; echo 出來 eval 即可。&lt;/p&gt;
+&lt;h2 id="xsession"&gt;xsession&lt;/h2&gt;
+&lt;p&gt;xsession.d 裡的腳本都是被 source 執行，
+因為我沒有要匯出的變數，為了防止汙染 xsession，
+&lt;a href="//github.com/gholk/loco/blob/a3380816724e52654979808011013d256ca817be/dt13.xinput"&gt;我是把整個腳本包在 &lt;code&gt;()&lt;/code&gt; 裡。&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id="在子 shell 內 source"&gt;在子 shell 內 source&lt;/h2&gt;
+&lt;p&gt;有時是想引用某腳本，但想要腳本執行完後再做一些事，
+就能用在子 shell 內 source 的型式：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-sh"&gt;# 防止變數汙染
+(
+    . /some/script
+    # 這裡看得到 script 裡的變數
+    # 也看得到 () 外的變數
+
+    git pull $some_var_in_script
+    # do what ever you want to after script
+)
+# 在括號內的變數不會跑到括號外
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id="大括號用途"&gt;大括號用途&lt;/h2&gt;
+&lt;p&gt;小括號是子 shell，大括號則只是一般的代碼塊，
+唯一用處就是，你需要把一堆命令模擬成一個命令時。&lt;/p&gt;
+&lt;h3 id="把一堆命令一起丟到背景"&gt;把一堆命令一起丟到背景&lt;/h3&gt;
+&lt;pre&gt;&lt;code class="lang-sh"&gt;{
+    sleep 30m
+    zenity --info --text 眼睛該休息囉！
+} &amp;amp;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="把一堆命令模擬成一個"&gt;把一堆命令模擬成一個&lt;/h3&gt;
+&lt;pre&gt;&lt;code class="lang-sh"&gt;{
+    echo &amp;#39;&amp;lt;pre&amp;gt;&amp;#39;
+    cat file
+    echo &amp;#39;&amp;lt;/pre&amp;gt;&amp;#39;
+} | w3m
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="結尾分號"&gt;結尾分號&lt;/h3&gt;
+&lt;p&gt;但要注意，右大括號前的最後一個命令，
+需要有分號或換行，和小括號不同。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-sh"&gt;if ( ps aux | grep tor ) # ok
+then echo tor work!
+fi
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="lang-sh"&gt;if { ps aux | grep tor; } # need semicolon
+then echo tor work!
+fi
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;其實這例子不需要括號的。
+除非需要多個命令，
+用最後一個當返回值，那可以用大括號。
+如果判斷內還用到變數，
+那可能要用小括號避免汙染。&lt;/p&gt;
+&lt;h2 id="將小括號內的變數引到外部"&gt;將小括號內的變數引到外部&lt;/h2&gt;
+&lt;p&gt;小括號外加 &lt;code&gt;$&lt;/code&gt; 就能取得內部的 stdout，
+所以只要 echo 出要匯出的變數即可。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-sh"&gt;$(
+    . /some/script
+    echo some_var=$some_var
+)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="lang-sh"&gt;# export 為環境變數
+export $(
+    . /some/script
+    echo some_var=$some_var
+)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;a href="//github.com/gholk/loco/blob/a3380816724e52654979808011013d256ca817be/profile"&gt;我在用 profile 就是這樣重用 &lt;code&gt;/etc/X11/Xsession.d/90gpg-agent&lt;/code&gt; 的。&lt;/a&gt;&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/man-page-rfc-zh-about.html</id>
 <title>中文與 rfc 手冊頁</title>
 <published>2018-01-28T11:51:15.550Z</published>

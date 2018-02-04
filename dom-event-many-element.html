@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-02-04T03:30:20.560Z">
+<meta name="keywords" property="og:article:tag" content="javascript,web,event">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="scadual-106-2.html" title="106 學年下學期行事歷">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title>一次聽多個元素的事件</title>
+</head>
+<body>
+<main><h1 id="一次聽多個元素的事件">一次聽多個元素的事件</h1>
+<p>一般要聽事件，就是綁在某元素上。
+但例如一次要聽所有 anchor 的 click 事件，
+不用在所有 a 上都綁，
+直接綁在 window 或 document 上，
+再用 <code>clickEvent.target</code> 檢查是不是從 a 來的就好了。</p>
+<script>
+window.addEventListener('click', function (clickEvent) {
+    const clickElement = clickEvent.target
+    alert(clickElement.tagName)
+    if (clickElement.tagName == 'A') {
+        // the clicked element is anchor
+    }
+
+    alert(this == window) // true
+})
+</script>
+
+<p>一般我習慣在 event listener 還是傳傳統的 function 進去，
+用 this 可以得到函數綁定的元素，
+用 <code>event.target</code> 可以拿到觸發事件的元素。
+另外如果用 arrow function， 
+<code>event.currentTarget</code> 好像是事件傳到的元素，
+也就是和一般 function 的 this 一樣。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer src="ext/load-disqus.js"></script>
+
+
+
+
+
+</body></html>

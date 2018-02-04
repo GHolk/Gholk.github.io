@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-02-02T09:15:41.056Z</updated>
+  <updated>2018-02-04T03:32:58.553Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,45 @@
 
 
 <entry>
+<id>http://gholk.github.io/dom-event-many-element.html</id>
+<title>一次聽多個元素的事件</title>
+<published>2018-02-04T03:30:20.560Z</published>
+<updated>2018-02-04T03:32:58.548Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/dom-event-many-element.html"/>
+<summary>一般要聽事件，就是綁在某元素上。
+但例如一次要聽所有 anchor 的 click 事件，
+不用在所有 a 上都綁，
+直接綁在 window 或 document 上，
+再用 clickEvent.target 檢查是不是從 a 來的就好了。</summary>
+<category term="javascript"/>
+<category term="web"/>
+<category term="event"/>
+<content type="html">&lt;h1 id="一次聽多個元素的事件"&gt;一次聽多個元素的事件&lt;/h1&gt;
+&lt;p&gt;一般要聽事件，就是綁在某元素上。
+但例如一次要聽所有 anchor 的 click 事件，
+不用在所有 a 上都綁，
+直接綁在 window 或 document 上，
+再用 &lt;code&gt;clickEvent.target&lt;/code&gt; 檢查是不是從 a 來的就好了。&lt;/p&gt;
+&lt;script&gt;
+window.addEventListener('click', function (clickEvent) {
+    const clickElement = clickEvent.target
+    alert(clickElement.tagName)
+    if (clickElement.tagName == 'A') {
+        // the clicked element is anchor
+    }
+
+    alert(this == window) // true
+})
+&lt;/script&gt;
+
+&lt;p&gt;一般我習慣在 event listener 還是傳傳統的 function 進去，
+用 this 可以得到函數綁定的元素，
+用 &lt;code&gt;event.target&lt;/code&gt; 可以拿到觸發事件的元素。
+另外如果用 arrow function， 
+&lt;code&gt;event.currentTarget&lt;/code&gt; 好像是事件傳到的元素，
+也就是和一般 function 的 this 一樣。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/scadual-106-2.html</id>
 <title>106 學年下學期行事歷</title>
 <published>2018-02-02T09:06:32.004Z</published>

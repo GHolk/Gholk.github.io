@@ -1,0 +1,29 @@
+# 一次聽多個元素的事件
+一般要聽事件，就是綁在某元素上。
+但例如一次要聽所有 anchor 的 click 事件，
+不用在所有 a 上都綁，
+直接綁在 window 或 document 上，
+再用 `clickEvent.target` 檢查是不是從 a 來的就好了。
+
+<script>
+window.addEventListener('click', function (clickEvent) {
+    const clickElement = clickEvent.target
+    alert(clickElement.tagName)
+    if (clickElement.tagName == 'A') {
+        // the clicked element is anchor
+    }
+    
+    alert(this == window) // true
+})
+</script>
+
+一般我習慣在 event listener 還是傳傳統的 function 進去，
+用 this 可以得到函數綁定的元素，
+用 `event.target` 可以拿到觸發事件的元素。
+另外如果用 arrow function， 
+`event.currentTarget` 好像是事件傳到的元素，
+也就是和一般 function 的 this 一樣。
+
+#javascript
+#web
+#event

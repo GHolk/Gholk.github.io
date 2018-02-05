@@ -43,6 +43,16 @@ raddit 就一片罵聲，說亂掉是我的事，
 }
 ```
 
+discord 縮小後變很窄，
+最好把右邊的成員名單收合，
+可以空出多一點空間顯示訊息。
+
+[![discord-member.png]]
+
+[discord-member.png]: http://farm5.staticflickr.com/4745/28311500649_1da7f33d24.jpg
+[![discord-member.png]]: http://www.flickr.com/photos/135370742@N08/28311500649
+
+
 #discord
 #im
 #gui

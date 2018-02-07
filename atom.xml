@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-02-07T04:53:55.847Z</updated>
+  <updated>2018-02-07T12:28:08.927Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,61 @@
 
 
 <entry>
+<id>http://gholk.github.io/html-br-semantic-poem.html</id>
+<title>html br 的語義</title>
+<published>2018-02-07T12:25:31.665Z</published>
+<updated>2018-02-07T12:28:08.921Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/html-br-semantic-poem.html"/>
+<summary>html br 是 break 換行的意思。
+在 html 中換行會被當成縮排的一部份，要換行一定要用 br。
+br 不應該使用在排版上，排版請交給 css，
+br 是用在 語義 上需要換行時，
+像詩的換行是詩的一部份，
+一般文章的換行就只是適應稿紙大小。</summary>
+<category term="html"/>
+<category term="web"/>
+<category term="css"/>
+<content type="html">&lt;h1 id="html br 的語義"&gt;html br 的語義&lt;/h1&gt;
+&lt;p&gt;html br 是 break 換行的意思。
+在 html 中換行會被當成縮排的一部份，要換行一定要用 br。
+br 不應該使用在排版上，排版請交給 css，
+br 是用在 &lt;strong&gt;語義&lt;/strong&gt; 上需要換行時，
+像詩的換行是詩的一部份，
+一般文章的換行就只是適應稿紙大小。&lt;/p&gt;
+&lt;p&gt;所以要分清楚什麼時候要用 br，
+什麼時候要用 pre 把整段包起來。
+簡單來說，就是當換行是有意義時，
+例如詩的換行。
+像 markdown 的換行，或寫文件的換行，
+只是超出螢幕寬度不方便，就換行。&lt;/p&gt;
+&lt;p&gt;&lt;a href="the-golden-ass-not-finish.html"&gt;上一篇馬基維基的豬&lt;/a&gt; 有引用詩，
+就想一下要用哪個 html 元素比較對。
+詩有分段，段裡再分行，
+所以那個大的空行是段落間隔，
+而不是單純空二行的意思。&lt;/p&gt;
+&lt;p&gt;所以我選用 p 元素分段，
+用 br 在段內分行，整篇詩是引用，
+所以用 blockquote 包起來。&lt;/p&gt;
+&lt;p&gt;在 markdown 裡用 &lt;code&gt;&amp;gt;&lt;/code&gt; 包詩，
+blockquote 裡本來就會在空行分段，
+然後行尾加二空白可以強制斷行。
+但我不太喜歡行尾二空白的語法，
+太不明顯了。
+所以我是直接寫成 &lt;code&gt;&amp;lt;br&amp;gt;&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;本來我很討厭 br，
+都習慣用 pre 或 css &lt;code&gt;white-space: pre;&lt;/code&gt; ，
+但東西發明就有他的用處，
+有時候 br 是比 pre 好的。&lt;/p&gt;
+&lt;p&gt;w3c 的 br 用途範例，
+一個就是詩的斷行，
+另一個則是西式信封上的地址，
+有一定格式。&lt;/p&gt;
+&lt;p&gt;pre 我覺得比較適合用在貼 code，
+或 &lt;a href="http://zh.wikipedia.org/wiki/ascii_art"&gt;ascii art&lt;/a&gt; 等 &lt;strong&gt;排版好的&lt;/strong&gt; 東西。
+像直接把 terminal 內容貼上，
+就適合用 pre。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/the-golden-ass-not-finish.html</id>
 <title>未完成的 golden ass</title>
 <published>2018-02-07T04:53:55.601Z</published>
@@ -900,7 +955,7 @@ symbola 就是直接提供 emoji 的字體，
 不過至少比豆腐好。
 花園有預計要推出黑體，
 就慢慢等，或自己去 wiki 貢獻吧。&lt;/p&gt;
-&lt;p&gt;台灣政府一直有送字到 unicode &lt;a href="http://zh.wikipedia.org/wiki/%E4%B8%AD%E6%97%A5%E9%9F%93%E7%B5%B1%E4%B8%80%E8%A1%A8%E6%84%8F%E6%96%87%E5%AD%97#%E6%93%B4%E5%B1%95A%E5%8D%80"&gt;中日韓統一表意文字#擴展A區&lt;/a&gt;
+&lt;p&gt;台灣政府一直有送字到 unicode &lt;a href="http://zh.wikipedia.org/wiki/%E4%B8%AD%E6%97%A5%E9%9F%93%E7%B5%B1%E4%B8%80%E8%A1%A8%E6%84%8F%E6%96%87%E5%AD%97#%E6%93%B4%E5%B1%95A%E5%8D%80"&gt;中日韓統一表意文字#擴展 A 區&lt;/a&gt;
 也有一個官方的 &lt;a href="http://www.cns11643.gov.tw/"&gt;全字庫&lt;/a&gt; 網站，
 但我看不懂他要怎麼用。
 因為 unicode 都編碼了，

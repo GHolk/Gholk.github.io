@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-02-06T06:07:15.079Z</updated>
+  <updated>2018-02-07T04:53:55.847Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,53 @@
 
 
 <entry>
+<id>http://gholk.github.io/the-golden-ass-not-finish.html</id>
+<title>未完成的 golden ass</title>
+<published>2018-02-07T04:53:55.601Z</published>
+<updated>2018-02-07T04:53:55.841Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/the-golden-ass-not-finish.html"/>
+<summary>The Golden Ass 是 馬基維利 的一首詩，
+我是在 哲學界的動物們 馬基維利的豬 裡看到的。
+裡面豬的發言很有哲理，點出人性的矛盾。
+本來想找完整版或原文，但英文維基寫這首詩沒有完成。</summary>
+<category term="心得"/>
+<category term="哲學界的動物們，出列！"/>
+<category term="哲學"/>
+<category term="西方"/>
+<category term="文學"/>
+<category term="詩"/>
+<content type="html">&lt;h1 id="未完成的 golden ass"&gt;未完成的 golden ass&lt;/h1&gt;
+&lt;p&gt;&lt;a href="https://en.wikipedia.org/wiki/The_Golden_Ass_(Machiavelli)"&gt;The Golden Ass&lt;/a&gt; 是 &lt;a href="http://zh.wikipedia.org/wiki/%E9%A6%AC%E5%9F%BA%E7%B6%AD%E5%88%A9"&gt;馬基維利&lt;/a&gt; 的一首詩，
+我是在 &lt;cite&gt;哲學界的動物們&lt;/cite&gt; &lt;cite&gt;馬基維利的豬&lt;/cite&gt; 裡看到的。
+裡面豬的發言很有哲理，點出人性的矛盾。
+本來想找完整版或原文，但英文維基寫這首詩沒有完成。&lt;/p&gt;
+&lt;p&gt;詩中是 &lt;a href="http://zh.wikipedia.org/wiki/%E5%96%80%E7%88%BE%E5%88%BB"&gt;喀爾刻&lt;/a&gt; 與她的動物們，
+介紹了各種動物的個性，熊的粗暴、狼的貪婪，
+都一一對應到當時義大利城市中各勢力的名爭暗鬥。&lt;/p&gt;
+&lt;p&gt;最後是豬，發表了對人類這種生物的感言。
+在比喻上，豬如果不是代表蠢笨懶惰貪婪，
+通常會被用來代表聰明，和人類相似的性格，
+像動物農莊中的豬那樣。&lt;/p&gt;
+&lt;p&gt;以下是馬基維利的豬中，
+對豬的感言的中文譯文，覺得寫得很好。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;自然賜給你們一雙巧手和語言能力，&lt;br&gt;
+同時也賜給你們勃勃野心，&lt;br&gt;
+以及將以上一切恩惠化為烏有的貪婪。&lt;/p&gt;
+&lt;p&gt;先是自然，後有命運，&lt;br&gt;
+讓你們遭受多少病苦，&lt;br&gt;
+多少他對你們承諾的幸福最後卻無疾而終！&lt;br&gt;
+野心，淫蕩，淚水，貪婪，&lt;br&gt;
+如同疥瘡，是你們命中之份，&lt;br&gt;
+我們找不到一種動物比人擁有&lt;br&gt;
+更脆弱的生命和更強烈的生命意志，&lt;br&gt;
+而且經歷過更多的模糊恐懼和更多憤怒。&lt;/p&gt;
+&lt;p&gt;豬不折磨豬，&lt;br&gt;
+雄鹿也不會折磨雄鹿。只有人類&lt;br&gt;
+會殺害人類，將他釘十字架，剝奪他所有的一切……&lt;/p&gt;
+&lt;/blockquote&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/line-new-chrome-app-in-store.html</id>
 <title>line 換新 chrome app</title>
 <published>2018-02-06T06:05:48.179Z</published>

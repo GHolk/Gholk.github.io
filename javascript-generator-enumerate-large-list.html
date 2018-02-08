@@ -1,0 +1,113 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-02-08T16:49:26.686Z">
+<meta name="keywords" property="og:article:tag" content="javascript,函數">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="excuse-better-truth-clever-lonely.html" title="真實與藉口，聰明的寂寞">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title>以 generator 遍歷大型陣列</title>
+</head>
+<body>
+<main><h1 id="以 generator 遍歷大型陣列">以 generator 遍歷大型陣列</h1>
+<p>以前一直覺得 js 的 generator 很雞肋，
+看起很炫，但其實沒什麼派得上用場的地方。
+之前想窮舉所有排列組合，把組合當一個陣列回傳，
+結果因為太大 stack 不夠裝。
+改成 generator 或 callback 的形式就可以了。</p>
+<h2 id="generator">generator</h2>
+<pre><code class="lang-js">function *randomSortGenerator(list) {
+    if (list.length == 1) yield list
+    else for (const item of list) {
+        const elseList = list.filter(s =&gt; s != item)
+        for (const subList of randomSortGenerator(elseList)) {
+            yield [item, ...subList]
+        } 
+    }
+}
+</code></pre>
+<p>generator 的意義有二個，一是狀態機，
+像 async await 就能用 generator 實現；
+二就是用來模擬鏈表。
+在鏈表很長或無窮的時候，例如模擬無窮數列。</p>
+<p>再加上新的 of 關鍵字，
+讓任何提供 Symbol.iterator 方法的物件，
+都能被當成鏈表遍歷。</p>
+<p>雖然 js 好像比較傾向 functional programing，
+比起 <code>for (... of ...)</code> 更偏好 <code>...forEach(...)</code> 。
+但因為用 <code>.next()</code> <code>.done</code> 遍歷列表太麻煩了，
+我就用了比較簡單的 of 關鍵字。</p>
+<h2 id="callback">callback</h2>
+<p>另一種是用 callback，
+可以說是把原本 generator 的 yield
+換成要接該項回呼函數。</p>
+<pre><code class="lang-js">function randomSortCallback(list, sendList) {
+    if (list.length == 1) sendList(list)
+    else for (const item of list) {
+        randomSortCallback(
+            list.filter(s =&gt; s != item),
+            (subList) =&gt; sendList([item, ...subList])
+        )
+    }
+}
+</code></pre>
+<p>發現這樣跑起來，
+在 node v6.12.3 竟然比 generator 快，
+js 果然是函數式語言，generator 你自盡吧。</p>
+<h2 id="測試">測試</h2>
+<pre><code class="lang-js">function show1of(count) {
+    const gate = 1 / count
+    return (item) =&gt; {
+        if (Math.random() &lt; gate) console.log(item)
+    }
+}
+
+function time(todo) {
+    console.time(&#39;todo&#39;)
+    todo()
+    console.timeEnd(&#39;todo&#39;)
+}
+
+time(() =&gt; {
+    randomSortCallback([1,2,3,4,5,6,7,8,9,10,11], show1of(100000))
+})
+
+time(() =&gt; {
+    const show1of100000 = show1of(100000)
+    for (const set of randomSortGenerator([1,2,3,4,5,6,7,8,9,10,11])) {
+        show1of100000(set)
+    }
+})
+</code></pre>
+<h2 id="函數呼叫層數">函數呼叫層數</h2>
+<p>之前好像不是因為回呼疊太多層爆 stack，
+而是因為 list 太大，內存存不下。
+因為排序多是要對列表中每個項目都呼叫，
+也就列表有幾項就疊幾層而已，
+而不是重覆呼叫一直往上疊。
+所以改成這種方式就不會爆了。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer src="ext/load-disqus.js"></script>
+
+
+
+
+
+</body></html>

@@ -141,3 +141,4 @@ the-golden-ass-not-finish.html
 html-br-semantic-poem.html
 excuse-better-truth-clever-lonely.html
 javascript-generator-enumerate-large-list.html
+general-reduce-array.html

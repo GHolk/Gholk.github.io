@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-02-08T17:05:05.220Z</updated>
+  <updated>2018-02-09T11:29:00.746Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,132 @@
 
 
 <entry>
+<id>http://gholk.github.io/general-reduce-array.html</id>
+<title>萬用的 array.reduce</title>
+<published>2018-02-09T11:28:35.819Z</published>
+<updated>2018-02-09T11:29:00.741Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/general-reduce-array.html"/>
+<summary>js 的 array 實作了 forEach map reduce filter
+等函數式語言對陣列的操作。這三者中最通用的 reduce，
+可以用來實現其它所有操作，
+因為 reduce 就相當於 for 迴圈，再加上一個共用變數。
+只是 reduce 用起來巢狀太多，很難看懂。</summary>
+<category term="函數"/>
+<category term="javascript"/>
+<category term="程式"/>
+<content type="html">&lt;h1 id="萬用的 array.reduce"&gt;萬用的 array.reduce&lt;/h1&gt;
+&lt;p&gt;js 的 array 實作了 forEach map reduce filter
+等函數式語言對陣列的操作。這三者中最通用的 reduce，
+可以用來實現其它所有操作，
+因為 reduce 就相當於 for 迴圈，再加上一個共用變數。
+只是 reduce 用起來巢狀太多，很難看懂。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-js"&gt;Array.prototype.map = function (mapping) {
+    const copy = new this.constructor()
+    return this.reduce(
+        (newList, item, index, list) =&amp;gt; {
+            newList.push(mapping(item, index, list))
+            return newList
+        },
+        copy
+    )
+}
+
+Array.prototype.filter = function (test) {
+    const copy = new this.constructor()
+    return this.reduce(
+        (matchList, item, index, list) =&amp;gt; {
+            if (test(item, index, list)) matchList.push(item)
+            return matchList
+        },
+        copy
+    )
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;因為 reduce 相當於對一個列表中每個元素呼叫某函數，
+並傳入一個初始值，將執行結果再當作下一個初始值。
+所以只要把傳入的初始值再回傳，就能達到共用變數的效果。
+也就是用 reduce 其實和用 for 迴圈是差不多的，
+甚至可以一次傳多個變數。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-js"&gt;[1,2,3].reduce((category, x) =&amp;gt; {
+    const even = category[0]
+    const odd = category[1]
+    if (x % 2 == 0) even.push(x)
+    else odd.push(x)
+    return [even, odd]
+}, [[],[]])
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;只是其實沒有必要，因為 js 有閉包功能，
+與其想一堆奇怪的辦法 hack 出在一個變數塞多個值的功能，
+製造一堆難懂難讀的 code，
+不如直接用 forEach 和閉包就好了。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-js"&gt;const even = []
+const odd = []
+[1,2,3].forEach((x) =&amp;gt; {
+    if (x % 2 == 0) even.push(x)
+    else odd.push(x)
+})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id="functional programming 參數風格"&gt;functional programming 參數風格&lt;/h2&gt;
+&lt;p&gt;fp 系需要 callback 的函數，
+參數順序慣例是先 callback 再傳要遍歷的鏈表。
+因為傳統 curry 的作法，多參數函數是來自單參數函，
+一個二參數函數，其實是接收一個參數後返回另一個函數，
+返回的再接受剩的一個，回傳結果。&lt;/p&gt;
+&lt;p&gt;reduce map 這些函數，是被視為先接受一個 callback，
+成為某種操作的 reduce map 函數，
+再來接受陣列作 reduce map。
+雖然實作上除了 haskell 外，幾乎沒有語言這麼作，
+但這個慣例就保留了下來。&lt;/p&gt;
+&lt;p&gt;haskell 中，如果函數傳入的參數量不足，
+會返回一個 &lt;strong&gt;半成品&lt;/strong&gt; ，繼續傳入參數到足夠，
+就能得到結果。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-js"&gt;// 假設只有單參函數，如何構造多參函數？
+function add(x) {
+    return function (y) {
+        return x + y
+    }
+}
+const add7 = add(7)
+add7(6) == 13
+add(2)(5) == 7
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="lang-js"&gt;function map(mapping) {
+    return function (list) {
+        const newList = new list.constructor()
+        for (let i=0; i&amp;lt;list.length; i++) {
+            newList.push(mapping(list[i]))
+        }
+        return newList
+    }
+}
+const double = map((x) =&amp;gt; x+x)
+double([1,2,3]) == [2,4,6]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id="多層巢狀的問題"&gt;多層巢狀的問題&lt;/h2&gt;
+&lt;p&gt;如果用 fp 的風格，因為要做的事是第一個參數，
+列表是最後一個，看起就會很怪，
+多層巢狀後會很醜。
+就像以前 ajax 的 callback hell。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-js"&gt;map((row) =&amp;gt; {
+    return map((item) =&amp;gt; {
+        return item * item
+    }, row)
+}, list)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;這裡比較直覺是類似一般 for 的寫法，
+先寫鏈表，再寫要做的事。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-js"&gt;map(list, (row) =&amp;gt; {
+    return map(row, (item) =&amp;gt; {
+        return item * item
+    })
+})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;但一般 lib 都會照傳統 fp 的風格設計，
+這種 for in 比較少看到，
+就關鍵字 for 或 foreach 會這樣設計而已，
+emacslisp 裡就有這種風格的 special form &lt;code&gt;dolist&lt;/code&gt; 。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/javascript-generator-enumerate-large-list.html</id>
 <title>以 generator 遍歷大型陣列</title>
 <published>2018-02-08T16:49:26.686Z</published>

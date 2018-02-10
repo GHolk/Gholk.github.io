@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-02-09T11:29:00.746Z</updated>
+  <updated>2018-02-10T16:16:23.451Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,96 @@
 
 
 <entry>
+<id>http://gholk.github.io/sicp-note-reader.html</id>
+<title>sicp 的筆記格式</title>
+<published>2018-02-10T15:13:12.038Z</published>
+<updated>2018-02-10T16:16:23.446Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/sicp-note-reader.html"/>
+<summary>去年暑假讀 sicp 時有邊讀邊寫筆記，
+一小節的程式一個檔案，還為自己方便，記筆記有一些規則。
+免強能直接在 github 上看，在本機則沒有適合的方法。
+今天繼續讀下去，花一天寫了一個 簡單的 web 閱讀器 。</summary>
+<category term="javascript"/>
+<category term="web"/>
+<category term="scheme"/>
+<category term="sicp"/>
+<category term="排版"/>
+<content type="html">&lt;h1 id="sicp 的筆記格式"&gt;sicp 的筆記格式&lt;/h1&gt;
+&lt;p&gt;去年暑假讀 sicp 時有邊讀邊寫筆記，
+一小節的程式一個檔案，還為自己方便，記筆記有一些規則。
+免強能直接在 github 上看，在本機則沒有適合的方法。
+今天繼續讀下去，花一天寫了一個 &lt;a href="sicp/"&gt;簡單的 web 閱讀器&lt;/a&gt; 。&lt;/p&gt;
+&lt;p&gt;習慣就一個小節的程式寫在同一個 &lt;code&gt;*.sch&lt;/code&gt; 檔，
+然後每小節、每個 sch 檔也寫一個同名 &lt;code&gt;*.md&lt;/code&gt; ，
+記錄一下寫了什麼，這小節在講什麼，
+程式有什麼心得感想。&lt;/p&gt;
+&lt;p&gt;然後每章一個目錄，一章有數個小節，
+各 sch md 都在同一個目錄裡。
+章的目錄再一個 &lt;code&gt;README.md&lt;/code&gt; 寫這章的心得當目錄。&lt;/p&gt;
+&lt;h2 id="功能與實作"&gt;功能與實作&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;讀取 &lt;code&gt;*.md&lt;/code&gt; 時，如果存在 &lt;code&gt;*.sch&lt;/code&gt; 就一併顯示。&lt;/li&gt;
+&lt;li&gt;進入目錄時，自動顯示 &lt;code&gt;README.md&lt;/code&gt; 。&lt;/li&gt;
+&lt;li&gt;之前有把各檔的檔名用 markdown 超連結語法，寫到 readme 裡，
+所以掃描還沒有必要。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;實作有考慮二種作法：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;寫 script，自動遍歷所有文件和程式，生出一份完整的文件。
+好處是生成可以是 html 甚至 readme，
+可以從 emacs 或其它 editor 讀。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;寫 web，用 ajax 載入 local 或 github page 上的 readme，
+用 &lt;a href="marked/"&gt;marked&lt;/a&gt; 生成 html。
+好處是可以直從瀏覽器讀，壞處也是得用瀏覽器讀。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;總之目前是寫出一個 &lt;a href="sicp/"&gt;reader&lt;/a&gt; ，
+用 fetch api 讀文件，
+還可以用 firefox &lt;code&gt;file://&lt;/code&gt; 讀喔，
+或 github page 上也可以。&lt;/p&gt;
+&lt;p&gt;之後也許轉成 js lib 之類的？
+感覺有這樣的需要，
+能讀散落在各子目錄的 markdown 和程式。
+之前 ccns 的 &lt;a href="https://github.com/kevinbird61"&gt;kevin cyu&lt;/a&gt; 有做過類似的，
+是生出一個 html 文件。&lt;/p&gt;
+&lt;h2 id="fetch policy"&gt;fetch policy&lt;/h2&gt;
+&lt;p&gt;在用firefox &lt;code&gt;file://&lt;/code&gt; 協定開本機目錄時，
+會列出目錄下的所有檔案。&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.flickr.com/photos/neckfree/40186603241/in/dateposted/"&gt;&lt;img src="https://farm5.staticflickr.com/4623/40186603241_d957ab7f1e_z.jpg" alt="firefox local directory"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;但不能用這個查目錄下有什麼檔案，
+如果你在 &lt;code&gt;file:///www/readme.html&lt;/code&gt; ， 
+&lt;code&gt;fetch(&amp;#39;./&amp;#39;)&lt;/code&gt; 是抓不到東西的。&lt;/p&gt;
+&lt;p&gt;firefox在 &lt;code&gt;file:&lt;/code&gt; 下是能ajax同一層和所有子目錄內容，
+但在瀏覽目錄時的自動列出功能，是不能被ajax的。
+而chrome是全部鎖起來，
+在file協定下沒有地方是same origin。&lt;/p&gt;
+&lt;h2 id="實作困難"&gt;實作困難&lt;/h2&gt;
+&lt;p&gt;我本來想用iframe直接看readme，
+在onload事件後，
+再用 &lt;a href="marked/"&gt;marked&lt;/a&gt; 把iframe的內容轉成html。
+結果發現iframe開 &lt;code&gt;*.md&lt;/code&gt; 會彈出下載視窗，
+不像 &lt;code&gt;*.txt&lt;/code&gt; 是能直接看。&lt;/p&gt;
+&lt;p&gt;後來改用 &lt;code&gt;history.pushState()&lt;/code&gt; ，
+直接把現在的路徑push成所閱讀的markdown的路徑。
+但這有個問題，原始程式和url是 &lt;code&gt;file:///home/gholk/sicp/index.html&lt;/code&gt; ，
+讀個幾次後變成 &lt;code&gt;file:///home/gholk/sicp/exercise/1/fast-expt.md&lt;/code&gt; ，
+之後F5重新整理，或從其它地方直接開這個url，
+會跳出叫你下載的視窗，或就看到原始的markdown，
+而不是 &lt;code&gt;index.html&lt;/code&gt; 渲染的markdown。&lt;/p&gt;
+&lt;p&gt;後來改成把path存在query string，
+但會有相對路徑的問題，
+像 &lt;code&gt;1/README.md&lt;/code&gt; 裡名為 &lt;code&gt;fast-expt.md&lt;/code&gt; 的超連結
+是指向同一層的 &lt;code&gt;1/fast-expt.md&lt;/code&gt; ，
+但如果直接 &lt;code&gt;fetch(&amp;#39;fast-expt.md&amp;#39;)&lt;/code&gt; 
+會指向 &lt;code&gt;index.html&lt;/code&gt; 所在的目錄下的 &lt;code&gt;fast-expt.md&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;我是用html的新的URL 物件解決，能計算相對路徑。
+像 &lt;code&gt;new URL(&amp;#39;helo/world&amp;#39;, &amp;#39;file:///home/gholk/index.html&amp;#39;)&lt;/code&gt; 
+就會是 &lt;code&gt;file:///home/gholk/helo/world&lt;/code&gt; ，
+連 &lt;code&gt;.&lt;/code&gt; 和 &lt;code&gt;..&lt;/code&gt; 都能處理，
+但注意尾部的斜線有影響。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/general-reduce-array.html</id>
 <title>萬用的 array.reduce</title>
 <published>2018-02-09T11:28:35.819Z</published>

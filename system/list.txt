@@ -142,3 +142,4 @@ html-br-semantic-poem.html
 excuse-better-truth-clever-lonely.html
 javascript-generator-enumerate-large-list.html
 general-reduce-array.html
+sicp-note-reader.html

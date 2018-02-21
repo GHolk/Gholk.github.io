@@ -144,3 +144,4 @@ javascript-generator-enumerate-large-list.html
 general-reduce-array.html
 sicp-note-reader.html
 shotgun-one-enemy.html
+trackpoint-evdev-xinput-config.html

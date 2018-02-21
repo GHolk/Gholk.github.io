@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-02-20T06:22:57.319Z</updated>
+  <updated>2018-02-21T03:48:20.521Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,79 @@
 
 
 <entry>
+<id>http://gholk.github.io/trackpoint-evdev-xinput-config.html</id>
+<title>trackpoint 以 evdev 驅動以 xinput config</title>
+<published>2018-02-21T03:48:20.257Z</published>
+<updated>2018-02-21T03:48:20.515Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/trackpoint-evdev-xinput-config.html"/>
+<summary>無意間又進入 windows，才發現 linux 下的 trackpoint
+速度是近不能用的狀態，虧我還能用這麼久。
+找到 解法是移除 xserver-xorg-input-libinput
+裝 xserver-xorg-input-evdev 即可 。
+之後就能用 xinput 或 xorg.conf 調速度了。</summary>
+<category term="debian"/>
+<category term="linux"/>
+<category term="gui"/>
+<category term="筆電"/>
+<category term="x-window"/>
+<category term="驅動"/>
+<content type="html">&lt;h1 id="trackpoint 以 evdev 驅動以 xinput config"&gt;trackpoint 以 evdev 驅動以 xinput config&lt;/h1&gt;
+&lt;p&gt;無意間又進入 windows，才發現 linux 下的 trackpoint
+速度是近不能用的狀態，虧我還能用這麼久。
+找到 &lt;a href="https://www.reddit.com/r/thinkpad/comments/4jku4c/configuring_trackpoint_on_thinkpad_13/"&gt;解法是移除 &lt;code&gt;xserver-xorg-input-libinput&lt;/code&gt;
+裝 &lt;code&gt;xserver-xorg-input-evdev&lt;/code&gt; 即可&lt;/a&gt; 。
+之後就能用 xinput 或 xorg.conf 調速度了。&lt;/p&gt;
+&lt;p&gt;在 windows 下可以直接用預附的工具調，
+然後 &lt;strong&gt;重新開機&lt;/strong&gt; 到 linux 下還是很快；
+但如果是 &lt;strong&gt;關機再開機&lt;/strong&gt; 就會變很慢了。&lt;/p&gt;
+&lt;p&gt;google 找類似的問題，多數太舊問題和解法都不對。
+有找到一個 stack exchange 的問題，但沒人回答。
+最後找到上面那串 reddit，仔細看才發現有解法。&lt;/p&gt;
+&lt;p&gt;一開始直接移除 &lt;code&gt;xserver-xorg-input-libinput&lt;/code&gt;
+後重啟 xserver &lt;code&gt;systemctl restart lightdm&lt;/code&gt; ，
+結果鍵盤和滑鼠就沒反應了。
+完全無法操作電腦，只好重開進 recovery mode，
+發現文字介面下還能操作，
+但 startx 進 gui 就不行了。
+之後仔細看，發現我預設沒裝 input-evdev 這個 package，
+難怪拔了 input-libinput 就沒反應。
+就裝再重開就好了。&lt;/p&gt;
+&lt;p&gt;裝好 evdev 發現 xinput 可以多看到很多選項，
+調低 &lt;code&gt;Device Accel Constant Deceleration&lt;/code&gt; 可以加速，
+reddit 那個人調到 0.2，我調 0.3 就很快了，要適應一下。
+其它還有模擬滾輪、中鍵，都有開。&lt;/p&gt;
+&lt;p&gt;evdev map-pages 裡有介紹 config 怎麼寫，
+&lt;a href="https://github.com/GHolk/loco/blob/e9a53e/evdev-trackpoint-gholk.conf"&gt;我就照著寫&lt;/a&gt; ，然後丟到 &lt;code&gt;/etc/X11/xorg.conf.d/&lt;/code&gt; ，
+&lt;code&gt;systemctl restart lightdm&lt;/code&gt; 就卡住了。
+不知道哪裡錯 orz
+最後用 &lt;a href="https://github.com/GHolk/loco/blob/e9a53e/evdev-trackpoint-gholk.sh"&gt;shell script 呼叫 xinput&lt;/a&gt; 解決。&lt;/p&gt;
+&lt;h2 id="xorg config 雷點"&gt;xorg config 雷點&lt;/h2&gt;
+&lt;p&gt;後來終於寫對 config 了，
+原本是照 evdev map-page 裡寫，
+發現最後一些中間有空格的屬性不知道怎麼調，
+用 Option 設的選項都是 UpperCamelCase，
+那些是中間有空格的。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Evdev Axis Calibration
+        4 32-bit values, order min-x, max-x, min-y, max-y or 0 values to
+        disable in-driver axis calibration.
+
+Evdev Axis Inversion
+        2 boolean values (8 bit, 0 or 1), order  X,  Y.  1  inverts  the
+        axis.
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;這些是只能用 xinput 調的，
+然後調速度的選項不在 evdev man-page，
+在 xorg.conf 的 man-page。
+有很多能調，像加速的曲線
+&lt;code&gt;AccelerationProfile&lt;/code&gt; 就有八九種。
+主要我選了一個順手的曲線，
+和 ConstantDeceleration 調減速倍率，
+2 就是 1/2，所以調 0.3 就是近三倍。&lt;/p&gt;
+&lt;p&gt;然後一直錯的一個雷點是 config 裡
+選項名和值都要用雙引號包起來。
+總之 &lt;a href="https://github.com/GHolk/loco/blob/4232b9/evdev-trackpoint-gholk.conf"&gt;最後就用 xorg.conf 了&lt;/a&gt; ，
+shell script 就刪了。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/shotgun-one-enemy.html</id>
 <title>用散彈槍的人總想把所有子彈打在同一個人身上</title>
 <published>2018-02-20T06:22:57.066Z</published>

@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-02-21T03:48:20.521Z</updated>
+  <updated>2018-02-22T08:59:26.452Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,54 @@
 
 
 <entry>
+<id>http://gholk.github.io/nissin-instant-chicken-noodle.html</id>
+<title>沒有料的日清原祖雞汁麵</title>
+<published>2018-02-22T08:59:26.196Z</published>
+<updated>2018-02-22T08:59:26.446Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/nissin-instant-chicken-noodle.html"/>
+<summary>日清食品的創辦人兼泡麵發明人吳百福，
+一直有個奇特的想法，泡麵應該只有麵，
+這種想法使他把調味料混到麵裡，不用額名調味包。
+原祖雞汁麵就是這樣的最初產品，
+還很特殊的在麵體上開了個洞，讓你打蛋進去。</summary>
+<category term="食物"/>
+<category term="泡麵"/>
+<category term="即食"/>
+<content type="html">&lt;h1 id="沒有料的日清原祖雞汁麵"&gt;沒有料的日清原祖雞汁麵&lt;/h1&gt;
+&lt;p&gt;日清食品的創辦人兼泡麵發明人吳百福，
+一直有個奇特的想法，泡麵應該只有麵，
+這種想法使他把調味料混到麵裡，不用額名調味包。
+原祖雞汁麵就是這樣的最初產品，
+還很特殊的在麵體上開了個洞，讓你打蛋進去。&lt;/p&gt;
+&lt;p&gt;日清食品的台裔日籍創辦人吳百福發明了泡麵這種食品，
+還一直有個奇特的夢想，把調味料加到麵裡。
+也就是他希望麵泡了就能吃，不用有調味包，
+算是一種奇特的偏執吧。&lt;/p&gt;
+&lt;p&gt;就像市售的麵條，但不用額外加調味料，
+整包加水煮開就能吃，不是很好？
+算一種日本人的偏執吧，
+像 apple 的線的簡約風格。&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://www.flickr.com/photos/135370742@N08/40371475722"&gt;&lt;img src="http://farm5.staticflickr.com/4710/40371475722_23796fc7d2.jpg" alt="dry noodle"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;以前高中吃過日清的出前一丁，覺得不錯。
+最近買了日清的原祖雞汁麵，
+果然是早期沒有調味包的麵。
+上面還有個小洞，感覺是讓你打蛋的。&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://www.flickr.com/photos/135370742@N08/40371476332"&gt;&lt;img src="http://farm5.staticflickr.com/4756/40371476332_1d197f860b.jpg" alt="heat noodle"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;調味料果然都拌到麵裡，
+一泡湯都是黃的，喝起來還有點鹹，
+我後來還另外加湯。&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://www.flickr.com/photos/135370742@N08/39519684685"&gt;&lt;img src="http://farm5.staticflickr.com/4758/39519684685_6797a2c2dc.jpg" alt="hot noodle"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;整體吃起來味道有點單調，
+吃一次還行，多吃幾次會膩。&lt;/p&gt;
+&lt;p&gt;這已經第三包了，不知道下次要換什麼口味。
+之前吃過素泡麵還不錯，
+就想像吃了一包 &lt;em&gt;沒有殺生&lt;/em&gt; 的泡麵。
+可能換別種素泡麵，或出前一丁吧，
+從高中那次就沒再吃過了，
+倒是之前吃香港的另一款公仔麵，
+一樣雞汁口味，超難吃的。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/trackpoint-evdev-xinput-config.html</id>
 <title>trackpoint 以 evdev 驅動以 xinput config</title>
 <published>2018-02-21T03:48:20.257Z</published>

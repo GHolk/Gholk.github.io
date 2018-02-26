@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-02-22T08:59:26.452Z</updated>
+  <updated>2018-02-26T04:58:40.016Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,252 @@
 
 
 <entry>
+<id>http://gholk.github.io/course-106-2.html</id>
+<title>106 年下學期課表</title>
+<published>2018-02-26T04:56:26.157Z</published>
+<updated>2018-02-26T04:57:05.614Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/course-106-2.html"/>
+<summary>迎來最自由的一學期，不缺學分，
+想修什麼就修，旁聽也可以。</summary>
+<category term="課表"/>
+<category term="ncku"/>
+<category term="學業"/>
+<content type="html">&lt;h1 id="106 年下學期課表"&gt;106 年下學期課表&lt;/h1&gt;
+&lt;p&gt;迎來最自由的一學期，不缺學分，
+想修什麼就修，旁聽也可以。&lt;/p&gt;
+&lt;p&gt;除了誤差理論外，這學期應該沒有硬理論課了。
+誤差理論沒有選，因為和聽打服務學習衝，
+但聽打寫不固定時間，所以之後應該沒差。&lt;/p&gt;
+&lt;p&gt;天氣學是想學看雲的能力。
+電腦通訊網路和測量系多數課都是湊學分的。&lt;/p&gt;
+&lt;style&gt;
+table, th, td {
+  border: solid 1px black;
+}
+&lt;/style&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;節次&lt;/th&gt;
+&lt;th&gt;一&lt;/th&gt;
+&lt;th&gt;二&lt;/th&gt;
+&lt;th&gt;三&lt;/th&gt;
+&lt;th&gt;四&lt;/th&gt;
+&lt;th&gt;五&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt; 1&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; 2&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;誤差理論&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; 3&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;誤差理論 校園裡的聽打員&lt;/td&gt;
+&lt;td&gt;天氣學&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; 4&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;誤差理論&lt;/td&gt;
+&lt;td&gt;天氣學&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;午休&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;天氣學&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; 5&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;地籍測量&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; 6&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;地籍測量&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; 7&lt;/td&gt;
+&lt;td&gt;民法物權&lt;/td&gt;
+&lt;td&gt;電腦通訊網路&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;工程倫理&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; 8&lt;/td&gt;
+&lt;td&gt;民法物權&lt;/td&gt;
+&lt;td&gt;電腦通訊網路&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;工程倫理&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; 9&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;電腦通訊網路&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;測量系：數學系後二館&lt;/li&gt;
+&lt;li&gt;天氣學：地科系館 3035&lt;/li&gt;
+&lt;li&gt;電腦通訊網路：資訊系館 4203&lt;/li&gt;
+&lt;li&gt;校園裡的聽打員：唯農 7309&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry><entry>
+<id>http://gholk.github.io/course-106-2.html</id>
+<title>106 年下學期課表</title>
+<published>2018-02-26T04:56:26.157Z</published>
+<updated>2018-02-26T04:56:26.431Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/course-106-2.html"/>
+<summary>迎來最自由的一學期，不缺學分，
+想修什麼就修，旁聽也可以。</summary>
+<category term="課表"/>
+<category term="ncku"/>
+<category term="學業"/>
+<content type="html">&lt;h1 id="106 年下學期課表"&gt;106 年下學期課表&lt;/h1&gt;
+&lt;p&gt;迎來最自由的一學期，不缺學分，
+想修什麼就修，旁聽也可以。&lt;/p&gt;
+&lt;p&gt;除了誤差理論外，這學期應該沒有硬理論課了。
+誤差理論沒有選，因為和聽打服務學習衝，
+但聽打寫不固定時間，所以之後應該沒差。&lt;/p&gt;
+&lt;p&gt;天氣學是想學看雲的能力。
+電腦通訊網路和測量系多數課都是湊學分的。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;節次&lt;/th&gt;
+&lt;th&gt;一&lt;/th&gt;
+&lt;th&gt;二&lt;/th&gt;
+&lt;th&gt;三&lt;/th&gt;
+&lt;th&gt;四&lt;/th&gt;
+&lt;th&gt;五&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt; 1&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; 2&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;誤差理論&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; 3&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;誤差理論 校園裡的聽打員&lt;/td&gt;
+&lt;td&gt;天氣學&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; 4&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;誤差理論&lt;/td&gt;
+&lt;td&gt;天氣學&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;午休&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;天氣學&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; 5&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;地籍測量&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; 6&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;地籍測量&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; 7&lt;/td&gt;
+&lt;td&gt;民法物權&lt;/td&gt;
+&lt;td&gt;電腦通訊網路&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;工程倫理&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; 8&lt;/td&gt;
+&lt;td&gt;民法物權&lt;/td&gt;
+&lt;td&gt;電腦通訊網路&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;工程倫理&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt; 9&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;電腦通訊網路&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;測量系：數學系後二館&lt;/li&gt;
+&lt;li&gt;天氣學：地科系館 3035&lt;/li&gt;
+&lt;li&gt;電腦通訊網路：資訊系館 4203&lt;/li&gt;
+&lt;li&gt;校園裡的聽打員：唯農 7309&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/nissin-instant-chicken-noodle.html</id>
 <title>沒有料的日清原祖雞汁麵</title>
 <published>2018-02-22T08:59:26.196Z</published>

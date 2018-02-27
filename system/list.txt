@@ -147,3 +147,4 @@ shotgun-one-enemy.html
 trackpoint-evdev-xinput-config.html
 nissin-instant-chicken-noodle.html
 course-106-2.html
+pipe-list-data-haskell.html

@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-02-27T02:44:34.847Z</updated>
+  <updated>2018-03-01T13:47:56.474Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,52 @@
 
 
 <entry>
+<id>http://gholk.github.io/line-new-chrome-app-launcher.html</id>
+<title>直接執行新版 line 的 launcher</title>
+<published>2018-03-01T13:43:13.922Z</published>
+<updated>2018-03-01T13:47:56.469Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/line-new-chrome-app-launcher.html"/>
+<summary>之前換新版 line 後就不能用 launcher 直接執行，
+一直之前找到新版 line 的 url，
+和直接用 cli 開啟的方法，
+chromium --app=chrome-extension://ophjlpahpchlmihnnnihgmmeilfjmjjc/index.html 。
+也就能寫成 launcher 了。</summary>
+<category term="line"/>
+<category term="im"/>
+<category term="x-window"/>
+<category term="gui"/>
+<category term="browser"/>
+<category term="chromium"/>
+<content type="html">&lt;h1 id="直接執行新版 line 的 launcher"&gt;直接執行新版 line 的 launcher&lt;/h1&gt;
+&lt;p&gt;之前換新版 line 後就不能用 launcher 直接執行，
+一直之前找到新版 line 的 url，
+和直接用 cli 開啟的方法，
+&lt;code&gt;chromium --app=chrome-extension://ophjlpahpchlmihnnnihgmmeilfjmjjc/index.html&lt;/code&gt; 。
+也就能寫成 launcher 了。&lt;/p&gt;
+&lt;p&gt;因為新版 line 也是開一個新視窗，
+就想能不能找出該視窗的 url，
+就能用 cli 開了。
+就用 chrome 的 debugger，
+開 &lt;a href="chrome://inspect/#extensions"&gt;chrome://inspect/#extensions&lt;/a&gt; ，
+如果 line 也開著，就能看到 url 
+是 &lt;a href="chrome-extension://ophjlpahpchlmihnnnihgmmeilfjmjjc/index.html"&gt;chrome-extension://ophjlpahpchlmihnnnihgmmeilfjmjjc/index.html&lt;/a&gt; 。&lt;/p&gt;
+&lt;p&gt;launcher 是抄原本的 line 的，
+icon 不改，改 comment 和 version 而已。
+有 comment 滑鼠久會有說明，
+不然分不出哪個是新的哪個是舊的。&lt;/p&gt;
+&lt;p&gt;xdg menu 裡有 &lt;em&gt;Chromium Apps&lt;/em&gt; 這個分類，
+但原本的 line launcher 裡沒有寫 category，
+找半天才找到是寫在 &lt;code&gt;.config/menus/applications-merged/user-chrome-apps.menu&lt;/code&gt; ，
+看起來也不是給人直接編輯的。
+後來才發現 launcher 也就是 &lt;code&gt;*.desktop&lt;/code&gt; ，
+應該是要用 &lt;code&gt;xdg-desktop-menu&lt;/code&gt; 安裝，
+而不是直接複製到 &lt;code&gt;.local/share/applications/&lt;/code&gt; 。
+詳情參考新的 &lt;a href="https://github.com/gholk/loco/tree/f1325c/applications"&gt;~/loco/applications/&lt;/a&gt; 。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-sh"&gt;xdg-desktop-menu install ~/.local/share/desktop-directories/chrome-apps.directory \
+                         chrome-ophjlpahpchlmihnnnihgmmeilfjmjjc-Default.desktop
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/pipe-list-data-haskell.html</id>
 <title>參數 currying 與函數管道</title>
 <published>2018-02-27T02:40:26.822Z</published>
@@ -1089,6 +1135,8 @@ blockquote 裡本來就會在空行分段，
 <category term="im"/>
 <category term="browser"/>
 <category term="linux"/>
+<category term="x-window"/>
+<category term="gui"/>
 <category term="chromium"/>
 <content type="html">&lt;h1 id="line 換新 chrome app"&gt;line 換新 chrome app&lt;/h1&gt;
 &lt;p&gt;因為用 linux，不能裝 chrome 桌面版，

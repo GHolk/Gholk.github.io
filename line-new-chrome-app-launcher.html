@@ -1,0 +1,64 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-03-01T13:43:13.922Z">
+<meta name="keywords" property="og:article:tag" content="line,im,x-window,gui,browser,chromium">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="pipe-list-data-haskell.html" title="參數 currying 與函數管道">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title>直接執行新版 line 的 launcher</title>
+</head>
+<body>
+<main><h1 id="直接執行新版 line 的 launcher">直接執行新版 line 的 launcher</h1>
+<p>之前換新版 line 後就不能用 launcher 直接執行，
+一直之前找到新版 line 的 url，
+和直接用 cli 開啟的方法，
+<code>chromium --app=chrome-extension://ophjlpahpchlmihnnnihgmmeilfjmjjc/index.html</code> 。
+也就能寫成 launcher 了。</p>
+<p>因為新版 line 也是開一個新視窗，
+就想能不能找出該視窗的 url，
+就能用 cli 開了。
+就用 chrome 的 debugger，
+開 <a href="chrome://inspect/#extensions">chrome://inspect/#extensions</a> ，
+如果 line 也開著，就能看到 url 
+是 <a href="chrome-extension://ophjlpahpchlmihnnnihgmmeilfjmjjc/index.html">chrome-extension://ophjlpahpchlmihnnnihgmmeilfjmjjc/index.html</a> 。</p>
+<p>launcher 是抄原本的 line 的，
+icon 不改，改 comment 和 version 而已。
+有 comment 滑鼠久會有說明，
+不然分不出哪個是新的哪個是舊的。</p>
+<p>xdg menu 裡有 <em>Chromium Apps</em> 這個分類，
+但原本的 line launcher 裡沒有寫 category，
+找半天才找到是寫在 <code>.config/menus/applications-merged/user-chrome-apps.menu</code> ，
+看起來也不是給人直接編輯的。
+後來才發現 launcher 也就是 <code>*.desktop</code> ，
+應該是要用 <code>xdg-desktop-menu</code> 安裝，
+而不是直接複製到 <code>.local/share/applications/</code> 。
+詳情參考新的 <a href="https://github.com/gholk/loco/tree/f1325c/applications">~/loco/applications/</a> 。</p>
+<pre><code class="lang-sh">xdg-desktop-menu install ~/.local/share/desktop-directories/chrome-apps.directory \
+                         chrome-ophjlpahpchlmihnnnihgmmeilfjmjjc-Default.desktop
+</code></pre>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer src="ext/load-disqus.js"></script>
+
+
+
+
+
+</body></html>

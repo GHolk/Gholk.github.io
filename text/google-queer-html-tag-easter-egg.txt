@@ -1,0 +1,39 @@
+# google 中對非標準元素 marquee 與 blink 的彩蛋
+marquee 和 blink 是二個惡名昭彰的 html 非標準元素，
+是 netscape 擅自加入的。
+因為非標準，而且閱讀體驗奇差無比，為人詬病。
+想不到 google `marquee html` 或 `blink html` 時，
+會出現頁面某部份顯示為 marquee 或 blink 的彩蛋。
+
+marquee 是跑馬燈，
+裡面的文字會像跑馬燈般移動；
+blink 是閃爍。
+二者都會造成閱讀困難，而且很不美觀，
+又非標準所以為人詬病；
+但一些自架網站的業餘人士倒是很愛用。
+
+[![google-blink-egg.png]]
+
+[![google-marquee-egg.png]]
+
+[google-blink-egg.png]: http://farm5.staticflickr.com/4602/40594982141_24472a20f9.jpg
+[![google-blink-egg.png]]: http://www.flickr.com/photos/135370742@N08/40594982141
+
+[google-marquee-egg.png]: http://farm5.staticflickr.com/4781/40594982901_80bedca2c9.jpg
+[![google-marquee-egg.png]]: http://www.flickr.com/photos/135370742@N08/40594982901
+
+在搜尋結果中，
+marquee 是搜尋符合比數與花費時間的那行小字變成跑馬燈，
+blink 則是匹配的關鍵字會閃爍。
+要注意二個單字的順序是先元素名再 html。
+
+其實我是不小心發現的， [本來想做彈幕][彈幕] ，
+就 google 看看 marquee 標籤還能不能用，
+結果就看到那行小字在跑。
+後來想說其它噁心元素搞不好也有，結果 blink 果然也有。
+
+[彈幕]: https://gist.github.com/GHolk/766d15e16f20d059af5b5642ed8ad8f1
+
+#html
+#google
+#easter-egg

@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-03-01T13:47:56.474Z</updated>
+  <updated>2018-03-03T05:16:41.654Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,35 @@
 
 
 <entry>
+<id>http://gholk.github.io/left-behind-after-dead.html</id>
+<title>身後的後事的赤裸</title>
+<published>2018-03-03T05:16:41.391Z</published>
+<updated>2018-03-03T05:16:41.648Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/left-behind-after-dead.html"/>
+<summary>阿妹 的 身後 蠻好聽的，但那個 MV 很赤裸，
+直接從太平間、冰櫃、棺木到火葬，
+加上用狹窄的視角呈現，如果是晚上看會毛毛的。
+第一次聽還沒聽出來歌詞在唱什麼，
+後來才發現是這麼赤裸。</summary>
+<category term="youtube"/>
+<category term="歌"/>
+<category term="女"/>
+<content type="html">&lt;h1 id="身後的後事的赤裸"&gt;身後的後事的赤裸&lt;/h1&gt;
+&lt;p&gt;&lt;u&gt;阿妹&lt;/u&gt; 的 &lt;cite&gt;身後&lt;/cite&gt; 蠻好聽的，但那個 MV 很赤裸，
+直接從太平間、冰櫃、棺木到火葬，
+加上用狹窄的視角呈現，如果是晚上看會毛毛的。
+第一次聽還沒聽出來歌詞在唱什麼，
+後來才發現是這麼赤裸。&lt;/p&gt;
+&lt;iframe src="https://www.youtube.com/embed/4V3hxNyiwaA"&gt;
+&lt;a href="https://www.youtube.com/watch?v=4V3hxNyiwaA"&gt;張惠妹：身後&lt;/a&gt;
+&lt;/iframe&gt;
+
+
+
+
+
+</content>
+</entry><entry>
 <id>http://gholk.github.io/line-new-chrome-app-launcher.html</id>
 <title>直接執行新版 line 的 launcher</title>
 <published>2018-03-01T13:43:13.922Z</published>

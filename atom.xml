@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-03-03T05:16:41.654Z</updated>
+  <updated>2018-03-03T16:33:00.601Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,43 @@
 
 
 <entry>
+<id>http://gholk.github.io/google-queer-html-tag-easter-egg.html</id>
+<title>google 中對非標準元素 marquee 與 blink 的彩蛋</title>
+<published>2018-03-03T16:27:55.617Z</published>
+<updated>2018-03-03T16:33:00.594Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/google-queer-html-tag-easter-egg.html"/>
+<summary>marquee 和 blink 是二個惡名昭彰的 html 非標準元素，
+是 netscape 擅自加入的。
+因為非標準，而且閱讀體驗奇差無比，為人詬病。
+想不到 google marquee html 或 blink html 時，
+會出現頁面某部份顯示為 marquee 或 blink 的彩蛋。</summary>
+<category term="html"/>
+<category term="google"/>
+<category term="easter-egg"/>
+<content type="html">&lt;h1 id="google 中對非標準元素 marquee 與 blink 的彩蛋"&gt;google 中對非標準元素 marquee 與 blink 的彩蛋&lt;/h1&gt;
+&lt;p&gt;marquee 和 blink 是二個惡名昭彰的 html 非標準元素，
+是 netscape 擅自加入的。
+因為非標準，而且閱讀體驗奇差無比，為人詬病。
+想不到 google &lt;code&gt;marquee html&lt;/code&gt; 或 &lt;code&gt;blink html&lt;/code&gt; 時，
+會出現頁面某部份顯示為 marquee 或 blink 的彩蛋。&lt;/p&gt;
+&lt;p&gt;marquee 是跑馬燈，
+裡面的文字會像跑馬燈般移動；
+blink 是閃爍。
+二者都會造成閱讀困難，而且很不美觀，
+又非標準所以為人詬病；
+但一些自架網站的業餘人士倒是很愛用。&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://www.flickr.com/photos/135370742@N08/40594982141"&gt;&lt;img src="http://farm5.staticflickr.com/4602/40594982141_24472a20f9.jpg" alt="google-blink-egg.png"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://www.flickr.com/photos/135370742@N08/40594982901"&gt;&lt;img src="http://farm5.staticflickr.com/4781/40594982901_80bedca2c9.jpg" alt="google-marquee-egg.png"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;在搜尋結果中，
+marquee 是搜尋符合比數與花費時間的那行小字變成跑馬燈，
+blink 則是匹配的關鍵字會閃爍。
+要注意二個單字的順序是先元素名再 html。&lt;/p&gt;
+&lt;p&gt;其實我是不小心發現的， &lt;a href="https://gist.github.com/GHolk/766d15e16f20d059af5b5642ed8ad8f1"&gt;本來想做彈幕&lt;/a&gt; ，
+就 google 看看 marquee 標籤還能不能用，
+結果就看到那行小字在跑。
+後來想說其它噁心元素搞不好也有，結果 blink 果然也有。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/left-behind-after-dead.html</id>
 <title>身後的後事的赤裸</title>
 <published>2018-03-03T05:16:41.391Z</published>

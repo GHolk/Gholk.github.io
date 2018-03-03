@@ -150,3 +150,4 @@ course-106-2.html
 pipe-list-data-haskell.html
 line-new-chrome-app-launcher.html
 left-behind-after-dead.html
+google-queer-html-tag-easter-egg.html

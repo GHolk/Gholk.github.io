@@ -151,3 +151,5 @@ pipe-list-data-haskell.html
 line-new-chrome-app-launcher.html
 left-behind-after-dead.html
 google-queer-html-tag-easter-egg.html
+geomatics-graduate-autobiography.html
+meme-reporter-youtuber-news.html

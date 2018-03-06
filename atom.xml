@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-03-03T16:33:00.601Z</updated>
+  <updated>2018-03-05T03:34:04.047Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,150 @@
 
 
 <entry>
+<id>http://gholk.github.io/geomatics-graduate-autobiography.html</id>
+<title>自傳</title>
+<published>2018-03-05T03:34:03.787Z</published>
+<updated>2018-03-05T03:34:04.040Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/geomatics-graduate-autobiography.html"/>
+<summary>
+:this + * {
+  width: 20%;
+  float: right;
+  margin: 1em;
+}
+style, script {
+  display: none;
+}
+</summary>
+<category term="自介"/>
+<category term="ncku"/>
+<content type="html">&lt;h1 id="自傳"&gt;自傳&lt;/h1&gt;
+&lt;style&gt;
+:this + * {
+  width: 20%;
+  float: right;
+  margin: 1em;
+}
+style, script {
+  display: none;
+}
+&lt;/style&gt;
+
+&lt;p&gt;&lt;img src="/home/gholk/Pictures/graduate/C34031328-1.jpg" alt="graduate"&gt;&lt;/p&gt;
+&lt;p&gt;我是王鼎鈞，Debian GNU/Linux 使用者，興趣使然的 Web 開發者。
+成大測量與空間資訊學系畢業，其中較有興趣的為攝影測量與 GIS。&lt;/p&gt;
+&lt;p&gt;身為 Debian 使用者，
+我能熟練使用 command line，
+操作 unix 工具如 find grep xargs 等，
+快速完成一般需要寫程式才能完成的工作。&lt;/p&gt;
+&lt;p&gt;身為 web 開發者，
+我能運用 HTML CSS JavaScript
+創造基於瀏覽器的 GUI 介面。
+在處理超過 shell script 能力範圍的問題，
+我能以 javascript 這門完整的語言，
+建構健壯、易於修改維護的程式。&lt;/p&gt;
+&lt;p&gt;身為測量與空間資訊學系的畢業生，
+我理解各專業科目核心觀念，
+搭配上我的程式能力，
+能親手實作出大部份內容。&lt;/p&gt;
+&lt;p&gt;例如在 GIS 應用，我自行設計一份表單，
+串接 google map api
+讓使用者點選自己最常買飲料的店家位置。
+在攝影測量課程中，
+我也是自行撰寫影像正射化的程式。&lt;/p&gt;
+&lt;h2 id="求學過程"&gt;求學過程&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;新泰國小&lt;/li&gt;
+&lt;li&gt;新泰國中&lt;/li&gt;
+&lt;li&gt;成功高中&lt;/li&gt;
+&lt;li&gt;成功大學化學系&lt;/li&gt;
+&lt;li&gt;成功大學測量與空間資訊系&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;學業從國中開始起飛，雖然不是多好的國中，
+班級唸書風氣也很差。
+基測意外的高分，上了台北市的第四、男生第三志願成功高中，
+高中算很認真。&lt;/p&gt;
+&lt;p&gt;考大學時對化學較有興趣，因此選擇化學系。
+但大一時成績不理想，加上不是很喜歡實驗室，
+便決定轉到另一充滿想像的測量與空間資訊系。
+之後也順利在三年半內修完必修與畢業要求學分。&lt;/p&gt;
+&lt;h2 id="程式設計之路"&gt;程式設計之路&lt;/h2&gt;
+&lt;p&gt;在大一接觸到自由軟體運動激發熱情，
+從大二開始使用 GNU/Linux 系統。
+大三開始有感於不懂程式的不方便，
+決定至少精通一種程式語言，
+便選了隨 node.js 掘起而大熱門的 JavaScript。&lt;/p&gt;
+&lt;p&gt;在大三自學程式設計後，
+發現程式不是只懂語法就好，
+背後的邏輯觀念、架構也是重要的，
+所以決定至少讀過一本有關程式設計的書，
+便讀了 MIT 的經典程式設計教材 SICP，
+並於 sitcon 上發表。&lt;/p&gt;
+&lt;h2 id="成就"&gt;成就&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;圖書館中控室工讀生&lt;/li&gt;
+&lt;li&gt;維基百科貢獻者&lt;/li&gt;
+&lt;li&gt;鄉民百科活躍貢獻者&lt;/li&gt;
+&lt;li&gt;106 學年 CCNS 校園電腦與網路愛好社副社長&lt;/li&gt;
+&lt;li&gt;2018 SITCON 學生計算機年會 short talk 講者 &lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="自選作品"&gt;自選作品&lt;/h2&gt;
+&lt;h3 id="[網頁地圖相簿 spexif](http://gisweb.ml/~2017GO/exifmap/)"&gt;&lt;a href="http://gisweb.ml/~2017GO/exifmap/"&gt;網頁地圖相簿 spexif&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;我大三下到大四上製做的專題，
+能依據照片的拍照位置將照片顯示在地圖上，
+並能修改照片的 metadata，
+註冊後允許上傳照片，登入即可觀看。&lt;/p&gt;
+&lt;h3 id="[倉頡新星](http://gholk.github.io/cjns/)"&gt;&lt;a href="http://gholk.github.io/cjns/"&gt;倉頡新星&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;有個倉頡輸入法教學軟體叫 &lt;strong&gt;倉頡之星&lt;/strong&gt; ，
+因為年代久遠，現代系統不一定能用，
+所以做了一個網頁版的；
+算是我第一個作品，裡面程式寫得蠻爛的。&lt;/p&gt;
+&lt;h3 id="[正射影像](http://gholk.github.io/orthophoto-reuse-code.html)"&gt;&lt;a href="http://gholk.github.io/orthophoto-reuse-code.html"&gt;正射影像&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;在攝影測量的作業，
+在已知內外方位參數下，
+將影像正射化的程式。&lt;/p&gt;
+&lt;style&gt;
+:this + * img {
+  width: 50%;
+}
+&lt;/style&gt;
+
+&lt;figure&gt;
+&lt;a href="https://www.flickr.com/photos/neckfree/38111535434"&gt;&lt;img src="https://farm5.staticflickr.com/4578/38111537324_f16b28b705_z.jpg" alt="orthophoto"&gt;&lt;/a&gt;
+&lt;figcaption&gt;正射後影像&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;!-- ## 學科自評 --&gt;
+&lt;!-- 大地 | 遙測 | 衛星 | 攝影測量 | 平面測量 | 統計 | 平差 | GIS --&gt;
+&lt;!-- ----|------|-----|---------|---------|-----|------|---- --&gt;
+&lt;!--  3  |  4   |  2  |   4     |    3    |   2 |  3   | 3 --&gt;
+&lt;!-- ### 大地測量 --&gt;
+&lt;!-- 大地測量的為地球重力場與 --&gt;
+&lt;h2 id="讀書計劃"&gt;讀書計劃&lt;/h2&gt;
+&lt;p&gt;我對攝影測量與 GIS 方面較有興趣，
+在研究領域外，這二個領域的課程也會列入考慮。
+在專業之外的課餘時間，
+也會做些自己感興趣的 side project 當作娛樂。&lt;/p&gt;
+&lt;style&gt;
+a {
+  color: blue !important;
+}
+a::after {
+  content: " (" attr(href) ")";
+  color: black;
+}
+figure a::after {
+  display: none;
+}
+footer {
+  display: none;
+}
+&lt;/style&gt;
+
+
+
+</content>
+</entry><entry>
 <id>http://gholk.github.io/google-queer-html-tag-easter-egg.html</id>
 <title>google 中對非標準元素 marquee 與 blink 的彩蛋</title>
 <published>2018-03-03T16:27:55.617Z</published>
@@ -362,126 +506,6 @@ table, th, td {
 }
 &lt;/style&gt;
 
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;節次&lt;/th&gt;
-&lt;th&gt;一&lt;/th&gt;
-&lt;th&gt;二&lt;/th&gt;
-&lt;th&gt;三&lt;/th&gt;
-&lt;th&gt;四&lt;/th&gt;
-&lt;th&gt;五&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt; 1&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt; 2&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;誤差理論&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt; 3&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;誤差理論 校園裡的聽打員&lt;/td&gt;
-&lt;td&gt;天氣學&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt; 4&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;誤差理論&lt;/td&gt;
-&lt;td&gt;天氣學&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;午休&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;天氣學&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt; 5&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;地籍測量&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt; 6&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;地籍測量&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt; 7&lt;/td&gt;
-&lt;td&gt;民法物權&lt;/td&gt;
-&lt;td&gt;電腦通訊網路&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;工程倫理&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt; 8&lt;/td&gt;
-&lt;td&gt;民法物權&lt;/td&gt;
-&lt;td&gt;電腦通訊網路&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;工程倫理&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt; 9&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;電腦通訊網路&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;ul&gt;
-&lt;li&gt;測量系：數學系後二館&lt;/li&gt;
-&lt;li&gt;天氣學：地科系館 3035&lt;/li&gt;
-&lt;li&gt;電腦通訊網路：資訊系館 4203&lt;/li&gt;
-&lt;li&gt;校園裡的聽打員：唯農 7309&lt;/li&gt;
-&lt;/ul&gt;
-</content>
-</entry><entry>
-<id>http://gholk.github.io/course-106-2.html</id>
-<title>106 年下學期課表</title>
-<published>2018-02-26T04:56:26.157Z</published>
-<updated>2018-02-26T04:56:26.431Z</updated>
-<link rel="alternate" type="text/html" href="http://gholk.github.io/course-106-2.html"/>
-<summary>迎來最自由的一學期，不缺學分，
-想修什麼就修，旁聽也可以。</summary>
-<category term="課表"/>
-<category term="ncku"/>
-<category term="學業"/>
-<content type="html">&lt;h1 id="106 年下學期課表"&gt;106 年下學期課表&lt;/h1&gt;
-&lt;p&gt;迎來最自由的一學期，不缺學分，
-想修什麼就修，旁聽也可以。&lt;/p&gt;
-&lt;p&gt;除了誤差理論外，這學期應該沒有硬理論課了。
-誤差理論沒有選，因為和聽打服務學習衝，
-但聽打寫不固定時間，所以之後應該沒差。&lt;/p&gt;
-&lt;p&gt;天氣學是想學看雲的能力。
-電腦通訊網路和測量系多數課都是湊學分的。&lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;

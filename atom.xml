@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-03-05T03:34:04.047Z</updated>
+  <updated>2018-03-06T04:20:05.522Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,37 @@
 
 
 <entry>
+<id>http://gholk.github.io/meme-reporter-youtuber-news.html</id>
+<title>如何製做網紅新聞</title>
+<published>2018-03-06T04:19:17.573Z</published>
+<updated>2018-03-06T04:20:05.515Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/meme-reporter-youtuber-news.html"/>
+<summary>館長被三立取消訪談森 77，
+開直播和三立主播在 facebook 上交火，
+三立當然很爽的抄了自己製造出來的新聞，
+而有了這個 meme。
+只是三層好像有點少，
+但又想不到更多層了，就這樣吧。</summary>
+<category term="meme"/>
+<category term="flickr"/>
+<category term="gimp"/>
+<category term="記者"/>
+<content type="html">&lt;h1 id="如何製做網紅新聞"&gt;如何製做網紅新聞&lt;/h1&gt;
+&lt;p&gt;館長被三立取消訪談森 77，
+開直播和三立主播在 facebook 上交火，
+三立當然很爽的抄了自己製造出來的新聞，
+而有了這個 meme。
+只是三層好像有點少，
+但又想不到更多層了，就這樣吧。&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://www.flickr.com/photos/135370742@N08/40604385842"&gt;&lt;img src="http://farm5.staticflickr.com/4706/40604385842_23c1f5beea.jpg" alt="館長新聞.png"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;中間那張圖是 &lt;strong&gt;它就是一個卡通嘛&lt;/strong&gt; ，
+之前館長評論 &lt;cite&gt;RE:從零開始的異世界生活&lt;/cite&gt; 中雷姆和艾密莉亞，
+可能別的新聞訪談有談到，
+感覺下一秒館長就要和主播輸贏了。
+可是縮太小看不出來，罔費我還找了超久。&lt;/p&gt;
+&lt;p&gt;&lt;a data-flickr-embed="true" href="https://www.flickr.com/photos/neckfree/40099325882/in/dateposted/" title="22308629_1559496500738791_1954407014589222139_n"&gt;&lt;img src="https://farm5.staticflickr.com/4765/40099325882_8516f70889_z.jpg" width="640" height="360" alt="22308629_1559496500738791_1954407014589222139_n"&gt;&lt;/a&gt;&lt;script async src="//embedr.flickr.com/assets/client-code.js" charset="utf-8"&gt;&lt;/script&gt;&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/geomatics-graduate-autobiography.html</id>
 <title>自傳</title>
 <published>2018-03-05T03:34:03.787Z</published>

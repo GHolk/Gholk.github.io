@@ -153,3 +153,4 @@ left-behind-after-dead.html
 google-queer-html-tag-easter-egg.html
 geomatics-graduate-autobiography.html
 meme-reporter-youtuber-news.html
+dom-input-javascript-event.html

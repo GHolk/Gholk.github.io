@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-03-06T10:22:43.410Z</updated>
+  <updated>2018-03-08T08:48:42.011Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,86 @@
 
 
 <entry>
+<id>http://gholk.github.io/bbsjs-prototype-bookmarklet-user-js.html</id>
+<title>bbsjs 原型 user.js 及小書籤</title>
+<published>2018-03-08T08:12:32.362Z</published>
+<updated>2018-03-08T08:48:42.005Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/bbsjs-prototype-bookmarklet-user-js.html"/>
+<summary>ptt 有一個允許執行 lua 的計劃，
+在 ptt2 可以寫 bbslua 腳本。
+但 lua 還是要在 ptt 主機上執行，
+如果是 javascirpt 就能在瀏覽器上執行。
+現在已經能用 websocket 從 https//term.ptt.cc/ 上 ptt，
+所以執行 js 也沒問題了，
+目前發布小書籤 bookmarklet 和 greasymonkey 腳本二種執行方法。</summary>
+<category term="ptt"/>
+<category term="bbs"/>
+<category term="bookmarklet"/>
+<category term="javascript"/>
+<category term="user-js"/>
+<category term="browser"/>
+<content type="html">&lt;h1 id="bbsjs 原型 user.js 及小書籤"&gt;bbsjs 原型 user.js 及小書籤&lt;/h1&gt;
+&lt;p&gt;ptt 有一個允許執行 lua 的計劃，
+在 ptt2 可以寫 bbslua 腳本。
+但 lua 還是要在 ptt 主機上執行，
+如果是 javascirpt 就能在瀏覽器上執行。
+現在已經能用 websocket 從 &lt;a href="https//term.ptt.cc/"&gt;https//term.ptt.cc/&lt;/a&gt; 上 ptt，
+所以執行 js 也沒問題了，
+目前發布小書籤 bookmarklet 和 greasymonkey 腳本二種執行方法。&lt;/p&gt;
+&lt;h2 id="user.js"&gt;user.js&lt;/h2&gt;
+&lt;p&gt;user.js 是 greasy monkey 或 temper monkey
+可以執行的 javascript 腳本，
+要先安裝 firefox 上的 greasymonkey
+或 chrome 的 temper monkey。
+然後去 &lt;a href="https://gist.github.com/GHolk/3154e8486cf987cf6ab84cae45c7dcc7"&gt;本腳本的 gist&lt;/a&gt; 上 &lt;a href="https://gist.github.com/GHolk/3154e8486cf987cf6ab84cae45c7dcc7/raw/d3fa362d371a897819230f0483b4ef52343b7e47/bbsjs.user.js"&gt;點 raw 安裝&lt;/a&gt; 。&lt;/p&gt;
+&lt;p&gt;瀏覽器安裝 bbsjs.user.js 後，
+ptt chrome 在含有 pttjs 的文章內按 &lt;code&gt;J&lt;/code&gt; 即可執行。
+建議在 ptt chrome 內右鍵，開啟選項內的好讀模式，
+方便執行內容超過一頁的 javascript。&lt;/p&gt;
+&lt;h2 id="小書籤 bookmarklet"&gt;小書籤 bookmarklet&lt;/h2&gt;
+&lt;p&gt;小書籤是一種執行 javascript 的方法，
+原理是把 javascript 嵌在
+&lt;strong&gt;我的最愛&lt;/strong&gt; 或 &lt;strong&gt;書籤&lt;/strong&gt; 的超連結裡，
+在任何網頁點擊該書籤，即可在該頁面執行小書籤。
+&lt;a title="bbsjs" rel="sidebar" href="javascript:void function () {const output='bookmarklet';class FakePrint{constructor(string){if(string)this.data=string;else this.data=''}print(string){this.data+=string}println(string){this.print(string+'\n')}}class JavascriptEvalator{prompt(){const script=this.getScript();this.execute(script)}getArticle(){if(location.href.match('www.ptt.cc')){return this.getPttWebArticle()}else return this.getPttChromeArticle()}getPttWebArticle(){return $('#main-container').text()}getPttChromeArticle(){return $('#mainContainer').children().get().map(row=&gt;$(row).text()).join('\n')}getScript(){const article=this.getArticle();const html=article.match(/&lt;html[\S\s]*?&lt;\/html&gt;/);const script=article.match(/&lt;script[\S\s]*?&lt;\/script&gt;/);return html||script}execute(script){return this.windowExecute(script)}evalExecute(script){const cleanScript=script.replace(/^&lt;script[\S\s]*?&gt;/,'').replace(/&lt;\/script&gt;$/,'');return eval(cleanScript)}windowExecute(script){const scriptWindow=window.open('about:blank');const scriptDocument=scriptWindow.document;scriptDocument.write(script);scriptDocument.close();return scriptWindow}}function promptJe(){const je=new JavascriptEvalator;je.prompt()}function registJe(listen){window.addEventListener('keydown',down=&gt;{if(listen(down)){try{promptJe()}catch(evalError){throw evalError}}})}switch(output){case'hello world':alert('hello world!');break;case'bookmarklet':promptJe();break;case'user.js':registJe(keydown=&gt;keydown.key=='J');break}}()"&gt;點這裡安裝 bbsjs 的 bookmarklet。&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;如果點擊上面連結沒有加入，
+可以右鍵複製超連結，然後手動加入書籤。
+（我找不到自動加入書籤的方法。）&lt;/p&gt;
+&lt;p&gt;在 ptt chrome 中閱讀含有 bbsjs 的文章時，
+點擊該書籤即可執行 bbsjs。
+同樣建議在 ptt chrome 內右鍵，開啟選項內的好讀模式，
+方便執行內容超過一頁的 javascript。&lt;/p&gt;
+&lt;h2 id="bbsjs"&gt;bbsjs&lt;/h2&gt;
+&lt;p&gt;bbsjs 是將 javascript 嵌入在 ptt 的文章內，
+用 script 標籤 &lt;code&gt;&amp;lt;script&amp;gt; /* pttjs */ &amp;lt;/script&amp;gt;&lt;/code&gt; ，
+或是完整的 html &lt;code&gt;&amp;lt;html&amp;gt; &amp;lt;!-- 完整的 html 內容 --&amp;gt; &amp;lt;/html&amp;gt;&lt;/code&gt; 。
+執行時會新開一個頁面，將 script 或 html 寫入其中並執行。&lt;/p&gt;
+&lt;p&gt;因為一些 bbsjs 的長度超過一頁，
+建議在 ptt chrome 中開啟好讀模式，
+一次讀取文章所有內容，方便執行腳本。&lt;/p&gt;
+&lt;p&gt;大部份主流瀏覽器會封鎖彈出式視窗，
+所以可能需要手動增加例外。&lt;/p&gt;
+&lt;p&gt;目前可以在 chrome ptt、term.ptt.cc、ptt 網頁版使用，
+user.js 都是按 J，小書籤則是直接啟動。&lt;/p&gt;
+&lt;h3 id="bbsjs api"&gt;bbsjs api&lt;/h3&gt;
+&lt;p&gt;基本上就和一般的 html 差不多。
+可以使用 document.write、alert、prompt、confirm 
+等函數與使用者交互，或直接操作 dom。
+所以除了 &lt;code&gt;&amp;lt;script&amp;gt;&lt;/code&gt; 也可以用 &lt;code&gt;&amp;lt;html&amp;gt;&lt;/code&gt; ，使用完整的網頁，
+就能直接放各種 html 元素。&lt;/p&gt;
+&lt;p&gt;url 可能是 &lt;code&gt;about:blank&lt;/code&gt; ，
+所以 ajax 受限於 same origin policy，
+所有網域都需要 cros 預檢請求。&lt;/p&gt;
+&lt;p&gt;最後如果需要的話，
+可以在 script 內呼叫 &lt;code&gt;window.close()&lt;/code&gt; 關閉視窗。&lt;/p&gt;
+&lt;h3 id="範例"&gt;範例&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.ptt.cc/bbs/Test/M.1520490441.A.9C5.html"&gt;html 範例&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.ptt.cc/bbs/Test/M.1520437072.A.BD0.html"&gt;猜電腦的數字&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.ptt.cc/bbs/Test/M.1520435942.A.BEF.html"&gt;電腦猜你的數字&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/dom-input-javascript-event.html</id>
 <title>讀取 html 輸入元素中的資料</title>
 <published>2018-03-06T09:49:19.895Z</published>
@@ -99,190 +179,6 @@ testForm.addEventListener('submit', function (testSubmit) {
 &lt;script&gt;
 testInput.addEventListener('keydown', function (press) {
     if (press.key == 'Enter') alert('click enter!\n' + this.value)
-})
-&lt;/script&gt;
-
-&lt;h2 id="其它"&gt;其它&lt;/h2&gt;
-&lt;p&gt;當然還有很多事件可以用：
-像 blur 是結束輸入後，也就是元素失去焦點時。
-change 則是失去焦點且內容改變時。 
-但用 change 反而不太直覺，
-輸入完後要點其它輸入框或頁面空白處才會觸發。&lt;/p&gt;
-&lt;p&gt;我在做 &lt;a href="cjns/"&gt;倉頡新星&lt;/a&gt; 就是用 input 和空白，
-因為倉頡輸入法就是用空白，且我不喜歡用 keydown。&lt;/p&gt;
-&lt;p&gt;之前一個外國人寫的
-&lt;a href="https://horsetoast.github.io/TypingNinja/"&gt;中文輸入法遊戲&lt;/a&gt; ，
-一開始聽 keyup，結果我用輸入法時按 Enter 好像不會送出 keyup，
-後來他改用 keydown 就好了。
-keydown 對中文輸入法較友好。&lt;/p&gt;
-</content>
-</entry><entry>
-<id>http://gholk.github.io/dom-input-javascript-event.html</id>
-<title>讀取 html 輸入元素中的資料</title>
-<published>2018-03-06T09:49:19.895Z</published>
-<updated>2018-03-06T10:20:07.466Z</updated>
-<link rel="alternate" type="text/html" href="http://gholk.github.io/dom-input-javascript-event.html"/>
-<summary>html 中有些 form 元素像 input 是設計來讓使用者輸入的，
-使用者輸入的資料會存在 value 屬性裡。
-至於要什麼時候 觸發 ，
-有用額外按鈕、偵測 Enter 鍵、偵測新輸入的字元，
-但都不太直覺。</summary>
-<category term="遊戲"/>
-<category term="html"/>
-<category term="javascript"/>
-<category term="輸入法"/>
-<content type="html">&lt;h1 id="讀取 html 輸入元素中的資料"&gt;讀取 html 輸入元素中的資料&lt;/h1&gt;
-&lt;p&gt;html 中有些 form 元素像 input 是設計來讓使用者輸入的，
-使用者輸入的資料會存在 value 屬性裡。
-至於要什麼時候 &lt;em&gt;觸發&lt;/em&gt; ，
-有用額外按鈕、偵測 Enter 鍵、偵測新輸入的字元，
-但都不太直覺。&lt;/p&gt;
-&lt;p&gt;主要問題是輸入的東西是存到一個元素的屬性，
-在 C 中可能是按 Enter 會觸發 scanf，
-但 html 中並統一一個 &lt;em&gt;完成輸入&lt;/em&gt; 的概念。
-只有一堆事件給你偵測，而且沒有一個是最好的。&lt;/p&gt;
-&lt;form id="client-test"&gt;
-&lt;input name="test-text" type="text"&gt;
-&lt;/form&gt;
-
-&lt;script&gt;
-const testForm = document.querySelector('#client-test')
-const testInput = testForm.querySelector('input')
-&lt;/script&gt;
-
-&lt;h2 id="聽 input 事件"&gt;聽 input 事件&lt;/h2&gt;
-&lt;p&gt;當使用者在打字，也就是 input 元素的內容一變，
-就會發出 input 事件。
-可以每次新輸入就讀取；
-如果不想太頻繁，可以用空白鍵模擬 Enter，
-也就是如果輪入的是空白，就發出訊息。&lt;/p&gt;
-&lt;script&gt;
-testInput.addEventListener('input', function (input) {
-    if (input.data == ' ' ||
-        / $/.test(this.value)) alert('click space!\n' + this.value)
-})
-&lt;/script&gt;
-
-&lt;h2 id="聽 keydown Enter 事件"&gt;聽 keydown Enter 事件&lt;/h2&gt;
-&lt;p&gt;上面為什麼用空白？因為不能用 enter。
-input 元素的內容不能是 Enter。
-所以按 Enter 不會輸入 Enter，
-也不會觸發 Enter 事件。&lt;/p&gt;
-&lt;p&gt;有另一組事件是 keydown，就聽得到 Enter 事件。
-但我不太喜歡這個事件，
-因為感覺相對 input 元素是另一個系統。
-除了 enter，鍵盤其它按鍵也都抓得到。&lt;/p&gt;
-&lt;p&gt;所以我才會聽 input 事件輸入是 space 的。
-中文不太會用空白鍵，英文才會，
-所以中文可以聽 input 就好。&lt;/p&gt;
-&lt;script&gt;
-testForm.addEventListener('submit', function (testSubmit) {
-    alert('form submit!\n' + this.formElements['test-text'].value)
-    testSubmit.preventDefault()
-})
-&lt;/script&gt;
-
-&lt;h2 id="聽 form submit 事件"&gt;聽 form submit 事件&lt;/h2&gt;
-&lt;p&gt;另一個比聽空白還奇葩的作法是聽 form submit。
-瀏覽器多會做一個功能，
-當在表單最後一個元素按 Enter 時，就會自動送出表單。
-所以如果你的 input 在 form 裡，
-可以直接聽 form 的 submit 事件。&lt;/p&gt;
-&lt;script&gt;
-testInput.addEventListener('keydown', function (press) {
-if (press.key == 'Enter') alert('click enter!\n' + this.value)
-})
-&lt;/script&gt;
-
-&lt;h2 id="其它"&gt;其它&lt;/h2&gt;
-&lt;p&gt;當然還有很多事件可以用：
-像 blur 是結束輸入後，也就是元素失去焦點時。
-change 則是失去焦點且內容改變時。 
-但用 change 反而不太直覺，
-輸入完後要點其它輸入框或頁面空白處才會觸發。&lt;/p&gt;
-&lt;p&gt;我在做 &lt;a href="cjns/"&gt;倉頡新星&lt;/a&gt; 就是用 input 和空白，
-因為倉頡輸入法就是用空白，且我不喜歡用 keydown。&lt;/p&gt;
-&lt;p&gt;之前一個外國人寫的
-&lt;a href="https://horsetoast.github.io/TypingNinja/"&gt;中文輸入法遊戲&lt;/a&gt; ，
-一開始聽 keyup，結果我用輸入法時按 Enter 好像不會送出 keyup，
-後來他改用 keydown 就好了。
-keydown 對中文輸入法較友好。&lt;/p&gt;
-</content>
-</entry><entry>
-<id>http://gholk.github.io/dom-input-javascript-event.html</id>
-<title>讀取 html 輸入元素中的資料</title>
-<published>2018-03-06T09:49:19.895Z</published>
-<updated>2018-03-06T09:49:20.145Z</updated>
-<link rel="alternate" type="text/html" href="http://gholk.github.io/dom-input-javascript-event.html"/>
-<summary>html 中有些 form 元素像 input 是設計來讓使用者輸入的，
-使用者輸入的資料會存在 value 屬性裡。
-至於要什麼時候 觸發 ，
-有用額外按鈕、偵測 Enter 鍵、偵測新輸入的字元，
-但都不太直覺。</summary>
-<category term="遊戲"/>
-<category term="html"/>
-<category term="javascript"/>
-<category term="輸入法"/>
-<content type="html">&lt;h1 id="讀取 html 輸入元素中的資料"&gt;讀取 html 輸入元素中的資料&lt;/h1&gt;
-&lt;p&gt;html 中有些 form 元素像 input 是設計來讓使用者輸入的，
-使用者輸入的資料會存在 value 屬性裡。
-至於要什麼時候 &lt;em&gt;觸發&lt;/em&gt; ，
-有用額外按鈕、偵測 Enter 鍵、偵測新輸入的字元，
-但都不太直覺。&lt;/p&gt;
-&lt;p&gt;主要問題是輸入的東西是存到一個元素的屬性，
-在 C 中可能是按 Enter 會觸發 scanf，
-但 html 中並統一一個 &lt;em&gt;完成輸入&lt;/em&gt; 的概念。
-只有一堆事件給你偵測，而且沒有一個是最好的。&lt;/p&gt;
-&lt;form id="client-test"&gt;
-&lt;input name="test-text" type="text"&gt;
-&lt;/form&gt;
-
-&lt;script&gt;
-const testForm = document.querySelector('#client-test')
-const testInput = testForm.querySelector('input')
-&lt;/script&gt;
-
-&lt;h2 id="聽 input 事件"&gt;聽 input 事件&lt;/h2&gt;
-&lt;p&gt;當使用者在打字，也就是 input 元素的內容一變，
-就會發出 input 事件。
-可以每次新輸入就讀取；
-如果不想太頻繁，可以用空白鍵模擬 Enter，
-也就是如果輪入的是空白，就發出訊息。&lt;/p&gt;
-&lt;script&gt;
-testInput.addEventListener('input', function (input) {
-    if (input.data == ' ') alert('click space!\n' + this.value)
-    // if (/ $/.test(this.value)) alert('click space!\n' + this.value)
-})
-&lt;/script&gt;
-
-&lt;h2 id="聽 keydown Enter 事件"&gt;聽 keydown Enter 事件&lt;/h2&gt;
-&lt;p&gt;上面為什麼用空白？因為不能用 enter。
-input 元素的內容不能是 Enter。
-所以按 Enter 不會輸入 Enter，
-也不會觸發 Enter 事件。&lt;/p&gt;
-&lt;p&gt;有另一組事件是 keydown，就聽得到 Enter 事件。
-但我不太喜歡這個事件，
-因為感覺相對 input 元素是另一個系統。
-除了 enter，鍵盤其它按鍵也都抓得到。&lt;/p&gt;
-&lt;p&gt;所以我才會聽 input 事件輸入是 space 的。
-中文不太會用空白鍵，英文才會，
-所以中文可以聽 input 就好。&lt;/p&gt;
-&lt;script&gt;
-testForm.addEventListener('submit', function (testSubmit) {
-    alert('form submit!\n' + this.formElements['test-text'].value)
-    testSubmit.preventDefault()
-})
-&lt;/script&gt;
-
-&lt;h2 id="聽 form submit 事件"&gt;聽 form submit 事件&lt;/h2&gt;
-&lt;p&gt;另一個比聽空白還奇葩的作法是聽 form submit。
-瀏覽器多會做一個功能，
-當在表單最後一個元素按 Enter 時，就會自動送出表單。
-所以如果你的 input 在 form 裡，
-可以直接聽 form 的 submit 事件。&lt;/p&gt;
-&lt;script&gt;
-testInput.addEventListener('keydown', function (press) {
-if (press.key == 'Enter') alert('click enter!\n' + this.value)
 })
 &lt;/script&gt;
 
@@ -692,101 +588,6 @@ pipe([1,2,3],
 &lt;p&gt;題外話，還是覺得 S 表達式好美，
 haskell 和一般的語言，包括其它偏指令式的，
 用到一堆關鍵字 if else，&lt;code&gt;=&lt;/code&gt; 賦值好醜。&lt;/p&gt;
-</content>
-</entry><entry>
-<id>http://gholk.github.io/pipe-list-data-haskell.html</id>
-<title>參數 currying 與函數管道</title>
-<published>2018-02-27T02:40:26.822Z</published>
-<updated>2018-02-27T02:40:27.066Z</updated>
-<link rel="alternate" type="text/html" href="http://gholk.github.io/pipe-list-data-haskell.html"/>
-<summary>在寫列表操作時，常會串接 map filter 最後 reduce，
-簡化每個操作的內容。
-在 javascript 中會用 dot notation 串接每個返回值的 map method，
-但 scheme 中就沒辦法，要寫成巢狀不太方便，
-haskell 中就能搭配 pipe 和函數自動 currying 達成。</summary>
-<category term="scheme"/>
-<category term="lisp"/>
-<category term="程式"/>
-<category term="函數"/>
-<content type="html">&lt;h1 id="參數 currying 與函數管道"&gt;參數 currying 與函數管道&lt;/h1&gt;
-&lt;p&gt;在寫列表操作時，常會串接 map filter 最後 reduce，
-簡化每個操作的內容。
-在 javascript 中會用 dot notation 串接每個返回值的 map method，
-但 scheme 中就沒辦法，要寫成巢狀不太方便，
-haskell 中就能搭配 pipe 和函數自動 currying 達成。&lt;/p&gt;
-&lt;pre&gt;&lt;code class="lang-scheme"&gt;(filter (lambda (x) (= 1 (mod x 2)))
-        (map (lambda (x) (+ x 3))
-            (map (lambda (x) (* x 7))
-                 &amp;#39;(sequence 10))))
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;在 scheme 中這樣寫很難閱讀，
-反觀 javascript，
-因為這些函數都是 Array 的方法，
-就能用 dot notation 串接調用。&lt;/p&gt;
-&lt;pre&gt;&lt;code class="lang-javascript"&gt;sequence(10)
-  .map((x) =&amp;gt; x * 7)
-  .map((x) =&amp;gt; x + 3)
-  .filter((x) =&amp;gt; x % 2 == 1)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;我有想過建構一個 pipe 函數，
-能把值依序傳給每個傳入的函數。&lt;/p&gt;
-&lt;pre&gt;&lt;code class="lang-scheme"&gt;(define (pipe value . function-list)
-  (fold-left (lambda (value function)
-               (function value))
-             value
-             function-list))
-
-(pipe 12 (lambda (x) (+ x 12))
-         (lambda (x) (* x 2))
-         (lambda (x) (mod x 7)))
-;; 6
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;但用在陣列上就還要多寫一次 lambda。&lt;/p&gt;
-&lt;pre&gt;&lt;code class="lang-scheme"&gt;(pipe &amp;#39;(1 2 3 4)
-      (lambda (list)
-        (map (lambda (x) (+ x 12))
-             list))
-      (lambda (list)
-        (map (lambda (x) (* x 2))
-             list))
-      (lambda (list)
-        (map (lambda (x) (mod x 7))
-             list)))
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;而聽說 haskell 的函數，如果沒有給足參數數量，
-就會變成半成品狀態，還是個函數，
-再繼續傳入參數到足夠數量就能得到結果。
-這是源自 curry 的用單參函數構造多參函數的方法。&lt;/p&gt;
-&lt;pre&gt;&lt;code class="lang-javascript"&gt;// 假設 js 也有 currying
-function add(a, b) {
-  return a + b
-}
-const add3 = add(3)
-add3(7) == 10
-add3(6) == 9
-add(2, 4) == 6
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;所以如果 scheme 也有參數 currying，
-那上述的對列表的 pipe 直接傳入
-&lt;code&gt;(map (lambda (x) (* x 2)))&lt;/code&gt; 就同等於
-&lt;code&gt;(lambda (list) (map (lambda (x) (* x 2)) list))&lt;/code&gt; 。&lt;/p&gt;
-&lt;p&gt;更別提 haskell 還有 pipe 算符，
-不用辛苦自己實現 pipe 函數。
-傳入只差一個參數的函數，就能用作 pipe 單元。&lt;/p&gt;
-&lt;p&gt;雖然 scheme 可以用自幹出類似輔助函數的方式解決。&lt;/p&gt;
-&lt;pre&gt;&lt;code class="lang-scheme"&gt;(define (apply-list list-operation atom-operation)
-  (lambda ( . list)
-    (apply list-operation 
-           (cons atom-operation list))))
-(pipe &amp;#39;(1 2 3 4)
-      (apply-list map (lambda (x) (+ x 12)))
-      (apply-list map (lambda (x) (* x 2)))
-      (apply-list filter (lambda (x) (= 2 (mod x 7))))
-      (apply-list fold-left (lambda (sum x) (+ sum x)) 0))
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;題外話，還是覺得 S 表達式好美，
-haskell 和一般的語言，包括其它偏指令式的，
-用到一堆關鍵字 if else，&lt;code&gt;=&lt;/code&gt;賦值好醜。&lt;/p&gt;
 </content>
 </entry><entry>
 <id>http://gholk.github.io/course-106-2.html</id>

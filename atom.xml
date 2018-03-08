@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-03-08T08:48:42.011Z</updated>
+  <updated>2018-03-08T13:27:12.038Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -28,13 +28,13 @@
 <id>http://gholk.github.io/bbsjs-prototype-bookmarklet-user-js.html</id>
 <title>bbsjs 原型 user.js 及小書籤</title>
 <published>2018-03-08T08:12:32.362Z</published>
-<updated>2018-03-08T08:48:42.005Z</updated>
+<updated>2018-03-08T13:27:12.032Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/bbsjs-prototype-bookmarklet-user-js.html"/>
 <summary>ptt 有一個允許執行 lua 的計劃，
 在 ptt2 可以寫 bbslua 腳本。
 但 lua 還是要在 ptt 主機上執行，
 如果是 javascirpt 就能在瀏覽器上執行。
-現在已經能用 websocket 從 https//term.ptt.cc/ 上 ptt，
+現在已經能用 websocket 從 https://term.ptt.cc/ 上 ptt，
 所以執行 js 也沒問題了，
 目前發布小書籤 bookmarklet 和 greasymonkey 腳本二種執行方法。</summary>
 <category term="ptt"/>
@@ -48,7 +48,7 @@
 在 ptt2 可以寫 bbslua 腳本。
 但 lua 還是要在 ptt 主機上執行，
 如果是 javascirpt 就能在瀏覽器上執行。
-現在已經能用 websocket 從 &lt;a href="https//term.ptt.cc/"&gt;https//term.ptt.cc/&lt;/a&gt; 上 ptt，
+現在已經能用 websocket 從 &lt;a href="https://term.ptt.cc/"&gt;https://term.ptt.cc/&lt;/a&gt; 上 ptt，
 所以執行 js 也沒問題了，
 目前發布小書籤 bookmarklet 和 greasymonkey 腳本二種執行方法。&lt;/p&gt;
 &lt;h2 id="user.js"&gt;user.js&lt;/h2&gt;

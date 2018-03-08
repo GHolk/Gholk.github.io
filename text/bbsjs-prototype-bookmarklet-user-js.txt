@@ -3,7 +3,7 @@ ptt 有一個允許執行 lua 的計劃，
 在 ptt2 可以寫 bbslua 腳本。
 但 lua 還是要在 ptt 主機上執行，
 如果是 javascirpt 就能在瀏覽器上執行。
-現在已經能用 websocket 從 <https//term.ptt.cc/> 上 ptt，
+現在已經能用 websocket 從 <https://term.ptt.cc/> 上 ptt，
 所以執行 js 也沒問題了，
 目前發布小書籤 bookmarklet 和 greasymonkey 腳本二種執行方法。
 

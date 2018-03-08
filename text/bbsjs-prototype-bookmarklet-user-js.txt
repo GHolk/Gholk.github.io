@@ -1,0 +1,87 @@
+# bbsjs 原型 user.js 及小書籤
+ptt 有一個允許執行 lua 的計劃，
+在 ptt2 可以寫 bbslua 腳本。
+但 lua 還是要在 ptt 主機上執行，
+如果是 javascirpt 就能在瀏覽器上執行。
+現在已經能用 websocket 從 <https//term.ptt.cc/> 上 ptt，
+所以執行 js 也沒問題了，
+目前發布小書籤 bookmarklet 和 greasymonkey 腳本二種執行方法。
+
+## user.js
+user.js 是 greasy monkey 或 temper monkey
+可以執行的 javascript 腳本，
+要先安裝 firefox 上的 greasymonkey
+或 chrome 的 temper monkey。
+然後去 [本腳本的 gist][gist] 上 [點 raw 安裝][gist raw] 。
+
+[gist]: https://gist.github.com/GHolk/3154e8486cf987cf6ab84cae45c7dcc7
+[gist raw]: https://gist.github.com/GHolk/3154e8486cf987cf6ab84cae45c7dcc7/raw/d3fa362d371a897819230f0483b4ef52343b7e47/bbsjs.user.js
+
+瀏覽器安裝 bbsjs.user.js 後，
+ptt chrome 在含有 pttjs 的文章內按 `J` 即可執行。
+建議在 ptt chrome 內右鍵，開啟選項內的好讀模式，
+方便執行內容超過一頁的 javascript。
+
+
+## 小書籤 bookmarklet
+小書籤是一種執行 javascript 的方法，
+原理是把 javascript 嵌在
+**我的最愛** 或 **書籤** 的超連結裡，
+在任何網頁點擊該書籤，即可在該頁面執行小書籤。
+<a title="bbsjs"
+   rel="sidebar"
+   href="javascript:void function () {const output='bookmarklet';class FakePrint{constructor(string){if(string)this.data=string;else this.data=''}print(string){this.data+=string}println(string){this.print(string+'\n')}}class JavascriptEvalator{prompt(){const script=this.getScript();this.execute(script)}getArticle(){if(location.href.match('www.ptt.cc')){return this.getPttWebArticle()}else return this.getPttChromeArticle()}getPttWebArticle(){return $('#main-container').text()}getPttChromeArticle(){return $('#mainContainer').children().get().map(row=>$(row).text()).join('\n')}getScript(){const article=this.getArticle();const html=article.match(/<html[\S\s]*?<\/html>/);const script=article.match(/<script[\S\s]*?<\/script>/);return html||script}execute(script){return this.windowExecute(script)}evalExecute(script){const cleanScript=script.replace(/^<script[\S\s]*?>/,'').replace(/<\/script>$/,'');return eval(cleanScript)}windowExecute(script){const scriptWindow=window.open('about:blank');const scriptDocument=scriptWindow.document;scriptDocument.write(script);scriptDocument.close();return scriptWindow}}function promptJe(){const je=new JavascriptEvalator;je.prompt()}function registJe(listen){window.addEventListener('keydown',down=>{if(listen(down)){try{promptJe()}catch(evalError){throw evalError}}})}switch(output){case'hello world':alert('hello world!');break;case'bookmarklet':promptJe();break;case'user.js':registJe(keydown=>keydown.key=='J');break}}()">點這裡安裝 bbsjs 的 bookmarklet。</a>
+
+如果點擊上面連結沒有加入，
+可以右鍵複製超連結，然後手動加入書籤。
+（我找不到自動加入書籤的方法。）
+
+在 ptt chrome 中閱讀含有 bbsjs 的文章時，
+點擊該書籤即可執行 bbsjs。
+同樣建議在 ptt chrome 內右鍵，開啟選項內的好讀模式，
+方便執行內容超過一頁的 javascript。
+
+
+## bbsjs
+bbsjs 是將 javascript 嵌入在 ptt 的文章內，
+用 script 標籤 `<script> /* pttjs */ </script>` ，
+或是完整的 html `<html> <!-- 完整的 html 內容 --> </html>` 。
+執行時會新開一個頁面，將 script 或 html 寫入其中並執行。
+
+因為一些 bbsjs 的長度超過一頁，
+建議在 ptt chrome 中開啟好讀模式，
+一次讀取文章所有內容，方便執行腳本。
+
+大部份主流瀏覽器會封鎖彈出式視窗，
+所以可能需要手動增加例外。
+
+目前可以在 chrome ptt、term.ptt.cc、ptt 網頁版使用，
+user.js 都是按 J，小書籤則是直接啟動。
+
+
+### bbsjs api
+基本上就和一般的 html 差不多。
+可以使用 document.write、alert、prompt、confirm 
+等函數與使用者交互，或直接操作 dom。
+所以除了 `<script>` 也可以用 `<html>` ，使用完整的網頁，
+就能直接放各種 html 元素。
+
+url 可能是 `about:blank` ，
+所以 ajax 受限於 same origin policy，
+所有網域都需要 cros 預檢請求。
+
+最後如果需要的話，
+可以在 script 內呼叫 `window.close()` 關閉視窗。
+
+### 範例
+* [html 範例](https://www.ptt.cc/bbs/Test/M.1520490441.A.9C5.html)
+* [猜電腦的數字](https://www.ptt.cc/bbs/Test/M.1520437072.A.BD0.html)
+* [電腦猜你的數字](https://www.ptt.cc/bbs/Test/M.1520435942.A.BEF.html)
+
+
+#ptt
+#bbs
+#bookmarklet
+#javascript
+#user-js
+#browser

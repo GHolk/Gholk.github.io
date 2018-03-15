@@ -1,5 +1,5 @@
 # BBSJS 原型概念版
-BBSJS 是由 BBSLua 啟發，在在測覽器上 ptt 時，
+BBSJS 是由 BBSLua 啟發，在用測覽器上 ptt 時，
 執行 ptt 文章內 javascript 的計劃。
 
 <script src="ext/toc.js"></script>
@@ -7,8 +7,10 @@ BBSJS 是由 BBSLua 啟發，在在測覽器上 ptt 時，
 ## 使用方法
 在文章內按 J 即可執行文內的 bbsjs；
 如果是用小書籤，就是直接在文章內點擊小書籤執行。
+目前可以在 ptt chrome、term.ptt.cc 或其它類似介面下使用，
+ptt 網頁版也可以動。
 
-使用 ptt chrome、bbsfox、term.ptt.cc 等，
+使用 ptt chrome、term.ptt.cc 等，
 建議在 ptt chrome 內右鍵，開啟選項內的好讀模式，
 讓 bbsjs 就算超過一頁，也能一次全部載入執行。
 
@@ -33,9 +35,64 @@ firefox 使用者可以直接點擊
 如果點擊什麼事都沒發生，請在上述超連結右鍵，
 手動複製連結內容後從書籤列加入。
 
+## bbsjs api
+bbsjs 會抓取文章內第一個 script 或 html 標籤，
+整個寫入到 iframe 中，如同把 script 存成 html 檔後開啟，
+並在網頁裡執行 script 內容。
+
+裡面可以用 document.write、alert confirm prompt，
+甚至操作 dom，與使用者互動。
+
+```html
+<script> 
+/* javascript */
+alert('hello world!')
+var username = prompt('what is your name?')
+document.write('good bye ' + username)
+</script>
+```
+
+如果是 `<html>` 可以直接寫 html 元素，
+甚至用 `<script src="https://some.script">` 引入其它 javascript，
+就和平常寫網頁一樣。
+
+```html
+<html>
+<meta charset="utf-8">
+
+<pre id="markdown-raw">
+# write your markdown here
+this **markdown** is power by [gholk/marked] .
+
+[gholk/marked]: http://github.com/gholk/marked/
+</pre>
+
+<div id="markdown-html"></div>
+
+<script src="https://gholk.github.io/marked/marked.min.js"></script>
+<script>
+  const raw = document.querySelector('#markdown-raw').textContent
+  const html = marked(raw)
+  document.querySelector('#markdown-html').innerHTML = html
+</script>
+</html>
+```
+
+要用 ajax 的話要設好 cors，
+在 iframe 的 context 裡沒有任何網址是 same origin。
+（自己 document.write(location.href) 就知道了。）
+要注意是網址不要簡寫成 `src="//some.script"` ，
+因為該 iframe scheme 是在 `blob:` ，要寫 `https://` 。
+
 
 ## 版本歷程
 以下版本從新排到舊。
+
+目前版本都沒有和 ptt chrome 互動，
+是直接從 html 裡抓出文章內的 script，
+再用 css 把執行結果放在頁面中央。
+未來期望可以整合進 ptt chrome，
+把 script 執行結果直接插到 ptt chrome 的好讀版內。
 
 ### iframe 原型
 bbsjs 正式發布友善可用的原型了！
@@ -74,6 +131,11 @@ bbsjs 會在新開的頁面載入。這本的 user.js 不能用，
 像 BBSFOX 或 ptt chrome，甚至 ptt 官方也開放用 websocket
 從 <https://term.ptt.cc/> 上 ptt。
 安裝 bbsjs 後，就能直接在瀏覽器上執行 bbsjs。
+
+## 問題回報與討論
+如果要報 bug 或提功能建議，
+目前建議在 gist 下留言，或在本文下面討論。
+disqus 如果不想註冊，可以匿名評論。
 
 #bbsjs
 #ptt

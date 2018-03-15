@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-03-15T14:35:37.327Z</updated>
+  <updated>2018-03-15T15:46:01.209Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,11 +25,154 @@
 
 
 <entry>
+<id>http://gholk.github.io/bbsjs.html#範例程式</id>
+<title>BBSJS 範例程式</title>
+<published>2018-03-15T12:52:05.029Z</published>
+<updated>2018-03-15T15:46:01.201Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/bbsjs.html#範例程式"/>
+<summary>BBSJS 是由 BBSLua 啟發，在用測覽器上 ptt 時，
+執行 ptt 文章內 javascript 的計劃。</summary>
+<category term="bbsjs"/>
+<category term="ptt"/>
+<category term="javascript"/>
+<category term="browser"/>
+<category term="bbs"/>
+<category term="user-js"/>
+<category term="bookmarklet"/>
+<content type="html">&lt;h1 id="BBSJS 原型概念版"&gt;BBSJS 原型概念版&lt;/h1&gt;
+&lt;p&gt;BBSJS 是由 BBSLua 啟發，在用測覽器上 ptt 時，
+執行 ptt 文章內 javascript 的計劃。&lt;/p&gt;
+&lt;script src="ext/toc.js"&gt;&lt;/script&gt;
+
+&lt;h2 id="使用方法"&gt;使用方法&lt;/h2&gt;
+&lt;p&gt;在文章內按 J 即可執行文內的 bbsjs；
+如果是用小書籤，就是直接在文章內點擊小書籤執行。
+目前可以在 ptt chrome、term.ptt.cc 或其它類似介面下使用，
+ptt 網頁版也可以動。&lt;/p&gt;
+&lt;p&gt;使用 ptt chrome、term.ptt.cc 等，
+建議在 ptt chrome 內右鍵，開啟選項內的好讀模式，
+讓 bbsjs 就算超過一頁，也能一次全部載入執行。&lt;/p&gt;
+&lt;h2 id="安裝"&gt;安裝&lt;/h2&gt;
+&lt;p&gt;目前發布 &lt;a href="http://zh.wikipedia.org/wiki/%E5%B0%8F%E6%9B%B8%E7%B1%A4"&gt;小書籤&lt;/a&gt; bookmarklet 和 &lt;a href="http://zh.wikipedia.org/wiki/Greasemonkey"&gt;Greasemonkey&lt;/a&gt; 腳本二種執行方法。
+grease monkey 是一種簡易的瀏覽器腳本，安裝後在特定的網域執行。
+小書籤則是類似書籤，只是點擊時不是前往該網站，而是在現在頁面下執行程式。&lt;/p&gt;
+&lt;h3 id="grease monkey"&gt;grease monkey&lt;/h3&gt;
+&lt;p&gt;需安裝 grease monkey，
+chrome 下可以試 Tampermonkey，
+目前最新版 &lt;a href="https://gist.github.com/GHolk/3154e8486cf987cf6ab84cae45c7dcc7"&gt;托管在 gist 上&lt;/a&gt; ，
+使用 grease monkey 者可以點 &lt;a href="https://gist.github.com/GHolk/3154e8486cf987cf6ab84cae45c7dcc7/raw/112a45b553f0b1989ec2208a8eb09013cfcdad58/bbsjs.user.js"&gt;gist 上的 raw 按鈕&lt;/a&gt; 安裝。&lt;/p&gt;
+&lt;h3 id="小書籤 bookmarklet"&gt;小書籤 bookmarklet&lt;/h3&gt;
+&lt;p&gt;firefox 使用者可以直接點擊
+&lt;a rel="sidebar" title="bbsjs" href="javascript:void function () {const output='bookmarklet';class JavascriptEvalator{prompt(){const script=this.getScript();this.execute(script)}getArticle(){if(location.href.match('www.ptt.cc')){return this.getPttWebArticle()}else return this.getPttChromeArticle()}getPttWebArticle(){return $('#main-container').text()}getPttChromeArticle(){return $('#mainContainer').children().get().map(row=&gt;$(row).text()).join('\n')}getScript(){const article=this.getArticle();const html=article.match(/&lt;html[\S\s]*?&lt;\/html&gt;/);const script=article.match(/&lt;script[\S\s]*?&lt;\/script&gt;/);return html||script}execute(script){return this.iframeObjectUrlExecute(script)}iframeObjectUrlExecute(script){const scriptBlob=new Blob([script]);const scriptUrl=URL.createObjectURL(scriptBlob);$('#bbsjs-container iframe').attr('src',scriptUrl);URL.revokeObjectURL(scriptBlob);$('#bbsjs-container').addClass('show')}evalExecute(script){const cleanScript=script.replace(/^&lt;script[\S\s]*?&gt;/,'').replace(/&lt;\/script&gt;$/,'');return eval(cleanScript)}windowExecute(script){const scriptWindow=window.open('about:blank');const scriptDocument=scriptWindow.document;scriptDocument.write(script);scriptDocument.close();return scriptWindow}iframeExecute(script){$('#bbsjs-container').addClass('show');const iframe=$('#bbsjs-container iframe').get(0);iframe.contentDocument.write(script);iframe.contentDocument.close();return iframe}}function promptJe(){const je=new JavascriptEvalator;je.prompt()}function registJe(listen){$(window).keydown(down=&gt;{if(listen(down)){try{promptJe()}catch(bbsjsError){console.error(bbsjsError)}}})}if($('#bbsjs-container').length==0)initBbsjsFrame();switch(output){case'hello world':alert('hello world!');break;case'bookmarklet':promptJe();break;case'user.js':registJe(keydown=&gt;keydown.key=='J');break}function initBbsjsFrame(){const $div=$('&lt;div&gt;').attr('id','bbsjs-container');const homePageUrl='https://gholk.github.io/bbsjs.html';$('&lt;button&gt;').text('move').appendTo($div).click(click=&gt;{const $container=$(click.target).parent();$container.toggleClass('show')});$('&lt;a&gt;').text('help').attr('target','bbsjs-iframe').attr('href',homePageUrl).appendTo($div);$('&lt;iframe&gt;').attr('name','bbsjs-iframe').attr('src',homePageUrl).appendTo($div);const cssText=`\n#bbsjs-container {\n  transition: 0.5s;\n  position: fixed;\n  top: 1em;\n  left: 1em;\n  z-index: 2;\n  background: white;\n}\n#bbsjs-container * {\n  display: none;\n}\n#bbsjs-container button {\n  display: inline;\n  margin: 0.5em;\n  color: black;\n}\n#bbsjs-container.show iframe {\n  border: none;\n  clear: both;\n  display: block;\n  width: 100%;\n  height: 25em;\n}\n#bbsjs-container.show a {\n  display: inline;\n}\n#bbsjs-container.show {\n  transition: 0.5s;\n  width: 40%;\n  top: 2em;\n  left: 30%;\n  z-index: 2;\n}\n`;$('&lt;style&gt;').text(cssText).appendTo($div);$div.appendTo('body')}}()"&gt;bbsjs 小書籤超連結&lt;/a&gt;
+安裝，如果跳出 &lt;em&gt;是否在側邊欄開啟&lt;/em&gt; ，請不要勾選。
+如果點擊什麼事都沒發生，請在上述超連結右鍵，
+手動複製連結內容後從書籤列加入。&lt;/p&gt;
+&lt;h2 id="bbsjs api"&gt;bbsjs api&lt;/h2&gt;
+&lt;p&gt;bbsjs 會抓取文章內第一個 script 或 html 標籤，
+整個寫入到 iframe 中，如同把 script 存成 html 檔後開啟，
+並在網頁裡執行 script 內容。&lt;/p&gt;
+&lt;p&gt;裡面可以用 document.write、alert confirm prompt，
+甚至操作 dom，與使用者互動。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-html"&gt;&amp;lt;script&amp;gt; 
+/* javascript */
+alert(&amp;#39;hello world!&amp;#39;)
+var username = prompt(&amp;#39;what is your name?&amp;#39;)
+document.write(&amp;#39;good bye &amp;#39; + username)
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果是 &lt;code&gt;&amp;lt;html&amp;gt;&lt;/code&gt; 可以直接寫 html 元素，
+甚至用 &lt;code&gt;&amp;lt;script src=&amp;quot;https://some.script&amp;quot;&amp;gt;&lt;/code&gt; 引入其它 javascript，
+就和平常寫網頁一樣。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-html"&gt;&amp;lt;html&amp;gt;
+&amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+
+&amp;lt;pre id=&amp;quot;markdown-raw&amp;quot;&amp;gt;
+# write your markdown here
+this **markdown** is power by [gholk/marked] .
+
+[gholk/marked]: http://github.com/gholk/marked/
+&amp;lt;/pre&amp;gt;
+
+&amp;lt;div id=&amp;quot;markdown-html&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+
+&amp;lt;script src=&amp;quot;https://gholk.github.io/marked/marked.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script&amp;gt;
+  const raw = document.querySelector(&amp;#39;#markdown-raw&amp;#39;).textContent
+  const html = marked(raw)
+  document.querySelector(&amp;#39;#markdown-html&amp;#39;).innerHTML = html
+&amp;lt;/script&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;要用 ajax 的話要設好 cors，
+在 iframe 的 context 裡沒有任何網址是 same origin。
+（自己 document.write(location.href) 就知道了。）
+要注意是網址不要簡寫成 &lt;code&gt;src=&amp;quot;//some.script&amp;quot;&lt;/code&gt; ，
+因為該 iframe scheme 是在 &lt;code&gt;blob:&lt;/code&gt; ，要寫 &lt;code&gt;https://&lt;/code&gt; 。&lt;/p&gt;
+&lt;h2 id="範例程式"&gt;範例程式&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.ptt.cc/bbs/PttWeb/M.1521126610.A.A07.html"&gt;在 PttWeb 板的介紹文兼簡單的程式&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;ptt 測試板 test 裡有幾篇，搜 bbsjs 就有了。
+但一周後會被清掉，就不放網址了。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;!-- - 個人站 &lt;http://clam.ml&gt; 的 test 板裡有幾篇示範程式，被 m 了應該不會被清。 --&gt;
+&lt;h2 id="版本歷程"&gt;版本歷程&lt;/h2&gt;
+&lt;p&gt;以下版本從新排到舊。&lt;/p&gt;
+&lt;p&gt;目前版本都沒有和 ptt chrome 互動，
+是直接從 html 裡抓出文章內的 script，
+再用 css 把執行結果放在頁面中央。
+未來期望可以整合進 ptt chrome，
+把 script 執行結果直接插到 ptt chrome 的好讀版內。&lt;/p&gt;
+&lt;h3 id="原型說明頁"&gt;原型說明頁&lt;/h3&gt;
+&lt;p&gt;在一開始的 iframe 加入首頁也就是說明頁面，
+還加了一個會在 iframe 內開啟的說明頁的超連結。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://gist.github.com/GHolk/3154e8486cf987cf6ab84cae45c7dcc7/112a45b553f0b1989ec2208a8eb09013cfcdad58"&gt;gist&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a rel="sidebar" title="bbsjs" href="javascript:void function () {const output='bookmarklet';class JavascriptEvalator{prompt(){const script=this.getScript();this.execute(script)}getArticle(){if(location.href.match('www.ptt.cc')){return this.getPttWebArticle()}else return this.getPttChromeArticle()}getPttWebArticle(){return $('#main-container').text()}getPttChromeArticle(){return $('#mainContainer').children().get().map(row=&gt;$(row).text()).join('\n')}getScript(){const article=this.getArticle();const html=article.match(/&lt;html[\S\s]*?&lt;\/html&gt;/);const script=article.match(/&lt;script[\S\s]*?&lt;\/script&gt;/);return html||script}execute(script){return this.iframeObjectUrlExecute(script)}iframeObjectUrlExecute(script){const scriptBlob=new Blob([script]);const scriptUrl=URL.createObjectURL(scriptBlob);$('#bbsjs-container iframe').attr('src',scriptUrl);URL.revokeObjectURL(scriptBlob);$('#bbsjs-container').addClass('show')}evalExecute(script){const cleanScript=script.replace(/^&lt;script[\S\s]*?&gt;/,'').replace(/&lt;\/script&gt;$/,'');return eval(cleanScript)}windowExecute(script){const scriptWindow=window.open('about:blank');const scriptDocument=scriptWindow.document;scriptDocument.write(script);scriptDocument.close();return scriptWindow}iframeExecute(script){$('#bbsjs-container').addClass('show');const iframe=$('#bbsjs-container iframe').get(0);iframe.contentDocument.write(script);iframe.contentDocument.close();return iframe}}function promptJe(){const je=new JavascriptEvalator;je.prompt()}function registJe(listen){$(window).keydown(down=&gt;{if(listen(down)){try{promptJe()}catch(bbsjsError){console.error(bbsjsError)}}})}if($('#bbsjs-container').length==0)initBbsjsFrame();switch(output){case'hello world':alert('hello world!');break;case'bookmarklet':promptJe();break;case'user.js':registJe(keydown=&gt;keydown.key=='J');break}function initBbsjsFrame(){const $div=$('&lt;div&gt;').attr('id','bbsjs-container');const homePageUrl='https://gholk.github.io/bbsjs.html';$('&lt;button&gt;').text('move').appendTo($div).click(click=&gt;{const $container=$(click.target).parent();$container.toggleClass('show')});$('&lt;a&gt;').text('help').attr('target','bbsjs-iframe').attr('href',homePageUrl).appendTo($div);$('&lt;iframe&gt;').attr('name','bbsjs-iframe').attr('src',homePageUrl).appendTo($div);const cssText=`\n#bbsjs-container {\n  transition: 0.5s;\n  position: fixed;\n  top: 1em;\n  left: 1em;\n  z-index: 2;\n  background: white;\n}\n#bbsjs-container * {\n  display: none;\n}\n#bbsjs-container button {\n  display: inline;\n  margin: 0.5em;\n  color: black;\n}\n#bbsjs-container.show iframe {\n  border: none;\n  clear: both;\n  display: block;\n  width: 100%;\n  height: 25em;\n}\n#bbsjs-container.show a {\n  display: inline;\n}\n#bbsjs-container.show {\n  transition: 0.5s;\n  width: 40%;\n  top: 2em;\n  left: 30%;\n  z-index: 2;\n}\n`;$('&lt;style&gt;').text(cssText).appendTo($div);$div.appendTo('body')}}()"&gt;小書籤&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="iframe 原型"&gt;iframe 原型&lt;/h3&gt;
+&lt;p&gt;bbsjs 正式發布友善可用的原型了！
+把 bbsjs 在原分頁內用 iframe 載入，
+並有按鈕開啟、收合 iframe。&lt;/p&gt;
+&lt;p&gt;把和有的沒的元素 style 都放在
+&lt;code&gt;body &amp;gt; div#bbsjs-container&lt;/code&gt; 內，
+用了很多 jquery。&lt;/p&gt;
+&lt;p&gt;目前是用 &lt;code&gt;URL.createObjectURL&lt;/code&gt; 和 &lt;code&gt;iframe.src&lt;/code&gt; 載入腳本，
+因為 grease monkey 的 script 不能寫入 &lt;code&gt;iframe.contentDocument&lt;/code&gt; ，
+二者被判為不同 origin，只好用這種奇怪的方法。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://gist.github.com/GHolk/3154e8486cf987cf6ab84cae45c7dcc7/e3d4baa929c756a6e2911eb2b25c716975ec22f1"&gt;gist&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a rel="sidebar" title="bbsjs" href="javascript:void function () {const output='bookmarklet';class JavascriptEvalator{prompt(){const script=this.getScript();this.execute(script)}getArticle(){if(location.href.match('www.ptt.cc')){return this.getPttWebArticle()}else return this.getPttChromeArticle()}getPttWebArticle(){return $('#main-container').text()}getPttChromeArticle(){return $('#mainContainer').children().get().map(row=&gt;$(row).text()).join('\n')}getScript(){const article=this.getArticle();const html=article.match(/&lt;html[\S\s]*?&lt;\/html&gt;/);const script=article.match(/&lt;script[\S\s]*?&lt;\/script&gt;/);return html||script}execute(script){return this.iframeObjectUrlExecute(script)}iframeObjectUrlExecute(script){const scriptBlob=new Blob([script]);const scriptUrl=URL.createObjectURL(scriptBlob);$('#bbsjs-container iframe').attr('src',scriptUrl);URL.revokeObjectURL(scriptBlob);$('#bbsjs-container').addClass('show')}evalExecute(script){const cleanScript=script.replace(/^&lt;script[\S\s]*?&gt;/,'').replace(/&lt;\/script&gt;$/,'');return eval(cleanScript)}windowExecute(script){const scriptWindow=window.open('about:blank');const scriptDocument=scriptWindow.document;scriptDocument.write(script);scriptDocument.close();return scriptWindow}iframeExecute(script){$('#bbsjs-container').addClass('show');const iframe=$('#bbsjs-container iframe').get(0);iframe.contentDocument.write(script);iframe.contentDocument.close();return iframe}}function promptJe(){const je=new JavascriptEvalator;je.prompt()}function registJe(listen){$(window).keydown(down=&gt;{if(listen(down)){try{promptJe()}catch(bbsjsError){console.error(bbsjsError)}}})}if($('#bbsjs-container').length==0)initBbsjsFrame();switch(output){case'hello world':alert('hello world!');break;case'bookmarklet':promptJe();break;case'user.js':registJe(keydown=&gt;keydown.key=='J');break}function initBbsjsFrame(){const $div=$('&lt;div&gt;').attr('id','bbsjs-container');$('&lt;button&gt;').text('move').appendTo($div).click(click=&gt;{const $container=$(click.target).parent();$container.toggleClass('show')});$('&lt;iframe&gt;').attr('src','https://gholk.github.io/bbsjs.html').appendTo($div);const cssText=`\n#bbsjs-container {\n  transition: 0.5s;\n  position: fixed;\n  top: 1em;\n  left: 1em;\n  z-index: 2;\n  background: white;\n}\n#bbsjs-container button {\n  float: right;\n  margin: 0.5em;\n  color: black;\n}\n#bbsjs-container iframe {\n  border: none;\n  display: none;\n}\n#bbsjs-container.show iframe {\n  clear: both;\n  display: block;\n  width: 100%;\n  height: 25em;\n}\n#bbsjs-container.show {\n  transition: 0.5s;\n  width: 40%;\n  top: 2em;\n  left: 30%;\n  z-index: 2;\n}\n`;$('&lt;style&gt;').text(cssText).appendTo($div);$div.appendTo('body')}}()"&gt;小書籤&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="[分頁原型](bbsjs-prototype-bookmarklet-user-js.txt)"&gt;&lt;a href="bbsjs-prototype-bookmarklet-user-js.txt"&gt;分頁原型&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;bbsjs 會在新開的頁面載入。這本的 user.js 不能用，
+後來發現是下一版 iframe 原型那個 same origin 的雷，
+&lt;code&gt;*.user.js&lt;/code&gt; 和原本頁面不是 same origin。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://gist.github.com/GHolk/3154e8486cf987cf6ab84cae45c7dcc7/52642d32989748e6e88d20d96fcddc79cd08e21c"&gt;gist&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a title="bbsjs" rel="sidebar" href="javascript:void function () {const output='bookmarklet';class FakePrint{constructor(string){if(string)this.data=string;else this.data=''}print(string){this.data+=string}println(string){this.print(string+'\n')}}class JavascriptEvalator{prompt(){const script=this.getScript();this.execute(script)}getArticle(){if(location.href.match('www.ptt.cc')){return this.getPttWebArticle()}else return this.getPttChromeArticle()}getPttWebArticle(){return $('#main-container').text()}getPttChromeArticle(){return $('#mainContainer').children().get().map(row=&gt;$(row).text()).join('\n')}getScript(){const article=this.getArticle();const html=article.match(/&lt;html[\S\s]*?&lt;\/html&gt;/);const script=article.match(/&lt;script[\S\s]*?&lt;\/script&gt;/);return html||script}execute(script){return this.windowExecute(script)}evalExecute(script){const cleanScript=script.replace(/^&lt;script[\S\s]*?&gt;/,'').replace(/&lt;\/script&gt;$/,'');return eval(cleanScript)}windowExecute(script){const scriptWindow=window.open('about:blank');const scriptDocument=scriptWindow.document;scriptDocument.write(script);scriptDocument.close();return scriptWindow}}function promptJe(){const je=new JavascriptEvalator;je.prompt()}function registJe(listen){window.addEventListener('keydown',down=&gt;{if(listen(down)){try{promptJe()}catch(evalError){throw evalError}}})}switch(output){case'hello world':alert('hello world!');break;case'bookmarklet':promptJe();break;case'user.js':registJe(keydown=&gt;keydown.key=='J');break}}()"&gt;小書籤&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id="BBSLua"&gt;BBSLua&lt;/h2&gt;
+&lt;p&gt;以前 ptt 有一個在文章內嵌入 lua 程式，
+讓使用者可以執行 lua 互動。
+目前在 ptt2 可以使用 bbslua，
+但因為 lua 還是要在 ptt 伺服器上執行，
+考量效能 ptt1 負載已經很重，就沒有引進到 ptt1。&lt;/p&gt;
+&lt;p&gt;如果是 javascirpt 就能在瀏覽器上執行，不會再增加 ptt 負擔。
+而且現在用瀏覽器上 ptt 的人數也增加了，
+像 BBSFOX 或 ptt chrome，甚至 ptt 官方也開放用 websocket
+從 &lt;a href="https://term.ptt.cc/"&gt;https://term.ptt.cc/&lt;/a&gt; 上 ptt。
+安裝 bbsjs 後，就能直接在瀏覽器上執行 bbsjs。&lt;/p&gt;
+&lt;h2 id="問題回報與討論"&gt;問題回報與討論&lt;/h2&gt;
+&lt;p&gt;如果要報 bug 或提功能建議，
+目前建議在 gist 下留言，或在本文下面討論。
+disqus 如果不想註冊，可以匿名評論。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/bbsjs.html#原型說明頁</id>
 <title>BBSJS 原型說明頁</title>
 <published>2018-03-15T12:52:05.029Z</published>
 <updated>2018-03-15T14:35:37.320Z</updated>
-<link rel="alternate" type="text/html" href="http://gholk.github.io/bbsjs.html"/>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/bbsjs.html#原型說明頁"/>
 <summary>BBSJS 是由 BBSLua 啟發，在用測覽器上 ptt 時，
 執行 ptt 文章內 javascript 的計劃。</summary>
 <category term="bbsjs"/>

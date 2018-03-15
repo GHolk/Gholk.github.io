@@ -14,6 +14,7 @@ ptt 網頁版也可以動。
 建議在 ptt chrome 內右鍵，開啟選項內的好讀模式，
 讓 bbsjs 就算超過一頁，也能一次全部載入執行。
 
+
 ## 安裝
 目前發布 [[小書籤]] bookmarklet 和 [[Greasemonkey]] 腳本二種執行方法。
 grease monkey 是一種簡易的瀏覽器腳本，安裝後在特定的網域執行。
@@ -84,6 +85,13 @@ this **markdown** is power by [gholk/marked] .
 要注意是網址不要簡寫成 `src="//some.script"` ，
 因為該 iframe scheme 是在 `blob:` ，要寫 `https://` 。
 
+## 範例程式
+
+  - [在 PttWeb 板的介紹文兼簡單的程式](https://www.ptt.cc/bbs/PttWeb/M.1521126610.A.A07.html)
+  - ptt 測試板 test 裡有幾篇，搜 bbsjs 就有了。
+    但一周後會被清掉，就不放網址了。
+
+<!-- - 個人站 <http://clam.ml> 的 test 板裡有幾篇示範程式，被 m 了應該不會被清。 -->
 
 ## 版本歷程
 以下版本從新排到舊。

@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-03-17T12:00:56.858Z</updated>
+  <updated>2018-03-17T15:35:27.715Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,80 @@
 
 
 <entry>
+<id>http://gholk.github.io/wii-dolphin-emulator-joystick.html</id>
+<title>wii 模擬器 dolphin 安裝與搖捍</title>
+<published>2018-03-17T15:32:53.813Z</published>
+<updated>2018-03-17T15:35:27.707Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/wii-dolphin-emulator-joystick.html"/>
+<summary>過年前裝了 Wii 和 Nintendo 64 通用的模擬器 dolphin，
+也用 qjoypad 調好搖捍，
+載了我想玩的大亂鬥，和比較適合同樂的瑪莉歐賽車
+結果過年也沒什麼玩到。
+一些下載和設定細節記在這裡。</summary>
+<category term="遊戲"/>
+<category term="dolphin"/>
+<category term="wii"/>
+<category term="搖捍"/>
+<category term="壓縮檔"/>
+<content type="html">&lt;h1 id="wii 模擬器 dolphin 安裝與搖捍"&gt;wii 模擬器 dolphin 安裝與搖捍&lt;/h1&gt;
+&lt;p&gt;過年前裝了 Wii 和 Nintendo 64 通用的模擬器 dolphin，
+也用 qjoypad 調好搖捍，
+載了我想玩的大亂鬥，和比較適合同樂的瑪莉歐賽車
+結果過年也沒什麼玩到。
+一些下載和設定細節記在這裡。&lt;/p&gt;
+&lt;p&gt;這篇文章應該過年前就要寫完了，
+但那時在忙 sitcon 投稿和其它有的沒的，就放置了，
+到現在新裝了卡比的 wii 遊戲才靠回憶重寫。&lt;/p&gt;
+&lt;h2 id="dolphin"&gt;dolphin&lt;/h2&gt;
+&lt;p&gt;安裝我是直接 &lt;code&gt;apt install dolphin-emu&lt;/code&gt; ，
+debian stretch 才剛發布還夠新沒問題。&lt;/p&gt;
+&lt;p&gt;以前在 ferrari 用 dolphin 玩過 kirby air ride，
+現在換新電腦 thinkpad13 重玩，
+才發現以前玩的都是 &lt;em&gt;慢速版&lt;/em&gt; ，
+現在變超快整個不會玩了 :P&lt;/p&gt;
+&lt;p&gt;只是 dolphin 搖捍有問題，設定頁面顯示抓得到，
+但進遊戲後就沒反應，就又抓不到了。
+總之我以前找過，有人推薦解法是不要依靠遊戲抓遊捍，
+手動把搖捍的鍵映射到鍵盤上，
+每個遊戲至少都支援鍵盤。&lt;/p&gt;
+&lt;h2 id="qjoypad"&gt;qjoypad&lt;/h2&gt;
+&lt;p&gt;qjoypad 能把搖捍的鍵映射到鍵盤上。
+&lt;code&gt;apt install qjoypad&lt;/code&gt; ，
+裝好直接從應用程式選單啟動，
+有 gui 介面，啟動後會常駐在狀態列。
+我一般是點 &lt;em&gt;quick set&lt;/em&gt; 手動設，有記憶幾組對應。
+要注意是 qjoypad 和 dolphin 可能有啟動順序，
+要先啟動某一個，如果沒辦法用，就從狀態列重啟看看。&lt;/p&gt;
+&lt;p&gt;一個人玩沒什麼問題，
+但要二人就要留意鍵盤的鍵夠不夠用。
+我是設定 1P 是符合常理、使用習慣的鍵盤，
+再把搖捍一一對應上來。
+2P 3P 就沒考慮在鍵盤上用，鍵全都擠在一起。&lt;/p&gt;
+&lt;h2 id="遊戲客制化鍵對應"&gt;遊戲客制化鍵對應&lt;/h2&gt;
+&lt;p&gt;我用搖捍是因為以前玩 NDS，
+格鬥遊戲和動作遊戲對搖捍的鍵配置比較熟悉，
+像卡比和 jump 大亂鬥。&lt;/p&gt;
+&lt;p&gt;玩 wii 的大亂鬥時就要調鍵綁定，
+這還好因為 wii 大亂鬥中可以客制化自己各鍵的功能。
+但瑪莉歐賽車就一定要手動調，
+這時就遇到困難，
+是要調 qjoypad，還是調 dolphin？&lt;/p&gt;
+&lt;p&gt;我最後是調 dolphin，dolphin 可以存按鍵配置檔，
+qjoypad 的設計比較糟，好像也可以，但不會用。&lt;/p&gt;
+&lt;h2 id="下載遊戲"&gt;下載遊戲&lt;/h2&gt;
+&lt;p&gt;遊戲副檔名是 &lt;code&gt;*.iso&lt;/code&gt; 或 &lt;code&gt;*.wbfs&lt;/code&gt; ，大概數 G，
+哪裡載就自己 google 遊戲名配 rom iso wbfs 等關鍵字一般就有了，
+但載回來一般是分片的壓縮檔，
+如果有多個載點，一般各是不同片，大概分成三四片。&lt;/p&gt;
+&lt;p&gt;如果是 rar 我載回來沒改檔名，
+放同一目錄直接 &lt;code&gt;7z x Cotton.part1.rar&lt;/code&gt; 就自動全部解了。
+之前的瑪莉歐賽車和大亂鬥是 7z 的，
+我是直接 cat 接在一起再解，
+不知道有沒有比較文明的做法。
+但多數解壓縮也沒變大，
+應該是因為 windows 下只有用壓縮檔分片較方便。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/ccns-vice-president-experience.html</id>
 <title>ccns 副社長經驗</title>
 <published>2018-03-17T11:57:18.316Z</published>

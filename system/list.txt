@@ -159,3 +159,4 @@ geomatics-measuring-the-world.html
 bbsjs.html
 ccns-vice-president-experience.html
 wii-dolphin-emulator-joystick.html
+wii-dolphin-kirby-horizontal-joystick.html

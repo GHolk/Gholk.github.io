@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-03-18T08:31:44.469Z</updated>
+  <updated>2018-03-19T16:40:55.774Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,41 @@
 
 
 <entry>
+<id>http://gholk.github.io/fleet-of-time-owe-life.html</id>
+<title>匆匆那年的互相虧欠</title>
+<published>2018-03-19T16:40:39.899Z</published>
+<updated>2018-03-19T16:40:55.765Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/fleet-of-time-owe-life.html"/>
+<summary>匆匆那年 說，寧願互相虧欠，
+也不要恩怨相消後，變成無恩無仇的陌生人。
+以前也想過類似的問題，和朋友吵了架，
+怎麼說也是先認識了才能不合吵架，
+難道還不如一個陌生人？</summary><link rel="enclosure" href="https://youtube.com/embed/omobhuutrE4"/><link rel="enclosure" href="https://youtube.com/embed/omobhuutrE4"/>
+<category term="youtube"/>
+<category term="歌"/>
+<category term="中國"/>
+<category term="思辨"/>
+<category term="抒發"/>
+<content type="html">&lt;h1 id="匆匆那年的互相虧欠"&gt;匆匆那年的互相虧欠&lt;/h1&gt;
+&lt;p&gt;&lt;cite&gt;匆匆那年&lt;/cite&gt; 說，寧願互相虧欠，
+也不要恩怨相消後，變成無恩無仇的陌生人。
+以前也想過類似的問題，和朋友吵了架，
+怎麼說也是先認識了才能不合吵架，
+難道還不如一個陌生人？&lt;/p&gt;
+
+
+&lt;iframe src="https://youtube.com/embed/omobhuutrE4"&gt;
+  &lt;a href="//youtube.com/ombhuutrE4"&gt;王菲 匆匆那年&lt;/a&gt;
+&lt;/iframe&gt;
+
+&lt;p&gt;如果被討厭、被虧欠的，
+心裡留個疙瘩，就不會被忘記嗎？
+也許在你而言十分介意的事，
+對方只覺得是小事，早就不記得了；
+連你也不記得了。
+能重新開始也不錯。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/wii-dolphin-kirby-horizontal-joystick.html</id>
 <title>星之卡比橫向 wii 搖捍</title>
 <published>2018-03-18T08:31:03.582Z</published>

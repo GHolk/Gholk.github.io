@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-03-20T14:25:38.918Z</updated>
+  <updated>2018-03-21T16:44:46.691Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,98 @@
 
 
 <entry>
+<id>http://gholk.github.io/thinkpad13-powertop-bug-usb-nic.html</id>
+<title>thinkpad13 使用 powertop 省電模式讓 usb type c 以太網卡不正常</title>
+<published>2018-03-21T16:41:41.111Z</published>
+<updated>2018-03-21T16:44:46.683Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/thinkpad13-powertop-bug-usb-nic.html"/>
+<summary>linux 上的省電軟體 powertop
+能控制筆電周邊裝置開關，達到省電的效果。
+但 linux 的硬體相容性沒保障，
+之前用 powertop --auto-tune 後，
+usb type c 以太網卡就不太正常，
+要手動進 powertop 把一些參數調回一般模式。</summary>
+<category term="筆電"/>
+<category term="網路"/>
+<category term="usb"/>
+<category term="linux"/>
+<content type="html">&lt;h1 id="thinkpad13 使用 powertop 省電模式讓 usb type c 以太網卡不正常"&gt;thinkpad13 使用 powertop 省電模式讓 usb type c 以太網卡不正常&lt;/h1&gt;
+&lt;p&gt;linux 上的省電軟體 powertop
+能控制筆電周邊裝置開關，達到省電的效果。
+但 linux 的硬體相容性沒保障，
+之前用 &lt;code&gt;powertop --auto-tune&lt;/code&gt; 後，
+usb type c 以太網卡就不太正常，
+要手動進 powertop 把一些參數調回一般模式。&lt;/p&gt;
+&lt;h2 id="歷史回顧"&gt;歷史回顧&lt;/h2&gt;
+&lt;p&gt;因為 thinkpad13 沒有網路孔，
+就買了一張 usb 以太網卡，
+且有一個平常用不到的 type c 孔，
+就買 type c 的。&lt;/p&gt;
+&lt;p&gt;之前一次就是裝回來後以太網卡會掛掉，
+裝置抓不到，宿網路也沒了。
+重開機也沒好，就送修；
+是在台南北門路廣捷資訊廣場買的，很佛心有保固一年。
+可以送修是正常，現在才發現是 powertop 的問題。&lt;/p&gt;
+&lt;h2 id="使用情況"&gt;使用情況&lt;/h2&gt;
+&lt;p&gt;日常使用是沒問題，因為開省電模式都是在外面用，
+也都用 wifi，不會用到網路線、以太網卡。
+主要是回宿舍後插回網路線，有時會出問題。&lt;/p&gt;
+&lt;p&gt;以前的 ferrari 開 powertop 時，
+滑鼠一段時間沒用會被斷電，
+就要手動把 powertop 中滑鼠的 usb 阜設不自動斷電。
+thinkpad13 也是類似。&lt;/p&gt;
+&lt;p&gt;之前沒發現是這個問題，而且重新開機後，
+powertop 的選項竟然不會回復預設！
+還是在省電的狀態。
+所以那時才會以為是網卡壞了，
+因為都重新開機還是不正常。&lt;/p&gt;
+&lt;h2 id="powertop"&gt;powertop&lt;/h2&gt;
+&lt;p&gt;一般我都是直接 &lt;code&gt;powertop --auto-tune&lt;/code&gt; ，
+會直接把所有選項調到省電，也就是 &lt;code&gt;好&lt;/code&gt; ，
+預設應該都是 &lt;code&gt;壞&lt;/code&gt; 也就是不省電。&lt;/p&gt;
+&lt;p&gt;在以太網卡死掉時，就把以太網卡的 usb 阜調成壞，
+再重插應該就會好了。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-term"&gt;~:$ sudo powertop
+PowerTOP 2.8      總覽       閒置統計     頻率統計          設備統計       可調 
+
+
+   壞           Enable SATA link power management for host0
+   壞           Enable SATA link power management for host1
+   壞           啟用音效設備電源管理功能
+   壞           NMI watchdog 監控應該關閉
+   壞           VM 回寫延時
+   壞           自動閒置於 USB 設備 Generic   USB  Joystick   [1-2.1]
+   壞           自動閒置於 USB 設備 USB Optical Mouse [1-1]
+   壞           Runtime PM for I2C Adapter i2c-2 (i915 gmbus dpb)
+   壞           Runtime PM for I2C Adapter i2c-6 (Synopsys DesignWare I2C adapte
+   壞           Runtime PM for I2C Adapter i2c-3 (i915 gmbus dpd)
+   壞           自動閒置於 USB 設備 xHCI Host Controller [usb2]
+   壞           自動閒置於未知的 USB 設備 1-7 (8087:0a2b)
+   壞           自動閒置於 USB 設備 4-Port USB 2.0 Hub [Generic]
+   壞           自動閒置於 USB 設備 xHCI Host Controller [usb1]
+&amp;gt;&amp;gt; 壞           自動閒置於 USB 設備 AX88179 [ASIX Elec. Corp.]                  
+   壞           自動閒置於 USB 設備 Integrated Camera [8SSC20F27024L1GZ79T0E97]
+   壞           自動閒置於 USB 設備 4-Port USB 3.0 Hub [Generic]
+   壞           Runtime PM for I2C Adapter i2c-0 (SMBus I801 adapter at efa0)
+   壞           Runtime PM for I2C Adapter i2c-1 (i915 gmbus dpc)
+
+ &amp;lt;ESC&amp;gt; 離開 | &amp;lt;Enter&amp;gt; 切換選項開關   | &amp;lt;r&amp;gt; 更新視窗內容
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果不確定哪個才是以太網卡，
+可以 &lt;code&gt;lsusb&lt;/code&gt; 看各連接阜對應的裝置名稱。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-term"&gt;~:$ lsusb
+Bus 002 Device 005: ID 0b95:1790 ASIX Electronics Corp. AX88179 Gigabit Ethernet
+Bus 002 Device 002: ID 0bda:0411 Realtek Semiconductor Corp.
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 001 Device 006: ID 8087:0a2b Intel Corp.
+Bus 001 Device 004: ID 1bcf:2c94 Sunplus Innovation Technology Inc.
+Bus 001 Device 005: ID 0079:000a DragonRise Inc.
+Bus 001 Device 003: ID 0bda:5411 Realtek Semiconductor Corp.
+Bus 001 Device 002: ID 0461:4e44 Primax Electronics, Ltd
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/geomatics-rearrange-city-land.html</id>
 <title>工程倫理：市地重畫</title>
 <published>2018-03-20T14:25:38.637Z</published>
@@ -1415,7 +1507,7 @@ blink 則是匹配的關鍵字會閃爍。
 <summary>之前換新版 line 後就不能用 launcher 直接執行，
 一直之前找到新版 line 的 url，
 和直接用 cli 開啟的方法，
-chromium --app=chrome-extension://ophjlpahpchlmihnnnihgmmeilfjmjjc/index.html 。
+chromium --app=chrome-extension://ophjlpahpchlmihnnnihgmmeilfjmjjc/index.html。
 也就能寫成 launcher 了。</summary>
 <category term="line"/>
 <category term="im"/>
@@ -1879,36 +1971,36 @@ shell script 就刪了。&lt;/p&gt;
 之前 ccns 的 &lt;a href="https://github.com/kevinbird61"&gt;kevin cyu&lt;/a&gt; 有做過類似的，
 是生出一個 html 文件。&lt;/p&gt;
 &lt;h2 id="fetch policy"&gt;fetch policy&lt;/h2&gt;
-&lt;p&gt;在用firefox &lt;code&gt;file://&lt;/code&gt; 協定開本機目錄時，
+&lt;p&gt;在用 firefox &lt;code&gt;file://&lt;/code&gt; 協定開本機目錄時，
 會列出目錄下的所有檔案。&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://www.flickr.com/photos/neckfree/40186603241/in/dateposted/"&gt;&lt;img src="https://farm5.staticflickr.com/4623/40186603241_d957ab7f1e_z.jpg" alt="firefox local directory"&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;但不能用這個查目錄下有什麼檔案，
 如果你在 &lt;code&gt;file:///www/readme.html&lt;/code&gt; ， 
 &lt;code&gt;fetch(&amp;#39;./&amp;#39;)&lt;/code&gt; 是抓不到東西的。&lt;/p&gt;
-&lt;p&gt;firefox在 &lt;code&gt;file:&lt;/code&gt; 下是能ajax同一層和所有子目錄內容，
-但在瀏覽目錄時的自動列出功能，是不能被ajax的。
-而chrome是全部鎖起來，
-在file協定下沒有地方是same origin。&lt;/p&gt;
+&lt;p&gt;firefox 在 &lt;code&gt;file:&lt;/code&gt; 下是能 ajax 同一層和所有子目錄內容，
+但在瀏覽目錄時的自動列出功能，是不能被 ajax 的。
+而 chrome 是全部鎖起來，
+在 file 協定下沒有地方是 same origin。&lt;/p&gt;
 &lt;h2 id="實作困難"&gt;實作困難&lt;/h2&gt;
-&lt;p&gt;我本來想用iframe直接看readme，
-在onload事件後，
-再用 &lt;a href="marked/"&gt;marked&lt;/a&gt; 把iframe的內容轉成html。
-結果發現iframe開 &lt;code&gt;*.md&lt;/code&gt; 會彈出下載視窗，
+&lt;p&gt;我本來想用 iframe 直接看 readme，
+在 onload 事件後，
+再用 &lt;a href="marked/"&gt;marked&lt;/a&gt; 把 iframe 的內容轉成 html。
+結果發現 iframe 開 &lt;code&gt;*.md&lt;/code&gt; 會彈出下載視窗，
 不像 &lt;code&gt;*.txt&lt;/code&gt; 是能直接看。&lt;/p&gt;
 &lt;p&gt;後來改用 &lt;code&gt;history.pushState()&lt;/code&gt; ，
-直接把現在的路徑push成所閱讀的markdown的路徑。
-但這有個問題，原始程式和url是 &lt;code&gt;file:///home/gholk/sicp/index.html&lt;/code&gt; ，
+直接把現在的路徑 push 成所閱讀的 markdown 的路徑。
+但這有個問題，原始程式和 url 是 &lt;code&gt;file:///home/gholk/sicp/index.html&lt;/code&gt; ，
 讀個幾次後變成 &lt;code&gt;file:///home/gholk/sicp/exercise/1/fast-expt.md&lt;/code&gt; ，
-之後F5重新整理，或從其它地方直接開這個url，
-會跳出叫你下載的視窗，或就看到原始的markdown，
-而不是 &lt;code&gt;index.html&lt;/code&gt; 渲染的markdown。&lt;/p&gt;
-&lt;p&gt;後來改成把path存在query string，
+之後 F5 重新整理，或從其它地方直接開這個 url，
+會跳出叫你下載的視窗，或就看到原始的 markdown，
+而不是 &lt;code&gt;index.html&lt;/code&gt; 渲染的 markdown。&lt;/p&gt;
+&lt;p&gt;後來改成把 path 存在 query string，
 但會有相對路徑的問題，
 像 &lt;code&gt;1/README.md&lt;/code&gt; 裡名為 &lt;code&gt;fast-expt.md&lt;/code&gt; 的超連結
 是指向同一層的 &lt;code&gt;1/fast-expt.md&lt;/code&gt; ，
 但如果直接 &lt;code&gt;fetch(&amp;#39;fast-expt.md&amp;#39;)&lt;/code&gt; 
 會指向 &lt;code&gt;index.html&lt;/code&gt; 所在的目錄下的 &lt;code&gt;fast-expt.md&lt;/code&gt; 。&lt;/p&gt;
-&lt;p&gt;我是用html的新的URL 物件解決，能計算相對路徑。
+&lt;p&gt;我是用 html 的新的 URL 物件解決，能計算相對路徑。
 像 &lt;code&gt;new URL(&amp;#39;helo/world&amp;#39;, &amp;#39;file:///home/gholk/index.html&amp;#39;)&lt;/code&gt; 
 就會是 &lt;code&gt;file:///home/gholk/helo/world&lt;/code&gt; ，
 連 &lt;code&gt;.&lt;/code&gt; 和 &lt;code&gt;..&lt;/code&gt; 都能處理，

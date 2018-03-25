@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-03-24T12:05:14.796Z</updated>
+  <updated>2018-03-25T12:35:11.638Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,75 @@
 
 
 <entry>
+<id>http://gholk.github.io/wii-dolphin-wiimote-cursor.html</id>
+<title>dolphin用模擬wiimote體感</title>
+<published>2018-03-25T12:35:11.384Z</published>
+<updated>2018-03-25T12:35:11.630Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/wii-dolphin-wiimote-cursor.html"/>
+<summary>之前玩dolphin模擬器都只有用到按鍵，
+沒有用到用描準之類的功能。
+原來可以用滑鼠的移動模擬wiimote，左鍵是A右鍵是B。
+或用搖捍的香菇頭搖捍也可以，只是不太好用。</summary>
+<category term="kirby"/>
+<category term="wii"/>
+<category term="dolphin"/>
+<category term="遊戲"/>
+<content type="html">&lt;h1 id="dolphin用模擬wiimote體感"&gt;dolphin用模擬wiimote體感&lt;/h1&gt;
+&lt;p&gt;之前玩dolphin模擬器都只有用到按鍵，
+沒有用到用描準之類的功能。
+原來可以用滑鼠的移動模擬wiimote，左鍵是A右鍵是B。
+或用搖捍的香菇頭搖捍也可以，只是不太好用。&lt;/p&gt;
+&lt;h2 id="滑鼠"&gt;滑鼠&lt;/h2&gt;
+&lt;p&gt;在裝置要選 &lt;strong&gt;keybord and mouse&lt;/strong&gt; ，
+在IR區域裡有體感上下左右前後的對應，
+要在上面點右鍵，可以設定較多細節。
+就把上下左右分別對應到 
+&lt;code&gt;Cursor Y-&lt;/code&gt; &lt;code&gt;Cursor Y+&lt;/code&gt; &lt;code&gt;Cursor X-&lt;/code&gt; &lt;code&gt;Cursor X+&lt;/code&gt; ，
+前後我是對應到 &lt;code&gt;`Shift` &amp;amp; `Cursor Y-` &lt;/code&gt;
+&lt;code&gt;`Shift` &amp;amp; `Cursor Y+` &lt;/code&gt; 。
+本來想對應到滾輪，但好像不行？&lt;/p&gt;
+&lt;h2 id="搖捍"&gt;搖捍&lt;/h2&gt;
+&lt;p&gt;搖捍就直接對應到看要用左邊還是右邊的香菇頭，
+直接設就好了。
+另外我是把前後對應到L2 &amp;amp; 香菇頭。&lt;/p&gt;
+&lt;p&gt;有時用dolphin會抓不到搖捍，
+在開遊戲前還可以，是進遊戲後才抓不到。
+發現在遊戲中直接調控制器，
+更新裝置列表後再選一次搖捍，就可以了。&lt;/p&gt;
+&lt;p&gt;不知道是什麼黑魔法，總之調完後，
+發現用搖捍的蘑菇頭模擬wii的cursor不是好主意。
+搖捍模擬cursor是把搖捍的x y 軸
+對應到wii cursor的平面，
+而不是像用方向鍵移動cursor，
+也就是放著不動時，cursor會回到畫面正中。
+總之十分難用，也有可能是因為我的搖捍會有雜訊和抖動造成難以描準。&lt;/p&gt;
+&lt;h2 id="卡比全破"&gt;卡比全破&lt;/h2&gt;
+&lt;p&gt;&lt;cite&gt;kirby return dreamland&lt;/cite&gt; 通關了，
+之後出現困難模式只有三血，
+還有競技場模式也不難，用槌子一下就破了。&lt;/p&gt;
+&lt;p&gt;這代真得很多以前其它代的元素：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;第七大關最後一小關，最後通關的門的背景最上有個月亮，
+那裡有座隱藏的門，裡面有食物和星星。&lt;/li&gt;
+&lt;li&gt;第五大關也就是dreamland最後一大關，
+有一關是boss塔，總共就是打五個boss後通關，
+在入口處上面還有一個用鐵柵欄圍的門，
+裡面是強化版的五個boss。&lt;/li&gt;
+&lt;li&gt;槌子在跑步時按丟屬性，是迴旋槌後把槌子甩出去的大絕，
+之後會失去槌子能力。&lt;/li&gt;
+&lt;li&gt;競技場和究極豪華版一樣，有幾顆蕃茄在樹上，
+吃了下回合會長出小蕃茄。&lt;/li&gt;
+&lt;li&gt;石頭和究極豪華版一樣，每次會變出不同形狀的石頭。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;此外也有一些可惜，其它代有的結果沒在這代出現：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;沒有幽浮屬性，應該吧？
+至少我沒找到，只有通關後的跳高會有幽浮出現給星星。&lt;/li&gt;
+&lt;li&gt;沒有鏡子，鏡子是究極豪華版的有趣屬性，
+特色是很多招式都可以反彈怪物的遠程攻擊。&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/bbsjs.html#blob url mime type</id>
 <title>BBSJS 修正 mime type bug</title>
 <published>2018-03-15T12:52:05.029Z</published>

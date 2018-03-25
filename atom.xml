@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-03-25T12:35:11.638Z</updated>
+  <updated>2018-03-25T16:04:24.705Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,196 @@
 
 
 <entry>
+<id>http://gholk.github.io/javascript-easy-s-expression-parser.html</id>
+<title>試做 s 表達式解析器</title>
+<published>2018-03-25T15:29:29.631Z</published>
+<updated>2018-03-25T16:04:24.698Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/javascript-easy-s-expression-parser.html"/>
+<summary>用 lisp 資料結構實作 lisp 直譯器簡單在省去
+從字串解析成巢狀鏈表的過程，
+所以想試著寫一個從字串解析成鏈表的程式，看這步的難度。
+是用比較熟悉的 javascript 寫的，
+因為我不會 scheme 或 common lisp 的字串處理函數。</summary>
+<category term="javascript"/>
+<category term="lisp"/>
+<category term="s-expression"/>
+<category term="parser"/>
+<category term="互動"/>
+<content type="html">&lt;h1 id="試做 s 表達式解析器"&gt;試做 s 表達式解析器&lt;/h1&gt;
+&lt;p&gt;用 lisp 資料結構實作 lisp 直譯器簡單在省去
+從字串解析成巢狀鏈表的過程，
+所以想試著寫一個從字串解析成鏈表的程式，看這步的難度。
+是用比較熟悉的 javascript 寫的，
+因為我不會 scheme 或 common lisp 的字串處理函數。&lt;/p&gt;
+&lt;h2 id="斷詞器"&gt;斷詞器&lt;/h2&gt;
+&lt;p&gt;發現分成二部會比較好做，不然會太複雜。
+先把字串拆成一個 tocken 鏈表，
+也就是平展的表，裡面把 &lt;code&gt;(&lt;/code&gt; &lt;code&gt;)&lt;/code&gt; 也視作 tocken。&lt;/p&gt;
+&lt;script&gt;
+function tockenize(string) {
+    const space = /^\s+/
+    const startBracket = /^\(/
+    const endBracket = /^\)/
+    const word = /^[\w-]+/
+    const stringRegexp = {
+        delimiter: /^"/,
+        char: /^[^\\"]/,
+        escape: /^\\/,
+        remove: function () {
+            let matchString = ''
+            string = string.slice(1)
+            while (!match(this.delimiter)) {
+                if (match(this.char)) matchString += remove(this.char)
+                else if (match(this.escape)) {
+                    remove(this.escape)
+                    matchString += remove(/./)
+                }
+            }
+            remove(this.delimiter)
+            return matchString
+        }
+    }
+
+    const regexpList = [startBracket, endBracket]
+    const tockenList = []
+    while (string.length &gt; 0) {
+        if (match(space)) remove(space)
+        else if (match(word)) {
+            const wordString = remove(word)
+            const atom = new Atom(wordString, 'symbol')
+            tockenList.push(atom)
+        }
+        else if (match(stringRegexp.delimiter)) {
+            const stringValue = stringRegexp.remove(string)
+            tockenList.push(new Atom(stringValue, 'string'))
+        }
+        else regexpList.forEach((regexp) =&gt; {
+            if (match(regexp)) tockenList.push(remove(regexp))
+        })
+    }
+    return tockenList
+    function match(regexp) {
+        return regexp.test(string)
+    }
+    function remove(regexp) {
+        const matchString = string.match(regexp)[0]
+        string = string.replace(regexp, '')
+        return matchString
+    }
+}
+&lt;/script&gt;
+
+&lt;h2 id="解析器"&gt;解析器&lt;/h2&gt;
+&lt;p&gt;把平展的表解析的巢狀的表比較需要思考，
+但其實 code 沒那麼長。
+我是用遞迴做的，可能也只能用遞迴做？
+但比較特別是沒有用到迴圈，
+因為是用 sicp 教的思考方式，
+而且要得到解析到哪裡還蠻麻煩的。&lt;/p&gt;
+&lt;script&gt;
+function nestize(tocken) {
+    return recur([], tocken)[0]
+
+    function recur(currentList, tocken) {
+        if (tocken.length == 0) return currentList
+        else if (tocken[0] == ')') return {
+            parse: currentList,
+            tocken: tocken.slice(1)
+        }
+        else if (tocken[0] == '(') {
+            const subParse = recur([], tocken.slice(1))
+            currentList.push(subParse.parse)
+            return recur(currentList, subParse.tocken)
+        }
+        else {
+            currentList.push(tocken[0])
+            return recur(currentList, tocken.slice(1))
+        }
+    }
+}
+&lt;/script&gt;
+
+&lt;h2 id="用 atom 代表一個字"&gt;用 atom 代表一個字&lt;/h2&gt;
+&lt;p&gt;本來還沒加字串時，是沒有用特殊物件的，
+都直接用字串代表符號。
+後來因為要和字串區分，只好引進一類似 tocken 的元素，
+將字串、數字、符號都視為不同類的 tocken，
+只是目前只實作了字串和符號。&lt;/p&gt;
+&lt;p&gt;目前的字串是用雙引號包起來，
+中間要再放雙引號要用反斜線跳脫，
+也可以放 enter 或任何其它字元。&lt;/p&gt;
+&lt;p&gt;其實字串和符號只有一線之隔，
+可以把符號視為 &lt;em&gt;只能比較相不相等&lt;/em&gt; 的字串，
+但實作上可以用 hash 做，不用真得保存所有字元。
+關於符號那些神奇的特性，
+其實是依賴 eval 這個黑魔法實現的。&lt;/p&gt;
+&lt;script&gt;
+class Atom {
+    constructor(value, type) {
+        this.value = value
+        this[type] = true
+        this.type = type
+    }
+    toString() {
+        switch (this.type) {
+        case 'symbol':
+            return '@' + this.value
+        case 'number':
+            return Number(this.value)
+        case 'string':
+            return this.value
+        default:
+            return `Atom ${this.value}`
+        }
+    }
+}
+&lt;/script&gt;
+
+&lt;form&gt;
+&lt;h2&gt;玩沙區&lt;/h2&gt;
+&lt;p&gt;要先按 tockenize 把 s-expression 解析成 tocken list，
+再按 nestize 把 tocken list 解析成巢狀。
+目前用 atom 看起來有點醜，
+因為被解析成 json 後會出現一堆 atom object。&lt;/p&gt;
+&lt;textarea&gt;
+(begin
+ (define (first list)
+   (car list))
+ (define (second list)
+   (car (cdr list)))
+ (define (third list)
+   (second (cdr list)))
+ (third list))
+&lt;/textarea&gt;
+&lt;button type="button" onclick="tockenizeTextarea()"&gt;tockenize&lt;/button&gt;
+&lt;button type="button" onclick="nestizeTextarea()"&gt;nestize&lt;/button&gt;
+&lt;style&gt;
+form textarea {
+  width: 100%;
+  display: block;
+  height: 20em;
+}
+&lt;/style&gt;
+&lt;/form&gt;
+
+&lt;script&gt;
+function tockenizeTextarea() {
+  const textarea = document.querySelector('textarea')
+  textarea.value = JSON.stringify(tockenize(textarea.value), null, 2)
+}
+function nestizeTextarea() {
+  const textarea = document.querySelector('textarea')
+  textarea.value = JSON.stringify(nestize(JSON.parse(textarea.value)), null, 2)
+}
+&lt;/script&gt;
+
+
+
+
+
+
+</content>
+</entry><entry>
 <id>http://gholk.github.io/wii-dolphin-wiimote-cursor.html</id>
 <title>dolphin用模擬wiimote體感</title>
 <published>2018-03-25T12:35:11.384Z</published>

@@ -134,7 +134,7 @@ class Atom {
 }
 </script>
 
-<form>
+<form id="playground">
 <h2>玩沙區</h2>
 <p>要先按 tockenize 把 s-expression 解析成 tocken list，
 再按 nestize 把 tocken list 解析成巢狀。
@@ -162,13 +162,25 @@ form textarea {
 </form>
 
 <script>
+function ioInput(pipe) {
+  const element = document.querySelector('#playground textarea')
+  element.value = pipe(element.value)
+}
+function prettyJson(struct) {
+  return JSON.stringify(struct, ['value', 'type'], 2)
+}
 function tockenizeTextarea() {
-  const textarea = document.querySelector('textarea')
-  textarea.value = JSON.stringify(tockenize(textarea.value), null, 2)
+  ioInput(tockenizeJson)
+  function tockenizeJson(string) {
+    return prettyJson(tockenize(string))
+  }
 }
 function nestizeTextarea() {
-  const textarea = document.querySelector('textarea')
-  textarea.value = JSON.stringify(nestize(JSON.parse(textarea.value)), null, 2)
+  ioInput(nestizeJson)
+  function nestizeJson(json) {
+    const struct = JSON.parse(json)
+    return prettyJson(nestize(struct))
+  }
 }
 </script>
 

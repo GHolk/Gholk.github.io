@@ -33,9 +33,9 @@ class Calendar {
     }
     addFromForm(form) {
         const alerm = {}
-        alerm.date = new Date(alerm.get('date'))
-        alerm.title = alerm.get('title')
-        alerm.body = alerm.get('body')
+        alerm.date = new Date(form.get('date'))
+        alerm.title = form.get('title')
+        alerm.body = form.get('body')
         this.add(alerm)
     }
 }

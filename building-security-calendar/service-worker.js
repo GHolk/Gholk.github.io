@@ -59,7 +59,7 @@ self.addEventListener('fetch', (fetchEvent) => {
 
 
 void function keepAlerm() {
-    calendar.expireAlerm()
+    calendar.expireNotify()
     setTimeout(keepAlerm, calendar.interval)
 }()
 

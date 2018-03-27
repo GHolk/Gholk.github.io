@@ -51,7 +51,7 @@ self.addEventListener('fetch', (fetchEvent) => {
     const request = fetchEvent.request
     if (request.method == 'POST' &&
         request.url.match(/alerm\/new$/)) {
-        request.body.formData().then(form => calendar.addFromForm(form))
+        request.formData().then(form => calendar.addFromForm(form))
         const done = stringToResponse('done')
         fetchEvent.respondWith(done)
     }

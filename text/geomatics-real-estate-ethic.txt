@@ -40,6 +40,8 @@ style, script {
 }
 </style>
 
+<footer contentEditable></footer>
+
 #心得
 #測量
 #ncku

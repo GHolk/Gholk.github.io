@@ -40,7 +40,7 @@ style, script {
 }
 </style>
 
-<footer contentEditable></footer>
+<footer contenteditable="true"></footer>
 
 #心得
 #測量

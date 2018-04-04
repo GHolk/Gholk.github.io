@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-04-03T13:26:07.536Z</updated>
+  <updated>2018-04-04T03:34:41.656Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,47 @@
 
 
 <entry>
+<id>http://gholk.github.io/perfect-make-exist.html</id>
+<title>存在是否為完美的條件</title>
+<published>2018-04-04T03:34:41.393Z</published>
+<updated>2018-04-04T03:34:41.646Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/perfect-make-exist.html"/>
+<summary>笛卡爾 與很多西方哲學家，
+會將 存在 視為 完美 所需的一個條件，
+認為完美必然包括存在這個屬性，
+從而去證明上帝的存在。
+直到 存在主義 打破這種作法，提出 存在先於本質 。</summary>
+<category term="思辨"/>
+<category term="哲學"/>
+<category term="歷史"/>
+<category term="歐美"/>
+<category term="信仰"/>
+<category term="基督"/>
+<content type="html">&lt;h1 id="存在是否為完美的條件"&gt;存在是否為完美的條件&lt;/h1&gt;
+&lt;p&gt;&lt;a href="http://zh.wikipedia.org/wiki/%E7%AC%9B%E5%8D%A1%E7%88%BE"&gt;笛卡爾&lt;/a&gt; 與很多西方哲學家，
+會將 &lt;strong&gt;存在&lt;/strong&gt; 視為 &lt;strong&gt;完美&lt;/strong&gt; 所需的一個條件，
+認為完美必然包括存在這個屬性，
+從而去證明上帝的存在。
+直到 &lt;a href="http://zh.wikipedia.org/wiki/%E5%AD%98%E5%9C%A8%E4%B8%BB%E7%BE%A9"&gt;存在主義&lt;/a&gt; 打破這種作法，提出 &lt;em&gt;存在先於本質&lt;/em&gt; 。&lt;/p&gt;
+&lt;p&gt;笛卡爾證明上帝的思路是這樣的：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;認知到自己是不完美的。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;因此必然存在一個完美的概念，
+因此才能認知到自己的不完美。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;完美如果不存在，就不能算是完美；
+存在是完美的一個屬性，因此完美的東西存在。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;然後再想辦法把這個完美的東西連到上帝。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;傳統西方哲學過度依靠上帝，
+把很多證明都由上帝出發。
+被存在主義批評上帝有如一個黑盒子，
+所有不確定、無法處理的議題都被丟到裡面。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/medical-detective-experience.html#finish</id>
 <title>經典閱讀通識：醫學神探</title>
 <published>2018-03-26T17:26:54.007Z</published>

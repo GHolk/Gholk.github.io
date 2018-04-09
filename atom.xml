@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-04-06T03:24:40.043Z</updated>
+  <updated>2018-04-09T06:52:43.362Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,49 @@
 
 
 <entry>
+<id>http://gholk.github.io/anacron-execute-by-cron.html</id>
+<title>用 cron 執行 anacron</title>
+<published>2018-04-09T06:52:43.078Z</published>
+<updated>2018-04-09T06:52:43.354Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/anacron-execute-by-cron.html"/>
+<summary>anacron 是用來執行排程的程式，
+但他不是像 cron 一樣的 daemon service，
+只是每次被呼叫時會檢查所有任務上次執行時間，
+如果過期就補執行。
+因為這樣，需要不斷呼叫他，
+一般是用 cron 每小時呼叫一次。</summary>
+<category term="linux"/>
+<category term="config"/>
+<category term="cron"/>
+<category term="firefox"/>
+<category term="備份"/>
+<content type="html">&lt;h1 id="用 cron 執行 anacron"&gt;用 cron 執行 anacron&lt;/h1&gt;
+&lt;p&gt;anacron 是用來執行排程的程式，
+但他不是像 cron 一樣的 daemon service，
+只是每次被呼叫時會檢查所有任務上次執行時間，
+如果過期就補執行。
+因為這樣，需要不斷呼叫他，
+一般是用 cron 每小時呼叫一次。&lt;/p&gt;
+&lt;p&gt;一般系統只有一支 &lt;code&gt;/etc/anacrontab&lt;/code&gt; 在執行，
+如果 user 要自己跑非 root 的 anacron 就要自己設定。
+要執行 anacron 要設 anacrontab 和 spooldir，
+anacrontab 就是要執行的工作，執行時用 -t 指定，
+spooldir 則是存執行記錄的資料夾，用 -S 指定。&lt;/p&gt;
+&lt;p&gt;像我是設 &lt;code&gt;anacron -t ~/.local/share/anacron/anacrontab 
+-S ~/.local/share/anacron&lt;/code&gt; ，
+每次執行就是執行整行，參數也要。
+有人寫在 &lt;code&gt;.profile&lt;/code&gt; 或 &lt;code&gt;.bashrc&lt;/code&gt; ，
+反正一般人一天開一次機，開一次 terminal，差不多。&lt;/p&gt;
+&lt;p&gt;&lt;a href="//github.com/gholk/loco/commit/914bd5"&gt;我目前是用 cron 一小時執行一次&lt;/a&gt; ，
+好像有點太多？anacron 的最小單位是一天，
+應該每開機一次執行一次差不多，
+可能用 &lt;code&gt;/etc/rc.local&lt;/code&gt; 或 userctl service 比較好。&lt;/p&gt;
+&lt;p&gt;我用到 anacron 主要是用來備份 firefox 的瀏覽紀錄，
+因為大概只能保存幾個月，我就設一個月備份一次。
+如果會用 sqlite，應該要用 sql 指令
+每個月和舊的合併就好，但我不會 sql。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/rss-vs-facebook-algorithm.html</id>
 <title>rss 與 facebook 等社群媒體的優劣</title>
 <published>2018-04-06T03:24:39.752Z</published>

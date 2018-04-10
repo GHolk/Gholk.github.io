@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-04-09T06:52:43.362Z</updated>
+  <updated>2018-04-10T17:03:05.131Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,34 @@
 
 
 <entry>
+<id>http://gholk.github.io/confucius-temple-fried-instant-noodle.html</id>
+<title>孔廟商圈的保哥黑輪的炒泡麵</title>
+<published>2018-04-10T17:03:04.865Z</published>
+<updated>2018-04-10T17:03:05.121Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/confucius-temple-fried-instant-noodle.html"/>
+<summary>孔廟商圈的炒泡麵一直都很有名，
+但之前去好幾次都沒開，原來一直跑錯間，
+有名的保哥炒泡麵是在旁邊的小巷子裡。
+感覺被街上的 古都麵館 故意擋住招牌？
+目前 2018 年是周四公休。</summary>
+<category term="食物"/>
+<category term="台南"/>
+<category term="泡麵"/>
+<content type="html">&lt;h1 id="孔廟商圈的保哥黑輪的炒泡麵"&gt;孔廟商圈的保哥黑輪的炒泡麵&lt;/h1&gt;
+&lt;p&gt;孔廟商圈的炒泡麵一直都很有名，
+但之前去好幾次都沒開，原來一直跑錯間，
+有名的保哥炒泡麵是在旁邊的小巷子裡。
+感覺被街上的 &lt;u&gt;古都麵館&lt;/u&gt; 故意擋住招牌？
+目前 2018 年是周四公休。&lt;/p&gt;
+&lt;p&gt;我是在春假連假，清明 11 天連假最後一天去吃的，
+一樓還可以有位子，反觀街上古都麵館還有人站著等。
+麵上有打一顆很生的蛋，蛋黃都是水的，
+結果整碗的湯都黃黃的，感覺太生不太好。
+我沒有加料，有一點高麗菜和黑輪，
+才 60 不會太貴。
+但吃起來沒什麼特別的，和奧利薇的差不多。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/anacron-execute-by-cron.html</id>
 <title>用 cron 執行 anacron</title>
 <published>2018-04-09T06:52:43.078Z</published>

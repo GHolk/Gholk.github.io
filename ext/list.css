@@ -46,3 +46,15 @@ label {
     width: 20em;
     z-index: 2;
 }
+
+#daily-sentence {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 1em;
+    width: 30%;
+    font-size: 0.7em;
+}
+#daily-sentence pre {
+    white-space: pre-wrap;
+}

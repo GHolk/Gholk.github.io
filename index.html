@@ -22,7 +22,10 @@
   <body>
     <h1>文章列表</h1>
     <h2><a href="comment.html">留言板</a></h2>
-    <q id="daily-sentence"></q>
+    <blockquote id="daily-sentence">
+      <h3>每日一句</h3>
+      <pre></pre>
+    </blockquote>
     <script>
       loadDailySentence()
       
@@ -31,13 +34,13 @@
         const list = node.textContent.split(/\n----\n/g)
         const day = daySince(new Date('2018-04-12'))
         const sentence = list[day % list.length]
-        document.querySelector('#daily-sentence').textContent = sentence
+        document.querySelector('#daily-sentence pre').textContent = sentence
       
         function daySince(start) {
-            const now = new Date()
-            const msDiff = Number(start) - Number(now)
-            const dayDiff = msDiff / 24 * 60 * 60 * 1000
-            return Math.floor(dayDiff)
+          const now = new Date()
+          const msDiff = Number(now) - Number(start)
+          const dayDiff = msDiff / (24 * 60 * 60 * 1000)
+          return Math.floor(dayDiff)
         }
       }
     </script>

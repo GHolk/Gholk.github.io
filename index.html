@@ -22,6 +22,26 @@
   <body>
     <h1>文章列表</h1>
     <h2><a href="comment.html">留言板</a></h2>
+    <q id="daily-sentence"></q>
+    <script>
+      loadDailySentence()
+      
+      async function loadDailySentence() {
+        const node = await ajaxQuery('key-and-lock.html', 'pre code')
+        const list = node.split(/\n----\n/g)
+        const day = daySince(new Date('2018-04-12'))
+        const sentence = list[day % list.length]
+        document.querySelector('#daily-sentence').textContent = sentence
+      
+        function daySince(start) {
+            const now = new Date()
+            const msDiff = Number(start) - Number(now)
+            const dayDiff = msDiff / 24 * 60 * 60 * 1000
+            return Math.floor(dayDiff)
+        }
+      }
+    </script>
+      
     <main></main>
     <template id="article-template">
       <article>

@@ -27,8 +27,8 @@
       loadDailySentence()
       
       async function loadDailySentence() {
-        const node = await ajaxQuery('key-and-lock.html', 'pre code')
-        const list = node.split(/\n----\n/g)
+        const node = await ajaxQuery('key-and-lock.html', 'pre')
+        const list = node.textContent.split(/\n----\n/g)
         const day = daySince(new Date('2018-04-12'))
         const sentence = list[day % list.length]
         document.querySelector('#daily-sentence').textContent = sentence

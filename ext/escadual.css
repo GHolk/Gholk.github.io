@@ -1,0 +1,35 @@
+
+#add-event {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    border: solid 1px;
+    padding: 1em;
+    margin: 1em;
+    background: white;
+}
+
+#add-event label {
+    display: block;
+}
+#add-event label.inline {
+    display: inline;
+}
+#add-event textarea {
+    display: block;
+}
+
+#event-board {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 40%;
+    height: 20em;
+    border: solid 1px;
+    margin: 1em;
+    padding: 1em;
+    overflow: auto;
+    background: white;
+    z-index: -1;
+}
+

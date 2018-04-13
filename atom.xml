@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-04-13T14:41:25.617Z</updated>
+  <updated>2018-04-13T16:00:35.608Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,126 @@
 
 
 <entry>
+<id>http://gholk.github.io/openpgp-js-decrypt-post.html</id>
+<title>用 openpgp 加解密部落文章</title>
+<published>2018-04-13T15:53:20.468Z</published>
+<updated>2018-04-13T16:00:35.599Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/openpgp-js-decrypt-post.html"/>
+<summary>在部落格文章可以放加密內容了。
+以前在 org-mode 看過類似的功能，
+最近想寫一些不能公開的文章，
+就試著實現這個功能，
+現在一些文章只要有密碼就能解鎖，
+或是有我的私鑰也可以。
+目前是用 gpg 加密，在網頁中有 openpgp-js 解密。</summary>
+<category term="encrypt"/>
+<category term="密碼學"/>
+<category term="decrypt-post.js"/>
+<category term="gpg"/>
+<category term="openssl"/>
+<category term="blog"/>
+<category term="javascript"/>
+<content type="html">&lt;h1 id="用 openpgp 加解密部落文章"&gt;用 openpgp 加解密部落文章&lt;/h1&gt;
+&lt;p&gt;在部落格文章可以放加密內容了。
+以前在 org-mode 看過類似的功能，
+最近想寫一些不能公開的文章，
+就試著實現這個功能，
+現在一些文章只要有密碼就能解鎖，
+或是有我的私鑰也可以。
+目前是用 gpg 加密，在網頁中有 openpgp-js 解密。&lt;/p&gt;
+&lt;p&gt;本來想簡單用 openssl 加解密就好，
+但他的格式沒有公開發行為標準，
+像是 salt 是直接用二進位寫在資料開頭。
+（應該是說格式寫在他的原始碼裡……。）
+有一個號稱 js 的 openssl 實現 &lt;a href="https://github.com/brix/crypto-js"&gt;crypto-js&lt;/a&gt; ，
+但我試他也不能解我用 openssl 加密的檔案，
+可能又有更新之類的。&lt;/p&gt;
+&lt;p&gt;後來發現 gpg 也能做對稱加密，
+以前以為 pgp 只能做非對稱加密，
+原來也能簡單用密碼對稱加密。
+然後再用之前看到的 &lt;a href="https://openpgpjs.org/"&gt;openpgp-js&lt;/a&gt; 做簡單解密。
+但只是做簡單的對稱解密，
+就引入超大的 openpgp 好像不太好；
+反正加密文章也沒幾篇。&lt;/p&gt;
+&lt;p&gt;使用方法就是打完文章後手動加密，
+例如用 gunpg： &lt;code&gt;echo hello world | gpg --symmetric --armor&lt;/code&gt; ，
+之後會輸出一段用 base64 編碼的加密內文，
+然後把密文放在任何帶有 &lt;code&gt;encrypt-data&lt;/code&gt; class 的標籤內。
+例如下面這樣：&lt;/p&gt;
+&lt;pre class="encrypt-data"&gt;
+-----BEGIN PGP MESSAGE-----
+
+hQEMA1sAF9EOR12VAQf/XWm3WoXoKkTOmvTLz6GnxGV5XhqhfTmUYiSoaHs6EP2J
+/2NpOEzO0XpDkTn1YgUrT315Uuq3y+oxhLvcXNximf7Xo2U9mOn/DfB34ZYGRp1c
+YxbSX2+dq/SkHuTL+UoywNjeieIzKT3oNedwxWqFn8W+RyfJK5zK3DKGQf3BfPU3
+9JfpSCa3CNNPNSonBnYtCXDG1QSO/REvJWwyCiUg6UdW8Ol0CqMIVsW4k1TEvuXm
+tOyJXh/i36NZJT4Xeac5iqxfArLvJeWVS5HSMVUjR3DiHyXMDuQEdj941+VgyGrM
+72FtzGXzR0+M8khQTKVPd/GAFPeQne6FtSBpJvHOxYwuBAcDAmowAlCEYnsG5hrt
+nGOKxbc2o5r9VdVv2RsmOdIFUHuKH7oTfm8Nq0TU5NLqAah/lV1jHqT+WLYlnxFJ
+KI6s1NWf7i6B0qFFeSDGYGCf+KiKr3f0s3jE94qn7LJD/x7EIAVdGD9NvuUlNFGT
+r+7Buho8iMcI64BOXS+9PdSvWIsxq3xgCw1M6dYlyihKrGnDuosb3q0ur4s4DoMZ
+te5Iq6AYgJnpekkHVfdLwUI+X20bTRvTiTlSinwQ9L8Tuuxg94l6KI0W0SidBR+r
+x+biTYZsSY8viAuY40bddOW7ECGbd5iEFWDnkgXP8fXPGiOD7rFivuILaPXS93yj
+JkXYAHPfytJJfdoMNLi2GIVGEHDQqN2qRhp0gbkMDjsNwjuF45vuwookMFLjfNhe
+s/elWfOwCFr/uEvY+Lb0TdLX3RTBar2korKdSFwGmsuhPnMy4z+WJev4maSrCy3h
+nWlRJZ4icxfOtwoGlT7cZCUhkiHqsqHjB4JGG/Py3b8xHy+tPngLzGeCdgI/N5jE
+j5ba/vBYKtWWV86RG1OKzBm+0LupQnb+2vQPalYxyN7uH2ZZ0ae7818/6TjrYdog
+1X1qHNEBK807WmwEsWnGsdhb2/ns3VnCEEkh7p/58cy7+zep+ZT7eR5mxLKZw4A1
+GiwL1T1BSRzCeFh6gipJ7nl+ehf3x0QncZvLEqWV0Dhdku/xMo7pkjw7f6+gw5XX
+6l4HpLnhrakFaUANTt6TJh19i943sDD6NouQ1Jj21DWbQb8ms+SSJBORpXX0MKJA
+QdM3LmdbA/ZFvu12lFbh+kXRGqMc93nW5tllMF+YS8mvnWi+roFF+9dpQ/H9c/t9
+T0TuEjg4nO2NewdnRgB4x2hSWJWRJ1nulTY0nQ7KrT2L3GOfhklDuiD6IF/z0YdL
+eZrDdC2+4PGQ1GwDw+9sD+ZcMANEBrzdLhTBDLmlz/IKgCCQ+7EEcVlXm8SFlTKs
+H4YfEsyAzBaSqK3FQ4tGlcYt8j4IWFeHFwlJ1kam4mOvQvdKcKyJSTCNIGXdb7Ox
+rnFOUZs6SGax85rONd8MhP8x1W9ediKSJBHb2+xyiZ2GsuABUkq9+ITqVPVbK3z6
+EXaiI4GBDYjFp6Wy1cevEK38OuLHE0Us6nkDu7b3Y8mEEutQpw/fSkbWUxUFt4ZF
+LQVEjOdh/7vdC8L/XW0VvR6JUio9vnkPSj1Da+H39nIwly5J1MnP3jKMcCDZ1XxN
+mxbTAoLg1kK67+JbBFTHdxQZEAaeSrNO2GkLw6Wv7lnvGTRNgRPSctEK2VKz+qDg
+nx09AjBI5xFpNL4xMV5p8264ZncsfB9hWdduBtFni7KtZ+enTlFFvw2ZzHr4NADW
+MXqojvLrWIXOjg8UKkZuaj9KsxB5l7cGtvYKdZbXOrxLszmmcaglBUzwbN4KIOYB
+qmCDdWTcYgiCHVnu9Ty3OVWef9d/egTJu0EAJ0rFcsO16IWh0GakZ+f9Ejfh9j3L
+2GJM5qH/9fir6zKXm0B1tYWHlRdqfGIAqWa9ugyc+HbRr6ERp5/wNyyaoA9IYIJm
+rSo=
+=ouff
+-----END PGP MESSAGE-----
+&lt;/pre&gt;
+
+&lt;p&gt;之後只要在文章後引入 &lt;code&gt;&amp;lt;script src=&amp;quot;ext/decrypt-post.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&lt;/code&gt; ，
+（然後 &lt;code&gt;decrypt-post.js&lt;/code&gt; 會再自動引入 &lt;code&gt;openpgp.js&lt;/code&gt; 的標籤，
+所以下面會有二個標籤。）
+要不要放 defer 隨意，
+之後所有帶有 encrypt-data class 的內容，
+就會在右上角產生一個按鈕，
+按了就可以輸入密碼進行解鎖，
+（上面那段的密碼是 &lt;code&gt;gpg is not pgp&lt;/code&gt; 。）
+對了就會解鎖，按鈕消失，顯示出明文內容；
+錯了什麼都不會發生。&lt;/p&gt;
+&lt;script src="ext/decrypt-post.js"&gt;&lt;/script&gt;
+
+&lt;p&gt;目前加密內容可以用密碼或私鑰開，
+另外加密只需公鑰，
+但公鑰加密只能用私鑰開，公鑰自己不能開。
+同時我有用 pgp 另一個功能 &lt;strong&gt;簽署&lt;/strong&gt; ，
+可以從這段訊息看出，
+加密這段訊息的人也擁有私鑰。&lt;/p&gt;
+&lt;p&gt;在加密方時遇到最大問題是：沒有統一格式。
+加密用到不少東西：初始向量、salt、密文。
+這些在解密時都是必須的，
+但要怎麼把這些傳給解密者呢？
+像 openssl 有一大堆加密碼，
+怎麼知道你是用哪一種？&lt;/p&gt;
+&lt;p&gt;openssl 有把 salt 和 initial vector 寫進密文裡，
+但他沒有發布成標準，
+就變成要去看他原始碼怎麼寫，其它軟體才能相容。
+pgp 就是很好解決這個問題，
+有標準、有實作、有為數不少的使用者，
+還有維護的公鑰伺服器。
+也許我一開始就該找 pgp 這個完整的生態，
+不應該在 openssl 上鑽研太久。&lt;/p&gt;
+&lt;p&gt;之後應該會寫一篇文章介紹 pgp 的概念，
+內容就用簡單的方法講一講功能，不提演算法。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/dream-cnxcwhy.html#sign</id>
 <title>夢境：溪慧李</title>
 <published>2018-04-13T11:02:07.673Z</published>

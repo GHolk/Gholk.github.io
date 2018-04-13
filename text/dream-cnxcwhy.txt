@@ -1,0 +1,40 @@
+# 夢境：溪慧李
+原則上夢不會公開，文章會加密。
+試做看看加密的文章，
+應該是寫好後除了第一段整篇加密，
+標籤就看感覺加，可能會稍微洩露密文內容。
+只會留密文，在網頁上可以用 javascript 解密。
+
+<pre class="encrypt-data">
+-----BEGIN PGP MESSAGE-----
+
+jA0EBwMCjSeDbWOaUQ/m0ukBqEx4+RbzedOCAJnGirdH6PFzE5wS7qaycQgNQhJv
+cHss0xBvCRmEoAJtWsXyO5skhNvYHCE4fDtFQ31MvYDBsYAcN4jyo3WiZBrRV/xn
+0Y+laBHv9Q557b5SbC+ZirCO92kUOHnpMbxyaNmSzQH7kVRW0TWr3c6wdm9GUfM1
+G2CSQogpo+Q9VgKSJ4Y/QTKdxDGH31/xdNlwxbk3e5nMYbQt9Xy0oQV/JNUnPwu9
+rslQo9kf4UhDdJwcAf5Y/ifxEv1/rmzorpYZbwrBi2cTZSy1gnDdv2JkIOWhC90f
+Pga3kJgcddHzfwMd8pZBB+Bq+d3KEulOt0IS85SJbP/LxQLeN3q94jm9svHNF+uc
+xNAdTX8ewQO65iojosyGr7605vioHEdayfTVf9QN6J5653+QY0e6hAQw3m4hyigr
+73tPK5u0o+avmIHGTTbcmAe3zuYKC279Cn2NIJFW8Yd5cGWzNMBl9NAAfshPkEKh
+V0BJpi9xhnHkwbrAL7bapZoYSSVQMreMg+iV4grwk9IXO56/wW7vmhTxiCdQ2O3s
+ywq/STu7M1Wkkzt+BuQ2ZwIDq0ePR2Qe9BHWzxg1HMXGYXBSLhRoH1bIdw6ZISQS
+1XyTrrAL5Vo2nY9oDI+7Wa/G3OGr8GVTA06aaSJMu73m+ch9Z1eV+Z81WfAdJI5S
+sMDVLUhKZxHSxqXDDsRMbsJBw/lL8QEbKNcdaNwXhPvsm+KrFiY+ouIsEdiUYIRO
+QmuBvbvlmhNsqf0cdnSCbK5OBdqN85AmYlHwksd5FJ1wdOtb3uiYDO/ekrouMzUv
+Sf9M4mP5Tfpz4JZWhtpl9df6k4k4J6KGYAfWFQRXuoKkKKKUwgg2xMUJ4ZURynpX
+FeYXNvFhKMHmVlFoN6H2OnrB31jPJTPOW3YJCf0oN6EQ8Os4m4w+r6oPhAvvuHce
+TT0JWRcLTrnjKUMiAe389oJOMF3snYjyu/Z8aplbmgMVCjYYLVWVLAzzZuKas17d
+KPNyuhIiUMEG2+yf69Hi4c+nahJtQkoK0hKrl3A3yLniHaLCkOpUP2rWoKfJ+Yox
+/SWVk49J2az8XQOTSyFldeLBqeRjDeStD0hJb/1ydIK7QZCgOESwHxkqfA0U5CuW
+7SZw1oGPY/O0WOsBgU5Q0LC9WTWohHLCXTVoM8C0cIC7F6ao1vbWqSE79Wlw+9d+
+AuULQHV/bbclGna8zecWlMOfMOyhEkLy
+=dtN5
+-----END PGP MESSAGE-----
+</pre>
+
+<script src="ext/decrypt-post.js"></script>
+
+#encrypt
+#夢
+#親戚
+#愛情

@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-04-13T13:30:57.213Z</updated>
+  <updated>2018-04-13T14:41:25.617Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,72 @@
 
 
 <entry>
+<id>http://gholk.github.io/dream-cnxcwhy.html#sign</id>
+<title>夢境：溪慧李</title>
+<published>2018-04-13T11:02:07.673Z</published>
+<updated>2018-04-13T14:41:25.609Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/dream-cnxcwhy.html"/>
+<summary>改用參數 `gpg --sign --symmetric --encrypt` ，用密碼和私鑰加密，讓訊息可以用密碼解或用和鑰解，同時簽名表示加密者為私鑰持有者。</summary>
+<category term="encrypt"/>
+<category term="夢"/>
+<category term="親戚"/>
+<category term="愛情"/>
+<content type="html">&lt;h1 id="夢境：溪慧李"&gt;夢境：溪慧李&lt;/h1&gt;
+&lt;p&gt;原則上夢不會公開，文章會加密。
+試做看看加密的文章，
+應該是寫好後除了第一段整篇加密，
+標籤就看感覺加，可能會稍微洩露密文內容。
+只會留密文，在網頁上可以用 javascript 解密。&lt;/p&gt;
+&lt;pre class="encrypt-data"&gt;
+-----BEGIN PGP MESSAGE-----
+
+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
+lfLbv45rMwcz7b7LmKEW3gL3
+=yDxq
+-----END PGP MESSAGE-----
+&lt;/pre&gt;
+
+&lt;script src="ext/decrypt-post.js"&gt;&lt;/script&gt;
+
+
+
+
+
+</content>
+</entry><entry>
 <id>http://gholk.github.io/dream-cnxcwhy.html</id>
 <title>夢境：溪慧李</title>
 <published>2018-04-13T11:02:07.673Z</published>

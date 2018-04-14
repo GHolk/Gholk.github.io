@@ -36,6 +36,14 @@
 2 你和其他 1 人
 ```
 
+----
+
+拳怕少壯，棍怕老郎。
+
+----
+
+我本將心向明月，奈何明月照溝渠。
+
 <script>
 document.querySelector('pre').forEach(pre => {
   pre.textContent = pre.textContent

@@ -176,3 +176,4 @@ key-and-lock.html
 dream-cnxcwhy.html
 openpgp-js-decrypt-post.html
 short-life-expensive-price.html
+easy-pgp-no-symmetric.html

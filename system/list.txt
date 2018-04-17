@@ -179,3 +179,4 @@ short-life-expensive-price.html
 easy-pgp-no-symmetric.html
 gpg-sign-encrypt-symmetric.html
 dream-exevt.html
+microsoft-student-fieldwork-speech.html

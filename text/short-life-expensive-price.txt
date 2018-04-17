@@ -44,6 +44,14 @@
 
 我本將心向明月，奈何明月照溝渠。
 
+----
+
+    我有一個硬梆梆的想法，和一個黏糊糊的建議。
+    還有一個濕噠噠的過程，和一個軟綿綿的結局。
+    真想抱著你的破折號，摸著你的冒號，親撫你的句號，舉著我的感嘆號，
+    穿過你的小括號，在裡面留下一串省略號...
+
+
 <script>
 document.querySelector('pre').forEach(pre => {
   pre.textContent = pre.textContent

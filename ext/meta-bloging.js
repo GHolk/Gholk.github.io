@@ -98,6 +98,31 @@ function ajaxQuery(url, selector) {
     })
 }
 
+patchPromise()
+function patchPromise() {
+    Promise.lazy = function (todo) {
+        const lazy = {}
+        lazy.todo = todo
+        lazy.promise = null
+        lazy.then = function () {
+            if (!this.promise) this.promise = new Promise(this.todo)
+            this.promise.then.apply(this.promise, arguments)
+        }
+        return lazy
+    }
+    if (!Promise.defer) Promise.defer = function () {
+        const defer = {}
+        const promise = new this((resolve, reject) => {
+            defer.resolve = resolve
+            defer.reject = reject
+        })
+        defer.promise = promise
+        defer.then = promise.then.bind(promise)
+        defer.catch = promise.catch.bind(promise)
+        return defer
+    }
+}
+
 function parseQueryOption(query) {
     const keyValue = query.split(/&/g)
     const result = {}

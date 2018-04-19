@@ -18,7 +18,7 @@
       var tagsRegexp;
       tagsRegexp = /(\n#\S+)+\s*$/;
       this.title = this.rawText.match(/[^#\n]+/)[0].trim();
-      this.tags = this.rawText.match(tagsRegexp)[0].trim().split(/\n/g).join(',');
+      this.tags = this.rawText.match(tagsRegexp)[0].trim().replace(/#/g, '').split(/\n/g).join(',');
       return this.main = marked(this.rawText.replace(tagsRegexp, ''));
     };
 

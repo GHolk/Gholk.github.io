@@ -58,8 +58,7 @@ windows 下可能又分好幾個，
 各部門間多少會有競爭，
 像之前就發生過在爭 ie 的預設首頁到底要用 msn 還是 bing。
 
-調侃微軟及各大科技公司內部文化的漫畫：
-http://bonkersworld.net/organizational-charts
+[![各大公司組織圖]]
 
 [各大公司組織圖]: http://bonkersworld.net/img/2011.06.27_organizational_charts.png
 [![各大公司組織圖]]: http://bonkersworld.net/organizational-charts

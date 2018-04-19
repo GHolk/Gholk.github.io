@@ -15,10 +15,10 @@
     }
 
     FileLoaderText.prototype.parse = function() {
-      var ref, tagsRegexp;
-      tagsRegexp = /^#\S+$/gm;
+      var tagsRegexp;
+      tagsRegexp = /(\n#\S+)+\s*$/;
       this.title = this.rawText.match(/[^#\n]+/)[0].trim();
-      this.tags = (ref = this.rawText.match(tagsRegexp)) != null ? ref.join(',').replace(/#/g, '') : void 0;
+      this.tags = this.rawText.match(tagsRegexp)[0].trim().split(/\n/g).join(',');
       return this.main = marked(this.rawText.replace(tagsRegexp, ''));
     };
 

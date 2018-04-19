@@ -10,9 +10,9 @@ class FileLoaderText
         @parse()
 
     parse: ->
-        tagsRegexp = /^#\S+$/gm
+        tagsRegexp = /(\n#\S+)+\s*$/
         @title = @rawText.match(/[^#\n]+/)[0].trim()
-        @tags = @rawText.match(tagsRegexp)?.join(',').replace(/#/g, '')
+        @tags = @rawText.match(tagsRegexp)[0].trim().split(/\n/g).join(',')
         @main = marked @rawText.replace tagsRegexp, ''
 
 module.exports = FileLoaderText

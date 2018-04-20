@@ -64,6 +64,16 @@
 推 zxcv820421: 擦玻璃叫電競 nmsl                                   04/16 22:21
 ```
 
+----
+
+```
+ 作者  ANiZan9991 (門務司)                                    看板  Gossiping
+ 標題  [問卦] 急！屌被字典砸到
+ 時間  Fri Dec 29 23:35:44 2017
+
+→ Chieen: 這下能讓你了解到知識就是力量了吧 12/29 23:40
+```
+
 <script>
 document.querySelector('pre').forEach(pre => {
   pre.textContent = pre.textContent

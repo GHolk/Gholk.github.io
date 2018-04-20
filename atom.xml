@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-04-19T07:13:20.413Z</updated>
+  <updated>2018-04-20T10:52:05.326Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,122 @@
 
 
 <entry>
+<id>http://gholk.github.io/javascript-for-in-array-string-index.html</id>
+<title>javascript for in 遍歷陣列時索引是字串</title>
+<published>2018-04-20T10:52:05.036Z</published>
+<updated>2018-04-20T10:52:05.318Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/javascript-for-in-array-string-index.html"/>
+<summary>javascript 有一個 for (const key in object) 的遍歷語法，
+一般用來遍歷物，但也可以用來遍歷陣列：
+for (let i in array) ；
+但雷點是，就算是陣列，
+這裡得到的 key 會是字串，而不是數字。
+所以做加減運算時會出錯。</summary>
+<category term="javascript"/>
+<category term="suck"/>
+<content type="html">&lt;h1 id="javascript for in 遍歷陣列時索引是字串"&gt;javascript for in 遍歷陣列時索引是字串&lt;/h1&gt;
+&lt;p&gt;javascript 有一個 &lt;code&gt;for (const key in object)&lt;/code&gt; 的遍歷語法，
+一般用來遍歷物，但也可以用來遍歷陣列：
+&lt;code&gt;for (let i in array)&lt;/code&gt; ；
+但雷點是，就算是陣列，
+這裡得到的 key 會是字串，而不是數字。
+所以做加減運算時會出錯。&lt;/p&gt;
+&lt;p&gt;&lt;button onclick="forInLoopArray()"&gt;for in loop  array&lt;/button&gt;&lt;/p&gt;
+&lt;script&gt;
+function forInLoopArray() {
+  const a = [0,-1,-2,-3,-4,-5,-6,-7,-8,-9,-10,-11]
+  for (const i in a) {
+    alert(i)
+    alert(typeof i) // string
+    alert(a[i])
+    alert(a[1 + i])    // 1 + '0' = '10'
+    break
+  }
+}
+&lt;/script&gt;
+
+&lt;p&gt;看來 array 可以被 for in loop 純粹是個巧合，
+因為 array 就是個物件，
+而物件的索引值當然是字串。
+一般用 for in loop 物件時，得到的索引本來就是字串，
+而在 js 中陣列本來就是一種物件，
+只是索引是用轉成數字，而且是轉成字串的數字。&lt;/p&gt;
+</content>
+</entry><entry>
+<id>http://gholk.github.io/short-life-expensive-price.html#knowledge-is-power</id>
+<title>名言：逢人短命、遇貨添錢</title>
+<published>2018-04-13T16:43:44.187Z</published>
+<updated>2018-04-20T10:52:04.687Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/short-life-expensive-price.html"/>
+<summary>
+ 作者  ANiZan9991 (門務司)                                    看板  Gossiping
+ 標題  [問卦] 急！屌被字典砸到
+ 時間  Fri Dec 29 23:35:44 2017
+ →  Chieen: 這下能讓你了解到知識就是力量了吧                        12/29 23:40
+</summary>
+<category term="daily"/>
+<category term="funny"/>
+<content type="html">&lt;h1 id="名言：逢人短命、遇貨添錢"&gt;名言：逢人短命、遇貨添錢&lt;/h1&gt;
+&lt;p&gt;蠻有趣的一句話，應該是損人用的。
+這篇是繼 &lt;a href="./key-and-lock.html"&gt;./key-and-lock.html&lt;/a&gt; 後的名言收集。
+想試試即時互動，收集後就直接更新上去，
+如果真太洗板，再想想別的做法吧。&lt;/p&gt;
+&lt;h2 id="逢人短命、遇貨添錢"&gt;逢人短命、遇貨添錢&lt;/h2&gt;
+&lt;p&gt;是形容問年紀時故意少說幾歲誇人年輕，
+問別人買新東西時說高價格誇別人精打細算。
+然後就被總結成這樣二句，不太好聽的話。&lt;/p&gt;
+&lt;hr&gt;
+&lt;pre&gt;&lt;code&gt;李晴信‎ 
+發文到
+ 場外休憩區
+1 分鐘 ·
+
+妳住的城市
+下雨了。
+
+輕輕滑過手機裡天氣的資訊
+手指停在通訊軟體上
+
+我不敢問妳有沒有帶傘，
+因為我怕，
+怕妳說沒帶。
+
+想到妳全身濕透的樣子。
+
+我會
+忍不住打手槍。
+讚
+留言
+2 你和其他 1 人
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;p&gt;拳怕少壯，棍怕老郎。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;我本將心向明月，奈何明月照溝渠。&lt;/p&gt;
+&lt;hr&gt;
+&lt;pre&gt;&lt;code&gt;我有一個硬梆梆的想法，和一個黏糊糊的建議。
+還有一個濕噠噠的過程，和一個軟綿綿的結局。
+真想抱著你的破折號，摸著你的冒號，親撫你的句號，舉著我的感嘆號，
+穿過你的小括號，在裡面留下一串省略號...
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;p&gt;你指尖躍動的電光，是我此生不變的信仰！&lt;/p&gt;
+&lt;hr&gt;
+&lt;pre&gt;&lt;code&gt; 作者  wangquanchi (● 米絲肉雞● )                                看板  C_Chat
+ 標題  [閒聊] 認為傳說對決不是電競 算老人心態嗎？
+ 時間  Mon Apr 16 22:21:04 2018
+推 zxcv820421: 擦玻璃叫電競 nmsl                                   04/16 22:21
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;pre&gt;&lt;code&gt; 作者  ANiZan9991 (門務司)                                    看板  Gossiping
+ 標題  [問卦] 急！屌被字典砸到
+ 時間  Fri Dec 29 23:35:44 2017
+
+→ Chieen: 這下能讓你了解到知識就是力量了吧 12/29 23:40
+&lt;/code&gt;&lt;/pre&gt;&lt;script&gt;
+document.querySelector('pre').forEach(pre =&gt; {
+  pre.textContent = pre.textContent
+})
+&lt;/script&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/microsoft-student-fieldwork-speech.html</id>
 <title>微軟實習生通識心得</title>
 <published>2018-04-17T16:09:22.155Z</published>
@@ -143,10 +259,7 @@ facebook 收購 instagram，
 <published>2018-04-17T16:09:22.155Z</published>
 <updated>2018-04-17T16:09:22.404Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/microsoft-student-fieldwork-speech.html"/>
-<summary>微軟實習生在台灣大學生間算蠻有名的，
-周圍人多少都有一二個去過，
-說簡單也不簡單，難也不難，
-這次來成大推廣，正好去一探虛實。</summary>
+<summary>未完成草稿</summary>
 <category term="心得"/>
 <category term="歐美"/>
 <content type="html">&lt;h1 id="微軟實習生通識心得"&gt;微軟實習生通識心得&lt;/h1&gt;

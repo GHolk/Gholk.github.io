@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-04-20T17:04:24.988Z</updated>
+  <updated>2018-04-22T15:07:16.491Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,78 @@
 
 
 <entry>
+<id>http://gholk.github.io/land-measure-homework-1.html</id>
+<title>107 年地籍測量第 1 次作業</title>
+<published>2018-04-22T14:36:09.536Z</published>
+<updated>2018-04-22T15:07:16.482Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/land-measure-homework-1.html"/>
+<summary>吳相忠老師開設課程地籍測量的第一次作業。</summary>
+<category term="ncku"/>
+<category term="測量"/>
+<category term="作業"/>
+<content type="html">&lt;h1 id="107 年地籍測量第 1 次作業"&gt;107 年地籍測量第 1 次作業&lt;/h1&gt;
+&lt;p&gt;吳相忠老師開設課程地籍測量的第一次作業。&lt;/p&gt;
+&lt;style&gt;
+  h1 {
+    counter-reset: question-number;
+  }
+  h2 {
+    counter-increment: question-number;
+    font-size: 1.2em;
+  }
+  h2::before {
+    content: counter(question-number) "、";
+  }
+  @counter-style question-number {
+    list-style-type: cjk-ideographic;
+  }
+&lt;/style&gt;
+
+&lt;h2 id="試述地籍測量與地形測量之區別？ *20 分*"&gt;試述地籍測量與地形測量之區別？ &lt;em&gt;20 分&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;地形測量是單純的測量技術，沒有特定測量目標，
+一般是用已知點座標，測出未知點的座標。
+近距離內全站儀用前方交會可以一次測量多個點，
+長距離則使用導線測量，打導線到待測點上。&lt;/p&gt;
+&lt;p&gt;而地籍測量則是結合地形測量的技術，
+並依照地籍測量法規及行政規則，
+測量土地的位置、邊界、形狀，
+並編定地號至地籍圖中，作為土地登計的依據。&lt;/p&gt;
+&lt;p&gt;在實地測量中，從前使用圖解法，
+也就是只在實地和地籍圖中標出位置，
+而不測出真實座標數值；
+易造成實地情況與圖面資訊不符的情況。&lt;/p&gt;
+&lt;p&gt;如今地籍圖重測後，已全面改用數值法，
+新測的地籍圖上的點位，都有實際座標資訊，
+也就能對應到實地位置。
+在測量時，也就不會產生實地與圖面不符的問題。&lt;/p&gt;
+&lt;h2 id="台灣光復後，受於人力、物力等限制，沿用日治時期地籍測量成果，成為台灣地籍測量的特殊性，造成現今日治時期地籍圖存在圖、地、簿不符的問題。 試問：日治時期地籍測量對現今台灣地籍測量的影響及其遭遇問題，請就地籍圖、坐標系統及測量作業加以說明。 *40 分*"&gt;台灣光復後，受於人力、物力等限制，沿用日治時期地籍測量成果，成為台灣地籍測量的特殊性，造成現今日治時期地籍圖存在圖、地、簿不符的問題。 試問：日治時期地籍測量對現今台灣地籍測量的影響及其遭遇問題，請就地籍圖、坐標系統及測量作業加以說明。 &lt;em&gt;40 分&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;日治時期地籍圖使用的是地籍圖座標系統，
+在光復初期修測中沿用，大多只是更改比例尺而已，
+座標系統和日治時期相同。
+只是日治時期的座標參考點，多因年代久遠而毀損不堪使用，
+也就無法實際定出土地位置，只能根據現況套用圖面，
+做粗略的測量。&lt;/p&gt;
+&lt;p&gt;直到民國 65 年建立 TWD67 座標系統，
+地籍圖才有可用的座標系統能用。
+在之後就是漫長的地籍圖重測。
+第一時次仍是圖解法重測，
+直到民國 78 年後才採用數值法，
+讓圖上的點能對應到現實的座標。&lt;/p&gt;
+&lt;p&gt;在重測期間民國 86 時，因為重測進度不如預期，
+舊的地籍圖自日治時代使用至今，已破損不堪使用，
+於是啟動數化地籍圖的計劃，
+將日治時代的紙本圖，掃描為電子檔，
+從此不再有紙本蟲蛀、老舊、破損等問題。&lt;/p&gt;
+&lt;h2 id="目前各地政事務所使用地籍圖，除辦理地籍圖重測或重劃等地籍整理，及光復後新登記土地所測繪者外，都是日治時期所測繪的。而目前台灣地籍測量坐標系統為 TWD97 系統。所以，不同時期在同一區域測製之地籍圖，如何把不同坐標系統經過套疊整合架構在 TWD97 系統上，且保持原有精度要求，是地籍測量重要的課題。 試問：日治時期地籍圖為地籍坐標系統如何在 TWD97 進行地籍測量？請就地籍測量作業程序及坐標轉換加以說明。 *40 分*"&gt;目前各地政事務所使用地籍圖，除辦理地籍圖重測或重劃等地籍整理，及光復後新登記土地所測繪者外，都是日治時期所測繪的。而目前台灣地籍測量坐標系統為 TWD97 系統。所以，不同時期在同一區域測製之地籍圖，如何把不同坐標系統經過套疊整合架構在 TWD97 系統上，且保持原有精度要求，是地籍測量重要的課題。 試問：日治時期地籍圖為地籍坐標系統如何在 TWD97 進行地籍測量？請就地籍測量作業程序及坐標轉換加以說明。 &lt;em&gt;40 分&lt;/em&gt;&lt;/h2&gt;
+&lt;p&gt;自日治時期沿用的地籍圖，
+使用的座標系統和現今通用的 TWD97 不同，
+轉換的過程是隱含在三圖合一的套疊步驟中。
+藉由測量地籍圖中的多個現況點實際位置的 TWD97 座標，
+即可將數化後的地籍圖強制附合到 TWD97，
+之後即可進行數值法地籍測量。&lt;/p&gt;
+&lt;footer contenteditable="true"&gt;&lt;/footer&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/dream-mrt-tamsui-bread.html</id>
 <title>夢境：捷運到淡水吃麵包</title>
 <published>2018-04-20T17:04:24.690Z</published>

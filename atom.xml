@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-04-22T15:07:16.491Z</updated>
+  <updated>2018-04-26T07:09:11.679Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,91 @@
 
 
 <entry>
+<id>http://gholk.github.io/engineer-ethic-low-time.html</id>
+<title>工程的倫理與法律隨時代變遷</title>
+<published>2018-04-26T07:08:04.367Z</published>
+<updated>2018-04-26T07:09:11.672Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/engineer-ethic-low-time.html"/>
+<summary>請測量系退休教授 王蜀嘉 教授演講，談工程倫理。
+主要教授談了社會上的倫理問題，法律和倫理的關係，</summary>
+<category term="測量"/>
+<category term="ncku"/>
+<category term="作業"/>
+<content type="html">&lt;h1 id="工程的倫理與法律隨時代變遷"&gt;工程的倫理與法律隨時代變遷&lt;/h1&gt;
+&lt;p&gt;請測量系退休教授 &lt;u&gt;王蜀嘉&lt;/u&gt; 教授演講，談工程倫理。
+主要教授談了社會上的倫理問題，法律和倫理的關係，&lt;/p&gt;
+&lt;h2 id="倫理風氣"&gt;倫理風氣&lt;/h2&gt;
+&lt;p&gt;工程倫理是近年才有的課，可能是台灣脫離威權時代後，
+自由的風氣也帶動整個社會對倫理看法的改變。
+近年又常有弊案，或學術界的論文抄襲案件，
+所以大學也加開了一些倫理課程，
+之前就有教授、學生論文抄襲，
+結果被罰要去上學術理倫理。&lt;/p&gt;
+&lt;p&gt;學界是良心事業，因為很多領域分工很細，
+尖端的研究，也只有真正有在參與的，知道在幹麻。
+而台灣的大學的系也不大，在同一個領域的也不多，
+研究方向不同的話，也是外行看熱鬧的情況。
+所以論文的口試和互審，如果真得很認真的造假，
+是很難發現的。&lt;/p&gt;
+&lt;h2 id="測量的圈子"&gt;測量的圈子&lt;/h2&gt;
+&lt;p&gt;測量是冷門科系，圈子比土木還小。
+尤其是成功大學的測量系，出去很多測量公司，
+之間也都是成大畢業的，都是學長學弟。
+如果有人想要圍標，又互相都認識，應該不會太難。&lt;/p&gt;
+&lt;p&gt;尤其又可能有同學會，和一些同業的交際應酬，
+有時會混在一起，是否有賄賂的嫌疑。
+而且測量很多案子都是公家發包，
+大家都是賺政府的錢，汙的不是自己的錢，
+就會容易和大家同流合汙。&lt;/p&gt;
+&lt;p&gt;台灣的採購法為人詬病，
+政府也常常找大學教授當評審委員，
+就可能發生廠商和評審是以前的師生關係。
+師生關係是有好有壞，有可能因此偏好。&lt;/p&gt;
+&lt;footer contenteditable="true"&gt;&lt;/footer&gt;
+</content>
+</entry><entry>
+<id>http://gholk.github.io/engineer-ethic-low-time.html</id>
+<title>工程的倫理與法律隨時代變遷</title>
+<published>2018-04-26T07:08:04.367Z</published>
+<updated>2018-04-26T07:08:04.620Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/engineer-ethic-low-time.html"/>
+<summary>請測量系退休教授 王蜀嘉 教授演講，談工程倫理。
+主要教授談了社會上的倫理問題，法律和倫理的關係，</summary>
+<category term="測量"/>
+<category term="ncku"/>
+<category term="作業"/>
+<content type="html">&lt;h1 id="工程的倫理與法律隨時代變遷"&gt;工程的倫理與法律隨時代變遷&lt;/h1&gt;
+&lt;p&gt;請測量系退休教授 &lt;u&gt;王蜀嘉&lt;/u&gt; 教授演講，談工程倫理。
+主要教授談了社會上的倫理問題，法律和倫理的關係，&lt;/p&gt;
+&lt;h2 id="倫理風氣"&gt;倫理風氣&lt;/h2&gt;
+&lt;p&gt;工程倫理是近年才有的課，可能是台灣脫離威權時代後，
+自由的風氣也帶動整個社會對倫理看法的改變。
+近年又常有弊案，或學術界的論文抄襲案件，
+所以大學也加開了一些倫理課程，
+之前就有教授、學生論文抄襲，
+結果被罰要去上學術理倫理。&lt;/p&gt;
+&lt;p&gt;學界是良心事業，因為很多領域分工很細，
+尖端的研究，也只有真正有在參與的，知道在幹麻。
+而台灣的大學的系也不大，在同一個領域的也不多，
+研究方向不同的話，也是外行看熱鬧的情況。
+所以論文的口試和互審，如果真得很認真的造假，
+是很難發現的。&lt;/p&gt;
+&lt;h2 id="測量的圈子"&gt;測量的圈子&lt;/h2&gt;
+&lt;p&gt;測量是冷門科系，圈子比土木還小。
+尤其是成功大學的測量系，出去很多測量公司，
+之間也都是成大畢業的，都是學長學弟。
+如果有人想要圍標，又互相都認識，應該不會太難。&lt;/p&gt;
+&lt;p&gt;尤其又可能有同學會，和一些同業的交際應酬，
+有時會混在一起，是否有賄賂的嫌疑。
+而且測量很多案子都是公家發包，
+大家都是賺政府的錢，汙的不是自己的錢，
+就會容易和大家同流合汙。&lt;/p&gt;
+&lt;p&gt;台灣的採購法為人詬病，
+政府也常常找大學教授當評審委員，
+就可能發生廠商和評審是以前的師生關係。
+師生關係是有好有壞，有可能因此偏好。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/land-measure-homework-1.html</id>
 <title>107 年地籍測量第 1 次作業</title>
 <published>2018-04-22T14:36:09.536Z</published>

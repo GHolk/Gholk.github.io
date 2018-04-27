@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-04-26T07:09:11.679Z</updated>
+  <updated>2018-04-27T16:14:18.406Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,54 @@
 
 
 <entry>
+<id>http://gholk.github.io/cute-cindy-love-you.html</id>
+<title>很可愛的王心凌的愛你</title>
+<published>2018-04-27T16:14:18.103Z</published>
+<updated>2018-04-27T16:14:18.397Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/cute-cindy-love-you.html"/>
+<summary>清明節時在阿公家唱歌，堂妹唱到這首忽然很興奮，
+還說要跳舞，我只能黑人問號。
+昨天找了原曲來聽，歌詞蠻可愛的，
+王心凌當時也還是清純學生的感覺，
+整首歌用可愛的方式呈現陷入戀愛的女生的感覺。</summary><link rel="enclosure" href="https://www.youtube.com/embed/sOp9yAG5dZM"/>
+<category term="歌"/>
+<category term="親戚"/>
+<category term="六龜"/>
+<category term="youtube"/>
+<content type="html">&lt;h1 id="很可愛的王心凌的愛你"&gt;很可愛的王心凌的愛你&lt;/h1&gt;
+&lt;p&gt;清明節時在阿公家唱歌，堂妹唱到這首忽然很興奮，
+還說要跳舞，我只能黑人問號。
+昨天找了原曲來聽，歌詞蠻可愛的，
+王心凌當時也還是清純學生的感覺，
+整首歌用可愛的方式呈現陷入戀愛的女生的感覺。&lt;/p&gt;
+
+
+&lt;iframe src="https://www.youtube.com/embed/sOp9yAG5dZM"&gt;
+  &lt;a href="https://youtu.be/sOp9yAG5dZM"&gt;
+    王心凌：愛你
+  &lt;/a&gt;
+&lt;/iframe&gt;
+
+&lt;p&gt;我只記得 kimberley 也有一首愛你，
+聽她唱才知道原來這首也叫愛你。
+mv 開頭第一段手部動作的舞，
+就和她當時的幾個動作一樣，
+後來還有找到完整舞蹈教學影片，
+可能是她的時代流行的吧。&lt;/p&gt;
+&lt;p&gt;歌詞二段前後對應，用相反的視角寫蠻有趣的。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;常常想我說的話 你是否聽的進去
+明明很想生氣 卻又忍不住笑意
+
+常常想你說的話 是不是別有用心
+明明很想相信 卻又忍不住懷疑
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;另一段很喜歡是第二段，
+&lt;em&gt;在大頭貼畫滿心號，貼在手機上對你微笑。&lt;/em&gt;
+還有抱著布偶跳來跳去，
+在家穿著居家服戴耳機那段也很可愛，
+表現出小女生的那種可愛。
+而和舞蹈時的學生制服的王凌心，又是完全不同風格了。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/engineer-ethic-low-time.html</id>
 <title>工程的倫理與法律隨時代變遷</title>
 <published>2018-04-26T07:08:04.367Z</published>

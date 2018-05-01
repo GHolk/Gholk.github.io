@@ -113,6 +113,16 @@ https://i.imgur.com/hniSkLN.jpg
                                                ......驚奇四修人，全省熱映中
 ```
 
+----
+
+```
+ 作者  taipeixcity (gary huang)                               看板  Gossiping
+ 標題  [新聞] 陳景峻任北農董座致行政混亂？柯 P：董事
+ 時間  Thu Mar  8 19:20:35 2018
+─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
+推 stevenkuo: 爸爸，你不是說 總經理是酬庸不用做事嗎                03/08 19:32
+```
+
 <script>
 document.querySelector('pre').forEach(pre => {
   pre.textContent = pre.textContent

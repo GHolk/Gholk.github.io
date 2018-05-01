@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-04-29T14:35:35.939Z</updated>
+  <updated>2018-05-01T14:48:43.894Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,46 @@
 
 
 <entry>
+<id>http://gholk.github.io/ccns-vice-president-experience-107.html</id>
+<title>ccns 副社長經驗</title>
+<published>2018-05-01T14:48:42.730Z</published>
+<updated>2018-05-01T14:48:43.011Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/ccns-vice-president-experience-107.html"/>
+<summary>之前寫上學期 的，
+有想到一些活動其實是在下學期，
+就上次沒寫，留到現在寫。</summary>
+<category term="心得"/>
+<category term="ccns"/>
+<category term="通識認證"/>
+<content type="html">&lt;h1 id="ccns 副社長經驗"&gt;ccns 副社長經驗&lt;/h1&gt;
+&lt;p&gt;&lt;a href="ccns-vice-president-experience.html"&gt;之前寫上學期&lt;/a&gt; 的，
+有想到一些活動其實是在下學期，
+就上次沒寫，留到現在寫。&lt;/p&gt;
+&lt;h2 id="準備"&gt;準備&lt;/h2&gt;
+&lt;p&gt;經過上學期，對社團運作比較有心得，
+不會出現開會不知道幹麻，
+或七點開會八點才到齊等莫名奇妙的情況。
+對辦理活動也比較上手了。&lt;/p&gt;
+&lt;p&gt;在暑假有用視訊開幾次會，
+討論下學期要辦些什麼活動，
+因為假設新社員多半在上學期就進社團了，
+所以下學期的活動，可以不用那麼新手取向。&lt;/p&gt;
+&lt;h2 id="活動"&gt;活動&lt;/h2&gt;
+&lt;p&gt;因此這學期初，有一場 ctf 作為社團博覽會的宣傳活動。
+其它還有寒假期間的 &lt;u&gt;學生計算機年會&lt;/u&gt; sitcon，
+社團很多人都有去，有三個錄取講者。&lt;/p&gt;
+&lt;h3 id="ctf"&gt;ctf&lt;/h3&gt;
+&lt;h3 id="ccns radio"&gt;ccns radio&lt;/h3&gt;
+&lt;h3 id="sitcon"&gt;sitcon&lt;/h3&gt;
+&lt;h3 id="門檻"&gt;門檻&lt;/h3&gt;
+&lt;h2 id="心得"&gt;心得&lt;/h2&gt;
+&lt;!-- 反思-學習心得(300 字以上) --&gt;
+&lt;!-- 撰寫方向參考： --&gt;
+&lt;!-- 1.任職前後感觸最深的一件事 --&gt;
+&lt;!-- 2.從職務中學習到的技能、觀念 --&gt;
+&lt;!-- 3.在社團經營創新具體事蹟  --&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/short-life-expensive-price.html#calculus-4th</id>
 <title>名言：逢人短命、遇貨添錢</title>
 <published>2018-04-13T16:43:44.187Z</published>

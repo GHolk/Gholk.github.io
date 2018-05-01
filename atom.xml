@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-05-01T14:48:43.894Z</updated>
+  <updated>2018-05-01T14:58:20.861Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,40 @@
 
 
 <entry>
+<id>http://gholk.github.io/taiwan-song-history-experience.html</id>
+<title>台語歌在台灣的足跡</title>
+<published>2018-05-01T14:58:20.593Z</published>
+<updated>2018-05-01T14:58:20.853Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/taiwan-song-history-experience.html"/>
+<summary>這是近來聽的第二場台語通識演講，我還都聽得懂，
+只是少數歌名、名詞可能不知道哪個字。
+台語創作歌手 謝銘祐 ，從台語的語音特性，
+橫跨四百年，從荷蘭人到國民政府，
+分析台語歌的發展興衰。</summary>
+<category term="台語"/>
+<category term="歌"/>
+<category term="通識證認"/>
+<category term="心得"/>
+<category term="歷史"/>
+<content type="html">&lt;h1 id="台語歌在台灣的足跡"&gt;台語歌在台灣的足跡&lt;/h1&gt;
+&lt;p&gt;這是近來聽的第二場台語通識演講，我還都聽得懂，
+只是少數歌名、名詞可能不知道哪個字。
+台語創作歌手 &lt;u&gt;謝銘祐&lt;/u&gt; ，從台語的語音特性，
+橫跨四百年，從荷蘭人到國民政府，
+分析台語歌的發展興衰。&lt;/p&gt;
+&lt;h2 id="台語語音"&gt;台語語音&lt;/h2&gt;
+&lt;p&gt;台語與國語最大的差別，是他的音調多上許多，
+加算入聲，總共八聲，遠多於國語的五聲。
+八聲中本身就帶有音調，
+甚至謝銘祐示範，台語拉長音後，
+就會有像歌仔戲的唱詞的效果。&lt;/p&gt;
+&lt;p&gt;以前看過電影，會有類似的用唱的唸白，
+有點像西方的聲樂，我覺得蠻好聽的。
+像電影 &lt;cite&gt;沒卵頭家&lt;/cite&gt; 就有一段，
+歌曲的話像 &lt;u&gt;李泰祥&lt;/u&gt; 的 &lt;cite&gt;野店&lt;/cite&gt; ，
+也是類似的風格，雖然他是唱國語的。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/ccns-vice-president-experience-107.html</id>
 <title>ccns 副社長經驗</title>
 <published>2018-05-01T14:48:42.730Z</published>

@@ -123,6 +123,11 @@ https://i.imgur.com/hniSkLN.jpg
 推 stevenkuo: 爸爸，你不是說 總經理是酬庸不用做事嗎                03/08 19:32
 ```
 
+----
+
+這個 ID 說的話 大家都不要相信
+
+
 <script>
 document.querySelector('pre').forEach(pre => {
   pre.textContent = pre.textContent

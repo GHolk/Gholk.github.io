@@ -128,14 +128,7 @@ function scrollToNextHr() {
 <p>一種特殊的 url schema，
 和 <code>data:</code> 一樣不指向某一位置，
 而是本身帶有意義。</p>
-<script>
-  function greet() {
-    var name = prompt('hey! what is your name?')
-    alert('welcome ' + name + '!')
-  }
-</script>
-
-<p><a href="javascript:greet()">greet-js</a></p>
+<p><a href="alert(&#39;hello world!&#39;)">greet-js</a></p>
 <hr>
 <h3 id="技術細節">技術細節</h3>
 <ul>
@@ -162,25 +155,22 @@ function helloHtml(name) {
 例如 <code>&lt;input type=&quot;submit&quot;&gt;</code> 如果 onclick 回傳 false 時不會提交，
 <code>&lt;a href=&quot;//google.com&quot;</code> 如果 onclick 回傳 false 時不會前往新頁面。</p>
 <script>
-  function greet() {
-    var name = prompt('hey! what is your name?')
-    alert('welcome ' + name + '!')
+  function isGreater10() {
+    let number = prompt('hey! what is your name?')
+    number = Number(number)
+    const isGreater = number > 10
+    alert(isGreater)
+    return isGreater
   }
 </script>
 
-<p><a onclick="greet()">greet</a></p>
+<p><a href="./" onclick="greet()">greet</a></p>
 <hr>
 <h3 id="void 算符">void 算符</h3>
 <pre><code class="lang-javascript">undefined === void a
 </code></pre>
-<p><a href="javascript:void prompt(&#39;隨便說點話&#39;))
-[無 void](javascript:prompt(&#39;隨便說點話&#39;)">有 void</a></p>
-<hr>
-<h3 id="函數表達式">函數表達式</h3>
-<pre><code class="lang-javascript">void function () {
-  // do what you want
-)()
-</code></pre>
+<p><a href="javascript:void prompt(&#39;隨便說點話&#39;)">有 void</a>
+<a href="javascript:prompt(&#39;隨便說點話&#39;)">無 void</a></p>
 <hr>
 <h3 id="youtube 搜尋小書籤">youtube 搜尋小書籤</h3>
 <pre><code class="lang-javascript">const keyWord = prompt(&#39;youtube 關鍵字&#39;)
@@ -188,11 +178,38 @@ window.open(&#39;http://youtube.com/search?q=&#39; + keyWord)
 </code></pre>
 <p><a href="javascript:const keyWord = prompt('youtube 關鍵字'); window.open('http://youtube.com/search?q=' + keyWord); undefined">youtube 關鍵字搜尋</a></p>
 <hr>
+<h3 id="函數表達式">函數表達式</h3>
+<pre><code class="lang-javascript">void function () {
+  // do what you want
+)()
+</code></pre>
+<hr>
+<h3 id="作用域">作用域</h3>
+<script>
+function promptYoutube() {
+  const keyWord = prompt('youtube 關鍵字')
+  window.open('http://youtube.com/search?q=' + keyWord)
+}
+</script>
+
+<p><a href="javascript:promptYoutube()">只呼叫函數</a></p>
+<hr>
+<h4 id="把用到的函數包進來">把用到的函數包進來</h4>
+<pre><code class="lang-javascript">void function() {
+  function promptYoutube() {
+    const keyWord=prompt(&quot;youtube 關鍵字&quot;);
+    window.open(&quot;http://youtube.com/search?q=&quot;+keyWord)
+  }
+  promptYoutube()
+}()
+</code></pre>
+<p><a href="javascript:void function(){function promptYoutube(){const keyWord=prompt(&quot;youtube 關鍵字&quot;);window.open(&quot;http://youtube.com/search?q=&quot;+keyWord)}promptYoutube()}()">把函數也包進來</a></p>
+<hr>
 <h3 id="uglify js">uglify js</h3>
 <ul>
 <li>超連結內不能有換行，</li>
 <li>html 內不能有雙引號、單引號、 <code>&lt;&gt;&amp;</code> 。</li>
-<li>保險作法是 uglify-js 再 encode html entities，或 <a href="http://zh.wikipedia.org/wiki/%E7%99%BE%E5%88%86%E6%AF%94%E7%B7%A8%E7%A2%BC">百分比編碼</a> 。</li>
+<li>保險作法是 uglify-js 再 encode html entities，或 <a href="http://zh.wikipedia.org/wiki/%E7%99%BE%E5%88%86%E8%99%9F%E7%B7%A8%E7%A2%BC">百分號編碼</a> 。</li>
 </ul>
 </main>
 

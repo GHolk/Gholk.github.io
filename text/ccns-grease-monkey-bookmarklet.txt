@@ -121,16 +121,8 @@ function scrollToNextHr() {
 和 `data:` 一樣不指向某一位置，
 而是本身帶有意義。
 
-<script>
-  function greet() {
-    var name = prompt('hey! what is your name?')
-    alert('welcome ' + name + '!')
-  }
-</script>
+[greet-js](alert('hello world!'))
 
-[greet-js]
-
-[greet-js]: javascript:greet()
 
 ----
 
@@ -164,13 +156,16 @@ onclick 回傳 false 表示不處理本來應該處理的事件，
 `<a href="//google.com"` 如果 onclick 回傳 false 時不會前往新頁面。
 
 <script>
-  function greet() {
-    var name = prompt('hey! what is your name?')
-    alert('welcome ' + name + '!')
+  function isGreater10() {
+    let number = prompt('hey! what is your name?')
+    number = Number(number)
+    const isGreater = number > 10
+    alert(isGreater)
+    return isGreater
   }
 </script>
 
-<a onclick="greet()">greet</a>
+<a href="./" onclick="greet()">greet</a>
 
 ---
 
@@ -185,16 +180,6 @@ undefined === void a
 
 ---
 
-### 函數表達式
-
-```javascript
-void function () {
-  // do what you want
-)()
-```
-
-----
-
 ### youtube 搜尋小書籤
 
 ```javascript
@@ -206,11 +191,50 @@ window.open('http://youtube.com/search?q=' + keyWord)
 
 ----
 
+### 函數表達式
+
+```javascript
+void function () {
+  // do what you want
+)()
+```
+
+----
+
+### 作用域
+
+<script>
+function promptYoutube() {
+  const keyWord = prompt('youtube 關鍵字')
+  window.open('http://youtube.com/search?q=' + keyWord)
+}
+</script>
+
+[只呼叫函數](javascript:promptYoutube())
+
+---
+
+#### 把用到的函數包進來
+
+```javascript
+void function() {
+  function promptYoutube() {
+    const keyWord=prompt("youtube 關鍵字");
+    window.open("http://youtube.com/search?q="+keyWord)
+  }
+  promptYoutube()
+}()
+```
+
+[把函數也包進來](javascript:void function(){function promptYoutube(){const keyWord=prompt("youtube 關鍵字");window.open("http://youtube.com/search?q="+keyWord)}promptYoutube()}())
+
+---
+
 ### uglify js
 
 * 超連結內不能有換行，
 * html 內不能有雙引號、單引號、 `<>&` 。
-* 保險作法是 uglify-js 再 encode html entities，或 [[百分比編碼]] 。
+* 保險作法是 uglify-js 再 encode html entities，或 [[百分號編碼]] 。
 
 
 

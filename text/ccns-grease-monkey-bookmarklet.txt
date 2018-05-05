@@ -1,0 +1,220 @@
+不用寫外掛也能惡搞網頁
+================
+有時候是不是覺得瀏覽器很智障？網頁很不人性？
+要是網頁是自己設計的就好了？
+除了寫超爆幹複雜的 plug-in 外，
+還有方便的 greasemonkey，和無腦的 bookmarklet，
+都可以達到類似的效果。
+
+* 油猴 *Greasemonkey*
+* 小書籤 *bookmarklet*
+* 開發者工具 *inspect*
+
+---
+
+## [活動介紹][kktix]
+本次 gholk 要來分享上古時代的瀏覽器密技 **小書籤** ，
+和簡單粗勇的 **油猴腳本** ，
+讓 javascript 開發者再也不用在 F12 開發者工具裡瞎忙半天，
+也不需要寫超爆幹複雜的瀏覽器外掛，
+就能輕鬆惡搞網站。
+
+[kktix]: //ccns.kktix.cc/events/106-meetup-ohayo
+
+
+---
+
+## 簡報模式
+
+### 切換樣式
+
+<script>
+function toggleSlideMode() {
+  document.body.classList.toggle('white-black-slide')
+}
+</script>
+
+<style contenteditable="true">
+body.white-black-slide {
+  font-size: 250%;
+  color: white;
+  background: black;
+}
+.white-black-slide a {
+  color: cyan;
+}
+</style>
+
+<button onclick="toggleSlideMode()">切換簡報模式</button>
+
+---
+
+### 顯示小書籤程式碼
+
+<style>
+a[href^=javascript]::before {
+  color: gray;
+  content: "<a href=\0022" attr(href) "\0022>";
+}
+a[href^=javascript]::after {
+  color: gray;
+  content: "</a>";
+}
+
+a[onclick]::before {
+  color: gray;
+  content: "<a onclick=\0022" attr(onclick) "\0022>";
+}
+a[onclick]::after {
+  color: gray;
+  content: "</a>";
+}
+
+style[contenteditable]::before {
+  content: "<style contenteditable=\0022" attr(contenteditable) "\0022>";
+}
+</style>
+
+---
+
+### 翻頁按鈕
+
+<style>
+:this + button {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 1em;
+}
+</style>
+
+<button onclick="scrollToNextHr()">下一頁</button>
+
+<script>
+function scrollToNextHr() {
+  const allHr = document.querySelectorAll('hr')
+  const windowTop = scrollY
+  for (const hr of allHr) {
+    if (hr.offsetTop > scrollY) {
+      scrollTo(0, hr.offsetTop + 1)
+      break
+    }
+  }
+}
+</script>
+
+---
+
+## 開發者工具
+瀏覽器 F12 開啟或右鍵檢查，
+各種意義上都很好用。
+
+----
+
+### 鎖右鍵圖片時
+<https://dq.yam.com/post.php?id=9229>
+
+---
+
+## 小書籤
+一種特殊的 url schema，
+和 `data:` 一樣不指向某一位置，
+而是本身帶有意義。
+
+<script>
+  function greet() {
+    var name = prompt('hey! what is your name?')
+    alert('welcome ' + name + '!')
+  }
+</script>
+
+[greet-js]
+
+[greet-js]: javascript:greet()
+
+----
+
+### 技術細節
+
+* `javascript:` 後的程片會在 global scope 下執行
+* 如果有回傳值，回傳值會被轉成字串，被當成下一個頁面的 html 內容
+* 如果有多個 statement，和 `eval()` 一樣是用最後一個 statment 的回傳值。
+
+----
+
+#### 回傳值
+
+<script>
+function helloHtml(name) {
+    if (!name) name = prompt('what is your name?')
+    var title = '<title>hello ' + name + '!</title>'
+    var body = '<h1>hello ' + name + '!</h1>'
+    var html = '<html>' + title + body + '</html>'
+    return html
+}
+</script>
+
+<a href="javascript:helloHtml()">hello</a>
+
+----
+
+### 相對 onclick
+onclick 回傳 false 表示不處理本來應該處理的事件，
+例如 `<input type="submit">` 如果 onclick 回傳 false 時不會提交，
+`<a href="//google.com"` 如果 onclick 回傳 false 時不會前往新頁面。
+
+<script>
+  function greet() {
+    var name = prompt('hey! what is your name?')
+    alert('welcome ' + name + '!')
+  }
+</script>
+
+<a onclick="greet()">greet</a>
+
+---
+
+### void 算符
+
+```javascript
+undefined === void a 
+```
+
+[有 void](javascript:void prompt('隨便說點話'))
+[無 void](javascript:prompt('隨便說點話'))
+
+---
+
+### 函數表達式
+
+```javascript
+void function () {
+  // do what you want
+)()
+```
+
+----
+
+### youtube 搜尋小書籤
+
+```javascript
+const keyWord = prompt('youtube 關鍵字')
+window.open('http://youtube.com/search?q=' + keyWord)
+```
+
+<a href="javascript:const keyWord = prompt('youtube 關鍵字'); window.open('http://youtube.com/search?q=' + keyWord); undefined">youtube 關鍵字搜尋</a>
+
+----
+
+### uglify js
+
+* 超連結內不能有換行，
+* html 內不能有雙引號、單引號、 `<>&` 。
+* 保險作法是 uglify-js 再 encode html entities，或 [[百分比編碼]] 。
+
+
+
+#ccns
+#javascript
+#html
+#bookmarklet

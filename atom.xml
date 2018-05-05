@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-05-04T18:13:56.657Z</updated>
+  <updated>2018-05-05T13:45:17.654Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,192 @@
 
 
 <entry>
+<id>http://gholk.github.io/ccns-grease-monkey-bookmarklet.html#小書籤</id>
+<title>不用寫外掛也能惡搞網頁</title>
+<published>2018-05-05T11:55:20.441Z</published>
+<updated>2018-05-05T13:45:17.640Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/ccns-grease-monkey-bookmarklet.html#小書籤"/>
+<summary>有時候是不是覺得瀏覽器很智障？網頁很不人性？
+要是網頁是自己設計的就好了？
+除了寫超爆幹複雜的 plug-in 外，
+還有方便的 greasemonkey，和無腦的 bookmarklet，
+都可以達到類似的效果。</summary>
+<category term="ccns"/>
+<category term="javascript"/>
+<category term="html"/>
+<category term="bookmarklet"/>
+<content type="html">&lt;h1 id="不用寫外掛也能惡搞網頁"&gt;不用寫外掛也能惡搞網頁&lt;/h1&gt;
+&lt;p&gt;有時候是不是覺得瀏覽器很智障？網頁很不人性？
+要是網頁是自己設計的就好了？
+除了寫超爆幹複雜的 plug-in 外，
+還有方便的 greasemonkey，和無腦的 bookmarklet，
+都可以達到類似的效果。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;油猴 &lt;em&gt;Greasemonkey&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;小書籤 &lt;em&gt;bookmarklet&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;開發者工具 &lt;em&gt;inspect&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="[活動介紹][kktix]"&gt;&lt;a href="//ccns.kktix.cc/events/106-meetup-ohayo"&gt;活動介紹&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;本次 gholk 要來分享上古時代的瀏覽器密技 &lt;strong&gt;小書籤&lt;/strong&gt; ，
+和簡單粗勇的 &lt;strong&gt;油猴腳本&lt;/strong&gt; ，
+讓 javascript 開發者再也不用在 F12 開發者工具裡瞎忙半天，
+也不需要寫超爆幹複雜的瀏覽器外掛，
+就能輕鬆惡搞網站。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="簡報模式"&gt;簡報模式&lt;/h2&gt;
+&lt;h3 id="切換樣式"&gt;切換樣式&lt;/h3&gt;
+&lt;script&gt;
+function toggleSlideMode() {
+  document.body.classList.toggle('white-black-slide')
+}
+&lt;/script&gt;
+
+&lt;style contenteditable="true"&gt;
+body.white-black-slide {
+  font-size: 250%;
+  color: white;
+  background: black;
+}
+.white-black-slide a {
+  color: cyan;
+}
+&lt;/style&gt;
+
+&lt;button onclick="toggleSlideMode()"&gt;切換簡報模式&lt;/button&gt;
+
+&lt;hr&gt;
+&lt;h3 id="顯示小書籤程式碼"&gt;顯示小書籤程式碼&lt;/h3&gt;
+&lt;style&gt;
+a[href^=javascript]::before {
+  color: gray;
+  content: "&lt;a href=\0022" attr(href) "\0022&gt;";
+}
+a[href^=javascript]::after {
+  color: gray;
+  content: "&lt;/a&gt;";
+}
+
+a[onclick]::before {
+  color: gray;
+  content: "&lt;a onclick=\0022" attr(onclick) "\0022&gt;";
+}
+a[onclick]::after {
+  color: gray;
+  content: "&lt;/a&gt;";
+}
+
+style[contenteditable]::before {
+  content: "&lt;style contenteditable=\0022" attr(contenteditable) "\0022&gt;";
+}
+&lt;/style&gt;
+
+&lt;hr&gt;
+&lt;h3 id="翻頁按鈕"&gt;翻頁按鈕&lt;/h3&gt;
+&lt;style&gt;
+:this + button {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 1em;
+}
+&lt;/style&gt;
+
+&lt;button onclick="scrollToNextHr()"&gt;下一頁&lt;/button&gt;
+
+&lt;script&gt;
+function scrollToNextHr() {
+  const allHr = document.querySelectorAll('hr')
+  const windowTop = scrollY
+  for (const hr of allHr) {
+    if (hr.offsetTop &gt; scrollY) {
+      scrollTo(0, hr.offsetTop + 1)
+      break
+    }
+  }
+}
+&lt;/script&gt;
+
+&lt;hr&gt;
+&lt;h2 id="開發者工具"&gt;開發者工具&lt;/h2&gt;
+&lt;p&gt;瀏覽器 F12 開啟或右鍵檢查，
+各種意義上都很好用。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="鎖右鍵圖片時"&gt;鎖右鍵圖片時&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://dq.yam.com/post.php?id=9229"&gt;https://dq.yam.com/post.php?id=9229&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="小書籤"&gt;小書籤&lt;/h2&gt;
+&lt;p&gt;一種特殊的 url schema，
+和 &lt;code&gt;data:&lt;/code&gt; 一樣不指向某一位置，
+而是本身帶有意義。&lt;/p&gt;
+&lt;script&gt;
+  function greet() {
+    var name = prompt('hey! what is your name?')
+    alert('welcome ' + name + '!')
+  }
+&lt;/script&gt;
+
+&lt;p&gt;&lt;a href="javascript:greet()"&gt;greet-js&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="技術細節"&gt;技術細節&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;javascript:&lt;/code&gt; 後的程片會在 global scope 下執行&lt;/li&gt;
+&lt;li&gt;如果有回傳值，回傳值會被轉成字串，被當成下一個頁面的 html 內容&lt;/li&gt;
+&lt;li&gt;如果有多個 statement，和 &lt;code&gt;eval()&lt;/code&gt; 一樣是用最後一個 statment 的回傳值。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h4 id="回傳值"&gt;回傳值&lt;/h4&gt;
+&lt;script&gt;
+function helloHtml(name) {
+    if (!name) name = prompt('what is your name?')
+    var title = '&lt;title&gt;hello ' + name + '!&lt;/title&gt;'
+    var body = '&lt;h1&gt;hello ' + name + '!&lt;/h1&gt;'
+    var html = '&lt;html&gt;' + title + body + '&lt;/html&gt;'
+    return html
+}
+&lt;/script&gt;
+
+&lt;p&gt;&lt;a href="javascript:helloHtml()"&gt;hello&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="相對 onclick"&gt;相對 onclick&lt;/h3&gt;
+&lt;p&gt;onclick 回傳 false 表示不處理本來應該處理的事件，
+例如 &lt;code&gt;&amp;lt;input type=&amp;quot;submit&amp;quot;&amp;gt;&lt;/code&gt; 如果 onclick 回傳 false 時不會提交，
+&lt;code&gt;&amp;lt;a href=&amp;quot;//google.com&amp;quot;&lt;/code&gt; 如果 onclick 回傳 false 時不會前往新頁面。&lt;/p&gt;
+&lt;script&gt;
+  function greet() {
+    var name = prompt('hey! what is your name?')
+    alert('welcome ' + name + '!')
+  }
+&lt;/script&gt;
+
+&lt;p&gt;&lt;a onclick="greet()"&gt;greet&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="void 算符"&gt;void 算符&lt;/h3&gt;
+&lt;pre&gt;&lt;code class="lang-javascript"&gt;undefined === void a
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;a href="javascript:void prompt(&amp;#39;隨便說點話&amp;#39;))
+[無 void](javascript:prompt(&amp;#39;隨便說點話&amp;#39;)"&gt;有 void&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="函數表達式"&gt;函數表達式&lt;/h3&gt;
+&lt;pre&gt;&lt;code class="lang-javascript"&gt;void function () {
+  // do what you want
+)()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id="youtube 搜尋小書籤"&gt;youtube 搜尋小書籤&lt;/h3&gt;
+&lt;pre&gt;&lt;code class="lang-javascript"&gt;const keyWord = prompt(&amp;#39;youtube 關鍵字&amp;#39;)
+window.open(&amp;#39;http://youtube.com/search?q=&amp;#39; + keyWord)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;a href="javascript:const keyWord = prompt('youtube 關鍵字'); window.open('http://youtube.com/search?q=' + keyWord); undefined"&gt;youtube 關鍵字搜尋&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="uglify js"&gt;uglify js&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;超連結內不能有換行，&lt;/li&gt;
+&lt;li&gt;html 內不能有雙引號、單引號、 &lt;code&gt;&amp;lt;&amp;gt;&amp;amp;&lt;/code&gt; 。&lt;/li&gt;
+&lt;li&gt;保險作法是 uglify-js 再 encode html entities，或 &lt;a href="http://zh.wikipedia.org/wiki/%E7%99%BE%E5%88%86%E6%AF%94%E7%B7%A8%E7%A2%BC"&gt;百分比編碼&lt;/a&gt; 。&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/urban-insect-termite.html</id>
 <title>都市昆蟲學：白蟻</title>
 <published>2018-05-02T15:09:34.428Z</published>

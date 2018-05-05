@@ -1,0 +1,206 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-05-05T11:55:20.441Z">
+<meta name="keywords" property="og:article:tag" content="ccns,javascript,html,bookmarklet">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="urban-insect-termite.html" title="都市昆蟲學：白蟻">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title>不用寫外掛也能惡搞網頁</title>
+</head>
+<body>
+<main><h1 id="不用寫外掛也能惡搞網頁">不用寫外掛也能惡搞網頁</h1>
+<p>有時候是不是覺得瀏覽器很智障？網頁很不人性？
+要是網頁是自己設計的就好了？
+除了寫超爆幹複雜的 plug-in 外，
+還有方便的 greasemonkey，和無腦的 bookmarklet，
+都可以達到類似的效果。</p>
+<ul>
+<li>油猴 <em>Greasemonkey</em></li>
+<li>小書籤 <em>bookmarklet</em></li>
+<li>開發者工具 <em>inspect</em></li>
+</ul>
+<hr>
+<h2 id="[活動介紹][kktix]"><a href="//ccns.kktix.cc/events/106-meetup-ohayo">活動介紹</a></h2>
+<p>本次 gholk 要來分享上古時代的瀏覽器密技 <strong>小書籤</strong> ，
+和簡單粗勇的 <strong>油猴腳本</strong> ，
+讓 javascript 開發者再也不用在 F12 開發者工具裡瞎忙半天，
+也不需要寫超爆幹複雜的瀏覽器外掛，
+就能輕鬆惡搞網站。</p>
+<hr>
+<h2 id="簡報模式">簡報模式</h2>
+<h3 id="切換樣式">切換樣式</h3>
+<script>
+function toggleSlideMode() {
+  document.body.classList.toggle('white-black-slide')
+}
+</script>
+
+<style contenteditable="true">
+body.white-black-slide {
+  font-size: 250%;
+  color: white;
+  background: black;
+}
+.white-black-slide a {
+  color: cyan;
+}
+</style>
+
+<button onclick="toggleSlideMode()">切換簡報模式</button>
+
+<hr>
+<h3 id="顯示小書籤程式碼">顯示小書籤程式碼</h3>
+<style>
+a[href^=javascript]::before {
+  color: gray;
+  content: "<a href=\0022" attr(href) "\0022>";
+}
+a[href^=javascript]::after {
+  color: gray;
+  content: "</a>";
+}
+
+a[onclick]::before {
+  color: gray;
+  content: "<a onclick=\0022" attr(onclick) "\0022>";
+}
+a[onclick]::after {
+  color: gray;
+  content: "</a>";
+}
+
+style[contenteditable]::before {
+  content: "<style contenteditable=\0022" attr(contenteditable) "\0022>";
+}
+</style>
+
+<hr>
+<h3 id="翻頁按鈕">翻頁按鈕</h3>
+<style>
+:this + button {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 1em;
+}
+</style>
+
+<button onclick="scrollToNextHr()">下一頁</button>
+
+<script>
+function scrollToNextHr() {
+  const allHr = document.querySelectorAll('hr')
+  const windowTop = scrollY
+  for (const hr of allHr) {
+    if (hr.offsetTop > scrollY) {
+      scrollTo(0, hr.offsetTop + 1)
+      break
+    }
+  }
+}
+</script>
+
+<hr>
+<h2 id="開發者工具">開發者工具</h2>
+<p>瀏覽器 F12 開啟或右鍵檢查，
+各種意義上都很好用。</p>
+<hr>
+<h3 id="鎖右鍵圖片時">鎖右鍵圖片時</h3>
+<p><a href="https://dq.yam.com/post.php?id=9229">https://dq.yam.com/post.php?id=9229</a></p>
+<hr>
+<h2 id="小書籤">小書籤</h2>
+<p>一種特殊的 url schema，
+和 <code>data:</code> 一樣不指向某一位置，
+而是本身帶有意義。</p>
+<script>
+  function greet() {
+    var name = prompt('hey! what is your name?')
+    alert('welcome ' + name + '!')
+  }
+</script>
+
+<p><a href="javascript:greet()">greet-js</a></p>
+<hr>
+<h3 id="技術細節">技術細節</h3>
+<ul>
+<li><code>javascript:</code> 後的程片會在 global scope 下執行</li>
+<li>如果有回傳值，回傳值會被轉成字串，被當成下一個頁面的 html 內容</li>
+<li>如果有多個 statement，和 <code>eval()</code> 一樣是用最後一個 statment 的回傳值。</li>
+</ul>
+<hr>
+<h4 id="回傳值">回傳值</h4>
+<script>
+function helloHtml(name) {
+    if (!name) name = prompt('what is your name?')
+    var title = '<title>hello ' + name + '!</title>'
+    var body = '<h1>hello ' + name + '!</h1>'
+    var html = '<html>' + title + body + '</html>'
+    return html
+}
+</script>
+
+<p><a href="javascript:helloHtml()">hello</a></p>
+<hr>
+<h3 id="相對 onclick">相對 onclick</h3>
+<p>onclick 回傳 false 表示不處理本來應該處理的事件，
+例如 <code>&lt;input type=&quot;submit&quot;&gt;</code> 如果 onclick 回傳 false 時不會提交，
+<code>&lt;a href=&quot;//google.com&quot;</code> 如果 onclick 回傳 false 時不會前往新頁面。</p>
+<script>
+  function greet() {
+    var name = prompt('hey! what is your name?')
+    alert('welcome ' + name + '!')
+  }
+</script>
+
+<p><a onclick="greet()">greet</a></p>
+<hr>
+<h3 id="void 算符">void 算符</h3>
+<pre><code class="lang-javascript">undefined === void a
+</code></pre>
+<p><a href="javascript:void prompt(&#39;隨便說點話&#39;))
+[無 void](javascript:prompt(&#39;隨便說點話&#39;)">有 void</a></p>
+<hr>
+<h3 id="函數表達式">函數表達式</h3>
+<pre><code class="lang-javascript">void function () {
+  // do what you want
+)()
+</code></pre>
+<hr>
+<h3 id="youtube 搜尋小書籤">youtube 搜尋小書籤</h3>
+<pre><code class="lang-javascript">const keyWord = prompt(&#39;youtube 關鍵字&#39;)
+window.open(&#39;http://youtube.com/search?q=&#39; + keyWord)
+</code></pre>
+<p><a href="javascript:const keyWord = prompt('youtube 關鍵字'); window.open('http://youtube.com/search?q=' + keyWord); undefined">youtube 關鍵字搜尋</a></p>
+<hr>
+<h3 id="uglify js">uglify js</h3>
+<ul>
+<li>超連結內不能有換行，</li>
+<li>html 內不能有雙引號、單引號、 <code>&lt;&gt;&amp;</code> 。</li>
+<li>保險作法是 uglify-js 再 encode html entities，或 <a href="http://zh.wikipedia.org/wiki/%E7%99%BE%E5%88%86%E6%AF%94%E7%B7%A8%E7%A2%BC">百分比編碼</a> 。</li>
+</ul>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer src="ext/load-disqus.js"></script>
+
+
+
+
+
+</body></html>

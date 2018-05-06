@@ -351,6 +351,15 @@ GM.notification('hello (1)')
 
 ---
 
+### [簡單 grease monkey repl][gm-repl]
+Read Evaluate Print Loop，
+可以輸入表達式，程式會調用 eval 然後印出求值結果。
+如果輸入是 promise，會等 resolve 後才顯示結果。
+
+[gm-repl]: https://gist.github.com/GHolk/699c7b42d02e9dfd1c8f9af011f1eef1
+
+---
+
 ### FB 備份功能
 把一份貼文備份成 JSON 或其它格式，
 並在原文被刪除時可以重發，

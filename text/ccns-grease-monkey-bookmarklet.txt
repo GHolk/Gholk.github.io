@@ -121,7 +121,7 @@ function scrollToNextHr() {
 和 `data:` 一樣不指向某一位置，
 而是本身帶有意義。
 
-[greet-js](alert('hello world!'))
+[greet-js](javascript:alert('hello world!'))
 
 
 ----
@@ -157,7 +157,7 @@ onclick 回傳 false 表示不處理本來應該處理的事件，
 
 <script>
   function isGreater10() {
-    let number = prompt('hey! what is your name?')
+    let number = prompt('input a number > 10')
     number = Number(number)
     const isGreater = number > 10
     alert(isGreater)
@@ -165,18 +165,29 @@ onclick 回傳 false 表示不處理本來應該處理的事件，
   }
 </script>
 
-<a href="./" onclick="greet()">greet</a>
+<a href="./" onclick="return isGreater10()">greet</a>
+
 
 ---
 
-### void 算符
+### 安裝小書籤
+* 其實就是加入 **我的最愛** 或 **書籤列**
+* 點擊書籤列中小書籤就可以執行
 
-```javascript
-undefined === void a 
-```
+---
 
-[有 void](javascript:void prompt('隨便說點話'))
-[無 void](javascript:prompt('隨便說點話'))
+#### firefox
+* 右鍵加入書籤
+* 設置 `<a rel="sidebar" href="javascript:alert('hey')">` 
+  可以讓超連結點擊時詢問加入書籤。
+  <a rel="sidebar" href="javascript:alert('hey')">say hey!</a>
+
+---
+
+#### chromium
+* 沒有辦法，只能右鍵複製網址，之後到書籤管理員裡手動加入。
+* 因為 chrome 的加入書籤是在網址列上的一顆星星，但多數小書籤沒有頁面，也就不行。
+* 幹你 google
 
 ---
 
@@ -189,15 +200,6 @@ window.open('http://youtube.com/search?q=' + keyWord)
 
 <a href="javascript:const keyWord = prompt('youtube 關鍵字'); window.open('http://youtube.com/search?q=' + keyWord); undefined">youtube 關鍵字搜尋</a>
 
-----
-
-### 函數表達式
-
-```javascript
-void function () {
-  // do what you want
-)()
-```
 
 ----
 
@@ -230,12 +232,144 @@ void function() {
 
 ---
 
+### void 算符
+
+```javascript
+undefined === void a 
+```
+
+* [有 void](javascript:void prompt('隨便說點話'))
+* [無 void](javascript:prompt('隨便說點話'))
+
+----
+
+### 函數表達式
+
+```javascript
+void function () {
+  // do what you want
+)()
+```
+
+---
+
 ### uglify js
 
 * 超連結內不能有換行，
 * html 內不能有雙引號、單引號、 `<>&` 。
 * 保險作法是 uglify-js 再 encode html entities，或 [[百分號編碼]] 。
 
+---
+
+## GreaseMonkey
+* 暱稱油猴腳本，是管理 `*.user.js` 的外掛程式。
+* firefox 有一些參數，可以在 [about:config](about:config) 裡調。
+* 古早時期，有人會寫一份 javascript，在啟動 firefox 時執行去調那些參數，那份 js 習慣會取名為 `*.user.js` 。
+* 後來有人在裡面作很多奇怪的事惡搞網頁，這些 `*.user.js` 量越來越多就需要一種管理的方法。
+* 好像還有 `*.user.css` ，但我沒有研究。
+
+---
+
+### 功能
+* 提供編輯器和管理介面。
+* 管理在每個網頁下要載入哪些 user.js。
+* 在進入附檔名為 `*.user.js` 的 url 時，會自動詢問安裝。
+
+---
+
+### 常見的散布方式
+* <//gist.github.com> 裡按 raw，正常會出現原始碼，有裝 grease monkey 會詢問安裝。
+  [bbsjs gist] 
+* [grease monkey wiki](https://wiki.greasespot.net/User_Script_Hosting)
+
+[bbsjs gist]: https://gist.github.com/GHolk/3154e8486cf987cf6ab84cae45c7dcc7
+
+---
+
+#### metadata header
+<https://wiki.greasespot.net/Metadata_Block>
+
+```user.js
+// ==UserScript==
+// @name  chrome bbs javascript executor
+// @namespace  http://gholk.github.io/
+// @description  press J in term.ptt.cc can run JavaScript
+// @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js
+// @match https://term.ptt.cc/*
+// @match https://www.clam.ml/*
+// @match https://www.ptt.cc/bbs/*
+// @version  13
+// @grant  GM.notification
+// @grant  GM.xmlHttpRequest
+// ==/UserScript==
+```
+
+---
+
+#### 執行環境
+* window 是假的，真的在 unsafeWindow。
+* 程式是被包在一個匿名函數裡執行，所以宣告的變數不會變全域變數。
+* jquery 有時會炸，原因不明。
+* 事件請愛用原生操作 `*.addEventListener` ，jquery 的會炸。
+* 操作 dom 還沒什麼問題，可以用原網頁的 jquery： `const $ = unsafeWindow.$` 。
+
+---
+
+#### `GM.*` API
+* GM.notification 可以發通知
+* GM.xmlHttpRequest 不受 same origin policy 限制，超爽的
+* GM.setClipboard 可以簡單複製內容
+* api 都是 promise 非同步，不過除非你很重順序，不然直接呼叫時間也不會差太多
+* <https://wiki.greasespot.net/API>
+
+```javascript
+GM.notification('hello (1)')
+  .then(() => {
+    return GM.notification('hello (2)')
+  })
+  .then(() => console.log('after send 2 notify'))
+```
+
+---
+
+#### 功能鍵
+* 以前有 api 可以在 grease monkey 的選單上設置按鈕。
+* 不過 firefox 57 quantum 後，api 不允許了。
+* 綁鍵盤 `window.addEventListener('keydown')` 。
+* 改用 bookmarklet，本身就是要點擊才能執行的。
+* grease monkey 較適合直接改 dom 而不是點擊執行。
+  像聽 hover 事件、在網頁上加按鈕。
+
+---
+
+## 許願池
+你有什麼功能想做嗎？
+或是想練手卻不知道做什麼嗎？
+來許願吧！
+
+<div id="disqus_thread"></div>
+
+---
+
+### FB 備份功能
+把一份貼文備份成 JSON 或其它格式，
+並在原文被刪除時可以重發，
+在每層樓 tag 原本的留言者並附上當初的留言。
+
+---
+
+### [BBSJS](bbsjs.html)
+在 ptt 上執行 javascript，
+類似當初 BBSLua 的概念，
+但是跑在瀏覽器上而不是 server 上。
+
+---
+
+### [clean window](https://github.com/GHolk/bookmarklet/blob/master/youtube-clean-player.js)
+開啟一個沒有工具列、分頁列、網址列的乾淨視窗，
+同義於 `chromium --app=https://www.youtube.com/embed/dWKNW5lm3Ss` 。
+通常是用在看 youtube 時想空出多點空間。
+<http://youtu.be/dWKNW5lm3Ss> 。
 
 
 #ccns

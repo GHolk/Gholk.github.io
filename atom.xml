@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-05-05T14:42:40.766Z</updated>
+  <updated>2018-05-06T07:33:18.227Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,328 @@
 
 
 <entry>
+<id>http://gholk.github.io/ccns-grease-monkey-bookmarklet.html#GreaseMonkey</id>
+<title>不用寫外掛也能惡搞網頁</title>
+<published>2018-05-05T11:55:20.441Z</published>
+<updated>2018-05-06T07:33:18.213Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/ccns-grease-monkey-bookmarklet.html#GreaseMonkey"/>
+<summary>有時候是不是覺得瀏覽器很智障？網頁很不人性？
+要是網頁是自己設計的就好了？
+除了寫超爆幹複雜的 plug-in 外，
+還有方便的 greasemonkey，和無腦的 bookmarklet，
+都可以達到類似的效果。</summary>
+<category term="ccns"/>
+<category term="javascript"/>
+<category term="html"/>
+<category term="bookmarklet"/>
+<content type="html">&lt;h1 id="不用寫外掛也能惡搞網頁"&gt;不用寫外掛也能惡搞網頁&lt;/h1&gt;
+&lt;p&gt;有時候是不是覺得瀏覽器很智障？網頁很不人性？
+要是網頁是自己設計的就好了？
+除了寫超爆幹複雜的 plug-in 外，
+還有方便的 greasemonkey，和無腦的 bookmarklet，
+都可以達到類似的效果。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;油猴 &lt;em&gt;Greasemonkey&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;小書籤 &lt;em&gt;bookmarklet&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;開發者工具 &lt;em&gt;inspect&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="[活動介紹][kktix]"&gt;&lt;a href="//ccns.kktix.cc/events/106-meetup-ohayo"&gt;活動介紹&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;本次 gholk 要來分享上古時代的瀏覽器密技 &lt;strong&gt;小書籤&lt;/strong&gt; ，
+和簡單粗勇的 &lt;strong&gt;油猴腳本&lt;/strong&gt; ，
+讓 javascript 開發者再也不用在 F12 開發者工具裡瞎忙半天，
+也不需要寫超爆幹複雜的瀏覽器外掛，
+就能輕鬆惡搞網站。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="簡報模式"&gt;簡報模式&lt;/h2&gt;
+&lt;h3 id="切換樣式"&gt;切換樣式&lt;/h3&gt;
+&lt;script&gt;
+function toggleSlideMode() {
+  document.body.classList.toggle('white-black-slide')
+}
+&lt;/script&gt;
+
+&lt;style contenteditable="true"&gt;
+body.white-black-slide {
+  font-size: 250%;
+  color: white;
+  background: black;
+}
+.white-black-slide a {
+  color: cyan;
+}
+&lt;/style&gt;
+
+&lt;button onclick="toggleSlideMode()"&gt;切換簡報模式&lt;/button&gt;
+
+&lt;hr&gt;
+&lt;h3 id="顯示小書籤程式碼"&gt;顯示小書籤程式碼&lt;/h3&gt;
+&lt;style&gt;
+a[href^=javascript]::before {
+  color: gray;
+  content: "&lt;a href=\0022" attr(href) "\0022&gt;";
+}
+a[href^=javascript]::after {
+  color: gray;
+  content: "&lt;/a&gt;";
+}
+
+a[onclick]::before {
+  color: gray;
+  content: "&lt;a onclick=\0022" attr(onclick) "\0022&gt;";
+}
+a[onclick]::after {
+  color: gray;
+  content: "&lt;/a&gt;";
+}
+
+style[contenteditable]::before {
+  content: "&lt;style contenteditable=\0022" attr(contenteditable) "\0022&gt;";
+}
+&lt;/style&gt;
+
+&lt;hr&gt;
+&lt;h3 id="翻頁按鈕"&gt;翻頁按鈕&lt;/h3&gt;
+&lt;style&gt;
+:this + button {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 1em;
+}
+&lt;/style&gt;
+
+&lt;button onclick="scrollToNextHr()"&gt;下一頁&lt;/button&gt;
+
+&lt;script&gt;
+function scrollToNextHr() {
+  const allHr = document.querySelectorAll('hr')
+  const windowTop = scrollY
+  for (const hr of allHr) {
+    if (hr.offsetTop &gt; scrollY) {
+      scrollTo(0, hr.offsetTop + 1)
+      break
+    }
+  }
+}
+&lt;/script&gt;
+
+&lt;hr&gt;
+&lt;h2 id="開發者工具"&gt;開發者工具&lt;/h2&gt;
+&lt;p&gt;瀏覽器 F12 開啟或右鍵檢查，
+各種意義上都很好用。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="鎖右鍵圖片時"&gt;鎖右鍵圖片時&lt;/h3&gt;
+&lt;p&gt;&lt;a href="https://dq.yam.com/post.php?id=9229"&gt;https://dq.yam.com/post.php?id=9229&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="小書籤"&gt;小書籤&lt;/h2&gt;
+&lt;p&gt;一種特殊的 url schema，
+和 &lt;code&gt;data:&lt;/code&gt; 一樣不指向某一位置，
+而是本身帶有意義。&lt;/p&gt;
+&lt;p&gt;&lt;a href="javascript:alert(&amp;#39;hello world!&amp;#39;)"&gt;greet-js&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="技術細節"&gt;技術細節&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;javascript:&lt;/code&gt; 後的程片會在 global scope 下執行&lt;/li&gt;
+&lt;li&gt;如果有回傳值，回傳值會被轉成字串，被當成下一個頁面的 html 內容&lt;/li&gt;
+&lt;li&gt;如果有多個 statement，和 &lt;code&gt;eval()&lt;/code&gt; 一樣是用最後一個 statment 的回傳值。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h4 id="回傳值"&gt;回傳值&lt;/h4&gt;
+&lt;script&gt;
+function helloHtml(name) {
+    if (!name) name = prompt('what is your name?')
+    var title = '&lt;title&gt;hello ' + name + '!&lt;/title&gt;'
+    var body = '&lt;h1&gt;hello ' + name + '!&lt;/h1&gt;'
+    var html = '&lt;html&gt;' + title + body + '&lt;/html&gt;'
+    return html
+}
+&lt;/script&gt;
+
+&lt;p&gt;&lt;a href="javascript:helloHtml()"&gt;hello&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="相對 onclick"&gt;相對 onclick&lt;/h3&gt;
+&lt;p&gt;onclick 回傳 false 表示不處理本來應該處理的事件，
+例如 &lt;code&gt;&amp;lt;input type=&amp;quot;submit&amp;quot;&amp;gt;&lt;/code&gt; 如果 onclick 回傳 false 時不會提交，
+&lt;code&gt;&amp;lt;a href=&amp;quot;//google.com&amp;quot;&lt;/code&gt; 如果 onclick 回傳 false 時不會前往新頁面。&lt;/p&gt;
+&lt;script&gt;
+  function isGreater10() {
+    let number = prompt('input a number &gt; 10')
+    number = Number(number)
+    const isGreater = number &gt; 10
+    alert(isGreater)
+    return isGreater
+  }
+&lt;/script&gt;
+
+&lt;p&gt;&lt;a href="./" onclick="return isGreater10()"&gt;greet&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="安裝小書籤"&gt;安裝小書籤&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;其實就是加入 &lt;strong&gt;我的最愛&lt;/strong&gt; 或 &lt;strong&gt;書籤列&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;點擊書籤列中小書籤就可以執行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h4 id="firefox"&gt;firefox&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;右鍵加入書籤&lt;/li&gt;
+&lt;li&gt;設置 &lt;code&gt;&amp;lt;a rel=&amp;quot;sidebar&amp;quot; href=&amp;quot;javascript:alert(&amp;#39;hey&amp;#39;)&amp;quot;&amp;gt;&lt;/code&gt; 
+可以讓超連結點擊時詢問加入書籤。
+&lt;a rel="sidebar" href="javascript:alert('hey')"&gt;say hey!&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h4 id="chromium"&gt;chromium&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;沒有辦法，只能右鍵複製網址，之後到書籤管理員裡手動加入。&lt;/li&gt;
+&lt;li&gt;因為 chrome 的加入書籤是在網址列上的一顆星星，但多數小書籤沒有頁面，也就不行。&lt;/li&gt;
+&lt;li&gt;幹你 google&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="youtube 搜尋小書籤"&gt;youtube 搜尋小書籤&lt;/h3&gt;
+&lt;pre&gt;&lt;code class="lang-javascript"&gt;const keyWord = prompt(&amp;#39;youtube 關鍵字&amp;#39;)
+window.open(&amp;#39;http://youtube.com/search?q=&amp;#39; + keyWord)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;a href="javascript:const keyWord = prompt('youtube 關鍵字'); window.open('http://youtube.com/search?q=' + keyWord); undefined"&gt;youtube 關鍵字搜尋&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="作用域"&gt;作用域&lt;/h3&gt;
+&lt;script&gt;
+function promptYoutube() {
+  const keyWord = prompt('youtube 關鍵字')
+  window.open('http://youtube.com/search?q=' + keyWord)
+}
+&lt;/script&gt;
+
+&lt;p&gt;&lt;a href="javascript:promptYoutube()"&gt;只呼叫函數&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id="把用到的函數包進來"&gt;把用到的函數包進來&lt;/h4&gt;
+&lt;pre&gt;&lt;code class="lang-javascript"&gt;void function() {
+  function promptYoutube() {
+    const keyWord=prompt(&amp;quot;youtube 關鍵字&amp;quot;);
+    window.open(&amp;quot;http://youtube.com/search?q=&amp;quot;+keyWord)
+  }
+  promptYoutube()
+}()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;a href="javascript:void function(){function promptYoutube(){const keyWord=prompt(&amp;quot;youtube 關鍵字&amp;quot;);window.open(&amp;quot;http://youtube.com/search?q=&amp;quot;+keyWord)}promptYoutube()}()"&gt;把函數也包進來&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="void 算符"&gt;void 算符&lt;/h3&gt;
+&lt;pre&gt;&lt;code class="lang-javascript"&gt;undefined === void a
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="javascript:void prompt(&amp;#39;隨便說點話&amp;#39;)"&gt;有 void&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="javascript:prompt(&amp;#39;隨便說點話&amp;#39;)"&gt;無 void&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="函數表達式"&gt;函數表達式&lt;/h3&gt;
+&lt;pre&gt;&lt;code class="lang-javascript"&gt;void function () {
+  // do what you want
+)()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id="uglify js"&gt;uglify js&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;超連結內不能有換行，&lt;/li&gt;
+&lt;li&gt;html 內不能有雙引號、單引號、 &lt;code&gt;&amp;lt;&amp;gt;&amp;amp;&lt;/code&gt; 。&lt;/li&gt;
+&lt;li&gt;保險作法是 uglify-js 再 encode html entities，或 &lt;a href="http://zh.wikipedia.org/wiki/%E7%99%BE%E5%88%86%E8%99%9F%E7%B7%A8%E7%A2%BC"&gt;百分號編碼&lt;/a&gt; 。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="GreaseMonkey"&gt;GreaseMonkey&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;暱稱油猴腳本，是管理 &lt;code&gt;*.user.js&lt;/code&gt; 的外掛程式。&lt;/li&gt;
+&lt;li&gt;firefox 有一些參數，可以在 &lt;a href="about:config"&gt;about:config&lt;/a&gt; 裡調。&lt;/li&gt;
+&lt;li&gt;古早時期，有人會寫一份 javascript，在啟動 firefox 時執行去調那些參數，那份 js 習慣會取名為 &lt;code&gt;*.user.js&lt;/code&gt; 。&lt;/li&gt;
+&lt;li&gt;後來有人在裡面作很多奇怪的事惡搞網頁，這些 &lt;code&gt;*.user.js&lt;/code&gt; 量越來越多就需要一種管理的方法。&lt;/li&gt;
+&lt;li&gt;好像還有 &lt;code&gt;*.user.css&lt;/code&gt; ，但我沒有研究。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="功能"&gt;功能&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;提供編輯器和管理介面。&lt;/li&gt;
+&lt;li&gt;管理在每個網頁下要載入哪些 user.js。&lt;/li&gt;
+&lt;li&gt;在進入附檔名為 &lt;code&gt;*.user.js&lt;/code&gt; 的 url 時，會自動詢問安裝。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id="常見的散布方式"&gt;常見的散布方式&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="//gist.github.com"&gt;//gist.github.com&lt;/a&gt; 裡按 raw，正常會出現原始碼，有裝 grease monkey 會詢問安裝。
+&lt;a href="https://gist.github.com/GHolk/3154e8486cf987cf6ab84cae45c7dcc7"&gt;bbsjs gist&lt;/a&gt; &lt;/li&gt;
+&lt;li&gt;&lt;a href="https://wiki.greasespot.net/User_Script_Hosting"&gt;grease monkey wiki&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h4 id="metadata header"&gt;metadata header&lt;/h4&gt;
+&lt;p&gt;&lt;a href="https://wiki.greasespot.net/Metadata_Block"&gt;https://wiki.greasespot.net/Metadata_Block&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-user.js"&gt;// ==UserScript==
+// @name  chrome bbs javascript executor
+// @namespace  http://gholk.github.io/
+// @description  press J in term.ptt.cc can run JavaScript
+// @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js
+// @match https://term.ptt.cc/*
+// @match https://www.clam.ml/*
+// @match https://www.ptt.cc/bbs/*
+// @version  13
+// @grant  GM.notification
+// @grant  GM.xmlHttpRequest
+// ==/UserScript==
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h4 id="執行環境"&gt;執行環境&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;window 是假的，真的在 unsafeWindow。&lt;/li&gt;
+&lt;li&gt;程式是被包在一個匿名函數裡執行，所以宣告的變數不會變全域變數。&lt;/li&gt;
+&lt;li&gt;jquery 有時會炸，原因不明。&lt;/li&gt;
+&lt;li&gt;事件請愛用原生操作 &lt;code&gt;*.addEventListener&lt;/code&gt; ，jquery 的會炸。&lt;/li&gt;
+&lt;li&gt;操作 dom 還沒什麼問題，可以用原網頁的 jquery： &lt;code&gt;const $ = unsafeWindow.$&lt;/code&gt; 。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h4 id="`GM.*` API"&gt;&lt;code&gt;GM.*&lt;/code&gt; API&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;GM.notification 可以發通知&lt;/li&gt;
+&lt;li&gt;GM.xmlHttpRequest 不受 same origin policy 限制，超爽的&lt;/li&gt;
+&lt;li&gt;GM.setClipboard 可以簡單複製內容&lt;/li&gt;
+&lt;li&gt;api 都是 promise 非同步，不過除非你很重順序，不然直接呼叫時間也不會差太多&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://wiki.greasespot.net/API"&gt;https://wiki.greasespot.net/API&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class="lang-javascript"&gt;GM.notification(&amp;#39;hello (1)&amp;#39;)
+  .then(() =&amp;gt; {
+    return GM.notification(&amp;#39;hello (2)&amp;#39;)
+  })
+  .then(() =&amp;gt; console.log(&amp;#39;after send 2 notify&amp;#39;))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h4 id="功能鍵"&gt;功能鍵&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;以前有 api 可以在 grease monkey 的選單上設置按鈕。&lt;/li&gt;
+&lt;li&gt;不過 firefox 57 quantum 後，api 不允許了。&lt;/li&gt;
+&lt;li&gt;綁鍵盤 &lt;code&gt;window.addEventListener(&amp;#39;keydown&amp;#39;)&lt;/code&gt; 。&lt;/li&gt;
+&lt;li&gt;改用 bookmarklet，本身就是要點擊才能執行的。&lt;/li&gt;
+&lt;li&gt;grease monkey 較適合直接改 dom 而不是點擊執行。
+像聽 hover 事件、在網頁上加按鈕。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="許願池"&gt;許願池&lt;/h2&gt;
+&lt;p&gt;你有什麼功能想做嗎？
+或是想練手卻不知道做什麼嗎？
+來許願吧！&lt;/p&gt;
+&lt;div id="disqus_thread"&gt;&lt;/div&gt;
+
+&lt;hr&gt;
+&lt;h3 id="FB 備份功能"&gt;FB 備份功能&lt;/h3&gt;
+&lt;p&gt;把一份貼文備份成 JSON 或其它格式，
+並在原文被刪除時可以重發，
+在每層樓 tag 原本的留言者並附上當初的留言。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="[BBSJS](bbsjs.html)"&gt;&lt;a href="bbsjs.html"&gt;BBSJS&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;在 ptt 上執行 javascript，
+類似當初 BBSLua 的概念，
+但是跑在瀏覽器上而不是 server 上。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="[clean window](https://github.com/GHolk/bookmarklet/blob/master/youtube-clean-player.js)"&gt;&lt;a href="https://github.com/GHolk/bookmarklet/blob/master/youtube-clean-player.js"&gt;clean window&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;開啟一個沒有工具列、分頁列、網址列的乾淨視窗，
+同義於 &lt;code&gt;chromium --app=https://www.youtube.com/embed/dWKNW5lm3Ss&lt;/code&gt; 。
+通常是用在看 youtube 時想空出多點空間。
+&lt;a href="http://youtu.be/dWKNW5lm3Ss"&gt;http://youtu.be/dWKNW5lm3Ss&lt;/a&gt; 。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/ccns-grease-monkey-bookmarklet.html#小書籤fix</id>
 <title>不用寫外掛也能惡搞網頁</title>
 <published>2018-05-05T11:55:20.441Z</published>

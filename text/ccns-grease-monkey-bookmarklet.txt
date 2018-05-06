@@ -19,7 +19,7 @@
 也不需要寫超爆幹複雜的瀏覽器外掛，
 就能輕鬆惡搞網站。
 
-[kktix]: //ccns.kktix.cc/events/106-meetup-ohayo
+[kktix]: https://ccns.kktix.cc/events/106-meetup-gholk-talk-01
 
 
 ---

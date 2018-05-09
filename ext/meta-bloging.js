@@ -135,19 +135,31 @@ function parseQueryOption(query) {
     return result
 }
 
-function detectLoader() {
-    autoDecrypt()
-    function createScript(url) {
+
+const autoLoader = {
+    caseList: [],
+    addCase(test, load) {
+        this.caseList.push({test, load})
+    },
+    autoLoad() {
+        for (const {test, load} of this.caseList) {
+            if (test()) load()
+        }
+    },
+    createScript(url) {
         const script = document.createElement('script')
         if (url) script.src = url
         return script
-    }
-    function autoDecrypt() {
-        if (document.querySelector('.encrypt-data')) {
-            const script = createScript('ext/decrypt-post.js')
-            document.body.appendChild(script)
-        }
+    },
+    addScript(url) {
+        const script = this.createScript(url)
+        document.body.appendChild(script)
     }
 }
+autoLoader.addCase(
+    () => document.querySelector('.encrypt-data'),
+    () => autoLoader.addScript('ext/decrypt-post.js')
+)
+        
 
 const goption = parseQueryOption(location.search.slice(1))

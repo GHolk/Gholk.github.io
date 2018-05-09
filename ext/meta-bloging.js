@@ -135,4 +135,19 @@ function parseQueryOption(query) {
     return result
 }
 
+function detectLoader() {
+    autoDecrypt()
+    function createScript(url) {
+        const script = document.createElement('script')
+        if (url) script.src = url
+        return script
+    }
+    function autoDecrypt() {
+        if (document.querySelector('.encrypt-data')) {
+            const script = createScript('ext/decrypt-post.js')
+            document.body.appendChild(script)
+        }
+    }
+}
+
 const goption = parseQueryOption(location.search.slice(1))

@@ -14,36 +14,47 @@
     <!-- 和網頁位置有關 -->
     <link rel="icon" type="image/png" href="ext/icon.png">
     <link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
-    <link rel="stylesheet" type="text/css" href="ext/list.css">
+    <link rel="stylesheet" type="text/css" href="ext/static-mblog.css">
     <link rel="alternate" href="atom.xml" type="application/atom+xml">
     <script src="ext/meta-bloging.js"></script>
-    <title>文章列表</title>
+    <title>靜態試驗場 mblog</title>
   </head>
   <body>
-    <h1>文章列表</h1>
-    <h2><a href="comment.html">留言板</a></h2>
+    <header>
+      <h1>靜態試驗場 mblog</h1>
+      <p>mblog is for meta bloging，你的瀏覽器就是我的實驗場。</p>
+    </header>
+    
+    <nav>
+      <ul>
+        <li><a href="online-web-chat-room.html">聊天室</a></li>
+        <li><a href="comment.html">留言板</a></li>
+        <li><a href="atom.xml">rss (atom)</a></li>
+      </ul>
+    </nav>
+    
     <blockquote id="daily-sentence">
       <h3>每日一句</h3>
       <pre></pre>
-    </blockquote>
-    <script>
-      loadDailySentence()
-      
-      async function loadDailySentence() {
-        const node = await ajaxQuery('key-and-lock.html', 'pre')
-        const list = node.textContent.split(/\n----\n/g)
-        const day = daySince(new Date('2018-04-12'))
-        const sentence = list[day % list.length]
-        document.querySelector('#daily-sentence pre').textContent = sentence
-      
-        function daySince(start) {
-          const now = new Date()
-          const msDiff = Number(now) - Number(start)
-          const dayDiff = msDiff / (24 * 60 * 60 * 1000)
-          return Math.floor(dayDiff)
+      <script>
+        loadDailySentence()
+        
+        async function loadDailySentence() {
+          const node = await ajaxQuery('key-and-lock.html', 'pre')
+          const list = node.textContent.split(/\n----\n/g)
+          const day = daySince(new Date('2018-04-12'))
+          const sentence = list[day % list.length]
+          document.querySelector('#daily-sentence pre').textContent = sentence
+        
+          function daySince(start) {
+            const now = new Date()
+            const msDiff = Number(now) - Number(start)
+            const dayDiff = msDiff / (24 * 60 * 60 * 1000)
+            return Math.floor(dayDiff)
+          }
         }
-      }
-    </script>
+      </script>
+    </blockquote>
       
     <main></main>
     <template id="article-template">
@@ -55,24 +66,6 @@
       </article>
     </template>
     <script src="ext/atom-indexing.js"></script>
-    <form id="query-article">
-      <h2>query by js</h2>
-      <textarea name="query-statement">
-title.match(/的/) &&
-date &gt; new Date('2017-08-01') &&
-hasTag('程式')
-      </textarea>
-      <label>match number: <output name="match-number"></output></label>
-      <input type="submit">
-      <script src="ext/searcher.js"></script>
-    </form>
-    <iframe id="index-chatbox"
-            src="https://www2.cbox.ws/box/?boxid=2382262&boxtag=nafllg"
-            allowtransparency="yes">
-      <a href="//my.cbox.ws/gholk">
-        你的瀏覽器不支援 iframe，請點擊觀看留言。
-      </a>
-    </iframe>	
   </body>
 </html>
 

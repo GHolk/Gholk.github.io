@@ -1,0 +1,51 @@
+
+header, nav, blockquote {
+    margin: 1em auto;
+}
+header {
+    display: block;
+    width: 70%;
+}
+header p {
+    text-align: right;
+}
+
+nav {
+    border-top: solid 1px;
+    border-bottom: solid 1px;
+    width: 80%;
+}
+nav ul {
+    /* list-style: none; */
+    padding: 0;
+    margin: 0.3em;
+}
+nav li {
+    display: inline-block;
+    margin: 0 1em;
+}
+nav a {
+    /* can not change `:visited` */
+    text-decoration: none;
+}
+
+#daily-sentence, main {
+    max-width: 60em;
+    margin: auto;
+    padding: 0 1em;
+}
+
+article {
+    margin: 2em 0;
+}
+article ul {
+    padding: 0;
+}
+article ul li {
+    display: inline-block;
+    margin-right: 0.5em;
+    color: grey;
+}
+article ul li:before {
+    content: '#';
+}

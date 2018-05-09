@@ -1,5 +1,5 @@
 
-header, nav, blockquote {
+header, blockquote {
     margin: 1em auto;
 }
 header {
@@ -13,12 +13,14 @@ header p {
 nav {
     border-top: solid 1px;
     border-bottom: solid 1px;
-    width: 80%;
+    width: auto;
+    margin: 1em;
 }
 nav ul {
     /* list-style: none; */
     padding: 0;
     margin: 0.3em;
+    max-width: 60em;
 }
 nav li {
     display: inline-block;

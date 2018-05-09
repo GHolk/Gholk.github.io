@@ -34,9 +34,8 @@ class Article {
         a.entry = entry
         return a
     }
-    createNode() {
+    createNodeNoAppend() {
         const template = this.constructor.template
-        const listNode = this.constructor.listNode
         const node = template.cloneNode(deep)
         node[q]('a').textContent = this.title
         node[q]('a').href = this.url
@@ -49,7 +48,11 @@ class Article {
             return li
         }).forEach((li) => ul.appendChild(li))
         this.node = node
-        listNode.appendChild(node)
+    }
+    createNode() {
+        if (!this.node) this.createNodeNoAppend()
+        const listNode = this.constructor.listNode
+        listNode.appendChild(this.node)
     }
     show(bool) {
         const classList = this.node.classList
@@ -68,14 +71,27 @@ Article.template = document
     .querySelector('article')
     .cloneNode(deep)
 
-function loadAtomUrl(url) {
+function loadAtomUrl(url, lengthLimit = getParameter('articleCountLimit')) {
     return ajaxQuery(url, 'entry').then((allEntry) => {
-        allEntry = Array.from(allEntry)
+        allEntry = Array.from(allEntry).slice(0, lengthLimit)
         const articleList = allEntry.map((entry) => Article.fromAtom(entry))
         articleList.forEach((article) => article.createNode())
         return articleList
         // return Promise.all(allEntry.map(asyncLoad))
     })
+}
+
+function getParameter(name) {
+    const h = 'hasOwnProperty'
+    const currentScript = document.currentScript
+    if (window[h](name)) return window[name]
+    else if (currentScript[h](name)) {
+        return currentScript[name]
+    }
+    else if (currentScript.dataset[h](name)) {
+        return currentScript.dataset[name]
+    }
+    else return undefined
 }
 
 const loadArticle = loadAtomUrl(atomUrl)
@@ -87,3 +103,4 @@ function asyncLoad(entry) {
         load(article)
     })
 }
+

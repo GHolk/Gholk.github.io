@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-05-08T13:24:58.201Z</updated>
+  <updated>2018-05-09T11:28:59.514Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>gholk MBlog</title>
   <subtitle>Mblog is for meta bloging</subtitle>
@@ -25,6 +25,47 @@
 
 
 <entry>
+<id>http://gholk.github.io/dream-sxtn.html</id>
+<title>夢境：極限地獄梗</title>
+<published>2018-05-09T11:27:55.040Z</published>
+<updated>2018-05-09T11:28:59.505Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/dream-sxtn.html"/>
+<summary>夢境及自我剖析加密文章。</summary>
+<category term="夢"/>
+<category term="學校"/>
+<content type="html">&lt;h1 id="夢境：極限地獄梗"&gt;夢境：極限地獄梗&lt;/h1&gt;
+&lt;p&gt;夢境及自我剖析加密文章。&lt;/p&gt;
+&lt;pre class="encrypt-data"&gt;
+-----BEGIN PGP MESSAGE-----
+
+hQEMA1sAF9EOR12VAQgAkO3+HKArx6wRQfiXbug2zBdiszqeSuq6DSkdL9cvtoAZ
+WtEzVGfNx4Fj1q+BudRrG1w8Yur+8FhpCXBFpEjhVo3bIjWHatSL2Skmwqpt6uuu
+Ge/L0GgLzp1fPAudNO/6hL2VlPjm5nUnt1vmMz8GWbLLS4EIxYuWF3pGr77sG75U
+fShgHBE1lC2ylk7oy8UkN6lhe4K4tRteCmzBX3DdL7miBEje5QBt27BIcuIKvmVN
+rCkq3g9MsUqE//wnENaXhTSUlRt8xp8TEMc1/gpKZiAsu8EJSjcoLef5kk0UoBZY
+vArYImJ6lt/Q1f3WC1J3GdUPgtxcseAshgPsCN394YwuBAcDAn5jiswVDYTO5iVX
+y6yVLJ1i2t5oms6YdaPvcg2+pA33mp30dClaVRPoodLpAXkxiTfuXW9n2n1vqwqC
+apkH+5NLudTdjK8b6RodpNUjMeH2f58SPr5ebjBP+2xjkP3civxXO6720SvSdC83
+au8X0ODGcGg69Zg1sHNsix7G43bHWai8SoD4XqV8rCRAlXEeGXV8qUjzeXLpzben
+3bfYGaEwsse85hwqnQgAX74JFAej/20NC+ke62kawgLVry1J05b0D+D704bnUJg6
+CpjyfbqyVwrLcv+Y5CneBtmPPLTF4ue84I4RoDa7jIHMcQuPV3VNVE+FiOPOV9IE
+43P1A0jlm5BT3KtE9+c8leE8Jctdl870rovDNCp8vbmixkjrscYRKZ7Zv4BVdAkr
+DsxkrMsa2DJYcNhBnk1kUm2Abliax1d+/t1o4pKjiJi9cIEHrKVYvfJwjWtrgEnA
+ncOh3RvkDj4Bm45OACf6UaBGXw1gBcpHpsLQ3KYQM7VlN1h+Su1OelQpIYT+0PBp
+hLrPkmczB1ThrQDhdwWo+y6aJYuHzUOKwkakj6yZbT2fZbUGapCSHDY+p1VT0iTG
++JGmEZgn8J6GEDQQJO1EwPVO+UTHzccDmsCYOiaSSNK/nl+tCLdPTq0tLBE9OV2O
+HSp59ZhVd6K7H+JFy3uAEuafg6/BaCx/kesa0/v+JIICUVp6TKqFC60PHqBx9O6/
+KrV+BGovxZyq3UJyHtNhwCCrxJkYVdgaQbe6b5D+5NzsAMrtUvCAfsPzEFaDpZnJ
+uLBXAjHecULKxVN3dqbVpqNaqU7EBONIksC2EZV0Pi4evDnPzM1vDyOdgJHiNhW7
+bA8XUW7U1+5VStF2vM5JLL5tINF/7geqKNn/DjPW00BWYDbkguK38WibNz1Ppna+
+CxRqsf9XUqJbfXho2Nmx2xyJIFpr/7BQre/8pHp0fYJb2kmlaZN5sVxsF5R1
+=dCHr
+-----END PGP MESSAGE-----
+&lt;/pre&gt;
+
+&lt;script src="ext/decrypt-post.js"&gt;&lt;/script&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/ccns-vice-president-experience-107.html</id>
 <title>ccns 下學期副社長經驗</title>
 <published>2018-05-01T14:48:42.730Z</published>

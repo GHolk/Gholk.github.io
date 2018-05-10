@@ -16,17 +16,20 @@ function injectDecryptHtml() {
     div.appendChild(script)
 
     const dataClass = 'encrypt-data'
-    document.querySelectorAll(`.${dataClass}`).forEach(encryptNode => {
+    for (const encrypt of document.querySelectorAll(`.${dataClass}`)) {
+        const button = createDecryptButton()
+        encrypt.insertBefore(button, encrypt.firstChild)
+    }
+    function createDecryptButton() {
         const button = document.createElement('button')
+        button.onclick = clickPromptDecrypt
         button.textContent = 'decrypt'
-        encryptNode.insertBefore(button, encryptNode.firstChild)
-    })
-    window.addEventListener('click', function (click) {
-        const button = click.target
-        if (button.matches(`.${dataClass} > button`)) {
-            promptDecrypt(button.parentNode)
-        }
-    })
+        return button
+    }
+    function clickPromptDecrypt(click) {
+        const encryptContainer = click.target.parentNode
+        promptDecrypt(encryptContainer)
+    }
 
     return new Promise(function waitOpengpgLoad(finish) {
         if (window.openpgp) finish(window.openpgp)
@@ -46,11 +49,22 @@ async function promptDecrypt(node, password = prompt('password')) {
     for (const child of node.childNodes) {
         if (child.nodeType == Node.TEXT_NODE) {
             textNode = child
-            break
         }
     }
-    const plain = await openpgpDecrypt(textNode.textContent, password)
-    const plainNode = document.createElement('article')
-    plainNode.textContent = plain
-    node.querySelector('button').replaceWith(plainNode)
+    let plain
+    try {
+        plain = await openpgpDecrypt(textNode.textContent, password)
+    }
+    catch (decryptError) {
+        console.error(decryptError)
+        alert('error password')
+        plain = null
+    }
+    finally {
+        if (plain) {
+            const plainNode = document.createElement('article')
+            plainNode.textContent = plain
+            node.querySelector('button').replaceWith(plainNode)
+        }
+    }
 }

@@ -190,6 +190,11 @@ Terry Cheung‎
 臣亮言：先帝創業未半，而中道發廢文。天長地久有時盡，廢文綿綿無絕期。
 ```
 
+---
+
+初學三年，天下無敵，再學三年，寸步難行。
+
+
 <script>
 document.querySelectorAll('pre').forEach(pre => {
   const code = pre.children[0]

@@ -360,14 +360,8 @@ m 就是比例尺 300 分之一
 所以這例題大家要知道
 
 先休息十分鐘
-</details>
 </pre>
 
-<style>
-pre summary {
-  display: block;
-}
-</style>
 
 ## 結束聽打
 ![end]

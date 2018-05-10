@@ -81,19 +81,6 @@ function loadAtomUrl(url, lengthLimit = getParameter('articleCountLimit')) {
     })
 }
 
-function getParameter(name) {
-    const h = 'hasOwnProperty'
-    const currentScript = document.currentScript
-    if (window[h](name)) return window[name]
-    else if (currentScript[h](name)) {
-        return currentScript[name]
-    }
-    else if (currentScript.dataset[h](name)) {
-        return currentScript.dataset[name]
-    }
-    else return undefined
-}
-
 const loadArticle = loadAtomUrl(atomUrl)
 
 function asyncLoad(entry) {

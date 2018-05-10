@@ -160,6 +160,17 @@ autoLoader.addCase(
     () => document.querySelector('.encrypt-data'),
     () => autoLoader.addScript('ext/decrypt-post.js')
 )
-        
+
+function getParameter(name, currentScript = document.currentScript) {
+    const h = 'hasOwnProperty'
+    if (window[h](name)) return window[name]
+    else if (currentScript[h](name)) {
+        return currentScript[name]
+    }
+    else if (currentScript.dataset[h](name)) {
+        return currentScript.dataset[name]
+    }
+    else return undefined
+}
 
 const goption = parseQueryOption(location.search.slice(1))

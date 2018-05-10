@@ -36,6 +36,10 @@ nav a {
     margin: auto;
     padding: 0 1em;
 }
+#daily-sentence pre {
+    width: 100%;
+    overflow: auto;
+}
 
 article {
     margin: 2em 0;

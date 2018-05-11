@@ -92,6 +92,7 @@ style[contenteditable]::before {
 
 <hr>
 <h3 id="翻頁按鈕">翻頁按鈕</h3>
+<h4 id="把按鈕移到螢幕右下角">把按鈕移到螢幕右下角</h4>
 <style>
 :this + button {
   position: fixed;
@@ -103,6 +104,7 @@ style[contenteditable]::before {
 
 <button onclick="scrollToNextHr()">下一頁</button>
 
+<h4 id="翻頁函數">翻頁函數</h4>
 <script>
 function scrollToNextHr() {
   const allHr = document.querySelectorAll('hr')
@@ -178,13 +180,13 @@ function helloHtml(name) {
 <li>設置 <code>&lt;a rel=&quot;sidebar&quot; href=&quot;javascript:alert(&#39;hey&#39;)&quot;&gt;</code> 
 可以讓超連結點擊時詢問加入書籤。
 <a rel="sidebar" href="javascript:alert('hey')">say hey!</a></li>
+<li>或拖拉超連結到書籤列就可以直接加入</li>
 </ul>
 <hr>
 <h4 id="chromium">chromium</h4>
 <ul>
-<li>沒有辦法，只能右鍵複製網址，之後到書籤管理員裡手動加入。</li>
-<li>因為 chrome 的加入書籤是在網址列上的一顆星星，但多數小書籤沒有頁面，也就不行。</li>
-<li>幹你 google</li>
+<li>只能拖拉超連結到書籤列加入</li>
+<li>或右鍵複製網址，之後到書籤管理員裡手動加入。</li>
 </ul>
 <hr>
 <h3 id="youtube 搜尋小書籤">youtube 搜尋小書籤</h3>

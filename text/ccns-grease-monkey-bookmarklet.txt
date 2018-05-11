@@ -79,6 +79,8 @@ style[contenteditable]::before {
 
 ### 翻頁按鈕
 
+#### 把按鈕移到螢幕右下角
+
 <style>
 :this + button {
   position: fixed;
@@ -89,6 +91,8 @@ style[contenteditable]::before {
 </style>
 
 <button onclick="scrollToNextHr()">下一頁</button>
+
+#### 翻頁函數
 
 <script>
 function scrollToNextHr() {
@@ -181,13 +185,13 @@ onclick 回傳 false 表示不處理本來應該處理的事件，
 * 設置 `<a rel="sidebar" href="javascript:alert('hey')">` 
   可以讓超連結點擊時詢問加入書籤。
   <a rel="sidebar" href="javascript:alert('hey')">say hey!</a>
+* 或拖拉超連結到書籤列就可以直接加入
 
 ---
 
 #### chromium
-* 沒有辦法，只能右鍵複製網址，之後到書籤管理員裡手動加入。
-* 因為 chrome 的加入書籤是在網址列上的一顆星星，但多數小書籤沒有頁面，也就不行。
-* 幹你 google
+* 只能拖拉超連結到書籤列加入
+* 或右鍵複製網址，之後到書籤管理員裡手動加入。
 
 ---
 

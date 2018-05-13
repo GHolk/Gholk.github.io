@@ -2,7 +2,7 @@
 const loadOpenpgp = injectDecryptHtml()
 function injectDecryptHtml() {
     const id = 'decrypt-post'
-    let div = document.querySelector(`#${id}`)
+    let div = document.getElementById(id)
     if (!div) {
         div = document.createElement('div')
         div.id = id
@@ -16,7 +16,7 @@ function injectDecryptHtml() {
     div.appendChild(script)
 
     const dataClass = 'encrypt-data'
-    for (const encrypt of document.querySelectorAll(`.${dataClass}`)) {
+    for (const encrypt of document.getElementsByClassName(dataClass)) {
         const button = createDecryptButton()
         encrypt.insertBefore(button, encrypt.firstChild)
     }
@@ -31,10 +31,7 @@ function injectDecryptHtml() {
         promptDecrypt(encryptContainer)
     }
 
-    return new Promise(function waitOpengpgLoad(finish) {
-        if (window.openpgp) finish(window.openpgp)
-        else setTimeout(() => waitOpengpgLoad(finish), 500)
-    })
+    return waitLoadOf('openpgp')
 }
 
 async function openpgpDecrypt(ascii, password) {

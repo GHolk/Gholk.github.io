@@ -173,4 +173,31 @@ function getParameter(name, currentScript = document.currentScript) {
     else return undefined
 }
 
+
+function waitLoadOf(event) {
+    const interval = 500
+    const defer = Promise.defer()
+    let test
+    if (typeof event == 'string') test = testWindowProperty
+    else test = event
+    intervalTest()
+    return defer
+
+    function testWindowProperty() {
+        return window[event]
+    }
+    function intervalTest() {
+        const result = test()
+        if (result) defer.resolve(result)
+        else setTimeout(intervalTest, interval)
+    }
+}
+
+function waitScriptTag(url, event) {
+    const script = document.createElement('script')
+    script.src = url
+    document.body.appendChild(script)
+    return waitLoadOf(event)
+}
+
 const goption = parseQueryOption(location.search.slice(1))

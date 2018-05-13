@@ -1,25 +1,21 @@
 
 const loadOpenpgp = injectDecryptHtml()
-function injectDecryptHtml() {
-    const id = 'decrypt-post'
-    let div = document.getElementById(id)
-    if (!div) {
-        div = document.createElement('div')
-        div.id = id
-        const thisScript = prevQuerySelector('script')
-        thisScript.parentNode.insertBefore(div, thisScript)
-    }
+if (getParameter('marked')) markedWhenDecrypt()
 
-    const opengpgUrl = 'https://cdnjs.cloudflare.com/ajax/libs/openpgp/3.0.4/openpgp.js'
-    const script = document.createElement('script')
-    script.src = opengpgUrl
-    div.appendChild(script)
+function injectDecryptHtml() {
+
+    const opengpgUrl =
+        'https://cdnjs.cloudflare.com/ajax/libs/openpgp/3.0.4/openpgp.js'
+    const loadOpenpgp = waitScriptTag(opengpgUrl, 'openpgp')
 
     const dataClass = 'encrypt-data'
     for (const encrypt of document.getElementsByClassName(dataClass)) {
         const button = createDecryptButton()
         encrypt.insertBefore(button, encrypt.firstChild)
     }
+    
+    return loadOpenpgp
+
     function createDecryptButton() {
         const button = document.createElement('button')
         button.onclick = clickPromptDecrypt
@@ -30,8 +26,6 @@ function injectDecryptHtml() {
         const encryptContainer = click.target.parentNode
         promptDecrypt(encryptContainer)
     }
-
-    return waitLoadOf('openpgp')
 }
 
 async function openpgpDecrypt(ascii, password) {
@@ -57,11 +51,26 @@ async function promptDecrypt(node, password = prompt('password')) {
         alert('error password')
         plain = null
     }
-    finally {
-        if (plain) {
-            const plainNode = document.createElement('article')
-            plainNode.textContent = plain
-            node.querySelector('button').replaceWith(plainNode)
-        }
+    
+    if (plain) {
+        const plainNode = document.createElement('article')
+        plainNode.textContent = plain
+        node.querySelector('button').replaceWith(plainNode)
+    }
+}
+
+function markedWhenDecrypt() {
+    const loadMarked = waitScriptTag(
+        'http://gholk.github.io/marked/marked.min.js',
+        'marked'
+    )
+    const encryptNodes = document.getElementsByClassName('encrypt-data')
+    for (const encrypt of encryptNodes) markedDecryptText(encrypt)
+
+    async function markedDecryptText(node) {
+        const marked = await loadMarked
+        const article = await waitLoadOf(() => node.querySelector('article'))
+        article.classList.add('html')
+        article.innerHTML = marked(article.textContent)
     }
 }

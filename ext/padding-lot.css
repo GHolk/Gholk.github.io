@@ -210,12 +210,16 @@ abbr:after {
     border: solid 1px;
     padding: 1em;
 }
-.encrypt-data button {
+.encrypt-data > button {
     float: right;
 }
-.encrypt-data article {
+.encrypt-data > article {
     margin: 0;
     margin-bottom: 1em;
     padding: 1em;
     border: solid 1px;
+}
+.encrypt-data > article.html {
+    white-space: normal;
+    padding: 0 1em;
 }

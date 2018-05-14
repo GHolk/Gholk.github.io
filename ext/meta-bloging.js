@@ -98,8 +98,8 @@ function ajaxQuery(url, selector) {
     })
 }
 
-patchPromise()
-function patchPromise() {
+if (window.Promise) patchPromise(Promise)
+function patchPromise(Promise) {
     Promise.lazy = function (todo) {
         const lazy = {}
         lazy.todo = todo

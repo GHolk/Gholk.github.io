@@ -35,13 +35,14 @@
     </nav>
     
     <blockquote id="daily-sentence">
-      <h3>每日一句</h3>
+      <h3><a href="key-and-lock.html">每日一句</a></h3>
       <pre></pre>
       <script>
         loadDailySentence()
         
         async function loadDailySentence() {
-          const node = await ajaxQuery('key-and-lock.html', 'pre')
+          const article = prevQuerySelector('a')
+          const node = await ajaxQuery(article.href, 'pre')
           const list = node.textContent.split(/\n----\n/g)
           const day = daySince(new Date('2018-04-12'))
           const sentence = list[day % list.length]

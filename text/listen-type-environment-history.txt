@@ -300,9 +300,20 @@ function injectTable() {
   const tableCell = document.querySelector('#main-experience-table-field')
   tableCell.textContent = ''
   list.forEach(node => tableCell.appendChild(node))
-  document.body.classList.add('print-table')
+}
+function toggleTableTimeout() {
+  const className = 'print-table'
+  const sleepSecond = 10
+  toggleTable()
+  setTimeout(toggleTable, sleepSecond*1000)
+  
+  function toggleTable() {
+    document.body.classList.toggle('print-table')
+  }
 }
 </script>
+
+<button onclick="toggleTableTimeout()">學習單全螢幕</button>
 
 ## 隱藏其它元素方便列印
 

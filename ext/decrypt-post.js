@@ -3,29 +3,33 @@ const loadOpenpgp = injectDecryptHtml()
 if (getParameter('marked')) markedWhenDecrypt()
 
 function injectDecryptHtml() {
+    const lazy = Promise.lazy(resolve => {
+        const opengpgUrl = 'https://cdnjs.cloudflare.com/ajax/libs/openpgp/3.0.4/openpgp.js'
+        waitScriptTag(opengpgUrl, 'openpgp').then(resolve)
+    })
 
-    const opengpgUrl =
-        'https://cdnjs.cloudflare.com/ajax/libs/openpgp/3.0.4/openpgp.js'
-    const loadOpenpgp = waitScriptTag(opengpgUrl, 'openpgp')
+    addButton()
+    return lazy
 
-    const dataClass = 'encrypt-data'
-    for (const encrypt of document.getElementsByClassName(dataClass)) {
-        const button = createDecryptButton()
-        encrypt.insertBefore(button, encrypt.firstChild)
+    function addButton() {
+        const dataClass = 'encrypt-data'
+        for (const encrypt of document.getElementsByClassName(dataClass)) {
+            const button = createDecryptButton()
+            encrypt.insertBefore(button, encrypt.firstChild)
+        }
+
+        function createDecryptButton() {
+            const button = document.createElement('button')
+            button.onclick = clickPromptDecrypt
+            button.textContent = 'decrypt'
+            return button
+        }
+        function clickPromptDecrypt(click) {
+            const encryptContainer = click.target.parentNode
+            promptDecrypt(encryptContainer)
+        }
     }
     
-    return loadOpenpgp
-
-    function createDecryptButton() {
-        const button = document.createElement('button')
-        button.onclick = clickPromptDecrypt
-        button.textContent = 'decrypt'
-        return button
-    }
-    function clickPromptDecrypt(click) {
-        const encryptContainer = click.target.parentNode
-        promptDecrypt(encryptContainer)
-    }
 }
 
 async function openpgpDecrypt(ascii, password) {

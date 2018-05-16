@@ -74,3 +74,10 @@ function markedWhenDecrypt() {
         article.innerHTML = marked(article.textContent)
     }
 }
+
+function injectHtmlScript(parent, html) {
+    const range = document.createRange()
+    range.selectNode(parent)
+    const fragment = range.createContextualFragment(html)
+    parent.appendChild(fragment)
+}

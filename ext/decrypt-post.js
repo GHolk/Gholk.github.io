@@ -39,7 +39,8 @@ async function openpgpDecrypt(ascii, password) {
     return plain.data
 }
 
-async function promptDecrypt(node, password = prompt('password')) {
+async function promptDecrypt(node, password) {
+    if (!password) password = promptHint()
     let textNode
     for (const child of node.childNodes) {
         if (child.nodeType == Node.TEXT_NODE) {
@@ -60,6 +61,10 @@ async function promptDecrypt(node, password = prompt('password')) {
         const plainNode = document.createElement('article')
         plainNode.textContent = plain
         node.querySelector('button').replaceWith(plainNode)
+    }
+    function promptHint() {
+        const hint = node.dataset.hint || 'password'
+        return prompt(hint)
     }
 }
 

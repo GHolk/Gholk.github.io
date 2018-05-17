@@ -100,16 +100,23 @@ function ajaxQuery(url, selector) {
 
 if (window.Promise) patchPromise(Promise)
 function patchPromise(Promise) {
-    Promise.lazy = function (todo) {
-        const lazy = {}
-        lazy.todo = todo
-        lazy.promise = null
-        lazy.then = function () {
-            if (!this.promise) this.promise = new Promise(this.todo)
-            this.promise.then.apply(this.promise, arguments)
+    class Lazy {
+        constructor(todo) {
+            this.todo = todo
+            this.promise = null
         }
-        return lazy
+        then() {
+            if (!this.promise) this.execute()
+            return this.promise.then.apply(this.promise, arguments)
+        }
+        execute() {
+            const defer = Promise.defer()
+            const result = this.todo(defer.resolve, defer.reject)
+            if (result && result.then) this.promise = result
+            else this.promise = defer
+        }
     }
+    Promise.Lazy = Lazy
     if (!Promise.defer) Promise.defer = function () {
         const defer = {}
         const promise = new this((resolve, reject) => {

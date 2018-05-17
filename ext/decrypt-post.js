@@ -3,10 +3,8 @@ const loadOpenpgp = injectDecryptHtml()
 if (getParameter('marked')) markedWhenDecrypt()
 
 function injectDecryptHtml() {
-    const lazy = Promise.lazy(resolve => {
-        const opengpgUrl = 'https://cdnjs.cloudflare.com/ajax/libs/openpgp/3.0.4/openpgp.js'
-        waitScriptTag(opengpgUrl, 'openpgp').then(resolve)
-    })
+    const openpgpUrl = 'https://cdnjs.cloudflare.com/ajax/libs/openpgp/3.0.4/openpgp.js'
+    const lazy = new Promise.Lazy(() => waitScriptTag(openpgpUrl, 'openpgp'))
 
     addButton()
     return lazy

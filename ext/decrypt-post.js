@@ -67,18 +67,21 @@ async function promptDecrypt(node, password) {
 }
 
 function markedWhenDecrypt() {
-    const loadMarked = waitScriptTag(
-        'http://gholk.github.io/marked/marked.min.js',
-        'marked'
-    )
+    const lazyMarked = new Promise.Lazy(loadMarked)
     const encryptNodes = document.getElementsByClassName('encrypt-data')
     for (const encrypt of encryptNodes) markedDecryptText(encrypt)
 
     async function markedDecryptText(node) {
-        const marked = await loadMarked
         const article = await waitLoadOf(() => node.querySelector('article'))
+        const marked = await lazyMarked
         article.classList.add('html')
         article.innerHTML = marked(article.textContent)
+    }
+    function loadMarked() {
+        return waitScriptTag(
+            'http://gholk.github.io/marked/marked.min.js',
+            'marked'
+        )
     }
 }
 

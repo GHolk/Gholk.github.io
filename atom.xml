@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-05-19T16:26:15.095Z</updated>
+  <updated>2018-05-20T10:13:04.320Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -25,6 +25,79 @@
 
 
 <entry>
+<id>http://gholk.github.io/novel-lhdls.html</id>
+<title>小說短文</title>
+<published>2018-05-18T15:40:08.968Z</published>
+<updated>2018-05-20T10:13:04.310Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/novel-lhdls.html"/>
+<summary>加入更多補充資料，並使用 marked 在瀏覽器端轉成 html 。</summary>
+<category term="小說"/>
+<category term="encrypt"/>
+<content type="html">&lt;h1 id="小說短文"&gt;小說短文&lt;/h1&gt;
+&lt;p&gt;試著把腦中劇情寫出來看看。&lt;/p&gt;
+&lt;pre class="encrypt-data" data-hint="筆名"&gt;
+-----BEGIN PGP MESSAGE-----
+
+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
+rttulc2IYb1xoQ==
+=Xc6i
+-----END PGP MESSAGE-----
+&lt;/pre&gt;
+
+&lt;script data-marked="true" src="ext/decrypt-post.js"&gt;&lt;/script&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/novel-lhdls.html</id>
 <title>小說短文</title>
 <published>2018-05-18T15:40:08.968Z</published>

@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-05-20T10:13:04.320Z</updated>
+  <updated>2018-05-20T17:01:49.543Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -25,6 +25,111 @@
 
 
 <entry>
+<id>http://gholk.github.io/geomatics-graduate-autobiography.html</id>
+<title>測量研究所自傳</title>
+<published>2018-05-20T16:32:42.593Z</published>
+<updated>2018-05-20T17:01:49.535Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/geomatics-graduate-autobiography.html"/>
+<summary>考測量研究所時寫的自傳，
+成大和交大在筆試外都要二階段面試，
+就很簡潔的寫了自傳。
+蠻著重在程式方面的，還給 DC 看過，
+雖然他的評價我沒有很參考。</summary>
+<category term="自介"/>
+<category term="ncku"/>
+<category term="學校"/>
+<category term="研究所"/>
+<category term="encrypt"/>
+<content type="html">&lt;h1 id="測量研究所自傳"&gt;測量研究所自傳&lt;/h1&gt;
+&lt;p&gt;考測量研究所時寫的自傳，
+成大和交大在筆試外都要二階段面試，
+就很簡潔的寫了自傳。
+蠻著重在程式方面的，還給 DC 看過，
+雖然他的評價我沒有很參考。&lt;/p&gt;
+&lt;pre class="encrypt-data" data-hint="手機號碼"&gt;
+-----BEGIN PGP MESSAGE-----
+
+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
+07k/0S0v6ZjcO7ME7o3p
+=yIlw
+-----END PGP MESSAGE-----
+&lt;/pre&gt;
+
+&lt;script src="ext/decrypt-post.js" data-marked="true"&gt;&lt;/script&gt;
+
+&lt;h2 id="後記"&gt;後記&lt;/h2&gt;
+&lt;p&gt;事後想很寫簡潔好像是對的，我進到面試間時，
+好像看到交大的教授才在看我的自傳，好像還是現場印的。
+反正也不是很重要就是了，
+要是寫太多他們可能也看不完，總之最後是上交大了。&lt;/p&gt;
+&lt;p&gt;然後因為有一些個人資料，所以做了加密系統後，
+重新加密再把 git 的歷史記錄改寫，
+應該就安全了吧？&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/novel-lhdls.html</id>
 <title>小說短文</title>
 <published>2018-05-18T15:40:08.968Z</published>

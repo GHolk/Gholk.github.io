@@ -1,37 +1,13 @@
-<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta charset="UTF-8">
-<meta name="author" property="og:article:author" content="gholk">
-<meta name="copyright" content="Common Creative">
-<meta name="generator" content="emacs, markdown">
-<!-- 以上一般不用改，以下才要改。 -->
-
-<!-- 後設資料 -->
-<meta name="date" property="og:article:public_time" content="2018-05-20T16:32:42.593Z">
-<meta name="keywords" property="og:article:tag" content="自介,ncku,學校,研究所,encrypt">
-<link rel="index" type="text/html" href="index.html" title="首頁">
-<link rel="start" type="text/html" href="index.html" title="首頁">
-<link rel="next" type="text/html" href="meme-reporter-youtuber-news.html" title="如何製做網紅新聞">
-<link rel="prev" type="text/html" href="google-queer-html-tag-easter-egg.html" title="google 中對非標準元素 marquee 與 blink 的彩蛋">
-
-<!-- 和網頁位置有關 -->
-<link rel="icon" type="image/png" href="ext/icon.png">
-<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
-<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="ext/meta-bloging.js"></script>
-
-<title>測量研究所自傳</title>
-</head>
-<body>
-<main><h1 id="測量研究所自傳">測量研究所自傳</h1>
-<p>考測量研究所時寫的自傳，
+# 測量研究所自傳
+考測量研究所時寫的自傳，
 成大和交大在筆試外都要二階段面試，
 就很簡潔的寫了自傳。
 蠻著重在程式方面的，還給 DC 看過，
-雖然他的評價我沒有很參考。</p>
-<pre class="encrypt-data" data-hint="手機號碼">
+雖然他的評價我沒有很參考。
+
+
+<pre class="encrypt-data"
+     data-hint="手機號碼">
 -----BEGIN PGP MESSAGE-----
 
 hQEMA1sAF9EOR12VAQf+PEMtSgjzqyfi60kT3UgmUAoRef51W5hpJ+LIr1atvtJu
@@ -103,23 +79,21 @@ CRCHcmPt4qT0mlDGL9StsbGcxkapKGbQzkJpizfB+7oUo0zE7Rs5IlRQVyYzckpj
 -----END PGP MESSAGE-----
 </pre>
 
-<script src="ext/decrypt-post.js" data-marked="true"></script>
+<script src="ext/decrypt-post.js"
+        data-marked="true"></script>
 
-<h2 id="後記">後記</h2>
-<p>事後想很寫簡潔好像是對的，我進到面試間時，
+## 後記
+事後想很寫簡潔好像是對的，我進到面試間時，
 好像看到交大的教授才在看我的自傳，好像還是現場印的。
 反正也不是很重要就是了，
-要是寫太多他們可能也看不完，總之最後是上交大了。</p>
-<p>然後因為有一些個人資料，所以做了加密系統後，
+要是寫太多他們可能也看不完，總之最後是上交大了。
+
+然後因為有一些個人資料，所以做了加密系統後，
 重新加密再把 git 的歷史記錄改寫，
-應該就安全了吧？</p>
-</main>
+應該就安全了吧？
 
-<script defer src="ext/meta-meta.js"></script>
-<script defer src="ext/load-disqus.js"></script>
-
-
-
-
-
-</body></html>
+#自介
+#ncku
+#學校
+#研究所
+#encrypt

@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-05-20T17:01:49.543Z</updated>
+  <updated>2018-05-21T10:10:24.025Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -25,6 +25,54 @@
 
 
 <entry>
+<id>http://gholk.github.io/match-serial-parallel.html</id>
+<title>多頭並行或依序配對的禮數</title>
+<published>2018-05-21T10:09:33.468Z</published>
+<updated>2018-05-21T10:10:24.012Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/match-serial-parallel.html"/>
+<summary>之前在找研究所教授時碰到的問題，
+是要一次拜會多個教授，還是依序一個談了再找下一個。
+其實應該是並行會比較好，
+不然依序會有種排後面的是被拒絕才找的感覺。
+追女生好像有點類似？不過資訊更加不對稱。</summary>
+<category term="愛情"/>
+<category term="學校"/>
+<category term="思辨"/>
+<category term="心理"/>
+<content type="html">&lt;h1 id="多頭並行或依序配對的禮數"&gt;多頭並行或依序配對的禮數&lt;/h1&gt;
+&lt;p&gt;之前在找研究所教授時碰到的問題，
+是要一次拜會多個教授，還是依序一個談了再找下一個。
+其實應該是並行會比較好，
+不然依序會有種排後面的是被拒絕才找的感覺。
+追女生好像有點類似？不過資訊更加不對稱。&lt;/p&gt;
+&lt;p&gt;本來是覺得要依序一個個找比較好，
+不然一次找很多個好像不太禮貌，
+有點像多方討好，腳踏多條船的感覺。
+但後來發現，要是一個個找，後面的教授從時間看，
+就知道是其它教授不收，才會後面再來找的。
+好像更尷尬。&lt;/p&gt;
+&lt;p&gt;如果套在追女生上，就變成是要一次追多個，還是依序。
+感覺依序比較不會被說閒話，
+不過很多女生也是同時被多人追求，反正台灣觀念就這樣。
+比較麻煩是被拒絕後，改追別人，會不會又被嘴挑剩的？
+被嘴我是沒差，但影響到女方看法就不好了。
+但男女會有資訊更不對稱的問題，
+你追的下一個和上一個一般不會認識，
+所以依序的問題比較小，加上又用時間區隔開了。&lt;/p&gt;
+&lt;p&gt;更麻煩還有，被拒絕後到底怎麼處理？
+我是想繼續當朋友，反正都認識了，
+又回到陌生人蠻可惜的，好像那段時間都浪費了。
+但我一直以為女方會有 &lt;em&gt;你示好只是想追我&lt;/em&gt; 的想法，
+所以告白後被拒絕對方印象會不佳。
+但之前又在 PTT 女板看過抱怨文，抱怨男方被拒絕後就不理不采？
+先不論女方是否在心機欲擒故縱，想要男方來個你追我跑 18 年，
+總之就和我的想法不同，雖然也可能只是少數奇葩而已。&lt;/p&gt;
+&lt;p&gt;有點夏蟲語冰的感覺。
+就算全部都會失敗，還是得一個個開始，
+看著他逐漸失敗，確保全部失敗。
+不然因為害怕失敗而不開始，是永遠不會成功的。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/geomatics-graduate-autobiography.html</id>
 <title>測量研究所自傳</title>
 <published>2018-05-20T16:32:42.593Z</published>

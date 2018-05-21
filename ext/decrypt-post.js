@@ -74,11 +74,10 @@ function markedWhenDecrypt() {
     async function markedDecryptText(node) {
         const article = await waitLoadOf(() => node.querySelector('article'))
         const marked = await lazyMarked
-        const html = marked(article.textContent)
+        const text = article.textContent
         article.textContent = ''
-        injectHtmlScript(article, html)
+        markdownToNode(marked, text, article)
         article.classList.add('html')
-        changeStyleChildren(article)
     }
     function loadMarked() {
         return waitScriptTag(
@@ -86,15 +85,21 @@ function markedWhenDecrypt() {
             'marked'
         )
     }
-    function changeStyleChildren(node) {
-        const list = node.getElementsByTagName('style')
-        for (const style of list) changeStyleThis(style)
-    }
-    function injectHtmlScript(parent, html) {
-        const range = document.createRange()
-        range.selectNode(parent)
-        const fragment = range.createContextualFragment(html)
-        parent.appendChild(fragment)
+    function markdownToNode(convert, text, node) {
+        const html = convert(text)
+        injectHtmlScript(node, html)
+        changeStyleChildren(node)
+        
+        function changeStyleChildren(node) {
+            const list = node.getElementsByTagName('style')
+            for (const style of list) changeStyleThis(style)
+        }
+        function injectHtmlScript(parent, html) {
+            const range = document.createRange()
+            range.selectNode(parent)
+            const fragment = range.createContextualFragment(html)
+            parent.appendChild(fragment)
+        }
     }
 }
 

@@ -180,24 +180,28 @@ function getParameter(name, currentScript = document.currentScript) {
     else return undefined
 }
 
-
-function waitLoadOf(event) {
+async function waitLoadOf(event) {
     const interval = 500
-    const defer = Promise.defer()
+    
     let test
-    if (typeof event == 'string') test = testWindowProperty
-    else test = event
-    intervalTest()
-    return defer
-
+    if (typeof event == 'function') test = event
+    else test = testWindowProperty
+    
+    let result
+    do {
+        await sleep(interval)
+        result = test()
+    } while (!result)
+    
+    return result
+    
     function testWindowProperty() {
         return window[event]
     }
-    function intervalTest() {
-        const result = test()
-        if (result) defer.resolve(result)
-        else setTimeout(intervalTest, interval)
-    }
+}
+
+function sleep(millisecond) {
+    return new Promise(wake => setTimeout(wake, millisecond))
 }
 
 function waitScriptTag(url, event) {

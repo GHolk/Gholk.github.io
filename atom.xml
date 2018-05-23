@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-05-22T16:27:43.772Z</updated>
+  <updated>2018-05-23T14:59:47.532Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -25,6 +25,94 @@
 
 
 <entry>
+<id>http://gholk.github.io/novel-lhdls.html</id>
+<title>小說短文</title>
+<published>2018-05-18T15:40:08.968Z</published>
+<updated>2018-05-23T14:59:46.874Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/novel-lhdls.html"/>
+<summary>更換密碼並完成一小節。</summary>
+<category term="小說"/>
+<category term="encrypt"/>
+<content type="html">&lt;h1 id="小說短文"&gt;小說短文&lt;/h1&gt;
+&lt;p&gt;試著把腦中劇情寫出來看看。&lt;/p&gt;
+&lt;pre class="encrypt-data" data-hint="菸的主角"&gt;
+-----BEGIN PGP MESSAGE-----
+
+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
+KHraDrPx
+=Q1yz
+-----END PGP MESSAGE-----
+&lt;/pre&gt;
+
+&lt;script data-marked="true" src="ext/decrypt-post.js"&gt;&lt;/script&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/implement-async-by-generator.html</id>
 <title>用 generator 實作 async await</title>
 <published>2018-05-22T09:37:11.268Z</published>

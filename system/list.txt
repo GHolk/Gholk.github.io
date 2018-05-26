@@ -203,3 +203,4 @@ quantum-computer-es-speech.html
 match-serial-parallel.html
 implement-async-by-generator.html
 taiwan-shell-king-study.html
+javascript-except-query-selector.html

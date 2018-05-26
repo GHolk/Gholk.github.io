@@ -6,7 +6,7 @@
 雖然他的評價我沒有很參考。
 
 
-<pre class="encrypt-data"
+<pre class="encrypt-data lang-markdown"
      data-hint="手機號碼">
 -----BEGIN PGP MESSAGE-----
 
@@ -79,8 +79,7 @@ CRCHcmPt4qT0mlDGL9StsbGcxkapKGbQzkJpizfB+7oUo0zE7Rs5IlRQVyYzckpj
 -----END PGP MESSAGE-----
 </pre>
 
-<script src="ext/decrypt-post.js"
-        data-marked="true"></script>
+<script src="ext/decrypt-post.js"></script>
 
 ## 後記
 事後想很寫簡潔好像是對的，我進到面試間時，

@@ -1,12 +1,12 @@
 
 const loadOpenpgp = injectDecryptHtml()
-if (getParameter('marked')) markedWhenDecrypt()
 
 function injectDecryptHtml() {
     const openpgpUrl = 'https://cdnjs.cloudflare.com/ajax/libs/openpgp/3.0.4/openpgp.js'
     const lazy = new Promise.Lazy(() => waitScriptTag(openpgpUrl, 'openpgp'))
 
     addButton()
+    markedWhenDecrypt()
     return lazy
 
     function addButton() {
@@ -69,7 +69,11 @@ async function promptDecrypt(node, password) {
 function markedWhenDecrypt() {
     const lazyMarked = new Promise.Lazy(loadMarked)
     const encryptNodes = document.getElementsByClassName('encrypt-data')
-    for (const encrypt of encryptNodes) markedDecryptText(encrypt)
+    for (const encrypt of encryptNodes) {
+        if (encrypt.classList.contains('lang-markdown')) {
+            markedDecryptText(encrypt)
+        }
+    }
 
     async function markedDecryptText(node) {
         const article = await waitLoadOf(() => node.querySelector('article'))
@@ -77,7 +81,6 @@ function markedWhenDecrypt() {
         const text = article.textContent
         article.textContent = ''
         markdownToNode(marked, text, article)
-        article.classList.add('html')
     }
     function loadMarked() {
         return waitScriptTag(

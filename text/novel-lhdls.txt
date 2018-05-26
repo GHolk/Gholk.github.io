@@ -1,7 +1,7 @@
 # 小說短文
 試著把腦中劇情寫出來看看。
 
-<pre class="encrypt-data" data-hint="菸的主角">
+<pre class="encrypt-data lang-markdown" data-hint="菸的主角">
 -----BEGIN PGP MESSAGE-----
 
 hQEMA1sAF9EOR12VAQf+KuJVGqHKO7v5TtrAxc4xrbeap+JGd3acBH6ucXhkUHQU
@@ -98,7 +98,7 @@ ALcBSTxIrVQxAeRULBhKNX7V+YED9vpRnOqDjA+/
 -----END PGP MESSAGE-----
 </pre>
 
-<script data-marked="true" src="ext/decrypt-post.js"></script>
+<script src="ext/decrypt-post.js"></script>
 
 #小說
 #encrypt

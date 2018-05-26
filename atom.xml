@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-05-26T05:41:36.558Z</updated>
+  <updated>2018-05-26T05:48:17.645Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -25,6 +25,105 @@
 
 
 <entry>
+<id>http://gholk.github.io/javascript-except-query-selector.html</id>
+<title>document.querySelector 的短處</title>
+<published>2018-05-26T05:41:36.293Z</published>
+<updated>2018-05-26T05:48:17.635Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/javascript-except-query-selector.html"/>
+<summary>加上第一次操作 dom 時的挫折經歷。</summary>
+<category term="javascript"/>
+<category term="web"/>
+<content type="html">&lt;h1 id="document.querySelector 的短處"&gt;document.querySelector 的短處&lt;/h1&gt;
+&lt;p&gt;在 javascript 操作 dom 中， &lt;code&gt;document.querySelector&lt;/code&gt;
+這個新的方法可以簡化很多操作，一舉取代大部份的查詢方法。
+但有時候不打算把查詢目標寫死時，就會比較麻煩，
+這時候可以回到單純的 getElementsByClassName、
+getElementById 等會比較方便，不用為 id 加上 &lt;code&gt;#&lt;/code&gt; ，
+或為 class 加上 &lt;code&gt;.&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;有時候某一函數會查詢某 class 的元素，
+如果不想把 class 名寫死，可能是同一函數裡會用到多次，
+就會把 className 寫成變數。
+但這樣要查詢時如果又用 querySelector，
+要嘛在 querySelector 時手動加上 &lt;code&gt;.&lt;/code&gt; ，
+要嘛直接在 className 裡包含點，但前者很麻煩，
+後者雖然 js 有 template string 了，但還是很醜。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-javascript"&gt;async function markdedAll(rootNode) {
+    const marked = await waitScriptTag(&amp;#39;../marked/marked.min.js&amp;#39;, &amp;#39;marked&amp;#39;)
+    const className = &amp;#39;to-marked&amp;#39;
+    const list = rootNode.querySelectorAll(`.${className}`)
+    // or rootNode.querySelectorAll(&amp;#39;.&amp;#39; + className)
+    // or const className = &amp;#39;.to-marked&amp;#39;
+
+    for (const node of list) node.innerHTML = marked(node.textContent)
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;由於寫多了這種 code，一直覺得很煩，
+忽然想到 js 還有其它查詢函數，可以直接接受 className 或 id 的，
+像 getElementsByClassName 和 getElementById，
+而且他們的返回值也支援 iterator protocol。
+所以上面就可以改寫不用手動修改查詢字串的版本。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-javascript"&gt;const className = &amp;#39;to-marked&amp;#39;
+const list = rootNode.getElementsByClassName(className)
+for (const node of list) node.innerHTML = marked(node.textContent)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id="一些雷點"&gt;一些雷點&lt;/h2&gt;
+&lt;p&gt;只有 document 物件有 getElementById，其它子元素只有 &lt;code&gt;getElementsBy*&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;getElementsBy*&lt;/code&gt; 所返回的是 HTMLCollection，如果 dom 改變了，
+之前查詢的結果也會跟著變；而 querySelector 返回的時 NodeList，
+是當下的 dom 的查詢結果的快照，不會反應之後 dom 的改變。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-javascript"&gt;let pList = document.getElementsByTagName(&amp;#39;p&amp;#39;)
+console.log(pList.length) // n
+pList[0].remove() // 將元素從 dom 中移除
+console.log(pList.length) // n-1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;所以如果想用 for 迴圈一一移除 HTMLCollection 中的元素會失敗，
+因為你把 index 1 的元素移除後，原 index 2 的元素會被遞移到 1，
+但 for 迴圈再來是處理 index 2，但 2 其實是原本 index 3 的元素；
+就算在 iterator protocol 中也是。
+所以最好的方法是用 &lt;code&gt;Array.from&lt;/code&gt; 把 HTMLCollection 轉回真正的陣列，
+就和 NodeList 一樣了，也就沒這個問題了。
+或是就不要在 HTMLCollection 中做出會讓元素數量改變的行為。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-javascript"&gt;let pList = document.getElementsByTagName(&amp;#39;p&amp;#39;)
+pList = Array.from(pList)
+pList.length // n
+pList[0].remove() // 將元素從 dom 中移除
+pList.length // n, 移除後陣列中仍保存原本元素的物件
+document.body.appendChild(pList[0]) // 可以隨時再插入回 dom。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;另外對同一個元素做同樣查詢得到的 HTMLCollection 是相同的，
+不只內容相同，物件也是同一個。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-javascript"&gt;let pl = document.getElementsByTagName(&amp;#39;p&amp;#39;)
+pl == document.getElementsByTagName(&amp;#39;p&amp;#39;) // true
+
+bodyPl = document.body.getElementsByTagName(&amp;#39;p&amp;#39;)
+bodyPl != pl  // true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;還有 querySelector 返回的 NodeList 具有 forEach 方法，
+但沒有 map filter 等，而 HTMLCollection 則全部沒有。
+且二者雖然可以用 for of，但都不適合用 for in loop，
+因為在 for in 中除了數字，
+還會取到 length keys values 等數字以外的屬性，
+處理起來很不方便。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-javascript"&gt;let pl = document.querySelector(&amp;#39;p&amp;#39;)
+for (const i in pl) console.log(i)
+// 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 
+// item keys values entries forEach length
+// 取到一堆異物
+
+for (const p of pl) console.log(p)
+// &amp;lt;p&amp;gt; ... &amp;lt;p&amp;gt;
+// 無異物
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id="第一次操作 dom 的惡夢"&gt;第一次操作 dom 的惡夢&lt;/h2&gt;
+&lt;p&gt;記得很久以前，剛學會 javascript 語法時，
+就開始玩 &lt;code&gt;document.getElementsBy*&lt;/code&gt; ，
+乍看之下還以為是陣列，就呼叫 forEach 結果報錯，
+又改叫 for in 也報錯，就這樣折騰了很久。
+最後才發現原來 dom 的雷點這麼多，
+從此很長一段時間，都習慣用 Array.from 
+轉換所有 HTMLCollection 和 NodeList。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/javascript-except-query-selector.html</id>
 <title>document.querySelector 的短處</title>
 <published>2018-05-26T05:41:36.293Z</published>

@@ -106,6 +106,14 @@ for (const p of pl) console.log(p)
 // &lt;p&gt; ... &lt;p&gt;
 // 無異物
 </code></pre>
+<h2 id="第一次操作 dom 的惡夢">第一次操作 dom 的惡夢</h2>
+<p>記得很久以前，剛學會 javascript 語法時，
+就開始玩 <code>document.getElementsBy*</code> ，
+乍看之下還以為是陣列，就呼叫 forEach 結果報錯，
+又改叫 for in 也報錯，就這樣折騰了很久。
+最後才發現原來 dom 的雷點這麼多，
+從此很長一段時間，都習慣用 Array.from 
+轉換所有 HTMLCollection 和 NodeList。</p>
 </main>
 
 <script defer src="ext/meta-meta.js"></script>

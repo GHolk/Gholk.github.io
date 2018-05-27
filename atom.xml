@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-05-27T08:52:54.336Z</updated>
+  <updated>2018-05-27T14:28:56.116Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -25,6 +25,50 @@
 
 
 <entry>
+<id>http://gholk.github.io/article-wmsr.html</id>
+<title>短文試作</title>
+<published>2018-05-27T14:28:55.805Z</published>
+<updated>2018-05-27T14:28:56.106Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/article-wmsr.html"/>
+<summary>試寫幾小段情節。
+只是一些小事，不成完整的篇章。</summary>
+<category term="創作"/>
+<category term="encrypt"/>
+<category term="小說"/>
+<content type="html">&lt;h1 id="短文試作"&gt;短文試作&lt;/h1&gt;
+&lt;p&gt;試寫幾小段情節。
+只是一些小事，不成完整的篇章。&lt;/p&gt;
+&lt;pre class="encrypt-data lang-markdown" data-hint="濫用的標籤"&gt;
+-----BEGIN PGP MESSAGE-----
+
+hQEMA1sAF9EOR12VAQgAnheMM898RXkIVGh+FDWWdTLidYXArNOqX3f6U2roC1tr
+klo3hvNED04tZQTHPYbQ8R3LLjtwgzQl0ChwA/WYZvwXUuEZYLQcSsLngQ0zAam+
+CM8Ld5hIvixcahOcp7h6dlY7LL1rI+y7fyrF+0zv6awtXunqyDRWgnGYGkV+C3sj
+RSgY6b4DmufuAeU+7ZuzE9yk5M1ysWcAoPIpo2ad3pRnAhPIhF/GomCDk1yTl6TU
+x4AXrUNE5DDH1PPiDXUHyCCY0l/S8hO/LrTIeIcZj1SuiIvk29kbRA+hbor2S/Ib
+7syN1Rdy4g+kTuUOpYX/lzK8bgjfAIbN037CUYPHk4wuBAcDAusvRtwb5pgH5ncx
+ThW3p72NDzKxf3QX7nuEnWptE+aj3sz6aTAnlId7O9LpAfp3e1SpxZNpKcVdU7kn
+mvBEU2O05SEGInc8VvP3Yd1/noDk2RvVPXbaXzSTXA2wWxoLnS1w3BVsqonI3epx
+WvQDxyl/VZn/GLdkq4ZVOxxRZpm8cNcUzhcjcGMCH6hvR12rekkb/nt2ktzag0B8
+H/tVDMAon+oweQkUFm7j6mOHL31H3omMoYe+iKL6OOyTichcMcHh8DQNsgO/oSht
+tqblg3yiTRcBuB9vCErnUQwCwZ8UEDMw6FArsijKwRc7RWMOQTW5ZyQvPgW3y/td
+x0BXuf28O7OBzMuUpreaU0N+RhKKMDcLUtYHLUj00c3Lm6Enuni4DwKcdIfB/wLf
+pmQC8PeZXf7IRWuiZUPcA66KAI/cJLZ0Xai3IOj3AOzu0aIdDzJ86DLyGBjU/QWe
+4DcbK8lxS3stDE8mwIix/IA97av3A465i9ZyAV7ltgSy/sT8k4XbMQcs9tQ9MtBl
+/yzD6dwUTzvJg6JwZdYFo/4dQ8JRea0Xxt5J+RThQz+RRkHQvBcf0KZM8g9180bL
+jVM5c8rI/rYGeAXpZzdXnFRA55DtI18wsB5JF/Zavb9Yamsgyb2LUs7F9z5V4fpg
+kjd5LunMW4DBgmTcdc8LGQKfAo+4PrGh9l6IMbtTFQwEAmrgP5H91GdvvVwbIB8K
+YpbLN+MZagQr/I4lZ7uzmmiVNUE/BUVifYUCKrjjM7GR5JVg8gZ4qrXT0PPKK8rw
+5O6d/wlSWEWsWzjOxQswqUOOY2gSN+hYV2pLOuQ4mR7z1gMdTLP1kWPYrYMxarPB
+75cgZ3Epn29XY6PNg7OAfIwODqrxjQr3D+ExoviPelPL+ObfTVSkNw3HnsdLm66a
+ZG0LfebvprmRP6AnmGsqCPoVJJKOk5Q=
+=bxe+
+-----END PGP MESSAGE-----
+&lt;/pre&gt;
+
+&lt;script src="ext/decrypt-post.js"&gt;&lt;/script&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/short-life-expensive-price.html</id>
 <title>名言：逢人短命、遇貨添錢</title>
 <published>2018-04-13T16:43:44.187Z</published>

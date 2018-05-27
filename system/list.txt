@@ -204,3 +204,4 @@ match-serial-parallel.html
 implement-async-by-generator.html
 taiwan-shell-king-study.html
 javascript-except-query-selector.html
+easy-rss-feed-concept.html

@@ -1,0 +1,16 @@
+
+@media print {
+    body.slide {
+        font-size: 28px;
+    }
+    .slide hr {
+        page-break-after: always;
+        visibility: hidden;
+        margin: 0;
+        padding: 0;
+    }
+    @page {
+        size: A5 landscape;
+        margin: 4em 2em;
+    }
+}

@@ -74,14 +74,30 @@ const Article = function ClassArticle () {
     return Article
 }()
 
-function loadAtomUrl(url, lengthLimit = getParameter('articleCountLimit')) {
+function loadAtomUrl(url, lengthLimit) {
+    if (lengthLimit == undefined) {
+        lengthLimit = Number(getParameter('articleCountLimit')) || 0
+    }
     return ajaxQuery(url, 'entry').then((allEntry) => {
-        allEntry = Array.from(allEntry).slice(0, lengthLimit)
-        const articleList = allEntry.map((entry) => Article.fromAtom(entry))
-        articleList.forEach((article) => article.createNode())
+        const convertor = convertAtomEntry(allEntry)
+        const articleList = []
+        for (let i=0;
+             i<lengthLimit && i<allEntry.length;
+             i++) {
+            const article = convertor.next()
+            articleList.push(article)
+        }
+        articleList.convertor = convertor
         return articleList
-        // return Promise.all(allEntry.map(asyncLoad))
     })
+}
+
+function *convertAtomEntry(entryList) {
+    for (const entry of entryList) {
+        const article = Article.fromAtom(entry)
+        article.createNode()
+        yield article
+    }
 }
 
 const loadArticle = loadAtomUrl(atomUrl)

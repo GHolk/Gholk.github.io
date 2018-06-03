@@ -161,8 +161,10 @@ const goption = parseQueryOption(location.search.slice(1))
 
 function getParameter(name, currentScript = document.currentScript) {
     const h = 'hasOwnProperty'
+    const kebab = camelToKebab(name)
     if (goption[h](name)) return goption[name]
-    if (window[h](name)) return window[name]
+    else if (goption[h](kebab)) return goption[kebab]
+    else if (window[h](name)) return window[name]
     else if (currentScript[h](name)) {
         return currentScript[name]
     }
@@ -171,6 +173,11 @@ function getParameter(name, currentScript = document.currentScript) {
     }
     else return undefined
 
+    function camelToKebab(camel, connect = '-') {
+        return camel.replace(/[A-Z]/g, upper => {
+            return connect + upper.toLowerCase()
+        })
+    }
 }
 
 function parseQueryOption(query) {

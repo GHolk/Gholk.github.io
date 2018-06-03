@@ -67,7 +67,24 @@
         <ul></ul>
       </article>
     </template>
-    <script src="ext/atom-indexing.js"></script>
+    <script data-article-count-limit="20"
+            src="ext/atom-indexing.js"></script>
+
+    <button onclick="loadMoreArticle(5)">more</button>
+    <script>
+      function loadMoreArticle(n = 1) {
+        return loadArticle.then(list => {
+          const convertor = list.convertor
+          const newList = []
+          for (let i=0; i<n; i++) {
+            const article = convertor.next()
+            newList.push(article)
+          }
+          list.push(...newList)
+          return newList
+        })
+      }
+    </script>
   </body>
 </html>
 

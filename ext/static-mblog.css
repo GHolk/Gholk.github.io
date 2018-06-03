@@ -56,3 +56,8 @@ article ul li {
 article ul li:before {
     content: '#';
 }
+
+body > button {
+    display: block;
+    margin: auto;
+}

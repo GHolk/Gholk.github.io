@@ -115,4 +115,5 @@ fillNode(footer, allList)
 
 }
 
-if (!goption.hasOwnProperty('meta') || eval(goption['meta'])) visualizeMeta()
+if (getParameter('meta') === undefined ||
+    getParameter('meta') === '') visualizeMeta()

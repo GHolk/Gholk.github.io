@@ -18,5 +18,27 @@ function loadDisqus() {
     d.body.appendChild(s)
 }
 
-if (!goption.hasOwnProperty('disqus') || eval(goption.disqus)) loadDisqus()
+function lazyDisqus() {
+    const details = document.createElement('details')
+    details.innerHTML = '<summary>留言板</summary>'
+    details.appendChild(disqus_thread)
+    details.ontoggle = function () {
+        loadDisqus()
+        this.ontoggle = null
+    }
+    document.body.appendChild(details)
+}
 
+function testLoadDisqus() {
+    const lazy = getParameter('lazy')
+    const disqus = getParameter('disqus')
+    if (lazy === '') lazyDisqus()
+    else if (disqus === undefined ||
+             disqus === '' ||
+             disqus === 'true' ||
+             disqus === '1') {
+        loadDisqus()
+    }
+}
+
+testLoadDisqus()

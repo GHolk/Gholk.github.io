@@ -130,17 +130,6 @@ function patchPromise(Promise) {
     }
 }
 
-function parseQueryOption(query) {
-    const keyValue = query.split(/&/g)
-    const result = {}
-    for (const pair of keyValue) {
-        const keyValue = pair.split(/=/)
-        const key = decodeURIComponent(keyValue[0])
-        const value = decodeURIComponent(keyValue[1])
-        result[key] = value
-    }
-    return result
-}
 
 
 const autoLoader = {
@@ -168,8 +157,11 @@ autoLoader.addCase(
     () => autoLoader.addScript('ext/decrypt-post.js')
 )
 
+const goption = parseQueryOption(location.search.slice(1))
+
 function getParameter(name, currentScript = document.currentScript) {
     const h = 'hasOwnProperty'
+    if (goption[h](name)) return goption[name]
     if (window[h](name)) return window[name]
     else if (currentScript[h](name)) {
         return currentScript[name]
@@ -178,8 +170,20 @@ function getParameter(name, currentScript = document.currentScript) {
         return currentScript.dataset[name]
     }
     else return undefined
+
 }
 
+function parseQueryOption(query) {
+    const keyValue = query.split(/&/g)
+    const result = {}
+    for (const pair of keyValue) {
+        const keyValue = pair.split(/=/)
+        const key = decodeURIComponent(keyValue[0])
+        const value = decodeURIComponent(keyValue[1])
+        result[key] = value
+    }
+    return result
+}
 
 function waitLoadOf(event) {
     const interval = 500
@@ -206,5 +210,3 @@ function waitScriptTag(url, event) {
     document.body.appendChild(script)
     return waitLoadOf(event)
 }
-
-const goption = parseQueryOption(location.search.slice(1))

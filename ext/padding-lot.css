@@ -223,3 +223,7 @@ abbr:after {
     white-space: normal;
     padding: 0 1em;
 }
+
+summary {
+    margin: 1em;
+}

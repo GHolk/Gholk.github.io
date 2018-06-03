@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-05-31T04:46:44.344Z</updated>
+  <updated>2018-06-03T15:58:14.258Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -25,6 +25,90 @@
 
 
 <entry>
+<id>http://gholk.github.io/earphone-solder-fix.html</id>
+<title>焊接修好舊耳掛式耳機</title>
+<published>2018-06-03T15:58:13.983Z</published>
+<updated>2018-06-03T15:58:14.248Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/earphone-solder-fix.html"/>
+<summary>最近把以前小時候用的耳機再拿來用，
+因為實在是不習慣耳塞式和耳道式耳機。
+原本以為只有海綿壞了，結果還一邊沒聲音。
+就用 CCNS 的焊鐵把線重焊一次，就修好了。
+可能是接觸不良吧。</summary>
+<category term="diy"/>
+<category term="耳機"/>
+<category term="ccns"/>
+<content type="html">&lt;h1 id="焊接修好舊耳掛式耳機"&gt;焊接修好舊耳掛式耳機&lt;/h1&gt;
+&lt;p&gt;最近把以前小時候用的耳機再拿來用，
+因為實在是不習慣耳塞式和耳道式耳機。
+原本以為只有海綿壞了，結果還一邊沒聲音。
+就用 CCNS 的焊鐵把線重焊一次，就修好了。
+可能是接觸不良吧。&lt;/p&gt;
+&lt;h2 id="再找出舊耳機的契機"&gt;再找出舊耳機的契機&lt;/h2&gt;
+&lt;p&gt;在大學本來不想再用耳掛式耳機，
+因為太大不方便攜帶，
+不像耳塞的耳機部份只有小小一個，
+線捲一捲就可以塞進口袋。
+但耳塞實在帶不習慣，帶久耳朵就會開始癢。
+本來還想說，耳塞就在外面時勉強用，
+在宿舍就直接放出來，對耳朵比較好。&lt;/p&gt;
+&lt;p&gt;但最近室友開始認真讀書，不方便放出來。
+之前也有試用過頭戴式，但戴起來都會夾頭，
+耳朵壓久也會很痠，總之就是也不好戴。
+就想起以前的耳掛式耳機，戴久也不太會不舒服。
+就決定把以前用的再翻出來用。&lt;/p&gt;
+&lt;h2 id="新舊耳機比較"&gt;新舊耳機比較&lt;/h2&gt;
+&lt;p&gt;這隻是國中還高中買的，BSD 白色鑲藍邊的耳掛式耳機，
+以前打 nds 要專心時會戴，或有準備時用來聽音樂。
+缺點是比較大不好攜帶，戴起來蠻明顯的，也沒有麥克風。&lt;/p&gt;
+&lt;p&gt;不過後來買的那隻耳道式也沒有麥克風，
+當初是想要一隻好攜帶的，
+而且搞不好耳道式不會像耳塞式那麼不舒服，
+結果也是會癢、濕，而且也一樣沒有麥克風。
+所以除了比較好攜帶，基本上就是白買了。&lt;/p&gt;
+&lt;h2 id="舊耳機的修復"&gt;舊耳機的修復&lt;/h2&gt;
+&lt;p&gt;托爸媽把舊耳機從台北帶回台南後，
+才發現不只海綿沒了，連左耳機也沒聲音。
+之前海綿因為太老爛掉，就整個拔掉，
+所以是一堆孔洞露出來的情況。
+本來以為只要隨便找塊布再罩上去就好，
+結果左耳還沒聲音，只好再想辦修，
+畢竟也用蠻久了，捨不得丟。&lt;/p&gt;
+&lt;p&gt;本來想先用測還有沒有電流，結果好的壞都二邊都測不到；
+後來 &lt;a href="http://github.com/raiso717"&gt;raiso&lt;/a&gt; 才說電流很弱，用三用電錶也測不出來，
+他是直接重新焊一遍。
+於是就他講解怎麼焊，我就直接上了。&lt;/p&gt;
+&lt;h3 id="焊接教學"&gt;焊接教學&lt;/h3&gt;
+&lt;p&gt;大概就和 &lt;a href="https://www.youtube.com/watch?v=vPtJDW4aHfI"&gt;網路上其它教焊接的影片&lt;/a&gt; 差不多：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;把舊的焊鍚熔掉，把線拉出來。&lt;/li&gt;
+&lt;li&gt;把原本的線的老的部份剪短，露出新的好的部份。&lt;/li&gt;
+&lt;li&gt;看要不要多上新的焊鍚，先把鍚條熔在焊鐵上，
+再讓她從焊鐵滴到目標。&lt;/li&gt;
+&lt;li&gt;最後把目標上的鍚溶化後，把線插進去等她凝固。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;說起來簡單，但要讓她插到半液體的鍚裡還不太容易，
+線是軟的，不好施力，我拿焊鐵的手又一直抖。
+raiso 有做一次，之後我就自立自強了，
+決竅大概就是不要怕被焊鐵燙到，雖然我是沒被燙到。
+然後 raiso 會在插進去後吹氣讓鍚快點冷卻，
+我也跟著吹，雖然我是不確定有沒有用。&lt;/p&gt;
+&lt;h3 id="亂槍打鳥"&gt;亂槍打鳥&lt;/h3&gt;
+&lt;p&gt;一開始把左邊的線拉出再焊進去後，還是不行。
+就剪掉一點，再看影片要燒掉漆，就用砂紙磨磨，
+再焊一次，還是不行。&lt;/p&gt;
+&lt;p&gt;後來就打算交叉測試，把右邊的也熔了線拿出來，
+反正耳機只有一邊通也沒屁用。
+這次沒有磨了，直接剪掉一點就焊，
+結果右邊的接到左耳就有聲音了！
+然後左邊線也接到右耳也有聲音！&lt;/p&gt;
+&lt;p&gt;還好這組耳掛式耳機的蜂鳴器部份是不分左右的，
+接上右邊的殼就是右耳機，
+左邊就是左耳，所以反過來也沒差。
+只是她二邊的線不一樣長，原本是右耳比較短，
+這樣變成左耳的線比較短；大不了再買新線接上去。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/taiwan-shell-king-study.html</id>
 <title>台灣的螺仔王</title>
 <published>2018-05-24T07:37:34.992Z</published>

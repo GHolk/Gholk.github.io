@@ -212,3 +212,4 @@ listen-type-human-engineering.html
 chinese-medicine-skin-diet.html
 visa-card-double-charge-record.html
 yellow-book-slido-ncku.html
+javascript-bind-method-of-object.html

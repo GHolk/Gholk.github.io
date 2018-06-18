@@ -214,3 +214,5 @@ visa-card-double-charge-record.html
 yellow-book-slido-ncku.html
 javascript-bind-method-of-object.html
 cadastral-serveying-homework-2.html
+cadastral-serveying-homework-4.html
+article-hwst.html

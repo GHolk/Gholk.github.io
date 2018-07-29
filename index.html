@@ -35,12 +35,12 @@
     </nav>
     
     <blockquote id="daily-sentence">
-      <h3><a data-source-list="key-and-lock.html short-life-expensive-price.html">每日一句</a></h3>
+      <h3><a data-source-list="taiwoman.html key-and-lock.html short-life-expensive-price.html">每日一句</a></h3>
       <script>
         loadDailySentence()
         
         async function loadDailySentence() {
-          const day = daySince(new Date('2018-04-12')) + 4
+          const day = daySince(new Date('2018-04-12'))
           const article = prevQuerySelector('a')
           const sourceList = article.dataset.sourceList.split(/ /g)
           const source = sourceList[ day % sourceList.length ]

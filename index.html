@@ -35,19 +35,49 @@
     </nav>
     
     <blockquote id="daily-sentence">
-      <h3><a href="key-and-lock.html">每日一句</a></h3>
-      <pre></pre>
+      <h3><a data-source-list="key-and-lock.html short-life-expensive-price.html">每日一句</a></h3>
       <script>
         loadDailySentence()
         
         async function loadDailySentence() {
+          const day = daySince(new Date('2018-04-12')) + 4
           const article = prevQuerySelector('a')
-          const node = await ajaxQuery(article.href, 'pre')
-          const list = node.textContent.split(/\n----\n/g)
-          const day = daySince(new Date('2018-04-12'))
-          const sentence = list[day % list.length]
-          document.querySelector('#daily-sentence pre').textContent = sentence
+          const sourceList = article.dataset.sourceList.split(/ /g)
+          const source = sourceList[ day % sourceList.length ]
+          const container = await fetchDocument(source)
+          window.cf = container.firstChild
+          const times = Math.floor(day / sourceList.length)
+          const sentence = selectSentence(container, times)
+          document.querySelector('#daily-sentence').appendChild(sentence)
         
+          async function fetchDocument(source) {
+            const main = await ajaxQuery(source, 'main')
+            const title = main.querySelector('h1')
+            const description = main.querySelector('p')
+            title.remove()
+            description.remove()
+            return main
+          }
+          function selectSentence(container, times) {
+            const hrList = container.querySelectorAll('hr')
+            const length = hrList.length + 1
+            const count = times % length
+            const fragment = document.createDocumentFragment()
+            if (count == 0) {
+              while (container.firstChild.nodeName != 'HR') {
+                fragment.appendChild(container.firstChild)
+              }
+            }
+            else {
+              let hr = hrList[count - 1]
+              for (let node = hr.nextSibling;
+                   node && node.nodeName != 'HR';
+                   node = hr.nextSibling) {
+                fragment.appendChild(node)
+              }
+            }
+            return fragment
+          }
           function daySince(start) {
             const now = new Date()
             const msDiff = Number(now) - Number(start)

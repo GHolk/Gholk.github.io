@@ -54,8 +54,7 @@
             const main = await ajaxQuery(source, 'main')
             const title = main.querySelector('h1')
             const description = main.querySelector('p')
-            title.remove()
-            description.remove()
+            [title, description].forEach(node => node && node.remove())
             return main
           }
           function selectSentence(container, times) {

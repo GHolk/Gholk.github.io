@@ -645,6 +645,11 @@ http://www.appledaily.com.tw/appledaily/article/headline/20070611/3550942/
 其實老婆也付了一遍。老闆想：每天都能碰到這樣浪漫的人就好了。
 ```
 
+---
+
+樓主你好：歡迎使用 FaceBook 防尷尬系統！您所看到的樓上樓下的回復，皆是由本服務器偵測無人留言的持續時間，模擬出這則貼文的尷尬程度。但，由於本系統還不夠完善，偶爾會有人身攻擊性質的回復，請不要在意， 另外，由於本系統還不夠穩定，可能本段話會以不同 ID 重複發送，敬請諒解！
+
+
 <script>
 document.querySelectorAll('pre').forEach(pre => {
   const code = pre.children[0]

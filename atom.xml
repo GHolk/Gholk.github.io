@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-08-26T10:03:42.146Z</updated>
+  <updated>2018-09-05T14:21:17.086Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -25,6 +25,185 @@
 
 
 <entry>
+<id>http://gholk.github.io/walkie-talkie-app-newbie.html</id>
+<title>用手機當對講機的 app 初嘗試</title>
+<published>2018-09-05T14:13:52.040Z</published>
+<updated>2018-09-05T14:21:17.075Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/walkie-talkie-app-newbie.html"/>
+<summary>之前在圖書館工作有用到對講機，
+一直很好奇這個沒有被時代淘汰的產物，
+應該可以用手機達到類似的體驗吧？
+就試了幾個 app，還發現語音訊息的功能就有點像，
+最後繞了一圈發現社團用的 discord 就很符合要求了。</summary>
+<category term="聊天"/>
+<category term="android"/>
+<content type="html">&lt;h1 id="用手機當對講機的 app 初嘗試"&gt;用手機當對講機的 app 初嘗試&lt;/h1&gt;
+&lt;p&gt;之前在圖書館工作有用到對講機，
+一直很好奇這個沒有被時代淘汰的產物，
+應該可以用手機達到類似的體驗吧？
+就試了幾個 app，還發現語音訊息的功能就有點像，
+最後繞了一圈發現社團用的 discord 就很符合要求了。&lt;/p&gt;
+&lt;p&gt;對講比起手機還是有一些方便，
+例如隨按隨說，有人說話會直接收到，
+不用叮咚再解鎖再開 app 看，也不用打字打半天。
+一大群人同時行動時很方便，
+例如騎車、計程車隊、貨車司機、爬山，
+我們是圖書館二人或以上，
+巡館時會帶著，分頭行動時方便。&lt;/p&gt;
+&lt;p&gt;所以就 google 了一下，找了幾款來試用；
+總要實際試過比較清楚使用情境和設計切不切合。
+一開始 google 到有二款，zello 和 iNtercom。
+iNtercom 是在同一區網下可以彼此對講，
+而 zello 是吃數據流量的。&lt;/p&gt;
+&lt;h2 id="iNtercom"&gt;iNtercom&lt;/h2&gt;
+&lt;p&gt;iNtercom 如果是在外可能要由一人開熱點，
+或彼此用藍芽連線，但藍芽和熱點距離都沒辦法太遠，
+而車隊行動可能會超過距離，
+如果不超過距離可能也用不上無線電。
+所以覺得不太適合。
+但如果在圖書館，全館是一個 wifi 區網可能可以，
+不過還是有停車場、頂樓沒辦法連 wifi 的地區。&lt;/p&gt;
+&lt;h2 id="zello"&gt;zello&lt;/h2&gt;
+&lt;p&gt;zello 就是完全走數據流量了，
+要到 zello 的中央伺服器再回來，
+像一般的 line 或 messenger 一樣。
+其特點是完全照無線電的使用模式設計，
+也比較完整，可以建立頻道、搜尋、一對一。
+在訊息上也有下功夫，可以重覆播放歷史訊息，
+一則則是分開的，可以看要聽哪一則。&lt;/p&gt;
+&lt;p&gt;之後幫爸裝裝看，教他用。
+然後 zello 有通訊錄匯入功能，
+發現他一堆朋友也都有在用。
+我在網路上評價，是看到有些司機也不裝無線電了，
+直接用 zello，看來也有普及到台灣了。&lt;/p&gt;
+&lt;p&gt;但後來我也覺得他介面設計有點奇怪，
+頻道的設定、帳號的設定、頻道的介面
+都有點反直覺，爸媽要找東西都要找半天。
+還有沒有分享連結，只能從電話號碼或 id 加；
+頻道只能在創建頻道時設定網址，
+之後只能用頻道名稱搜，有時還搜不到。&lt;/p&gt;
+&lt;h2 id="語音訊息"&gt;語音訊息&lt;/h2&gt;
+&lt;p&gt;後來發現語音訊息其實有點像對講機的體驗，
+像中國的微信一開始就是主打語音訊息，
+和類似對講機不用打字的方便體驗。
+如果加上收到語音訊息時自動播放，
+甚至鎖定螢幕待機時也自動播放，就很方便了。
+但這可能會變成很吵很煩，可能要做成群組的設定，
+可以在某個群組暫時開啟自動播放，對話結束再關閉。&lt;/p&gt;
+&lt;p&gt;而現在蠻多 app 都有語音訊息了，
+telegram line messenger 都可以，
+只是沒有自動播放的功能。
+telegram 可以自幹客戶端，
+所以完全可以自己實現一個收到訊息時
+自動播放的類似對講機的客戶端。&lt;/p&gt;
+&lt;p&gt;之後就試了 telegram，最強的手機通訊軟體。
+google telegram walkie talkie 看 &lt;a href="https://www.reddit.com/r/Telegram/comments/6kmnqe/core_feature_request_autoplay_option_for_voice/"&gt;一篇文章&lt;/a&gt;
+說 telegram 已經有自動播放的功能，
+但找不到，還是拿掉了？
+總之後來就放棄了。&lt;/p&gt;
+&lt;h2 id="discord"&gt;discord&lt;/h2&gt;
+&lt;p&gt;之後和 dc 測了 telegram 語音訊息的使用情境，還行，
+之前也意外用過他的通話，鈴聲是和手機的內建相同，
+體驗和原本的通話很接近，但有時接到會沒聲音？
+之後 dc 無意間說到其實 discord 的語音就很類似了，
+就回頭試了 discord。&lt;/p&gt;
+&lt;p&gt;discord 的語音我之前一直把他想成
+比較像一對一打電話通話，
+其實他是 &lt;strong&gt;頻道&lt;/strong&gt; 讓一堆人掛在上面，
+就和無線電的頻道類似。
+加上他其實有 &lt;abbr title="press to talk"&gt;PTT&lt;/abbr&gt; 功能，
+按著鍵才會發話；
+不然預設是會偵測環境聲音，在大於門檻才會開始發送聲音。&lt;/p&gt;
+&lt;p&gt;discord 語音頻道連上後，
+鎖定螢幕後如果有人出聲也會收得到，
+當然也能在背景執行；應該是為遊戲或實況主設計的，
+手遊也可以邊玩邊開著聊天，
+畢竟他很大用戶群就是要組隊的遊戲玩家。&lt;/p&gt;
+&lt;p&gt;所以繞了一圈又回到原點，其實用 discord 就可以了。
+zello 和 discord 相比，
+是多了頻道裡的訊息可以重播，一則則是分開的，
+另外介面和設計也較接近傳統無線電的體驗，
+還可以同時掛在多個頻道上。
+但 discord 的伺服器、子頻道，
+emoji、chatbot 等功能較完整。&lt;/p&gt;
+&lt;p&gt;除非是無線電的重度使用者，
+不然綜合來 discord 說 discord 應該比較好。
+而且社團本來就有在用 discord，
+不用多裝一個 app zello。
+但已經稍微教爸媽使用 zello 了，
+就先不刪掉吧，搞不好之後會用到。
+不然重教 discord 太麻煩了，
+而且 discord 都是英文，爸不會英文有點麻煩。&lt;/p&gt;
+</content>
+</entry><entry>
+<id>http://gholk.github.io/hometown-change.html#school-staff</id>
+<title>我所以為的故鄉</title>
+<published>2017-02-28T16:25:28.908Z</published>
+<updated>2018-08-28T10:31:10.376Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/hometown-change.html"/>
+<summary>我對故鄉沒什麼感覺。</summary>
+<category term="故鄉"/>
+<category term="家"/>
+<category term="新莊"/>
+<category term="成大"/>
+<content type="html">&lt;h1 id="我所以為的故鄉"&gt;我所以為的故鄉&lt;/h1&gt;
+&lt;p&gt;我對故鄉沒什麼感覺。&lt;/p&gt;
+&lt;p&gt;我到國中畢業為止，
+住的地方都差不多。
+但有搬過一次家，
+差一、二個街區而已。
+但國小同學國中就幾乎沒聯絡了。&lt;/p&gt;
+&lt;p&gt;國小國中我對周圍算很熟，
+也算不熟。
+很熟是我放學會在周圍走來走去，
+也會為了買東西吃跑很遠。
+但這段距離是以走路很遠，
+騎腳踏車很近。&lt;/p&gt;
+&lt;p&gt;我到高中就到台北市讀，
+離開了原本的生活圈。
+而且我在高中也沒有培養新的生活圈，
+因為我的觀念沒有改變，
+還是像國中一樣只知道唸書，
+或是社團，但那根本不叫社團。&lt;/p&gt;
+&lt;p&gt;我也不會去外面吃或遠一點的地方吃，
+就只會走到北車而已。
+那段時間不太吃晚餐，
+就錯過很多熟悉的機會。
+同時家裡附近隨著時間也有些改變，
+回來才發現已不是我熟悉的地方了。&lt;/p&gt;
+&lt;p&gt;然後就是出外唸大學，
+一去又是一、二年，
+回來根本人事已非。
+有點把大學當作家了，
+因為成大比較特殊，
+會和台南高度重疊，
+和其它大學不太一樣。&lt;/p&gt;
+&lt;p&gt;大學不是自然的產物，
+是因為政府有意為之，
+把一群人聚集起來的結果。
+根本沒有人能夠長居在此，
+想把大學當家是不可能的，
+除非你成為教職員，
+成大還有成為 &lt;strong&gt;當地人&lt;/strong&gt; 這一途。&lt;/p&gt;
+&lt;p&gt;而同學的感情，雖然是真得，
+但也有點人造味道，
+一群人無緣無故整天聚在一起，
+除了學校，還真沒這個機會。
+學校還真是最適合交朋友、談戀愛的地方。&lt;/p&gt;
+&lt;p&gt;不過成為教職員就必需面對學界、政界的黑暗面，
+看看我母校成功高中的行政被唾棄到什麼程度。
+但對教職員來說，學生都是過客，他們才是主體，
+因此學生和教職員如果都過度以自我為中心，就會有很多衝突。
+而教職員沒差，反正幾年學生就畢業了，他們又清靜了。&lt;/p&gt;
+&lt;p&gt;我可以理解故鄉的想法，
+只是我已經沒有故鄉了。
+我認同整個台灣的紛圍，
+但我沒有一個熟悉的地方可以稱為故鄉。
+我能認同的是 &lt;strong&gt;家&lt;/strong&gt; ，
+對我來說， &lt;em&gt;有舒服的床的地方稱作家&lt;/em&gt; 。
+我現在的家是宿舍，或說宿舍的床。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/short-life-expensive-price.html</id>
 <title>名言：逢人短命、遇貨添錢</title>
 <published>2018-04-13T16:43:44.187Z</published>

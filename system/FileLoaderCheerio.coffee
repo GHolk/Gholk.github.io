@@ -24,7 +24,6 @@ class FileLoaderCheerio
         @next = @selector('link[rel=next]').attr 'href'
         @nextTitle = @selector('link[rel=next]').attr 'title'
         @main = @selector('main').html()
-        @selector('main').html(@main)
         @description =
             @selector('main > :not(h1)').first().text()
 
@@ -36,6 +35,7 @@ class FileLoaderCheerio
         @selector('link[rel=prev]').attr 'title', @prevTitle
         @selector('link[rel=next]').attr 'href', @next
         @selector('link[rel=next]').attr 'title', @nextTitle
+        @selector('main').html(@main)
         @description =
             @selector('main > :not(h1)').first().text()
         @file = @path.replace /^.*\//, ''

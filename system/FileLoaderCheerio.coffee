@@ -35,7 +35,6 @@ class FileLoaderCheerio
         @selector('link[rel=prev]').attr 'title', @prevTitle
         @selector('link[rel=next]').attr 'href', @next
         @selector('link[rel=next]').attr 'title', @nextTitle
-        @selector('main').html(@main).find('meta,link').appendTo('head')
         @description =
             @selector('main > :not(h1)').first().text()
         @file = @path.replace /^.*\//, ''

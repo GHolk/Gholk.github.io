@@ -1,35 +1,84 @@
 
-/****************************************************************
-* - file: word.css                                              *
-* - title: 適合文件閱讀的樣式表                                 *
-* - author: c34031328                                           *
-* - date: 2015-11-10                                            *
-* - tag: word, css, writer, document,                           *
-* - link: http://myweb.ncku.edu.tw/~c34031328/study/word.css    *
-****************************************************************/
-
-/*************************************************************
-* this css is to make a document look like M$ word or other  *
-* official software. i want it be as simply as possible.     *
-* ***********************************************************/
 
 @media print {
 
-    @page {
-        margin: 3em 0;
+    /* hide page description */
+    h1 + p {
+        display: none;
     }
+
+    /* set page margin */
+    @page {
+        margin: ;
+        padding: 0;
+    }
+    main, body {
+        margin: 0 !important;
+        padding: 0;
+    }
+    
     body {
         font-size: 12pt;
+        line-height: 18pt;
     }
-    /*a:after { content: " (" attr(href) ") " ; }*/
-    /*@page:left, @page:right { content: "my cockroch" ; }*/
-    /* h1 { page-break-before: always ; } */
-    h2, h3, h4, h5 { page-break-after: avoid ; }
-    header { page-break-after: always; }
-    main { margin: 0; }
+    h1 {
+        font-size: 20pt;
+        line-height: 24pt;
+        font-weight: normal;
+    }
+    h1:lang(en) {
+        font-size: 16pt;
+        line-height: 18pt;
+        font-weight: normal;
+    }
+    header i {
+        font-size: 14pt;
+    }
+    header i:lang(en) {
+        font-size: 14pt;
+    }
+    header h2 {
+        font-size: 14pt;
+        font-weight: normal;
+    }
+
+    h2 {
+        font-size: 14pt;
+        font-weight: bold;
+    }
+    h3 {
+        font-size: 12pt;
+        font-weight: bold;
+    }
+    main > p {
+        text-indent: 1cm;
+    }
+
+    /* 參考文獻不編號 */
+    h2:last-of-type::before {
+        content: none;
+    }
+    /* 參考文獻凸排 */
+    h2:last-of-type ~ p {
+        text-indent: -1cm;
+        padding-left: 1cm;
+    }
+
+    caption, figcaption {
+        font-size: 12pt;
+        font-weight: normal;
+        text-align: center;
+    }
+    
+    h2, h3, h4, h5 {
+        page-break-after: avoid ;
+    }
+    header {
+        page-break-after: always;
+    }
 
     hr.structure { display: none; }
-    hr.page-break {
+    hr.page-break, hr:first-of-type {
         page-break-after: always;
         visibility: hidden;
         padding: 0;
@@ -39,12 +88,20 @@
     figure { page-break-inside: avoid; }
 
     a:after {
+        color: black;
         content: "(" attr(href) ")";
     }
 
-    .browser-only { display: none; }
+    .browser-only, script, style {
+        display: none;
+    }
     .print-only { display: initial; }
     figure.print-only { display: block; }
+
+    /* metadata footer and comment board */
+    body > footer, body > footer + details {
+        display: none;
+    }
 
 }
 
@@ -61,11 +118,19 @@
     display: none;
 }
 
-dt { font-weight: 500; }
-header dt { display: inline; }
-header dt:after { content: ":"; }
-header dd { display: inline; }
-header { font-style: italic; }
+dt {
+    font-weight: 500;
+}
+header dt {
+    display: inline;
+}
+header dt:after {
+    content: ":";
+}
+header dd {
+    display: inline;
+    margin: 0 0 0 0;
+}
 
 /* table ***********************************/
 
@@ -95,15 +160,15 @@ pre { margin: 1em; }
 
 blockquote, q { color: #666; }
 
-/* body { font-family: serif Kai "標楷體" "宋體" "明體"; } */
+body {
+    font-family: Kai, 標楷體, 宋體, 明體;
+}
+:lang(en) {
+    font-family: "Times New Roman";
+}
 
 /*    make header beheave like document header, as title.
     and the sub title should.     */
-header {
-    display:block;
-    text-align:center;
-    font-size:larger;
-}
 
 code {
     border: 1px solid;
@@ -128,16 +193,10 @@ code.term , .term code {
     text-indent: 0;
 }
 
-main { margin: 2em; }
-
-/*    muti-column
 main {
-    display:block;
-    -moz-column-count:2;
-    column-count:2;
-    -webkit-column-count:2;
+    margin: 2em;
 }
-*/
+
 
 main > p {
     text-indent: 2em;
@@ -145,7 +204,7 @@ main > p {
 
 dd {
     margin-bottom: 1ex; 
-    }
+}
 
 q:lang(zh)  { quotes: "「" "」" "『" "』" ; }
 q:lang(zh).me { quotes: "『" "』" "「" "」" ; }
@@ -306,22 +365,43 @@ main .question {
     display: none;
 }
 
-.paper {
+
+/* top level title center */
+h1, h2 {
+    text-align: center;
+}
+
+
+/* top level cjk decimal */
+/* after first hr devide cover */
+hr {
     counter-reset: counter-lv1;
 }
-.paper h2 {
+h2 {
     counter-increment: counter-lv1;
 }
-.paper h2::before {
+h2::before {
     content: counter(counter-lv1, cjk-decimal) "、";
 }
 
-.paper h2 {
+/* second level dot decimal */
+h2 {
     counter-reset: counter-lv2;
 }
-.paper h3 {
+h3 {
     counter-increment: counter-lv2;
 }
-.paper h3::before {
+h3::before {
     content: counter(counter-lv1) "." counter(counter-lv2) " ";
+}
+
+/* summary no counter */
+header i {
+    display: block;
+}
+h1, header h2, header i {
+    text-align: center;
+}
+header h2::before {
+    content: none;
 }

@@ -229,3 +229,5 @@ walkie-talkie-app-newbie.html
 linux-iccard-ccid-compile.html
 novel-ulwa.html
 schedule-107-1.html
+gis-saas-report.html
+multiboot-grub-configure-master.html

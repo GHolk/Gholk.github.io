@@ -1,0 +1,137 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-10-03T09:31:48.660Z">
+<meta name="keywords" property="og:article:tag" content="linux,boot,flash">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="gis-saas-report.html" title="GIS 界的 SaaS">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>多重開機的隨身碟</title>
+</head>
+<body>
+<main><h1 id="多重開機的隨身碟">多重開機的隨身碟</h1>
+<p>不小心多買了一顆 32G 的隨身碟，
+手癢就把他做成了多重開機的 linux 開機碟。
+之前試過幾次都失敗，這次照著 arch wiki
+自己 config 不用現成的解決方案，
+在弄壞自己筆電的 grub 後，終於成功了。</p>
+<p>主要是想達成能直接把 live-cd 的 iso 檔放進隨身碟後，
+就能直接開機，不用 <code>cat live-cd.iso &gt; /dev/sdb</code>
+把隨身碟 <em>燒</em> 成開機碟。</p>
+<p>以前能用 grub4dos 達成這種功能，
+只要把 iso 檔放進他裡面的 iso 目錄，
+就能在開機選單裡直接選他開機。</p>
+<p>後來想自己用 grub 達成，也修了蠻多次 grub，
+自認對 grub 的介面還算熟悉，
+應該能自己做一顆用 grub2 的開機碟了。
+於是就 google 了一下，開始照著 wiki 做了。</p>
+<p>基本上照著 <a href="https://wiki.archlinux.org/index.php/Multiboot_USB_drive#Using_GRUB_and_loopback_devices">他的部驟</a> 走就裝好了，
+唯一問題是沒有教怎麼用光碟開機。
+用光碟開機首先要初始化 grub，然後載入一些基本模組，
+之後再載入核心和映像檔，最後開機。
+用 grub 開機的基本方法可以參閱 
+<a href="https://www.openfoundry.org/tw/foss-programs/9267-linux-grub2-fixing">開放文化基金會的救援指引</a> 。</p>
+<h2 id="grub config 撰寫">grub config 撰寫</h2>
+<p>那些模組有點麻煩，我是直接去抄我的 debian 的 <code>/boot/grub.cfg</code> ，
+其語法類似 bash，有一點 linux 程度的都看得懂。
+反正就他做了什麼命令，我就跟著做，
+然後看哪些是判斷測試類的不重要 code，可能可以刪掉。
+成果是 <a href="https://github.com/GHolk/loco/blob/5082d7803/multiboot-flash-drive-grub.cfg#L8">multiboot-flash-drive-grub.cfg</a> 
+的 header 部份到 menuentry 開始前，
+也就是從第 8 行到第 50 行間。</p>
+<p>總之裝好後，就可以把 iso 光碟檔先丟到 <code>/boot/iso/</code> 下，
+然後寫那個光碟的 menuentry 了。</p>
+<p>menuentry 的寫法大概就主要二行開機命令，
+用 linux 命令載入核心，用 initrd 載入初始映象檔。
+之後好像不用 <code>boot</code> 指令，
+可能 menuentry 會自動呼叫 boot？不是很確定。
+但麻煩的是載入核心時要傳入參數，
+每個發行版的參數不同，要參考原有光碟的參數。</p>
+<pre><code># debian 的參數
+menuentry &#39;Debian GNU/Linux&#39; {
+    # 載入   核心路徑                 參數
+    linux    /vmlinuz-4.9.0-8-amd64 root=/dev/sda1 ro quiet
+    initrd   /initrd.img-4.9.0-8-amd64
+}
+</code></pre><p>基本上就先把該光碟 mount 起來，
+看一下有沒有 <code>/boot/grub/grub.cfg</code> 之類的檔案。
+像 <a href="https://newtoypia.blogspot.com/2014/01/finnix.html">貴哥的 finnix</a> 就有 <code>/boot/grub/loopback.cfg</code> ，
+內容大概如下：</p>
+<pre><code>menuentry &quot;Boot Finnix 110 (64-bit)&quot; {
+        linux /boot/x86/linux64 findiso=${iso_path} vga=791 nomodeset quiet toram --
+        initrd /boot/x86/initrd.xz
+}
+</code></pre><p>很明顯就是要你在載入核心時傳入該光碟映像檔的位置，
+然後還要指定一些奇怪的東西。
+最後那個 toram 則是指示開機後把整個 os 放到 ramdisk 裡。
+（finnix 是不到 1G 的作業系統，
+以現在電腦動輒 4G 以上的 ram 來說，是輕鬆放得下的。）</p>
+<p>所以把 <code>finnix-ckhung16c.iso</code> 放到 <code>/boot/iso/</code> 目錄後，
+就加入以下的 menuentry：</p>
+<pre><code>menuentry &quot;Boot Finnix 110 (64-bit)&quot; {
+
+        # 掛載光碟到 (loop) 裝置
+        loopback loop /boot/iso/linux/finnix-ckhung16c.iso
+
+        # 指定核心的路徑，在 (loop) 的 boot/x86/linux64
+        # 參數基本照抄原本的 loopback.cfg，
+        # 但指定 iso 的路徑在 /boot/iso/finnix-ckhung16c.iso
+        linux (loop)/boot/x86/linux64 findiso=/boot/iso/finnix-ckhung16c.iso vga=791 nomodeset quiet toram --
+        initrd (loop)/boot/x86/initrd.xz
+}
+</code></pre><p>然後就能在開機後的 grub 選單看到 
+<em>Boot Finnix 110 (64-bit)</em> 這項了，
+如果 <em>夠幸運</em> 就能開機了。</p>
+<h2 id="路徑的地雷">路徑的地雷</h2>
+<p>有一點比較麻煩是那個路徑，
+就是 <code>findiso=/boot/iso/finnix-ckhung16c.iso</code> 這個參數。
+因為事實上你開機時 grub 的根目錄不是開機後 os 的根目錄，
+而且你有很多顆硬碟和很多分割區，（至少插著的隨身碟和原本電腦的硬碟二顆。）
+所以他會把哪顆當根目錄，然後找到 <code>/boot/iso/finnix-ckhung16c.iso</code> 呢？
+誰知道，總之我這樣寫 finnix 能開機。</p>
+<p>像 ubuntu 的參數就要指定另一個檔案：</p>
+<pre><code>linux   /casper/vmlinuz  file=/cdrom/preseed/ubuntu.seed boot=casper quiet splash ---
+</code></pre><p>我試著把 root 先設到 iso 裡，再設路徑，也是沒用。
+總之我不知道怎麼用 ubuntu 核心開機。</p>
+<pre><code>loopback loop /boot/iso/ubuntu-18.04-desktop-amd64.iso
+set root=(loop)
+linux   /casper/vmlinuz  file=/preseed/ubuntu.seed boot=casper quiet splash ---
+</code></pre><p>其實多數發行版都會有一些路徑參數要設，然後多半設不好。
+所以用 grub 掛載 iso 開機容易有問題。</p>
+<h2 id="syslinux memdisk">syslinux memdisk</h2>
+<p>arch wiki 好像還有介紹另一個 syslinux memdisk 的方式，
+相比 grub 是掛載光碟後，再讀取核心來開機；
+syslinux memdisk 是直接把光碟讀到 ram 裡，
+然後讓系統把 ram 當開機的硬碟，
+當作插入一片光碟一樣開機，不會這種要改寫參數的問題。</p>
+<p>該怎麼說，grub 雖然可以讓你讀到光碟的內容，
+相比 memdisk 只能把整個光碟檔塞到 ramdisk 裡，
+然後當作另一個裝置開機，算是一種進步；
+但這種進步卻不如老方法的穩定好用。實在是諷刺。</p>
+<p>但現今 uefi 漸漸取代 bios，grub 支援 uefi 了，
+但不確定 syslinux 和 memdisk 這麼老的東西能不能在 uefi 上運作。
+現在要嘛等各發行版統一 kernel 的開機參數，
+（我看是不可能，linux 發行版這麼多年了也沒有統一。）
+要嘛再研究一次 syslinux memdisk。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy="" src="ext/load-disqus.js"></script>
+
+</body></html>

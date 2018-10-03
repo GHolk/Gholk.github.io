@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-10-03T09:35:44.837Z</updated>
+  <updated>2018-10-03T15:04:13.033Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -28,7 +28,7 @@
 <id>http://gholk.github.io/gis-saas-report.html</id>
 <title>GIS 界的 SaaS</title>
 <published>2018-09-30T10:36:04.690Z</published>
-<updated>2018-10-03T09:35:44.826Z</updated>
+<updated>2018-10-03T15:04:13.022Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/gis-saas-report.html"/>
 <summary>GIS 與 SaaS 的結合。</summary>
 <category term="作業"/>
@@ -36,7 +36,7 @@
 <content type="html">&lt;h1 id="GIS 界的 SaaS"&gt;GIS 界的 SaaS&lt;/h1&gt;
 &lt;p&gt;GIS 與 SaaS 的結合。&lt;/p&gt;
 &lt;header contenteditable="true"&gt;
-&lt;i&gt;佚名&lt;/i&gt;
+&lt;i&gt;gholk&lt;/i&gt;
 
 &lt;h2&gt;摘要&lt;/h2&gt;
 &lt;p&gt;在雲端興起後 GIS 也捲入了雲端的大浪潮。其中 SaaS 是 GIS 最主要的模式。&lt;/p&gt;
@@ -151,18 +151,43 @@
 是現成可用的，不需要在使用者端做過多的配置，
 整體作為一種服務向使用者提供；
 而不是使用者需要去部署。&lt;/p&gt;
+&lt;h3 id="群眾協作與 web gis"&gt;群眾協作與 web gis&lt;/h3&gt;
+&lt;p&gt;google map 和 open street map 都有群眾協作的影子在。
+群眾協作最好的例子是維基百科，
+基於 web 界面提供內容，
+同時也讓使用者能簡單貢獻內容。
+能有這種跨時代的進步，
+最主要是受惠於 www 讓軟體近用的門檻變低，
+讓貢獻者不需要經過太多的學習，就能快速進入狀況。&lt;/p&gt;
+&lt;p&gt;web 2.0 就是這樣一項指標，
+宣告網站和使用者互動的時代來臨。
+讓網頁正式成為繼 PC windows 後的新標準平台，
+也成為群眾協作模式的運作基礎。
+最注名的群眾協作成果 &lt;strong&gt;維基百科&lt;/strong&gt; 就在 2001 年成立 &lt;a href="http://zh.wikipedia.org/wiki/維基百科"&gt;wikipedia&lt;/a&gt; ，
+而將類似的概念結合 web gis 技術，
+即成為 open street map。&lt;/p&gt;
+&lt;p&gt;open street map 在 2004 年成立 &lt;a href="http://zh.wikipedia.org/wiki/OSM"&gt;OSM&lt;/a&gt; ，
+標榜得是人人可繪製的線上地圖。
+透過瀏覽器介面，允許使用者查看、編輯地圖。
+其相當於在瀏覽器與網頁伺服器中運行的一套 web gis，
+同時所有使用者也共享同一份在伺服器上的地圖。
+藉由所有使用者編修，累積成果為一份十分詳細的地圖。&lt;/p&gt;
+&lt;p&gt;web gis 在 open street map 的場合中，
+扮演了核心的角色：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;因為其相對傳統 gis 桌面軟體，使用瀏覽器作為介面，
+降低了使用門檻，使貢獻更為容易，社群也更容易發展。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;因為使用了 web 技術，自然使所有使用者接觸、操作的資料，
+都是在網頁伺服器上，傳送到客戶端的瀏覽器上，
+供編輯、檢視，天生具有共享資料的性質。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id="參考文獻"&gt;參考文獻&lt;/h2&gt;
-&lt;p&gt;示範段落
-整體作為一種服務向使用者提供；
-而不是使用者需要去部署。
-整體作為一種服務向使用者提供；
-而不是使用者需要去部署。
-整體作為一種服務向使用者提供；
-而不是使用者需要去部署。&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://zh.wikipedia.org/wiki/維基百科"&gt;wikipedia: 維基百科上關於維基百科的介紹&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://zh.wikipedia.org/wiki/OSM"&gt;osm: 維基百科上關於開放街圖的介紹&lt;/a&gt;&lt;/p&gt;
 &lt;link rel="stylesheet" href="ext/paper.css"&gt;
 
-&lt;script&gt; 
-&lt;/script&gt;
 </content>
 </entry><entry>
 <id>http://gholk.github.io/short-life-expensive-price.html#good-guy-card</id>

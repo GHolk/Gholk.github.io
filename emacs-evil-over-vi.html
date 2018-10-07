@@ -1,0 +1,174 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-10-07T05:56:38.038Z">
+<meta name="keywords" property="og:article:tag" content="emacs,vim,lisp,巨集">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="multiboot-grub-configure-master.html" title="多重開機的隨身碟">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>讓 emacs evil 超越 vi</title>
+</head>
+<body>
+<main><h1 id="讓 emacs evil 超越 vi">讓 emacs evil 超越 vi</h1>
+<p>以前是從 vi 開始學起，但因為喜歡 lisp，
+又看到有人說 emacs 裝 evil 就有類似 vi 的操作，
+而且還能用 <abbr title="emacs lisp">elisp</abbr> 
+擴展 vi 原有的 text-object 概念，更上一層樓，
+所以我就跳槽到 emacs 了。
+這篇介紹最近對 evil 大刀闊斧進行的擴充。</p>
+<h2 id="不必要的附註">不必要的附註</h2>
+<ul>
+<li><p>我習慣叫 vim <abbr title="vim">vi</abbr> ，
+因為我都用 debian 系，debian 系的 linux 裡的 vi 是直接用精簡版的 vim。
+我啟動 vi 時都只打 vi，因為二個字比三個字短；
+反正在 vimrc 裡設 nocp 就會變回 vim 了。</p>
+</li>
+<li><p>然後其實我 text object 是用 evil 一段時間後才開始真正使用的，
+以前看教學有看過，但一直忘記也沒有實際用。</p>
+</li>
+<li><p>這篇的 config 都在 <a href="http://github.com/gholk/dot-emacs/blob/d5a4d5bd/lisp/evil-command-plus.el">evil-command-plus</a> 、 <a href="http://github.com/gholk/dot-emacs/blob/d5a4d5bd/el-get-user/init/init-evil.el">init-evil</a> 。</p>
+</li>
+</ul>
+<h2 id="教 emacs 認得句與詞">教 emacs 認得句與詞</h2>
+<p>emacs 我一開始看教學時，有個概念很吸引我。
+emacs 除了基本的字元外，把文字分成 <strong>句子</strong> 、 <strong>詞</strong> 。
+像是 ctrl b 是後退一個字元，alt b 則是後退一個詞；
+ctrl e 是到行尾也就是 enter 前，
+alt e 則是到句尾，也訧是句號。
+（C 語言可能是分號。）</p>
+<p>雖然說這裡的詞是限定像英文用空格隔開的詞，中文就沒辦法；
+句子則是認標點符號，像英文的逗號、句號。
+所以換程式語言，只要在該語言的 mode 裡定義
+什麼是一個 statement，什麼是一個 word，
+就能用同一副武功打天下。</p>
+<p>想想 diw 在 vi 裡是刪除一個詞，
+在 c 裡一個詞也就是一個變數名稱，
+是大小寫和底線組成的；但在 lisp，
+一個詞則是大小寫底線星號加號等很多字組成的。
+如果可以讓 emacs 在不同 mode 自動判斷
+應該要刪哪些字不是很棒嗎？</p>
+<p>但我後來沒有這麼做，不會依不同 mode 更改詞的定義；
+而是定義新的動作，讓所有動作共存可以隨時取用。
+因為我用 evil，而 vi 的特色就是快捷鍵不會不夠用，
+不像 emacs 只有 <code>ctrl *</code> ，
+vi 在 normal state 所有鍵都能直接用，
+還有 ctrl alt g 等 prefix 可以加。</p>
+<p>直接用 text object 說明：</p>
+<ul>
+<li>S: 刪除一個 snake_case 的詞。</li>
+<li>s: 像原有的 emacs 刪除一個句子。</li>
+<li>l: 一個 little word，camelCase 裡的一小個單字，
+從 <a href="http://github.com/tarao/evil-plugins">evil-little-word</a> 抄來的。</li>
+<li>o: 一個 kebab-case，evil-mode 定義的，寫 lisp 方便吧。</li>
+</ul>
+<h2 id="讓 evil 命令更 text object">讓 evil 命令更 text object</h2>
+<p>vi 有些命令不遵守 text object 或 motion 的範圍，像 <code>!</code> 。
+其實我原本不太用這個命令的，比較多人熟悉的應該是 <code>:%!</code> 
+或用 v 選取範圍後再按 <code>:!</code> 就會變成 <code>:&#39;&lt;,&#39;&gt;!</code> 。
+但有個問題，就算用 visual 選取範圍，
+還是只能把整行都 pipe 到外部命令，
+而不能只送選取範圍內的字；
+就算按 <code>!i(</code> 之類的 text-object，
+還是會把 text-object 所在行整行吃進去，和想像中不一樣。</p>
+<p>所以就重新定義了一個命令，只會吃他該吃的範圍。
+emacs 類似的命令叫 shell-command-on-region，
+基本上是直接指定位置，也就是該字元在 buffer 內的 index；
+不像 vi 會翻譯成行號，就把整行吃進去。</p>
+<h2 id="無縫結合 emacs 與 evil">無縫結合 emacs 與 evil</h2>
+<p>vi 的 insert mode 類似 emacs 自身的輸入模式，
+是按什麼鍵就出什麼鍵，但 emacs 還預設了很多快捷鍵，
+像 ctrl b alt b ctal a。
+可是 evil 的 insert mode 預設則是和 vi 的一樣什麼都沒有，
+要移動游標要先退出回到 normal mode 或用方向鍵，
+而 ctrl p ctrl n 則是變成自動補全。</p>
+<p>同時 evil 為了 emacs 原有的鍵綁定，
+另外加了一個 emacs-state，
+就是幾乎和 emacs 不裝 evil 時的鍵綁定相同。
+我原本為了能在 insert mode 裡用 emacs 的鍵，
+就直接把 insert-state 定義成 emacs-state，
+這樣按 i s a 進入 insert-state 時就會變成進入 emacs-state。</p>
+<p>只是壞處是以前可以 cw 進 insert-state 改一個字，
+然後退出後移動到下一個字按 <code>.</code> ，
+就會自動重覆刪字打新字的動作；
+但 emacs-state 不是正常 evil 的 mode，
+也就不能用 <code>.</code> 重覆。</p>
+<p>後來我發現 emacs 的鍵綁定是漸進的，
+也就是如果刪掉 insert-state 的鍵綁定，
+就會自動回到 emacs 預設的鍵綁定；
+evil 又有一個 customize 選項
+是可以關掉 insert-state 的所有鍵綁定，
+就大致和 emacs-state 相同了；
+只是他還是 insert-state，還是可以用 <code>.</code> 重覆。</p>
+<p>然後 evil 有一個預設的退出鍵 ctrl z，
+是在 evil 任何模式間和 emacs-state 切換，
+也就是任何 state 按 ctrl z 都會進入 emacs-state。
+大家都知道 vi 的 esc 太遠了，
+一般都會綁一個好按的快捷鍵跳出 insert-state。
+以前我是用 ctrl c，也是預設的，
+而且在 ex 中按 ctrl c 也會退出。</p>
+<p>但 emacs 的 ctrl c 是一些特殊 mode 的 prefix 鍵，
+拿來用不方便；加上原本又用 emacs-state 代替 insert-state，
+就直接把 ctrl z 改成在 normal-state 和 emacs-state 間切換了。
+現在回到 insert-state 後，
+則是把 ctrl z 改成退出 insert 和 replace 回到 normal 的鍵，
+normal 按 ctrl z 也會進入 insert。</p>
+<p>其實 emacs 還有另一個預設的退出鍵 ctrl g，
+可以從 minibuffer 中退出，或中止目前執行中的命令。
+但不知道為什麼我沒有把他拿來用，
+可能因為 ctrl z 原本能達成我要的功能，
+他又和原本 vi 的 ctrl c 很近，比較好按吧。</p>
+<h2 id="巨集輔助定義">巨集輔助定義</h2>
+<p>之前也把一些命令加到 evil 裡，像 gu gU 原本是轉大小寫，
+linux 的 cconv 是基於 iconv 轉簡體繁體的程式，
+就把 gt gT 定義成呼叫 cconv 轉繁體簡體。
+還有一個是 urlencode，也就是網址用的很多 <code>%</code> 的編碼。
+這個 emacs 裡有現成函數可以用，但要自己包成 evil-command。</p>
+<p>因為我覺得這些場合還算常見，而且打包出來的函數，
+除了最後呼叫的 emacs 函數不同，
+或是執行的 shell-command 不同，其它部份都相同。
+所以都寫成了巨集，也就是在執行前展開成一大串程式，
+只有一部份會不同。</p>
+<p>基本上巨集就是產生函數的函數，其實可以用函數來做到，
+但因為 emacs 預設還是 dynamic scope，
+沒辦法用閉包讓產生的函數記住當初輸入的參數，
+所以只好改用巨集 macro。</p>
+<h2 id="emacs command 相關">emacs command 相關</h2>
+<p>還有一個是寫 elisp 會常用的 <code>C-x C-e</code> ，
+執行游標前的 elisp。
+和 eval-buffer eval-region 之類的，
+直接執行剛寫好的 elisp。
+所以後來就把 visual-state 的 <code>C-x C-e</code> 
+綁成 eval-region，這樣就能直接選直接執行。</p>
+<p>另外 emacs 預設有一些 command，
+可以用 alt x 打 command name 呼叫。
+但一直覺得既然用了 evil，
+應該要可以像 ex 的 command 一樣用 <code>:</code> 呼叫。
+還有一個常用的是 <code>alt :</code> ，能 eval lisp expression。</p>
+<p>本來想這功能比較複雜，應該等對 elisp 再熟一點才來挑戰，
+想不到無意間發現 evil 的 customize 裡
+有一個補全 emacs command 的選項 <code>evil-ex-complete-emacs-commands</code> ，
+才知道原來早就可以直接輸入 emacs command 了，
+如果輸入是括號開頭就會被當 expression 執行。
+而且 emacs command 還有補全，可惜 expression 沒有有點可惜。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy="" src="ext/load-disqus.js"></script>
+
+</body></html>

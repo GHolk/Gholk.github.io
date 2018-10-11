@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-10-10T10:31:43.465Z</updated>
+  <updated>2018-10-11T14:51:21.968Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -25,6 +25,417 @@
 
 
 <entry>
+<id>http://gholk.github.io/utm-taiwan-some-topic.html</id>
+<title>還沒想好主題</title>
+<published>2018-10-11T14:41:11.022Z</published>
+<updated>2018-10-11T14:51:21.958Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/utm-taiwan-some-topic.html"/>
+<summary>gis 第二次作業，要以 utm 投影與台灣作題材，主題自訂。
+然後內容必須包括 utm 簡介與在台灣地區的誤差。</summary>
+<category term="gis"/>
+<category term="geomatics"/>
+<category term="report"/>
+<content type="html">&lt;h1 id="還沒想好主題"&gt;還沒想好主題&lt;/h1&gt;
+&lt;p&gt;gis 第二次作業，要以 utm 投影與台灣作題材，主題自訂。
+然後內容必須包括 utm 簡介與在台灣地區的誤差。&lt;/p&gt;
+&lt;h2 id="utm 在台灣的投影誤差"&gt;utm 在台灣的投影誤差&lt;/h2&gt;
+&lt;p&gt;utm 是將地球每六度經度分為一帶，
+在每帶使用橫麥卡托投影，
+以中央經線尺度為 0.9996 的相割投影。
+在台灣是 utm 51 zone，120°E 到 126°E 的地區。&lt;/p&gt;
+&lt;p&gt;由於台灣正好處在 120-122 處，
+也就是 51 zone 的邊緣，
+因此 utm 對台灣來說還是有稍大的投影扭曲。&lt;/p&gt;
+&lt;p&gt;以下我使用 proj.4 進行地圖投影，
+以 wgs84 作參考橢球經緯度，
+將台灣各地的經緯度座標，
+投影到 utm 51 及 twd97。
+在圖面上以卡氏座標系計算距離，
+再與大地線距離作比較大。&lt;/p&gt;
+&lt;h3 id="[proj.4]"&gt;&lt;a href="http://proj4.org/"&gt;proj.4&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;proj.4 是 unix 系統下的投影轉換工具，
+也是 QGIS 內部使用的投影轉換工具。
+我使用 proj.4 最簡單的 command line 介面，
+進行轉換測試。&lt;/p&gt;
+&lt;h3 id="使用 qgis 點出各地經緯度座標"&gt;使用 qgis 點出各地經緯度座標&lt;/h3&gt;
+&lt;p&gt;首先要選定一些點座標來作轉換，
+為了能讓資料與現實生活連結，
+而不只是單純無感情的數據，
+選定了台灣各地及澎湖縣的交通樞鈕。&lt;/p&gt;
+&lt;p&gt;其中使用了 tgos 的 wms 圖層介接作為底圖
+與數化座標的參考，因此座標可能不是很準確。
+數化後再將座標存到該圖層屬性資料表中，
+並將整體結果輸出為地圖，展示如下：&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://www.flickr.com/photos/144554087@N04/30307338057"&gt;&lt;img src="http://farm2.staticflickr.com/1901/30307338057_8c424a70d2.jpg" alt="some-point.png"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;（查證後發現新北市蘆洲區並無火車站，
+該點 &lt;strong&gt;蘆洲火車站&lt;/strong&gt; 應更正為 &lt;strong&gt;捷運蘆洲站&lt;/strong&gt; 。）&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id="使用 invgeod 由經緯度計算大地線"&gt;使用 invgeod 由經緯度計算大地線&lt;/h3&gt;
+&lt;p&gt;invgeod 是 proj.4 所提供的工具，
+可以由二點經緯度座標計算出大地線在二點上的方位角與長度。
+這裡將上述各點分為七組，分別計算其 wgs84 橢球上的大地線長度：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-term"&gt;$ invgeod +ellps=WGS84 &amp;lt;&amp;lt;GEOD
+25.04775dN 121.517021dE 25.040081dN 121.512188dE
+25.04775dN 121.517021dE 25.091459dN 121.464478dE
+25.04775dN 121.517021dE 24.989146dN 121.313394dE
+25.04775dN 121.517021dE 24.137281dN 120.686759dE
+25.04775dN 121.517021dE 22.638565dN 120.301893dE
+24.137281dN 120.686759dE 23.560901dN 119.62949dE
+24.137281dN 120.686759dE 23.992629dN 121.601248dE
+GEOD
+
+-150d8&amp;#39;18.47&amp;quot;   29d51&amp;#39;34.164&amp;quot;   979.570
+-47d34&amp;#39;55.949&amp;quot;  132d23&amp;#39;43.903&amp;quot;  7179.569
+-107d29&amp;#39;8.833&amp;quot;  72d25&amp;#39;41.15&amp;quot;    21553.940
+-140d0&amp;#39;17.414&amp;quot;  39d38&amp;#39;58.643&amp;quot;   131306.647
+-154d51&amp;#39;50.457&amp;quot; 24d38&amp;#39;40.787&amp;quot;   294142.382
+-120d26&amp;#39;28.284&amp;quot; 59d7&amp;#39;52.715&amp;quot;    125200.617
+99d35&amp;#39;15.264&amp;quot;   -80d2&amp;#39;22.26&amp;quot;    94373.816
+&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;路線&lt;/th&gt;
+&lt;th&gt;大地線長度 (m)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;台北車站-總統府&lt;/td&gt;
+&lt;td&gt;979.570&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台北車站-蘆洲火車站&lt;/td&gt;
+&lt;td&gt;7179.569&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台北車站-桃園車站&lt;/td&gt;
+&lt;td&gt;21553.940&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台北車站-台中車站&lt;/td&gt;
+&lt;td&gt;131306.647&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台北車站-高雄車站&lt;/td&gt;
+&lt;td&gt;294142.382&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台中車站-馬公航空站&lt;/td&gt;
+&lt;td&gt;125200.617&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台中車站-花蓮車站&lt;/td&gt;
+&lt;td&gt;117182.591&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="使用 proj 將經緯度投影到 twd97 平面座標"&gt;使用 proj 將經緯度投影到 twd97 平面座標&lt;/h2&gt;
+&lt;p&gt;proj.4 的另一個工具 &lt;code&gt;proj&lt;/code&gt; 可以將橢球座標投影到平面，
+proj.4 本身帶有 epsg 的參數資料庫，
+登記在 epsg 中的座標系統有現成的參數可以直接使用。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-term"&gt;$ proj +init=epsg:3826 &amp;lt;&amp;lt;PROJ
+121.5170212729008 25.047750402347074
+121.51218835995553 25.040081355845224
+121.46447770199445 25.091458666223513
+121.3133939517849 24.98914581081843
+120.68675863600342 24.1372808482334
+120.30189266178539 22.638565387382755
+119.62949045558962 23.560900758837473
+121.60124825481569 23.99262920154155
+PROJ
+
+302168.39       2771166.16
+301683.95       2770314.84
+296849.94       2775988.28
+281636.86       2764611.89
+218164.11       2670262.31
+178245.05       2504429.59
+110084.00       2607064.50
+311176.20       2654337.35
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;結果整理成表格：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;地點&lt;/th&gt;
+&lt;th&gt;經度&lt;/th&gt;
+&lt;th&gt;緯度&lt;/th&gt;
+&lt;th&gt;twd97 E&lt;/th&gt;
+&lt;th&gt;twd97 N&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;台北車站&lt;/td&gt;
+&lt;td&gt;121.5170212729008&lt;/td&gt;
+&lt;td&gt;25.047750402347074&lt;/td&gt;
+&lt;td&gt;302168.39&lt;/td&gt;
+&lt;td&gt;2771166.16&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;總統府&lt;/td&gt;
+&lt;td&gt;121.51218835995553&lt;/td&gt;
+&lt;td&gt;25.040081355845224&lt;/td&gt;
+&lt;td&gt;301683.95&lt;/td&gt;
+&lt;td&gt;2770314.84&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;蘆洲火車站&lt;/td&gt;
+&lt;td&gt;121.46447770199445&lt;/td&gt;
+&lt;td&gt;25.091458666223513&lt;/td&gt;
+&lt;td&gt;296849.94&lt;/td&gt;
+&lt;td&gt;2775988.28&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;桃園車站&lt;/td&gt;
+&lt;td&gt;121.3133939517849&lt;/td&gt;
+&lt;td&gt;24.98914581081843&lt;/td&gt;
+&lt;td&gt;281636.86&lt;/td&gt;
+&lt;td&gt;2764611.89&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台中車站&lt;/td&gt;
+&lt;td&gt;120.68675863600342&lt;/td&gt;
+&lt;td&gt;24.1372808482334&lt;/td&gt;
+&lt;td&gt;218164.11&lt;/td&gt;
+&lt;td&gt;2670262.31&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;高雄車站&lt;/td&gt;
+&lt;td&gt;120.30189266178539&lt;/td&gt;
+&lt;td&gt;22.638565387382755&lt;/td&gt;
+&lt;td&gt;178245.05&lt;/td&gt;
+&lt;td&gt;2504429.59&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;馬公航空站&lt;/td&gt;
+&lt;td&gt;119.62949045558962&lt;/td&gt;
+&lt;td&gt;23.560900758837473&lt;/td&gt;
+&lt;td&gt;110084.00&lt;/td&gt;
+&lt;td&gt;2607064.50&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;花蓮車站&lt;/td&gt;
+&lt;td&gt;121.60124825481569&lt;/td&gt;
+&lt;td&gt;23.99262920154155&lt;/td&gt;
+&lt;td&gt;311176.20&lt;/td&gt;
+&lt;td&gt;2654337.35&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;再依之前的分組方式，簡單用畢氏定理計算各分組二點間座標，
+使用 octave 的 norm 函數，最後結果如下表：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;路線&lt;/th&gt;
+&lt;th&gt;twd97 平面投影距離&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;台北車站-總統府&lt;/td&gt;
+&lt;td&gt;979.503882585725&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台北車站-蘆洲火車站&lt;/td&gt;
+&lt;td&gt;7179.04949815062&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台北車站-桃園車站&lt;/td&gt;
+&lt;td&gt;21552.3126224032&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台北車站-台中車站&lt;/td&gt;
+&lt;td&gt;131294.729532990&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台北車站-高雄車站&lt;/td&gt;
+&lt;td&gt;294117.989881817&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台中車站-馬公航空站&lt;/td&gt;
+&lt;td&gt;125200.931971005&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台中車站-花蓮車站&lt;/td&gt;
+&lt;td&gt;94365.5299204625&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id="使用 proj 將經緯度投影到 utm 51 zone 平面座標"&gt;使用 proj 將經緯度投影到 utm 51 zone 平面座標&lt;/h2&gt;
+&lt;p&gt;utm 51 zone 的地圖投影作法也類似，
+只是可以不用 epsg 代碼，
+proj 有內建 utm 的投影參數：
+&lt;code&gt;proj +proj=utm +zone=51&lt;/code&gt; 。
+結果如下二表：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;地點&lt;/th&gt;
+&lt;th&gt;utm 51 zone E&lt;/th&gt;
+&lt;th&gt;utm 51 zone N&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;台北車站&lt;/td&gt;
+&lt;td&gt;350400.14&lt;/td&gt;
+&lt;td&gt;2771054.89&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;總統府&lt;/td&gt;
+&lt;td&gt;349903.20&lt;/td&gt;
+&lt;td&gt;2770210.87&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;蘆洲火車站&lt;/td&gt;
+&lt;td&gt;345153.83&lt;/td&gt;
+&lt;td&gt;2775954.94&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;桃園車站&lt;/td&gt;
+&lt;td&gt;329774.20&lt;/td&gt;
+&lt;td&gt;2764804.50&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台中車站&lt;/td&gt;
+&lt;td&gt;264925.20&lt;/td&gt;
+&lt;td&gt;2671366.80&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;高雄車站&lt;/td&gt;
+&lt;td&gt;222690.52&lt;/td&gt;
+&lt;td&gt;2506024.50&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;馬公航空站&lt;/td&gt;
+&lt;td&gt;155892.74&lt;/td&gt;
+&lt;td&gt;2609662.42&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;花蓮車站&lt;/td&gt;
+&lt;td&gt;357713.83&lt;/td&gt;
+&lt;td&gt;2654116.80&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;路線&lt;/th&gt;
+&lt;th&gt;utm 51 平面投影距離 (m)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;台北車站-總統府&lt;/td&gt;
+&lt;td&gt;979.448377404360&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台北車站-蘆洲火車站&lt;/td&gt;
+&lt;td&gt;7178.73656144298&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台北車站-桃園車站&lt;/td&gt;
+&lt;td&gt;21552.1872680176&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台北車站-台中車站&lt;/td&gt;
+&lt;td&gt;131315.195829926&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台北車站-高雄車站&lt;/td&gt;
+&lt;td&gt;294195.266216329&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台中車站-馬公航空站&lt;/td&gt;
+&lt;td&gt;125281.713928394&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台中車站-花蓮車站&lt;/td&gt;
+&lt;td&gt;94378.4528230724&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id="成果分析"&gt;成果分析&lt;/h3&gt;
+&lt;p&gt;最後把三種投影的距離製表比較：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;路線&lt;/th&gt;
+&lt;th&gt;大地線距離&lt;/th&gt;
+&lt;th&gt;twd97 平面投影距離&lt;/th&gt;
+&lt;th&gt;twd97 誤差&lt;/th&gt;
+&lt;th&gt;utm 51 平面投影距離 (m)&lt;/th&gt;
+&lt;th&gt;utm 51 zone 誤差&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;台北車站 -總統府&lt;/td&gt;
+&lt;td&gt;979.57&lt;/td&gt;
+&lt;td&gt;979.503882585725&lt;/td&gt;
+&lt;td&gt;6.74963650122267E -05&lt;/td&gt;
+&lt;td&gt;979.44837740436&lt;/td&gt;
+&lt;td&gt;0.000124159167431&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台北車站 -蘆洲火車站&lt;/td&gt;
+&lt;td&gt;7179.569&lt;/td&gt;
+&lt;td&gt;7179.04949815062&lt;/td&gt;
+&lt;td&gt;7.23583615368142E -05&lt;/td&gt;
+&lt;td&gt;7178.73656144298&lt;/td&gt;
+&lt;td&gt;0.000115945477649&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台北車站 -桃園車站&lt;/td&gt;
+&lt;td&gt;21553.94&lt;/td&gt;
+&lt;td&gt;21552.3126224032&lt;/td&gt;
+&lt;td&gt;7.55025576205657E -05&lt;/td&gt;
+&lt;td&gt;21552.1872680176&lt;/td&gt;
+&lt;td&gt;8.13184031504352E -05&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台北車站 -台中車站&lt;/td&gt;
+&lt;td&gt;131306.647&lt;/td&gt;
+&lt;td&gt;131294.72953299&lt;/td&gt;
+&lt;td&gt;9.07605767284862E -05&lt;/td&gt;
+&lt;td&gt;131315.195829926&lt;/td&gt;
+&lt;td&gt;-6.5105842859602E -05&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台北車站 -高雄車站&lt;/td&gt;
+&lt;td&gt;294142.382&lt;/td&gt;
+&lt;td&gt;294117.989881817&lt;/td&gt;
+&lt;td&gt;8.2926227825831E -05&lt;/td&gt;
+&lt;td&gt;294195.266216329&lt;/td&gt;
+&lt;td&gt;-0.000179791215293&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台中車站 -馬公航空站&lt;/td&gt;
+&lt;td&gt;125200.617&lt;/td&gt;
+&lt;td&gt;125200.931971005&lt;/td&gt;
+&lt;td&gt;-2.51573045367377E -06&lt;/td&gt;
+&lt;td&gt;125281.713928394&lt;/td&gt;
+&lt;td&gt;-0.000647735852564&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;台中車站 -花蓮車站&lt;/td&gt;
+&lt;td&gt;94373.816&lt;/td&gt;
+&lt;td&gt;94365.5299204625&lt;/td&gt;
+&lt;td&gt;8.78006197979934E -05&lt;/td&gt;
+&lt;td&gt;94378.4528230724&lt;/td&gt;
+&lt;td&gt;-4.91325165063711E -05&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;可以看到，相較於 utm 51 zone，twd97 平面投影上的距離，
+在台灣西部的誤差較小，整體表現優於 utm。
+只有在橫跨東西部時，也就是台中到花蓮的路線，誤差大於 utm。&lt;/p&gt;
+&lt;link rel="stylesheet" href="ext/paper.css"&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/fourier-basis-function.html</id>
 <title>傅立葉三角函數基底練習</title>
 <published>2018-10-10T10:28:41.838Z</published>

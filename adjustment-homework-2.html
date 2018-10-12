@@ -1,0 +1,214 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-10-12T05:05:19.697Z">
+<meta name="keywords" property="og:article:tag" content="report,geomatics">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="utm-taiwan-some-topic.html" title="還沒想好主題">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>平差作業二</title>
+</head>
+<body>
+<main><h1 id="平差作業二">平差作業二</h1>
+<p>平差作業二，老師要求要正式一點，就用電腦打。</p>
+<h2 id="廣義逆矩陣">廣義逆矩陣</h2>
+<p>Let A be a m×n matrix, and the rank(A)=r. P and Q are products of elementary
+matrices such that</p>
+<pre><code class="lang-math">P A Q = \begin{bmatrix}
+I_r &amp; 0 \\
+0 &amp; 0
+\end{bmatrix}
+</code></pre>
+<p>The generalized inverse of A is</p>
+<pre><code class="lang-math">A^g = Q 
+\begin{bmatrix}
+I_r &amp; U \\
+V &amp; W
+\end{bmatrix}
+P
+</code></pre>
+<p>where U, V, and W are arbitrary matrices. Show that
+$A A^g A = A$ (30%)</p>
+<p>因為 P Q 為可逆方陣，可以將 A 重寫為：</p>
+<pre><code class="lang-math">A = P^{-1} \begin{bmatrix}
+I_r &amp; 0 \\
+0 &amp; 0
+\end{bmatrix}
+Q^{-1}
+</code></pre>
+<p>如此則可將 P Q 與自身的逆消除，
+剩下中間塊矩陣，非單位方陣的部份
+也在乘上二對角矩陣後消除。
+至此滿足廣義逆的條件 $A A^g A = A$ 。</p>
+<pre><code class="lang-math">\begin{multline}
+A A^g A = (
+    P^{-1} \begin{bmatrix}
+    I_r &amp; 0 \\
+    0 &amp; 0
+    \end{bmatrix}
+    Q^{-1} 
+)
+(
+    Q 
+    \begin{bmatrix}
+        I_r &amp; U \\
+        V &amp; W
+    \end{bmatrix}
+    P
+)
+(
+    P^{-1} \begin{bmatrix}
+    I_r &amp; 0 \\
+    0 &amp; 0
+    \end{bmatrix}
+    Q^{-1} 
+) \\
+= P^{-1} 
+\begin{bmatrix}
+    I_r &amp; 0 \\
+    0 &amp; 0
+\end{bmatrix}
+\begin{bmatrix}
+    I_r &amp; U \\
+    V &amp; W
+\end{bmatrix}
+\begin{bmatrix}
+    I_r &amp; 0 \\
+    0 &amp; 0
+\end{bmatrix}
+Q^{-1}
+=
+P^{-1} 
+\begin{bmatrix}
+I_r &amp; 0 \\
+0   &amp; 0 
+\end{bmatrix}
+Q^{-1}
+= A
+\end{multline}
+</code></pre>
+<h2 id="冪等矩陣">冪等矩陣</h2>
+<p>試證下二者為 <strong>冪等矩陣</strong> 。
+冪等矩陣定義為自乘為等於自己，
+若 M 為冪等矩陣，則 $M^2 = M^n = M$ 。</p>
+<h3 id="$M = I - B^T ( B P^{-1} B^T ) ^{-1} B P^{-1}$">$M = I - B^T ( B P^{-1} B^T ) ^{-1} B P^{-1}$</h3>
+<p>首先，若一矩陣 M 為冪等矩陣，刖 I - M 亦為冪等矩陣：</p>
+<pre><code class="lang-math">(I - M)^2 = I^2 - 2 I M + M^2
+= I - 2 M + M
+= I - M
+</code></pre>
+<p>故證明 $B^T ( B P^{-1} B^T ) ^{-1} B P^{-1}$ 為冪等矩陣，
+即可證明 $I - B^T ( B P^{-1} B^T ) ^{-1} B P^{-1}$ 為冪等矩陣。</p>
+<pre><code class="lang-math">( B^T ( B P^{-1} B^T ) ^{-1} B P^{-1} ) ^ 2 =
+( B^T ( B P^{-1} B^T ) ^{-1} B P^{-1} ) 
+( B^T ( B P^{-1} B^T ) ^{-1} B P^{-1} ) \\
+= B^T ( B P^{-1} B^T ) ^{-1} 
+( B P^{-1}  B^T ) ( B P^{-1} B^T ) ^{-1} 
+B P^{-1} =
+B^T ( B P^{-1} B^T ) ^{-1} B P^{-1}
+</code></pre>
+<p>若 $B^T ( B P^{-1} B^T ) ^{-1} B P^{-1}$ 為冪等矩陣，
+則推得 $I - B^T ( B P^{-1} B^T ) ^{-1} B P^{-1}$ 亦為冪等矩陣。</p>
+<h3 id="$M = A^T A ( A^T A ) ^+$">$M = A^T A ( A^T A ) ^+$</h3>
+<p>根據 <strong>偽逆矩陣</strong> 的定義，
+若 $A^+$ 為 $A$ 的 <strong>偽逆矩陣</strong> ，
+則 $A$ 與 $A^+$ 滿足以下種關係：</p>
+<pre><code class="lang-math">A A^+ A = A \\
+A^+ A A^+ = A^+ \\
+(A^+ A)^* = A^+ A \\
+(A A^+)^* = A A^+
+</code></pre>
+<p>其中 $M^*$ 為 M 的 <strong>共軛轉置矩陣</strong> ，
+對實數矩陣 M 來說共軛轉置矩陣相當於轉置矩陣 $M^* = M^T$ 。</p>
+<pre><code class="lang-math">( A^T A ( A^T A )^+ ) ^ 2
+= ( A^T A ) ( A^T A )^+ ( A^T A ) ( A^T A )^+
+</code></pre>
+<p>根據定義， $M M^+ M = M$ ，
+故上式可再化簡：</p>
+<pre><code class="lang-math">( A^T A ) ( A^T A )^+ ( A^T A ) ( A^T A )^+
+= ( A^T A ) ( A^T A )^+
+</code></pre>
+<p>得證 $( A^T A ) ( A^T A )^+$ 為冪等矩陣。</p>
+<h2 id="偽逆矩陣與特徽值">偽逆矩陣與特徽值</h2>
+<p>給定 <strong>奇異方陣</strong> A：</p>
+<pre><code class="lang-math">A = \begin{bmatrix}
+    6 &amp; 2 &amp; 4 &amp; 6 \\
+    1 &amp; 5 &amp; 1 &amp; 4 \\
+    1 &amp; 2 &amp; 7 &amp; 4 \\
+    3 &amp; 1 &amp; 2 &amp; 3
+\end{bmatrix}
+</code></pre>
+<h3 id="偽逆矩陣">偽逆矩陣</h3>
+<p>由 matlab 中的 pinv 函數算出 A 的偽逆矩陣為：</p>
+<pre><code class="lang-math">pinv(A) = \begin{bmatrix}
+0.1300326 &amp; -0.0657980 &amp; -0.0977199 &amp; 0.0650163 \\
+-0.0505537 &amp; 0.1852334 &amp; -0.0054289 &amp; -0.0252769 \\
+-0.0252769 &amp; -0.0740499 &amp; 0.1639522 &amp; -0.0126384 \\
+0.0370033 &amp; 0.0534202 &amp; -0.0097720 &amp; 0.0185016
+\end{bmatrix}
+</code></pre>
+<h3 id="特徵值">特徵值</h3>
+<p>試求 $A A^+$ 的特徵值。</p>
+<pre><code class="lang-math">A A^+ = \begin{bmatrix}
+0.8 &amp; 0 &amp; 0 &amp; 0.4 \\
+0   &amp; 1 &amp; 0 &amp; 0   \\
+0   &amp; 0 &amp; 1 &amp; 0   \\
+0.4 &amp; 0 &amp; 0 &amp; 0.2
+\end{bmatrix}
+</code></pre>
+<p>由 matlab 函數 eig 可以求出矩陣的特徵值；
+<code>eig(A*pinv(A))</code> <code>[1 1 0 1]</code> 。</p>
+<h3 id="跡">跡</h3>
+<p>$A A^+$ 的跡與 $A A^+$ 的特徵值的合相同，這並不是巧合。
+以下設 $M = A A^+$ ，
+M 與其特徵值 λ 、特徵向量組成的矩陣 X 可以表示為如下的關係：</p>
+<pre><code class="lang-math">M = A A^+ \\
+M X = X \Lambda = X diag(\lambda_1, ... , \lambda_n) \\
+\rightarrow M = X \Lambda X^{-1} \\
+\rightarrow tr(A A^+) = tr(M) = tr(X \Lambda X^{-1}) \\
+= tr(\Lambda X^{-1} X) = tr(\Lambda) = \sum \lambda_n
+</code></pre>
+<p>因此， $A A^+$ 的跡即為 $X \Lambda X^{-1}$ 的跡，
+又根據跡的運算法則， $tr(A B C) = tr(B C A) = tr(C A B)$ ，
+因此將 $X \Lambda X^{-1}$ 順序推移後即可消去式中的 X，只留下 Λ 。
+而 Λ 的跡即為特徵值的和，因此 $A A^+$ 的跡即為 Λ 的跡即為特徵向量的和。</p>
+<script type="text/x-mathjax-config">
+ MathJax.Hub.Config({tex2jax: {
+ inlineMath: [['$','$']],
+ processEscapes: true,
+ skipTags: ["script","noscript","style","textarea", 'code'],
+ processClass: ['lang-math']
+ }});
+</script>
+
+<script>
+for (const math of document.querySelectorAll('.lang-math')) {
+  math.textContent = '\\[' + math.textContent + '\\]'
+}
+document.body.contentEditable = true
+</script>
+
+<p><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML" async></script></p>
+<link rel="stylesheet" href="ext/paper.css">
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy="" src="ext/load-disqus.js"></script>
+
+</body></html>

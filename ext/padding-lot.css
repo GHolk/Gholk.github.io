@@ -69,6 +69,9 @@ code.lang-term {
     color: #DDD;
     background-color: #333;
 }
+code.lang-math {
+    border: none;
+}
 
 pre {
     white-space: pre-wrap;
@@ -125,7 +128,7 @@ iframe {
 }
 
 
-script, style {
+script:not([type]), style {
     display: block;
     margin: 1em;
     white-space: pre;
@@ -142,6 +145,10 @@ script[src]:before {
 script:after {
     content: '</script>';
 }
+script[type^= "math/"] {
+    display: none;
+}
+
 style:before {
     content: '<style>';
 }

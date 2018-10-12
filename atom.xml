@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-10-11T14:51:21.968Z</updated>
+  <updated>2018-10-12T15:12:56.902Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -25,6 +25,387 @@
 
 
 <entry>
+<id>http://gholk.github.io/adjustment-homework-2.html</id>
+<title>平差作業二</title>
+<published>2018-10-12T05:05:19.697Z</published>
+<updated>2018-10-12T15:12:56.890Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/adjustment-homework-2.html"/>
+<summary>平差作業二，老師要求要正式一點，就用電腦打。</summary>
+<category term="report"/>
+<category term="geomatics"/>
+<content type="html">&lt;h1 id="平差作業二"&gt;平差作業二&lt;/h1&gt;
+&lt;p&gt;平差作業二，老師要求要正式一點，就用電腦打。&lt;/p&gt;
+&lt;h2 id="廣義逆矩陣"&gt;廣義逆矩陣&lt;/h2&gt;
+&lt;p&gt;Let A be a m×n matrix, and the rank(A)=r. P and Q are products of elementary
+matrices such that&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;P A Q = \begin{bmatrix}
+I_r &amp;amp; 0 \\
+0 &amp;amp; 0
+\end{bmatrix}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The generalized inverse of A is&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;A^g = Q 
+\begin{bmatrix}
+I_r &amp;amp; U \\
+V &amp;amp; W
+\end{bmatrix}
+P
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;where U, V, and W are arbitrary matrices. Show that
+$A A^g A = A$ (30%)&lt;/p&gt;
+&lt;p&gt;因為 P Q 為可逆方陣，可以將 A 重寫為：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;A = P^{-1} \begin{bmatrix}
+I_r &amp;amp; 0 \\
+0 &amp;amp; 0
+\end{bmatrix}
+Q^{-1}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如此則可將 P Q 與自身的逆消除，
+剩下中間塊矩陣，非單位方陣的部份
+也在乘上二對角矩陣後消除。
+至此滿足廣義逆的條件 $A A^g A = A$ 。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;\begin{multline}
+A A^g A = (
+    P^{-1} \begin{bmatrix}
+    I_r &amp;amp; 0 \\
+    0 &amp;amp; 0
+    \end{bmatrix}
+    Q^{-1} 
+)
+(
+    Q 
+    \begin{bmatrix}
+        I_r &amp;amp; U \\
+        V &amp;amp; W
+    \end{bmatrix}
+    P
+)
+(
+    P^{-1} \begin{bmatrix}
+    I_r &amp;amp; 0 \\
+    0 &amp;amp; 0
+    \end{bmatrix}
+    Q^{-1} 
+) \\
+= P^{-1} 
+\begin{bmatrix}
+    I_r &amp;amp; 0 \\
+    0 &amp;amp; 0
+\end{bmatrix}
+\begin{bmatrix}
+    I_r &amp;amp; U \\
+    V &amp;amp; W
+\end{bmatrix}
+\begin{bmatrix}
+    I_r &amp;amp; 0 \\
+    0 &amp;amp; 0
+\end{bmatrix}
+Q^{-1}
+=
+P^{-1} 
+\begin{bmatrix}
+I_r &amp;amp; 0 \\
+0   &amp;amp; 0 
+\end{bmatrix}
+Q^{-1}
+= A
+\end{multline}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id="冪等矩陣"&gt;冪等矩陣&lt;/h2&gt;
+&lt;p&gt;試證下二者為 &lt;strong&gt;冪等矩陣&lt;/strong&gt; 。
+冪等矩陣定義為自乘為等於自己，
+若 M 為冪等矩陣，則 $M^2 = M^n = M$ 。&lt;/p&gt;
+&lt;h3 id="$M = I - B^T ( B P^{-1} B^T ) ^{-1} B P^{-1}$"&gt;$M = I - B^T ( B P^{-1} B^T ) ^{-1} B P^{-1}$&lt;/h3&gt;
+&lt;p&gt;首先，若一矩陣 M 為冪等矩陣，刖 I - M 亦為冪等矩陣：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;(I - M)^2 = I^2 - 2 I M + M^2
+= I - 2 M + M
+= I - M
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;故證明 $B^T ( B P^{-1} B^T ) ^{-1} B P^{-1}$ 為冪等矩陣，
+即可證明 $I - B^T ( B P^{-1} B^T ) ^{-1} B P^{-1}$ 為冪等矩陣。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;( B^T ( B P^{-1} B^T ) ^{-1} B P^{-1} ) ^ 2 =
+( B^T ( B P^{-1} B^T ) ^{-1} B P^{-1} ) 
+( B^T ( B P^{-1} B^T ) ^{-1} B P^{-1} ) \\
+= B^T ( B P^{-1} B^T ) ^{-1} 
+( B P^{-1}  B^T ) ( B P^{-1} B^T ) ^{-1} 
+B P^{-1} =
+B^T ( B P^{-1} B^T ) ^{-1} B P^{-1}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;若 $B^T ( B P^{-1} B^T ) ^{-1} B P^{-1}$ 為冪等矩陣，
+則推得 $I - B^T ( B P^{-1} B^T ) ^{-1} B P^{-1}$ 亦為冪等矩陣。&lt;/p&gt;
+&lt;h3 id="$M = A^T A ( A^T A ) ^+$"&gt;$M = A^T A ( A^T A ) ^+$&lt;/h3&gt;
+&lt;p&gt;根據 &lt;strong&gt;偽逆矩陣&lt;/strong&gt; 的定義，
+若 $A^+$ 為 $A$ 的 &lt;strong&gt;偽逆矩陣&lt;/strong&gt; ，
+則 $A$ 與 $A^+$ 滿足以下種關係：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;A A^+ A = A \\
+A^+ A A^+ = A^+ \\
+(A^+ A)^* = A^+ A \\
+(A A^+)^* = A A^+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;其中 $M^*$ 為 M 的 &lt;strong&gt;共軛轉置矩陣&lt;/strong&gt; ，
+對實數矩陣 M 來說共軛轉置矩陣相當於轉置矩陣 $M^* = M^T$ 。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;( A^T A ( A^T A )^+ ) ^ 2
+= ( A^T A ) ( A^T A )^+ ( A^T A ) ( A^T A )^+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;根據定義， $M M^+ M = M$ ，
+故上式可再化簡：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;( A^T A ) ( A^T A )^+ ( A^T A ) ( A^T A )^+
+= ( A^T A ) ( A^T A )^+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;得證 $( A^T A ) ( A^T A )^+$ 為冪等矩陣。&lt;/p&gt;
+&lt;h2 id="偽逆矩陣與特徽值"&gt;偽逆矩陣與特徽值&lt;/h2&gt;
+&lt;p&gt;給定 &lt;strong&gt;奇異方陣&lt;/strong&gt; A：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;A = \begin{bmatrix}
+    6 &amp;amp; 2 &amp;amp; 4 &amp;amp; 6 \\
+    1 &amp;amp; 5 &amp;amp; 1 &amp;amp; 4 \\
+    1 &amp;amp; 2 &amp;amp; 7 &amp;amp; 4 \\
+    3 &amp;amp; 1 &amp;amp; 2 &amp;amp; 3
+\end{bmatrix}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="偽逆矩陣"&gt;偽逆矩陣&lt;/h3&gt;
+&lt;p&gt;由 matlab 中的 pinv 函數算出 A 的偽逆矩陣為：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;pinv(A) = \begin{bmatrix}
+0.1300326 &amp;amp; -0.0657980 &amp;amp; -0.0977199 &amp;amp; 0.0650163 \\
+-0.0505537 &amp;amp; 0.1852334 &amp;amp; -0.0054289 &amp;amp; -0.0252769 \\
+-0.0252769 &amp;amp; -0.0740499 &amp;amp; 0.1639522 &amp;amp; -0.0126384 \\
+0.0370033 &amp;amp; 0.0534202 &amp;amp; -0.0097720 &amp;amp; 0.0185016
+\end{bmatrix}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="特徵值"&gt;特徵值&lt;/h3&gt;
+&lt;p&gt;試求 $A A^+$ 的特徵值。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;A A^+ = \begin{bmatrix}
+0.8 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0.4 \\
+0   &amp;amp; 1 &amp;amp; 0 &amp;amp; 0   \\
+0   &amp;amp; 0 &amp;amp; 1 &amp;amp; 0   \\
+0.4 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0.2
+\end{bmatrix}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;由 matlab 函數 eig 可以求出矩陣的特徵值；
+&lt;code&gt;eig(A*pinv(A))&lt;/code&gt; &lt;code&gt;[1 1 0 1]&lt;/code&gt; 。&lt;/p&gt;
+&lt;h3 id="跡"&gt;跡&lt;/h3&gt;
+&lt;p&gt;$A A^+$ 的跡與 $A A^+$ 的特徵值的合相同，這並不是巧合。
+以下設 $M = A A^+$ ，
+M 與其特徵值 λ 、特徵向量組成的矩陣 X 可以表示為如下的關係：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;M = A A^+ \\
+M X = X \Lambda = X diag(\lambda_1, ... , \lambda_n) \\
+\rightarrow M = X \Lambda X^{-1} \\
+\rightarrow tr(A A^+) = tr(M) = tr(X \Lambda X^{-1}) \\
+= tr(\Lambda X^{-1} X) = tr(\Lambda) = \sum \lambda_n
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;因此， $A A^+$ 的跡即為 $X \Lambda X^{-1}$ 的跡，
+又根據跡的運算法則， $tr(A B C) = tr(B C A) = tr(C A B)$ ，
+因此將 $X \Lambda X^{-1}$ 順序推移後即可消去式中的 X，只留下 Λ 。
+而 Λ 的跡即為特徵值的和，因此 $A A^+$ 的跡即為 Λ 的跡即為特徵向量的和。&lt;/p&gt;
+&lt;script type="text/x-mathjax-config"&gt;
+ MathJax.Hub.Config({tex2jax: {
+ inlineMath: [['$','$']],
+ processEscapes: true,
+ skipTags: ["script","noscript","style","textarea", 'code'],
+ processClass: ['lang-math']
+ }});
+&lt;/script&gt;
+
+&lt;script&gt;
+for (const math of document.querySelectorAll('.lang-math')) {
+  math.textContent = '\\[' + math.textContent + '\\]'
+}
+document.body.contentEditable = true
+&lt;/script&gt;
+
+&lt;p&gt;&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML" async&gt;&lt;/script&gt;&lt;/p&gt;
+&lt;link rel="stylesheet" href="ext/paper.css"&gt;
+</content>
+</entry><entry>
+<id>http://gholk.github.io/adjustment-homework-2.html</id>
+<title>平差作業二</title>
+<published>2018-10-12T05:05:19.697Z</published>
+<updated>2018-10-12T15:02:16.876Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/adjustment-homework-2.html"/>
+<summary>平差作業二，老師要求要正式一點，就用電腦打。</summary>
+<category term="report"/>
+<category term="geomatics"/>
+<content type="html">&lt;h1 id="平差作業二"&gt;平差作業二&lt;/h1&gt;
+&lt;p&gt;平差作業二，老師要求要正式一點，就用電腦打。&lt;/p&gt;
+&lt;h2 id="廣義逆矩陣"&gt;廣義逆矩陣&lt;/h2&gt;
+&lt;p&gt;Let A be a m×n matrix, and the rank(A)=r. P and Q are products of elementary
+matrices such that&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;P A Q = \begin{bmatrix}
+I_r &amp;amp; 0 \\
+0 &amp;amp; 0
+\end{bmatrix}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The generalized inverse of A is&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;A^g = Q 
+\begin{bmatrix}
+I_r &amp;amp; U \\
+V &amp;amp; W
+\end{bmatrix}
+P
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;where U, V, and W are arbitrary matrices. Show that
+$A A^g A = A$ (30%)&lt;/p&gt;
+&lt;p&gt;因為 P Q 為可逆方陣，可以將 A 重寫為：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;A = P^{-1} \begin{bmatrix}
+I_r &amp;amp; 0 \\
+0 &amp;amp; 0
+\end{bmatrix}
+Q^{-1}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如此則可將 P Q 與自身的逆消除，
+剩下中間塊矩陣，非單位方陣的部份
+也在乘上二對角矩陣後消除。
+至此滿足廣義逆的條件 $A A^g A = A$ 。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;\begin{multline}
+A A^g A = (
+    P^{-1} \begin{bmatrix}
+    I_r &amp;amp; 0 \\
+    0 &amp;amp; 0
+    \end{bmatrix}
+    Q^{-1} 
+)
+(
+    Q 
+    \begin{bmatrix}
+        I_r &amp;amp; U \\
+        V &amp;amp; W
+    \end{bmatrix}
+    P
+)
+(
+    P^{-1} \begin{bmatrix}
+    I_r &amp;amp; 0 \\
+    0 &amp;amp; 0
+    \end{bmatrix}
+    Q^{-1} 
+) \\
+= P^{-1} 
+\begin{bmatrix}
+    I_r &amp;amp; 0 \\
+    0 &amp;amp; 0
+\end{bmatrix}
+\begin{bmatrix}
+    I_r &amp;amp; U \\
+    V &amp;amp; W
+\end{bmatrix}
+\begin{bmatrix}
+    I_r &amp;amp; 0 \\
+    0 &amp;amp; 0
+\end{bmatrix}
+Q^{-1}
+=
+P^{-1} 
+\begin{bmatrix}
+I_r &amp;amp; 0 \\
+0   &amp;amp; 0 
+\end{bmatrix}
+Q^{-1}
+= A
+\end{multline}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id="冪等矩陣"&gt;冪等矩陣&lt;/h2&gt;
+&lt;p&gt;試證下二者為 &lt;strong&gt;冪等矩陣&lt;/strong&gt; 。
+冪等矩陣定義為自乘為等於自己，
+若 M 為冪等矩陣，則 $M^2 = M^n = M$ 。&lt;/p&gt;
+&lt;h3 id="$M = I - B^T ( B P^{-1} B^T ) ^{-1} B P^{-1}$"&gt;$M = I - B^T ( B P^{-1} B^T ) ^{-1} B P^{-1}$&lt;/h3&gt;
+&lt;p&gt;首先，若一矩陣 M 為冪等矩陣，刖 I - M 亦為冪等矩陣：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;(I - M)^2 = I^2 - 2 I M + M^2
+= I - 2 M + M
+= I - M
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;故證明 $B^T ( B P^{-1} B^T ) ^{-1} B P^{-1}$ 為冪等矩陣，
+即可證明 $I - B^T ( B P^{-1} B^T ) ^{-1} B P^{-1}$ 為冪等矩陣。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;( B^T ( B P^{-1} B^T ) ^{-1} B P^{-1} ) ^ 2 =
+( B^T ( B P^{-1} B^T ) ^{-1} B P^{-1} ) 
+( B^T ( B P^{-1} B^T ) ^{-1} B P^{-1} ) \\
+= B^T ( B P^{-1} B^T ) ^{-1} 
+( B P^{-1}  B^T ) ( B P^{-1} B^T ) ^{-1} 
+B P^{-1} =
+B^T ( B P^{-1} B^T ) ^{-1} B P^{-1}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;若 $B^T ( B P^{-1} B^T ) ^{-1} B P^{-1}$ 為冪等矩陣，
+則推得 $I - B^T ( B P^{-1} B^T ) ^{-1} B P^{-1}$ 亦為冪等矩陣。&lt;/p&gt;
+&lt;h3 id="$M = A^T A ( A^T A ) ^+$"&gt;$M = A^T A ( A^T A ) ^+$&lt;/h3&gt;
+&lt;p&gt;根據 &lt;strong&gt;偽逆矩陣&lt;/strong&gt; 的定義，
+若 $A^+$ 為 $A$ 的 &lt;strong&gt;偽逆矩陣&lt;/strong&gt; ，
+則 $A$ 與 $A^+$ 滿足以下種關係：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;A A^+ A = A \\
+A^+ A A^+ = A^+ \\
+(A^+ A)^* = A^+ A \\
+(A A^+)^* = A A^+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;其中 $M^*$ 為 M 的 &lt;strong&gt;共軛轉置矩陣&lt;/strong&gt; ，
+對實數矩陣 M 來說共軛轉置矩陣相當於轉置矩陣 $M^* = M^T$ 。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;( A^T A ( A^T A )^+ ) ^ 2
+= ( A^T A ) ( A^T A )^+ ( A^T A ) ( A^T A )^+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;根據定義， $M M^+ M = M$ ，
+故上式可再化簡：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;( A^T A ) ( A^T A )^+ ( A^T A ) ( A^T A )^+
+= ( A^T A ) ( A^T A )^+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;得證 $( A^T A ) ( A^T A )^+$ 為冪等矩陣。&lt;/p&gt;
+&lt;h2 id="偽逆矩陣與特徽值"&gt;偽逆矩陣與特徽值&lt;/h2&gt;
+&lt;p&gt;給定 &lt;strong&gt;奇異方陣&lt;/strong&gt; A：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;A = \begin{bmatrix}
+    6 &amp;amp; 2 &amp;amp; 4 &amp;amp; 6 \\
+    1 &amp;amp; 5 &amp;amp; 1 &amp;amp; 4 \\
+    1 &amp;amp; 2 &amp;amp; 7 &amp;amp; 4 \\
+    3 &amp;amp; 1 &amp;amp; 2 &amp;amp; 3
+\end{bmatrix}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="偽逆矩陣"&gt;偽逆矩陣&lt;/h3&gt;
+&lt;p&gt;由 matlab 中的 pinv 函數算出 A 的偽逆矩陣為：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;pinv(A) = \begin{bmatrix}
+0.1300326 &amp;amp; -0.0657980 &amp;amp; -0.0977199 &amp;amp; 0.0650163 \\
+-0.0505537 &amp;amp; 0.1852334 &amp;amp; -0.0054289 &amp;amp; -0.0252769 \\
+-0.0252769 &amp;amp; -0.0740499 &amp;amp; 0.1639522 &amp;amp; -0.0126384 \\
+0.0370033 &amp;amp; 0.0534202 &amp;amp; -0.0097720 &amp;amp; 0.0185016
+\end{bmatrix}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id="特徵值"&gt;特徵值&lt;/h3&gt;
+&lt;p&gt;試求 $A A^+$ 的特徵值。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;A A^+ = \begin{bmatrix}
+0.8 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0.4 \\
+0   &amp;amp; 1 &amp;amp; 0 &amp;amp; 0   \\
+0   &amp;amp; 0 &amp;amp; 1 &amp;amp; 0   \\
+0.4 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0.2
+\end{bmatrix}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;由 matlab 函數 eig 可以求出矩陣的特徵值；
+&lt;code&gt;eig(A*pinv(A))&lt;/code&gt; &lt;code&gt;[1 1 0 1]&lt;/code&gt; 。&lt;/p&gt;
+&lt;h3 id="跡"&gt;跡&lt;/h3&gt;
+&lt;p&gt;$A A^+$ 的跡與 $A A^+$ 的特徵值的合相同，這並不是巧合。
+以下設 $M = A A^+$ ，
+M 與其特徵值 λ 、特徵向量組成的矩陣 X 可以表示為如下的關係：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-math"&gt;M = A A^+ \\
+M X = X \Lambda = X diag(\lambda_1, ... , \lambda_n) \\
+\rightarrow M = X \Lambda X^{-1} \\
+\rightarrow tr(A A^+) = tr(M) = tr(X \Lambda X^{-1}) \\
+= tr(\Lambda X^{-1} X) = tr(\Lambda) = \sum \lambda_n
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;因此， $A A^+$ 的跡即為 $X \Lambda X^{-1}$ 的跡，
+又根據跡的運算法則， $tr(A B C) = tr(B C A) = tr(C A B)$ ，
+因此將 $X \Lambda X^{-1}$ 順序推移後即可消去式中的 X，只留下 Λ 。
+而 Λ 的跡即為特徵值的和，因此 $A A^+$ 的跡即為 Λ 的跡即為特徵向量的和。&lt;/p&gt;
+&lt;script type="text/x-mathjax-config"&gt;
+ MathJax.Hub.Config({tex2jax: {
+ inlineMath: [['$','$']],
+ processEscapes: true,
+ skipTags: ["script","noscript","style","textarea", 'code'],
+ processClass: ['lang-math']
+ }});
+&lt;/script&gt;
+
+&lt;script&gt;
+for (const math of document.querySelectorAll('.lang-math')) {
+  math.textContent = '\\[' + math.textContent + '\\]'
+}
+&lt;/script&gt;
+
+&lt;p&gt;&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML" async&gt;&lt;/script&gt;&lt;/p&gt;
+&lt;link rel="stylesheet" href="ext/paper.css"&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/utm-taiwan-some-topic.html</id>
 <title>還沒想好主題</title>
 <published>2018-10-11T14:41:11.022Z</published>

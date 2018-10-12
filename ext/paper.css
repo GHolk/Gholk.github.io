@@ -55,11 +55,11 @@
     }
 
     /* 參考文獻不編號 */
-    h2:last-of-type::before {
+    h2.reference::before {
         content: none;
     }
     /* 參考文獻凸排 */
-    h2:last-of-type ~ p {
+    h2.reference ~ p {
         text-indent: -1cm;
         padding-left: 1cm;
     }
@@ -407,28 +407,28 @@ header h2::before {
     content: none;
 }
 
-a {
+a.reference {
     font-size: 50%;
 }
-a::before {
+a.reference::before {
     color: black;
     content: "[";
 }
-a::after {
+a.reference::after {
     color: black;
     content: "]";
 }
 
 
-h2:last-of-type ~ p a {
-    color: black;
-    font-size: 100%;
-}
-h2:last-of-type ~ p a::before {
-    content: none;
-}
-h2:last-of-type ~ p a::after {
-    color: blue;
-    content: " (" attr(href) ")";
-}
+/* h2.reference ~ p a { */
+/*     color: black; */
+/*     font-size: 100%; */
+/* } */
+/* h2:last-of-type ~ p a::before { */
+/*     content: none; */
+/* } */
+/* h2:last-of-type ~ p a::after { */
+/*     color: blue; */
+/*     content: " (" attr(href) ")"; */
+/* } */
 

@@ -88,9 +88,14 @@
 
     figure { page-break-inside: avoid; }
 
-    a:after {
+    a::after {
         color: black;
         content: "(" attr(href) ")";
+    }
+    a.image::after {
+        display: block;
+        text-align: center;
+        content: attr(href);
     }
 
     .browser-only, script, style {
@@ -103,7 +108,9 @@
     body > footer, body > footer + details {
         display: none;
     }
-
+    main pre > code {
+        overflow: initial;
+    }
 }
 
 
@@ -264,14 +271,14 @@ dt {
 img { 
     max-width: 80%; 
     display: block; 
-    box-shadow: 0 0 0.3ex black ;
+    /* box-shadow: 0 0 0.3ex black ; */
     margin: auto; 
 }
 
 img.inline, p img {
     display: inline; 
-    box-shadow: none; 
-    } 
+    /* box-shadow: none;  */
+}
 
 ol.cjk { list-style: cjk-ideographic; }
 
@@ -289,7 +296,7 @@ figure { /*    display table made box adjust element inside. */
 figure img , figure pre , figure iframe {
     display: block; 
     margin: auto; 
-    box-shadow: 0 0 0.3ex black ;
+    /* box-shadow: 0 0 0.3ex black ; */
 }
 
 iframe {

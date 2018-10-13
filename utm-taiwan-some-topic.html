@@ -119,7 +119,7 @@ GEOD
 </tr>
 </tbody>
 </table>
-<h2 id="使用 proj 將經緯度投影到 twd97 平面座標">使用 proj 將經緯度投影到 twd97 平面座標</h2>
+<h3 id="使用 proj 將經緯度投影到 twd97 平面座標">使用 proj 將經緯度投影到 twd97 平面座標</h3>
 <p>proj.4 的另一個工具 <code>proj</code> 可以將橢球座標投影到平面，
 proj.4 本身帶有 epsg 的參數資料庫，
 登記在 epsg 中的座標系統有現成的參數可以直接使用。</p>
@@ -253,7 +253,7 @@ PROJ
 </tr>
 </tbody>
 </table>
-<h2 id="使用 proj 將經緯度投影到 utm 51 zone 平面座標">使用 proj 將經緯度投影到 utm 51 zone 平面座標</h2>
+<h3 id="使用 proj 將經緯度投影到 utm 51 zone 平面座標">使用 proj 將經緯度投影到 utm 51 zone 平面座標</h3>
 <p>utm 51 zone 的地圖投影作法也類似，
 只是可以不用 epsg 代碼，
 proj 有內建 utm 的投影參數：
@@ -422,7 +422,9 @@ proj 有內建 utm 的投影參數：
 </table>
 <p>可以看到，相較於 utm 51 zone，twd97 平面投影上的距離，
 在台灣西部的誤差較小，整體表現優於 utm。
-只有在橫跨東西部時，也就是台中到花蓮的路線，誤差大於 utm。</p>
+只有在台中到花蓮、台北到台串二段路線，誤差稍大於 utm。
+整體來說，twd97 的誤差都在 0.0001 以下，
+符合預期的 0.9999 精度。</p>
 <link rel="stylesheet" href="ext/paper.css">
 </main>
 

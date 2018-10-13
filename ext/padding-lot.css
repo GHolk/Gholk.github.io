@@ -128,7 +128,7 @@ iframe {
 }
 
 
-script:not([type]), style {
+script, style {
     display: block;
     margin: 1em;
     white-space: pre;

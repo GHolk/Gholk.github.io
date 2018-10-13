@@ -325,6 +325,25 @@ t | cos | sin | 傅立葉轉換 cos | 傅立葉轉換 sin | 直接平差 cos | �
     真正的觀測方程式和係數的關係還是線性的，
     因此平差也能夠簡單計算，達到精確的結果。
 
+
+<h2 class="reference">參考資料</h2>
+物理大地測量，交通大學鄭景中教授授課，傅立葉轉換。
+
+Advanced Engineering Mathematics, 10/e (IE-Paperback),
+Erwin Kreyszig, ISBN:9780470646137,
+Fourier transform.
+
+測量平差法，唐城，間接觀測平差。
+
+octave help page quad
+
+octave help page global
+
+MathJax: <https://mathjax.org/>
+
+
+
+
 <script src="ext/header-nctu.js?execute&editable"></script>
 
 <link rel="stylesheet" href="ext/paper.css">

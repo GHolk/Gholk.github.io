@@ -26,7 +26,7 @@ headerNctu.initDict = function () {
     dict.title = document.querySelector('h1').textContent
     dict.description = document.querySelector('p').textContent
     dict.date = document.querySelector('meta[name=date]').content
-    dict.keyword = document.querySelector('meta[name=keyword]').content
+    dict.keyword = document.querySelector('meta[name=keywords]').content
 }
 headerNctu.replaceTemplate = function (outerDict) {
     Object.assign(this.dict, outerDict)

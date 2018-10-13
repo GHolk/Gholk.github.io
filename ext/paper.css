@@ -426,16 +426,3 @@ a.reference::after {
     content: "]";
 }
 
-
-/* h2.reference ~ p a { */
-/*     color: black; */
-/*     font-size: 100%; */
-/* } */
-/* h2:last-of-type ~ p a::before { */
-/*     content: none; */
-/* } */
-/* h2:last-of-type ~ p a::after { */
-/*     color: blue; */
-/*     content: " (" attr(href) ")"; */
-/* } */
-

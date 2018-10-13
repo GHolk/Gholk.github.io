@@ -23,15 +23,10 @@ headerNctu.coverHeader = function () {
 }
 headerNctu.initDict = function () {
     const dict = this.dict
-    if (!dict.title) {
-        dict.title = document.querySelector('h1').textContent
-    }
-    if (!dict.description) {
-        dict.description = document.querySelector('p').textContent
-    }
-    if (!dict.date) {
-        dict.date = document.querySelector('meta[name=date]').content
-    }
+    dict.title = document.querySelector('h1').textContent
+    dict.description = document.querySelector('p').textContent
+    dict.date = document.querySelector('meta[name=date]').content
+    dict.keyword = document.querySelector('meta[name=keyword]').content
 }
 headerNctu.replaceTemplate = function (outerDict) {
     Object.assign(this.dict, outerDict)
@@ -59,6 +54,9 @@ headerNctu.initHeader = function () {
 </dl>
 <dl>
 <dt>日期</dt> <dd class="date-slot">不可考</dd>
+</dl>
+<dl>
+<dt>關鍵字</dt> <dd class="keyword-slot">不可考</dd>
 </dl>
 
 <h2>摘要</h2>

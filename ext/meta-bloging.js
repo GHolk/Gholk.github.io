@@ -1,4 +1,6 @@
 
+var gmeta = {}
+
 // call in inline script, return the script tag itself.
 function prevQuerySelector(selector) {
     const allMatch = document.querySelectorAll(selector)
@@ -160,28 +162,7 @@ autoLoader.addCase(
 
 autoLoader.addCase(
     () => document.querySelector('.lang-math'),
-    async () => {
-        const url = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML&delayStartupUntil=configured'
-        const MathJax = await waitScriptTag(url, 'MathJax')
-
-        for (const math of document.querySelectorAll('.lang-math')) {
-            math.textContent = '\\[' + math.textContent + '\\]'
-        }
-
-        const autoLineBreak = {linebreak: {automatic: true}}
-        MathJax.Hub.Config({
-            CommonHTML: autoLineBreak,
-            'HTML-CSS': autoLineBreak,
-            SVG: autoLineBreak,
-            tex2jax: {
-                inlineMath: [['$','$']],
-                processEscapes: true,
-                skipTags: ["script","noscript","style","textarea", 'code'],
-                processClass: ['lang-math']
-            }
-        })
-        MathJax.Hub.Configured()
-    }
+    () => autoLoader.addScript('ext/mathjax-block.js')
 )
 
 const goption = parseQueryOption(location.search.slice(1))

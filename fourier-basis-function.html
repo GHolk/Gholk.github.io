@@ -28,8 +28,10 @@
 <main><h1 id="傅立葉三角函數基底練習">傅立葉三角函數基底練習</h1>
 <p>物理大地測量的作業一，用三角函數當基底，
 嘗試合成出新的函數，再用正交基底的概念，
-將合成函數分解回基底；
-並嘗試在合成函數中加入雜訊，測試含雜訊的分解。</p>
+將合成函數分解回基底，等同於計算傅立葉轉換參數的過程；
+並嘗試在合成函數中加入雜訊，測試含雜訊的分解。
+最後再嘗試用測量界通用的最小二乘平差法求解參數，
+分析不同做法的差異。</p>
 <h2 id="程式">程式</h2>
 <p>本作業使用相容於 matlab 的程式語言 octave。</p>
 <h2 id="基底函數">基底函數</h2>
@@ -621,6 +623,8 @@ adjustment_error = data&#39; - design_matrics * adjustment_coefficient;
 因此平差也能夠簡單計算，達到精確的結果。</p>
 </li>
 </ol>
+<script src="ext/header-nctu.js?execute&editable"></script>
+
 <link rel="stylesheet" href="ext/paper.css">
 
 <script> 

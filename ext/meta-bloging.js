@@ -139,7 +139,8 @@ const autoLoader = {
     },
     autoLoad() {
         for (const {test, load} of this.caseList) {
-            if (test()) load()
+            let result = test()
+            if (result) load(result)
         }
     },
     createScript(url) {
@@ -179,12 +180,9 @@ autoLoader.addCase(
                 processClass: ['lang-math']
             }
         })
-
         MathJax.Hub.Configured()
-
     }
 )
-
 
 const goption = parseQueryOption(location.search.slice(1))
 

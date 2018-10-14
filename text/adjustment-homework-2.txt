@@ -1,5 +1,8 @@
 # 平差作業二
-平差作業二，老師要求要正式一點，就用電腦打。
+平差理論的第二次作業。
+內容主要包括廣義逆矩陣、偽逆矩陣、冪等矩陣，
+是一些簡單的矩陣證明和計算。
+
 
 ## 廣義逆矩陣
 Let A be a m×n matrix, and the rank(A)=r. P and Q are products of elementary
@@ -26,7 +29,8 @@ P
 where U, V, and W are arbitrary matrices. Show that
 $A A^g A = A$ (30%)
 
-因為 P Q 為可逆方陣，可以將 A 重寫為：
+因為 P Q 為 elementary matrics 的積，
+為可逆方陣，可以將 A 重寫為：
 
 ```math
 A = P^{-1} \begin{bmatrix}
@@ -187,7 +191,16 @@ A A^+ = \begin{bmatrix}
 ```
 
 由 matlab 函數 eig 可以求出矩陣的特徵值；
-`eig(A*pinv(A))` `[1 1 0 1]` 。
+`eig(A*pinv(A))` 。
+
+```math
+A A^+ X = X \Lambda = X \begin{bmatrix}
+1 & 0 & \cdots \\
+0 & 1 \\
+0 & 0 & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+```
 
 ### 跡
 $A A^+$ 的跡與 $A A^+$ 的特徵值的合相同，這並不是巧合。
@@ -207,25 +220,13 @@ M X = X \Lambda = X diag(\lambda_1, ... , \lambda_n) \\
 因此將 $X \Lambda X^{-1}$ 順序推移後即可消去式中的 X，只留下 Λ 。
 而 Λ 的跡即為特徵值的和，因此 $A A^+$ 的跡即為 Λ 的跡即為特徵向量的和。
 
+<script>autoLoader.autoLoad()</script>
 
-<script type="text/x-mathjax-config">
- MathJax.Hub.Config({tex2jax: {
- inlineMath: [['$','$']],
- processEscapes: true,
- skipTags: ["script","noscript","style","textarea", 'code'],
- processClass: ['lang-math']
- }});
-</script>
+<script defer src="ext/header-nctu.js?execute&editable"></script>
 
-<script>
-for (const math of document.querySelectorAll('.lang-math')) {
-  math.textContent = '\\[' + math.textContent + '\\]'
-}
-document.body.contentEditable = true
-</script>
-
-<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
 <link rel="stylesheet" href="ext/paper.css">
 
 #report
 #geomatics
+#adjustment
+#nctu

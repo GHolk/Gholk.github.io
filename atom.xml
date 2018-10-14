@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-10-14T03:00:26.929Z</updated>
+  <updated>2018-10-14T05:56:52.634Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -25,6 +25,134 @@
 
 
 <entry>
+<id>http://gholk.github.io/javascript-strict-equality-myth.html</id>
+<title>全等算符的迷思</title>
+<published>2018-10-14T05:47:02.108Z</published>
+<updated>2018-10-14T05:56:52.623Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/javascript-strict-equality-myth.html"/>
+<summary>因為 javascript 的相等算符 == 會做很多奇怪的類型轉換，
+所以不少人鼓吹應該全面使用全等算符 === 。
+但這是不必要的，因為那些奇怪的類型轉換，
+只會發生在糟糕的 code style；
+你根本不應該嘗試比較二個類型不相同的變數。
+就像鼓吹結尾要加分號的作法，
+我認為那是一種過度要求。</summary>
+<category term="javascript"/>
+<category term="物件"/>
+<category term="suck"/>
+<content type="html">&lt;h1 id="全等算符的迷思"&gt;全等算符的迷思&lt;/h1&gt;
+&lt;p&gt;因為 javascript 的相等算符 &lt;code&gt;==&lt;/code&gt; 會做很多奇怪的類型轉換，
+所以不少人鼓吹應該全面使用全等算符 &lt;code&gt;===&lt;/code&gt; 。
+但這是不必要的，因為那些奇怪的類型轉換，
+只會發生在糟糕的 code style；
+你根本不應該嘗試比較二個類型不相同的變數。
+就像鼓吹結尾要加分號的作法，
+我認為那是一種過度要求。&lt;/p&gt;
+&lt;h2 id="比較算符的問題"&gt;比較算符的問題&lt;/h2&gt;
+&lt;p&gt;javascript 的 &lt;code&gt;==&lt;/code&gt; 會在比較二種類型不同的變數時，
+做類型轉換，所以會造成一些 &lt;a href="https://github.com/denysdovhan/wtfjs#-is-equal-"&gt;奇怪的結果&lt;/a&gt; 。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-js"&gt;[1,2,3] == &amp;#39;1,2,3&amp;#39; // true
+[] == ![] // true
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;甚至還有人 &lt;a href="https://dorey.github.io/JavaScript-Equality-Table/"&gt;整理了一個表格&lt;/a&gt; 。
+所以很多人鼓吹應該全面使用嚴格相等算符 &lt;code&gt;===&lt;/code&gt; 。&lt;/p&gt;
+&lt;h2 id="人的問題"&gt;人的問題&lt;/h2&gt;
+&lt;p&gt;但這不應該是全等算符的問題，而是人的問題。
+基本上那些奇怪的狀況都不應該發生在你寫的 code 裡；
+我的意思是你根本不應該試著那樣比較。&lt;/p&gt;
+&lt;p&gt;請問什麼時候會你會用 &lt;code&gt;==&lt;/code&gt; 比較二個陣列相不相等？
+甚至是比較一個陣列和一個字串相不相等？
+如果要比較二個陣列一不一樣，
+應該用 &lt;code&gt;array.any&lt;/code&gt; 之類的，一一檢查每個元素吧，
+如果要檢查陣列為不為空，應該要直接檢查長度吧。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-javascript"&gt;const a = [1,2,3]
+const b = [1,2,3]
+a.any((x, i) =&amp;gt; x == b[i]) // 比較每個元素相不相等
+
+a.length == 0 // 檢查陣列為空
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;更別提那些告訴你把物件和字串比較會發生什麼鬼事的人，
+哪個瘋子會比較物件和字串？他期望得到什麼結果？type error 嗎？&lt;/p&gt;
+&lt;h2 id="真實的比較情況"&gt;真實的比較情況&lt;/h2&gt;
+&lt;p&gt;基本上，雖然 javascript 是弱類型的，
+你也不需要顯示標出變數的類型，
+但你寫 javascript 的時候還是會清楚從上下文知道，
+現在這個變數應該是什麼類型。&lt;/p&gt;
+&lt;p&gt;基本上你不會比較物件相不相等，
+（只有很少見的情況，比較物件相等就像
+比較 C 裡的二個指標是不是指向同一個地方。）
+多半你比較二個物件的某個原始類型屬性相不相等，
+而比較原始類型，雖然也有些奇怪的地方，
+但你應該只比較相同類型的屬性。&lt;/p&gt;
+&lt;p&gt;就算是字串和數字，你應該要顯式的類型轉換再比較，
+除非你很懶， &lt;code&gt;==&lt;/code&gt; 可以自動幫你轉，
+但我還是不建議這麼做，有時會讓人誤會變數的類型。&lt;/p&gt;
+&lt;h2 id="原始類型的雷"&gt;原始類型的雷&lt;/h2&gt;
+&lt;p&gt;如果你預期輸入的數字可能不是數字，
+那你應該做顯式類型轉換轉成數字：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-js"&gt;n = Number(n)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;另外也不要比較一個變數和 true false 相不相等，
+直接放在 if 的括號裡就可以了。
+如果要這樣比，建議先顯式轉為布林值：&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-js"&gt;if (thing == true) void 0 // naver do this!
+if (thing) void 0 // just do this
+if (Boolean(thing) == true) void 0 // or this
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id="多型"&gt;多型&lt;/h2&gt;
+&lt;p&gt;很少數你會不知道變數型別的例子是，
+你希望你的函數能做很多事，
+所以寫了一個能傳入不同類型參數的多型函數。
+那你要做的第一件事應該是先檢查傳入的參數到底是什麼類型，
+而不是什麼都不管就亂比較一通。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;function justLength(thing) {
+  // 處理不能存取屬性的 null 和 undefined
+  if (thing == null) return 0
+  // 處理布林，true = 1, false = 0
+  else if (typeof thing == &amp;#39;boolean&amp;#39;) return Number(thing)
+  // 處理字串與陣列
+  else if (typeof thing.length == &amp;#39;number&amp;#39;) return thing.length
+  else if (typeof thing == &amp;#39;object&amp;#39;) return Object.keys(thing).length
+  else throw new TypeError(&amp;#39;unknown type, can not convert to number&amp;#39;)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id="效率"&gt;效率&lt;/h2&gt;
+&lt;p&gt;有些人認為全等算符效率較好，可能是真的，但也不會差太多。
+試想比較相同類型與不同類型的場合：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;不管是相等或全等算符，都得先檢查二者類型相不相同。&lt;ul&gt;
+&lt;li&gt;全等要確認相同才能繼續比較，&lt;/li&gt;
+&lt;li&gt;相等要確認相同才不進行類型轉換。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;然後才能比較內容是不是一樣。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;因此對相同類型來說，不管是全等或相等，
+比較都是二步：檢查類型，比較內容。
+（雖然都是二步一樣的內容，
+但相等可能會因為 &lt;em&gt;可能會進行的類型轉換&lt;/em&gt; ，
+而效率較低。）&lt;/p&gt;
+&lt;p&gt;至於不同類型，我已經說過了，
+你不應該比較不同類型的變數；
+&lt;em&gt;除非你很清楚你在做什麼&lt;/em&gt; 。&lt;/p&gt;
+&lt;p&gt;這種時候，全等算符什麼都不做，只會丟 false 給你；
+相等算符則會幫你完成多餘的工作，
+然後給你一個很有個性的答案。&lt;/p&gt;
+&lt;h2 id="結論"&gt;結論&lt;/h2&gt;
+&lt;p&gt;我是很懶的人，知道分號規則後從不寫分號，
+也很討厭 &lt;code&gt;===&lt;/code&gt; 要多打一個等號。
+要用二個等號來表達比較已經夠反直覺了，
+三個等號是什麼鬼？&lt;/p&gt;
+&lt;p&gt;lisp 中要比較就直接用 &lt;code&gt;(= a b)&lt;/code&gt; 或 &lt;code&gt;(eq a b)&lt;/code&gt; 就好，
+賦值則是用 &lt;code&gt;(setf a b)&lt;/code&gt; ；
+但 javascript 因為用了等號賦值，只好把相等改成二個等號，
+全等只好再降級成三個等號。&lt;/p&gt;
+&lt;p&gt;故事說完了，
+結論是只做類型相同的比較時，二者幾無差別。
+無論你是打算繼續用全等，
+還是開始用相等，你都更認識了二者。
+你做好決定了嗎？&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/adjustment-homework-2.html#hader</id>
 <title>平差作業二</title>
 <published>2018-10-12T05:05:19.697Z</published>

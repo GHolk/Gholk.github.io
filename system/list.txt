@@ -235,3 +235,4 @@ emacs-evil-over-vi.html
 fourier-basis-function.html
 utm-taiwan-some-topic.html
 adjustment-homework-2.html
+javascript-strict-equality-myth.html

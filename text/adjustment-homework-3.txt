@@ -1,0 +1,92 @@
+# 平差作業三
+在直角座標與經緯度座標間轉換的誤差傳播，
+使用 wgs84 橢球。
+
+## 直角座標與經緯度座標的轉換關係
+
+```math
+x = (N + h) cos \phi cos \lambda \\
+y = (N + h) cos \phi sin \lambda \\
+z = (N (1-e^2) + h) sin \phi \\
+```
+
+φ λ h 分別為經度、緯度、橢球高，
+而 N 為當地 **卯酉圈** 半徑，
+也就是在該點上與子午圈截面垂直的切面。
+
+N 的公式如下：
+
+```math
+N = \frac a \sqrt{ 1 - e^2 sin^2 \phi }
+```
+
+```matlab
+% wgs84 參數
+global major_axis flattening first_eccentricity flattening;
+major_axis = 6378137;
+flattening = 1/298.257223563;
+first_eccentricity = sqrt(-flattening^2 + 2*flattening);
+
+function N = radius_N(phi)
+  global major_axis first_eccentricity;
+  a = major_axis;
+  e = first_eccentricity;
+  N = a ./ sqrt(1 .- e^2 * sin(phi).^2);
+end
+```
+
+## 誤差傳播
+給定一點直角座標 
+`(1241581.343, -4638917.074, 4183965.568)` ，
+變方協變方矩陣為：
+
+```math
+\Sigma_r = \begin{bmatrix}
+9.0 & -0.1 & 0.2 \\
+-0.1 & 8.0 & -0.2 \\
+0.2 & -0.2 & 9.1
+\end{bmatrix} \multiply 10^{-4} m^2
+```
+
+以誤差傳播公式由 x y z 求出 φ λ h 的變方協變方矩陣，
+以矩陣式來看，需要先求出 xyz 與 φλh 的線性關係式，
+
+```math
+A
+\begin{bmatrix}
+x \\ y \\ z
+\end{bmatrix}
+= \begin{bmatrix}
+\phi \\ \lambda \\ h
+\end{bmatrix}
+\\
+
+\Sigma_g = A^{-1} \Sigma_r ( A^{-1} )^T
+```
+
+雖然實際二者非線性關係，但可以用偏微分後線性化近似。
+但線性化需有初始值，以下先試著算出 φλh 的初始值。
+
+
+## 經緯度轉換至直角座標
+經緯度座標公式如下：
+
+```math
+\phi = arctan ( \frac z \sqrt{ x^2 + y^2 } ( 1 - \frac {e^2 N} {N+h} )^{-1} ) \\
+h = \frac \sqrt{ x^2 + y^2 } {cos \phi} - N \\
+\lambda = arctan \frac y x \\
+```
+
+可以看出該公式本身需要用到卯酉圈徑，
+但卯酉圈半徑又需要用到緯度。
+但可以觀察到緯度計算中用到卯酉圈半徑處是一分數，
+如果先假設橢球高為 0，即可消去卯酉圈半徑 N。
+
+因此我們先假設橢球高為 0，算出緯度的近似值，
+再用緯度的近似值算出近似的卯酉圈半徑
+
+所以需要先帶入緯度的初始值，
+
+#adjustment
+#nctu
+#report

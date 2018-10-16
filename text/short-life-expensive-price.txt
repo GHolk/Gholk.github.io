@@ -750,6 +750,10 @@ http://news.ltn.com.tw/news/life/paper/267028
 領導 : 有，但他改換國籍為天國（劉曉波）
 ```
 
+---
+
+jQuery 做事，開口不談$後面啥都別想動。
+
 <script>
 document.querySelectorAll('pre').forEach(pre => {
   const code = pre.children[0]

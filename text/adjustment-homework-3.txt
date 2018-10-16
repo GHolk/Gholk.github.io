@@ -7,7 +7,7 @@
 ```math
 x = (N + h) cos \phi cos \lambda \\
 y = (N + h) cos \phi sin \lambda \\
-z = (N (1-e^2) + h) sin \phi \\
+z = (N (1-e^2) + h) sin \phi
 ```
 
 φ λ h 分別為經度、緯度、橢球高，
@@ -17,7 +17,7 @@ z = (N (1-e^2) + h) sin \phi \\
 N 的公式如下：
 
 ```math
-N = \frac a \sqrt{ 1 - e^2 sin^2 \phi }
+N = \frac a {\sqrt{ 1 - e^2 sin^2 \phi }}
 ```
 
 ```matlab
@@ -45,7 +45,7 @@ end
 9.0 & -0.1 & 0.2 \\
 -0.1 & 8.0 & -0.2 \\
 0.2 & -0.2 & 9.1
-\end{bmatrix} \multiply 10^{-4} m^2
+\end{bmatrix} \times 10^{-4} m^2
 ```
 
 以誤差傳播公式由 x y z 求出 φ λ h 的變方協變方矩陣，
@@ -65,27 +65,94 @@ x \\ y \\ z
 ```
 
 雖然實際二者非線性關係，但可以用偏微分後線性化近似。
-但線性化需有初始值，以下先試著算出 φλh 的初始值。
+但線性化要有初始值，以下先試著算出 φλh 的初始值。
 
 
-## 經緯度轉換至直角座標
-經緯度座標公式如下：
+## 使用 proj.4 計算經緯度初始值
+[proj.4] 是 [OSGeo] 的專案，
+可以在經緯度、直角座標、各地圖投影間轉換。
+這裡始用 proj.4 由 XYZ 計算 φλh 的值。
 
-```math
-\phi = arctan ( \frac z \sqrt{ x^2 + y^2 } ( 1 - \frac {e^2 N} {N+h} )^{-1} ) \\
-h = \frac \sqrt{ x^2 + y^2 } {cos \phi} - N \\
-\lambda = arctan \frac y x \\
+[proj.4]: http://proj4.org/
+[OSGeo]: http://www.osgeo.org/
+
+```term
+cs2cs +proj=geocent +datum=WGS84 +to \
+      +proj=latlong +ellps=WGS84 +datum=WGS84 <<CS
+1241581.343 -4638917.074 4183965.568
+CS
+
+75d0'58.613"W   41d15'18.211"N 312.391
 ```
 
-可以看出該公式本身需要用到卯酉圈徑，
-但卯酉圈半徑又需要用到緯度。
-但可以觀察到緯度計算中用到卯酉圈半徑處是一分數，
-如果先假設橢球高為 0，即可消去卯酉圈半徑 N。
+得到對應的經緯度是 `(75°0′58.613″W   41°15′18.211″N 312.391)` ，
+或轉成十進位與地理緯度 `(-75.0162813888889, 48.7449413888889, 312.391)` 。
 
-因此我們先假設橢球高為 0，算出緯度的近似值，
-再用緯度的近似值算出近似的卯酉圈半徑
+## 偏微分
+接著計算偏微分，三條公式分別對 φλh 偏微分，
+得到線性化的矩陣。這裡使用數值微分。
 
-所以需要先帶入緯度的初始值，
+```matlab
+function derive_function = derive (function_handle, interval = 0.005)
+  derive_function = @(x) (
+    function_handle(x.+interval) - function_handle(x.-interval)
+  ) ./ (interval * 2);
+end
+
+init_degree = [-75.0162813888889 48.7449413888889 312.391];
+
+geodxyz = {};
+geodxyz{1} = @(f,l,h) (radius_N(f)+h) .* cosd(f) .* cosd(l);
+geodxyz{2} = @(f,l,h) (radius_N(f)+h) .* cosd(f) .* sind(l);
+geodxyz{3} = @(f,l,h) (radius_N(f).*(1-first_eccentricity^2)+h) .* sind(f);
+
+geodpart = {};
+for i=1:3
+  geodpart{i,1} = derive(@(f) geodxyz{i}(f, init_degree(2), init_degree(3)), 0.000001);
+  geodpart{i,2} = derive(@(l) geodxyz{i}(init_degree(1), l, init_degree(3)), 0.000001);
+  geodpart{i,3} = derive(@(h) geodxyz{i}(init_degree(1), init_degree(2), h));
+end
+
+design_matrix = zeros(3,3);
+for i=1:3
+  for j=1:3
+    design_matrix(i,j) = geodpart{i,j}(init_degree(j));
+  end
+end
+```
+
+最後得到線性化的設計矩陣 A：
+
+```math
+A = \begin{bmatrix}
+73467.2836260870 & -21648.1901006773 & 0.170487421564758 \\
+83758.4625696763 & 18988.3346902207 & 0.194369023665786 \\
+14413.2366403937 & 0 & -0.965999253094196
+\end{bmatrix}
+```
+
+## 經緯度的變方協變方矩陣
+有了線性化的設計矩陣，
+就能由誤差傳播公式計算得未知數的變方協變方矩陣。
+
+```math
+A^{-1} = \begin{bmatrix}
+7.3467 \times 10^{4} & -2.1648 \times 10^{4} & 1.7049 \times 10^{-1} \\
+8.3758 \times 10^{4} & 1.8988 \times 10^{4} & 1.9437 \times 10^{-1} \\
+1.4413 \times 10^{4} & 0.0000 & -9.6600 \times 10^{-1}
+\end{bmatrix}
+\\
+\Sigma_g = A^{-1} \Sigma_r {A^{-1}}^T = \begin{bmatrix}
+6.7565 \times 10^{-6} & -1.6818 \times 10^{-6} & -1.1626 \times 10^{-1} \\
+-1.6818 \times 10^{-6} & 1.0449 \times 10^{-4} & 7.6370 \times 10^{-2} \\
+-1.1626 \times 10^{-1} & 7.6370 \times 10^{-2} & 9.2545 \times 10^{4}
+\end{bmatrix}
+```
+
+其中 φ λ 因為是經緯度，
+經緯度的 1° 遠比公尺大，變方較小是正常的。
+而橢球高 h 的單位也是公尺，
+變方就和原本的 xyz 變方差不多。
 
 #adjustment
 #nctu

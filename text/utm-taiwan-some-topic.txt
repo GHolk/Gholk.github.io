@@ -2,6 +2,26 @@
 gis 第二次作業，要以 utm 投影與台灣作題材，主題自訂。
 然後內容必須包括 utm 簡介與在台灣地區的誤差。
 
+## twd97 與 twd67
+open source geographic wiki 上提到幾種方法區別 twd67 與 twd97 地圖，
+其中一種是看東北角的三貂角燈塔座標 [tell twd67 twd97] ：
+若是東經 122 度線穿過三貂角東方外海，則是 twd67；
+若是東經 122 度線穿過三貂角西部陸地，則是 twd97。
+
+>  - 東北角三貂角燈塔東邊外海就是東經 122 度整. 若是 TWD97 時, 則 122 度線穿越過燈塔西側.
+>  - 國道一號新竹公道五交流道為東經 121 度 Expressway 1's Gongdaowu interchange lies upon 121.00 deg. E. == 250000m E.
+>  - 台北市復興南路為 Taibei City's Fuxing S. Rd. lies upon 304000m E.
+>  - 豐原火車站前為 221000m E. lies in front of Fengyuan railway station.
+
+[tell twd67 twd97]: https://wiki.osgeo.org/wiki/Taiwan_datums#How_can_I_tell_if_a_map_is_.E6.80.8E.E5.88.A4.E6.96.B7.E6.9F.90.E5.9C.96.E7.82.BA_TWD67_vs._TWD97.3F
+
+根據 tgos 圖台查詢，現今所三貂角燈塔的 twd97 平面座標為
+`(351085.6949, 2766970.4467)` ，
+使用 proj.4 轉換回 twd97 的橢球 `invproj +init=epsg:3826 +ellps=GRS80` ，
+結果是 `(122d0'5.293"E   25d0'26.632"N)` ，
+燈塔的確在 122°E 東邊。
+
+
 ## utm 在台灣的投影誤差
 utm 是將地球每六度經度分為一帶，
 在每帶使用橫麥卡托投影，

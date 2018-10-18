@@ -2,6 +2,101 @@
 gis 第二次作業，要以 utm 投影與台灣作題材，主題自訂。
 然後內容必須包括 utm 簡介與在台灣地區的誤差。
 
+## utm 介紹
+utm 是主要由美國軍方使用的地圖投影，
+使用範圍是全世界除南北極區外的地區。
+utm 使用橫麥卡托投影法，
+將全地球每 6° 經度分為一 <abbr title="zone">區</abbr>，
+共分為 60 帶，數字編號。
+並緯度每 8° 分為一 <abbr title="band">帶</abbr>，
+分為 23 帶，以英文字母編號。
+但帶與區並非絕對，在地球上數處有例外。
+
+### 起源
+最早使用 utm 這個名稱的是二戰德國時的德意志國防軍，
+用來做航空照片的投影。
+當時的一些航空照片上註記了 *UTMREF* 與分區、分帶的編碼，
+並以橫麥卡托投影展示，但中央經線尺度為 1.0。
+在二戰後 1947 年，美國陸軍採用了非常類似的系統，
+亦稱為 utm，但將中央經線尺度改為 0.9996。
+
+### 橫麥托投影原理
+橫麥卡托投影是將假想的圓柱與地軸垂直，
+並圓柱與地球上一經線相切（或相割），
+並與麥卡托相同是由地心射出光源，
+可保相切部份，也就是地球上南北狹長帶狀地區的變形為最小。
+但在遠離中央經線地區尺度會放大，
+有如麥卡托投影在南北極區的放大。
+故橫卡托投影適用於南北狹長型的國家，
+
+### 相切或相割
+橫麥卡托投影可以是與球面相切或相割：
+如果是相切，就是在中央經線上不變型，
+但其它區域，離中央經線越遠，就放越大。
+如果是相割，則會在二條割線上是不變型，
+割線間則會縮小，割線外會放大。
+相割相對相切，會有較多區域處在尺度 1±x 的範圍內，
+而相切則全在都 1+2x 的範圍。
+
+台灣本島現今採用的是相割投影，
+因考慮台灣島雖然是南北狹長型，
+但中央經線通過地區，多是中央山脈山區，
+聚落與開發地區則分布在東西部。
+若採用相切，則不變型的地區都在山區，
+東西部反而變型較大，也就是重要的地區變型較大，
+不變型的地區卻不重要，
+違反我們希望地圖投影能在關注地區的扭曲為最小的目標。
+
+而相割則可以有二條標準尺度的割線，
+分別貫穿東西部平原，
+也就是在台灣島東西二側的變型尺度會較小，
+符合我們地圖投影的目標。
+而現今的 utm 投影，則為了整體的變型要較小，
+所以也採用了相割的投影法，
+讓投影造成的誤差控制在 1.0 附近。
+
+### utm 分區形狀
+utm 為橫麥卡托，雖然在標準經線上能不變型，
+但由於地球是球形，在高緯度地區經線會收束；
+如果 utm 仍全整投影出同樣寛度的區域，
+在不同分區的 utm 在高緯度地區會重覆。
+
+[![utm-redundent-zone.png]]
+
+[utm-redundent-zone.png]: http://farm2.staticflickr.com/1927/43585484370_10b8c3c476.jpg
+[![utm-redundent-zone.png]]: http://www.flickr.com/photos/144554087@N04/43585484370 "橫麥卡托投影在地球上是一個帶狀區域，在高緯度地區會重疊。"
+
+utm 的作法是在高緯度地區減少每區的寬度，
+從二區重疊部份的中線分隔，
+所以 utm 每區成為了楔形，又因為 utm 不包含極區，
+楔型的尖端被去除，成為以下的形狀：
+
+[![utm-zone-shape]]
+
+[![utm-zone-shape]]: https://www.nrcan.gc.ca/earth-sciences/geography/topographic-information/maps/9779
+[utm-zone-shape]: https://www.nrcan.gc.ca/sites/www.nrcan.gc.ca/files/earthsciences/images/topo101/images/utm_figure1_en.gif
+
+平常我們所見的 utm 則多半是畫成一張完整的圖，
+其類似於將楔形拉伸成長方型的結果，
+只是方便想像地球作為整體的成果：
+
+[![utm-in-mercator]]
+
+[utm-in-mercator]: https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Utm-zones.jpg/1280px-Utm-zones.jpg
+[![utm-in-mercator]]: https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system
+
+實際上若將 utm 完整展示，
+應該是一條條的楔形並列，
+在赤道以外的區域都不會相連。
+
+### 台灣與 utm
+在早期國民政府遷台時，由於地圖為軍事機密不公開，
+曾採用全球製圖的 utm 作為地型圖的座標系統 [tm2] 。
+utm 為 6° 分帶，含蓋台灣地區的圖幅為 51 zone，
+也就是橫跨 120-126°E 的範圍。
+
+[tm2]: http://www.sunriver.com.tw/grid_tm2.htm "大地座標系統與二度分帶座標"
+
 ## twd97 與 twd67
 open source geographic wiki 上提到幾種方法區別 twd67 與 twd97 地圖，
 其中一種是看東北角的三貂角燈塔座標 [tell twd67 twd97] ：
@@ -20,7 +115,6 @@ open source geographic wiki 上提到幾種方法區別 twd67 與 twd97 地圖�
 使用 proj.4 轉換回 twd97 的橢球 `invproj +init=epsg:3826 +ellps=GRS80` ，
 結果是 `(122d0'5.293"E   25d0'26.632"N)` ，
 燈塔的確在 122°E 東邊。
-
 
 ## utm 在台灣的投影誤差
 utm 是將地球每六度經度分為一帶，
@@ -206,8 +300,26 @@ proj 有內建 utm 的投影參數：
 只有在台中到花蓮、台北到台串二段路線，誤差稍大於 utm。
 整體來說，twd97 的誤差都在 0.0001 以下，
 符合預期的 0.9999 精度。
+ 
+<script>
+for (const anchor of document.querySelectorAll('a')) {
+  if (anchor.querySelector('img')) anchor.classList.add('image')
+}
+for (const image of document.querySelectorAll('img')) {
+  let p
+  if (image.parentNode.nodeName == 'P') p = image.parentNode
+  if (image.parentNode.parentNode.nodeName == 'P') p = image.parentNode.parentNode
+  if (p && p.childNodes.length == 1) {
+    const figure = document.createElement('figure')
+    figure.appendChild(p.childNodes[0])
+    p.replaceWith(figure)
+  }
+}
+</script>
 
 <link rel="stylesheet" href="ext/paper.css">
+
+<script src="ext/header-nctu.js?execute&editable"></script>
 
 #gis
 #geomatics

@@ -63,8 +63,9 @@ utm 為橫麥卡托，雖然在標準經線上能不變型，
 
 [![utm-redundent-zone.png]]
 
-[utm-redundent-zone.png]: http://farm2.staticflickr.com/1927/43585484370_10b8c3c476.jpg
-[![utm-redundent-zone.png]]: http://www.flickr.com/photos/144554087@N04/43585484370 "橫麥卡托投影在地球上是一個帶狀區域，在高緯度地區會重疊。"
+[utm-redundent-zone.png]: http://farm2.staticflickr.com/1927/43585484370_10b8c3c476.jpg "橫麥卡托投影在地球上是一個帶狀區域，在高緯度地區會重疊。"
+
+[![utm-redundent-zone.png]]: http://www.flickr.com/photos/144554087@N04/43585484370 
 
 utm 的作法是在高緯度地區減少每區的寬度，
 從二區重疊部份的中線分隔，
@@ -301,25 +302,13 @@ proj 有內建 utm 的投影參數：
 整體來說，twd97 的誤差都在 0.0001 以下，
 符合預期的 0.9999 精度。
  
-<script>
-for (const anchor of document.querySelectorAll('a')) {
-  if (anchor.querySelector('img')) anchor.classList.add('image')
-}
-for (const image of document.querySelectorAll('img')) {
-  let p
-  if (image.parentNode.nodeName == 'P') p = image.parentNode
-  if (image.parentNode.parentNode.nodeName == 'P') p = image.parentNode.parentNode
-  if (p && p.childNodes.length == 1) {
-    const figure = document.createElement('figure')
-    figure.appendChild(p.childNodes[0])
-    p.replaceWith(figure)
-  }
-}
-</script>
+
 
 <link rel="stylesheet" href="ext/paper.css">
 
 <script src="ext/header-nctu.js?execute&editable"></script>
+
+<script src="ext/paper.js?execute"></script>
 
 #gis
 #geomatics

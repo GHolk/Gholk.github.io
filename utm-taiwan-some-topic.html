@@ -80,7 +80,7 @@ utm 使用橫麥卡托投影法，
 但由於地球是球形，在高緯度地區經線會收束；
 如果 utm 仍全整投影出同樣寛度的區域，
 在不同分區的 utm 在高緯度地區會重覆。</p>
-<p><a href="http://www.flickr.com/photos/144554087@N04/43585484370" title="橫麥卡托投影在地球上是一個帶狀區域，在高緯度地區會重疊。"><img src="http://farm2.staticflickr.com/1927/43585484370_10b8c3c476.jpg" alt="utm-redundent-zone.png"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/43585484370"><img src="http://farm2.staticflickr.com/1927/43585484370_10b8c3c476.jpg" alt="utm-redundent-zone.png" title="橫麥卡托投影在地球上是一個帶狀區域，在高緯度地區會重疊。"></a></p>
 <p>utm 的作法是在高緯度地區減少每區的寬度，
 從二區重疊部份的中線分隔，
 所以 utm 每區成為了楔形，又因為 utm 不包含極區，
@@ -513,25 +513,11 @@ proj 有內建 utm 的投影參數：
 只有在台中到花蓮、台北到台串二段路線，誤差稍大於 utm。
 整體來說，twd97 的誤差都在 0.0001 以下，
 符合預期的 0.9999 精度。</p>
-<script>
-for (const anchor of document.querySelectorAll('a')) {
-  if (anchor.querySelector('img')) anchor.classList.add('image')
-}
-for (const image of document.querySelectorAll('img')) {
-  let p
-  if (image.parentNode.nodeName == 'P') p = image.parentNode
-  if (image.parentNode.parentNode.nodeName == 'P') p = image.parentNode.parentNode
-  if (p && p.childNodes.length == 1) {
-    const figure = document.createElement('figure')
-    figure.appendChild(p.childNodes[0])
-    p.replaceWith(figure)
-  }
-}
-</script>
-
 <link rel="stylesheet" href="ext/paper.css">
 
 <script src="ext/header-nctu.js?execute&editable"></script>
+
+<script src="ext/paper.js?execute"></script>
 </main>
 
 <script defer src="ext/meta-meta.js"></script>

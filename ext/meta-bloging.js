@@ -170,15 +170,12 @@ const goption = parseQueryOption(location.search.slice(1))
 function getParameter(name, currentScript = document.currentScript) {
     const h = 'hasOwnProperty'
     const kebab = camelToKebab(name)
-    const scriptUrl = new URL(currentScript.src)
-    const scriptQuery = scriptUrl.searchParams
     if (goption[h](name)) return goption[name]
     else if (goption[h](kebab)) return goption[kebab]
     else if (window[h](name)) return window[name]
     else if (currentScript[h](name)) {
         return currentScript[name]
     }
-    else if (scriptQuery.has(name)) return scriptQuery.get(name)
     else if (currentScript.dataset[h](name)) {
         return currentScript.dataset[name]
     }

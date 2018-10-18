@@ -1,0 +1,313 @@
+# 用 generator 實作 async await
+generator 除了配合 iterator protocol，
+在執行中中斷後回傳值，還具有協程的功能，
+在中斷繼續後傳入變數。
+所以其實 async await 關鍵字並不是必須的，
+只要有 generator 即可實作出 async 函數。
+
+## 巨集實作 async
+以前還以為 async await 是單純的巨集，
+且不懂 generator 的功能。
+殊不知 generator 其實是實作 async 的關鍵，
+因為單純的巨集展開不能在迴圈內展開，
+所以實作 async await generator 是必要的。
+
+```javascript
+async function foo() {
+  const a = await b
+  console.log(await a)
+}
+
+function foo() {
+  return b.then(b_a$ => {
+    const a = b_a$      // 原本的 const a = await b
+    return a.then(a_c$ => {
+      console.log(a_c$) // 原本的 console.log(await a)
+    })
+  })
+}
+```
+
+因為一個帶 await 的函數，
+實際上可以展開成將 await 後的表達式，
+呼叫 then 方法後，將原本的 await 和表達式，
+換成型參的名字。
+如果要得到 promise，就記得回傳。
+
+但事情沒有那麼簡單，以上的改寫只在單純序列執行時辦得到，
+如果在 for while if else 的 code block 中使用 await，
+就不能這樣改寫。
+
+```javascript
+async function foo() {
+  let response
+  for (const url of list) {
+    response = await fetch(url)
+    if (response.ok) break
+  }
+  return response
+}
+function foo() {
+  let response
+  for (const url of list) {
+    fetch(url).then(f_r$ => {
+      response = f_r$
+      if (response.ok) break // 在另一個函數內用 break 報錯
+    })
+  }
+  return response // 因為 then 是非同步，到這裡 then 還沒執行，所以回傳 undefined
+}
+```
+
+## generator 實作 async
+這裡用 generator 實作會方便很多，
+因為 generator 會在每次碰到 yield 時中斷，
+等待 next 被呼叫時再繼續。
+因此 generator 搭配 promise 或 callback，
+都能實作類似 async await 的函數。
+
+generator 執行後會回傳尚未開始執行的物件，
+呼叫其 next 方法，可以繼續執行到下一個 yield 為止，
+並以 yield 後的表達式為返回值。
+若呼叫 next 方法時傳入參數，
+則 generator 內的 yield 就會有返回值。
+例如 `const a = yield 'hello world'` ，
+則 `run.next() == 'hello world'` ，再接著
+`run.next('bye')` 後 a 就會被初始化為 `'bye'` 。
+
+### 用遞迴執行 generator 模擬 async
+
+<script>
+function runAsync(generator, ...argument) {
+    return new Promise((resolve, reject) => {
+        const run = generator(...argument)
+        const result = run.next()
+        runNext(result.value, result.done)
+
+        function runNext(value, done) {
+            if (done) resolve(value)
+            else if (!value) {
+                const result = run.next(value)
+                runNext(result.value, result.done)
+            }
+            else if (typeof value.then == 'function') {
+                value.then(value => {
+                    const result = run.next(value)
+                    runNext(result.value, result.done)
+                }).catch(error => {
+                    let result
+                    let isError = false
+                    try {
+                        result = run.throw(error)
+                    }
+                    catch (generatorError) {
+                        isError = true
+                        result = generatorError
+                    }
+                    if (isError) reject(result)
+                    else runNext(result.value, result.done)
+                })
+            }
+            else {
+                const result = run.next(value)
+                runNext(result.value, result.done)
+            }
+        }
+    })
+}
+</script>
+
+運用這點，我們只要每次 yield 一個 promise，
+然後不馬上執行 next，而是在 promise.then 後取得結果後，
+再執行 next： `promise.then(value => run.next(value))` ，
+即可達到類似 async 的結果。
+
+再加上 `run.throw()` 方法，
+可以在 generator 函數中的 yield 位置拋出異常，
+就能在 promise 被 reject 後將錯誤 throw 回 generator 函數中。
+
+總之就是可以寫出一個函數，
+自動執行用 generator 撰寫的 async function。
+而更可以把這個直接當作函數的方法，
+也就是相對於增加一種 async 語法，
+其實為 generator 增加一個 method 就夠了。
+原本是宣告後執行 `async function foo() {}()` ，
+變成宣告 generator function 後呼叫 async 方法執行
+`async function foo(){}.async('hello world')` 。
+
+### 為 Function 物件或 GeneratorFunction 物件增加方法
+javascript 中 function 也是物作，
+所有 function 都從 `Function.prototype` 上繼承方法，
+所以只要 patch Function.prototype 
+或 GeneratorFunction.prototype，
+就可以對所有 generator 函數呼叫該方法。
+
+<script>
+Function.prototype.async = function () {
+  return runAsync(this, ...arguments)
+}
+
+// 或是 patch 在 GeneratorFunction 上，因為他不是全域變數，比較麻煩。
+function patchGeneratorFunction() {
+  function *generator() {}
+  const GeneratorFunction = generator.constructor
+  GeneratorFunction.prototype.async = function () {
+    return runAsync(this, ...arguments)
+  }
+}
+</script>
+
+### 呼叫 generator 函數的 async 方法
+
+```javascript
+function *generatorCrawler(url) {
+  const response = yield fetch(url)
+  const html = yield response.text()
+  const domParser = new DOMParser()
+  const dom = domParser.parseFromString(html, 'text/html')
+  const allAnchor = dom.querySelectorAll('a')
+  return Array.from(allAnchor).map(a => a.href)
+}
+generatorCrawler.async('http://google.com.tw/').then(console.log)
+
+// 等價於
+
+async function asyncCrawler(url) {
+  const response = await fetch(url)
+  const html = await response.text()
+  const domParser = new DOMParser()
+  const dom = domParser.parseFromString(html, 'text/html')
+  const allAnchor = dom.querySelectorAll('a')
+  return Array.from(allAnchor).map(a => a.href)
+}
+asyncCrawler('http://tw.yahoo.com/').then(console.log)
+```
+
+## 使用 callback 的 async generator
+其實不一定要用 promise，用 callback 更簡單好用，
+因為 callback 只要無腦把 callback 丟進去就好了，
+不用處理 thenable 的問題。
+另外這裡指定在 callback 中傳入的第一個參數為 error，第二個參數才是值。
+
+<script>
+function runCallback(generator, ...argument) {
+    return callback => {
+        const run = generator(argument)
+        tryRun('next')
+
+        function dealCallback(value, done) {
+            if (done) {
+                const error = null
+                callback(error, vallue)
+            }
+            else if (typeof value == 'function') {
+                const callback = value
+                callback((error, value) => {
+                    if (error) tryRun('throw', error)
+                    else tryRun('next', value)
+                })
+            }
+            else tryRun('next', value)
+        }
+        function tryRun(todo, value) {
+            let isError = false
+            let result
+            try {
+                result = run[todo](value)
+            }
+            catch (runError) {
+                isError = true
+                result = runError
+            }
+            if (isError) reject(result)
+            else runNext(result.value, result.done)
+        }
+    }
+}
+</script>
+
+只是一般的 callback 型式函數並不是只有單參數回呼函數，
+需要在呼叫時指定參數外，同時傳入回呼函數。
+但在 runCallback 中，我們只傳入回呼函數一個參數，
+所以在使用 callback style 中，
+我們需要手動把多參數的 callback 包成單參數的 callback。
+至於要怎麼包，可以用高階函數也就是返回函數的函數，
+或用 bind，bind 除了綁定函數的 this 外，
+還有一個綁定數個參數的功能。
+
+```javascript
+function johnSay(string) {
+  console.log('John: ', string)
+}
+const johnSay = console.log.bind(console, 'John: ')
+```
+
+### 包裝 node.js 的 callback style 為例
+
+```javascript
+// 用 bind 指定參數
+const readListFile = fs.readFile.bind(fs, 'list.txt', 'utf8')
+// 用閉包高階函數指定參數
+function readFile(filename) {
+  return callback => fs.readFile(filename, 'utf8', callback)
+}
+
+function *readAllFile() {
+  const listFile = yield readListFile
+  const list = listFile.split(/\n/g)
+  const fileList = []
+  for (const filename of list) {
+    const file = yield readFile(filename)
+    // 或是 const file = yield fs.readFile.bind(fs, filename, 'utf8')
+    fileList.push(file)
+  }
+  return fileList
+}
+
+// 我實作的 callback style 的 generator 一定要傳入 callback 才會執行
+const readAllFileThen = runCallback(readAllFile)
+// 所以這裡要傳入 callback 才會開始動
+readAllFileThen((fileList) => console.log(fileList.length))
+```
+
+用 callback 搭配 generator 的作法還有另一個問題，
+就是容易實作出 lazy 的版本。
+預設 promise 在 new 時就會執行，
+也就是 promise 就算不被 then 也會執行，
+但 callback 則是你不傳入回呼函數就不會真正執行。
+而且 callback 也不像 promise 能接多個 then 事件，
+每傳入一次 callback 就會執行一次，每次都是新的值，
+不像 promise 執行完後會把值保存起來。
+
+最後在實作 runCallback 中，
+我有把回傳結果也包成單一參數的 callback，
+這樣就能在另一個 generator 中被 await。
+但如上所述，callback style 要把 callback 傳入後才會執行，
+所以也要傳參數給他才會開始執行。
+（有些人會多做些手腳，確保 callback 只會執行一次，
+甚至讓 callback 可以先執行。）
+
+### 重寫的優美物件導向版本
+
+自己無聊 [重寫了一個 generator 的執行器][object async generator] ，
+對應 promise 和 callback 都有一個。
+本文內的執行器有點 bug，
+就是 generator 直接拋出錯誤會死掉，
+而不是 reject promise 或傳 error 到 callback 裡。
+然後還抽象化了一堆介面，
+讓實作實例時只要定義關鍵幾個方法即可。
+因為太過抽象化太噁心了，第一眼反而看不太懂，就不直接放了。
+
+[object async generator]: https://gist.github.com/GHolk/202183dda46475cc43756080ed149871
+
+聽說有一個 javascript 的非同步 library co.js，
+以前好像是用 generator 做的，也能搭配 callback style。
+（他們稱單參 callback 的函數為 thunk。）
+不過現在大家都用 async 了，
+加上 js 的使用者好像普遍水，
+知道 generator 和 async 關係的人也不多。
+這種特殊的作法，也就鮮為人知了。
+
+#javascript
+#async
+#library

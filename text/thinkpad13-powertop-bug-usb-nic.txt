@@ -1,0 +1,92 @@
+# thinkpad13 使用 powertop 省電模式讓 usb type c 以太網卡不正常
+linux 上的省電軟體 powertop
+能控制筆電周邊裝置開關，達到省電的效果。
+但 linux 的硬體相容性沒保障，
+之前用 `powertop --auto-tune` 後，
+usb type c 以太網卡就不太正常，
+要手動進 powertop 把一些參數調回一般模式。
+
+## 歷史回顧
+因為 thinkpad13 沒有網路孔，
+就買了一張 usb 以太網卡，
+且有一個平常用不到的 type c 孔，
+就買 type c 的。
+
+之前一次就是裝回來後以太網卡會掛掉，
+裝置抓不到，宿網路也沒了。
+重開機也沒好，就送修；
+是在台南北門路廣捷資訊廣場買的，很佛心有保固一年。
+可以送修是正常，現在才發現是 powertop 的問題。
+
+## 使用情況
+日常使用是沒問題，因為開省電模式都是在外面用，
+也都用 wifi，不會用到網路線、以太網卡。
+主要是回宿舍後插回網路線，有時會出問題。
+
+以前的 ferrari 開 powertop 時，
+滑鼠一段時間沒用會被斷電，
+就要手動把 powertop 中滑鼠的 usb 阜設不自動斷電。
+thinkpad13 也是類似。
+
+之前沒發現是這個問題，而且重新開機後，
+powertop 的選項竟然不會回復預設！
+還是在省電的狀態。
+所以那時才會以為是網卡壞了，
+因為都重新開機還是不正常。
+
+## powertop
+一般我都是直接 `powertop --auto-tune` ，
+會直接把所有選項調到省電，也就是 `好` ，
+預設應該都是 `壞` 也就是不省電。
+
+在以太網卡死掉時，就把以太網卡的 usb 阜調成壞，
+再重插應該就會好了。
+
+```term
+~:$ sudo powertop
+PowerTOP 2.8      總覽       閒置統計     頻率統計          設備統計       可調 
+
+
+   壞           Enable SATA link power management for host0
+   壞           Enable SATA link power management for host1
+   壞           啟用音效設備電源管理功能
+   壞           NMI watchdog 監控應該關閉
+   壞           VM 回寫延時
+   壞           自動閒置於 USB 設備 Generic   USB  Joystick   [1-2.1]
+   壞           自動閒置於 USB 設備 USB Optical Mouse [1-1]
+   壞           Runtime PM for I2C Adapter i2c-2 (i915 gmbus dpb)
+   壞           Runtime PM for I2C Adapter i2c-6 (Synopsys DesignWare I2C adapte
+   壞           Runtime PM for I2C Adapter i2c-3 (i915 gmbus dpd)
+   壞           自動閒置於 USB 設備 xHCI Host Controller [usb2]
+   壞           自動閒置於未知的 USB 設備 1-7 (8087:0a2b)
+   壞           自動閒置於 USB 設備 4-Port USB 2.0 Hub [Generic]
+   壞           自動閒置於 USB 設備 xHCI Host Controller [usb1]
+>> 壞           自動閒置於 USB 設備 AX88179 [ASIX Elec. Corp.]                  
+   壞           自動閒置於 USB 設備 Integrated Camera [8SSC20F27024L1GZ79T0E97]
+   壞           自動閒置於 USB 設備 4-Port USB 3.0 Hub [Generic]
+   壞           Runtime PM for I2C Adapter i2c-0 (SMBus I801 adapter at efa0)
+   壞           Runtime PM for I2C Adapter i2c-1 (i915 gmbus dpc)
+
+ <ESC> 離開 | <Enter> 切換選項開關   | <r> 更新視窗內容                         
+```
+
+如果不確定哪個才是以太網卡，
+可以 `lsusb` 看各連接阜對應的裝置名稱。
+
+```term
+~:$ lsusb
+Bus 002 Device 005: ID 0b95:1790 ASIX Electronics Corp. AX88179 Gigabit Ethernet
+Bus 002 Device 002: ID 0bda:0411 Realtek Semiconductor Corp.
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 001 Device 006: ID 8087:0a2b Intel Corp.
+Bus 001 Device 004: ID 1bcf:2c94 Sunplus Innovation Technology Inc.
+Bus 001 Device 005: ID 0079:000a DragonRise Inc.
+Bus 001 Device 003: ID 0bda:5411 Realtek Semiconductor Corp.
+Bus 001 Device 002: ID 0461:4e44 Primax Electronics, Ltd
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+```
+
+#筆電
+#網路
+#usb
+#linux

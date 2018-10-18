@@ -1,0 +1,206 @@
+# RSS 通知系統簡介
+RSS 是一項靜態被動的通知技術，
+基於萬維網的特性，相對於其它推播技術，
+是一項極具萬維網風格的通知技術。
+只要能發布網頁，就能發布 RSS，適應性極強。
+其後也衍生出 RSS 0.92、RSS 1.0、RSS 2.0、 
+Atom 等多個版本，這裡統稱 RSS。
+本文對有網頁程式基礎的人，簡介 RSS 的原理。
+
+想像在沒有通知技術的時代，
+你想跟上某個部落格的最新文章，該怎麼做？
+只能每天去他的首頁看，有沒有新文章發表。
+於是，你可以寫一份腳本，每天把他的首頁抓回來，
+分析有沒有改動，多了哪些文章，有多了再去看。
+
+這是最 **萬維網** 的作法，
+每個人管理自己的網頁，只在自己的網頁上更新，
+而且網頁是靜態，沒辦法在其它網頁上留言，
+也不透過 email 或其它管道通知更新。
+
+於是面臨一個問題，你必須分析他的首頁的 html，
+看如果有新文章，會出現在首頁 html 檔的哪裡。
+這樣才能更精準的判斷。
+但有一百個部落格，就有一百種首頁，
+每個都不一樣，都要寫不同的程式去解析，
+這樣不是很麻煩嗎？
+
+所以，有人統一了 *首頁的格式* ？當然不可能。
+想想你爬首頁是要看什麼，是看 **文章列表** ，
+就有人就統一了文章列表的格式，
+每發布新文章，就更新該列表，
+然後只要每隔一段時間，用爬蟲把該列表爬回來分析，
+就知道有新文章了。
+
+這種列表的格式就叫 RSS，有 Rich Site Summary、
+Really Simple Syndication、RDF Site Summary 各種稱呼，
+也有二三種版本，唯一共通點是都是 xml 格式。
+會有這麼多版本，主要是因為理念的分歧，
+是要儘量標準化，還是要越簡單越好，
+是要能充份擴展到取代 html 網頁，
+還是只包含簡陋的文字內容。
+
+## Atom 格式簡介
+這裡介紹的是 RFC 標準化的 Atom 格式，
+和 RSS 有類似的功能，只是更符合 xml 規範。
+先想像一份這樣的列表需要什麼功能？
+文章標題、發布日期、摘要，
+所以定義了這三個元素：
+
+```xml
+<title>RSS 通知系統簡介</title>
+<published>2018-05-27T12:19:28+08:00</published>
+<summary>
+RSS 是一項靜態被動的通知技術，
+基於萬維網的特性，相對於其它推播技術，
+是一項極具萬維網風格的通知技術。
+只要能發布網頁，就能發布 RSS，適應性極強。
+其後也衍生出 RSS 0.92、RSS 1.0、RSS 2.0、 
+Atom 等多個版本，這裡統稱 RSS。
+本文對有網頁程式基礎的人，簡介 RSS 的原理。
+</summary>
+```
+
+再來，有些人認為 rss 中應該要放全文，方便閱讀。
+但另一群人認為只應該放標題和摘要，
+一是放了全文，就不需要網站，點閱率會下降；
+一是 rss 本來就只是一份通知，不應該包含太多內容。
+總之，atom 設計了一份 `<content>` 標籤，
+如果你想要，可以把整篇文章放進去，一起在 atom 中發布。
+
+還有一個很重要，就是原文的網址，
+在 atom 中是以 `<link>` 標籤表示。
+因為 atom 想像可能存在除了 html 以外的發布方式，
+例如純文字格式，加上 atom 本身即可以帶有 content，
+所以是用 alternate 表示存在另一種格式的資源。
+
+```xml
+<link rel="alternate"
+      type="text/html"
+      href="http://gholk.github.io/easy-rss-feed-concept.html" />
+<link rel="alternate"
+      type="text/plain"
+      href="http://gholk.github.io/text/easy-rss-feed-concept.txt" />
+```
+
+最後，需要將整份 atom 組織起來。
+以 html 來說，可能會用 `<hr>` 分割每篇文章，
+atom 中則是用一個 `<entry>` 標籤來定義一篇文章，
+最後整個 xml 用一個 feed 作為根元素。
+所以你的 atom 看起來會像這樣：
+
+```xml
+<feed>
+
+<entry>
+    <id>http://gholk.github.io/easy-rss-feed-concept.html</id>
+    <title>RSS 通知系統簡介</title>
+    <published>2018-05-27T05:41:36.293Z</published>
+    <updated>2018-05-27T05:48:17.635Z</updated>
+    <link rel="alternate"
+          type="text/html" 
+          href="http://gholk.github.io/javascript-except-query-selector.html"/>
+    <summary>
+        RSS 是一項靜態被動的通知技術，
+        基於萬維網的特性，相對於其它推播技術，
+        是一項極具萬維網風格的通知技術。
+        只要能發布網頁，就能發布 RSS，適應性極強。
+        其後也衍生出 RSS 0.92、RSS 1.0、RSS 2.0、 
+        Atom 等多個版本，這裡統稱 RSS。
+        本文對有網頁程式基礎的人，簡介 RSS 的原理。
+    </summary>
+    <category term="web"/>
+</entry>
+
+<entry>
+    <id>http://gholk.github.io/javascript-except-query-selector.html</id>
+    <title>document.querySelector 的短處</title>
+    <published>2018-05-26T05:41:36.293Z</published>
+    <updated>2018-05-26T05:41:36.549Z</updated>
+    <link rel="alternate" 
+          type="text/html" 
+          href="http://gholk.github.io/javascript-except-query-selector.html"/>
+    <summary>在 javascript 操作 dom 中，document.querySelector
+        這個新的方法可以簡化很多操作，一舉取代大部份的查詢方法。
+        但有時候不打算把查詢目標寫死時，就會比較麻煩，
+        這時候可以回到單純的 getElementsByClassName、
+        getElementById 等會比較方便，不用為 id 加上 # ，
+        或為 class 加上 . 。
+    </summary>
+    <category term="javascript"/>
+    <category term="web"/>
+</entry>
+
+</feed>
+```
+
+另外身為一份標準化的格式，為了配合 xml 的偏執，
+每篇文章要有一個 id，必須保證不能重複。
+可能會直接拿文章的網址，畢竟網址絕對不會重複。
+所以上面的 entry 中有 id 這個元素。
+updated 則是相對於 published，
+published 是該內容發布的時間，
+updated 則是內容最後變動的時間。
+
+最後，你可能還想在 atom 中放上部落格的簡介，
+你可以在 feed 中加 title 元素，
+subtitle 作副標題，
+updated 表示這份 rss 最後更新時間，
+詳情可以直接看我的 [atom](atom.xml) ，
+或直接看 [rfc 標準](https://tools.ietf.org/html/rfc4287) 。
+
+## 更新頻率
+以 atom 來說，一份是一個 feed 根元素，內含有多個 entry 元素。
+我的做法是，發布新文章時，就將新文章的 entry 插到最前面，
+並更新 atom 的 updated 時間。
+然後其它人會定期來抓這份 atom 回去，
+下次再抓時，就會發現有新內容了。
+
+日子久了，entry 就會越積越多，atom 也越來越大。
+我的習慣是不清，頂多把五篇後十篇後的 entry 的 content 移除，
+反正 entry 也佔不了多少空間。
+如果要的話，也可以固定把十篇後，或二個月前的 entry 清掉；
+或直接激進派，每次發新文章都把舊的全部清掉，
+其實如果間隔不要太快，隔一二天才一篇，
+理論上大部份人是每天更新 RSS 的，
+二邊都一邊一次，是不太會漏掉的。
+
+## 其它通知
+其實無論是 rss 或 atom 格式，沒有限定在部落格和文章，
+甚至也不限定在網頁，也適用在很多其它發布通知的地方。
+
+* 像 wiki 就有 rss 可以訂閱，每有人編輯一次，
+  就會加一則 entry，內容就是該次編輯的內容。
+
+* git repository 也可以用 rss，每次 commit 就發，
+  還可以用 url 指向 diff 表示 commit 內容。
+  
+  如果是 github 和 issue 系統，
+  有人發 issue 或 pull request，也會有新通知。
+
+* 以前 facebook 甚至提供把 notification 用 rss 的方式訂閱，
+  每次動態就是一則 entry，就像現在的通知，
+  也是每則通知有標題、內容、日期、指向的網址，分明就是一份 rss。
+  
+  github 也有類似的功能，且現在還有運作；
+  每次你追縱的 repository 有事件、
+  你 follow 的人 star 了某個 repo，都會通知你。
+  
+  但這種通知有個問題，就是他是用網址的型式，
+  如果網址不小心洩漏，別人也可以經由這個網址看到你的通知。
+  相當於明文存密碼的感覺。
+
+## 其它應用
+像我是直接把 atom 當資料庫來用，首頁不放內容了，
+直接用 ajax 抓 atom 回來解析，然後顯示前十項最新文章。
+所以舊的 entry 也不能清掉，不然就看不到資料了。
+不過現在 atom 有點肥大了，就會造成載入變慢，
+大概 400K 吧嘿嘿，看首頁就要載入 400K 的 atom，
+可能之後會把老舊部份分離出來吧。
+
+
+#web
+#rss
+#教學
+#簡介
+

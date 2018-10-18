@@ -1,0 +1,95 @@
+# 以 generator 遍歷大型陣列
+以前一直覺得 js 的 generator 很雞肋，
+看起很炫，但其實沒什麼派得上用場的地方。
+之前想窮舉所有排列組合，把組合當一個陣列回傳，
+結果因為太大 stack 不夠裝。
+改成 generator 或 callback 的形式就可以了。
+
+## generator
+
+```js
+function *randomSortGenerator(list) {
+    if (list.length == 1) yield list
+    else for (const item of list) {
+        const elseList = list.filter(s => s != item)
+        for (const subList of randomSortGenerator(elseList)) {
+            yield [item, ...subList]
+        } 
+    }
+}
+```
+
+generator 的意義有二個，一是狀態機，
+像 async await 就能用 generator 實現；
+二就是用來模擬鏈表。
+在鏈表很長或無窮的時候，例如模擬無窮數列。
+
+再加上新的 of 關鍵字，
+讓任何提供 Symbol.iterator 方法的物件，
+都能被當成鏈表遍歷。
+
+雖然 js 好像比較傾向 functional programing，
+比起 `for (... of ...)` 更偏好 `...forEach(...)` 。
+但因為用 `.next()` `.done` 遍歷列表太麻煩了，
+我就用了比較簡單的 of 關鍵字。
+
+## callback
+另一種是用 callback，
+可以說是把原本 generator 的 yield
+換成要接該項回呼函數。
+
+```js
+function randomSortCallback(list, sendList) {
+    if (list.length == 1) sendList(list)
+    else for (const item of list) {
+        randomSortCallback(
+            list.filter(s => s != item),
+            (subList) => sendList([item, ...subList])
+        )
+    }
+}
+```
+
+發現這樣跑起來，
+在 node v6.12.3 竟然比 generator 快，
+js 果然是函數式語言，generator 你自盡吧。
+
+## 測試
+
+```js
+function show1of(count) {
+    const gate = 1 / count
+    return (item) => {
+        if (Math.random() < gate) console.log(item)
+    }
+}
+
+function time(todo) {
+    console.time('todo')
+    todo()
+    console.timeEnd('todo')
+}
+
+time(() => {
+    randomSortCallback([1,2,3,4,5,6,7,8,9,10,11], show1of(100000))
+})
+
+time(() => {
+    const show1of100000 = show1of(100000)
+    for (const set of randomSortGenerator([1,2,3,4,5,6,7,8,9,10,11])) {
+        show1of100000(set)
+    }
+})
+```
+
+## 函數呼叫層數
+之前好像不是因為回呼疊太多層爆 stack，
+而是因為 list 太大，內存存不下。
+因為排序多是要對列表中每個項目都呼叫，
+也就列表有幾項就疊幾層而已，
+而不是重覆呼叫一直往上疊。
+所以改成這種方式就不會爆了。
+
+
+#javascript
+#函數

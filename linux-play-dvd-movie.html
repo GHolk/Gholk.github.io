@@ -1,0 +1,71 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-12-09T07:54:05.174Z">
+<meta name="keywords" property="og:article:tag" content="電影,光碟,驅動,debian,linux,windows,外接,筆電">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="depress-mood-cause-nothing.html" title=" 精神的壓力無法壓垮一個人">
+<link rel="prev" type="text/html" href="expose-internal-state.html" title=" 儲存與暴露程式的內部狀態">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<meta property="og:image" content="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title> linux 下播放租來的 dvd 全面啟動</title>
+</head>
+<body>
+<main><h1 id="linux 下播放租來的 dvd 全面啟動">linux 下播放租來的 dvd 全面啟動</h1>
+<p>租了 <cite>全面啟動</cite> dvd 來看，結果用外接光碟機，
+在 linux 和 windows 下都不能看。
+debian 裝了 <code>libdvd-pkg</code> 後才能看。
+不知道為什麼沒有預裝，可能是光碟機是外接的原因吧。</p>
+<p>記得 CCNS 機房有幾個外接光碟機，
+最近沒什麼事，本來想租 <cite>星際戰警</cite> 來看，
+但亞藝只有 3，就改租全面啟動。
+然後用外接光碟機在沒有光碟機的筆電裡放。</p>
+<h2 id="讀 dvd">讀 dvd</h2>
+<p>結果第一次放 debian，讀裡面東西不給讀，
+一直權限不足；我明明有用 root 了，還是一樣。
+可以 mount，也可以 ls 看有多少檔案，但不能讀。
+用 vlc 也報錯，也是不能讀。</p>
+<p>然後換 windows，結果顯示磁區加密，
+就猜是光碟可能有防拷，
+但 windows 竟然沒有自帶驅動 orz。</p>
+<p>後來 google 到可能要裝 libdvd-pkg，
+雖然不知道為什麼沒有預裝，總之隔天裝了就能用 vlc 播了。
+一開始好像不能 mount 讀內容或 dd，
+但不 mount 的情況可以用 vlc 從光碟播，
+於是就看完了。</p>
+<p>之後就可以讀了，然後用 dd 把整個 dvd 拷一遍，
+之後留著研究，5.3G 花了半小時。</p>
+<h2 id="全面啟動">全面啟動</h2>
+<p>結局是 <u>柯柏</u> 在迷失層找到在夢境中死掉，已經變很老的 <u>齋藤</u> ，
+然後就切到他們醒來，柯柏回家和小孩團聚。
+最後有放一個陀螺，轉得跌跌撞撞，但沒有拍到有沒有停。</p>
+<p>我認為是沒有，因為如果要停，應該要拍到她停的鏡頭；
+對電影來說，拍一個在轉的陀螺，就是表示陀螺在轉；
+如果要表示陀螺停了，就要拍停的陀螺。
+基本上電影沒拍，等於沒有。</p>
+<p>而且最後一段的畫面太夢幻了，
+有點慢動作，和模糊細節的感覺。
+這二點都偏向最後還在夢中，
+所以我認為最後柯柏和齋藤沒有醒來。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer src="ext/load-disqus.js"></script>
+
+
+
+
+</body></html>

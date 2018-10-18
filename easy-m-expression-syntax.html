@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" prefix="og: http://ogp.me/ns#">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="c34031328">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="vim, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-04-07T07:10:28.433Z">
+<meta name="keywords" property="og:article:tag" content="lisp,s-expression,語法,程式語言">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="half-month-so-lot-first.html" title="CCNS 第一次雙周刊雜文">
+<link rel="prev" type="text/html" href="suck-government-website-computer.html" title="政府的資訊系統">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<meta property="og:image" content="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<title>簡單的 S 表達式</title>
+</head>
+<body>
+<main><h1 id="-s-">簡單的 S 表達式</h1>
+<p>S 表達式是 LISP 的語法，
+無意間發現可以用極簡單的語法，
+表現出一般程式語言所有的結構。</p>
+<p>把元素用空格隔開，像 <code>print apple banana</code> ；
+第一個會被當作函數呼叫，其餘會當作函數的參數。
+然後可以用括號改變優先權，
+<code>print (to-upper-case apple)</code> 。</p>
+<p>再加上一種資料結構 list ，
+但語法一樣是 <code>(apple banana carrot)</code> ，
+為了避免被當作函數呼叫，
+所以要 <code>quot</code> ，寫成 <code>quot (apple banana carrot)</code> ，
+或是簡寫成 <code>&#39;(apple banana carrot)</code> 。</p>
+<p>發現了嗎？ S 表達式的特性就是
+可以是語法，也可以是資料，
+結構是一樣的。
+這造成了 lisp 極為彈性，
+接受的參數也是一個 S 表達式，
+可以對他求值或當作列表處理。</p>
+<p>所以多數流程控制，
+在 lisp 中也都是函數或巨集。
+像 if 可以這樣寫：
+<code>(if yes &#39;(print yes) &#39;(print no))</code> 。
+第一個是判斷式，若為真，
+則求值第二個參數，
+若為假，則求值第三個參數。</p>
+<p>但也因此 lisp 不能用一般的縮排規則。
+大部份的作法是直接以程式的流程結構排，
+而不要為函數和參數縮排，在閱讀時忽略括號。</p>
+<pre><code>(
+    if
+        yes
+        &#39;(print yes)
+        &#39;(
+            if
+                no
+                &#39;(print yes)
+                &#39;(print no)
+         )
+)
+
+
+(if yes
+    &#39;(print yes)
+&#39;(if no
+    &#39;(print yes)
+    &#39;(print no)
+))
+</code></pre></main>
+
+<footer></footer>
+<script src="ext/luser-meta.js" defer></script>
+
+</body>
+</html>
+

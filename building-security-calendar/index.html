@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-03-27">
+<meta name="keywords" property="og:article:tag" content="javascript,互動,ncku">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="medical-detective-experience.html" title="經典閱讀通識：醫學神探">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="../ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="../ext/icon.png">
+<link rel="stylesheet" type="text/css" href="../ext/padding-lot.css">
+
+<script src="../ext/meta-bloging.js"></script>
+
+<title>中控室值班鬧鐘</title>
+</head>
+<body>
+<main>
+
+
+
+<h1 id="中控室值班鬧鐘">中控室值班鬧鐘</h1>
+<p>用 service worker 和 push api 試做鬧鐘。</p>
+<script src="service-worker.js"></script>
+
+<form method="post" action="alerm/new" target="hidden-frame">
+  <label>
+    日期：
+    <input type="datetime" name="date">
+  </label>
+<label> 標題： <input name="title"></label>
+  <label>內文：<textarea name="body"></textarea></label>
+  <input type="submit">
+</form>
+<iframe name="hidden-frame"></iframe>
+
+<style>
+label {
+display: block;
+}
+</style>
+
+</main>
+
+<script defer src="../ext/meta-meta.js"></script>
+<script defer src="../ext/load-disqus.js"></script>
+
+</body></html>
+
+

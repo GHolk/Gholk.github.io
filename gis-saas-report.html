@@ -1,0 +1,234 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-09-30T10:36:04.690Z">
+<meta name="keywords" property="og:article:tag" content="作業,gis">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="multiboot-grub-configure-master.html" title="多重開機的隨身碟">
+<link rel="prev" type="text/html" href="gis-saas-report.html" title="GIS 界的 SaaS">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>GIS 界的 SaaS</title>
+</head>
+<body>
+<main><h1 id="GIS 界的 SaaS">GIS 界的 SaaS</h1>
+<p>GIS 與 SaaS 的結合。</p>
+<header contenteditable="true">
+<i>gholk</i>
+
+<h2>摘要</h2>
+<p>在雲端興起後 GIS 也捲入了雲端的大浪潮。其中 SaaS 是 GIS 最主要的模式。</p>
+
+<dl>
+<dt>關鍵字</dt>
+<dd>gis</dd>
+<dd>saas</dd>
+<dd>雲端</dd>
+</dl>
+</header>
+
+
+<h2 id="雲端運算中的 SaaS">雲端運算中的 SaaS</h2>
+<p>雲端運算的核心理念，在於將運算與儲存分散到個人電腦外，建置所謂雲：大型數據中心、機房；讓所謂端：使用者可以依自己的需求購買、租賃雲的資源，如儲存空間、計算任務。雲端中的應用，可以粗略分為三個層次：</p>
+<ul>
+<li><p>IaaS: Infrastructure as a Service 基礎建設作為服務，相當於給你一台虛擬的電腦，可以安裝任意作業系統，作任何事。</p>
+</li>
+<li><p>PaaS: Platform as a Service 平台作為服務，相當於給你一些已經裝好的程式執行環境，例如一台 web server，省去更底層的瑣碎操作。常用於網站的開發或資料庫。</p>
+</li>
+<li><p>SaaS: Software as a Service 軟體作為服務，直接提供現成可用的軟體。</p>
+</li>
+</ul>
+<h3 id="SaaS 的運作模式">SaaS 的運作模式</h3>
+<p>其中 SaaS 是 GIS 主要應用的範圍。SaaS 是將軟體在雲上運行，使用者透過網
+路存取。相比傳統的業務邏輯，不需要從頭建置電腦、購買軟體、安裝等瑣碎流
+程，也省去很多親自建置的麻煩事，例如管理電腦硬體、作業系統安全性、軟體
+版本等。SaaS 的核心理念，就是第三方直接提供現成可用的軟體，讓使用者可
+以專注在軟體使用上，而不需要關心底層細節。</p>
+<h2 id="GIS 與 SaaS 的結合">GIS 與 SaaS 的結合</h2>
+<p>雲端運算與 SaaS 是軟體業的未來，
+也許某一天，所有軟體都會在雲端運行，
+不再需要笨重的桌面軟體，
+且屆時 gis 的能力將遠超現今 gis 所能做到的。
+<a href="https://www.geospatialworld.net/article/cloud-computing-future-belongs-to-gis-as-a-service/">gis cloud future</a></p>
+<p>現今 gis 軟體最主要的問題是，
+大多數使用者都是 <strong>專業使用者</strong> ，
+像是我們測量、地理、都市計劃等相關學系的 <em>受過專業訓練</em> 的使用者，
+或是政府機關、相關公司才會用到。
+我們雖然能完整發揮 gis 的潛力，
+但那些未受過訓練的一般人，
+卻被屏除在 gis 軟體的專業門檻之外。</p>
+<p>於是在這樣的條件下，google 與 bing map 掘起，
+憑藉其簡單、易操作的介面與免費的策略，
+搶下了 gis 軟體的低階藍海市場，
+使空間資訊有如基礎建設般普及。</p>
+<p>但那些低階 gis 軟體如 google map，
+對專業的空間資訊分析來說是遠遠不夠的。
+要滿足現有的專業市場，
+需要一種有別於 20 年來 gis 軟體業
+所採用的創新商業模式，
+能夠使成本、複雜度與使用門檻都達到新的水平。</p>
+<p>佷明顯雲端運算與 SaaS 就是以上所有問題的答案。
+對 saas 後的 gis 來說，很多傳統 gis 的問題都不再是問題；
+易用性、計算能力，都因為雲端化、SaaS 商業模型得以解決，
+所以重點又回到了最基礎也最不可或缺的元素上：資料。
+<em>Data is king.</em></p>
+<p>那到底 SaaS 型式的 gis 軟體會是什麼樣子？
+我們不只期待一個桌面 gis 軟體的網頁版。
+但 saas 型式的 gis，
+應該要至少具有現今桌面 gis 軟體的所有功能，
+並且是開箱即用的，同時基於雲端的特性，
+提供一些基礎的空間資訊資料，例如底圖等。</p>
+<p>此外，SaaS 也使 gis 更容易結合其它資料，
+與其它軟體相輔相成。
+傳統 gis 應用中，從 gis 匯出或匯入資料，
+將 gis 結合現有的分析軟體、營運系統，
+一直是繁瑣的問題。
+各個軟體如同一座座孤島，交互相當困難。
+在 SaaS 中，常見的作法是直接提供與其它軟體結合的 gis 系統，
+或提供簡單的 API 介面，使資料的加值應用更容易。</p>
+<h3 id="歷史進程">歷史進程</h3>
+<p>GIS 最主要的用戶是政府單位或有特殊需求的公司，
+相比之下個人用戶反而在少數。
+個人用戶，是 PC 時代的主流，
+也讓 PC 時代的軟體營利模式發展為販售單機版、買斷制，
+將軟體本身作為一種產品販售。
+用戶和軟體公司間一次性付錢結清，
+沒有客制化，少有更新、功能變更等售後服務。
+公司是賣軟體，之後軟體怎麼用是客戶的事，</p>
+<p>相比在 PC 時代前的大型工作站時代，
+軟體公司的營利模式多為服務取向，
+軟體作為服務的手段，販售的重點不在軟體本身，
+而在該公司能提供什麼樣的服務。
+此時軟體作為整體解決方案的一環，
+綁定在特定硬體上，不會出現 PC 時代那種軟體單獨販售的情況。
+因為此時的軟體多要綁定環境，也不能輕易從原本的機器中移植出來。
+故此時買方多無能力自行維護，要依靠賣方的支援。</p>
+<p>到了雲端時代的 SaaS 模式，又回到以服務為導向。
+此時相對於 PC 時代，軟體的角色減弱了，重點回到服務上。
+此時買方在乎的是，用簡單方便的手段，滿足需求，
+雲端就是直接免去安裝、部署的過程，
+直接透過網路提供可用的軟體。</p>
+<table>
+<thead>
+<tr>
+<th>時代</th>
+<th>大型工作站時代</th>
+<th>PC 時代</th>
+<th>雲端時代</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>主機</td>
+<td>大型工作站</td>
+<td>PC</td>
+<td>雲端機房</td>
+</tr>
+<tr>
+<td>客戶端</td>
+<td>終端機</td>
+<td>PC</td>
+<td>個人電腦或行動裝置</td>
+</tr>
+<tr>
+<td>相容性</td>
+<td>程式綁定主機</td>
+<td>PC 手動安裝</td>
+<td>客戶端較少相容性問題</td>
+</tr>
+<tr>
+<td>買家</td>
+<td>有一定規模組織</td>
+<td>個人用戶</td>
+<td>多元化</td>
+</tr>
+</tbody>
+</table>
+<p>綜合比較結果，雲端時代的 SaaS 服務模式，更注重在 <em>服務</em> 上。
+不需要親自部署機器，因為雲服務商提供了硬體；
+不需要管理軟體，因為雲服務商也直接提供了。
+此時使用者只要關注在 <em>我需要什麼樣的服務</em> 上，
+免除了其它的瑣碎雜事。</p>
+<h3 id="SaaS 的 GIS 案例">SaaS 的 GIS 案例</h3>
+<p>SaaS 的使用者，有像大型工作站時代的組織，
+也有 PC 時代的一般使用者，呈現更多元化的分布。</p>
+<p>老牌的 GIS 軟體公司 Esri，
+順應潮流推出了 ArcGIS online，
+是基於瀏覽器的 web gis，也是收費的軟體。
+主要目標客群是中大型組織，有特殊目的的製圖。</p>
+<p>更多的還有如 google earth、open street map 等，
+面向較一般使用者的 gis 軟體。</p>
+<h3 id="SaaS 與 web gis 的關係">SaaS 與 web gis 的關係</h3>
+<p>SaaS 是軟體工程界的術語，用來形容由雲端提供軟體服務的模式；
+相對來說 web gis 則是發展自 GIS 界本身，
+指由瀏覽器作為客戶端與伺服器互動的 gis 軟體。
+當用 SaaS 用在 gis 上時，特別注重在雲端與服務二個詞上。</p>
+<p>一般的 web gis 也可以是私人架設的伺服器，
+通過區域網路，由瀏覽器作為界面，服務組織內的使用者。
+相比傳統的大型工作站，可能是客戶端電腦上需要運行一套 gis 軟體，
+而 gis 軟體又能和工作站上的資料庫互動，
+呼叫工作站上的程式，等待執行結果。</p>
+<p>而 SaaS 的服務多半和 web gis 相同，
+是通過 http 與瀏覽器提供的。
+但更強調的是伺服器是在雲端上，
+是現成可用的，不需要在使用者端做過多的配置，
+整體作為一種服務向使用者提供；
+而不是使用者需要去部署。</p>
+<h3 id="群眾協作與 web gis">群眾協作與 web gis</h3>
+<p>google map 和 open street map 都有群眾協作的影子在。
+群眾協作最好的例子是維基百科，
+基於 web 界面提供內容，
+同時也讓使用者能簡單貢獻內容。
+能有這種跨時代的進步，
+最主要是受惠於 www 讓軟體近用的門檻變低，
+讓貢獻者不需要經過太多的學習，就能快速進入狀況。</p>
+<p>web 2.0 就是這樣一項指標，
+宣告網站和使用者互動的時代來臨。
+讓網頁正式成為繼 PC windows 後的新標準平台，
+也成為群眾協作模式的運作基礎。
+最注名的群眾協作成果 <strong>維基百科</strong> 就在 2001 年成立 <a href="http://zh.wikipedia.org/wiki/維基百科">wikipedia</a> ，
+而將類似的概念結合 web gis 技術，
+即成為 open street map。</p>
+<p>open street map 在 2004 年成立 <a href="http://zh.wikipedia.org/wiki/OSM">OSM</a> ，
+標榜得是人人可繪製的線上地圖。
+透過瀏覽器介面，允許使用者查看、編輯地圖。
+其相當於在瀏覽器與網頁伺服器中運行的一套 web gis，
+同時所有使用者也共享同一份在伺服器上的地圖。
+藉由所有使用者編修，累積成果為一份十分詳細的地圖。</p>
+<p>web gis 在 open street map 的場合中，
+扮演了核心的角色：</p>
+<ul>
+<li><p>因為其相對傳統 gis 桌面軟體，使用瀏覽器作為介面，
+降低了使用門檻，使貢獻更為容易，社群也更容易發展。</p>
+</li>
+<li><p>因為使用了 web 技術，自然使所有使用者接觸、操作的資料，
+都是在網頁伺服器上，傳送到客戶端的瀏覽器上，
+供編輯、檢視，天生具有共享資料的性質。</p>
+</li>
+</ul>
+<h2 id="參考文獻">參考文獻</h2>
+<p><a href="http://zh.wikipedia.org/wiki/維基百科">wikipedia: 維基百科上關於維基百科的介紹</a></p>
+<p><a href="http://zh.wikipedia.org/wiki/OSM">osm: 維基百科上關於開放街圖的介紹</a></p>
+<p><a href="https://www.geospatialworld.net/article/cloud-computing-future-belongs-to-gis-as-a-service/">geospatialword: cloud computing future belongs to gis as a service</a></p>
+<link rel="stylesheet" href="ext/paper.css">
+
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy="" src="ext/load-disqus.js"></script>
+
+</body></html>

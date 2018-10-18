@@ -1,0 +1,106 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-11-23T04:03:28.010Z">
+<meta name="keywords" property="og:article:tag" content="gui,android,ssh,x-window,windows">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="xkbcomp-custom-keyboard.html" title=" xkbcomp 自訂鍵盤按鍵">
+<link rel="prev" type="text/html" href="bullshit-assault-harm.html" title=" 人的爭鬥本性">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<meta property="og:image" content="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title> x window 在 android 上</title>
+</head>
+<body>
+<main><h1 id="x window 在 android 上">x window 在 android 上</h1>
+<p>x window 是分工很細，易剝離的架構，
+所以可以用 ssh -X 這種神奇的方式工作；
+但把 x server 和 window manager 分離也造成一些麻煩的事。
+之前我 <a href="//github.com/raiso717">raiso</a> 在手機上用 ssh 連到 server，
+接鍵盤寫 code，於是便想在手機上用 x window。</p>
+<h2 id="x window 與 window manager">x window 與 window manager</h2>
+<p>x window 只是協議，
+各程式用 x window 協議和 x server 溝通，
+x server 再把畫面 render 出來。
+對 x server 來說程式都是 client，
+螢幕和顯卡也是 client，
+鍵盤和滑鼠也都 client。</p>
+<p>但 x window 並無規範 window manager，
+也就是 x server 只會直接顯示 render 視窗，
+如果要調視窗大小、切換不同視窗、關閉，
+都要通過 x window 協議去和 x server 溝通；
+也就是發訊息給 x server。</p>
+<p>所以你要關閉一個視窗，可能要打開終端機，
+<code>kill -SIGTERM $pid</code> 。
+但如果你已經在 x 下，
+你又要怎麼通知 x 再開一個終端機，
+並執行 kill 命令？
+可以是各程式內會寫好，
+像寫一個按扭按下去會發訊息給 x server，看要切視窗或關掉自己。</p>
+<p>但每個程式都這樣寫太麻煩，
+而且之前還要能互相溝通，
+於是有了 window manager。
+讓每個程式啟動後，
+都被關在另一個 window manager 創造出來的盒子裡，
+在互動時，要通過 window manager，
+也能通過 window manager 處理 resize close move 等事，
+程式就不需要自己處理。</p>
+<h2 id="ssh 轉發 x window">ssh 轉發 x window</h2>
+<p>ssh 有一個 -X 選項，能把遠端的程式和本地的 x server 連結。
+也就是不會用到遠端的 x server，甚至遠端也不用裝 x server，
+只要程式有和 x 溝通的能力即可。</p>
+<p>但連上去仍機器需要有 x server，
+如果也是 linux 多半已有 x server，
+ssh 後啟動的程式如果要啟動 gui，
+就會直接在本地的 x server 上顯示，
+再通過本地的 window manager 管理，
+和其它本地啟動的視窗一樣。</p>
+<h2 id="windows">windows</h2>
+<p>windows 下已有 window manager，
+在 windows 下裝的 x server 多半會直接與
+windows 的 window manager 溝通。
+在啟動後程式會把要顯示的內容傳給 windows 下裝的 x server，
+而 x server 再把內容由 window manager 包裝成視窗顯示。</p>
+<p>所以就是在 linux 下的程式也是在 windows 下的視窗，
+而不是像一般遠端桌面連線是把整個系統關在一個框框裡，
+二邊是不互痛的。</p>
+<h2 id="android">android</h2>
+<p>android 下就比較麻煩，因為 android 下的
+window manager 和 windows 或 linux 的不同。
+例如你不能在 android 上開 <strong>視窗</strong> ，
+然後拉到左邊或右邊，再在旁邊空白處開另一個視窗；
+android 中的 app 都是佔滿整個螢幕的。</p>
+<p>android 上有幾款 x server，
+但都缺 window manager，都是開啟後一大塊空白。
+在 ssh shell 中打 xclock 就開一個框框，
+沒有標題抓著移動，沒有叉叉可以關掉視窗，
+甚至也沒辦法切換焦點。</p>
+<p>一個辦法是完全連到 desktop 環境，
+直接把整個螢幕傳過來，而不是傳一個個的視窗；
+就和傳統的 vnc 一樣。</p>
+<p>如果不裝 vnc，要在 x window 下達成類似的作法，
+可以用 Xnest 或 Xephyr，
+是在一個視窗中啟動另一個 Xsession 的程式。
+而在 android 上透過 ssh 這樣作，有點像包了二層，
+先用 xephyr 在 x window 開一個視窗，
+再在 xephyr 視窗裡開一個完整的 x window。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer src="ext/load-disqus.js"></script>
+
+
+
+</body></html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-11-12T14:57:01.310Z">
+<meta name="keywords" property="og:article:tag" content="ssh,gui,x-window,windows,ip">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="dt13-start-up.html" title="">
+<link rel="prev" type="text/html" href="kaohsiung-art-travel.html" title=" 高雄藝術之旅">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<meta property="og:image" content="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title> 在 cygwin 下使用 x server</title>
+</head>
+<body>
+<main><h1 id="在 cygwin 下使用 x server">在 cygwin 下使用 x server</h1>
+<p>剛學會 <code>ssh -X</code> 選項，能遠端用 shell 登入，
+再加上 X window 的圖形介面。
+之後為了在 windows 下也能用，
+得裝了一個 windows 下的 x server，
+就挑 cygwin 的，是能用，但有點慢。</p>
+<h2 id="cygwin">cygwin</h2>
+<p>cygwin 要裝 X <a href="http://x.cygwin.com/docs/ug/setup.html">X.cygwin 官網的手冊</a> 已有詳細說明，
+大概就是 X11 分類中要勾選 x server 和 x init 二個包，
+其它相依的會自己裝好。
+這裡是裝 x server 而己，不是裝 desktop，
+所以裝起來沒有 gnome、window mananger 之類的，
+只能啟動一個 xterm 或開 xclock。</p>
+<p>裝完要啟動可以打 <code>startxwin</code> 開始，
+或裝完產生的圖示 x win server。
+之後 x server 會出現在 windows 通知欄裡，
+可以從那裡關掉或開 xterm 或 cygwin，
+裡面的 <code>DISPLAY</code> 就是 x window 的了，
+能直接執行 xclock 或 ssh -Y。</p>
+<p>cygwin 裝完出現的啟動圖示，
+有一個是 user script，不知道是幹麻的，
+可能是啟動 desktop 的，
+總之我按了沒用，也沒裝 desktop。</p>
+<h2 id="ssh 跳板">ssh 跳板</h2>
+<p>ssh -X 或 -Y 選項是會把 x window 也透過 ssh 傳送，
+也就是讓遠端的 x client 和本地的 x server 溝通，
+就能在本地開啟 remote 的 gui 程式。</p>
+<p>還有一個有趣的選項 -J，
+能直接把多台 server 當跳板，
+各 server 間用逗號分隔，
+如果有 port 就用冒號附在後面，
+但最後一個 ssh 的 port 是不能用冒號的。</p>
+<pre><code>ssh -J userA@serverA,userB@serverB:2211 userC@serverC -p 5566
+</code></pre><p>這樣就是用 userA 登入 serverA，
+再從 serverA 用 userB 登入 serverB 走 port 2211，
+最後從 serverB 用 userC 登入 serverC。</p>
+<h3 id="反向隧道">反向隧道</h3>
+<p>我是先在社辦的沒公網電腦用 -R 選項在另一台公用 server 開 port，
+<code>ssh -NR 35760:localhost:22 web.ccns</code> ，
+因為 web.ccns 有公網 ip，ssh 到 web.ccns 上，
+再 <code>ssh gholk@localhost -p 22</code> 就行了，
+或是直接 <code>ssh -J web.ccns gholk@localhost -p 35760</code> 。</p>
+<hr>
+<p>可是最後用 cygwin x server 速度很慢，
+到幾乎不能用的程度。
+我覺得是 cygwin 的 x server 本來就慢，
+應該和網速沒有關係；
+網速應該有 10MB/s 以上。</p>
+<p><ins datetime="2017-11-15">
+後來用隨身碟開機跑 finnix，
+用裡面的 x server 連 debian，
+速度也還行，比 cygwin 快多了，
+真得是 cygwin 的 x server 太慢的問題，
+和網速沒關係。
+</ins></p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer src="ext/load-disqus.js"></script>
+
+
+
+</body></html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-04-15T14:45:37.218Z">
+<meta name="keywords" property="og:article:tag" content="gpg,密碼學">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="dream-exevt.html" title="夢境：發表會">
+<link rel="prev" type="text/html" href="easy-pgp-no-symmetric.html" title="非對稱加密系統簡介">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title>gpg 私鑰加密、對稱加密、簽署</title>
+</head>
+<body>
+<main><h1 id="gpg 私鑰加密、對稱加密、簽署">gpg 私鑰加密、對稱加密、簽署</h1>
+<p>gpg 是 gnu 基金會依 openpgp 標準設計的自由軟體，
+作為 pgp 的自由軟體版本替代。
+用來做非對稱的加解密，
+和簽署文件，認證該文件是所發出。
+<a href="easy-pgp-no-symmetric.html">簡單概念則在上一篇文章有提到</a> ，
+但這三種功能還能組合使用，
+這篇文主要是介紹組合使用意義。</p>
+<h2 id="加密">加密</h2>
+<p>加密時需要指定要給誰，或說指定讓誰可以解密。
+這時需要他的公鑰，用他的公鑰加密，
+就只有他的私鑰能解密。
+因為公鑰是公開的，這讓大家都可以寄私密信給他，
+但也都只有他自己的私鑰可以解密。</p>
+<h2 id="對稱加密且非對稱加密">對稱加密且非對稱加密</h2>
+<p>對稱加密就是傳統的方法，加密和解密使用同一組密碼。
+openpgp 中也容許使用對稱加密，如果和非對稱加密一起用，
+就是讓生成的訊息，可以在二種方式下被解密：</p>
+<ol>
+<li>對方知道你加密時額外設定的密碼。</li>
+<li>對方有私鑰，這裡的私鑰是相應你加密時使用的公鑰的私鑰。</li>
+</ol>
+<h2 id="非對稱加密且簽署">非對稱加密且簽署</h2>
+<p>也就是自己的私鑰簽署後，再用對方的公鑰加密。
+代表要有對方的私鑰才能看到訊息內容，
+且可以用你的公鑰認證訊息確實是你所發出。</p>
+<p>如只簽署沒加密，訊息會是以明文儲存；
+如果只加密沒簽署，
+則訊息可能來自所有知道對方公鑰的人，
+沒辦法認證是你。</p>
+<h2 id="對稱加密且簽署">對稱加密且簽署</h2>
+<p>用自己的私鑰簽署後，再用對稱加密設密碼加密。
+就是用在對方沒有自己的公私鑰，只好用對稱加密；
+又需要讓對方能驗證訊息發出者。
+就和上面的非對稱加密且簽署類似。</p>
+<h2 id="對稱、非對稱、簽署三合一">對稱、非對稱、簽署三合一</h2>
+<p>這可以想像成簽署完後，再用一開始提的
+那種可以被密碼或私鑰解的加密方式加密。
+像我的部落格文章裡的加密多是用這種方式，
+用我的私鑰簽署，再用我自己的公鑰和自訂的密碼加密，
+可以用我公開的公鑰驗證內容是我發的，
+如果知道密碼的人也可以解開。
+另外我自己也可以用自己的私鑰解，
+因為我是用我的公鑰加密的，
+當然只有我自己的私鑰能解，
+這是為了防止哪天我忘了當初設的密碼，仍能用私鑰解開。
+不然一般是會用要接收訊息的人的公鑰加密，
+讓對方能用密碼或自己的私鑰解開。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer src="ext/load-disqus.js"></script>
+
+
+
+
+
+</body></html>

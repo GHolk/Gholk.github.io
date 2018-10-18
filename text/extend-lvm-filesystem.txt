@@ -1,0 +1,82 @@
+# 單人維護模式下擴大 usr 分割
+原本 toshiba 的硬碟裡裝的 debian stretch
+一開始割很小，usr 一下就快滿了，只剩 500mb。
+但身邊的開機碟都不能用，
+最後嘗試進 single user mode，順利擴大分區大小。
+
+## 開機碟的問題
+手邊有一顆 debian stretch net install
+但裡面的系統東西超少，
+沒有 lvm 程式，更別說 resize2fs。
+
+社辦有一顆不知道誰的 mint 16.04 完整系統隨身碟，
+可以開機，有 lvm 也有 resize2fs。
+我 lvm 有試成功，但 resize2fs 報 fs 有不支援的 flag，
+我也不敢加 `--force` 硬來。
+
+## 單人維護模式
+最後試這條路，因為懶得再燒一顆開機碟。
+我直接在 console 下 `init 1` 或 
+`systemctl rescue` 都沒用。
+
+在 debian 預設的開機選單裡有一個 advance option，
+但裡面只有一個 rescue mode，
+進去後也看不出和原本的差別。
+
+最後是在 grub 下改開機選項才成功，
+在 `linux` 命令加入 `init=/bin/bash` 選項，
+應該加在哪都沒差，就成功了。
+
+    linux	/vmlinuz-4.9.0-4-amd64 root=/dev/mapper/graduateLVM-dRoot ro cgroup_enable=memory swapaccount=1 quiet init=/bin/bash
+    initrd	/initrd.img-4.9.0-4-amd64
+    boot
+
+進去後就是 root 只有一個 tty，
+然後我可以直接 `umount /usr` 。
+
+```sh
+umount /usr
+lvextend -L +2G graduateLVM/dUsr
+fsck -ft ext4 graduateLVM/dUsr     # resize2fs 前會要求 fsck
+resize2fs graduateLVM/dUsr         # 沒指定 size 就是調到和 device 一樣大
+
+## 如果 lvextend 加 -r 選項好像可以一起調大 filesystem，
+## 就不用再下 resize2fs 了。
+```
+
+### `/etc/grub.d/40-custom`
+
+我自己加了 single user mode 的 entry，
+改 `/etc/grub.d/40-custom` 然後 `update-grub` 即可。
+
+
+```sh
+#! /bin/sh
+exec tail -n +3 $0
+# This file provides an easy way to add custom menu entries.  Simply type the
+# menu entries you want to add after this comment.  Be careful not to change
+# the 'exec tail' line above.
+
+menuentry 'Debian GNU/Linux single user mode' --class debian --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple-2556b1d9-b8d7-40cd-81dc-2548fe362673' {
+	load_video
+	insmod gzio
+	if [ x$grub_platform = xxen ]; then insmod xzio; insmod lzopio; fi
+	insmod part_msdos
+	insmod ext2
+	set root='hd0,msdos12'
+	if [ x$feature_platform_search_hint = xy ]; then
+	  search --no-floppy --fs-uuid --set=root --hint-bios=hd0,msdos12 --hint-efi=hd0,msdos12 --hint-baremetal=ahci0,msdos12  442ed0ec-76f3-4826-bb26-e51e43393a05
+	else
+	  search --no-floppy --fs-uuid --set=root 442ed0ec-76f3-4826-bb26-e51e43393a05
+	fi
+	echo	'正在載入 Linux 4.9.0-4-amd64 ...'
+	linux	/vmlinuz-4.9.0-4-amd64 root=/dev/mapper/graduateLVM-dRoot ro cgroup_enable=memory swapaccount=1 init=/bin/bash quiet
+	echo	'正在載入初始 ramdisk ...'
+	initrd	/initrd.img-4.9.0-4-amd64
+}
+```
+
+#grub
+#lvm
+#linux
+#boot

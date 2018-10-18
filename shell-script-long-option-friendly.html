@@ -1,0 +1,55 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-01-04T14:26:07.826Z">
+<meta name="keywords" property="og:article:tag" content="cli,shell,選項,coding-style,程式">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="cold-rain-running-nose-snot.html" title="冬天下雨又感冒流鼻水">
+<link rel="prev" type="text/html" href="aborigines-pingtung-timur.html" title="高屏瑪家鄉三地門原住民文化之旅">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title>shell script 中使用長選項增加可讀性</title>
+</head>
+<body>
+<main><h1 id="shell script 中使用長選項增加可讀性">shell script 中使用長選項增加可讀性</h1>
+<p>GNU 的工具多會有長短選項，
+長選項一看就知道在幹麻，不用再查 man page。
+所以我建議 shell script 中應該統一用長選項，
+增加可讀性，反正寫程式不差那幾劃，
+短選項就在 cli 的時候用起來方便就好了。</p>
+<ul>
+<li>短選項： <code>-s</code> <code>-al</code> <code>-xzf</code></li>
+<li>長選項： <code>--after</code> <code>--remote-file</code> <code>--no-login</code></li>
+</ul>
+<p>以前都不喜歡長選項，
+因為短選項可以寫在一起方便。
+後來才發現長選項可讀性高多了，
+不像短選項都得查 man page 才知道在幹麻。</p>
+<p>程式就是要讓人看懂，
+如果看 shell script 還要查 man page 也太麻煩了。
+而且只要寫一次，之後都是直接執行，
+不像在 cli 打長選項很麻煩，
+只是短選項要常用才記得住。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer src="ext/load-disqus.js"></script>
+
+
+
+
+
+</body></html>

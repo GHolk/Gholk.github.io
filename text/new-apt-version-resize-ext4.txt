@@ -1,0 +1,45 @@
+# 在舊版 debian 上裝新程式 resize ext4
+最近 root 滿了，因為沒有把 usr 和 var 切開，
+又裝了 docker，所以就滿了。
+要在從 live cd 調，
+但 live cd 的 resize2fs 版本過舊，
+於是就改了 sources.list，
+裝新的就能調了。
+
+## 分開 usr var
+之前不切 usr var 的原因是，
+比較好整個搬走，
+因為只有 root 一個分區。
+home 就一定要切的。
+
+但不把 usr var 切開就是這點麻煩，
+切開的話可以從單人維護模式，
+因為重要程式都𠝥 /bin /sbin，
+能 umount /usr /var，之後就能調。
+不過還是不能調 root 的。
+
+## 開機碟
+用開機碟 finnix 開機想改，
+我的 volume group 是 kick，logical volume 是 debian，
+`lvresize --resizefs --size +3G kick/debian` 報錯，
+`lvresize --size +3G kick/debian` 沒問題，
+是 resize2fs fsck 都不認得我的 ext4。
+可能是版本太舊。
+明明也才差一個 debian。
+
+後來想出的辦法是去改 `/etc/apt/sources.list` ，
+把版本改成新的 stertch，
+然後 `dpkg-query -S resize2fs` 
+找出 resize2fs 是屬於 e2fsprogs 這個 apt 包的，
+再安裝 `apt install e2fsprogs` 。
+
+雖然這樣跨版本亂裝不好，
+但只裝一個，而且只是 live cd，
+也沒有要長期使用，應該沒差。
+總之就能 resize 了，
+resize2fs 不帶參數會自動調成和 partition 一樣大，
+或自己決定要調多大設參數。
+
+#開機碟
+#lvm
+#硬碟

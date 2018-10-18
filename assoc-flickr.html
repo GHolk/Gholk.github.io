@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" prefix="og: http://ogp.me/ns#">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="vim, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-10-28T02:27:34.392Z">
+<meta name="keywords" property="og:article:tag" content="flickr,api,圖,oauth,blog">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="evil-selection-x-window.html" title=" emacs evil 與 x window 選擇文字相通">
+<link rel="prev" type="text/html" href="georeference-tilt-photo.html" title=" 影像改正">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<meta property="og:image" content="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title> flickr 圖床腳本 assocr</title>
+</head>
+<body>
+<main><h1 id="flickr 圖床腳本 assocr">flickr 圖床腳本 assocr</h1>
+<p>寫上一篇作業終於得面對圖片的問題，
+到底部落格該怎麼貼圖這件事。
+我一直用 flickr 當圖床，
+但他的上傳面和內嵌介面不好用，
+只好自己寫一個腳本 <a href="https://github.com/GHolk/loco/blob/eccc8930/bin/assocr.js">assocr</a> 來用。</p>
+<p>flickr 的上傳介面還不錯，
+但要一次取得一堆圖片的內嵌就很不方便。
+而且寫文到一半，還得開網頁介面傳圖，
+再把圖的網址一張張貼回來，很麻煩。</p>
+<p>而且上傳後的網址我會看不出哪一張是哪一張，
+對應不出檔名，貼圖不方便。
+一堆圖片上傳後變一堆網址。
+我比較希望是可以用檔名或有意義的字串直接引用。</p>
+<p>最後我想到的解法是把內嵌的網址存成一個 js 物件，
+用自定的標示符作 key，用內嵌所需的作 value。
+然後用 key 直接存取圖片。</p>
+<p>大概就是上傳完後取得圖片內嵌網址，
+然後和原本的檔名輸出成 json 格式，
+然後放在 script 標籤內。
+像這樣</p>
+<script src="ext/flickr.js"></script>
+<script>
+flk.set(["2017-10-28 10-13-39 的螢幕擷圖.png"],
+[{"farm":"farm5","server":"4467","photo":"37978428291","secret":"70a10bd323","user":"135370742@N08"}])
+</script>
+
+<p>之後就能用 <code>flk.gn(&#39;2017-10-28 10-13-39 的螢幕擷圖.png&#39;)</code>
+取得圖片的 node，或也能用 regex 取 <code>flk.gn(/10-13-39/)</code> ，
+如果用了 global flag 就會回傳陣列 <code>flk.gn(/螢幕擷圖/g)</code> 。
+（這部份是我手動偵測 regexp 的 flag，再決定要回傳什麼的。）</p>
+<p><code>js flk.gn(&#39;10-13-39&#39;)</code></p>
+<p>另外因為我覺得檔案有點大，
+所以另外寫成一個 flickr.js，
+沒有和 <a href="./ext/meta-bloging.js">./ext/meta-bloging.js</a> 合在一起。
+所以如果要貼圖要先用 <code>&lt;script src=&quot;ext/flickr.js&quot;&gt;&lt;/script&gt;</code> 引用。</p>
+<h2 id="麻煩的內嵌網址">麻煩的內嵌網址</h2>
+<p>上傳的圖還不是有圖片 id 就能內嵌，
+得要有一堆其它資訊才行，
+像所在伺服器、api 金鑰。
+這些資訊都得要 call api 才能要得到。</p>
+<p>flickr 真是實作 OAuth 很轍底，
+連引用圖片都要金鑰。
+還是 imgur 大方好用。</p>
+<p>實作上則是我上傳後 flickr 只會回傳圖片 id，
+我還要再用圖片 id 查詢該圖片的詳細資料，
+才會回傳內嵌要用到的其它資訊。</p>
+</main>
+
+<footer>
+<script src="ext/luser-meta.js" defer></script>
+</footer>
+
+<div id="disqus_thread">
+<script defer src="ext/load-disqus.js"></script>
+<noscript>
+  Please enable JavaScript to view the
+  <a href="https://disqus.com/?ref_noscript">
+    comments powered by Disqus.
+  </a>
+</noscript>
+</div>
+
+
+</body>
+</html>
+

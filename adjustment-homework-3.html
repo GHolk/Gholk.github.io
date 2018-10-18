@@ -1,0 +1,186 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-10-16T12:42:11.658Z">
+<meta name="keywords" property="og:article:tag" content="adjustment,nctu,report">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="sun-old-professor-sigh.html" title="老教授的嘆息">
+<link rel="prev" type="text/html" href="javascript-strict-equality-myth.html" title="全等算符的迷思">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>平差作業三</title>
+</head>
+<body>
+<main><h1 id="平差作業三">平差作業三</h1>
+<p>在直角座標與經緯度座標間轉換的誤差傳播，
+使用 wgs84 橢球。</p>
+<h2 id="直角座標與經緯度座標的轉換關係">直角座標與經緯度座標的轉換關係</h2>
+<pre><code class="lang-math">x = (N + h) cos \phi cos \lambda \\
+y = (N + h) cos \phi sin \lambda \\
+z = (N (1-e^2) + h) sin \phi
+</code></pre>
+<p>φ λ h 分別為經度、緯度、橢球高，
+而 N 為當地 <strong>卯酉圈</strong> 半徑，
+也就是在該點上與子午圈截面垂直的切面。</p>
+<p>N 的公式如下：</p>
+<pre><code class="lang-math">N = \frac a {\sqrt{ 1 - e^2 sin^2 \phi }}
+</code></pre>
+<pre><code class="lang-matlab">% wgs84 參數
+global major_axis flattening first_eccentricity;
+major_axis = 6378137;
+flattening = 1/298.257223563;
+first_eccentricity = sqrt(-flattening^2 + 2*flattening);
+
+function N = radius_N(phi)
+  global major_axis first_eccentricity;
+  a = major_axis;
+  e = first_eccentricity;
+  N = a ./ sqrt(1 .- e^2 * sin(phi).^2);
+end
+</code></pre>
+<h2 id="誤差傳播">誤差傳播</h2>
+<p>給定一點直角座標 
+<code>(1241581.343, -4638917.074, 4183965.568)</code> ，
+變方協變方矩陣為：</p>
+<pre><code class="lang-math">\Sigma_r = \begin{bmatrix}
+9.0 &amp; -0.1 &amp; 0.2 \\
+-0.1 &amp; 8.0 &amp; -0.2 \\
+0.2 &amp; -0.2 &amp; 9.1
+\end{bmatrix} \times 10^{-4} m^2
+</code></pre>
+<p>以誤差傳播公式由 x y z 求出 φ λ h 的變方協變方矩陣，
+以矩陣式來看，需要先求出 xyz 與 φλh 的線性關係式，</p>
+<pre><code class="lang-math">A
+\begin{bmatrix}
+x \\ y \\ z
+\end{bmatrix}
+= \begin{bmatrix}
+\phi \\ \lambda \\ h
+\end{bmatrix}
+\\
+
+\Sigma_g = A^{-1} \Sigma_r ( A^{-1} )^T
+</code></pre>
+<p>雖然實際二者非線性關係，但可以用偏微分後線性化近似。
+但線性化要有初始值，以下先試著算出 φλh 的初始值。</p>
+<h2 id="使用 proj.4 計算經緯度初始值">使用 proj.4 計算經緯度初始值</h2>
+<p><a href="http://proj4.org/">proj.4</a> 是 <a href="http://www.osgeo.org/">OSGeo</a> 的專案，
+可以在經緯度、直角座標、各地圖投影間轉換。
+這裡始用 proj.4 由 XYZ 計算 φλh 的值。</p>
+<pre><code class="lang-term">cs2cs +proj=geocent +datum=WGS84 +to \
+      +proj=latlong +ellps=WGS84 +datum=WGS84 &lt;&lt;CS
+1241581.343 -4638917.074 4183965.568
+CS
+
+75d0&#39;58.613&quot;W   41d15&#39;18.211&quot;N 312.391
+</code></pre>
+<p>得到對應的經緯度是 <code>(75°0′58.613″W   41°15′18.211″N 312.391)</code> ，
+或轉成十進位與地理緯度 <code>(φ,λ,h) = (48.7449413888889, -75.0162813888889, 312.391)</code> 。</p>
+<h2 id="偏微分">偏微分</h2>
+<p>接著計算偏微分，三條公式分別對 φλh 偏微分，
+得到線性化的矩陣。這裡使用數值微分。</p>
+<pre><code class="lang-matlab">function derive_function = derive (function_handle, interval = 0.005)
+  derive_function = @(x) (
+    function_handle(x.+interval) - function_handle(x.-interval)
+  ) ./ (interval * 2);
+end
+
+init_degree = [48.7449413888889, -75.0162813888889, 312.391];
+
+geodxyz = {};
+geodxyz{1} = @(f,l,h) (radius_N(f)+h) .* cosd(f) .* cosd(l);
+geodxyz{2} = @(f,l,h) (radius_N(f)+h) .* cosd(f) .* sind(l);
+geodxyz{3} = @(f,l,h) (radius_N(f).*(1-first_eccentricity^2)+h) .* sind(f);
+
+geodpart = zeros(3,3);
+for i=1:3
+  geodpart(i,1) = derive(@(f) geodxyz{i}(f, init_degree(2), init_degree(3)), 0.000001)(init_degree(1));
+  geodpart(i,2) = derive(@(l) geodxyz{i}(init_degree(1), l, init_degree(3)), 0.000001)(init_degree(2));
+  geodpart(i,3) = derive(@(h) geodxyz{i}(init_degree(1), init_degree(2), h))(init_degree(3));
+end
+</code></pre>
+<p>最後得到線性化的設計矩陣 A：</p>
+<pre><code class="lang-math">A = \begin{bmatrix}
+-2.2080 \times 10^{4} &amp; 7.1151 \times 10^{4} &amp; 1.7049 \times 10^{-1} \\
+8.2496 \times 10^{4} &amp; 1.9043 \times 10^{4} &amp; -6.3699 \times 10^{-1} \\
+7.1546 \times 10^{4} &amp; 0.0000 &amp; 7.5178 \times 10^{-1}
+\end{bmatrix}
+</code></pre>
+<h2 id="經緯度的變方協變方矩陣">經緯度的變方協變方矩陣</h2>
+<p>有了線性化的設計矩陣，
+就能由誤差傳播公式計算得未知數的變方協變方矩陣。</p>
+<pre><code class="lang-math">A^{-1} = \begin{bmatrix}
+-1.7451 \times 10^{-6} &amp; 6.5202 \times 10^{-6} &amp; 5.9204 \times 10^{-6} \\
+1.3115 \times 10^{-5} &amp; 3.5102 \times 10^{-6} &amp; -7.2830 \times 10^{-14} \\
+1.6608 \times 10^{-1} &amp; -6.2052 \times 10^{-1} &amp; 7.6674 \times 10^{-1}
+\end{bmatrix}
+\\
+\Sigma_g = A^{-1} \Sigma_r ( A^{-1} )^T = \begin{bmatrix}
+6.6917 \times 10^{-14} &amp; -1.9453 \times 10^{-15} &amp; 5.7800 \times 10^{-10} \\
+-1.9453 \times 10^{-15} &amp; 1.6374 \times 10^{-13} &amp; 4.4066 \times 10^{-10} \\
+5.7800 \times 10^{-10} &amp; 4.4066 \times 10^{-10} &amp; 8.9402 \times 10^{-4}
+\end{bmatrix}
+</code></pre>
+<p>其中 φ λ 因為是經緯度，
+經緯度的 1° 遠比公尺大，變方較小是正常的。
+而橢球高 h 的單位也是公尺，
+變方就和原本的 xyz 變方差不多。</p>
+<h2 id="標準差">標準差</h2>
+<p>變方協變方矩陣中的對角線元素，
+是該隨機變數的對自身的變異數，
+即為該變數標準差的平方。</p>
+<pre><code class="lang-math">\Sigma_g = \begin{bmatrix}
+\sigma_\phi^2 &amp; \ddots \\
+\ddots &amp; \sigma_\lambda^2 \\
+       &amp;    &amp; \sigma_h^2
+\end{bmatrix}
+\\
+\sigma_\phi =    2.5868 \times 10^{-7} ° \\
+\sigma_\lambda = 4.0465 \times 10^{-7} ° \\
+\sigma_h =       2.9900 \times 10^{-2} m
+</code></pre>
+<p>若要化算到區域座標系統，也就是 E N H 座標系統，
+高程方向 h 不用變化，但經緯度要由角度轉成距離，
+也就是乘上該點上單位角度對應的公尺距離：</p>
+<pre><code class="lang-math">R = a \frac {( 2 - f )} 2 = 6367445 m \\
+\sigma_N = 2 \pi R \frac {\sigma_\phi} {360 °} = 0.02875 m \\
+\sigma_E = 2 \pi R cos \phi \frac {\sigma_\lambda} {360 °} = 0.02965 m \\
+\sigma_H = \sigma_h                            = 0.02990 m
+</code></pre>
+<p>原本算出來發現 E N H 裡只有 H 與原本的 x y z 座標精差不多，
+E N 的標準差差很多，覺得不太對，
+結果找到二個錯誤：</p>
+<ol>
+<li><p>原本座標轉換後是經度、緯度、橢球高，順序應該是 λφh，
+但計算上忘了換成 φλh。</p>
+</li>
+<li><p>但上面那個原因應該不會讓量級差太多，後來又發現我是用角度，
+所以換成距離時不能直接乘半徑，要先乘 π / 360 換成弧度。</p>
+</li>
+</ol>
+<p>總之修正後結果和我預期的差不多，
+三個方向誤差相當，也和原本的 xyz 誤差相當。</p>
+<script src="ext/header-nctu.js?execute&editable"></script>
+
+<link rel="stylesheet" href="ext/paper.css">
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy="" src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

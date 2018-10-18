@@ -1,0 +1,126 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-02-27T02:40:26.822Z">
+<meta name="keywords" property="og:article:tag" content="scheme,lisp,程式,函數">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="line-new-chrome-app-launcher.html" title="直接執行新版 line 的 launcher">
+<link rel="prev" type="text/html" href="course-106-2.html" title="106年下學期課表">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title>參數 currying 與函數管道</title>
+</head>
+<body>
+<main><h1 id="參數 currying 與函數管道">參數 currying 與函數管道</h1>
+<p>在寫列表操作時，常會串接 map filter 最後 reduce，
+簡化每個操作的內容。
+在 javascript 中會用 dot notation 串接每個返回值的 map method，
+但 scheme 中就沒辦法，要寫成巢狀不太方便，
+haskell 中就能搭配 pipe 和函數自動 currying 達成。</p>
+<pre><code class="lang-scheme">(filter (lambda (x) (= 1 (mod x 2)))
+        (map (lambda (x) (+ x 3))
+            (map (lambda (x) (* x 7))
+                 &#39;(sequence 10))))
+</code></pre>
+<p>在 scheme 中這樣寫很難閱讀，
+反觀 javascript，
+因為這些函數都是 Array 的方法，
+就能用 dot notation 串接調用。</p>
+<pre><code class="lang-javascript">sequence(10)
+  .map((x) =&gt; x * 7)
+  .map((x) =&gt; x + 3)
+  .filter((x) =&gt; x % 2 == 1)
+</code></pre>
+<p>我有想過建構一個 pipe 函數，
+能把值依序傳給每個傳入的函數。</p>
+<pre><code class="lang-scheme">(define (pipe value . function-list)
+  (fold-left (lambda (value function)
+               (function value))
+             value
+             function-list))
+
+(pipe 12 (lambda (x) (+ x 12))
+         (lambda (x) (* x 2))
+         (lambda (x) (mod x 7)))
+;; 6
+</code></pre>
+<p>但用在陣列上就還要多寫一次 lambda。</p>
+<pre><code class="lang-scheme">(pipe &#39;(1 2 3 4)
+      (lambda (list)
+        (map (lambda (x) (+ x 12))
+             list))
+      (lambda (list)
+        (map (lambda (x) (* x 2))
+             list))
+      (lambda (list)
+        (map (lambda (x) (mod x 7))
+             list)))
+</code></pre>
+<p>而聽說 haskell 的函數，如果沒有給足參數數量，
+就會變成半成品狀態，還是個函數，
+再繼續傳入參數到足夠數量就能得到結果。
+這是源自 curry 的用單參函數構造多參函數的方法。</p>
+<pre><code class="lang-javascript">// 假設 js 也有 currying
+function add(a, b) {
+  return a + b
+}
+
+const add3 = add(3)
+add3(7) == 10
+add3(6) == 9
+add(2, 4) == 6
+</code></pre>
+<p>所以如果 scheme 也有參數 currying，
+那上述的對列表的 pipe 直接傳入
+<code>(map (lambda (x) (* x 2)))</code> 就同等於
+<code>(lambda (list) (map (lambda (x) (* x 2)) list))</code> 。</p>
+<pre><code class="lang-javascript">// currying pipe list
+map((x) =&gt; x+3, [1,2,3]) // [4,5,6]
+const map4 = map((x) =&gt; x+4)
+map4([1,2,3]) // [5,6,7]
+
+pipe([1,2,3],
+     map((x) =&gt; x * 3)
+     map((x) =&gt; x + 6))
+// [9, 12, 15]
+</code></pre>
+<p>更別提 haskell 還有 pipe 算符，
+不用辛苦自己實現 pipe 函數。
+傳入只差一個參數的函數，就能用作 pipe 單元。</p>
+<p>雖然 scheme 可以用自幹出類似輔助函數的方式解決。</p>
+<pre><code class="lang-scheme">(define (apply-list list-operation atom-operation)
+  (lambda ( . list)
+    (apply list-operation 
+           (cons atom-operation list))))
+(pipe &#39;(1 2 3 4)
+      (apply-list map (lambda (x) (+ x 12)))
+      (apply-list map (lambda (x) (* x 2)))
+      (apply-list filter (lambda (x) (= 2 (mod x 7))))
+      (apply-list fold-left (lambda (sum x) (+ sum x)) 0))
+</code></pre>
+<p>題外話，還是覺得 S 表達式好美，
+haskell 和一般的語言，包括其它偏指令式的，
+用到一堆關鍵字 if else，<code>=</code> 賦值好醜。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer src="ext/load-disqus.js"></script>
+
+
+
+
+
+</body></html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-01-28T11:51:15.550Z">
+<meta name="keywords" property="og:article:tag" content="markdown,marked,man-page,makefile,dl,中文">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="shell-source-in-sub-shell.html" title="在子 shell 中引用外部腳本">
+<link rel="prev" type="text/html" href="font-hanazono-symbola-noto.html" title="全字庫與 emoji 字體">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title>中文與 rfc 手冊頁</title>
+</head>
+<body>
+<main><h1 id="中文與 rfc 手冊頁">中文與 rfc 手冊頁</h1>
+<p>有把常用的參考資料寫成 man-page 的習慣，
+之前就想把 http status code 寫成手冊頁，
+最近簡單用 http rfc 改了。
+還有中文手冊的問題，把之前找到的解法拿來用，
+重寫了以前的幾份手冊。</p>
+<h2 id="http rfc">http rfc</h2>
+<p>之前寫過 html-char，
+是直接拿 wikipedia 的表格改的。
+主要是大三寫作業，尤其是大地測量學，
+是用 markdown 轉成 html，
+寫公式會用到特殊符號，就會邊查邊寫，
+就寫了一份 html 特殊符號的 man page。</p>
+<p>還想寫一個 http-status，
+是寫 <a href="//github.com/ccns/quiz-chatbot-server">quiz-chatbot-server</a> 設計 rest api，
+要常常查什麼情況回覆哪個 code 好。</p>
+<p>這份想用正式一點，不想從 wikipedia 或 mdn 抄，
+找到定義的文件是 rfc7231，那是完整的 http 規格。
+因為 rfc 格式看來就是 man page 的格式，
+所以又想能不能用 terminal 看，
+結果一直找不到作法。</p>
+<p>有個套件是 doc-rfc，但就是純文字檔而已。
+只能用 less 看，也沒有語法高亮。
+當時有點忙，就沒有繼續。</p>
+<p>現在也只是簡單用 marked-man，
+把整份 rfc 包成 code block，
+然後放到 <code>~/.local/share/man/man7</code> 就能用 man 看了。</p>
+<pre><code class="lang-sh">sed -i -e &#39;1i```rfc&#39; -e &#39;$a```&#39; rfc7321.txt
+marked-man -o rfc7321.7 rfc7321.txt
+ln -s $PWD/rfc7321.7 ~/.local/share/man/man7/rfc7321.7
+ln -s $PWD/rfc7321.7 ~/.local/share/man/man7/http.7
+</code></pre>
+<h2 id="中文 man-page">中文 man-page</h2>
+<p>大概就是 groff 只看空格、换行，来决定在哪裡斷行。
+但中文中幾乎沒有空格，換行就會很彆扭。
+例如原本的 tanet man-pages：</p>
+<pre><code class="lang-term">TANET(7)                         PTT 鄉民手冊                         TANET(7)
+
+NAME
+       TANet - 台灣學術網路
+
+DESCRIPTION
+       TANet  為  Taiwan  Academic  Network，即台灣學術網路， 為中華民國教育部
+       與台灣各大學 共同建立的 一個全國性 教學研究用網際網路系統。
+
+HISTORY
+       1980     年代中期，教育部引進     BITNET     大學教學研究網路系統，提供
+       學術界跨國電子         郵件、檔案傳輸等應用服務。1980        年代末期，
+       教育部科技顧問室（1990        年更名為         顧問室）在張進福主任任內
+       編列經費，委由科技顧問陳文村規劃，補助主要國立                 大學建立
+       校園網路、校際網路。於   1990   年    7    月，教育部電子計算機中心邀集
+       受補助大學成立「台灣學術網路」，建立以       TCP/IP      通訊協定為基礎
+       之網際網路系統，        為台灣第一個網際網路系統，         也是台灣往後
+       發展政府、商用網際網路系統之基礎   。1999  年起，教育部推動  中小學使用
+       ADSL      連線至      TANet，讓資訊教育向下扎根，      迄今       TANet
+       已成為全台灣各級學校網路及資訊教育之平台。
+
+       TANet 初期連接台灣部份的學術單位與研究機構，網路骨幹使用電話 連線，頻寬
+       為 9.6kbps。1991 年 12 月 3 日以 64Kbps 數據專線連接美國 普林斯頓大學的
+ Manual page tanet.7 line 1 (press h for help or q to quit)
+</code></pre>
+<p>後來 google 到中文 man-page 翻譯計劃
+的 github repo，發現他們有解決，<a href="https://github.com/man-pages-zh/wiki/wiki/%E6%89%8B%E5%86%8C%E9%A1%B5%E7%9A%84%E4%B8%AD%E6%96%87%E6%8E%92%E7%89%88">寫在 wiki 裡。</a>
+只要在 man-page 開頭引入像 header 的檔案即可，
+<a href="//github.com/gholk/loco/blob/663614/man/tanet.7#L1">也就是在第一行加入 <code>.mso zh.tmac</code> 。</a>
+但要注意系統裡有沒有 <code>zh.tmac</code> 這個檔案，
+應該會在 <code>/usr/share/groff/current/tmac/zh.tmac</code> ，
+沒有就從 wiki 上下載回去。</p>
+<pre><code class="lang-term">TANET(7)                           NCKU CCNS                          TANET(7)
+
+NAME
+       TANet - 台灣學術網路
+
+DESCRIPTION
+       TANet  為 Taiwan Academic Network，即台灣學術網路， 為中華民國教育部與
+       台灣各大學共同建立的 一個全國性教學研究用網際網路系統。
+
+HISTORY
+       1980 年代中期，教育部引進 BITNET 大學教學研究網路系統，提供  學術界跨國
+       電子  郵件、檔案傳輸等應用服務。1980  年代末期， 教育部科技顧問室（1990
+       年更名為 顧問室）在張進福主任任內  編列經費，委由科技顧問陳文村規劃，補
+       助主要國立 大學建立 校園網路、校際網路。於 1990 年 7 月，教育部電子計算
+       機中心邀集 受補助大學成立「台灣學術網路」，建立以 TCP/IP 通訊協定為基礎
+       之網際網路系統， 為台灣第一個網際網路系統， 也是台灣往後 發展政府、商用
+       網際網路系統之基礎  。1999  年起，教育部推動  中小學使用  ADSL   連線至
+       TANet，讓資訊教育向下扎根， 迄今 TANet 已成為全台灣各級學校網路及資訊教
+       育之平台。
+
+       TANet 初期連接台灣部份的學術單位與研究機構，網路骨幹使用電話 連線，頻寬
+       為 9.6kbps。1991 年 12 月 3 日以 64Kbps 數據專線連接美國 普林斯頓大學的
+       JvNCnet，成為台灣的第一條跨國網路連線。1994 年年初，以 T1  連接架設中的
+ Manual page tanet(7) line 1 (press h for help or q to quit)
+</code></pre>
+<p>之後斷行會在任何中文字斷，不只在空白處；
+還加了避頭尾的規則，不會把標點放到單獨句首。
+我記得以前解過類似的問題，
+那時是去看 <code>zh.tmac</code> 調了哪些選項，
+然後忘了，也沒有寫到 loco 或 man-page 裡。</p>
+<h2 id="斷行警告">斷行警告</h2>
+<p>本來亂斷行也沒關係，只是比較難看而已。
+但難斷行時 groff 會丟警告，
+警告出現過長又無法折行的句子。
+這警告平常也不會出現，
+只會出現在 man 的結果 pipe 到另一程式時候；
+例如你要用 grep 直接搜 tanet 某一 ip：</p>
+<pre><code class="lang-term">$ man tanet | grep 128
+&lt;standard input&gt;:8: warning [p 1, 1.5i]: cannot adjust line
+&lt;standard input&gt;:72: warning [p 2, 0.3i]: cannot adjust line
+&lt;standard input&gt;:699: warning [p 2, 9.8i, div `3tbd111,0&#39;, 0.0i]: cannot adjust line
+&lt;standard input&gt;:2426: warning [p 2, 88.0i, div `3tbd2,1&#39;, 0.0i]: cannot adjust line
+&lt;standard input&gt;:2426: warning [p 2, 88.0i, div `3tbd2,1&#39;, 0.2i]: can&#39;t break line
+&lt;standard input&gt;:2431: warning [p 2, 88.0i, div `3tbd3,1&#39;, 0.0i]: cannot adjust line
+&lt;standard input&gt;:2497: warning [p 3, 5.5i]: cannot adjust line
+&lt;standard input&gt;:2498: warning [p 3, 5.7i]: cannot adjust line
+   │       140.128.1~40                          靜宜大學                  │
+   │       140.128.41~60                         南開科技大學              │
+   │       140.128.61~70                         中國醫藥大學              │
+</code></pre>
+<p>後來 <a href="https://www.ptt.cc/bbs/Linux/M.1517117385.A.76C.html">去 ptt linux 板問，</a>
+但還是自己想到之前好像看過，
+就上面那個 <code>.mso zh.tmac</code> 解決了大半的 warning，
+剩下一些是 table 內排版的 warning，
+就稍微修一下格式解決。</p>
+<h2 id="config makefile">config makefile</h2>
+<p><a href="//github.com/gholk/loco/blob/663614/man/Makefile">之後就寫到 makefile 裡。</a>
+makefile 是個不錯的方式，
+有時要一些工具的選項會忘記，
+或簡單的 config 不知道寫在哪，
+如果是 build 相關的就能放 makefile。</p>
+<p>最後 <a href="//github.com/gholk/loco/commit/6636147a6108e07fa13a9658a49add5d860b90ba">重寫了 tanet、ncku-id 這二份</a> ，
+二份原本都是用 roff 格式寫的，
+重寫成 markdown，
+再用 <a href="//github.com/kapouer/marked-man">marked-man</a> 轉成 roff man-page。</p>
+<p>只是 markdown 沒有定義清單的 dl 格式，
+只能寫成表格，比較不方便。
+就會看到一堆只有二欄的表格。
+一直很猶豫， <em>在 markdown 中我們需要 dl 嗎？</em></p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer src="ext/load-disqus.js"></script>
+
+
+
+
+
+</body></html>

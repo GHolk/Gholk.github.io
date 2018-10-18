@@ -1,0 +1,23 @@
+# vlc 螢幕錄影
+vlc 有螢幕錄影的功能，
+但我用 debian 裝好會報錯，
+因為一些工具被放到 vlc-plugin-access-extra 這個包裡，
+要自己手動裝。
+
+ 1. media
+ 2. convert/save
+ 3. capture device
+ 4. capture mode: Desktop
+ 5. option: 選你要的 fps，預設 1/s 也太慢
+ 6. destination file: 選輸出檔案
+
+<meta property="og:video:url" content="https://youtube.com/embed/xHEIDI2ncss">
+
+<iframe src="https://youtube.com/embed/xHEIDI2ncss">
+<a href="https://youtube.com/xHEIDI2ncss">vlc screen record</a>
+</iframe>
+
+#vlc
+#record
+#debian
+#youtube

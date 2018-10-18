@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" prefix="og: http://ogp.me/ns#">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="c34031328">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="vim, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-09-17T03:00:32.408Z">
+<meta name="keywords" property="og:article:tag" content="lisp,程式語言,括號,go,分號">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="optional-boolean-argument.html" title="可省略的布林值參數">
+<link rel="prev" type="text/html" href="lisp-scheme-defect.html" title="lisp 系語言的缺陷">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<meta property="og:image" content="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<title>if 的語法問題</title>
+</head>
+<body>
+<main><h1 id="if-">if 的語法問題</h1>
+<p>最流行的 if 語法來自 C 語言，
+也就是在圓括號裡放表達式。
+我一直以為圓括號有點多餘，
+明明就是表達式了，為什麼要再括起來？</p>
+<pre><code>if (test()) {
+    puts(&quot;test is true&quot;);
+}
+</code></pre><p>後來發現依絕大多數語言的邏輯，
+表達式也是 statement，
+而 statement 應該要用分號結尾，
+或用換行結尾。
+竟然變成我最討厭的 allman 風格。</p>
+<pre><code>if test()
+{
+    puts(&quot;test is true&quot;)
+}
+
+if test(); {
+    puts(&quot;hey&quot;)
+}
+</code></pre><p>go 語言是沒有括號，但看起來反而不習慣。</p>
+<pre><code>if test() != nil {
+    foo();
+}
+</code></pre><p>還是我大 lisp 好看 <code>&lt;3</code>
+因為要比較就要呼叫函數，自然有括號。
+不像其它語言括號有改變優先順序的歧義，
+在 lisp 只有函數一種，沒有優先權問題。</p>
+<pre><code>(if (= a b)
+    (print &quot;a = b&quot;)
+    (print &quot;a != b&quot;))
+</code></pre></main>
+
+<footer></footer>
+<script src="ext/luser-meta.js" defer></script>
+
+<div id="disqus_thread"></div>
+<script defer>
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+var disqus_config = function () {
+this.page.url = window.location;
+this.page.identifier = window.location.toString().replace(/.*\//,'');
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://gholk-gh.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+</body>
+</html>
+

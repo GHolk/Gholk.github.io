@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" prefix="og: http://ogp.me/ns#">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="vim, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-11-01T14:00:59.182Z">
+<meta name="keywords" property="og:article:tag" content="markdown,marked,git,man-page,blog,javascript">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="comment.html" title=" 留言板">
+<link rel="prev" type="text/html" href="evil-selection-x-window.html" title=" emacs evil 與 x window 選擇文字相通">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<meta property="og:image" content="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title> 幫 marked 加上空格限制</title>
+</head>
+<body>
+<main><h1 id="幫 marked 加上空格限制">幫 marked 加上空格限制</h1>
+<p><a href="http://github.com/GHolk/marked" title="從 marked fork 來改的">我的 markdown</a> 有自訂新語法，
+像刪除線和底線，但如果同一行有二個符號就會自動觸發。
+加上新限制條件符號外要加空白，
+就能避免誤判減號成刪除線。</p>
+<h2 id="[我的 markdown]"><a href="http://github.com/GHolk/marked" title="從 marked fork 來改的">我的 markdown</a></h2>
+<p>考完期中比較閒來幫 marked 功能。
+之前加了 <u>底線</u> 、 <cite>書名號</cite> 、 <s>刪除線</s> 。
+底線就是底線，把原本和星號混用的功能去掉；
+書名號用波浪符，刪除線用減號。</p>
+<p>本來的慣例是二個波浪符是刪除線，
+但我覺得減號比較適合刪除，波浪用書名號。
+而且本來刪除線是用 <code>&lt;del&gt;</code> ，
+del 是日後和 ins 搭配做修改用的 tag。
+我用刪除線多是用來做效果，
+根據 w3c 這應該要用 s，
+也就是不含修改功能的刪除線。</p>
+<p>但語法解析還是舊的，變成只要用了二個減號，
+像 <code>a-b-c</code> 就會被當成刪除線。
+（這篇文章不會因為已經修掉了。）
+因為我 regexp 是下 <code>/-(\S+)-/</code> ，
+只規定減號中不能有空白，像 <code>-this-text-delete-</code> 。
+其它二種也是類似的做法，只是空白要換成波浪符和底線。</p>
+<p>因為是用 javascript 寫的，
+可以 <a href="marked">直接在網頁上試玩</a> 。</p>
+<h2 id="marked 的 lex">marked 的 lex</h2>
+<p>lex 是詞法分析，就是斷詞的步驟，
+把字串拆成 token。
+marked 的斷詞是一個個匹配，
+看是不是超連結、強調等語法元素；
+都沒中就會用 <code>/.*?(?=[-*~_\[\]])/</code> 去匹配，
+也就是把 <code>[]-*~_</code> 以外的字都視為 text，
+然後停下來重新偵測是不是有語法元素。</p>
+<p><a href="http://github.com/GHolk/marked/commit/e25ef2">我把 regexp 改成遇到空白才會停</a> ，
+或中文斷句符號 <code>、，：；。？！</code> 會停。
+（因為 emacs 的 pangu-mode
+在斷句符號後不會加空白 = =）
+而平常碰到語法符號也不會停。</p>
+<h2 id="marked 的 test">marked 的 test</h2>
+<p>marked 有測試，雖然只是簡單的黑箱測試，但還蠻實用的。
+<code>node test</code> 跑完就知道有哪些問題了。
+之前丟 pull request 給 <a href="http://github.com/GHolk/marked-man" title="一個把 marked 的 token render 成 man-page 的程式">marked-man</a> 他就有叫我寫測試。</p>
+<p>測試就是加一個新功能後，寫一個 text 檔有該語法，
+和預期的轉換結果的 html 檔，
+放到 <code>test/new</code> 或 <code>test/origin</code> 。
+（new 好像是放新功能。）
+之後 test 時就會比較這二個一不一樣。</p>
+<p>有時候你加了新功能，舊的 test 就 fail 了，
+這時候就找到 bug 了。
+但我的情況是我加了舊的不相容的語法，
+所以舊的會 fail。</p>
+<p>我本來是想如果加參數 <code>--gfm</code> 可以用原本的版本，
+（也就是預設的 github flavor markdown。）
+但一些選項不會處理，不知道怎麼改，
+現在一些 gfm 會不相容，
+像星號外面也要有空白才能被 parse 成強調。</p>
+</main>
+
+
+<script src="ext/meta-meta.js" defer></script>
+
+
+<div id="disqus_thread">
+<script defer src="ext/load-disqus.js"></script>
+<noscript>
+  Please enable JavaScript to view the
+  <a href="https://disqus.com/?ref_noscript">
+    comments powered by Disqus.
+  </a>
+</noscript>
+</div>
+
+
+</body>
+</html>
+

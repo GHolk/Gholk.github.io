@@ -1,0 +1,450 @@
+# LISP 七日談
+
+![caution!! contain lisp!]
+
+[caution!! contain lisp!]: http://www.lisperati.com/lisplogo_fancy_256.png
+
+起初，神創造七個公理，
+於是有了 lisp。
+
+* quote
+* atom
+* eq
+* cons
+* car
+* cdr
+* cond
+
+> ### [[格林斯潘第十定律]]
+>
+> 任何 C 或 Fortran 程序複雜到一定程度之後，
+> 都會包含一個臨時開發的、不合規範的、
+> 充滿程序錯誤的、運行速度很慢的、
+> 只有一半功能的 Common Lisp 實現。
+
+<script src="ext/toc.js"></script>
+
+<style>
+h1 + p {
+    float: right;
+}
+</style>
+
+## cons
+神先造了 cons，再用 cons 造出世界萬物。
+
+cons 是一種資料結構，也是建構函數，
+有二個欄位，分別叫 car cdr。
+欄位內容可以是任何東西，
+例如 number list function 或另一個 cons。
+
+```lisp
+(setq my-cons (cons 1 "hello")) ; (1 . "hello")
+(car my-cons)  ; 1
+(cdr my-cons)  ; "hello"
+```
+
+
+### 列表
+列表由 cons 構成，有點像資料結構中的 link list，
+每個 cons 在 cdr 裡存了下一個 cons，但只有單向。
+
+而最後一個 cons 的 cdr 是一個特殊的值 nil，
+用來標示列表結束。
+
+```lisp
+(1 . (2 . (3 . nil)))  ; dot pair 的寫法
+(1 2 3)                ; list 的寫法
+```
+
+而一個空表則直接表示成 nil。
+想像只有一個元素的表是 `(1 . nil)` ，
+則空表就是 `nil` 。
+
+另外這也造成對一個表取 cdr，
+即是取得除首去元素的子列表。
+
+```lisp
+(1 . (2 . (3 . nil)))
+(1 2 3)
+(car (1 . (2 . (3 . nil))))  ; (2 . (3 . nil))
+(car (3 . nil))              ; nil 也就是空表
+```
+
+### 樹
+既然我們有了列表，可以在列表裡存另一個列表，
+形成樹的結構。
+
+```lisp
+(1
+ 2
+ (1 2)
+ (3
+  (4 5)
+  (5 6 7))
+ 5)
+```
+
+附錄： [nil 的問題](#nil 與 false)
+
+## 函數
+神說，函數是好的，於是便不用那算符，只剩餘函數。
+
+### 括號的歧義
+
+## S 表達式
+神看那程式和列表相像，就用列表把程式給表示了。
+
+### 控制結構
+神說 s 表達式是好的，就用 s 表達式表達控制結構。
+
+函數是先對參數求值，再把求值結果傳入函數；
+控制結構則沒有一定的做法。
+這些求值順序和函數不同的，稱為 **special form** 。
+
+同為 s 表達式，讓控制結構看起來很像函數，
+但他們本質仍是不同的。
+
+例如 and or 如果是 [[短路求值]] 的則屬 special form，
+也就是先看第一個是否為 true，若有需要才對第二個求值。
+if cond 也都屬 special form。
+
+    (if (= a b)
+        (+ c (* a 2))
+        (+ c a b))
+
+    (cond
+        ((< x 10) 1)
+        ((< x 20) 2)
+        ((< x 30) 3)
+        (t 4))
+
+
+## 迴圈與遞迴
+神說，神不需要迴圈。
+
+一般程式語言有一種結構叫迴圈，
+用來重複執行直到條件滿足。
+
+但迴圈並不必要，遞迴可以實現迴圈的功能，
+甚至更多。所以 lisp 沒有迴圈；
+迴圈作為一種巨集形式存在。
+
+
+```lisp
+(defun while (test do)
+    (if (test)
+        (progn 
+            (do)
+            (while test do))))
+```
+
+```js
+function fwhile(test, todo) {
+    if (test()) {
+        todo()
+        fwhile(test, todo)
+    }
+}
+
+let x = 0
+fwhile(
+    () => x < 10,
+    () => {
+        alert(x)
+        x++
+    }
+)
+```
+
+### 遞迴與尾端遞迴
+尾端遞迴是遞迴的一種特殊型式。
+特色是只需要追蹤固定數量的變數，和迴圈類似。
+
+可以最佳化成在常數空間、一次多項式時間內完成，
+也就和迴圈相同。
+
+```lisp
+;f1 f2 counter
+(fib 0 1 5)
+(fib 1 1 4)
+(fib 1 2 3)
+(fib 2 3 2)
+(fib 3 5 1)
+(fib 5 8 0)
+5
+```
+
+```js
+let f1 = 0
+let f2 = 1
+for (let i=5; i>0; i--) {
+    let nextF1 = f2
+    let nextF2 = f1 + f2
+    f1 = nextF1
+    f2 = nextF2
+}
+```
+
+```lisp
+(fib 5)
+(+ (fib 4) (fib 3))
+(+ (+ (fib 3)
+      (fib 2))
+   (+ (fib 2)
+      (fib 1)))
+(+ (+ (+ (fib 2)
+         (fib 1))
+      (+ (fib 1)
+         (fib 0)))
+   (+ (+ (fib 1)
+         (fib 0))
+      0))
+```
+
+
+## 語法樹
+lisp 把程式也看成一個表。
+例如 `(subst (list a b c) a d)` 本身是一份程式，
+也能看成一個 list，其中第二個元素也是一個表。
+
+所以在 lisp 中寫 macro 很容易。
+在其它語言中，要寫 macro 要手動操作語法樹，
+極為麻煩。
+
+```js
+// sweet.js
+syntax let = function (ctx) {
+    let ident = ctx.next().value
+    ctx.next() // eat `=`
+    let init = ctx.expand('expr').value
+    return #`
+        (function (${ident}) {
+            ${ctx} // <2>
+        }(${init}))
+    `
+}
+```
+
+```js
+let x = y
+alert(x+6)
+f(x)
+alert(x*3)
+
+/* produce */
+
+(function (x) {
+    alert(x+6)
+    f(x)
+    alert(x*3)
+}(y))
+```
+
+### quote
+但這裡有個問題，lisp 程式中的那些 if and map 要怎麼表示？
+表示成字串好像可以，但那字串又要怎麼辦？
+如果函數和變數在同一命名空間，
+那 map 可以表示成函數的值，
+但 if and 這些不屬函數的 special form 怎麼辦？
+
+所以發明了 quote 這個系統，
+被 quote 起來的可以視為一段 hash 值。
+（在傳統 lisp 中是記憶體位置。）
+
+```lisp
+(quote s)
+;; 簡寫為
+'s
+```
+
+```lisp
+'(if (= a b)
+     a
+     b)
+```
+
+被 quote 後就不會被求值，
+quote 的結果可以視為一個 **命名空間** 中的一個名字，
+可以在一個 **環境** 被 eval 求值。
+
+### eval
+eval 是一個特殊函數，他 **求值** 一個 list。
+
+quote 可以 quote 名字，也能 qoute list，
+被 quote 的 list 內容不會執行，
+都會視為 symbol。
+
+```lisp
+(setq my-list '(concat "hello, " "world!"))
+(car my-list)    ; 'concat
+(eval my-list)   ; "hello, world!"
+(eval (subst 'concat 'print my-list))  ; 把 my-list 中的 concat 換成 print
+```
+
+### macro
+所以對 lisp 來說，macro 就是收一個 list，
+然後改啊改啊改，再回傳一個 list。
+
+相比其它語言只有字串代換的簡單 macro，
+不然就是要操作複雜的語法；
+lisp 的 macro 如此簡單，
+就是因為 lisp 的語法節單所致。
+
+
+## 副作用
+lisp 函數內是一個或多個 expression，
+一般一個就夠了，
+如果有多個，也會依序執行。
+
+```lisp
+(defun my-function (x y)
+    (+ x y)                   ; 沒有意義的 expression
+    (+ (* x 2) (* y 6))       ; 沒有意義的 expression
+    (setq x 18)               ; 這個 expression 有意義，因為有副作用
+    (* (/ x 2) (- 6 y)))      ; 這個有意義，因為會被 return
+```
+
+除非有 **副作用** ，
+否則只有最後一個 expression 有意義，
+因為其它都不會被 return。
+
+
+## 附錄
+
+### nil 與 false
+傳統 lisp 中 nil 和布林值 false 是用同一個符號表示。
+但這樣有個問題，要分辨 **樹** 中的 nil 是表示
+false 還是空表有點麻煩。
+
+```lisp
+(eq nil ()) ; t
+((1 3 5)
+ (t t nil)  ; 這個 nil 是表示空表還是 false？
+ ((1 2)     ; () 和 nil 是同義
+  (3)
+  ()))
+```
+
+### 函數與變數
+傳統 lisp 區分函數與變數的命名空間，
+就和 C 語言差不多。
+所以上面一些代碼會無法運行 :P
+
+主流的 common lisp 依然如此，
+而 scheme 則不區分。
+
+在區分的 lisp 實作中，
+通常要將函數做為值傳遞時，
+需要用一種特殊的 quote 寫法，
+被暱稱為 *function quote* 。
+
+```lisp
+(defun square (x)
+    (* x x))
+
+(map #'square
+     '(1 2 3 4 5))
+;; (1 4 9 16 25)
+
+(map (lambda (x) (* x x))
+     '(1 2 3 4 5))
+```
+
+
+### 作用域
+作用域體現在程式如何處理 **自由變數** 這個問題上。
+自由變數在呼叫時決定是 **動態作用域** ，
+在定義時決定是 **詞法作用語** 。
+
+```lisp
+(defun user-say (sentence)
+    (format "%s: %s\n" 
+            user        ; user 在這個 scope 中沒有定義，
+                        ; 也就是沒有被綁定某一個值，稱為自由變數。
+            sentence))
+```
+
+傳統 lisp 是動態作用域，
+主要因為傳統 lisp 多半直接把函數看成一個 list，
+直接用類似 eval 的方式執行。
+為了方便，當發現自由變數時，
+直接在執行時找當然是最簡單的作法。
+
+詞法作用域的作法多是在定義函數時
+把定義的 **環境** 作一份快照，
+一個函數就是由快照和函數體二部份組成。
+函數執行時，遇到自由變數就直接回環境中找。
+
+
+### 介紹文案：LISP 一日談
+提起 lisp 你會想到什麼？
+古董級的語言？人工智慧？大量的括號？
+lisp 是一門函數導向、超編程導向的語言。
+函數導向意味抽象化過程，
+超編程則意味強大的巨集系統。
+
+許多人曾說，接觸 lisp 能改變你的編程觀念，
+讓你重新思考什麼是語言，什麼是良好的結構。
+lisp 語言古老又新穎，語法彈性強大。
+百聞不如一見，想知道 lisp 究竟有什麼魔力，
+歡迎親自來 CCNS 的定期聚；
+let's talk in lisp!
+
+* `2017-10-19 19:10~21:00`
+* 成功大學資訊工程舊系館 4202 教室 (1F)
+* <https://ccns.kktix.cc/events/ccns-lisp-1-day>
+
+
+### setq 與 setf
+最初，lisp 只有 set 函數，
+set 函數設置一個符號的值，
+被賦值的必須是 **符號** 。
+
+
+```lisp
+(set 'foo "bar")        ; 注意，foo 必須被 quote 了
+
+(set 'a 'b)         ; a 的內容是另一個符號 b
+(set a "bbb")       ; 這裡 a 沒有被 quote，所以會被 eval 成 b
+(print b)           ; bbb
+```
+
+
+#### set quote
+
+但人們覺得每次設值都必須 quote 太麻煩了，
+於是有了 setq，為一個巨集，
+會自動把名稱 quote。
+
+```lisp
+(setq hello "world")
+;; 被改寫為
+;; (set (quote hello) "world")
+```
+
+
+#### set field
+
+然後，有了對物件的欄位賦值的函數 setf。
+模仿 `myObj.car = "my car"` ，
+寫成 `(setf (car myObj) "my car")` 。
+
+當然也是用巨集達成的，
+而 setf 中的 `(car my-cons)` 並不被執行，
+只是一種便於閱讀的寫法。
+
+```lisp
+(setf (car my-cons) "the my cons car")
+;; 相當於
+;; (set-car my-cons "the my cons car")
+(print (car my-cons))  ; "the my cons car"
+```
+
+### [投影片](lisp-7-day.sozi.html)
+
+<iframe src="lisp-7-day.sozi.html"></iframe>
+
+#lisp
+#筆記
+#ccns

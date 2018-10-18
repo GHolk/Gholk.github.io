@@ -1,0 +1,87 @@
+# CCNS 前後的程式開發
+ccns 期末社聚，
+各社員都介紹一下最近幹了什麼，
+我其實是從開始學程式後算起。
+對 [marked] 貢獻 fork、
+loco 一些自用程式、部落格系統、
+[pttbackup] 、專題 [spexif] 。
+原本是簡單一份 [hackmd] ，想說整理成網頁。
+
+[pttbackup]: ptt
+[spexif]: spexif/doc/report.html
+[hackmd]: https://hackmd.io/s/Skxy6YxSM
+
+
+## marked
+一直想找一個 markdown converter，
+再自己改，加入自定義的語法。
+最後選了 [marked] 。
+（這個好像不是很流行，不過能用就好。）
+
+自定義了一些語法，
+然後加嚴了強調的星號旁必須留空格。
+和圖片 url 認定，讓 reference 可以含中括號，
+把 regexp 設成 `\[(.*?)\]: ?([^\s]*)\s"(.*)"` ，
+配合貼圖必須附來源的圖床，像 flickr。
+[可以直接在網頁裡試用。][try marked]
+
+```markdown
+[image]: https://i.imgur.com/DjwiJDR.jpg
+[![image]]: https://i.imgur.com/DjwiJDR
+```
+
+[try marked]: marked/#Browser
+[marked]: //github.com/gholk/marked
+
+## [loco]
+這個 repo 是放一些 dot file 和自用的小程式，
+以前創的時候不知道大家會取名 dot-file，
+因為多發行版會把一些設定放在 `~/.local`，
+像 `~/.local/bin` ，就取諧音 loco。
+大多是 shell script，輸入法也放在這裡。
+
+像在 x window 裡廣播的 xwall，
+和用 crontab 定時提示休息。
+xwall 是用 zenity 做的，
+一個能方便顯示視窗的程式。
+
+剛做了一個 aclp.sh，能簡化 xsel 的介面。
+
+```sh
+clipboard # 印出目前剪貼簿內容
+clipboard hello world # 把內容換成 hello world
+df | clipboard # 把 df 輸出到 clipboard
+```
+
+[loco]: //github.com/gholk/loco
+
+
+## [cjns]
+倉頡新星，彷倉頡之星的倉頡教學軟體，網頁版。
+之前有想過重構，但看到初學 js 寫的 code 實在太噁了，放棄。
+
+有做成離線版，可以下載放在本機用 `file://` 開。
+之後再改成 service worker 的離線版好了，更方便。
+
+
+## blog
+這個部落格系統，加了 <./atom.xml> ，
+能以 atom 方式訂閱，
+另外連首頁也改成用 js 從 atom 抓資料，
+而不是把內容都寫到 index.html。
+
+## [spexif]
+在測量系做的專題，
+能上傳照片、修改 exif 的 gps 資訊。
+在這學期加了 service worker 的功能。
+
+## [pttbackup]
+寫了一些腳本來備份 ptt 文章，
+是備份 web 版的 html。
+備份之後直接存到 github，
+可以用 github page 看。
+現在數量有點多，所以會跑很慢。
+
+#blog
+#ccns
+#程式

@@ -1,0 +1,197 @@
+# 平差作業三
+在直角座標與經緯度座標間轉換的誤差傳播，
+使用 wgs84 橢球。
+
+## 直角座標與經緯度座標的轉換關係
+
+```math
+x = (N + h) cos \phi cos \lambda \\
+y = (N + h) cos \phi sin \lambda \\
+z = (N (1-e^2) + h) sin \phi
+```
+
+φ λ h 分別為經度、緯度、橢球高，
+而 N 為當地 **卯酉圈** 半徑，
+也就是在該點上與子午圈截面垂直的切面。
+
+N 的公式如下：
+
+```math
+N = \frac a {\sqrt{ 1 - e^2 sin^2 \phi }}
+```
+
+```matlab
+% wgs84 參數
+global major_axis flattening first_eccentricity;
+major_axis = 6378137;
+flattening = 1/298.257223563;
+first_eccentricity = sqrt(-flattening^2 + 2*flattening);
+
+function N = radius_N(phi)
+  global major_axis first_eccentricity;
+  a = major_axis;
+  e = first_eccentricity;
+  N = a ./ sqrt(1 .- e^2 * sin(phi).^2);
+end
+```
+
+## 誤差傳播
+給定一點直角座標 
+`(1241581.343, -4638917.074, 4183965.568)` ，
+變方協變方矩陣為：
+
+```math
+\Sigma_r = \begin{bmatrix}
+9.0 & -0.1 & 0.2 \\
+-0.1 & 8.0 & -0.2 \\
+0.2 & -0.2 & 9.1
+\end{bmatrix} \times 10^{-4} m^2
+```
+
+以誤差傳播公式由 x y z 求出 φ λ h 的變方協變方矩陣，
+以矩陣式來看，需要先求出 xyz 與 φλh 的線性關係式，
+
+```math
+A
+\begin{bmatrix}
+x \\ y \\ z
+\end{bmatrix}
+= \begin{bmatrix}
+\phi \\ \lambda \\ h
+\end{bmatrix}
+\\
+
+\Sigma_g = A^{-1} \Sigma_r ( A^{-1} )^T
+```
+
+雖然實際二者非線性關係，但可以用偏微分後線性化近似。
+但線性化要有初始值，以下先試著算出 φλh 的初始值。
+
+
+## 使用 proj.4 計算經緯度初始值
+[proj.4] 是 [OSGeo] 的專案，
+可以在經緯度、直角座標、各地圖投影間轉換。
+這裡始用 proj.4 由 XYZ 計算 φλh 的值。
+
+[proj.4]: http://proj4.org/
+[OSGeo]: http://www.osgeo.org/
+
+```term
+cs2cs +proj=geocent +datum=WGS84 +to \
+      +proj=latlong +ellps=WGS84 +datum=WGS84 <<CS
+1241581.343 -4638917.074 4183965.568
+CS
+
+75d0'58.613"W   41d15'18.211"N 312.391
+```
+
+得到對應的經緯度是 `(75°0′58.613″W   41°15′18.211″N 312.391)` ，
+或轉成十進位與地理緯度 `(φ,λ,h) = (48.7449413888889, -75.0162813888889, 312.391)` 。
+
+## 偏微分
+接著計算偏微分，三條公式分別對 φλh 偏微分，
+得到線性化的矩陣。這裡使用數值微分。
+
+```matlab
+function derive_function = derive (function_handle, interval = 0.005)
+  derive_function = @(x) (
+    function_handle(x.+interval) - function_handle(x.-interval)
+  ) ./ (interval * 2);
+end
+
+init_degree = [48.7449413888889, -75.0162813888889, 312.391];
+
+geodxyz = {};
+geodxyz{1} = @(f,l,h) (radius_N(f)+h) .* cosd(f) .* cosd(l);
+geodxyz{2} = @(f,l,h) (radius_N(f)+h) .* cosd(f) .* sind(l);
+geodxyz{3} = @(f,l,h) (radius_N(f).*(1-first_eccentricity^2)+h) .* sind(f);
+
+geodpart = zeros(3,3);
+for i=1:3
+  geodpart(i,1) = derive(@(f) geodxyz{i}(f, init_degree(2), init_degree(3)), 0.000001)(init_degree(1));
+  geodpart(i,2) = derive(@(l) geodxyz{i}(init_degree(1), l, init_degree(3)), 0.000001)(init_degree(2));
+  geodpart(i,3) = derive(@(h) geodxyz{i}(init_degree(1), init_degree(2), h))(init_degree(3));
+end
+```
+
+最後得到線性化的設計矩陣 A：
+
+```math
+A = \begin{bmatrix}
+-2.2080 \times 10^{4} & 7.1151 \times 10^{4} & 1.7049 \times 10^{-1} \\
+8.2496 \times 10^{4} & 1.9043 \times 10^{4} & -6.3699 \times 10^{-1} \\
+7.1546 \times 10^{4} & 0.0000 & 7.5178 \times 10^{-1}
+\end{bmatrix}
+```
+
+## 經緯度的變方協變方矩陣
+有了線性化的設計矩陣，
+就能由誤差傳播公式計算得未知數的變方協變方矩陣。
+
+```math
+A^{-1} = \begin{bmatrix}
+-1.7451 \times 10^{-6} & 6.5202 \times 10^{-6} & 5.9204 \times 10^{-6} \\
+1.3115 \times 10^{-5} & 3.5102 \times 10^{-6} & -7.2830 \times 10^{-14} \\
+1.6608 \times 10^{-1} & -6.2052 \times 10^{-1} & 7.6674 \times 10^{-1}
+\end{bmatrix}
+\\
+\Sigma_g = A^{-1} \Sigma_r ( A^{-1} )^T = \begin{bmatrix}
+6.6917 \times 10^{-14} & -1.9453 \times 10^{-15} & 5.7800 \times 10^{-10} \\
+-1.9453 \times 10^{-15} & 1.6374 \times 10^{-13} & 4.4066 \times 10^{-10} \\
+5.7800 \times 10^{-10} & 4.4066 \times 10^{-10} & 8.9402 \times 10^{-4}
+\end{bmatrix}
+```
+
+其中 φ λ 因為是經緯度，
+經緯度的 1° 遠比公尺大，變方較小是正常的。
+而橢球高 h 的單位也是公尺，
+變方就和原本的 xyz 變方差不多。
+
+## 標準差
+變方協變方矩陣中的對角線元素，
+是該隨機變數的對自身的變異數，
+即為該變數標準差的平方。
+
+```math
+\Sigma_g = \begin{bmatrix}
+\sigma_\phi^2 & \ddots \\
+\ddots & \sigma_\lambda^2 \\
+       &    & \sigma_h^2
+\end{bmatrix}
+\\
+\sigma_\phi =    2.5868 \times 10^{-7} ° \\
+\sigma_\lambda = 4.0465 \times 10^{-7} ° \\
+\sigma_h =       2.9900 \times 10^{-2} m
+```
+
+若要化算到區域座標系統，也就是 E N H 座標系統，
+高程方向 h 不用變化，但經緯度要由角度轉成距離，
+也就是乘上該點上單位角度對應的公尺距離：
+
+```math
+R = a \frac {( 2 - f )} 2 = 6367445 m \\
+\sigma_N = 2 \pi R \frac {\sigma_\phi} {360 °} = 0.02875 m \\
+\sigma_E = 2 \pi R cos \phi \frac {\sigma_\lambda} {360 °} = 0.02965 m \\
+\sigma_H = \sigma_h                            = 0.02990 m
+```
+
+原本算出來發現 E N H 裡只有 H 與原本的 x y z 座標精差不多，
+E N 的標準差差很多，覺得不太對，
+結果找到二個錯誤：
+
+ 1. 原本座標轉換後是經度、緯度、橢球高，順序應該是 λφh，
+    但計算上忘了換成 φλh。
+
+ 2. 但上面那個原因應該不會讓量級差太多，後來又發現我是用角度，
+    所以換成距離時不能直接乘半徑，要先乘 π / 360 換成弧度。
+
+總之修正後結果和我預期的差不多，
+三個方向誤差相當，也和原本的 xyz 誤差相當。
+
+<script src="ext/header-nctu.js?execute&editable"></script>
+
+<link rel="stylesheet" href="ext/paper.css">
+
+#adjustment
+#nctu
+#report

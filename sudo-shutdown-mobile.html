@@ -1,0 +1,83 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-01-08T03:38:27.039Z">
+<meta name="keywords" property="og:article:tag" content="手機,wifi,ssh,sudo,linux,config">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="javascript-variable-hoisting-state.html" title="js 中的變量提升與函數狀態">
+<link rel="prev" type="text/html" href="puff-girl-cinderella.html" title="劉亦菲：泡芙女孩">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title>免密碼 sudoer 關機</title>
+</head>
+<body>
+<main><h1 id="免密碼 sudoer 關機">免密碼 sudoer 關機</h1>
+<p>debian shutdown 命令本來可以在本機由任何使用者執行，
+也就是只要坐在電腦前，任何帳號都能直接關機。
+但如果在床上用手機用 ssh，
+要從手機關機就要用 sudo，要打密碼麻煩。
+所以就用 ssh 公私鑰免密碼，再把 sudo 也設成免密碼。</p>
+<p>不知道 shutdown 的機制是怎麼做的，
+shutdown 好像是一個符號連結到 systemd，
+由於是符號連結，權限是 777；
+systemd 也是 <code>a+x</code> ，大家都能看系統狀態，
+shutdown 也就任何使用者能都能執行。</p>
+<p>但 systemd 內部被以 shutdown 執行時，
+會判斷執行者的權限，如果是從遠端像 ssh 登入，
+就會報錯然後退出：</p>
+<pre><code>Failed to set wall message, ignoring: Interactive authentication required.
+Failed to call ScheduleShutdown in logind, proceeding with immediate shutdown: Interactive authentication required.
+</code></pre><p>從遠端得要用 sudo，但我遠端已用公私鑰登入，不用打密碼。
+如果還要用 sudo 關機，就還得打一次密碼。
+sudo 要打一次密碼真有點麻煩，
+有時候用 ssh 登入只想執行個 sudo 命令，
+就要登入打一次密碼，sudo 再打一次。</p>
+<p>ssh 用公私鑰就不用密碼，
+sudo 則可以用 visudo 改 <code>/etc/sudoers</code> ，
+sudo 本來能指定能執行的指令，
+加 <code>NOPASSWD:</code> 選項可以指定不用密碼。
+我是創一個群組，指定該群組可以不用密碼執行 <code>sudo shutdown</code> 。</p>
+<pre><code># %group  host runspec  option:  path
+%shutdown ALL=(ALL:ALL) NOPASSWD:/sbin/shutdown
+</code></pre><p>我讀 sudoers 的手冊讀半天，她語法是用 EBNF 寫，
+開頭有稍微簡介一下 EBNF 的語法，
+但沒有看，反正就和 regexp 有點像。</p>
+<p>中間卡很久，visudo 如果格式錯誤，
+會報錯不讓你存檔，就試半天：</p>
+<ol>
+<li>runspec 不知道要設什麼，
+後來就抄原本就有的 sudo 群組設定。</li>
+<li>shutdown 原本不知道要用絕對路徑，
+後來無意間才試對。</li>
+</ol>
+<p>現在用 VXConnectBot 設一個主機，
+是連到我宿網的 ip，連上後直接執行 <code>sudo shutdown +5</code> 。
+<code>+5</code> 是怕按錯，可以有五分鐘時間再取消。
+另外 vx connect bot 的登入後執行，
+不是 ssh 直接打在最後的指令，
+是一樣會開 interactive shell，
+還有在命令中寫 enter，才會送出 enter，
+執行完也不會退出。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer src="ext/load-disqus.js"></script>
+
+
+
+
+
+</body></html>

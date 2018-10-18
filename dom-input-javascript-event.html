@@ -1,0 +1,112 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-03-06T09:49:19.895Z">
+<meta name="keywords" property="og:article:tag" content="遊戲,html,javascript,輸入法">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="bbsjs-prototype-bookmarklet-user-js.html" title="bbsjs 原型 user.js 及小書籤">
+<link rel="prev" type="text/html" href="meme-reporter-youtuber-news.html" title="如何製做網紅新聞">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title>讀取 html 輸入元素中的資料</title>
+</head>
+<body>
+<main><h1 id="讀取 html 輸入元素中的資料">讀取 html 輸入元素中的資料</h1>
+<p>html 中有些 form 元素像 input 是設計來讓使用者輸入的，
+使用者輸入的資料會存在 value 屬性裡。
+至於要什麼時候 <em>觸發</em> ，
+有用額外按鈕、偵測 Enter 鍵、偵測新輸入的字元，
+但都不太直覺。</p>
+<p>主要問題是輸入的東西是存到一個元素的屬性，
+在 C 中可能是按 Enter 會觸發 scanf，
+但 html 中並統一一個 <em>完成輸入</em> 的概念。
+只有一堆事件給你偵測，而且沒有一個是最好的。</p>
+<form id="client-test">
+<input name="test-text" type="text">
+</form>
+
+<script>
+const testForm = document.querySelector('#client-test')
+const testInput = testForm.querySelector('input')
+</script>
+
+<h2 id="聽 input 事件">聽 input 事件</h2>
+<p>當使用者在打字，也就是 input 元素的內容一變，
+就會發出 input 事件。
+可以每次新輸入就讀取；
+如果不想太頻繁，可以用空白鍵模擬 Enter，
+也就是如果輪入的是空白，就發出訊息。</p>
+<script>
+testInput.addEventListener('input', function (input) {
+    if (input.data == ' ' ||
+        / $/.test(this.value)) alert('click space!\n' + this.value)
+})
+</script>
+
+<h2 id="聽 keydown Enter 事件">聽 keydown Enter 事件</h2>
+<p>上面為什麼用空白？因為不能用 enter。
+input 元素的內容不能是 Enter。
+所以按 Enter 不會輸入 Enter，
+也不會觸發 Enter 事件。</p>
+<p>有另一組事件是 keydown，就聽得到 Enter 事件。
+但我不太喜歡這個事件，
+因為感覺相對 input 元素是另一個系統。
+除了 enter，鍵盤其它按鍵也都抓得到。</p>
+<p>所以我才會聽 input 事件輸入是 space 的。
+中文不太會用空白鍵，英文才會，
+所以中文可以聽 input 就好。</p>
+<script>
+testForm.addEventListener('submit', function (testSubmit) {
+    alert('form submit!\n' + this.elements['test-text'].value)
+    testSubmit.preventDefault()
+})
+</script>
+
+<h2 id="聽 form submit 事件">聽 form submit 事件</h2>
+<p>另一個比聽空白還奇葩的作法是聽 form submit。
+瀏覽器多會做一個功能，
+當在表單最後一個元素按 Enter 時，就會自動送出表單。
+所以如果你的 input 在 form 裡，
+可以直接聽 form 的 submit 事件。</p>
+<script>
+testInput.addEventListener('keydown', function (press) {
+    if (press.key == 'Enter') alert('click enter!\n' + this.value)
+})
+</script>
+
+<h2 id="其它">其它</h2>
+<p>當然還有很多事件可以用：
+像 blur 是結束輸入後，也就是元素失去焦點時。
+change 則是失去焦點且內容改變時。 
+但用 change 反而不太直覺，
+輸入完後要點其它輸入框或頁面空白處才會觸發。</p>
+<p>我在做 <a href="cjns/">倉頡新星</a> 就是用 input 和空白，
+因為倉頡輸入法就是用空白，且我不喜歡用 keydown。</p>
+<p>之前一個外國人寫的
+<a href="https://horsetoast.github.io/TypingNinja/">中文輸入法遊戲</a> ，
+一開始聽 keyup，結果我用輸入法時按 Enter 好像不會送出 keyup，
+後來他改用 keydown 就好了。
+keydown 對中文輸入法較友好。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer src="ext/load-disqus.js"></script>
+
+
+
+
+
+</body></html>

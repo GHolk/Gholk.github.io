@@ -1,0 +1,27 @@
+# todo list 的要求
+最近覺得需要一個 todo list，
+要求和我的部落格差不多，要能插入 html；
+但因為是 todo list，還要求要操作簡便。
+hackmd 好像符合要求，試著用看看。
+
+最好還是能自架網站，能嵌入 html。
+hackmd 只開放有限 tag，我希望能自由插入，
+想日期就加 `<input type="date">` ，
+想連結就 `<iframe>` ，
+再加上 wiki 的形式最好。
+
+## [hackmd/IwVgZgLA7BIMYFoBMA2KBOBEAcBTJC26IuCAhgCZiQwVxlIhA===](https://hackmd.io/IwVgZgLA7BIMYFoBMA2KBOBEAcBTJC26IuCAhgCZiQwVxlIhA===)
+<iframe src="https://hackmd.io/IwVgZgLA7BIMYFoBMA2KBOBEAcBTJC26IuCAhgCZiQwVxlIhA===">
+你的瀏覽器不支援 iframe
+</iframe>
+
+<style>
+iframe {
+height: 40em;
+}
+</style>
+
+#hackmd
+#todo
+#wiki
+#blog

@@ -1,0 +1,77 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-02-05T05:45:45.665Z">
+<meta name="keywords" property="og:article:tag" content="discord,im,gui,x-window,config">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="line-new-chrome-app-in-store.html" title="line 換新 chrome app">
+<link rel="prev" type="text/html" href="dom-event-many-element.html" title="一次聽多個元素的事件">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title>調整 discord 視窗大小</title>
+</head>
+<body>
+<main><h1 id="調整 discord 視窗大小">調整 discord 視窗大小</h1>
+<p>discord 視窗忽然不能調小於某一寬度，
+便 google 到 raddit 上有人抱怨，
+discord 團隊就迅速出來滅火道歉，並提供解法。
+在 <code>~/.config/discord/settings.json</code> 加入
+<code>&quot;MIN_WIDTH&quot;:0, &quot;MIN_HEIGHT&quot;:0</code> 即可。</p>
+<p>主要是一些視窗介面都有自動調視窗大小的功能，
+拖曳視窗到滑鼠碰到螢幕左或右邊界為止，
+視窗就會調成半個螢幕寬一個螢幕高，
+右上或左下則會變成半高半寬。
+就能在剩下的螢幕做事，
+還能看到原本的視窗。</p>
+<p>以前習慣有事會把 discord 拖到側邊或側上，
+昨天 discord 忽然不能這樣調，覺得不方便。
+就 google 找解法。
+看到 <a href="https://redd.it/6shs9n">raddit 上有串</a> ，
+discord 團隊表示是因為縮太小排版會亂掉，
+所以有設最小高寬。</p>
+<p>raddit 就一片罵聲，說亂掉是我的事，
+你不應該限制我怎麼調整視窗。
+那個開發者也有提供解法，
+在 <code>settings.json</code> 裡設 MIN_HEIGHT MIN_WIDTH 為 0。
+總之看來之後會解除，或出現適合視窗極小時的排版。</p>
+<pre><code class="lang-json">{
+  &quot;IS_MAXIMIZED&quot;: false,
+  &quot;IS_MINIMIZED&quot;: false,
+  &quot;MIN_HEIGHT&quot;: 0,
+  &quot;MIN_WIDTH&quot;: 0,
+  &quot;trayBalloonShown&quot;: true,
+  &quot;WINDOW_BOUNDS&quot;: {
+    &quot;x&quot;: 344,
+    &quot;y&quot;: 29,
+    &quot;width&quot;: 940,
+    &quot;height&quot;: 736
+  }
+}
+</code></pre>
+<p>discord 縮小後變很窄，
+最好把右邊的成員名單收合，
+可以空出多一點空間顯示訊息。</p>
+<p><a href="http://www.flickr.com/photos/135370742@N08/28311500649"><img src="http://farm5.staticflickr.com/4745/28311500649_1da7f33d24.jpg" alt="discord-member.png"></a></p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer src="ext/load-disqus.js"></script>
+
+
+
+
+
+</body></html>

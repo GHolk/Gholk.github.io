@@ -1,0 +1,102 @@
+# dt13 使用小感
+thinkpad 總算到了，配件和我選的一樣很少，
+決定重裝系統，沒想到裝 debian 時有些問題，
+硬體是 thinkpad 尊爵不凡特規，
+也有些問題，整體是很順，總之就邊用邊解吧。
+
+## 配件
+在選規格的時候，我幾乎什麼配件都沒選，
+果然什麼都沒有，只有一個充電座。
+害我一開始有點冏，開機到 linux 抓不到 wifi 驅動，
+又沒有網路孔，也沒有 usb 轉乙太網路的，
+什麼都不能做。
+
+機身有三個 usb、一個 type c、
+一個 OneLink+ 接口、
+一個 HDMI、一個讀卡機。
+
+
+## 網路
+裝 debian 時才發現 wifi 驅動抓不到，要我手動載。
+google 後發現 reddit 上有人介紹過
+debian 在 thinkpad 13 的安裝，就有提到要手動載驅動。
+其實只是放在 debian 的 non-free repo，
+沒有放到 netinst 的光碟裡面而已。
+
+後來是用 [r2] 的完整版 debian 隨身碟裝好，
+r2 最近在試 debian，在 debian 上編譯 bbs。
+一樣選 xfce，事後再用 usb 把 [wifi 驅動][iwlwifi] 放進去。
+之後 `apt install ./firmware-iwlwifi_20171130-3_all.deb`
+wifi 就能動了。
+
+[r2]: //github.com/holishing "夢之大地站長，bbs 專家"
+[iwlwifi]: https://packages.debian.org/stretch/firmware-iwlwifi
+
+usb 轉網路孔則比較晚，試用 [HexRabbit] 確定能用，
+就去北門走一圈，在宏華資訊買了個 500 的 type c 轉 ethernet。
+在日本橋有 200 多的，後來看好像只有 usb 2.0 的速度，就沒有買。
+
+[HexRabbit]: //github.com/HexRabbit "現任 ccns 社長"
+
+## 小紅點
+小紅點裝了 xinput 就抓到了，只是速度還是有點慢，
+也沒辦法實現輕拍點擊。
+在虛擬檔案系統應該有個文件可以設定，
+`/sys/devices/platform/i8042/serio?/press_to_select` ，
+但我的找不到；懷疑是 thinkpad 後來把輕拍點擊的功能拿掉了。
+
+後來用 xinput 設定速度，
+`xinput --list` 可以看各裝置的 id，
+`xinput --list-props $id` 可以看有什麼能設的，
+再依屬性 id 設定 `xinput --set-prop $device_id $prop_id $value` 。
+我就把觸控板和小紅點的速度都設到最快，也就是 1.0。
+再把 [設定腳本] 掛到 `/etc/Xsession.d/` 下面。
+
+[設定腳本]: //github.com/GHolk/loco/blob/master/dt13.xinput
+
+
+## 功能鍵 fn
+thinkpad 的 fn 鍵和雙 A 的不同，
+少了關螢幕鍵，但把音量、亮度都做到上面去了；
+不像之前 ferrari one 音量是 `fn 上下鍵` 、亮度是 `fn 上下鍵` 。
+但少了關螢幕鍵蠻不方便的，不能開機、關螢幕、上床滑手機。
+目前是發現鎖定螢幕後會自動關螢幕，但還是要先登人才能鎖定。
+
+比較驚訝是 fn 鍵竟然被 linux 抓到了，
+其它電源鍵也被抓到了。
+其實以前 acer 好像也可以，
+只是一些鍵是像 F6 是直接控制螢幕，
+抓不到的。（應該吧？）
+但比較想要能直接關掉螢幕的功能，
+目前先 `xset dpms force off` 擋著用。
+
+另外 bios 裡可以設定 fn 和 ctrl 互換，
+因為 thinkpad 上 fn 在最左下角，
+ctrl 在 fn 右邊，
+一般鍵盤是 ctrl 在最左下角。
+不確定要不要換，目前是沒換，
+
+ 1. 這樣比較近比較好按，
+ 2. 怕別人用我電腦會搞錯。
+
+
+## 休眠與 wifi
+我之前習慣開機就自動開熱點，也不用登入；
+或登出後上床繼續用 wifi。
+但現在不知道為什麼登出後熱點就卦了，
+仍收的到訊號，但就沒有資料，有線也沒有斷。
+但鎖住螢幕後正常，就是不能登出。
+
+---
+
+如果開了 powertop 的話，電量近十個小時，超級夠用。
+螢幕解析度有點太高，只好手動在系統內調低，
+讓字大一點；要玩遊戲、看電影時再調高就好。
+還蠻滿意的，速度比 ferrari one 快很多，
+也不會很熱，又比較輕薄，雖然變大了。
+
+#電腦
+#筆電
+#debian
+#linux
+#開始

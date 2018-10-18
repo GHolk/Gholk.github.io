@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" prefix="og: http://ogp.me/ns#">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="vim, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2017-10-18T06:34:52.300Z">
+<meta name="keywords" property="og:article:tag" content="grub,lvm,linux,boot">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="github-email-address.html" title=" github 因為 email 不同無法辨識帳號">
+<link rel="prev" type="text/html" href="hp-boot-error.html" title=" 惠普 PC 的開機問題">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<meta property="og:image" content="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title> 單人維護模式下擴大 usr 分割</title>
+</head>
+<body>
+<main><h1 id="單人維護模式下擴大 usr 分割">單人維護模式下擴大 usr 分割</h1>
+<p>原本 toshiba 的硬碟裡裝的 debian stretch
+一開始割很小，usr 一下就快滿了，只剩 500mb。
+但身邊的開機碟都不能用，
+最後嘗試進 single user mode，順利擴大分區大小。</p>
+<h2 id="開機碟的問題">開機碟的問題</h2>
+<p>手邊有一顆 debian stretch net install
+但裡面的系統東西超少，
+沒有 lvm 程式，更別說 resize2fs。</p>
+<p>社辦有一顆不知道誰的 mint 16.04 完整系統隨身碟，
+可以開機，有 lvm 也有 resize2fs。
+我 lvm 有試成功，但 resize2fs 報 fs 有不支援的 flag，
+我也不敢加 <code>--force</code> 硬來。</p>
+<h2 id="單人維護模式">單人維護模式</h2>
+<p>最後試這條路，因為懶得再燒一顆開機碟。
+我直接在 console 下 <code>init 1</code> 或 
+<code>systemctl rescue</code> 都沒用。</p>
+<p>在 debian 預設的開機選單裡有一個 advance option，
+但裡面只有一個 rescue mode，
+進去後也看不出和原本的差別。</p>
+<p>最後是在 grub 下改開機選項才成功，
+在 <code>linux</code> 命令加入 <code>init=/bin/bash</code> 選項，
+應該加在哪都沒差，就成功了。</p>
+<pre><code>linux    /vmlinuz-4.9.0-4-amd64 root=/dev/mapper/graduateLVM-dRoot ro cgroup_enable=memory swapaccount=1 quiet init=/bin/bash
+initrd    /initrd.img-4.9.0-4-amd64
+boot
+</code></pre><p>進去後就是 root 只有一個 tty，
+然後我可以直接 <code>umount /usr</code> 。</p>
+<pre><code class="lang-sh">umount /usr
+lvextend -L +2G graduateLVM/dUsr
+fsck -ft ext4 graduateLVM/dUsr     # resize2fs 前會要求 fsck
+resize2fs graduateLVM/dUsr         # 沒指定 size 就是調到和 device 一樣大
+
+## 如果 lvextend 加 -r 選項好像可以一起調大 filesystem，
+## 就不用再下 resize2fs 了。
+</code></pre>
+<h3 id="`/etc/grub.d/40-custom`"><code>/etc/grub.d/40-custom</code></h3>
+<p>我自己加了 single user mode 的 entry，
+改 <code>/etc/grub.d/40-custom</code> 然後 <code>update-grub</code> 即可。</p>
+<pre><code class="lang-sh">#! /bin/sh
+exec tail -n +3 $0
+# This file provides an easy way to add custom menu entries.  Simply type the
+# menu entries you want to add after this comment.  Be careful not to change
+# the &#39;exec tail&#39; line above.
+
+menuentry &#39;Debian GNU/Linux single user mode&#39; --class debian --class gnu-linux --class gnu --class os $menuentry_id_option &#39;gnulinux-simple-2556b1d9-b8d7-40cd-81dc-2548fe362673&#39; {
+    load_video
+    insmod gzio
+    if [ x$grub_platform = xxen ]; then insmod xzio; insmod lzopio; fi
+    insmod part_msdos
+    insmod ext2
+    set root=&#39;hd0,msdos12&#39;
+    if [ x$feature_platform_search_hint = xy ]; then
+      search --no-floppy --fs-uuid --set=root --hint-bios=hd0,msdos12 --hint-efi=hd0,msdos12 --hint-baremetal=ahci0,msdos12  442ed0ec-76f3-4826-bb26-e51e43393a05
+    else
+      search --no-floppy --fs-uuid --set=root 442ed0ec-76f3-4826-bb26-e51e43393a05
+    fi
+    echo    &#39;正在載入 Linux 4.9.0-4-amd64 ...&#39;
+    linux    /vmlinuz-4.9.0-4-amd64 root=/dev/mapper/graduateLVM-dRoot ro cgroup_enable=memory swapaccount=1 init=/bin/bash quiet
+    echo    &#39;正在載入初始 ramdisk ...&#39;
+    initrd    /initrd.img-4.9.0-4-amd64
+}
+</code></pre>
+</main>
+
+<footer>
+<script src="ext/luser-meta.js" defer></script>
+</footer>
+
+<div id="disqus_thread">
+<script defer src="ext/load-disqus.js"></script>
+<noscript>
+  Please enable JavaScript to view the
+  <a href="https://disqus.com/?ref_noscript">
+    comments powered by Disqus.
+  </a>
+</noscript>
+</div>
+
+
+</body>
+</html>
+

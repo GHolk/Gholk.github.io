@@ -1,0 +1,96 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-03-08T08:12:32.362Z">
+<meta name="keywords" property="og:article:tag" content="ptt,bbs,bookmarklet,javascript,user-js,browser">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="geomatics-measuring-the-world.html" title="工程倫理的丈量世界心得">
+<link rel="prev" type="text/html" href="dom-input-javascript-event.html" title="讀取 html 輸入元素中的資料">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title>bbsjs 原型 user.js 及小書籤</title>
+</head>
+<body>
+<main><h1 id="bbsjs 原型 user.js 及小書籤">bbsjs 原型 user.js 及小書籤</h1>
+<p>ptt 有一個允許執行 lua 的計劃，
+在 ptt2 可以寫 bbslua 腳本。
+但 lua 還是要在 ptt 主機上執行，
+如果是 javascirpt 就能在瀏覽器上執行。
+現在已經能用 websocket 從 <a href="https://term.ptt.cc/">https://term.ptt.cc/</a> 上 ptt，
+所以執行 js 也沒問題了，
+目前發布小書籤 bookmarklet 和 greasymonkey 腳本二種執行方法。</p>
+<h2 id="user.js">user.js</h2>
+<p>user.js 是 greasy monkey 或 temper monkey
+可以執行的 javascript 腳本，
+要先安裝 firefox 上的 greasymonkey
+或 chrome 的 temper monkey。
+然後去 <a href="https://gist.github.com/GHolk/3154e8486cf987cf6ab84cae45c7dcc7">本腳本的 gist</a> 上 <a href="https://gist.github.com/GHolk/3154e8486cf987cf6ab84cae45c7dcc7/raw/d3fa362d371a897819230f0483b4ef52343b7e47/bbsjs.user.js">點 raw 安裝</a> 。</p>
+<p>瀏覽器安裝 bbsjs.user.js 後，
+ptt chrome 在含有 pttjs 的文章內按 <code>J</code> 即可執行。
+建議在 ptt chrome 內右鍵，開啟選項內的好讀模式，
+方便執行內容超過一頁的 javascript。</p>
+<h2 id="小書籤 bookmarklet">小書籤 bookmarklet</h2>
+<p>小書籤是一種執行 javascript 的方法，
+原理是把 javascript 嵌在
+<strong>我的最愛</strong> 或 <strong>書籤</strong> 的超連結裡，
+在任何網頁點擊該書籤，即可在該頁面執行小書籤。
+<a title="bbsjs" rel="sidebar" href="javascript:void function () {const output='bookmarklet';class FakePrint{constructor(string){if(string)this.data=string;else this.data=''}print(string){this.data+=string}println(string){this.print(string+'\n')}}class JavascriptEvalator{prompt(){const script=this.getScript();this.execute(script)}getArticle(){if(location.href.match('www.ptt.cc')){return this.getPttWebArticle()}else return this.getPttChromeArticle()}getPttWebArticle(){return $('#main-container').text()}getPttChromeArticle(){return $('#mainContainer').children().get().map(row=>$(row).text()).join('\n')}getScript(){const article=this.getArticle();const html=article.match(/<html[\S\s]*?<\/html>/);const script=article.match(/<script[\S\s]*?<\/script>/);return html||script}execute(script){return this.windowExecute(script)}evalExecute(script){const cleanScript=script.replace(/^<script[\S\s]*?>/,'').replace(/<\/script>$/,'');return eval(cleanScript)}windowExecute(script){const scriptWindow=window.open('about:blank');const scriptDocument=scriptWindow.document;scriptDocument.write(script);scriptDocument.close();return scriptWindow}}function promptJe(){const je=new JavascriptEvalator;je.prompt()}function registJe(listen){window.addEventListener('keydown',down=>{if(listen(down)){try{promptJe()}catch(evalError){throw evalError}}})}switch(output){case'hello world':alert('hello world!');break;case'bookmarklet':promptJe();break;case'user.js':registJe(keydown=>keydown.key=='J');break}}()">點這裡安裝 bbsjs 的 bookmarklet。</a></p>
+<p>如果點擊上面連結沒有加入，
+可以右鍵複製超連結，然後手動加入書籤。
+（我找不到自動加入書籤的方法。）</p>
+<p>在 ptt chrome 中閱讀含有 bbsjs 的文章時，
+點擊該書籤即可執行 bbsjs。
+同樣建議在 ptt chrome 內右鍵，開啟選項內的好讀模式，
+方便執行內容超過一頁的 javascript。</p>
+<h2 id="bbsjs">bbsjs</h2>
+<p>bbsjs 是將 javascript 嵌入在 ptt 的文章內，
+用 script 標籤 <code>&lt;script&gt; /* pttjs */ &lt;/script&gt;</code> ，
+或是完整的 html <code>&lt;html&gt; &lt;!-- 完整的 html 內容 --&gt; &lt;/html&gt;</code> 。
+執行時會新開一個頁面，將 script 或 html 寫入其中並執行。</p>
+<p>因為一些 bbsjs 的長度超過一頁，
+建議在 ptt chrome 中開啟好讀模式，
+一次讀取文章所有內容，方便執行腳本。</p>
+<p>大部份主流瀏覽器會封鎖彈出式視窗，
+所以可能需要手動增加例外。</p>
+<p>目前可以在 chrome ptt、term.ptt.cc、ptt 網頁版使用，
+user.js 都是按 J，小書籤則是直接啟動。</p>
+<h3 id="bbsjs api">bbsjs api</h3>
+<p>基本上就和一般的 html 差不多。
+可以使用 document.write、alert、prompt、confirm 
+等函數與使用者交互，或直接操作 dom。
+所以除了 <code>&lt;script&gt;</code> 也可以用 <code>&lt;html&gt;</code> ，使用完整的網頁，
+就能直接放各種 html 元素。</p>
+<p>url 可能是 <code>about:blank</code> ，
+所以 ajax 受限於 same origin policy，
+所有網域都需要 cros 預檢請求。</p>
+<p>最後如果需要的話，
+可以在 script 內呼叫 <code>window.close()</code> 關閉視窗。</p>
+<h3 id="範例">範例</h3>
+<ul>
+<li><a href="https://www.ptt.cc/bbs/Test/M.1520490441.A.9C5.html">html 範例</a></li>
+<li><a href="https://www.ptt.cc/bbs/Test/M.1520437072.A.BD0.html">猜電腦的數字</a></li>
+<li><a href="https://www.ptt.cc/bbs/Test/M.1520435942.A.BEF.html">電腦猜你的數字</a></li>
+</ul>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer src="ext/load-disqus.js"></script>
+
+
+
+
+
+</body></html>

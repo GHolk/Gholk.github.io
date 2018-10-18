@@ -1,0 +1,44 @@
+# 如何做梗圖
+看到一些用沒梗當梗的梗圖，
+於是就想把沒梗和 [而且沒人愛你] 套在一起，
+再加上嗆一下用盜版 photo shop 的，
+用 gimp 做成這張。
+
+<meta property="og:image" type="image/jpeg" content="https://farm5.staticflickr.com/4682/39074839922_19ae5e4fa7.jpg">
+
+[而且沒人愛你]: https://zh.moegirl.org/zh-tw/%E8%80%8C%E4%B8%94%E6%B2%A1%E6%9C%89%E4%BA%BA%E7%88%B1%E4%BD%A0
+
+[![how to create meme.png]][how to create meme flickr]
+
+## 創作過程
+過程沒什麼好說的，就想哪些素材適合就 google 圖片丟上去。
+
+ps 的操作介面裡的 icon 是自己畫的，底圖是 google 的；
+猴子的輸入框也是自己畫的。二者都是用選取區域再用收縮畫出框。
+
+**狂暴微笑殺手** 想半天想不起來名字，
+最後用以圖搜圖找到該 meme 是叫 *hide pain harold* 。
+
+沒人回的圖是用一個文字框裡換樣式做的，
+後來才想到用 *成為第一個說讚的人* 表示沒人讚。
+
+盜版直接用 windows 的，不確定 ps 有沒有自己的盜版警告。
+
+桌子那個懶得畫或貼圖，就隨便做一做了事；
+用 SJO 是因為那個抱住自己的人是手往下，
+sto 會變成往上。
+
+最後在右上有放自己的 icon ESC，
+不知道有沒有人會注意就是了。
+
+## 發布
+* [天堂梗模擬器](https://www.facebook.com/groups/MemeSimulators/permalink/1971005656558637)
+* [冷梗研究社](https://www.facebook.com/groups/coldstem/permalink/1594250707295748)
+
+[how to create meme flickr]: https://www.flickr.com/photos/135370742@N08/39074839922
+[how to create meme.png]: https://farm5.staticflickr.com/4682/39074839922_19ae5e4fa7.jpg
+
+#meme
+#flickr
+#gimp
+#自創

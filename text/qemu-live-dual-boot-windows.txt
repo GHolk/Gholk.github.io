@@ -1,0 +1,81 @@
+# linux 下用虛擬機開雙開機的 windows 分區
+很多 linux user 都把電腦做成雙開機，
+可以在開機時選要進 windows 還 linux。
+我又在 linux 下用 qemu 拿 windows 分割當硬碟開虛擬機，
+之後要用 windows 程式就不用重開到 windows 了。
+
+之前用 ferrari one 有沒有試過類似的事忘了，
+不過很可能是 cpu 太差跑不動，
+換 thinkpad 13 才又試了，
+最後在 [ptt 板友的協助下弄出來了！][ptt]
+
+[ptt]: https://www.ptt.cc/bbs/Linux/M.1511707620.A.5B2.html
+
+qemu 我多用 `qemu-system-x86_64 -enable-kvm` ，
+詳細為什麼要用 system 我也沒查。
+一開始直接試 `qemu-system-x86_64 -enable-kvm -hda /dev/sda` ，
+結果不签。
+不確定是因為 sda 正在使用，（linux 也在 sda 裡。）
+還是 uefi 的問題，就去 ptt linux 板問。
+
+但另外用原筆電的硬碟接上去，
+再 ``js `${qemu} -hda /dev/sdb` `` ，
+就直接看到開機選單了，也能進 windows。
+只是之後 windows 竟然給我更新，
+我又不敢直接關虛擬機等同強制關機，
+只好等他更新完。
+
+之後記得加 `-snapshot` `-net none` 二個參數。
+snapshot 不會寫入硬碟，也就不需要 sda 的寫入權限也能開機，
+只會寫到暫存檔，關機就沒了，就可以直接關掉虛擬機強制關機了。
+net none 是關虛擬機的網路連線，防止 windows 連網就想要更新。
+好像有 snapshot 就可以不用關網路了。
+
+## ovmf
+後來有板友提供 ovmf 關鍵字，
+最後找到 red had 的 [ovmf 白皮書]，
+裡面 Example qemu invocation 章節有範例就照著用了。
+
+[ovmf 白皮書]: http://www.linux-kvm.org/downloads/lersek/ovmf-whitepaper-c770f8c.txt
+
+需要 `ovmf.fd` 這個檔案，
+debian 有 ovmf 可以用 apt 裝，
+裝好後會在 `/usr/share/ovmf/OVMF.fd` 。
+好像使用時會讀寫，要有寫入權限；
+白皮書是複製一份，然後讀寫複製的那份。
+
+裡面用到 `-drive if=pflash,file=OVMF.fd` 這個選項，
+可以用 `-pflash OVMF.fd` 代替。
+drive 好像是定義一個裝置，
+很多選項都可以視為 drive 的簡寫。
+
+```sh
+qemu-system-x86_64 -enable-kvm -snapshot \
+                   -m 1G \
+                   -hda /dev/sda \
+                   -pflash /usr/share/ovmf/OVMF.fd \
+                   -net none
+```
+
+最後寫成一個 [shell script]，
+免得每次都要打一堆選項麻煩，也省得忘記。
+這裡可以直接用 `/usr/share/ovmf/OVMF.fd` 是因為我開了 snapshot 選項，
+對 OVMF.fd 不會直接寫入，也只會寫入暫存檔。
+
+[shell script]: https://github.com/GHolk/loco/blob/master/bin/qemu-windows.sh
+
+<ins datetime="2017-11-30">
+但不知道為什麼我開機後是直接進 windows。
+我有裝 grub，應該會先進 grub，
+然後有選單可以進 debian 或 windows。
+沒有仔細研究，總之不想管。
+</ins>
+
+
+#shell
+#虛擬機
+#windows
+#linux
+#boot
+#硬碟
+#筆電

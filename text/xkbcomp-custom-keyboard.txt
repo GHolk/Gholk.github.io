@@ -1,0 +1,55 @@
+# xkbcomp 自訂鍵盤按鍵
+thinkpad 的 home 鍵太遠了不好按，
+用 xkbcomp 把 super page up down 加上
+home end 的效果，但只是抄來的 config，
+不太知道意義；也不是所有情況都能用。
+
+之前 acer 的鍵盤 page up down 在方向鍵上的左右邊，
+`fn page-up` 就是 home，
+在 firefox 等沒有 readline 不能用 `C-a` 的情況，
+要移到行首行尾時很方便。
+
+但 thinkpad 的 end home 是在鍵盤左上角，
+和 esc f1-12 insert delete 同一排。
+delete 在那個位置沒錯，insert 不會用到沒差，
+只是 home 和 end 還算常用，
+那麼遠就很不方便。
+
+所以就 google 一下，看能不能讓某按鍵組合多出 home end 的效果。
+fn 是硬體層級的，只能用 bios 裡那少得可憐的選項調，只能配 f1-12。
+有找到叫 super hyper 的 modifier key 能用，
+就綁到 super 也就是 win 上。
+
+後來是照 [stackoverflow 上一個綁方向鍵][map arrow home end] 的作法，
+把他的方向鍵改成翻頁鍵，就算 config 好了。
+用 xkbcomp 編譯更新， [詳細加到我的 git 了][git xkb] 。
+
+[map arrow home end]: https://unix.stackexchange.com/questions/65434/map-superleftright-to-home-end
+[git xkb]: https://github.com/GHolk/loco/commit/ddf1b6
+
+共有 `*.xkb` `*.xkm` 二種檔案。
+xkb 是文字檔，和 C 的風格類似，可能是用 lex 和 yacc 做的，
+和 C 一樣會分出一些標頭檔，分別是在 types 和 symbols，
+編譯時要指定要去哪裡找標頭，會生出 xkm 檔，詳細寫在 makefile 裡。
+`xkbcomp *.xkm $DISPLAY` 會把目前 X window 的鍵盤設置成 xkm 的樣子，
+另外直接在編譯時指定 display 而不指定輸出，
+就不會輸出 xkm，而直接把設定傳給 x server。
+
+另外要讓 user 能 config 自己的 xkb，
+我在 /etc/X11/Xsession.d 裡加了一個 `56custom-xkb` ，
+如果 `~/.xkb/default.xkm` 存在，就自動載入。
+我覺得每次都重新編譯太麻煩，
+所以是希望 user 自己編譯好，系統直接 source。
+
+之前也有寫過一個 [Xsession.d 的 script][xinput] ，
+用來改觸控板和小紅點速度用的。
+因為我覺得這台電腦的速度應該調到最快比較好用，
+所以是每個使用者都會執行，調到最快。
+
+[xinput]: https://github.com/GHolk/loco/blob/34ae95/dt13.xinput
+
+#x-window
+#鍵盤
+#筆電
+#config
+

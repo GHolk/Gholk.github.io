@@ -1,0 +1,110 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-02-10T15:13:12.038Z">
+<meta name="keywords" property="og:article:tag" content="javascript,web,scheme,sicp,排版">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="shotgun-one-enemy.html" title="用散彈槍的人總想把所有子彈打在同一個人身上">
+<link rel="prev" type="text/html" href="general-reduce-array.html" title="萬用的 array.reduce">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<script src="ext/meta-bloging.js"></script>
+
+<title>sicp 的筆記格式</title>
+</head>
+<body>
+<main><h1 id="sicp 的筆記格式">sicp 的筆記格式</h1>
+<p>去年暑假讀 sicp 時有邊讀邊寫筆記，
+一小節的程式一個檔案，還為自己方便，記筆記有一些規則。
+免強能直接在 github 上看，在本機則沒有適合的方法。
+今天繼續讀下去，花一天寫了一個 <a href="sicp/">簡單的 web 閱讀器</a> 。</p>
+<p>習慣就一個小節的程式寫在同一個 <code>*.sch</code> 檔，
+然後每小節、每個 sch 檔也寫一個同名 <code>*.md</code> ，
+記錄一下寫了什麼，這小節在講什麼，
+程式有什麼心得感想。</p>
+<p>然後每章一個目錄，一章有數個小節，
+各 sch md 都在同一個目錄裡。
+章的目錄再一個 <code>README.md</code> 寫這章的心得當目錄。</p>
+<h2 id="功能與實作">功能與實作</h2>
+<ul>
+<li>讀取 <code>*.md</code> 時，如果存在 <code>*.sch</code> 就一併顯示。</li>
+<li>進入目錄時，自動顯示 <code>README.md</code> 。</li>
+<li>之前有把各檔的檔名用 markdown 超連結語法，寫到 readme 裡，
+所以掃描還沒有必要。</li>
+</ul>
+<p>實作有考慮二種作法：</p>
+<ol>
+<li><p>寫 script，自動遍歷所有文件和程式，生出一份完整的文件。
+好處是生成可以是 html 甚至 readme，
+可以從 emacs 或其它 editor 讀。</p>
+</li>
+<li><p>寫 web，用 ajax 載入 local 或 github page 上的 readme，
+用 <a href="marked/">marked</a> 生成 html。
+好處是可以直從瀏覽器讀，壞處也是得用瀏覽器讀。</p>
+</li>
+</ol>
+<p>總之目前是寫出一個 <a href="sicp/">reader</a> ，
+用 fetch api 讀文件，
+還可以用 firefox <code>file://</code> 讀喔，
+或 github page 上也可以。</p>
+<p>之後也許轉成 js lib 之類的？
+感覺有這樣的需要，
+能讀散落在各子目錄的 markdown 和程式。
+之前 ccns 的 <a href="https://github.com/kevinbird61">kevin cyu</a> 有做過類似的，
+是生出一個 html 文件。</p>
+<h2 id="fetch policy">fetch policy</h2>
+<p>在用firefox <code>file://</code> 協定開本機目錄時，
+會列出目錄下的所有檔案。</p>
+<p><a href="https://www.flickr.com/photos/neckfree/40186603241/in/dateposted/"><img src="https://farm5.staticflickr.com/4623/40186603241_d957ab7f1e_z.jpg" alt="firefox local directory"></a></p>
+<p>但不能用這個查目錄下有什麼檔案，
+如果你在 <code>file:///www/readme.html</code> ， 
+<code>fetch(&#39;./&#39;)</code> 是抓不到東西的。</p>
+<p>firefox在 <code>file:</code> 下是能ajax同一層和所有子目錄內容，
+但在瀏覽目錄時的自動列出功能，是不能被ajax的。
+而chrome是全部鎖起來，
+在file協定下沒有地方是same origin。</p>
+<h2 id="實作困難">實作困難</h2>
+<p>我本來想用iframe直接看readme，
+在onload事件後，
+再用 <a href="marked/">marked</a> 把iframe的內容轉成html。
+結果發現iframe開 <code>*.md</code> 會彈出下載視窗，
+不像 <code>*.txt</code> 是能直接看。</p>
+<p>後來改用 <code>history.pushState()</code> ，
+直接把現在的路徑push成所閱讀的markdown的路徑。
+但這有個問題，原始程式和url是 <code>file:///home/gholk/sicp/index.html</code> ，
+讀個幾次後變成 <code>file:///home/gholk/sicp/exercise/1/fast-expt.md</code> ，
+之後F5重新整理，或從其它地方直接開這個url，
+會跳出叫你下載的視窗，或就看到原始的markdown，
+而不是 <code>index.html</code> 渲染的markdown。</p>
+<p>後來改成把path存在query string，
+但會有相對路徑的問題，
+像 <code>1/README.md</code> 裡名為 <code>fast-expt.md</code> 的超連結
+是指向同一層的 <code>1/fast-expt.md</code> ，
+但如果直接 <code>fetch(&#39;fast-expt.md&#39;)</code> 
+會指向 <code>index.html</code> 所在的目錄下的 <code>fast-expt.md</code> 。</p>
+<p>我是用html的新的URL 物件解決，能計算相對路徑。
+像 <code>new URL(&#39;helo/world&#39;, &#39;file:///home/gholk/index.html&#39;)</code> 
+就會是 <code>file:///home/gholk/helo/world</code> ，
+連 <code>.</code> 和 <code>..</code> 都能處理，
+但注意尾部的斜線有影響。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer src="ext/load-disqus.js"></script>
+
+
+
+
+
+</body></html>

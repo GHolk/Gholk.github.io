@@ -35,5 +35,10 @@ gmeta.postPaper.regist('img', (image) => {
         p.replaceWith(figure)
     }
 })
+gmeta.postPaper.regist('table', (table) => {
+    const caption = document.createElement('caption')
+    if (table.title) caption.textContent = table.title
+    table.appendChild(caption)
+})
 
 gmeta.postPaper.auto()

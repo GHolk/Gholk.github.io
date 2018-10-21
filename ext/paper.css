@@ -148,12 +148,19 @@ caption {
     }
 
 table { 
-    margin: auto; 
+    margin: 1em auto; 
     border: 1px solid; 
     text-align: center; 
+    counter-increment: table-number;
     /*text-align: justify; 
     text-justify: inter-word; */
     }
+table caption:empty::after {
+    content: "表" counter(table-number, cjk-decimal);
+}
+table caption::after {
+    content: "表" counter(table-number, cjk-decimal) "、";
+}
 
 th, td {
     border: 1px solid; 
@@ -315,7 +322,15 @@ ol > li > ol > li > ol { list-style: lower-latin; }
 
 figure { /*    display table made box adjust element inside. */
     margin: 1em ; 
-    }
+    counter-increment: image-number;
+}
+
+figcaption::before {
+    content: "圖" counter(image-number, cjk-decimal) "、";
+}
+figcaption:empty::before {
+    content: "圖" counter(image-number, cjk-decimal);
+}
 
 figure img , figure pre , figure iframe {
     display: block; 

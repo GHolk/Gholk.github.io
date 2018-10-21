@@ -1,6 +1,8 @@
-# 還沒想好主題
+# utm 51 區的標準割線與在台灣附近的誤差
 gis 第二次作業，要以 utm 投影與台灣作題材，主題自訂。
 然後內容必須包括 utm 簡介與在台灣地區的誤差。
+我簡單計算了 utm 51 區的標準尺度割線位置，
+並取了台灣島上幾個點計算與比較 utm、twd97、大地線的誤差。
 
 ## utm 介紹
 utm 是主要由美國軍方使用的地圖投影，
@@ -146,6 +148,12 @@ utm 為 6° 分帶，含蓋台灣地區的圖幅為 51 zone，
 也就是 utm 51 區在台灣緯度 23°N 附近的標準尺度線
 約在 123±1.7603°E，接近台灣的一條則在 121.2397°E。
 其實相當接近台灣島中線。
+
+[![utm-51-secant.png]]
+
+[utm-51-secant.png]: http://farm2.staticflickr.com/1912/43648633680_a61caed3d2.jpg "UTM 51 zone 附近經緯度網格與標準尺度割線位置"
+[![utm-51-secant.png]]: http://www.flickr.com/photos/144554087@N04/43648633680
+
 
 ## twd97 與 twd67
 open source geographic wiki 上提到幾種方法區別 twd67 與 twd97 地圖，

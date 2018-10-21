@@ -22,12 +22,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="ext/meta-bloging.js"></script>
 
-<title>還沒想好主題</title>
+<title>utm 51 區的標準割線與在台灣附近的誤差</title>
 </head>
 <body>
-<main><h1 id="還沒想好主題">還沒想好主題</h1>
+<main><h1 id="utm 51 區的標準割線與在台灣附近的誤差">utm 51 區的標準割線與在台灣附近的誤差</h1>
 <p>gis 第二次作業，要以 utm 投影與台灣作題材，主題自訂。
-然後內容必須包括 utm 簡介與在台灣地區的誤差。</p>
+然後內容必須包括 utm 簡介與在台灣地區的誤差。
+我簡單計算了 utm 51 區的標準尺度割線位置，
+並取了台灣島上幾個點計算與比較 utm、twd97、大地線的誤差。</p>
 <h2 id="utm 介紹">utm 介紹</h2>
 <p>utm 是主要由美國軍方使用的地圖投影，
 使用範圍是全世界除南北極區外的地區。
@@ -133,6 +135,7 @@ utm 為 6° 分帶，含蓋台灣地區的圖幅為 51 zone，
 也就是 utm 51 區在台灣緯度 23°N 附近的標準尺度線
 約在 123±1.7603°E，接近台灣的一條則在 121.2397°E。
 其實相當接近台灣島中線。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/43648633680"><img src="http://farm2.staticflickr.com/1912/43648633680_a61caed3d2.jpg" alt="utm-51-secant.png" title="UTM 51 zone 附近經緯度網格與標準尺度割線位置"></a></p>
 <h2 id="twd97 與 twd67">twd97 與 twd67</h2>
 <p>open source geographic wiki 上提到幾種方法區別 twd67 與 twd97 地圖，
 其中一種是看東北角的三貂角燈塔座標 <a href="https://wiki.osgeo.org/wiki/Taiwan_datums#How_can_I_tell_if_a_map_is_.E6.80.8E.E5.88.A4.E6.96.B7.E6.9F.90.E5.9C.96.E7.82.BA_TWD67_vs._TWD97.3F">tell twd67 twd97</a> ：
@@ -548,34 +551,13 @@ proj 有內建 utm 的投影參數：
 只有在台中到花蓮、台北到台串二段路線，誤差稍大於 utm。
 整體來說，twd97 的誤差都在 0.0001 以下，
 符合預期的 0.9999 精度。</p>
-<style>
-figure {
-  counter-increment: image-number;
-}
-figcaption::before {
-  content: "圖" counter(image-number, cjk-decimal) "、";
-}
-table {
-  counter-increment: table-number;
-}
-table caption::after {
-  content: "表" counter(table-number, cjk-decimal);
-}
-</style>
-
 <link rel="stylesheet" href="ext/paper.css">
 
 <script src="ext/header-nctu.js?execute&editable"></script>
 
-<script src="ext/paper.js"></script>
+<script src="ext/paper.js?execute"></script>
 
-<script>
-gmeta.postPaper.regist('table', (table) => {
-  const caption = document.createElement('caption')
-  table.appendChild(caption)
-})
-gmeta.postPaper.auto(true)
-</script>
+
 
 </main>
 

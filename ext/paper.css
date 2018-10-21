@@ -154,11 +154,13 @@ table {
     counter-increment: table-number;
     /*text-align: justify; 
     text-justify: inter-word; */
-    }
+}
 table caption:empty::after {
+    content: "表" counter(table-number);
     content: "表" counter(table-number, cjk-decimal);
 }
 table caption::after {
+    content: "表" counter(table-number) ". ";
     content: "表" counter(table-number, cjk-decimal) "、";
 }
 
@@ -326,9 +328,11 @@ figure { /*    display table made box adjust element inside. */
 }
 
 figcaption::before {
+    content: "圖" counter(image-number) ". ";
     content: "圖" counter(image-number, cjk-decimal) "、";
 }
 figcaption:empty::before {
+    content: "圖" counter(image-number);
     content: "圖" counter(image-number, cjk-decimal);
 }
 
@@ -428,6 +432,7 @@ h2 {
     counter-increment: counter-lv1;
 }
 h2::before {
+    content: counter(counter-lv1) ". ";
     content: counter(counter-lv1, cjk-decimal) "、";
 }
 

@@ -43,7 +43,7 @@ utm 使用橫麥卡托投影法，
 <p>最早使用 utm 這個名稱的是二戰德國時的德意志國防軍，
 用來做航空照片的投影。
 當時的一些航空照片上註記了 <em>UTMREF</em> 與分區、分帶的編碼，
-並以橫麥卡托投影展示，但中央經線尺度為 1.0。
+並以橫麥卡托投影展示，但中央經線尺度為 1.0 <a href="https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system#History" title="維基百科 UTM 英文條目">^1</a> 。
 在二戰後 1947 年，美國陸軍採用了非常類似的系統，
 亦稱為 utm，但將中央經線尺度改為 0.9996。</p>
 <h3 id="橫麥托投影原理">橫麥托投影原理</h3>
@@ -60,7 +60,7 @@ utm 使用橫麥卡托投影法，
 因為投影方向垂直，如果要以單一經圈投影出整個地球，
 在相差 90° 的經圈上會最大的扭曲，
 且扭曲後的世界地圖，也與麥卡托投影的扭大不相同。</p>
-<p><a href="https://en.wikipedia.org/wiki/Transverse_Mercator_projection"><img src="https://upload.wikimedia.org/wikipedia/commons/9/93/MercTranEll.png" alt="tmp earth" title="使用橫麥卡托投影整個地球，與麥卡托投影的扭曲方向完全不同。"></a></p>
+<p><a href="https://en.wikipedia.org/wiki/Transverse_Mercator_projection" title="維基百科橫麥卡托投影英文條目"><img src="https://upload.wikimedia.org/wikipedia/commons/9/93/MercTranEll.png" alt="tmp earth" title="使用橫麥卡托投影整個地球，與麥卡托投影的扭曲方向完全不同。"></a></p>
 <p>但麥卡托與橫麥卡托在扭曲不大的小範圍內仍會顯得相似，
 因為球面與圓柱相切處附近，
 橫麥卡托投影的經緯線是約略垂直的，
@@ -99,7 +99,7 @@ utm 使用橫麥卡托投影法，
 從二區重疊部份的中線分隔，
 所以 utm 每區成為了楔形，又因為 utm 不包含極區，
 楔型的尖端被去除，成為以下的形狀：</p>
-<p><a href="https://www.nrcan.gc.ca/earth-sciences/geography/topographic-information/maps/9779"><img src="https://www.nrcan.gc.ca/sites/www.nrcan.gc.ca/files/earthsciences/images/topo101/images/utm_figure1_en.gif" alt="utm-zone-shape" title="UTM 各區實際形狀接近去掉尖端的楔形"></a></p>
+<p><a href="https://www.nrcan.gc.ca/earth-sciences/geography/topographic-information/maps/9779" title="Natural Resources Canada: The UTM Grid"><img src="https://www.nrcan.gc.ca/sites/www.nrcan.gc.ca/files/earthsciences/images/topo101/images/utm_figure1_en.gif" alt="utm-zone-shape" title="UTM 各區實際形狀接近去掉尖端的楔形"></a></p>
 <p>平常我們所見的 utm 則多半是畫成一張完整的圖，
 其類似於將楔形拉伸成長方型的結果，
 只是方便想像地球作為整體的成果：</p>
@@ -114,7 +114,7 @@ utm 使用橫麥卡托投影法，
 則將原點南移 10000 公里。</p>
 <h3 id="台灣與 utm">台灣與 utm</h3>
 <p>在早期國民政府遷台時，由於地圖為軍事機密不公開，
-曾採用全球製圖的 utm 作為地型圖的座標系統 <a href="http://www.sunriver.com.tw/grid_tm2.htm" title="大地座標系統與二度分帶座標">tm2</a> 。
+曾採用全球製圖的 utm 作為地型圖的座標系統 <a href="http://www.sunriver.com.tw/grid_tm2.htm" title="大地座標系統與二度分帶座標">^2</a> 。
 utm 為 6° 分帶，含蓋台灣地區的圖幅為 51 zone，
 也就是橫跨 120-126°E 的範圍。</p>
 <p>當年所使用的 utm51 區座標系統，
@@ -138,7 +138,7 @@ utm 為 6° 分帶，含蓋台灣地區的圖幅為 51 zone，
 <p><a href="http://www.flickr.com/photos/144554087@N04/43648633680"><img src="http://farm2.staticflickr.com/1912/43648633680_a61caed3d2.jpg" alt="utm-51-secant.png" title="UTM 51 zone 附近經緯度網格與標準尺度割線位置"></a></p>
 <h2 id="twd97 與 twd67">twd97 與 twd67</h2>
 <p>open source geographic wiki 上提到幾種方法區別 twd67 與 twd97 地圖，
-其中一種是看東北角的三貂角燈塔座標 <a href="https://wiki.osgeo.org/wiki/Taiwan_datums#How_can_I_tell_if_a_map_is_.E6.80.8E.E5.88.A4.E6.96.B7.E6.9F.90.E5.9C.96.E7.82.BA_TWD67_vs._TWD97.3F">tell twd67 twd97</a> ：
+其中一種是看東北角的三貂角燈塔座標 <a href="https://wiki.osgeo.org/wiki/Taiwan_datums#How_can_I_tell_if_a_map_is_.E6.80.8E.E5.88.A4.E6.96.B7.E6.9F.90.E5.9C.96.E7.82.BA_TWD67_vs._TWD97.3F">^3</a> ：
 若是東經 122 度線穿過三貂角東方外海，則是 twd67；
 若是東經 122 度線穿過三貂角西部陸地，則是 twd97。</p>
 <blockquote>
@@ -168,7 +168,7 @@ utm 為 6° 分帶，含蓋台灣地區的圖幅為 51 zone，
 投影到 utm 51 及 twd97。
 在圖面上以卡氏座標系計算距離，
 再與大地線距離作比較大。</p>
-<h3 id="[proj.4]"><a href="http://proj4.org/">proj.4</a></h3>
+<h3 id="proj.4 [^4]">proj.4 <a href="http://proj4.org/">^4</a></h3>
 <p>proj.4 是 unix 系統下的投影轉換工具，
 也是 QGIS 內部使用的投影轉換工具。
 我使用 proj.4 最簡單的 command line 介面，
@@ -557,6 +557,56 @@ proj 有內建 utm 的投影參數：
 
 <script src="ext/paper.js?execute"></script>
 
+<script>
+gmeta.reference = {
+  imageCounter: 1,
+  add(id, ...description) {
+    const entry = this.createEntry(id, ...description)
+    this.node.appendChild(entry)
+  },
+  createEntry(id, ...description) {
+    const dl = document.createElement('dl')
+    const dt = document.createElement('dt')
+    dt.textContent = id
+    dl.appendChild(dt)
+    for (const text of description) {
+      const dd = document.createElement('dd')
+      dd.textContent = text
+      dl.appendChild(dd)
+    }
+    return dl
+  },
+  node: document.createDocumentFragment(),
+  render() {
+    const main = document.querySelector('main')
+    let referenceHeader = document.querySelector('h2.reference')
+    if (!referenceHeader) {
+      referenceHeader = document.createElement('h2')
+      referenceHeader.textContent = '參考資料'
+      referenceHeader.classList.add('reference')
+      main.appendChild(referenceHeader)
+    }
+    if (referenceHeader.nextSibling) {
+      referenceHeader.parentNode.insertBefore(
+        this.node, referenceHeader.nextSibling
+      )
+    }
+    else main.appendChild(this.node)
+  }
+}
+document.querySelectorAll('a').forEach(anchor => {
+  const reference = gmeta.reference
+  if (anchor.textContent.charAt(0) == '^') {
+    reference.add(anchor.textContent, anchor.href, anchor.title)
+  }
+  else if (anchor.classList.contains('image')) {
+    const cjk = gmeta.patchCjkCounter.numberToCjk(reference.imageCounter)
+    reference.add('圖' + cjk, anchor.href, anchor.title)
+    reference.imageCounter++
+  }
+})
+gmeta.reference.render()
+</script>
 
 
 </main>

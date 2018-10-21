@@ -18,9 +18,11 @@ utm 使用橫麥卡托投影法，
 最早使用 utm 這個名稱的是二戰德國時的德意志國防軍，
 用來做航空照片的投影。
 當時的一些航空照片上註記了 *UTMREF* 與分區、分帶的編碼，
-並以橫麥卡托投影展示，但中央經線尺度為 1.0。
+並以橫麥卡托投影展示，但中央經線尺度為 1.0 [^1] 。
 在二戰後 1947 年，美國陸軍採用了非常類似的系統，
 亦稱為 utm，但將中央經線尺度改為 0.9996。
+
+[^1]: https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system#History "維基百科 UTM 英文條目"
 
 ### 橫麥托投影原理
 橫麥卡托投影是將假想的圓柱與地軸垂直，
@@ -40,7 +42,7 @@ utm 使用橫麥卡托投影法，
 
 [![tmp earth]]
 
-[![tmp earth]]: https://en.wikipedia.org/wiki/Transverse_Mercator_projection
+[![tmp earth]]: https://en.wikipedia.org/wiki/Transverse_Mercator_projection "維基百科橫麥卡托投影英文條目"
 [tmp earth]: https://upload.wikimedia.org/wikipedia/commons/9/93/MercTranEll.png "使用橫麥卡托投影整個地球，與麥卡托投影的扭曲方向完全不同。"
 
 但麥卡托與橫麥卡托在扭曲不大的小範圍內仍會顯得相似，
@@ -94,7 +96,7 @@ utm 的作法是在高緯度地區減少每區的寬度，
 
 [![utm-zone-shape]]
 
-[![utm-zone-shape]]: https://www.nrcan.gc.ca/earth-sciences/geography/topographic-information/maps/9779
+[![utm-zone-shape]]: https://www.nrcan.gc.ca/earth-sciences/geography/topographic-information/maps/9779 "Natural Resources Canada: The UTM Grid"
 [utm-zone-shape]: https://www.nrcan.gc.ca/sites/www.nrcan.gc.ca/files/earthsciences/images/topo101/images/utm_figure1_en.gif "UTM 各區實際形狀接近去掉尖端的楔形"
 
 平常我們所見的 utm 則多半是畫成一張完整的圖，
@@ -118,11 +120,11 @@ utm 與許多平面座標系統相同，為了避免出現負數座標值，會�
 
 ### 台灣與 utm
 在早期國民政府遷台時，由於地圖為軍事機密不公開，
-曾採用全球製圖的 utm 作為地型圖的座標系統 [tm2] 。
+曾採用全球製圖的 utm 作為地型圖的座標系統 [^2] 。
 utm 為 6° 分帶，含蓋台灣地區的圖幅為 51 zone，
 也就是橫跨 120-126°E 的範圍。
 
-[tm2]: http://www.sunriver.com.tw/grid_tm2.htm "大地座標系統與二度分帶座標"
+[^2]: http://www.sunriver.com.tw/grid_tm2.htm "大地座標系統與二度分帶座標"
 
 當年所使用的 utm51 區座標系統，
 相比台灣現今的 twd97 二度分帶系統，
@@ -157,7 +159,7 @@ utm 為 6° 分帶，含蓋台灣地區的圖幅為 51 zone，
 
 ## twd97 與 twd67
 open source geographic wiki 上提到幾種方法區別 twd67 與 twd97 地圖，
-其中一種是看東北角的三貂角燈塔座標 [tell twd67 twd97] ：
+其中一種是看東北角的三貂角燈塔座標 [^3] ：
 若是東經 122 度線穿過三貂角東方外海，則是 twd67；
 若是東經 122 度線穿過三貂角西部陸地，則是 twd97。
 
@@ -166,7 +168,7 @@ open source geographic wiki 上提到幾種方法區別 twd67 與 twd97 地圖�
 >  - 台北市復興南路為 Taibei City's Fuxing S. Rd. lies upon 304000m E.
 >  - 豐原火車站前為 221000m E. lies in front of Fengyuan railway station.
 
-[tell twd67 twd97]: https://wiki.osgeo.org/wiki/Taiwan_datums#How_can_I_tell_if_a_map_is_.E6.80.8E.E5.88.A4.E6.96.B7.E6.9F.90.E5.9C.96.E7.82.BA_TWD67_vs._TWD97.3F
+[^3]: https://wiki.osgeo.org/wiki/Taiwan_datums#How_can_I_tell_if_a_map_is_.E6.80.8E.E5.88.A4.E6.96.B7.E6.9F.90.E5.9C.96.E7.82.BA_TWD67_vs._TWD97.3F
 
 根據 tgos 圖台查詢，現今所三貂角燈塔的 twd97 平面座標為
 `(351085.6949, 2766970.4467)` ，
@@ -191,13 +193,13 @@ utm 是將地球每六度經度分為一帶，
 在圖面上以卡氏座標系計算距離，
 再與大地線距離作比較大。
 
-### [proj.4]
+### proj.4 [^4]
 proj.4 是 unix 系統下的投影轉換工具，
 也是 QGIS 內部使用的投影轉換工具。
 我使用 proj.4 最簡單的 command line 介面，
 進行轉換測試。
 
-[proj.4]: http://proj4.org/
+[^4]: http://proj4.org/
 
 ### 使用 qgis 點出各地經緯度座標
 首先要選定一些點座標來作轉換，
@@ -367,6 +369,56 @@ proj 有內建 utm 的投影參數：
 
 <script src="ext/paper.js?execute"></script>
 
+<script>
+gmeta.reference = {
+  imageCounter: 1,
+  add(id, ...description) {
+    const entry = this.createEntry(id, ...description)
+    this.node.appendChild(entry)
+  },
+  createEntry(id, ...description) {
+    const dl = document.createElement('dl')
+    const dt = document.createElement('dt')
+    dt.textContent = id
+    dl.appendChild(dt)
+    for (const text of description) {
+      const dd = document.createElement('dd')
+      dd.textContent = text
+      dl.appendChild(dd)
+    }
+    return dl
+  },
+  node: document.createDocumentFragment(),
+  render() {
+    const main = document.querySelector('main')
+    let referenceHeader = document.querySelector('h2.reference')
+    if (!referenceHeader) {
+      referenceHeader = document.createElement('h2')
+      referenceHeader.textContent = '參考資料'
+      referenceHeader.classList.add('reference')
+      main.appendChild(referenceHeader)
+    }
+    if (referenceHeader.nextSibling) {
+      referenceHeader.parentNode.insertBefore(
+        this.node, referenceHeader.nextSibling
+      )
+    }
+    else main.appendChild(this.node)
+  }
+}
+document.querySelectorAll('a').forEach(anchor => {
+  const reference = gmeta.reference
+  if (anchor.textContent.charAt(0) == '^') {
+    reference.add(anchor.textContent, anchor.href, anchor.title)
+  }
+  else if (anchor.classList.contains('image')) {
+    const cjk = gmeta.patchCjkCounter.numberToCjk(reference.imageCounter)
+    reference.add('圖' + cjk, anchor.href, anchor.title)
+    reference.imageCounter++
+  }
+})
+gmeta.reference.render()
+</script>
 
 
 

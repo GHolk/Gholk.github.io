@@ -93,7 +93,7 @@ utm 的作法是在高緯度地區減少每區的寬度，
 [![utm-zone-shape]]
 
 [![utm-zone-shape]]: https://www.nrcan.gc.ca/earth-sciences/geography/topographic-information/maps/9779
-[utm-zone-shape]: https://www.nrcan.gc.ca/sites/www.nrcan.gc.ca/files/earthsciences/images/topo101/images/utm_figure1_en.gif
+[utm-zone-shape]: https://www.nrcan.gc.ca/sites/www.nrcan.gc.ca/files/earthsciences/images/topo101/images/utm_figure1_en.gif "UTM 各區實際形狀接近去掉尖端的楔形"
 
 平常我們所見的 utm 則多半是畫成一張完整的圖，
 其類似於將楔形拉伸成長方型的結果，
@@ -101,7 +101,7 @@ utm 的作法是在高緯度地區減少每區的寬度，
 
 [![utm-in-mercator]]
 
-[utm-in-mercator]: https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Utm-zones.jpg/1280px-Utm-zones.jpg
+[utm-in-mercator]: https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Utm-zones.jpg/1280px-Utm-zones.jpg "將麥卡托投影依 UTM 分區畫上網格"
 [![utm-in-mercator]]: https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system
 
 實際上若將 utm 完整展示，
@@ -126,6 +126,26 @@ utm 為 6° 分帶，含蓋台灣地區的圖幅為 51 zone，
 相比台灣現今的 twd97 二度分帶系統，
 原點都在赤道上，
 但 twd97 的東西方向原點則是在 121°E 上西移 250 公里。
+
+而 utm 的標準尺度線位置，可以由計算得到。
+若 utm 的中央經線尺度為 0.9996，
+依據投影原理，距離與尺度成正比，
+也就是 utm 的投影平面與地表在中央經線處
+離地心的距離比為 0.9996 : 1，
+如下圖所示：
+
+[![tm-proj.png]]
+
+[tm-proj.png]: http://farm2.staticflickr.com/1910/43644610380_88426ce84a.jpg "由畢氏定理計算出標準尺度線在投影平面上的距離"
+[![tm-proj.png]]: http://www.flickr.com/photos/144554087@N04/43644610380
+
+因此可以推出 UTM 51 區的標準尺度線約在中央經線左右 180km 處，
+換算成經度的話，由於處在北緯 23° ，
+需要將球面上的 1.6204° 乘上當地緯度造成的變化：
+`1.6204° ÷ cos(23°) = 1.7603°` ，
+也就是 utm 51 區在台灣緯度 23°N 附近的標準尺度線
+約在 123±1.7603°E，接近台灣的一條則在 121.2397°E。
+其實相當接近台灣島中線。
 
 ## twd97 與 twd67
 open source geographic wiki 上提到幾種方法區別 twd67 與 twd97 地圖，
@@ -184,7 +204,7 @@ proj.4 是 unix 系統下的投影轉換工具，
 
 [![some-point.png]]
 
-[some-point.png]: http://farm2.staticflickr.com/1901/30307338057_8c424a70d2.jpg
+[some-point.png]: http://farm2.staticflickr.com/1901/30307338057_8c424a70d2.jpg "選定用作投影誤差計算的台灣各點"
 [![some-point.png]]: http://www.flickr.com/photos/144554087@N04/30307338057
 
 *（查證後發現新北市蘆洲區並無火車站，
@@ -338,6 +358,9 @@ proj 有內建 utm 的投影參數：
 <script src="ext/header-nctu.js?execute&editable"></script>
 
 <script src="ext/paper.js?execute"></script>
+
+
+
 
 #gis
 #geomatics

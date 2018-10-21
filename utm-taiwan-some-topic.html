@@ -97,11 +97,11 @@ utm 使用橫麥卡托投影法，
 從二區重疊部份的中線分隔，
 所以 utm 每區成為了楔形，又因為 utm 不包含極區，
 楔型的尖端被去除，成為以下的形狀：</p>
-<p><a href="https://www.nrcan.gc.ca/earth-sciences/geography/topographic-information/maps/9779"><img src="https://www.nrcan.gc.ca/sites/www.nrcan.gc.ca/files/earthsciences/images/topo101/images/utm_figure1_en.gif" alt="utm-zone-shape"></a></p>
+<p><a href="https://www.nrcan.gc.ca/earth-sciences/geography/topographic-information/maps/9779"><img src="https://www.nrcan.gc.ca/sites/www.nrcan.gc.ca/files/earthsciences/images/topo101/images/utm_figure1_en.gif" alt="utm-zone-shape" title="UTM 各區實際形狀接近去掉尖端的楔形"></a></p>
 <p>平常我們所見的 utm 則多半是畫成一張完整的圖，
 其類似於將楔形拉伸成長方型的結果，
 只是方便想像地球作為整體的成果：</p>
-<p><a href="https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Utm-zones.jpg/1280px-Utm-zones.jpg" alt="utm-in-mercator"></a></p>
+<p><a href="https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Utm-zones.jpg/1280px-Utm-zones.jpg" alt="utm-in-mercator" title="將麥卡托投影依 UTM 分區畫上網格"></a></p>
 <p>實際上若將 utm 完整展示，
 應該是一條條的楔形並列，
 在赤道以外的區域都不會相連。</p>
@@ -119,6 +119,20 @@ utm 為 6° 分帶，含蓋台灣地區的圖幅為 51 zone，
 相比台灣現今的 twd97 二度分帶系統，
 原點都在赤道上，
 但 twd97 的東西方向原點則是在 121°E 上西移 250 公里。</p>
+<p>而 utm 的標準尺度線位置，可以由計算得到。
+若 utm 的中央經線尺度為 0.9996，
+依據投影原理，距離與尺度成正比，
+也就是 utm 的投影平面與地表在中央經線處
+離地心的距離比為 0.9996 : 1，
+如下圖所示：</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/43644610380"><img src="http://farm2.staticflickr.com/1910/43644610380_88426ce84a.jpg" alt="tm-proj.png" title="由畢氏定理計算出標準尺度線在投影平面上的距離"></a></p>
+<p>因此可以推出 UTM 51 區的標準尺度線約在中央經線左右 180km 處，
+換算成經度的話，由於處在北緯 23° ，
+需要將球面上的 1.6204° 乘上當地緯度造成的變化：
+<code>1.6204° ÷ cos(23°) = 1.7603°</code> ，
+也就是 utm 51 區在台灣緯度 23°N 附近的標準尺度線
+約在 123±1.7603°E，接近台灣的一條則在 121.2397°E。
+其實相當接近台灣島中線。</p>
 <h2 id="twd97 與 twd67">twd97 與 twd67</h2>
 <p>open source geographic wiki 上提到幾種方法區別 twd67 與 twd97 地圖，
 其中一種是看東北角的三貂角燈塔座標 <a href="https://wiki.osgeo.org/wiki/Taiwan_datums#How_can_I_tell_if_a_map_is_.E6.80.8E.E5.88.A4.E6.96.B7.E6.9F.90.E5.9C.96.E7.82.BA_TWD67_vs._TWD97.3F">tell twd67 twd97</a> ：
@@ -165,7 +179,7 @@ utm 為 6° 分帶，含蓋台灣地區的圖幅為 51 zone，
 與數化座標的參考，因此座標可能不是很準確。
 數化後再將座標存到該圖層屬性資料表中，
 並將整體結果輸出為地圖，展示如下：</p>
-<p><a href="http://www.flickr.com/photos/144554087@N04/30307338057"><img src="http://farm2.staticflickr.com/1901/30307338057_8c424a70d2.jpg" alt="some-point.png"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/30307338057"><img src="http://farm2.staticflickr.com/1901/30307338057_8c424a70d2.jpg" alt="some-point.png" title="選定用作投影誤差計算的台灣各點"></a></p>
 <p><em>（查證後發現新北市蘆洲區並無火車站，
 該點 <strong>蘆洲火車站</strong> 應更正為 <strong>捷運蘆洲站</strong> 。）</em></p>
 <h3 id="使用 invgeod 由經緯度計算大地線">使用 invgeod 由經緯度計算大地線</h3>
@@ -534,11 +548,35 @@ proj 有內建 utm 的投影參數：
 只有在台中到花蓮、台北到台串二段路線，誤差稍大於 utm。
 整體來說，twd97 的誤差都在 0.0001 以下，
 符合預期的 0.9999 精度。</p>
+<style>
+figure {
+  counter-increment: image-number;
+}
+figcaption::before {
+  content: "圖" counter(image-number, cjk-decimal) "、";
+}
+table {
+  counter-increment: table-number;
+}
+table caption::after {
+  content: "表" counter(table-number, cjk-decimal);
+}
+</style>
+
 <link rel="stylesheet" href="ext/paper.css">
 
 <script src="ext/header-nctu.js?execute&editable"></script>
 
-<script src="ext/paper.js?execute"></script>
+<script src="ext/paper.js"></script>
+
+<script>
+gmeta.postPaper.regist('table', (table) => {
+  const caption = document.createElement('caption')
+  table.appendChild(caption)
+})
+gmeta.postPaper.auto(true)
+</script>
+
 </main>
 
 <script defer src="ext/meta-meta.js"></script>

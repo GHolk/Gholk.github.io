@@ -1,0 +1,85 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-10-30T11:16:45.741Z">
+<meta name="keywords" property="og:article:tag" content="javascript,linux">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="sun-old-professor-sigh.html" title="老教授的嘆息">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>node.js 啟動後放棄 root 權限</title>
+</head>
+<body>
+<main><h1 id="node.js 啟動後放棄 root 權限">node.js 啟動後放棄 root 權限</h1>
+<p>node.js 當伺服器運行時，需要有 root 權限才能綁定 80 連接阜，
+所以有時會用 sudo 來執行 node.js。
+但如果 node 有 root 權限，被挾持後相當於讓駭客取得了 root 權限。
+posix 有 api 可以讓程序執行時改變自己的 uid，
+從而能在以 root 權限執行後放棄 root 權限。</p>
+<pre><code class="lang-javascript">process.getuid() // 0 root
+
+// 可以傳入 username 或 uid
+// 變成普通的使用者 gholk
+process.setuid(&#39;gholk&#39;)
+
+// 失敗，現在只是普通的使用者了，
+// gholk 沒有權限改自己的 uid
+process.setuid(&#39;root&#39;)
+</code></pre>
+<p>一開始是簡單用 setuid 把 root 換掉，
+但要注意是換成一般人後就換不回來了，
+而且也沒辦法改自己的 uid gid。
+所以如果 gid uid 都要改的話，
+要在還有 root 權限時改自己的 gid，
+再改自己 uid；不然先改 uid 會沒辦法改 gid。</p>
+<pre><code class="lang-javascript">const express = require(&#39;express&#39;)
+const app = express()
+app.listen(80, () =&gt; {
+  console.log(&#39;server start&#39;)
+  const user = &#39;gholk&#39;
+  process.setgid(user)
+  process.setuid(user)
+  console.log(&#39;drop root&#39;)
+})
+</code></pre>
+<p>但後來發現一個問題，setgid 後雖然有了 user 的 group，
+但只有 user 的 group，也就是 uid 對應的 gid，
+而 user 的其它 group 像 sudoer、docker 都沒有。
+又研究了一下，發現是要用 initgroup 才對，
+會根據 <code>/etc/group</code> 把該使用者的所有群組查出來。
+所以正確流程應該是：</p>
+<pre><code class="lang-javascript">function switchUser(process) {
+  const user = &#39;gholk&#39;
+  process.initgroups(user, user)
+  process.setgid(user)
+  process.setuid(user)
+  console.log(&#39;drop root&#39;)
+}
+</code></pre>
+<p>詳細 <a href="https://nodejs.org/api/process.html#process_process_initgroups_user_extragroup">可以查 node.js 的 api</a> 。</p>
+<p>因為最近開始寫 node.js 配 express，
+想把自己一些機器上的程式能對外發布，
+最簡單就是用 web api，但又不太想寫 php，
+就用 express 了，來學個比較強的 server。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy="" src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

@@ -238,3 +238,4 @@ adjustment-homework-2.html
 javascript-strict-equality-myth.html
 adjustment-homework-3.html
 sun-old-professor-sigh.html
+javascript-node-drop-root.html

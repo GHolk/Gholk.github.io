@@ -1,0 +1,66 @@
+# node.js 啟動後放棄 root 權限
+node.js 當伺服器運行時，需要有 root 權限才能綁定 80 連接阜，
+所以有時會用 sudo 來執行 node.js。
+但如果 node 有 root 權限，被挾持後相當於讓駭客取得了 root 權限。
+posix 有 api 可以讓程序執行時改變自己的 uid，
+從而能在以 root 權限執行後放棄 root 權限。
+
+```javascript
+process.getuid() // 0 root
+
+// 可以傳入 username 或 uid
+// 變成普通的使用者 gholk
+process.setuid('gholk')
+
+// 失敗，現在只是普通的使用者了，
+// gholk 沒有權限改自己的 uid
+process.setuid('root')
+```
+
+一開始是簡單用 setuid 把 root 換掉，
+但要注意是換成一般人後就換不回來了，
+而且也沒辦法改自己的 uid gid。
+所以如果 gid uid 都要改的話，
+要在還有 root 權限時改自己的 gid，
+再改自己 uid；不然先改 uid 會沒辦法改 gid。
+
+```javascript
+const express = require('express')
+const app = express()
+app.listen(80, () => {
+  console.log('server start')
+  const user = 'gholk'
+  process.setgid(user)
+  process.setuid(user)
+  console.log('drop root')
+})
+```
+
+但後來發現一個問題，setgid 後雖然有了 user 的 group，
+但只有 user 的 group，也就是 uid 對應的 gid，
+而 user 的其它 group 像 sudoer、docker 都沒有。
+又研究了一下，發現是要用 initgroup 才對，
+會根據 `/etc/group` 把該使用者的所有群組查出來。
+所以正確流程應該是：
+
+```javascript
+function switchUser(process) {
+  const user = 'gholk'
+  process.initgroups(user, user)
+  process.setgid(user)
+  process.setuid(user)
+  console.log('drop root')
+}
+```
+
+詳細 [可以查 node.js 的 api][node.js api] 。
+
+[node.js api]: https://nodejs.org/api/process.html#process_process_initgroups_user_extragroup
+
+因為最近開始寫 node.js 配 express，
+想把自己一些機器上的程式能對外發布，
+最簡單就是用 web api，但又不太想寫 php，
+就用 express 了，來學個比較強的 server。
+
+#javascript
+#linux

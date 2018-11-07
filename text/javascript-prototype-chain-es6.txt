@@ -1,0 +1,184 @@
+# Function 們的 prototype 與 es6 class 語法
+在 [jawil 的 github issue 部落格][jawil blog]
+看到他探究 javascript 函數原型與物件原型的根源。
+剛好之前自幹 promise 與 async function 時
+對 AsyncFunction class 做了些研究，就 [回了一篇心得][reply in jawil] ，
+想不到回覆途中忽然想通是 es6 class extends 語法
+讓子類別繼承靜態方法，造成子類別的原型直接指向父類別。
+
+[jawil blog]: https://github.com/jawil/blog/issues/13
+[reply in jawil]: https://github.com/jawil/blog/issues/13#issuecomment-436213836
+
+## 原回文
+我是認為 js runtime 中物件就是有一個 `__proto__` 屬性，
+在查詢屬性時就會一路用 proto 往上找。
+函數可以當作建構函數，只是方便我們建立同類的物件；
+並在建構物件時，把  proto 指向建構式的 prototype 屬性。
+
+這些都只是包裝。
+Object 與 Object.prototype 沒什麼特殊意義，
+他只是提供了一些物件常用的方法，
+而那些方法其實都能自己 patch 出來。
+所以你大可自己寫一個 MyObject 建構式，
+在 MyObject.prototype 上也可以自幹出
+多數 Object.prototype 提供的方法。
+
+唯一特例是 Function，
+Function.prototype 不是物件，
+而也是函數；我不確定這有什麼意義。
+但函數也是一種物件，可以有擁有屬性與原型，
+所以 Function.prototype.__proto__ == Object.prototype。
+
+關於 es6 新增的箭頭函數、generator、async function，
+其中箭頭函數的原型也是指向 Function.prototype，
+和一般函數沒有差別。
+
+### generator 與 async function
+而 generator 與 async 就有趣了，
+他們的建構函數不是公開的全域變數，
+要用 `(function*(){}).constructor` 與 `(async function() {}).constructor` 來獲取。
+（以下稱為 GeneratorFunction 與 AsyncFunction。）
+
+這二個建構式也都和 Function 一樣能用來動態建構函數，
+他們的實例的原型是各自建構子的 `.prototype` ，
+ `*.prototype`  的原型又指向 Function.prototype，
+所以 instanceof 可以得到正確的結果。
+
+但又一點很吊詭，GeneratorFunction 與 AsyncFunction 
+原型不是指向 Function.prototype。
+原本 js 中所有函數包括建構函數的原型都是指向 Function.prototype，
+但 GeneratorFunction 與 AsyncFunction 的原型是指向 Function。
+`GeneratorFunction.__proto__ == Function` 。
+
+### es6 class extends 語法
+後來我發現這可能是 es6 class  的緣故。
+如果用 es6 class 語法繼承現有類別，
+雖然子 constructor 仍是函數，
+但 `constructor.__proto__` 會指向父建構式。
+
+```
+class SubObject extends Object {
+}
+SubObject.prototype instanceof Object.prototype // true
+SubObject instanceof Object // true
+SubObject.entries == Object.entries // true
+```
+
+目前想到的二個原因：
+
+ 1. 讓 instanceof 算符可以運作在 class 上，也就是建構函數上。
+    比較好看而已。
+
+ 2. 讓子類繼承父類的靜態方法。
+    因為原型指向了父類，自然能從子類存取到父類的屬性。
+    主要應該是這個原因，而且繼承時還能用 super 存取靜態方法。
+
+所以 GeneratorFunction 與 AsyncFunction 在內部
+應該是用類似 `class extends Function` 的方法實作的。
+
+### 結論
+我認為 js 中的函數與物件都是一個黑箱，
+那些建構式只是其一個很有限的介面，
+提供很少的方法讓我們接觸外部。
+
+而函數又比物件更黑，
+相比物件只是簡單的 key value 集合，
+加上一個 `__proto__` 屬性。
+基本上是可以自己實現的。
+
+```
+child.get = function (key) {
+  if (this.hasOwn(key)) return this.getOwn(key)
+  else if (this.parent) return this.parent.get(ket)
+  else return undefined  // parent is null
+```
+
+但函數的閉包、this、yield await 都是透過黑魔法實現的功能，
+需要在執行時做很多手腳才能辦到，
+不然就是像 babel 要完全重編譯成另一種樣子。
+
+### 回顧之前的經驗
+
+今年早些做了點有趣的功能，像 [自己實現 Promise][monkey promise] 
+與 [用 generator 實現 async 函數][monkey async] ，
+所以研究了一下要怎麼為 generator function 加 method 但又不加到所有 function 上，
+所以找到了 GeneratorFunction.prototype 這東西，
+順便做了點實驗。
+
+（結論是 async 可以透過 generator 實現，promise 可以以原生物件方式實現；
+整個 async 與 promise 系列升級，只有 generator 是真正重要不可取代的元件。）
+
+[monkey async]: https://gist.github.com/GHolk/202183dda46475cc43756080ed149871
+[monkey promise]: https://gist.github.com/GHolk/202183dda46475cc43756080ed149871#file-async-js-L169
+
+昨天才看到這篇，覺得也是另一種探討方向，
+也想把自己的想法與發現寫下來，就寫了。
+（發現 `AsyncFunction.__proto__ != Function.prototype` 。）
+沒想到寫到一半忽然想通是 es6 class extends 的原因，
+文章長度幾乎加倍……。
+
+## 嘗試繼承 Function
+上面提到，既然 async 與 generator function 都是繼承自 Function，
+那可不可能自己繼承 Function 創造自己的 function 類別呢？
+於是就自己實驗了。
+如果不改寫 constructor 或在 constructor 中有呼叫 super 的話，
+也就是不顯式返回 this 以外的物件，
+那返回值就還是函數。
+
+```
+class MyFunction extends Function {
+  constructor() {
+    super()
+    this.name = 'my function'
+  }
+}
+typeof new MyFunction() // function
+```
+
+其實想一下就能理解，super 其實就是 Function，
+而直接呼叫 Function 建構式，就是返回內容是傳入字串的函數，
+（上面是空函數。） 
+extends 後在 constructor 內呼叫了 super，
+其實和直接呼叫 Function 是沒有差別的，
+所以想想返回值是函數也是理所當然的事。
+
+雖然可以以此做簡單的客製化：
+
+```
+class AnotherFunction extends Function {
+  constructor(n) {
+    super('i', `return i + ${n}`)
+  }
+}
+let af = new AnotherFunction(3)
+af(6) // 6 + 3 = 9
+```
+
+但這種可客製化的範圍太低了，
+所有閉包都不能用，也不能用 this 存取自己的其它方法，
+因為 function 執行時的 this 不是指向自己。
+（可以用 arguments.callee 得到自己，
+但還是很糟，因為 callee 廢棄了。）
+
+有 google 到 [一篇 stackoverflow 也在討論
+extends Function 的可能性][stackoverflow extend function] ，
+做法有 JSON.stringify 傳入的 object 然後傳入 super，
+應該也能 function.toString 之後傳入，
+但都是要手動 parse，一樣不能用閉包。
+
+[stackoverflow extend function]: https://stackoverflow.com/questions/36871299/ "how to extend function with es6 classes"
+
+然後有人提到 Proxy 中有個有趣的 apply handler，
+可以代理函數被呼叫時的行為，
+但好像只能用在要被代理的本來就是函數的情況。
+不像 python 只要有 `__call__` 方法就被視為函數。
+
+如果能繼承函數，想試著實作一個 function hook，
+讓 function 可以有 after before 之類的 hook。
+看來可能要用 proxy 實現，但用 proxy 又不如用物件，
+讓各 hook 與附加、移除 hook 的方法能用物件的屬性暴露。
+把包裝好的函數用物件的方法暴露。
+所以 proxy 的地位其實有點尷尬。
+
+#javascript
+#物件導向

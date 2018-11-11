@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-11-07T04:27:22.192Z</updated>
+  <updated>2018-11-11T13:13:32.895Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -25,6 +25,61 @@
 
 
 <entry>
+<id>http://gholk.github.io/defecate-apologize-mail-regret.html</id>
+<title>道歉信</title>
+<published>2018-11-11T13:12:54.746Z</published>
+<updated>2018-11-11T13:12:55.018Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/defecate-apologize-mail-regret.html"/>
+<summary>一封上鎖的道歉信。</summary>
+<category term="encrypt"/>
+<category term="心情"/>
+<content type="html">&lt;h1 id="道歉信"&gt;道歉信&lt;/h1&gt;
+&lt;p&gt;一封上鎖的道歉信。&lt;/p&gt;
+&lt;pre class="encrypt-data" data-hint="你請我吃過的東西"&gt;
+-----BEGIN PGP MESSAGE-----
+
+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
+Wr6ygC0vfmwGZyaCLvkZkeQ=
+=ANGx
+-----END PGP MESSAGE-----
+&lt;/pre&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/short-life-expensive-price.html#china-taiwan-questionary</id>
 <title>名言：逢人短命、遇貨添錢</title>
 <published>2018-04-13T16:43:44.187Z</published>

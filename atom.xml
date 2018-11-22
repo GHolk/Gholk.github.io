@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-11-22T02:47:23.975Z</updated>
+  <updated>2018-11-22T13:00:26.001Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -25,6 +25,214 @@
 
 
 <entry>
+<id>http://gholk.github.io/javascript-mathjs-tag-template.html</id>
+<title>真正使用 mathjs 並結合 es6 tag template</title>
+<published>2018-11-22T12:52:35.956Z</published>
+<updated>2018-11-22T13:00:25.989Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/javascript-mathjs-tag-template.html"/>
+<summary>mathjs 是一款 javascript 上的數學庫，
+我認為最大功能是用來算矩陣。
+後來才發現他真正的使用方法，
+用的好可以取代 matlab 的簡單矩陣運算。
+同時也發現其實他算是 es6 tag template 語法可以應用的地方。</summary>
+<category term="javascript"/>
+<category term="語法"/>
+<category term="matlab"/>
+<content type="html">&lt;h1 id="真正使用 mathjs 並結合 es6 tag template"&gt;真正使用 mathjs 並結合 es6 tag template&lt;/h1&gt;
+&lt;p&gt;mathjs 是一款 javascript 上的數學庫，
+我認為最大功能是用來算矩陣。
+後來才發現他真正的使用方法，
+用的好可以取代 matlab 的簡單矩陣運算。
+同時也發現其實他算是 es6 tag template 語法可以應用的地方。&lt;/p&gt;
+&lt;h2 id="老酒重開"&gt;老酒重開&lt;/h2&gt;
+&lt;p&gt;其實蠻久以前就用過這東西，
+但那時根本沒發現他的威力，
+感覺除了算反矩陣，
+沒有其它特別突出，也不是很好用。&lt;/p&gt;
+&lt;p&gt;現在修研究所的平差課，
+同學一怒之下用 jupyter 寫平差作業，
+我也效法用 js 寫，於是又把 mathjs 給翻出來用。&lt;/p&gt;
+&lt;h2 id="長算式的問題"&gt;長算式的問題&lt;/h2&gt;
+&lt;p&gt;本來只是記得他有矩陣功能，平差會用到。
+但越寫越不對，覺得寫到後面語法真是醜到爆炸，
+尤其要寫一長串矩陣、反矩陣、相加相乘。
+因為 js 沒有算符重載，
+所以要加矩陣得要呼叫 mathjs 自己的函數，
+變成一大串前綴 m 表達式混在一起。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-javascript"&gt;// 最小二乘平差解
+// X = inv(A&amp;#39; * P * A) * A&amp;#39; * P * L
+const X = MathJs.multiply(
+    MathJs.inv(
+        MathJs.multiply(
+            MathJs.transpose(A), P, A
+        )
+    ),
+    MathJs.transpose(A),
+    P, L
+)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;上面那串還好一點，但這次作業還有約制，
+完整應該寫成
+&lt;code&gt;inv(A&amp;#39;*P*A + 1/s*C&amp;#39;*C) * (A&amp;#39;*P*L + 1/s*C&amp;#39;*W)&lt;/code&gt; ，
+會再多一層 &lt;code&gt;MathJs.add()&lt;/code&gt; ，
+到最後寫到受不了，
+去翻官網發現他們有實作簡單的 parser！&lt;/p&gt;
+&lt;h2 id="javascript 中的仿 matlab parser"&gt;javascript 中的仿 matlab parser&lt;/h2&gt;
+&lt;p&gt;他們的 parser 蠻直覺的，
+就是能讓你用像 matlab 的語法寫矩陣運算，
+同時還有提供 scope，就是很古典，
+用 object 當 hash 當變數用。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-javascript"&gt;const design = [[1,2],
+                [3,4]]
+const weight = MathJs.diag([1/3, 1/4, 1/2])
+const observation = MathJs.transpose([[7,6,4]])
+
+const X = MathJs.eval(&amp;quot;inv(A&amp;#39; * P * A) * A&amp;#39; * P * L&amp;quot;, {
+    A: design,
+    P: weight, 
+    L: observation
+})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;在 eval 中 mathjs 會解析語法，並把 &lt;code&gt;*&lt;/code&gt; &lt;code&gt;+&lt;/code&gt; 之類的算符
+換成 &lt;code&gt;MathJs.multiply&lt;/code&gt; &lt;code&gt;MathJs.add&lt;/code&gt; ，
+同時還提供其它函數，像 &lt;code&gt;&amp;#39;&lt;/code&gt; 就會被翻譯成 &lt;code&gt;MathJs.transpose&lt;/code&gt; ，
+inv 就是 &lt;code&gt;MathJs.inv&lt;/code&gt; 。
+MathJs 也附帶了不少函數，像 sin cos log，
+甚至也能定義自己的函數，然後放在 scope 裡傳進去。&lt;/p&gt;
+&lt;p&gt;最後我連定義矩陣也直接用 eval 做；
+畢竟原本要定義矩陣要先寫成二維陣列，
+一大堆方括號逗號寫起來太麻煩了。
+雖然不能像 matlab 一樣直接用空白、換行分隔欄列，
+不能省去逗號和方括號、分號有點可惜。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-javascript"&gt;const design = MathJs.eval(`
+    [1, 3, 5;
+     2, 4, 6]
+`)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id="es6 template tag hack"&gt;es6 template tag hack&lt;/h2&gt;
+&lt;p&gt;後來我想到，其實可以自己定義語法，
+自己用空白、換行分隔後做成矩陣，
+又想到可以結合 es6 template tag，
+寫起來更直觀。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-javascript"&gt;MathJs.spaceMatrix = function (template, ...argument) {
+    if (argument.length &amp;gt; 1) {
+        throw new Error(&amp;#39;variable interpolation not support&amp;#39;)
+    }
+    const string = template[0]
+    const array = string
+          .split(/\n/g)
+          .map(row =&amp;gt; row.trim())
+          .filter(Boolean)
+          .map(row =&amp;gt; row
+               .split(/\s+/g)
+               .map(Number))
+    return MathJs.matrix(array)
+}
+const $sm = MathJs.spaceMatrix.bind(MathJs)
+
+const design = $sm`
+    1 2 3
+    4 5 6
+`
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;後來又想到，與其用那麼蹩腳的 object 當 scope，
+不如直接用 tag template 的變數內插直接傳變數進去。
+這本來就是 es6 tag template 適用的範圍。
+而且 parser mathjs 都幫我寫好了，
+我只要包裝成能 tag template 的結構就能用了。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-javascript"&gt;MathJs.template = function (template, ...variable) {
+    const prefix = &amp;#39;_variable&amp;#39;
+    const scope = {}
+    const expression = template.reduce((previousExpression, nextExpression, index) =&amp;gt; {
+        if (index == 0) return previousExpression + nextExpression
+        else {
+            const variableCount = index - 1
+            const variableName = prefix + variableCount
+            scope[variableName] = variable[variableCount]
+
+            return previousExpression + variableName + nextExpression
+        }
+    }, &amp;#39;&amp;#39;)
+    return this.eval(expression, scope)
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;基本上思路就是重用原始的 eval 語法，
+所以就是把 tag template 中每個原本的變數位置，
+換成變數名字，並把該 scope 中的那個名字定義為該變數的值。
+這是最簡單只透過 &lt;code&gt;MathJs.eval&lt;/code&gt; 與 parser 溝通的定義方式。&lt;/p&gt;
+&lt;pre&gt;&lt;code class="lang-javascript"&gt;const $math = MathJs.template.bind(MathJs)
+
+const A = $sm`
+    2 3 4
+    5 6 7
+`
+const L = $sm`
+    1
+    2
+`
+const P = $math`diag([1/3,1/2])`
+const X = $math`
+    inv(${A}&amp;#39; * ${P} * ${A}) * ${A} * ${P} * ${L}
+`
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;這樣就直覺多了，像 perl 或 bash 在雙引號內部
+可以放其它字串變數的寫法。
+唯一問題我想是 js 的內插寫法太醜了，
+需要用大括號括起來，造成有點難以閱讀。
+也許這就是 tag template 很少人用、失敗的原因吧。&lt;/p&gt;
+&lt;p&gt;但事後想想，搞不好原本的寫法還比較好讀，
+上面是算式比較簡單的情況，如果複雜的話就會難讀了；
+雖然還是比原本只能用前綴寫法好。
+另外 mathjs 中可以相乘可以省略 &lt;code&gt;*&lt;/code&gt; 單純用空隔，
+算是較貼近數學的寫法。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;const X = $math`
+    inv(${normalConstrain}) * (
+        ${designMatrix}&amp;#39; ${p} ${observation} +
+        1/${s} ${designConstrain}&amp;#39; ${valueConstrain}
+    )
+`
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;我有 &lt;a href="https://github.com/josdejong/mathjs/issues/1330"&gt;向 mathjs 提了這個 es6 tag template 功能的 issue&lt;/a&gt; ，
+也在 issue 中貼了上面那段範例程式，不知道會不會收。
+（放一天沒人回了，感覺是不會。
+最近提 issue 都被放置，難道是新手光環用完了，英文太爛被發現？）
+mathjs 專案有點大，底下一堆目錄腳本 require 來 require 去的，
+找起來有夠麻煩，等最近忙完再看要不要幫他改丟 pull request。&lt;/p&gt;
+&lt;h2 id="mathjs 其它功能"&gt;mathjs 其它功能&lt;/h2&gt;
+&lt;p&gt;mathjs 其實可以不和外界溝，直接寫成多行；
+在裡面也能賦值變數，會變成 scope 物件的 key value。
+只是我這次作業沒有這樣寫，可能下次可以試試看。&lt;/p&gt;
+&lt;h2 id="矩陣維度問題"&gt;矩陣維度問題&lt;/h2&gt;
+&lt;p&gt;最後來抱怨一下 mathjs 一個不太喜歡的地方，
+向量和矩陣不能相乘；
+因為在 mathjs 中向量不是矩陣，
+只有 &lt;em&gt;寬度 1 的矩陣&lt;/em&gt; 和 &lt;em&gt;高度 1 的矩陣&lt;/em&gt; ，
+沒有 &lt;strong&gt;行向量&lt;/strong&gt; 也沒有 &lt;strong&gt;列向量&lt;/strong&gt; 。&lt;/p&gt;
+&lt;p&gt;同時，如果把內積 &lt;code&gt;a · b&lt;/code&gt; 視為 &lt;code&gt;a&amp;#39; * b&lt;/code&gt; ，
+因為矩陣就是矩陣，只會變成高度寬度 1 的矩陣，
+他還是矩陣，不會是純量。
+而高寬 1 的矩陣基本上是不能乘大部份矩陣的，
+所以也造成了不少問題。&lt;/p&gt;
+&lt;p&gt;例如如果要定義列向量，就必須寫成寬度為一的矩陣，
+以我的習慣會寫成高度為一再轉置，可以少寫一點方括號。
+或其實也能用分號幫矩陣換行，
+只是如果是高度一的二維矩陣還是得寫二個方括號。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;const scope = {}
+MathJs.eval(`
+    L = [[1,2,3]]&amp;#39;
+    L2 = [[1],
+          [2],
+          [3]]
+    L3 = [1; 2; 3]
+    L4 = [1, 3, 4;]  # this cause syntax error
+`, scope)
+scope.L, scope.L2 // matrix
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;在 matlab 中純量就是高寬為 1 的矩陣，
+也是長度為 1 的向量；
+雖然向量還是分行列向量，
+但向量也就是寬度或高度為 1 的矩陣。
+也就沒有這麼多雷。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/short-life-expensive-price.html#warm-water-frog</id>
 <title>名言：逢人短命、遇貨添錢</title>
 <published>2018-04-13T16:43:44.187Z</published>

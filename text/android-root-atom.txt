@@ -1,0 +1,95 @@
+# root 新小手機 atom 過程
+最近入手群眾募資的新手機，unihertz 的 atom。
+因為想裝把手機摸擬成藍牙鍵盤或滑鼠的 app，
+所以就搜尋到 xda 上 root 的方法，
+用 magisk 還蠻簡單的，就照作也成功了。
+雖然結果因為手機是 mtk， 藍牙模組和 aosp 不合，
+所以 bluetooth+ 不能動。總之 root 了。
+
+## 刷機流程
+magisk 是 systemless root，
+大概是不會改到 system 分區的 root。
+用 magisk manager 時只要有系統的 `boot.img` ，
+就能用 magisk manager patch 該映像檔，
+用 fastboot 刷入達成 root。
+
+ 1. 取得你手機的 boot 分區映像檔。
+    據 xda 老鳥的說法，
+    小廠的手機可以和原廠要，原廠一般會給。
+    手機變磚可以用原廠 rom 刷回來。
+    
+    [這裡也備份一份 rom][gdrive rom] ，預防原連結死掉。
+    原廠是給了一份壓縮檔，裡面有各分區的映像檔，
+    像刷 magisk 要的 boot 分區是 `boot-verified.img` 。
+    
+[gdrive rom]: https://drive.google.com/drive/folders/1ECG5ebmTM6w-9sg0n4X7Ll2jcARBN2q5?usp=sharing
+ 
+ 2. 在手機上安裝 magisk manager，
+    可以 [在 magisk 的 github 載 apk][magisk manager] 。
+    
+[magisk manager]: https://github.com/topjohnwu/Magisk/releases
+    
+ 3. 之後把該映像檔傳到手機上，啟動 magisk manager，
+    選擇安裝，補丁該映像檔。
+    之後 magisk 就會修改該映像檔。
+ 
+ 4. 再把該 patch 過的映像檔傳回電腦。
+    接著把手機開機到 fastboot 模式，接上電腦。
+    如果不知道怎麼按，可以用 `adb reboot bootloader` 。
+    之後可以用 `fastboot devices` 檢查接上電腦的 android。
+    
+ 5. 接著要刷 boot 分區，所以要先解鎖。
+    現在的 android 如果要刷，要先解鎖，
+    同時為了安全性，解鎖時會同時清空手機的資料，
+    回復原廠設定，防止使用者資料外洩。
+    
+    下指令 `fastboot oem unlock` ，
+    手機會上會和你確定是否要解鎖，用音量鍵確定。
+ 
+ 6. 之後就能用 `fastboot flash boot patch_boot.img`
+    把映像檔刷進去。
+    刷完後為了安全，可以再 `fastboot oem lock` 鎖回來，
+    這樣別人要 hack 進你的手機，
+    也要 oem unlock，也會清空資料，也就不會外洩。
+    
+ 7. 最後就能開機了。
+    刷完後第一次開機時會稍久，好像還會重開機一次。
+    總之就完成了。
+
+
+我是根據 [xda 上的 atom thread 的人的說明][xda atom] root 成功的，
+感覺用 fastboot 蠻方便的，好像很多手機都可以直接刷。
+只是要下一點指令，且要 unlock 會清空資料。
+
+[xda atom]: https://forum.xda-developers.com/showpost.php?p=78112885&postcount=27
+ 
+atom 好像沒有區的問題，我也沒看到映像檔也分區。
+刷機時就直接刷了，也沒碰到問題。
+
+## android 模擬藍牙鍵鼠
+之前想要 root 是因為想要用手機控制投影片，感覺還蠻方便的。
+一開始是想到用無線滑鼠，就能拿著滑鼠遠程當簡報筆。
+後來又想到現在的手機都有藍牙功能，
+可能可以用手機模擬滑鼠或鍵盤，就能用手機當簡報筆用。
+
+結果在 google play 找到的 app 都是需要 root 的，
+不然就是要另外在電腦上裝其它軟體。
+其實也有找到一些可以控制簡報的，
+但比較想要能直接當滑鼠用的，
+因為可能會用瀏覽器放簡報，
+所以能模擬基礎鍵盤滑鼠比較好。
+有一款叫 **true mouth/kb** 的，
+就是能辦到類似的事，但他要先裝 **bluetooth+** 。
+bluetooth+ 試了就發現要 root，所以就 root 了。
+
+root 後執行 bluetooth+ ，
+他顯示 atom 是用 mtk 的模組，
+可能和 aosp 的一些 api 不合。
+結果真得不合，root 後 bluetooth+ 還是不能跑。
+
+總之就 root 成功了，但還是不能用手機來模擬藍牙鍵鼠。
+之後可能會用到其它 root 功能吧。
+
+#android
+#slide
+#root

@@ -242,3 +242,4 @@ javascript-node-drop-root.html
 javascript-prototype-chain-es6.html
 defecate-apologize-mail-regret.html
 politic-free-2018.html
+android-root-atom.html

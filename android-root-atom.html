@@ -105,6 +105,32 @@ bluetooth+ 試了就發現要 root，所以就 root 了。</p>
 結果真得不合，root 後 bluetooth+ 還是不能跑。</p>
 <p>總之就 root 成功了，但還是不能用手機來模擬藍牙鍵鼠。
 之後可能會用到其它 root 功能吧。</p>
+<h2 id="atom 開機到 fastboot">atom 開機到 fastboot</h2>
+<p>雖然可以簡單連上 adb 後，
+下指令 <code>adb reboot bootloader</code> 開機到 fastboot，
+但如果手機半磚了進不了系統，那就不能用 adb 重開了。
+大部份手機也提供直接從關機狀態開機到 fastboot 或 recovery 的方式，
+以 atom 來說，可以按著音量向上與電源鍵開機，
+（到 unihertz 字樣出現就能放掉了。）
+就能進入 recovery 模式。
+如果是重新開機，就是在螢幕黑掉後開始按著音量向上。</p>
+<p>這模式一開始會只出現一個躺在地上胸口打開
+有一個三角驚嘆號的 android，顯示一行沒有指令。
+你需要同時按著音量向上與電源鍵剛好三秒，
+（這步驟要多試幾次，時間不好抓。）
+然後先放開音量鍵，再放開電源鍵，就能看到選單了。
+只是這是 recovery，不是 fastboot，
+可以用音量鍵上下移動，用電源鍵選取，
+有一個 reboot to bootloader 才是開機到 bootloader 的選項。</p>
+<p>atom 好像沒辦法直接開機到 fastboot，
+只能經由 recovery，所以 recovery 刷壞也不能靠 fastboot 救。
+另一個音量下向鍵則是開機到 factory mode，
+裡面有一些簡單的測試，但和刷機無關。
+最後提醒一下，沒事不要按著電源鍵太久，
+按超過五秒，（多久不確定，但有點久。）會強制關機。
+我一開始以為顯示 recovery 選單是要按超過 3 秒，
+就一直按著向上和電源鍵，按到強制關機好幾次
+才發現不對，才發現是要 <strong>剛好三秒</strong> 。</p>
 </main>
 
 <script defer src="ext/meta-meta.js"></script>

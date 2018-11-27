@@ -1,0 +1,125 @@
+# 共享單車發展對計程車與公共運輸系統影響分析
+近年來世界各國吹起共享單車風，
+台灣以台北地區的 ubike 系統最為發達。
+許多民眾也開始以 ubike 代步，不再騎自己的機車或開車。
+同時因為 ubike 的方便甚至限時免費策略，
+也分走了計程車與其它公共運輸系統的一部份乘客數，
+一些計程車司機也因此抱怨 ubike 搶走了他們的生意。
+本計劃預計用台北地區 ubike 與計程車的開放資料，
+分析二者在地區、時間上彼此消長的情形。
+
+## 研究方法
+希望能取得不同年份上 ubike 的各站點位置與使用人次，
+分析 ubike 擴展據點與使用人次的成長關係，
+及在 ubike 擴張範圍內，捷運、公車運量是否困此有變化。
+更進一步，希望能取得 ubike 借還地資料，
+計算 ubike 的使用距離，與捷運進出站距離的比較。
+
+## 數據
+ubike 可以在官網找到現有站點對應的地址，
+而 [各站點設置日期則在維基百科有記錄][ubike station list] ，
+同時有 [每月租賃人次的統計][ubike month times] 。
+[計程車營運可以在政府的開放資料平台找到二年統計一次的資料][taxi open data] 。
+
+[ubike station list]: https://zh.wikipedia.org/wiki/%E8%87%BA%E5%8C%97%E5%B8%82%E5%85%AC%E5%85%B1%E8%87%AA%E8%A1%8C%E8%BB%8A%E7%A7%9F%E8%B3%83%E7%B3%BB%E7%B5%B1%E7%AB%99%E9%BB%9E%E5%88%97%E8%A1%A8 "維基百科上的 youbike 站點列表"
+[ubike month times]: http://dotstat.taipei.gov.tw/pxweb2007P/Dialog/varval.asp?ma=TP10502M&ti=%BBO%A5_%A5%AB%A4%BD%A6@%A6%DB%A6%E6%A8%AE%AF%B2%B8%EE%B1%A1%A7%CE&path=../PXfile/CountyStatistics&lang=9&strList=L "台北市政府對 youbike 租借人次的逐月統計"
+[taxi open data]: https://data.gov.tw/dataset/6252 "政府開放資料平台上的計程車營運統計資料"
+
+## 問題
+維基百科中，新北和台北的資料是分開的。
+
+## 預期成果
+預計能看出計程車司機所抱怨的，因為 ubike 的普及，
+造成部份市民轉用 ubike，讓計程車使用率下滑。
+如果能找到公車、捷運的資料，預計也會出現類似的結果；
+但不少 ubike 站是設在捷運站，故捷運站的情況可能較複雜。
+
+[taxi r analysis]: https://ithelp.ithome.com.tw/users/20111603/ironman/2012
+
+<link rel="stylesheet" href="ext/paper.css" />
+
+<script src="ext/paper.js?execute"></script>
+
+<script src="ext/header-nctu.js?execute&editable"></script>
+
+<script>
+function $html(template, ...text) {
+  const result = []
+  for (let i=0; i<template.length; i++) {
+    if (i>0) result.push(encodeHtml(text[i-1]))
+    result.push(template[i])
+  }
+  return result.join('')
+  
+  function encodeHtml(text) {
+    return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+  }
+}
+gmeta.reference = {
+  imageCounter: 1,
+  add(title, url, context) {
+    const entry = this.createEntry(title, url, context)
+    this.node.appendChild(entry)
+  },
+  createEntry(title, url, context) {
+    const dl = document.createElement('dl')
+    const dt = document.createElement('dt')
+    dt.textContent = title
+    dl.appendChild(dt)
+    dl.innerHTML = $html`<dt>${title}</dt>
+    <dd>${url}</dd>
+    <dd class="context">${context}</dd>`
+    return dl
+  },
+  node: document.createDocumentFragment(),
+  render() {
+    const main = document.querySelector('main')
+    let referenceHeader = document.querySelector('h2.reference')
+    if (!referenceHeader) {
+      referenceHeader = document.createElement('h2')
+      referenceHeader.textContent = '參考資料'
+      referenceHeader.classList.add('reference')
+      main.appendChild(referenceHeader)
+    }
+    if (referenceHeader.nextSibling) {
+      referenceHeader.parentNode.insertBefore(
+        this.node, referenceHeader.nextSibling
+      )
+    }
+    else main.appendChild(this.node)
+  }
+}
+document.querySelectorAll('a').forEach(anchor => {
+  const reference = gmeta.reference
+  if (anchor.classList.contains('image')) {
+    const cjk = gmeta.patchCjkCounter.numberToCjk(reference.imageCounter)
+    reference.add('圖' + cjk, anchor.href, anchor.title)
+    reference.imageCounter++
+  }
+  else reference.add(anchor.title, anchor.href, anchor.textContent)
+})
+gmeta.reference.render()
+</script>
+
+<style>
+main {
+  counter-reset: reference-id;
+}
+a {
+  counter-increment: reference-id;
+}
+a::after {
+  content: "[" counter(reference-id) "]";
+  font-size: smaller;
+}
+dd.context::before, dd.context::after {
+  content: "……";
+}
+</style>
+
+#gis
+#nctu
+#report

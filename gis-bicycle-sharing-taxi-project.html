@@ -1,0 +1,144 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-11-27T09:06:37.910Z">
+<meta name="keywords" property="og:article:tag" content="gis,nctu,report">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="javascript-mathjs-tag-template.html" title="真正使用 mathjs 並結合 es6 tag template">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>共享單車發展對計程車與公共運輸系統影響分析</title>
+</head>
+<body>
+<main><h1 id="共享單車發展對計程車與公共運輸系統影響分析">共享單車發展對計程車與公共運輸系統影響分析</h1>
+<p>近年來世界各國吹起共享單車風，
+台灣以台北地區的 ubike 系統最為發達。
+許多民眾也開始以 ubike 代步，不再騎自己的機車或開車。
+同時因為 ubike 的方便甚至限時免費策略，
+也分走了計程車與其它公共運輸系統的一部份乘客數，
+一些計程車司機也因此抱怨 ubike 搶走了他們的生意。
+本計劃預計用台北地區 ubike 與計程車的開放資料，
+分析二者在地區、時間上彼此消長的情形。</p>
+<h2 id="研究方法">研究方法</h2>
+<p>希望能取得不同年份上 ubike 的各站點位置與使用人次，
+分析 ubike 擴展據點與使用人次的成長關係，
+及在 ubike 擴張範圍內，捷運、公車運量是否困此有變化。
+更進一步，希望能取得 ubike 借還地資料，
+計算 ubike 的使用距離，與捷運進出站距離的比較。</p>
+<h2 id="數據">數據</h2>
+<p>ubike 可以在官網找到現有站點對應的地址，
+而 <a href="https://zh.wikipedia.org/wiki/%E8%87%BA%E5%8C%97%E5%B8%82%E5%85%AC%E5%85%B1%E8%87%AA%E8%A1%8C%E8%BB%8A%E7%A7%9F%E8%B3%83%E7%B3%BB%E7%B5%B1%E7%AB%99%E9%BB%9E%E5%88%97%E8%A1%A8" title="維基百科上的 youbike 站點列表">各站點設置日期則在維基百科有記錄</a> ，
+同時有 <a href="http://dotstat.taipei.gov.tw/pxweb2007P/Dialog/varval.asp?ma=TP10502M&amp;ti=%BBO%A5_%A5%AB%A4%BD%A6@%A6%DB%A6%E6%A8%AE%AF%B2%B8%EE%B1%A1%A7%CE&amp;path=../PXfile/CountyStatistics&amp;lang=9&amp;strList=L" title="台北市政府對 youbike 租借人次的逐月統計">每月租賃人次的統計</a> 。
+<a href="https://data.gov.tw/dataset/6252" title="政府開放資料平台上的計程車營運統計資料">計程車營運可以在政府的開放資料平台找到二年統計一次的資料</a> 。</p>
+<h2 id="問題">問題</h2>
+<p>維基百科中，新北和台北的資料是分開的。</p>
+<h2 id="預期成果">預期成果</h2>
+<p>預計能看出計程車司機所抱怨的，因為 ubike 的普及，
+造成部份市民轉用 ubike，讓計程車使用率下滑。
+如果能找到公車、捷運的資料，預計也會出現類似的結果；
+但不少 ubike 站是設在捷運站，故捷運站的情況可能較複雜。</p>
+<link rel="stylesheet" href="ext/paper.css">
+
+<script src="ext/paper.js?execute"></script>
+
+<script src="ext/header-nctu.js?execute&editable"></script>
+
+<script>
+function $html(template, ...text) {
+  const result = []
+  for (let i=0; i<template.length; i++) {
+    if (i>0) result.push(encodeHtml(text[i-1]))
+    result.push(template[i])
+  }
+  return result.join('')
+
+  function encodeHtml(text) {
+    return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+  }
+}
+gmeta.reference = {
+  imageCounter: 1,
+  add(title, url, context) {
+    const entry = this.createEntry(title, url, context)
+    this.node.appendChild(entry)
+  },
+  createEntry(title, url, context) {
+    const dl = document.createElement('dl')
+    const dt = document.createElement('dt')
+    dt.textContent = title
+    dl.appendChild(dt)
+    dl.innerHTML = $html`<dt>${title}</dt>
+    <dd>${url}</dd>
+    <dd class="context">${context}</dd>`
+    return dl
+  },
+  node: document.createDocumentFragment(),
+  render() {
+    const main = document.querySelector('main')
+    let referenceHeader = document.querySelector('h2.reference')
+    if (!referenceHeader) {
+      referenceHeader = document.createElement('h2')
+      referenceHeader.textContent = '參考資料'
+      referenceHeader.classList.add('reference')
+      main.appendChild(referenceHeader)
+    }
+    if (referenceHeader.nextSibling) {
+      referenceHeader.parentNode.insertBefore(
+        this.node, referenceHeader.nextSibling
+      )
+    }
+    else main.appendChild(this.node)
+  }
+}
+document.querySelectorAll('a').forEach(anchor => {
+  const reference = gmeta.reference
+  if (anchor.classList.contains('image')) {
+    const cjk = gmeta.patchCjkCounter.numberToCjk(reference.imageCounter)
+    reference.add('圖' + cjk, anchor.href, anchor.title)
+    reference.imageCounter++
+  }
+  else reference.add(anchor.title, anchor.href, anchor.textContent)
+})
+gmeta.reference.render()
+</script>
+
+<style>
+main {
+  counter-reset: reference-id;
+}
+a {
+  counter-increment: reference-id;
+}
+a::after {
+  content: "[" counter(reference-id) "]";
+  font-size: smaller;
+}
+dd.context::before, dd.context::after {
+  content: "……";
+}
+</style>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy="" src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

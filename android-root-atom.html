@@ -8,7 +8,7 @@
 
 <!-- 後設資料 -->
 <meta name="date" property="og:article:public_time" content="2018-11-22T02:43:06.828Z">
-<meta name="keywords" property="og:article:tag" content="android,slide,root">
+<meta name="keywords" property="og:article:tag" content="android,slide,root,app">
 <link rel="index" type="text/html" href="index.html" title="首頁">
 <link rel="start" type="text/html" href="index.html" title="首頁">
 <link rel="next" type="text/html" href="javascript-mathjs-tag-template.html" title="真正使用 mathjs 並結合 es6 tag template">
@@ -105,7 +105,7 @@ bluetooth+ 試了就發現要 root，所以就 root 了。</p>
 結果真得不合，root 後 bluetooth+ 還是不能跑。</p>
 <p>總之就 root 成功了，但還是不能用手機來模擬藍牙鍵鼠。
 之後可能會用到其它 root 功能吧。</p>
-<h2 id="atom 開機到 fastboot">atom 開機到 fastboot</h2>
+<h2 id="&lt;ins datetime=&quot;2018-11-26&quot;&gt;atom 開機到 fastboot&lt;/ins&gt;"><ins datetime="2018-11-26">atom 開機到 fastboot</ins></h2>
 <p>雖然可以簡單連上 adb 後，
 下指令 <code>adb reboot bootloader</code> 開機到 fastboot，
 但如果手機半磚了進不了系統，那就不能用 adb 重開了。
@@ -131,6 +131,31 @@ bluetooth+ 試了就發現要 root，所以就 root 了。</p>
 我一開始以為顯示 recovery 選單是要按超過 3 秒，
 就一直按著向上和電源鍵，按到強制關機好幾次
 才發現不對，才發現是要 <strong>剛好三秒</strong> 。</p>
+<h2 id="&lt;ins datetime=&quot;2018-11-28&quot;&gt;透過 vnc 控制投影片&lt;/ins&gt;"><ins datetime="2018-11-28">透過 vnc 控制投影片</ins></h2>
+<p>要讓電腦接受作為像滑鼠、鍵盤的輸入裝置，除了最簡單的藍牙裝置、usb 外，
+多需要在電腦上預先安裝軟體接受來自手機的訊號，無論是透過藍牙或網路。
+比起為了一個 app 自幹 client 與 server，
+較簡單的作法是重用既有的架構，例如 x window 或 vnc。
+雖然 vnc 是用來遠端操作整台電腦畫面的，
+但也能傳送滑鼠移動或按鍵，所以能視作多了畫面功能的遠端裝置。</p>
+<p>目前有二款試用過的，一是走 vnc 的 <a href="https://play.google.com/store/apps/details?id=nine.controller">Remote mouse</a> ，
+一是走 ssh 和 x window 的 <a href="https://play.google.com/store/apps/details?id=com.stripe1.xmouse">XMouse Remote Mouse &amp; Keyboard</a> 。</p>
+<p><a href="https://play.google.com/store/apps/details?id=nine.controller">Remote mouse</a> 是走 vnc 的，要在電腦裝 vnc server。
+windows 下可以用 tiger vnc，linux 可以用 x11vnc。
+用來放投影片是沒什麼問題，
+用音量鍵能模擬捲動翻頁，滑動螢幕就會移動游標。
+預設好像會自己搜尋區網內的 vnc port。
+感覺這 app 蠻實用的，如果有實際用到的話，
+可能會贊助一下吧。</p>
+<p>另一款是 <a href="https://play.google.com/store/apps/details?id=com.stripe1.xmouse">XMouse Remote Mouse &amp; Keyboard</a> ，
+就是走 ssh 然後用 xdotool 命令來發送按鍵與移動滑鼠。
+所以電腦要有裝這二個軟體。
+debian ubunti 系就 <code>apt install xdotool ssh</code> 。
+但因為是用 xdotool 控制，
+在移動游標的連續動作時會有點頓。</p>
+<p>因為 xdotool 只有 linux 下能用，而且他會頓，
+目前是用 remote mouse。
+雖然一般 windows 也沒有 vnc server 就是了。</p>
 </main>
 
 <script defer src="ext/meta-meta.js"></script>

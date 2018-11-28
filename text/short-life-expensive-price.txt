@@ -818,6 +818,16 @@ jQuery 做事，開口不談$後面啥都別想動。
 →  linger:幹還真的是溫水煮青蛙                                     01/04 16:33
 ```
 
+---
+
+```
+推 pedobear:我都幻想跟她玩搔癢遊戲，弄的愛菜笑的喘不過氣
+→  pedobear:然後不小心玩過了頭，不小心尿尿在褲子上...
+→  pedobear:她就一臉快要哭出來 用無辜的眼神看著我
+→  pedobear:我就裝做不知情的說: 妳流了好多汗 趕快換衣服別感冒了
+→  pedobear:然後很紳士的幫她把汗舔乾淨
+```
+
 <script>
 document.querySelectorAll('pre').forEach(pre => {
   const code = pre.children[0]

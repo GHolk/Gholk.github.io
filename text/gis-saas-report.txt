@@ -1,20 +1,7 @@
 # GIS 界的 SaaS
-GIS 與 SaaS 的結合。
-
-<header contenteditable="true">
-<i>gholk</i>
-
-<h2>摘要</h2>
-<p>在雲端興起後 GIS 也捲入了雲端的大浪潮。其中 SaaS 是 GIS 最主要的模式。</p>
-
-<dl>
-<dt>關鍵字</dt>
-<dd>gis</dd>
-<dd>saas</dd>
-<dd>雲端</dd>
-</dl>
-</header>
-
+在雲端興起後 GIS 也捲入了雲端的大浪潮。其中 SaaS 是 GIS 最主要的模式。
+本文介紹雲端運算時代中 GIS 如何以 SaaS 形式提供服務，
+並與過去大型工作站時代、PC 時代的 GIS 比較。
 
 ## 雲端運算中的 SaaS
 雲端運算的核心理念，在於將運算與儲存分散到個人電腦外，建置所謂雲：大型數據中心、機房；讓所謂端：使用者可以依自己的需求購買、租賃雲的資源，如儲存空間、計算任務。雲端中的應用，可以粗略分為三個層次：
@@ -33,12 +20,11 @@ GIS 與 SaaS 的結合。
 以專注在軟體使用上，而不需要關心底層細節。
 
 
-## GIS 與 SaaS 的結合
+## [GIS 與 SaaS 的結合][gis cloud future]
 雲端運算與 SaaS 是軟體業的未來，
 也許某一天，所有軟體都會在雲端運行，
 不再需要笨重的桌面軟體，
 且屆時 gis 的能力將遠超現今 gis 所能做到的。
-[gis cloud future]
 
 現今 gis 軟體最主要的問題是，
 大多數使用者都是 **專業使用者** ，
@@ -164,20 +150,20 @@ web 2.0 就是這樣一項指標，
 宣告網站和使用者互動的時代來臨。
 讓網頁正式成為繼 PC windows 後的新標準平台，
 也成為群眾協作模式的運作基礎。
-最注名的群眾協作成果 **維基百科** 就在 2001 年成立 [wikipedia] ，
+[最注名的群眾協作成果 **維基百科** 就在 2001 年成立][wikipedia] ，
 而將類似的概念結合 web gis 技術，
 即成為 open street map。
 
-[wikipedia]: http://zh.wikipedia.org/wiki/維基百科
+[wikipedia]: http://zh.wikipedia.org/wiki/維基百科 "維基百科上介紹維基百科的條目"
 
-open street map 在 2004 年成立 [OSM] ，
+[open street map 在 2004 年成立][OSM] ，
 標榜得是人人可繪製的線上地圖。
 透過瀏覽器介面，允許使用者查看、編輯地圖。
 其相當於在瀏覽器與網頁伺服器中運行的一套 web gis，
 同時所有使用者也共享同一份在伺服器上的地圖。
 藉由所有使用者編修，累積成果為一份十分詳細的地圖。
 
-[OSM]: http://zh.wikipedia.org/wiki/OSM
+[OSM]: http://zh.wikipedia.org/wiki/OSM "維基百科上介紹開放街圖的條目"
 
 web gis 在 open street map 的場合中，
 扮演了核心的角色：
@@ -190,18 +176,101 @@ web gis 在 open street map 的場合中，
   供編輯、檢視，天生具有共享資料的性質。
   
 
-## 參考文獻
-[wikipedia: 維基百科上關於維基百科的介紹][wikipedia]
-
-[osm: 維基百科上關於開放街圖的介紹][OSM]
-
-[geospatialword: cloud computing future belongs to gis as a service][gis cloud future]
-
-[gis cloud future]: https://www.geospatialworld.net/article/cloud-computing-future-belongs-to-gis-as-a-service/
+[gis cloud future]: https://www.geospatialworld.net/article/cloud-computing-future-belongs-to-gis-as-a-service/ "geospatial world 中介紹 GIS as a Service 的文章"
 
 
 <link rel="stylesheet" href="ext/paper.css">
 
+<script src="ext/paper.js"></script>
+
+<script src="ext/header-nctu.js?execute&editable"></script>
+
+<style>
+/* context */
+h2.reference ~ dl > dd:nth-of-type(1)::before {
+  content: "……，";
+}
+h2.reference ~ dl > dd:nth-of-type(1)::after {
+  content: "……";
+}
+
+/* reference anchor foot note */
+body {
+  counter-reset: reference-sentence;
+}
+a.reference-sentence {
+  color: black;
+  counter-increment: reference-sentence;
+}
+a.reference-sentence::after {
+  content: "[" counter(reference-sentence) "]";
+  font-size: smaller;
+  color: blue;
+}
+</style>
+  
+
+<script>
+gmeta.reference = {
+  imageCounter: 1,
+  anchorCounter: 1,
+  add() {
+    const entry = this.createEntry(...arguments)
+    this.node.appendChild(entry)
+  },
+  createEntry(id, context, description, url) {
+    const dl = document.createElement('dl')
+    const dt = document.createElement('dt')
+    dt.textContent = id
+    dl.appendChild(dt)
+    for (const text of [context, description, url]) {
+      const dd = document.createElement('dd')
+      dd.textContent = text
+      dl.appendChild(dd)
+    }
+    return dl
+  },
+  node: document.createDocumentFragment(),
+  render() {
+    const main = document.querySelector('main')
+    let referenceHeader = document.querySelector('h2.reference')
+    if (!referenceHeader) {
+      referenceHeader = document.createElement('h2')
+      referenceHeader.textContent = '參考資料'
+      referenceHeader.classList.add('reference')
+      main.appendChild(referenceHeader)
+    }
+    if (referenceHeader.nextSibling) {
+      referenceHeader.parentNode.insertBefore(
+        this.node, referenceHeader.nextSibling
+      )
+    }
+    else main.appendChild(this.node)
+  }
+}
+
+gmeta.postPaper.regist('a', anchor => {
+  const reference = gmeta.reference
+  if (anchor.classList.contains('image')) {
+    const cjk = gmeta.patchCjkCounter.numberToCjk(reference.imageCounter)
+    reference.add('圖' + cjk, anchor.href, anchor.title)
+    reference.imageCounter++
+  }
+  else {
+    anchor.classList.add('reference-sentence')
+    const index = `^${reference.anchorCounter}`
+    reference.add(index, anchor.textContent, anchor.title, anchor.href)
+    reference.anchorCounter++
+  }
+})
+
+gmeta.postPaper.auto(true)
+gmeta.reference.render()
+
+</script>
 
 #作業
 #gis
+#saas
+#cloud
+

@@ -28,6 +28,18 @@ class AtomLoader {
         )
     }
     add(loader) {
+        const entry = this.createEntry(loader)
+        const tags = loader.tags.split(/,/g)
+        if (!tags.includes('hide')) {
+            if (tags.includes('sage')) {
+                this.selector('entry:nth-of-type(9)').after(entry)
+            }
+            else {
+                this.selector('entry:first-of-type').before(entry)
+            }
+        }
+    }
+    createEntry(loader) {
         const tags = loader.tags.split(/,/g).map(tagToAtom).join('\n')
         const currentDate = new Date()
         const entry = this.selector('<entry>')
@@ -55,7 +67,8 @@ ${tags}
                 entry.find('summary').after($link)
             })
 
-        this.selector('entry:first-of-type').before(entry)
+        return entry
+
         function tagToAtom(tag) {
             return `<category term="${tag}" />`
         }

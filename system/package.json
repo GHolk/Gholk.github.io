@@ -1,0 +1,17 @@
+{
+  "name": "mblog",
+  "version": "0.0.0",
+  "description": "git base static blog",
+  "dependencies": {
+    "cheerio": "git+https://github.com/GHolk/cheerio.git",
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/GHolk/GHolk.github.io.git"
+  },
+  "author": "gholk",
+  "license": "ISC"
+}

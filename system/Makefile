@@ -14,7 +14,7 @@ all: $(html_files)
 	then basename $@ >>$(list_file) ; \
 	fi
 
-	$(text_to_html) $@
+	$(text_to_html) $< $@
 
 	-xdg-open $@
 

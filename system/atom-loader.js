@@ -13,10 +13,14 @@ class AtomLoader {
         this.selector = cheerio.load(fs.readFileSync(path), option)
         this.baseUri = 'http://gholk.github.io'
     }
+    removeOldContent(count = 10) {
+        this.selector('content').slice(10).remove()
+    }
     write() {
         const current = new Date()
         this.selector('feed > updated:first-of-type')
             .text(current.toISOString())
+        this.removeOldContent()
         fs.writeFileSync(
             this.path,
             this.selector.html(),

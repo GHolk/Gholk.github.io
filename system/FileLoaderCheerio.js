@@ -11,6 +11,7 @@
       this.path = path;
       this.file = path.replace(/^.*\//, '');
       this.selector = cheerio.load(fs.readFileSync(path, 'utf8'), {
+        keepNonAscii: true,
         decodeEntities: false,
         xmlMode: false,
         withDomLvl1: true,

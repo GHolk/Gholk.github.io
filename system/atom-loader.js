@@ -6,7 +6,7 @@ class AtomLoader {
         if (!path) path = '../atom.xml'
         this.path = path
         const option = {
-            decodeEntities: false,
+            keepNonAscii: true,
             xmlMode: true,
             normalizeWhitespace: false
         }
@@ -52,8 +52,9 @@ class AtomLoader {
       href="${this.baseUri}/${loader.file}" />
 <summary>${loader.description}</summary>
 ${tags}
-<content type="html">${escapeHtml(loader.main)}</content>
+<content type="html"></content>
 `)
+        entry.find('content').text(loader.main)
         const $ = loader.selector
         $('meta[property]')
             .filter(

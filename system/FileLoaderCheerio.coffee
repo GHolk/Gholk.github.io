@@ -7,7 +7,7 @@ class FileLoaderCheerio
         @path = path
         @file = path.replace /^.*\//, ''
         @selector = cheerio.load (fs.readFileSync path, 'utf8'), {
-            decodeEntities: false
+            keepNonAscii: true
             xmlMode: false
             withDomLvl1: true
             normalizeWhitespace: false

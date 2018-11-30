@@ -8,7 +8,8 @@ const atom = new AtomLoader()
 const post = new HTMLLoader(htmlPath)
 
 function addToAtom(title, description) {
-    post.description = description
+    const $summary = post.selector('<pre>').addClass('diff').text(description)
+    post.description = post.selector.html($summary)
     post.file += '#' + title
     atom.add(post)
     atom.write()
@@ -18,7 +19,7 @@ function extractDiffFromGit(gitLog) {
     const logList = gitLog.split(/\n/g)
     const contentStart = /^@@/
     while (!contentStart.test(logList[0])) logList.shift()
-    return logList.join('\n')
+    return logList.slice(0,15).join('\n')
 }
 
 const changeTitle = changeLog[0].replace(/\s/g, '-')

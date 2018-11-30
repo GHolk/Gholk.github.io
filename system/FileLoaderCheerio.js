@@ -30,7 +30,7 @@
       this.next = this.selector('link[rel=next]').attr('href');
       this.nextTitle = this.selector('link[rel=next]').attr('title');
       this.main = this.selector('main').html();
-      return this.description = this.selector('main > :not(h1)').first().text();
+      return this.description = this.selector('main > :not(h1)').first().html();
     };
 
     FileLoaderCheerio.prototype.sync = function() {

@@ -50,10 +50,11 @@ class AtomLoader {
 <updated>${currentDate.toISOString()}</updated>
 <link rel="alternate" type="text/html"
       href="${this.baseUri}/${loader.file}" />
-<summary>${loader.description}</summary>
+<summary type="html"></summary>
 ${tags}
 <content type="html"></content>
 `)
+        entry.find('summary').text(loader.description)
         entry.find('content').text(loader.main)
         const $ = loader.selector
         $('meta[property]')

@@ -19,6 +19,9 @@ const Article = function ClassArticle () {
         get url() {
             return this.entry[q]('link[rel=alternate]')[p]('href')
         }
+        get descriptionNode() {
+            return this.entry[q]('summary')
+        }
         get description() {
             return this.entry[q]('summary')[t]
         }
@@ -40,7 +43,11 @@ const Article = function ClassArticle () {
             node[q]('a').textContent = this.title
             node[q]('a').href = this.url
             node[q]('small').textContent = this.date.toJSON()
-            node[q]('.summary')[t] = this.description
+            const descriptionNode = this.descriptionNode
+            if (descriptionNode.getAttribute('type') == 'html') {
+                node[q]('.summary').innerHTML = descriptionNode[t]
+            }
+            else node[q]('summary')[t] = descriptionNode[t]
             const ul = node[q]('ul')
             this.tags.map((tag) => {
                 let li = document.createElement('li')

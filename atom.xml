@@ -30,7 +30,7 @@
 <published>2018-11-30T05:26:11.227Z</published>
 <updated>2018-11-30T05:27:23.441Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/politic-free-2018.html#black-and-first-hero"/>
-<summary>&lt;pre class=&quot;diff&quot;&gt;@@ -54,6 +54,25 @@
+<summary type="html">&lt;pre class=&quot;diff&quot;&gt;@@ -54,6 +54,25 @@
  這辯護有點無力，但就這樣吧。
  如果可以大概會投他吧。
  
@@ -276,7 +276,7 @@
 <published>2018-11-30T04:41:39.271Z</published>
 <updated>2018-11-30T04:43:10.921Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/legendre-sphere-harmonic-coefficient.html#include-derive-define"/>
-<summary>&lt;pre class=&quot;diff&quot;&gt;@@ -36,6 +36,13 @@ function pn = p_nth(n)
+<summary type="html">&lt;pre class=&quot;diff&quot;&gt;@@ -36,6 +36,13 @@ function pn = p_nth(n)
    end
  end
  
@@ -945,7 +945,7 @@ end
 <published>2018-11-28T07:30:11.867Z</published>
 <updated>2018-11-29T05:44:25.580Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/legendre-sphere-harmonic-coefficient.html#fix-type-complete-summary"/>
-<summary>&lt;pre class=&quot;diff&quot;&gt;@@ -2,7 +2,7 @@
+<summary type="html">&lt;pre class=&quot;diff&quot;&gt;@@ -2,7 +2,7 @@
  物理大地測量的各項球諧函數滿足正交性，
  因此可以用多階球諧函數的和擬合地球重力位，
  將各階球諧函數視作是總合函數的基底。

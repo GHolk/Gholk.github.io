@@ -36,6 +36,13 @@ function pn = p_nth(n)
   end
 end
 
+function dydx = derive_at (f, x, dx = 0.005)
+  dydx = ( f(x.+dx) .- f(x.-dx) ) / (dx*2);
+end
+
+function dfdx = derive (f, dx = 0.005)
+  dfdx = @(x) derive_at(f, x, dx);
+end
     
 function pnm = p_nmth(n,m)
   dpnm = p_nth(n);

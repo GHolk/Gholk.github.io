@@ -7,12 +7,12 @@
 <!-- 以上一般不用改，以下才要改。 -->
 
 <!-- 後設資料 -->
-<meta name="date" property="og:article:public_time" content="2018-11-28T07:30:11.867Z">
+<meta name="date" property="og:article:public_time" content="2018-11-30T04:41:39.271Z">
 <meta name="keywords" property="og:article:tag" content="nctu,report,matlab">
 <link rel="index" type="text/html" href="index.html" title="首頁">
 <link rel="start" type="text/html" href="index.html" title="首頁">
-<link rel="next" type="text/html" href="">
-<link rel="prev" type="text/html" href="gis-bicycle-sharing-taxi-project.html" title="共享單車發展對計程車與公共運輸系統影響分析">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="legendre-sphere-harmonic-coefficient.html" title="legendre 球諧函數的正交性與系數">
 
 <!-- 和網頁位置有關 -->
 <link rel="icon" type="image/png" href="ext/icon.png">
@@ -59,6 +59,13 @@ function pn = p_nth(n)
   end
 end
 
+function dydx = derive_at (f, x, dx = 0.005)
+  dydx = ( f(x.+dx) .- f(x.-dx) ) / (dx*2);
+end
+
+function dfdx = derive (f, dx = 0.005)
+  dfdx = @(x) derive_at(f, x, dx);
+end
 
 function pnm = p_nmth(n,m)
   dpnm = p_nth(n);
@@ -665,7 +672,7 @@ end
 </main>
 
 <script defer src="ext/meta-meta.js"></script>
-<script defer data-lazy="" src="ext/load-disqus.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
 <script>autoLoader.autoLoad()</script>
 
 </body></html>

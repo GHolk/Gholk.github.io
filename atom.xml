@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-11-30T05:27:23.463Z</updated>
+  <updated>2018-11-30T06:48:28.515Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -30,7 +30,7 @@
 <published>2018-11-30T05:26:11.227Z</published>
 <updated>2018-11-30T05:27:23.441Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/politic-free-2018.html#black-and-first-hero"/>
-<summary>@@ -54,6 +54,25 @@
+<summary>&lt;pre class=&quot;diff&quot;&gt;@@ -54,6 +54,25 @@
  這辯護有點無力，但就這樣吧。
  如果可以大概會投他吧。
  
@@ -45,9 +45,9 @@
 +[這張圖片及後面幾話大概描寫了首席勇者的性格][first] ，
 +後面他也算主要角色，不少重要場合都有出現，就不再舉了。
 +
-+[brave]: https://www.facebook.com/pg/Official.YellowBook/photos/?tab=album&amp;album_id=1199253163427927
++[brave]: https://www.facebook.com/pg/Official.YellowBook/photos/?tab=album&amp;amp;amp;album_id=1199253163427927
 +[black]: https://www.facebook.com/Official.YellowBook/photos/pb.272512416102011.-2207520000.1467235393./1213973798622530/
-+[first]: https://www.facebook.com/Official.YellowBook/photos/a.1199253163427927/1442543625765545/?type=3&amp;theater
++[first]: https://www.facebook.com/Official.YellowBook/photos/a.1199253163427927/1442543625765545/?type=3&amp;amp;amp;theater
 +
 +陳其邁常被酸他爸貪汙，但越認識他就覺得他的人品真是滿分，做事認真。
 +至於他的實力和他爸有沒有像首席一樣完全來自他爸，
@@ -56,7 +56,7 @@
  ### 選後
  韓國瑜會上真的很扯。
  陳其邁的政見、辯論都很強，
-</summary>
+&lt;/pre&gt;</summary>
 <category term="政治"/>
 <category term="中國"/>
 <category term="自由"/>
@@ -276,7 +276,7 @@
 <published>2018-11-30T04:41:39.271Z</published>
 <updated>2018-11-30T04:43:10.921Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/legendre-sphere-harmonic-coefficient.html#include-derive-define"/>
-<summary>@@ -36,6 +36,13 @@ function pn = p_nth(n)
+<summary>&lt;pre class=&quot;diff&quot;&gt;@@ -36,6 +36,13 @@ function pn = p_nth(n)
    end
  end
  
@@ -290,7 +290,7 @@
      
  function pnm = p_nmth(n,m)
    dpnm = p_nth(n);
-</summary>
+&lt;/pre&gt;</summary>
 <category term="nctu"/>
 <category term="report"/>
 <category term="matlab"/>
@@ -945,7 +945,7 @@ end
 <published>2018-11-28T07:30:11.867Z</published>
 <updated>2018-11-29T05:44:25.580Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/legendre-sphere-harmonic-coefficient.html#fix-type-complete-summary"/>
-<summary>@@ -2,7 +2,7 @@
+<summary>&lt;pre class=&quot;diff&quot;&gt;@@ -2,7 +2,7 @@
  物理大地測量的各項球諧函數滿足正交性，
  因此可以用多階球諧函數的和擬合地球重力位，
  將各階球諧函數視作是總合函數的基底。
@@ -954,7 +954,7 @@ end
  就能由總合中分離出各項系數。
  本次作業練習由 legendre 函數定義出各階球諧函數，
  再以任意系數組合出一組重力位，
-</summary>
+&lt;/pre&gt;</summary>
 <category term="nctu"/>
 <category term="report"/>
 <category term="matlab"/>

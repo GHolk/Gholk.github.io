@@ -47,7 +47,7 @@ const Article = function ClassArticle () {
             if (descriptionNode.getAttribute('type') == 'html') {
                 node[q]('.summary').innerHTML = descriptionNode[t]
             }
-            else node[q]('summary')[t] = descriptionNode[t]
+            else node[q]('.summary')[t] = descriptionNode[t]
             const ul = node[q]('ul')
             this.tags.map((tag) => {
                 let li = document.createElement('li')

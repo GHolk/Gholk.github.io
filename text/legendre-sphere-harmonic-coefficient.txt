@@ -230,7 +230,7 @@ for n = 0:6
     coefficient_sum_grid += snmc * snm(n, m)(y_radian_range', x_radian_range);
   end
 end
-plot_earth_grid_180x360_tofile(coefficient_sum_grid, 'coefficient-sum');
+plot_grid_180x360_tofile(coefficient_sum_grid, 'coefficient-sum');
 ```
 
 系數名 | 系數值 | 系數名 | 系數值
@@ -270,6 +270,31 @@ R66 | 0.707811 | S66 | 0.957893
 
 [coefficient-sum.png]: http://farm5.staticflickr.com/4821/45360456564_39db045f29.jpg "合成的球諧函數圖型"
 [![coefficient-sum.png]]: http://www.flickr.com/photos/144554087@N04/45360456564
+
+### 估計各項球諧系數的振幅
+由之後分離系數所使用的積分，其積分結果產生的系數
+`2*pi/(2*n+1)*factorial(n+m)/factorial(n-m)` 可以得知，
+雖然各項球諧的系數都介於 0-1 之間，
+但 m 的次數越高，其結果的振幅也會越大，
+產生的系數也會越大，二者約是階乘的關係。
+
+我選取了 S42 項作實驗，其圖形如上述圖九。
+在維持其它系數不變，獨立調整 S42 係數，
+繪出 B42 為 500 與 999 的情況如下。
+在 500 時就能在原本合成的彩度中看出 S42 的形狀，
+到 999 時則是二者混合，再增加就和 S42 的獨立圖形無太大區別了，
+也就不畫了。
+
+[![s42-500.png]]
+
+[![s42-999.png]]
+
+[s42-500.png]: http://farm5.staticflickr.com/4904/45405619284_3dfc69c44b.jpg "B42 = 500"
+[![s42-500.png]]: http://www.flickr.com/photos/144554087@N04/45405619284
+
+[s42-999.png]: http://farm5.staticflickr.com/4885/44313000990_0cb15059f0.jpg "B42 = 999"
+[![s42-999.png]]: http://www.flickr.com/photos/144554087@N04/44313000990
+
 
 ## 以正交性質分離系數
 因為球諧函數各項間為正交，

@@ -7,7 +7,7 @@
 <!-- 以上一般不用改，以下才要改。 -->
 
 <!-- 後設資料 -->
-<meta name="date" property="og:article:public_time" content="2018-11-30T04:41:39.271Z">
+<meta name="date" property="og:article:public_time" content="2018-12-01T13:50:23.962Z">
 <meta name="keywords" property="og:article:tag" content="nctu,report,matlab">
 <link rel="index" type="text/html" href="index.html" title="首頁">
 <link rel="start" type="text/html" href="index.html" title="首頁">
@@ -197,7 +197,7 @@ for n = 0:6
     coefficient_sum_grid += snmc * snm(n, m)(y_radian_range&#39;, x_radian_range);
   end
 end
-plot_earth_grid_180x360_tofile(coefficient_sum_grid, &#39;coefficient-sum&#39;);
+plot_grid_180x360_tofile(coefficient_sum_grid, &#39;coefficient-sum&#39;);
 </code></pre><table>
 <thead>
 <tr>
@@ -379,6 +379,20 @@ plot_earth_grid_180x360_tofile(coefficient_sum_grid, &#39;coefficient-sum&#39;);
 </tbody>
 </table>
 <p><a href="http://www.flickr.com/photos/144554087@N04/45360456564"><img src="http://farm5.staticflickr.com/4821/45360456564_39db045f29.jpg" alt="coefficient-sum.png" title="合成的球諧函數圖型"></a></p>
+<h3 id="估計各項球諧系數的振幅">估計各項球諧系數的振幅</h3>
+<p>由之後分離系數所使用的積分，其積分結果產生的系數
+<code>2*pi/(2*n+1)*factorial(n+m)/factorial(n-m)</code> 可以得知，
+雖然各項球諧的系數都介於 0-1 之間，
+但 m 的次數越高，其結果的振幅也會越大，
+產生的系數也會越大，二者約是階乘的關係。</p>
+<p>我選取了 S42 項作實驗，其圖形如上述圖九。
+在維持其它系數不變，獨立調整 S42 係數，
+繪出 B42 為 500 與 999 的情況如下。
+在 500 時就能在原本合成的彩度中看出 S42 的形狀，
+到 999 時則是二者混合，再增加就和 S42 的獨立圖形無太大區別了，
+也就不畫了。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/45405619284"><img src="http://farm5.staticflickr.com/4904/45405619284_3dfc69c44b.jpg" alt="s42-500.png" title="B42 = 500"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/44313000990"><img src="http://farm5.staticflickr.com/4885/44313000990_0cb15059f0.jpg" alt="s42-999.png" title="B42 = 999"></a></p>
 <h2 id="以正交性質分離系數">以正交性質分離系數</h2>
 <p>因為球諧函數各項間為正交，
 故在函數上積分後如同內積，

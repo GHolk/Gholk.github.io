@@ -17,6 +17,9 @@ elif [ $1 = "-c" ]
 then
     node add-to-atom.js $html_path
 else
+    echo "argument:
+    -a add update log
+    -c add whole article log" >&2
     exit 22
 fi
 

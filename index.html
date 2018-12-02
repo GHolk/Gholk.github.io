@@ -47,32 +47,20 @@
     </script>
 
       
-    <main></main>
+    <main data-init-count="10"></main>
     <template id="article-template">
       <article>
         <h2><a></a></h2>
         <small class="date"></small>
         <div class="summary"></div>
-        <ul></ul>
+        <ul><li></li></ul>
       </article>
     </template>
-    <script data-article-count-limit="20"
-            src="ext/atom-indexing.js"></script>
-
-    <button onclick="loadMoreArticle(5)">more</button>
-    <script>
-      function loadMoreArticle(n = 1) {
-        return loadArticle.then(list => {
-          const convertor = list.convertor
-          const newList = []
-          for (let i=0; i<n; i++) {
-            const article = convertor.next()
-            newList.push(article)
-          }
-          list.push(...newList)
-          return newList
-        })
-      }
+    <button id="load-more-article">more</button>
+    <script type="module">
+      import {AtomIndex} from './ext/atom-indexing.js'
+      const atomIndex = new AtomIndex()
+      atomIndex.autoGenerateBlog(document)
     </script>
   </body>
 </html>

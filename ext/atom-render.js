@@ -92,7 +92,8 @@ class AtomIndex {
                 this.listNode.appendChild(node)
             }
         }
-        loadTimes(10)
+        const initCount = Number(this.listNode.dataset.initCount)
+        loadTimes(initCount)
         document.getElementById('load-more-article').onclick = () => {
             const count = Math.random()*3 + 3
             loadTimes(count)

@@ -13,7 +13,7 @@ then
     else
         git diff $text_path | node update-to-atom.js $html_path "$change_log"
     fi
-elif [ $1 = "-c" ]
+elif [ $add_style = "-c" ]
 then
     node add-to-atom.js $html_path
 else
@@ -25,4 +25,5 @@ fi
 
 
 commit_message="[text] $(basename -s .txt $text_path | sed 's/-/ /g') $change_log"
-git commit -m "$commit_message" $text_path $html_path ../atom.xml template.html
+git add $text_path $html_path ../atom.xml template.html
+git commit -m "$commit_message"

@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-12-02T09:43:40.771Z</updated>
+  <updated>2018-12-03T14:42:54.134Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,145 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 
+<entry>
+<id>http://gholk.github.io/secret-reader.html#support-html-format</id>
+<title>解密閱讀器</title>
+<published>2018-12-02T08:08:19.157Z</published>
+<updated>2018-12-03T14:42:54.125Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/secret-reader.html#support-html-format"/>
+<summary type="html">
+如果檔名以 `*.html.gpg` 結尾，將判定為 html ，
+在 iframe 中展示完整的 html 。</summary>
+<category term="encrypt"/>
+<category term="blog"/>
+<content type="html">&lt;h1 id=&quot;解密閱讀器&quot;&gt;解密閱讀器&lt;/h1&gt;
+&lt;p&gt;用來讀全篇 pgp 加密的文章。
+需要載入 openpgpjs，流量會稍大。&lt;/p&gt;
+&lt;form&gt;
+&lt;label&gt;
+filepath
+&lt;input name=&quot;file-path&quot; type=&quot;text&quot;&gt;
+&lt;/label&gt;
+
+&lt;label&gt;
+password
+&lt;input name=&quot;pgp-password&quot; type=&quot;password&quot;&gt;
+&lt;/label&gt;
+
+&lt;label&gt;
+pgp private key
+&lt;textarea name=&quot;pgp-private-key&quot;&gt;&lt;/textarea&gt;
+&lt;/label&gt;
+
+&lt;button type=&quot;button&quot; onclick=&quot;secretReader.decryptForm()&quot;&gt;decrypt&lt;/button&gt;
+
+&lt;output name=&quot;plain-text&quot;&gt;&lt;/output&gt;
+&lt;/form&gt;
+
+&lt;style&gt;
+  output {
+    white-space: pre-wrap;
+  }
+  label, output, textarea {
+    display: block;
+  }
+&lt;/style&gt;
+
+&lt;script src=&quot;ext/decrypt-post.js&quot;&gt;&lt;/script&gt;
+
+&lt;script&gt;
+var secretReader
+loadOpenpgp.then(openpgp =&gt; {
+    secretReader = {
+        openpgp,
+        form: document.querySelector(&apos;form&apos;),
+        getFormName(name) {
+            return this.form.elements[name]
+        },
+        async fetchEncryptUint8Array(path) {
+            if (!path) path = this.getFormName(&apos;file-path&apos;).value
+            const response = await fetch(path)
+            const arrayBuffer = await response.arrayBuffer()
+            return new Uint8Array(arrayBuffer)
+        },
+        async decrypt(binary, type, key) {
+            const stream = false
+            const message = this.openpgp.message.read(binary, stream)
+            let typename
+            if (type == &apos;privateKey&apos;) typename = &apos;privateKeys&apos;
+            else typename = &apos;passwords&apos;
+            const plain = await this.openpgp.decrypt({
+                message, [typename]: key
+            })
+            return plain.data
+        },
+        async decryptForm() {
+            const password = this.getFormName(&apos;pgp-password&apos;).value
+            const armorPrivateKey = this.getFormName(&apos;pgp-private-key&apos;).value
+            let type
+            let key
+            if (armorPrivateKey) {
+                const privateKey = await this.openpgp.key.readArmored(armorPrivateKey)
+                try {
+                    await privateKey.keys[0].decrypt(password)
+                }
+                catch (privateKeyDecryptError) {
+                    alert(&apos;private key password wrong&apos;)
+                    throw privateKeyDecryptError
+                }
+                type = &apos;privateKey&apos;
+                key = privateKey.keys[0]
+            }
+            else {
+                type = &apos;password&apos;
+                key = password
+            }
+
+            const path = this.getFormName(&apos;file-path&apos;).value
+            let binary
+            try {
+                binary = await this.fetchEncryptUint8Array(path)
+            }
+            catch (fetchFileError) {
+                const filepath = this.getFormName(&apos;file-path&apos;).value
+                alert(`file &quot;${filepath}&quot; not exist`)
+                throw fetchFileError
+            }
+
+            let plain
+            try {
+                plain = await this.decrypt(binary, type, key)
+            }
+            catch (decryptError) {
+                alert(&apos;wrong pgp key&apos;)
+                throw decryptError
+            }
+            this.outputResult(path, plain)
+        },
+        outputResult(path, plain) {
+            if (/\.html?\.gpg$/.test(path)) this.outputReslutHtml(plain)
+            else this.getFormName(&apos;plain-text&apos;).textContent = plain
+        },
+        outputReslutHtml(html) {
+            const iframe = document.createElement(&apos;iframe&apos;)
+            const output = this.getFormName(&apos;plain-text&apos;)
+            output.textContent = &apos;&apos;
+            output.appendChild(iframe)
+            iframe.contentDocument.write(html)
+            iframe.contentDocument.close()
+        },
+        loadQueryString() {
+            for (const [name, value] of Object.entries(goption)) {
+                const node = this.getFormName(name)
+                if (node) node.value = value
+            }
+        }
+    }
+    secretReader.loadQueryString()
+})
+&lt;/script&gt;
+</content>
+</entry>
 <entry>
 <id>http://gholk.github.io/secret-reader.html</id>
 <title>解密閱讀器</title>

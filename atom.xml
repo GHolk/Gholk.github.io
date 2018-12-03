@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-12-02T12:45:05.639Z</updated>
+  <updated>2018-12-03T14:42:54.134Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -25,6 +25,144 @@
 
 
 <entry>
+<id>http://gholk.github.io/secret-reader.html#support-html-format</id>
+<title>解密閱讀器</title>
+<published>2018-12-02T08:08:19.157Z</published>
+<updated>2018-12-03T14:42:54.125Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/secret-reader.html#support-html-format"/>
+<summary type="html">
+如果檔名以 `*.html.gpg` 結尾，將判定為 html ，
+在 iframe 中展示完整的 html 。</summary>
+<category term="encrypt"/>
+<category term="blog"/>
+<content type="html">&lt;h1 id=&quot;解密閱讀器&quot;&gt;解密閱讀器&lt;/h1&gt;
+&lt;p&gt;用來讀全篇 pgp 加密的文章。
+需要載入 openpgpjs，流量會稍大。&lt;/p&gt;
+&lt;form&gt;
+&lt;label&gt;
+filepath
+&lt;input name=&quot;file-path&quot; type=&quot;text&quot;&gt;
+&lt;/label&gt;
+
+&lt;label&gt;
+password
+&lt;input name=&quot;pgp-password&quot; type=&quot;password&quot;&gt;
+&lt;/label&gt;
+
+&lt;label&gt;
+pgp private key
+&lt;textarea name=&quot;pgp-private-key&quot;&gt;&lt;/textarea&gt;
+&lt;/label&gt;
+
+&lt;button type=&quot;button&quot; onclick=&quot;secretReader.decryptForm()&quot;&gt;decrypt&lt;/button&gt;
+
+&lt;output name=&quot;plain-text&quot;&gt;&lt;/output&gt;
+&lt;/form&gt;
+
+&lt;style&gt;
+  output {
+    white-space: pre-wrap;
+  }
+  label, output, textarea {
+    display: block;
+  }
+&lt;/style&gt;
+
+&lt;script src=&quot;ext/decrypt-post.js&quot;&gt;&lt;/script&gt;
+
+&lt;script&gt;
+var secretReader
+loadOpenpgp.then(openpgp =&gt; {
+    secretReader = {
+        openpgp,
+        form: document.querySelector(&apos;form&apos;),
+        getFormName(name) {
+            return this.form.elements[name]
+        },
+        async fetchEncryptUint8Array(path) {
+            if (!path) path = this.getFormName(&apos;file-path&apos;).value
+            const response = await fetch(path)
+            const arrayBuffer = await response.arrayBuffer()
+            return new Uint8Array(arrayBuffer)
+        },
+        async decrypt(binary, type, key) {
+            const stream = false
+            const message = this.openpgp.message.read(binary, stream)
+            let typename
+            if (type == &apos;privateKey&apos;) typename = &apos;privateKeys&apos;
+            else typename = &apos;passwords&apos;
+            const plain = await this.openpgp.decrypt({
+                message, [typename]: key
+            })
+            return plain.data
+        },
+        async decryptForm() {
+            const password = this.getFormName(&apos;pgp-password&apos;).value
+            const armorPrivateKey = this.getFormName(&apos;pgp-private-key&apos;).value
+            let type
+            let key
+            if (armorPrivateKey) {
+                const privateKey = await this.openpgp.key.readArmored(armorPrivateKey)
+                try {
+                    await privateKey.keys[0].decrypt(password)
+                }
+                catch (privateKeyDecryptError) {
+                    alert(&apos;private key password wrong&apos;)
+                    throw privateKeyDecryptError
+                }
+                type = &apos;privateKey&apos;
+                key = privateKey.keys[0]
+            }
+            else {
+                type = &apos;password&apos;
+                key = password
+            }
+
+            const path = this.getFormName(&apos;file-path&apos;).value
+            let binary
+            try {
+                binary = await this.fetchEncryptUint8Array(path)
+            }
+            catch (fetchFileError) {
+                const filepath = this.getFormName(&apos;file-path&apos;).value
+                alert(`file &quot;${filepath}&quot; not exist`)
+                throw fetchFileError
+            }
+
+            let plain
+            try {
+                plain = await this.decrypt(binary, type, key)
+            }
+            catch (decryptError) {
+                alert(&apos;wrong pgp key&apos;)
+                throw decryptError
+            }
+            this.outputResult(path, plain)
+        },
+        outputResult(path, plain) {
+            if (/\.html?\.gpg$/.test(path)) this.outputReslutHtml(plain)
+            else this.getFormName(&apos;plain-text&apos;).textContent = plain
+        },
+        outputReslutHtml(html) {
+            const iframe = document.createElement(&apos;iframe&apos;)
+            const output = this.getFormName(&apos;plain-text&apos;)
+            output.textContent = &apos;&apos;
+            output.appendChild(iframe)
+            iframe.contentDocument.write(html)
+            iframe.contentDocument.close()
+        },
+        loadQueryString() {
+            for (const [name, value] of Object.entries(goption)) {
+                const node = this.getFormName(name)
+                if (node) node.value = value
+            }
+        }
+    }
+    secretReader.loadQueryString()
+})
+&lt;/script&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/short-life-expensive-price.html#must-follow-law</id>
 <title>名言：逢人短命、遇貨添錢</title>
 <published>2018-04-13T16:43:44.187Z</published>
@@ -4023,117 +4161,7 @@ end
 <category term="gis"/>
 <category term="nctu"/>
 <category term="report"/>
-<content type="html">&lt;h1 id=&quot;共享單車發展對計程車與公共運輸系統影響分析&quot;&gt;共享單車發展對計程車與公共運輸系統影響分析&lt;/h1&gt;
-&lt;p&gt;近年來世界各國吹起共享單車風，
-台灣以台北地區的 ubike 系統最為發達。
-許多民眾也開始以 ubike 代步，不再騎自己的機車或開車。
-同時因為 ubike 的方便甚至限時免費策略，
-也分走了計程車與其它公共運輸系統的一部份乘客數，
-一些計程車司機也因此抱怨 ubike 搶走了他們的生意。
-本計劃預計用台北地區 ubike 與計程車的開放資料，
-分析二者在地區、時間上彼此消長的情形。&lt;/p&gt;
-&lt;h2 id=&quot;研究方法&quot;&gt;研究方法&lt;/h2&gt;
-&lt;p&gt;希望能取得不同年份上 ubike 的各站點位置與使用人次，
-分析 ubike 擴展據點與使用人次的成長關係，
-及在 ubike 擴張範圍內，捷運、公車運量是否困此有變化。
-更進一步，希望能取得 ubike 借還地資料，
-計算 ubike 的使用距離，與捷運進出站距離的比較。&lt;/p&gt;
-&lt;h2 id=&quot;數據&quot;&gt;數據&lt;/h2&gt;
-&lt;p&gt;ubike 可以在官網找到現有站點對應的地址，
-而 &lt;a href=&quot;https://zh.wikipedia.org/wiki/%E8%87%BA%E5%8C%97%E5%B8%82%E5%85%AC%E5%85%B1%E8%87%AA%E8%A1%8C%E8%BB%8A%E7%A7%9F%E8%B3%83%E7%B3%BB%E7%B5%B1%E7%AB%99%E9%BB%9E%E5%88%97%E8%A1%A8&quot; title=&quot;維基百科上的 youbike 站點列表&quot;&gt;各站點設置日期則在維基百科有記錄&lt;/a&gt; ，
-同時有 &lt;a href=&quot;http://dotstat.taipei.gov.tw/pxweb2007P/Dialog/varval.asp?ma=TP10502M&amp;amp;ti=%BBO%A5_%A5%AB%A4%BD%A6@%A6%DB%A6%E6%A8%AE%AF%B2%B8%EE%B1%A1%A7%CE&amp;amp;path=../PXfile/CountyStatistics&amp;amp;lang=9&amp;amp;strList=L&quot; title=&quot;台北市政府對 youbike 租借人次的逐月統計&quot;&gt;每月租賃人次的統計&lt;/a&gt; 。
-&lt;a href=&quot;https://data.gov.tw/dataset/6252&quot; title=&quot;政府開放資料平台上的計程車營運統計資料&quot;&gt;計程車營運可以在政府的開放資料平台找到二年統計一次的資料&lt;/a&gt; 。&lt;/p&gt;
-&lt;h2 id=&quot;問題&quot;&gt;問題&lt;/h2&gt;
-&lt;p&gt;維基百科中，新北和台北的資料是分開的。&lt;/p&gt;
-&lt;h2 id=&quot;預期成果&quot;&gt;預期成果&lt;/h2&gt;
-&lt;p&gt;預計能看出計程車司機所抱怨的，因為 ubike 的普及，
-造成部份市民轉用 ubike，讓計程車使用率下滑。
-如果能找到公車、捷運的資料，預計也會出現類似的結果；
-但不少 ubike 站是設在捷運站，故捷運站的情況可能較複雜。&lt;/p&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
 
-&lt;script src=&quot;ext/paper.js?execute&quot;&gt;&lt;/script&gt;
-
-&lt;script src=&quot;ext/header-nctu.js?execute&amp;editable&quot;&gt;&lt;/script&gt;
-
-&lt;script&gt;
-function $html(template, ...text) {
-  const result = []
-  for (let i=0; i&lt;template.length; i++) {
-    if (i&gt;0) result.push(encodeHtml(text[i-1]))
-    result.push(template[i])
-  }
-  return result.join(&apos;&apos;)
-
-  function encodeHtml(text) {
-    return text
-    .replace(/&amp;/g, &apos;&amp;amp;&apos;)
-    .replace(/&lt;/g, &apos;&amp;lt;&apos;)
-    .replace(/&gt;/g, &apos;&amp;gt;&apos;)
-  }
-}
-gmeta.reference = {
-  imageCounter: 1,
-  add(title, url, context) {
-    const entry = this.createEntry(title, url, context)
-    this.node.appendChild(entry)
-  },
-  createEntry(title, url, context) {
-    const dl = document.createElement(&apos;dl&apos;)
-    const dt = document.createElement(&apos;dt&apos;)
-    dt.textContent = title
-    dl.appendChild(dt)
-    dl.innerHTML = $html`&lt;dt&gt;${title}&lt;/dt&gt;
-    &lt;dd&gt;${url}&lt;/dd&gt;
-    &lt;dd class=&quot;context&quot;&gt;${context}&lt;/dd&gt;`
-    return dl
-  },
-  node: document.createDocumentFragment(),
-  render() {
-    const main = document.querySelector(&apos;main&apos;)
-    let referenceHeader = document.querySelector(&apos;h2.reference&apos;)
-    if (!referenceHeader) {
-      referenceHeader = document.createElement(&apos;h2&apos;)
-      referenceHeader.textContent = &apos;參考資料&apos;
-      referenceHeader.classList.add(&apos;reference&apos;)
-      main.appendChild(referenceHeader)
-    }
-    if (referenceHeader.nextSibling) {
-      referenceHeader.parentNode.insertBefore(
-        this.node, referenceHeader.nextSibling
-      )
-    }
-    else main.appendChild(this.node)
-  }
-}
-document.querySelectorAll(&apos;a&apos;).forEach(anchor =&gt; {
-  const reference = gmeta.reference
-  if (anchor.classList.contains(&apos;image&apos;)) {
-    const cjk = gmeta.patchCjkCounter.numberToCjk(reference.imageCounter)
-    reference.add(&apos;圖&apos; + cjk, anchor.href, anchor.title)
-    reference.imageCounter++
-  }
-  else reference.add(anchor.title, anchor.href, anchor.textContent)
-})
-gmeta.reference.render()
-&lt;/script&gt;
-
-&lt;style&gt;
-main {
-  counter-reset: reference-id;
-}
-a {
-  counter-increment: reference-id;
-}
-a::after {
-  content: &quot;[&quot; counter(reference-id) &quot;]&quot;;
-  font-size: smaller;
-}
-dd.context::before, dd.context::after {
-  content: &quot;……&quot;;
-}
-&lt;/style&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/politic-free-2018.html</id>
 <title>2018 年縣市長選舉政治傾向文</title>

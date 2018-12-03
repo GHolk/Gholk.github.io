@@ -109,5 +109,5 @@ class AtomIndex {
     }
 }
 
-export {AtomIndex}
+export {AtomIndex, Article}
 

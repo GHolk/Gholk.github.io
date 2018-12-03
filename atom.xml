@@ -163,6 +163,7 @@ loadOpenpgp.then(openpgp =&gt; {
 &lt;/script&gt;
 </content>
 </entry>
+
 <entry>
 <id>http://gholk.github.io/secret-reader.html</id>
 <title>解密閱讀器</title>
@@ -288,4 +289,36 @@ loadOpenpgp.then(openpgp =&gt; {
 &lt;/script&gt;
 </content>
 </entry>
+<entry>
+<id>http://gholk.github.io/online-web-chat-room.html</id>
+<title>嵌入式的線上即時聊天室</title>
+<published>2018-01-02T14:14:13.264Z</published>
+<updated>2018-01-02T16:10:25.571Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/online-web-chat-room.html"/>
+<summary>很久以前在 fc2 看過類似的東西，覺得不錯，
+前幾天又在 //blog.user.today 看到，
+就決定自己裝一個。最後選了 cbox 這個平台。</summary>
+<category term="blog"/>
+<category term="disqus"/>
+<category term="聊天"/>
+<category term="留言"/>
+<category term="cbox"/>
+</entry>
+<entry>
+<id>http://gholk.github.io/comment.html</id>
+<title> 留言板</title>
+<published>2017-11-06T05:07:50.771Z</published>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/comment.html"/>
+<summary>
+    本網站的通用留言板。
+雖然每篇文章都有留言板，
+但如果不知道要留在哪篇文章，
+就留在這裡吧。留言可以用其它平台上你慣用的帳號登入，
+如果不想登入也可以匿名評論。
+    </summary>
+<category term="留言"/>
+<category term="匿名"/>
+<category term="blog"/>
+</entry>
+
 </feed>

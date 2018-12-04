@@ -1,0 +1,65 @@
+# 經由 ssh tunnel 連上行動網路裡的 adb
+adb 除了用 usb 線連接外，
+[也能走網路用 tcp 連接，最簡單是在區網中用 wifi 連結。][adb wifi]
+但有時候電腦和 android 二者不在同一區網，
+那就得靠第三方有固定 ip 的 server 做中介，
+只要有網路就能經由 ssh port forward 遠端連上 adb，
+就算是行動網路浮動 ip 也能遠端做壞事了。
+
+[adb wifi]: adb-over-wifi.html
+
+首先如果有 root 的話，有現成的 app 能控制 adb 走 tcp，
+不然就是用 [前文所寫無 root 透過 wifi adb 的作法][adb wifi no root] 。
+之前用的是 f-droid 的 [ADB Manager] ，
+但他在我的新手機怪怪的，會一直跳出來要 root 權限，
+就換成 [Wirebug] 。
+反正都是很簡單的 app，就只有一個功能是切換透過 tcp adb。
+
+[ADB Manager]: https://f-droid.org/en/packages/com.matoski.adbm/
+[Wirebug]: https://f-droid.org/en/packages/com.github.sryze.wirebug/
+[adb wifi no root]: adb-over-wifi.html#-root
+
+然後 android 上的 ssh client 我是用 [VX ConnectBot] ，
+你也可以用其它能 ssh forward remote 的軟體。
+（也就是 `ssh -R` 的功能。）
+設定過程就相當於在 android 上執行
+`ssh -R 55555:localhost:5555 my@static.sever.tw` ，
+之後 static.server.tw 上的 38763 port
+就會被轉發到 android 上的 5555 port。
+
+[VX ConnectBot]: http://connectbot.vx.sk/
+
+以 vx connect bot 來說，
+設定方法是登入過主機並加入清單後，
+長按該主機會有一個 *編輯端口轉發* 的選項。
+按頂端的選單新建一個端口轉發，
+暱稱隨便取，我是取 adb， *轉發類型* 選遠端，
+源端口看你要在 static.server.tw 上哪個 port 會連到 android，
+（例如上面是用 55555。）
+而目標端口則選 `localhost:5555` 也就是 adb 的預設 port。
+
+之後你用 vx connect bot 連上該主機時就會自動轉發，
+不管是走 wifi 還是 4g 網路；
+再用 wirebug 或 adb manager 或先前登入設定允許從網路連接 adb，
+就能登入 static.server.tw 後 `adb connect localhost:55555` 
+連上 android。
+
+如果你不想要再登入一次 static.server.tw 才能執行 adb，
+還能在 static.server.tw 上的 `/etc/ssh/sshd_config` 裡
+設 `GatewayPorts yes` ，
+就能讓 static.server.tw 的 55555 port 直接連到 android。
+預設因為安全起見，ssh server 是不允許綁到對外 ip 的；
+也就是只有在 static.server.tw 上看 localhost:55555
+才會連到 android 的 5555 port，
+但從外部連到 static.server.tw:55555 是連不上的。
+
+另外 vx connect bot 的轉發類型有
+遠端、本地、動態套接字(socks) 三種可以選。
+其中遠端上面說明過了，也就是 ssh 的 `-R` 選項，
+本地就是 `-L` ，動態套接字則是 `-D` 選項，
+用來當 http SOCKS 給瀏覽器用的。
+
+#android
+#ssh
+#無線
+#刷機

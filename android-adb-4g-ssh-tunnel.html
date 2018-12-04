@@ -1,0 +1,80 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-12-04T06:09:25.348Z">
+<meta name="keywords" property="og:article:tag" content="android,ssh,無線,刷機">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="legendre-sphere-harmonic-coefficient.html" title="legendre 球諧函數的正交性與系數">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>經由 ssh tunnel 連上行動網路裡的 adb</title>
+</head>
+<body>
+<main><h1 id="經由 ssh tunnel 連上行動網路裡的 adb">經由 ssh tunnel 連上行動網路裡的 adb</h1>
+<p>adb 除了用 usb 線連接外，
+<a href="adb-over-wifi.html">也能走網路用 tcp 連接，最簡單是在區網中用 wifi 連結。</a>
+但有時候電腦和 android 二者不在同一區網，
+那就得靠第三方有固定 ip 的 server 做中介，
+只要有網路就能經由 ssh port forward 遠端連上 adb，
+就算是行動網路浮動 ip 也能遠端做壞事了。</p>
+<p>首先如果有 root 的話，有現成的 app 能控制 adb 走 tcp，
+不然就是用 <a href="adb-over-wifi.html#-root">前文所寫無 root 透過 wifi adb 的作法</a> 。
+之前用的是 f-droid 的 <a href="https://f-droid.org/en/packages/com.matoski.adbm/">ADB Manager</a> ，
+但他在我的新手機怪怪的，會一直跳出來要 root 權限，
+就換成 <a href="https://f-droid.org/en/packages/com.github.sryze.wirebug/">Wirebug</a> 。
+反正都是很簡單的 app，就只有一個功能是切換透過 tcp adb。</p>
+<p>然後 android 上的 ssh client 我是用 <a href="http://connectbot.vx.sk/">VX ConnectBot</a> ，
+你也可以用其它能 ssh forward remote 的軟體。
+（也就是 <code>ssh -R</code> 的功能。）
+設定過程就相當於在 android 上執行
+<code>ssh -R 55555:localhost:5555 my@static.sever.tw</code> ，
+之後 static.server.tw 上的 38763 port
+就會被轉發到 android 上的 5555 port。</p>
+<p>以 vx connect bot 來說，
+設定方法是登入過主機並加入清單後，
+長按該主機會有一個 <em>編輯端口轉發</em> 的選項。
+按頂端的選單新建一個端口轉發，
+暱稱隨便取，我是取 adb， <em>轉發類型</em> 選遠端，
+源端口看你要在 static.server.tw 上哪個 port 會連到 android，
+（例如上面是用 55555。）
+而目標端口則選 <code>localhost:5555</code> 也就是 adb 的預設 port。</p>
+<p>之後你用 vx connect bot 連上該主機時就會自動轉發，
+不管是走 wifi 還是 4g 網路；
+再用 wirebug 或 adb manager 或先前登入設定允許從網路連接 adb，
+就能登入 static.server.tw 後 <code>adb connect localhost:55555</code> 
+連上 android。</p>
+<p>如果你不想要再登入一次 static.server.tw 才能執行 adb，
+還能在 static.server.tw 上的 <code>/etc/ssh/sshd_config</code> 裡
+設 <code>GatewayPorts yes</code> ，
+就能讓 static.server.tw 的 55555 port 直接連到 android。
+預設因為安全起見，ssh server 是不允許綁到對外 ip 的；
+也就是只有在 static.server.tw 上看 localhost:55555
+才會連到 android 的 5555 port，
+但從外部連到 static.server.tw:55555 是連不上的。</p>
+<p>另外 vx connect bot 的轉發類型有
+遠端、本地、動態套接字(socks) 三種可以選。
+其中遠端上面說明過了，也就是 ssh 的 <code>-R</code> 選項，
+本地就是 <code>-L</code> ，動態套接字則是 <code>-D</code> 選項，
+用來當 http SOCKS 給瀏覽器用的。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

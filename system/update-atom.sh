@@ -25,5 +25,5 @@ fi
 
 
 commit_message="[text] $(basename -s .txt $text_path | sed 's/-/ /g') $change_log"
-git add $text_path $html_path ../atom.xml template.html
+git add $text_path $html_path ../atom.xml template.html list.txt
 git commit -m "$commit_message"

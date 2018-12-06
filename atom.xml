@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-12-04T06:10:54.181Z</updated>
+  <updated>2018-12-06T12:00:55.750Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,166 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/mathjs-evaluator.html</id>
+<title>mathjs 執行介面</title>
+<published>2018-12-06T11:29:48.076Z</published>
+<updated>2018-12-06T12:00:55.735Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/mathjs-evaluator.html"/>
+<summary type="html">mathjs 是一套提供類似 matlab 語法，
+在 javascript 中執行的數學函式庫。
+可以在網頁上無需伺服器運作，
+也就可以靜態托管，甚至寫成 service worker 離線運作。</summary>
+<category term="web"/>
+<category term="study"/>
+<category term="octave"/>
+<category term="javascript"/>
+<category term="tool"/>
+<content type="html">&lt;h1 id=&quot;mathjs 執行介面&quot;&gt;mathjs 執行介面&lt;/h1&gt;
+&lt;p&gt;mathjs 是一套提供類似 matlab 語法，
+在 javascript 中執行的數學函式庫。
+可以在網頁上無需伺服器運作，
+也就可以靜態托管，甚至寫成 service worker 離線運作。&lt;/p&gt;
+&lt;p&gt;我現在的測量課程，大部份的作業可以以 mathjs 完成，
+只是繪圖部份還沒搞定。
+一直用 octave 只是他的繪圖很方便，
+會自己彈出結果視窗，能直接存檔。
+js 繪圖就要靠其它函式庫輔助。
+如果是在網頁上，就能畫在 canvas 裡，
+也有所見即所得的效果。&lt;/p&gt;
+&lt;h2 id=&quot;math notepad&quot;&gt;math notepad&lt;/h2&gt;
+&lt;p&gt;結果後來想想 mathjs 的 parser 這麼完整，
+應該是有人做過類似的東西了，結果就找到了 &lt;a href=&quot;//mathnotepad.com&quot;&gt;math notepad&lt;/a&gt; 。
+功能蠻完整的，可以存檔、短網址分享，還有 plot 繪圖功能。
+那這個 mathjs 的 web shell 應該沒用了，
+功能太爛，就一個能把 script 嵌在 querystring 裡的功能比較特別，
+mathnotepad 則是要你存檔後分享短網址。
+二者比較 mathnotepad 應該是比較強。&lt;/p&gt;
+&lt;p&gt;唯一比較不順眼就是 math notepad 的 plot 函數有點奇怪，
+不是像 matlab 風格，而是輸入一種帶參數的函數？
+像 &lt;code&gt;plot(f(x))&lt;/code&gt; ，會畫出整個 f 函數，
+那個 x 則是自由變數，不用先定義 x。
+總之怪怪的，用起來不太順手。&lt;/p&gt;
+&lt;form&gt;
+&lt;textarea&gt;
+    A = [1, 3, 5;
+        2, 4, 6]
+
+    inv(A&amp;#39; * A)
+&lt;/textarea&gt;
+&lt;button type=&quot;button&quot; onclick=&quot;mathJsEvaluator.evalAndShow(&apos;javascript&apos;)&quot;&gt;
+    execute javascript&lt;/button&gt;
+&lt;button type=&quot;button&quot; onclick=&quot;mathJsEvaluator.evalAndShow(&apos;mathjs&apos;)&quot;&gt;
+    execute mathjs&lt;/button&gt;
+&lt;button type=&quot;button&quot; onclick=&quot;mathJsEvaluator.showScope()&quot;&gt;
+    show all variable&lt;/button&gt;
+&lt;button type=&quot;button&quot; onclick=&quot;mathJsEvaluator.clearOutput()&quot;&gt;
+    clear output&lt;/button&gt;
+&lt;button type=&quot;button&quot; onclick=&quot;mathJsEvaluator.syncUrl()&quot;&gt;
+    get script share url&lt;/button&gt;
+&lt;label&gt; &lt;input type=&quot;checkbox&quot; name=&quot;clear-after-execute&quot; checked&gt;
+        clear script after successful execute &lt;/label&gt;
+&lt;output&gt;&lt;/output&gt;
+&lt;/form&gt;
+
+&lt;style&gt;
+textarea {
+    display: block;
+    height: 8em;
+    width: 80%;
+}
+output {
+    display: block;
+    width: 80%;
+    height: 10em;
+    border: solid 1px;
+    white-space: pre-wrap;
+    overflow: auto;
+}
+label {
+    display: block;
+}
+&lt;/style&gt;
+
+&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.3.1/math.min.js&quot;&gt;&lt;/script&gt;
+
+&lt;script&gt;
+var mathJsEvaluator = {
+    mathjs: math,
+    scope: {},
+    inputNode: document.querySelector(&apos;textarea&apos;),
+    outputNode: document.querySelector(&apos;output&apos;),
+    isClearAfterExecuteNode: document.querySelector(&apos;[name=clear-after-execute]&apos;),
+    evalJavaScript(code) {
+        return eval(code)
+    },
+    evalMathJs(code) {
+        return this.mathjs.eval(code, this.scope)
+    },
+    showScope() {
+        this.showResult(JSON.stringify(this.scope))
+    },
+    syncUrl() {
+        const escapeScript = encodeURIComponent(this.inputNode.value)
+        const scriptUrl = &apos;?mathjs-script=&apos; + escapeScript
+        history.pushState(null, &apos;sync url&apos;, scriptUrl)
+    },
+    evalAndShow(type) {
+        let name
+        if (type == &apos;javascript&apos;) name = &apos;evalJavaScript&apos;
+        else name = &apos;evalMathJs&apos;
+
+        let result
+        try {
+            result = this[name](this.inputNode.value)
+        }
+        catch (evalError) {
+            return this.showResult(evalError)
+        }
+        if (this.isClearAfterExecuteNode.checked) this.inputNode.value = &apos;&apos;
+        this.showResult(result)
+    },
+    divider: &apos;\n\n######################\n\n&apos;,
+    showResult(result) {
+        let resultString
+        if (result.type == &apos;ResultSet&apos;) {
+            resultString = result.entries.map(String).join(&apos;\n\n&apos;)
+        }
+        else resultString = String(result)
+
+        if (this.outputNode.textContent == &apos;&apos;) {
+            this.outputNode.textContent = resultString
+        }
+        else {
+            this.outputNode.textContent += this.divider + resultString
+        }
+        this.outputNode.scrollTop = this.outputNode.scrollHeight
+    },
+    clearOutput() {
+        this.outputNode.textContent = &apos;&apos;
+    },
+    async initFromQueryString(relative = &apos;&apos;) {
+        const url = new URL(relative, location)
+        let scriptText = &apos;&apos;
+        if (url.searchParams.has(&apos;mathjs-script&apos;)) {
+            scriptText = url.searchParams.get(&apos;mathjs-script&apos;)
+        }
+        else if (url.searchParams.has(&apos;mathjs-script-url&apos;)) {
+            const scriptUrl = url.searchParams.get(&apos;mathjs-script-url&apos;)
+            const response = await fetch(scriptUrl)
+            const text = await response.text()
+            scriptText = text
+        }
+        if (scriptText) {
+            this.isClearAfterExecuteNode.checked = false
+            this.inputNode.value = scriptText
+            this.evalAndShow(&apos;mathjs&apos;)
+        }
+    }
+}
+mathJsEvaluator.initFromQueryString()
+&lt;/script&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/android-adb-4g-ssh-tunnel.html</id>
 <title>經由 ssh tunnel 連上行動網路裡的 adb</title>
 <published>2018-12-04T06:09:25.348Z</published>
@@ -3352,138 +3512,7 @@ end
 <category term="slide"/>
 <category term="root"/>
 <category term="app"/>
-<content type="html">&lt;h1 id=&quot;root 新小手機 atom 過程&quot;&gt;root 新小手機 atom 過程&lt;/h1&gt;
-&lt;p&gt;最近入手群眾募資的新手機，unihertz 的 atom。
-因為想裝把手機摸擬成藍牙鍵盤或滑鼠的 app，
-所以就搜尋到 xda 上 root 的方法，
-用 magisk 還蠻簡單的，就照作也成功了。
-雖然結果因為手機是 mtk， 藍牙模組和 aosp 不合，
-所以 bluetooth+ 不能動。總之 root 了。&lt;/p&gt;
-&lt;h2 id=&quot;刷機流程&quot;&gt;刷機流程&lt;/h2&gt;
-&lt;p&gt;magisk 是 systemless root，
-大概是不會改到 system 分區的 root。
-用 magisk manager 時只要有系統的 &lt;code&gt;boot.img&lt;/code&gt; ，
-就能用 magisk manager patch 該映像檔，
-用 fastboot 刷入達成 root。&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;取得你手機的 boot 分區映像檔。
-據 xda 老鳥的說法，
-小廠的手機可以和原廠要，原廠一般會給。
-手機變磚可以用原廠 rom 刷回來。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://drive.google.com/drive/folders/1ECG5ebmTM6w-9sg0n4X7Ll2jcARBN2q5?usp=sharing&quot;&gt;這裡也備份一份 rom&lt;/a&gt; ，預防原連結死掉。
-原廠是給了一份壓縮檔，裡面有各分區的映像檔，
-像刷 magisk 要的 boot 分區是 &lt;code&gt;boot-verified.img&lt;/code&gt; 。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;ol&gt;
-&lt;li&gt;在手機上安裝 magisk manager，
-可以 &lt;a href=&quot;https://github.com/topjohnwu/Magisk/releases&quot;&gt;在 magisk 的 github 載 apk&lt;/a&gt; 。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;之後把該映像檔傳到手機上，啟動 magisk manager，
-選擇安裝，補丁該映像檔。
-之後 magisk 就會修改該映像檔。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;再把該 patch 過的映像檔傳回電腦。
-接著把手機開機到 fastboot 模式，接上電腦。
-如果不知道怎麼按，可以用 &lt;code&gt;adb reboot bootloader&lt;/code&gt; 。
-之後可以用 &lt;code&gt;fastboot devices&lt;/code&gt; 檢查接上電腦的 android。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;接著要刷 boot 分區，所以要先解鎖。
-現在的 android 如果要刷，要先解鎖，
-同時為了安全性，解鎖時會同時清空手機的資料，
-回復原廠設定，防止使用者資料外洩。&lt;/p&gt;
-&lt;p&gt;下指令 &lt;code&gt;fastboot oem unlock&lt;/code&gt; ，
-手機會上會和你確定是否要解鎖，用音量鍵確定。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;之後就能用 &lt;code&gt;fastboot flash boot patch_boot.img&lt;/code&gt;
-把映像檔刷進去。
-刷完後為了安全，可以再 &lt;code&gt;fastboot oem lock&lt;/code&gt; 鎖回來，
-這樣別人要 hack 進你的手機，
-也要 oem unlock，也會清空資料，也就不會外洩。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;最後就能開機了。
-刷完後第一次開機時會稍久，好像還會重開機一次。
-總之就完成了。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;我是根據 &lt;a href=&quot;https://forum.xda-developers.com/showpost.php?p=78112885&amp;amp;postcount=27&quot;&gt;xda 上的 atom thread 的人的說明&lt;/a&gt; root 成功的，
-感覺用 fastboot 蠻方便的，好像很多手機都可以直接刷。
-只是要下一點指令，且要 unlock 會清空資料。&lt;/p&gt;
-&lt;p&gt;atom 好像沒有區的問題，我也沒看到映像檔也分區。
-刷機時就直接刷了，也沒碰到問題。&lt;/p&gt;
-&lt;h2 id=&quot;android 模擬藍牙鍵鼠&quot;&gt;android 模擬藍牙鍵鼠&lt;/h2&gt;
-&lt;p&gt;之前想要 root 是因為想要用手機控制投影片，感覺還蠻方便的。
-一開始是想到用無線滑鼠，就能拿著滑鼠遠程當簡報筆。
-後來又想到現在的手機都有藍牙功能，
-可能可以用手機模擬滑鼠或鍵盤，就能用手機當簡報筆用。&lt;/p&gt;
-&lt;p&gt;結果在 google play 找到的 app 都是需要 root 的，
-不然就是要另外在電腦上裝其它軟體。
-其實也有找到一些可以控制簡報的，
-但比較想要能直接當滑鼠用的，
-因為可能會用瀏覽器放簡報，
-所以能模擬基礎鍵盤滑鼠比較好。
-有一款叫 &lt;strong&gt;true mouth/kb&lt;/strong&gt; 的，
-就是能辦到類似的事，但他要先裝 &lt;strong&gt;bluetooth+&lt;/strong&gt; 。
-bluetooth+ 試了就發現要 root，所以就 root 了。&lt;/p&gt;
-&lt;p&gt;root 後執行 bluetooth+ ，
-他顯示 atom 是用 mtk 的模組，
-可能和 aosp 的一些 api 不合。
-結果真得不合，root 後 bluetooth+ 還是不能跑。&lt;/p&gt;
-&lt;p&gt;總之就 root 成功了，但還是不能用手機來模擬藍牙鍵鼠。
-之後可能會用到其它 root 功能吧。&lt;/p&gt;
-&lt;h2 id=&quot;&amp;lt;ins datetime=&amp;quot;2018-11-26&amp;quot;&amp;gt;atom 開機到 fastboot&amp;lt;/ins&amp;gt;&quot;&gt;&lt;ins datetime=&quot;2018-11-26&quot;&gt;atom 開機到 fastboot&lt;/ins&gt;&lt;/h2&gt;
-&lt;p&gt;雖然可以簡單連上 adb 後，
-下指令 &lt;code&gt;adb reboot bootloader&lt;/code&gt; 開機到 fastboot，
-但如果手機半磚了進不了系統，那就不能用 adb 重開了。
-大部份手機也提供直接從關機狀態開機到 fastboot 或 recovery 的方式，
-以 atom 來說，可以按著音量向上與電源鍵開機，
-（到 unihertz 字樣出現就能放掉了。）
-就能進入 recovery 模式。
-如果是重新開機，就是在螢幕黑掉後開始按著音量向上。&lt;/p&gt;
-&lt;p&gt;這模式一開始會只出現一個躺在地上胸口打開
-有一個三角驚嘆號的 android，顯示一行沒有指令。
-你需要同時按著音量向上與電源鍵剛好三秒，
-（這步驟要多試幾次，時間不好抓。）
-然後先放開音量鍵，再放開電源鍵，就能看到選單了。
-只是這是 recovery，不是 fastboot，
-可以用音量鍵上下移動，用電源鍵選取，
-有一個 reboot to bootloader 才是開機到 bootloader 的選項。&lt;/p&gt;
-&lt;p&gt;atom 好像沒辦法直接開機到 fastboot，
-只能經由 recovery，所以 recovery 刷壞也不能靠 fastboot 救。
-另一個音量下向鍵則是開機到 factory mode，
-裡面有一些簡單的測試，但和刷機無關。
-最後提醒一下，沒事不要按著電源鍵太久，
-按超過五秒，（多久不確定，但有點久。）會強制關機。
-我一開始以為顯示 recovery 選單是要按超過 3 秒，
-就一直按著向上和電源鍵，按到強制關機好幾次
-才發現不對，才發現是要 &lt;strong&gt;剛好三秒&lt;/strong&gt; 。&lt;/p&gt;
-&lt;h2 id=&quot;&amp;lt;ins datetime=&amp;quot;2018-11-28&amp;quot;&amp;gt;透過 vnc 控制投影片&amp;lt;/ins&amp;gt;&quot;&gt;&lt;ins datetime=&quot;2018-11-28&quot;&gt;透過 vnc 控制投影片&lt;/ins&gt;&lt;/h2&gt;
-&lt;p&gt;要讓電腦接受作為像滑鼠、鍵盤的輸入裝置，除了最簡單的藍牙裝置、usb 外，
-多需要在電腦上預先安裝軟體接受來自手機的訊號，無論是透過藍牙或網路。
-比起為了一個 app 自幹 client 與 server，
-較簡單的作法是重用既有的架構，例如 x window 或 vnc。
-雖然 vnc 是用來遠端操作整台電腦畫面的，
-但也能傳送滑鼠移動或按鍵，所以能視作多了畫面功能的遠端裝置。&lt;/p&gt;
-&lt;p&gt;目前有二款試用過的，一是走 vnc 的 &lt;a href=&quot;https://play.google.com/store/apps/details?id=nine.controller&quot;&gt;Remote mouse&lt;/a&gt; ，
-一是走 ssh 和 x window 的 &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.stripe1.xmouse&quot;&gt;XMouse Remote Mouse &amp;amp; Keyboard&lt;/a&gt; 。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://play.google.com/store/apps/details?id=nine.controller&quot;&gt;Remote mouse&lt;/a&gt; 是走 vnc 的，要在電腦裝 vnc server。
-windows 下可以用 tiger vnc，linux 可以用 x11vnc。
-用來放投影片是沒什麼問題，
-用音量鍵能模擬捲動翻頁，滑動螢幕就會移動游標。
-預設好像會自己搜尋區網內的 vnc port。
-感覺這 app 蠻實用的，如果有實際用到的話，
-可能會贊助一下吧。&lt;/p&gt;
-&lt;p&gt;另一款是 &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.stripe1.xmouse&quot;&gt;XMouse Remote Mouse &amp;amp; Keyboard&lt;/a&gt; ，
-就是走 ssh 然後用 xdotool 命令來發送按鍵與移動滑鼠。
-所以電腦要有裝這二個軟體。
-debian ubunti 系就 &lt;code&gt;apt install xdotool ssh&lt;/code&gt; 。
-但因為是用 xdotool 控制，
-在移動游標的連續動作時會有點頓。&lt;/p&gt;
-&lt;p&gt;因為 xdotool 只有 linux 下能用，而且他會頓，
-目前是用 remote mouse。
-雖然一般 windows 也沒有 vnc server 就是了。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/legendre-sphere-harmonic-coefficient.html</id>
 <title>legendre 球諧函數的正交性與系數</title>

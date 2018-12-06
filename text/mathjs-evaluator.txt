@@ -1,0 +1,156 @@
+# mathjs 執行介面
+mathjs 是一套提供類似 matlab 語法，
+在 javascript 中執行的數學函式庫。
+可以在網頁上無需伺服器運作，
+也就可以靜態托管，甚至寫成 service worker 離線運作。
+
+我現在的測量課程，大部份的作業可以以 mathjs 完成，
+只是繪圖部份還沒搞定。
+一直用 octave 只是他的繪圖很方便，
+會自己彈出結果視窗，能直接存檔。
+js 繪圖就要靠其它函式庫輔助。
+如果是在網頁上，就能畫在 canvas 裡，
+也有所見即所得的效果。
+
+## math notepad
+結果後來想想 mathjs 的 parser 這麼完整，
+應該是有人做過類似的東西了，結果就找到了 [math notepad] 。
+功能蠻完整的，可以存檔、短網址分享，還有 plot 繪圖功能。
+那這個 mathjs 的 web shell 應該沒用了，
+功能太爛，就一個能把 script 嵌在 querystring 裡的功能比較特別，
+mathnotepad 則是要你存檔後分享短網址。
+二者比較 mathnotepad 應該是比較強。
+
+[math notepad]: //mathnotepad.com
+
+唯一比較不順眼就是 math notepad 的 plot 函數有點奇怪，
+不是像 matlab 風格，而是輸入一種帶參數的函數？
+像 `plot(f(x))` ，會畫出整個 f 函數，
+那個 x 則是自由變數，不用先定義 x。
+總之怪怪的，用起來不太順手。
+
+<form>
+<textarea>
+    A = [1, 3, 5;
+        2, 4, 6]
+
+    inv(A' * A)
+</textarea>
+<button type="button" onclick="mathJsEvaluator.evalAndShow('javascript')">
+    execute javascript</button>
+<button type="button" onclick="mathJsEvaluator.evalAndShow('mathjs')">
+    execute mathjs</button>
+<button type="button" onclick="mathJsEvaluator.showScope()">
+    show all variable</button>
+<button type="button" onclick="mathJsEvaluator.clearOutput()">
+    clear output</button>
+<button type="button" onclick="mathJsEvaluator.syncUrl()">
+    get script share url</button>
+<label> <input type="checkbox" name="clear-after-execute" checked>
+        clear script after successful execute </label>
+<output></output>
+</form>
+
+<style>
+textarea {
+    display: block;
+    height: 8em;
+    width: 80%;
+}
+output {
+    display: block;
+    width: 80%;
+    height: 10em;
+    border: solid 1px;
+    white-space: pre-wrap;
+    overflow: auto;
+}
+label {
+    display: block;
+}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.3.1/math.min.js"></script>
+
+<script>
+var mathJsEvaluator = {
+    mathjs: math,
+    scope: {},
+    inputNode: document.querySelector('textarea'),
+    outputNode: document.querySelector('output'),
+    isClearAfterExecuteNode: document.querySelector('[name=clear-after-execute]'),
+    evalJavaScript(code) {
+        return eval(code)
+    },
+    evalMathJs(code) {
+        return this.mathjs.eval(code, this.scope)
+    },
+    showScope() {
+        this.showResult(JSON.stringify(this.scope))
+    },
+    syncUrl() {
+        const escapeScript = encodeURIComponent(this.inputNode.value)
+        const scriptUrl = '?mathjs-script=' + escapeScript
+        history.pushState(null, 'sync url', scriptUrl)
+    },
+    evalAndShow(type) {
+        let name
+        if (type == 'javascript') name = 'evalJavaScript'
+        else name = 'evalMathJs'
+
+        let result
+        try {
+            result = this[name](this.inputNode.value)
+        }
+        catch (evalError) {
+            return this.showResult(evalError)
+        }
+        if (this.isClearAfterExecuteNode.checked) this.inputNode.value = ''
+        this.showResult(result)
+    },
+    divider: '\n\n######################\n\n',
+    showResult(result) {
+        let resultString
+        if (result.type == 'ResultSet') {
+            resultString = result.entries.map(String).join('\n\n')
+        }
+        else resultString = String(result)
+
+        if (this.outputNode.textContent == '') {
+            this.outputNode.textContent = resultString
+        }
+        else {
+            this.outputNode.textContent += this.divider + resultString
+        }
+        this.outputNode.scrollTop = this.outputNode.scrollHeight
+    },
+    clearOutput() {
+        this.outputNode.textContent = ''
+    },
+    async initFromQueryString(relative = '') {
+        const url = new URL(relative, location)
+        let scriptText = ''
+        if (url.searchParams.has('mathjs-script')) {
+            scriptText = url.searchParams.get('mathjs-script')
+        }
+        else if (url.searchParams.has('mathjs-script-url')) {
+            const scriptUrl = url.searchParams.get('mathjs-script-url')
+            const response = await fetch(scriptUrl)
+            const text = await response.text()
+            scriptText = text
+        }
+        if (scriptText) {
+            this.isClearAfterExecuteNode.checked = false
+            this.inputNode.value = scriptText
+            this.evalAndShow('mathjs')
+        }
+    }
+}
+mathJsEvaluator.initFromQueryString()
+</script>
+
+#web
+#study
+#octave
+#javascript
+#tool

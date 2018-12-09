@@ -251,3 +251,4 @@ android-adb-4g-ssh-tunnel.html
 mathjs-evaluator.html
 run-as-elf-road.html
 taiwan-consensus-stolen-base.html
+adjustment-homework-7.html

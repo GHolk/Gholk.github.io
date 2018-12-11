@@ -41,6 +41,10 @@ nav a {
     width: 100%;
     overflow: auto;
 }
+#daily-sentence {
+    border: dotted;
+    border-top: none;
+}
 
 article {
     margin: 2em 0;

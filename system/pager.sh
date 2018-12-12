@@ -10,6 +10,7 @@ then
 else
     cp template.html $html_path
     node updateHTML.js $html_path
+    node updateRel.js $html_path
     echo "# to commit change:"
     echo "./update-atom.sh create $html_path"
 fi

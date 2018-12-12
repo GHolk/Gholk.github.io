@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-12-12T12:53:42.533Z">
+<meta name="keywords" property="og:article:tag" content="linux,x-window">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="android-atom-tip.html" title="atom 使用技巧">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>x11vnc 圖形介面啟動</title>
+</head>
+<body>
+<main><h1 id="x11vnc 圖形介面啟動">x11vnc 圖形介面啟動</h1>
+<p>x11vnc 是一個在 x window 既有架構下，
+提供 vnc 連接的程式。
+除了命令列介面，也有簡單的圖形介面可以用。
+缺點是一般是用來分享已登入的 x window，
+要已經有登入的 x window，
+而且該 x window 要一直開著不能關掉。</p>
+<p>我一開始在找遠程登入時，
+發現我系統裡不知道為什麼有 x11vnc 這個指令，
+研究了一下，就會用密碼登入了。
+可以用 <code>x11vnc -usepw</code> 就能把密碼存在 <code>~/.vnc/passwd</code> 。</p>
+<p>後來發現他有一個 launcher，
+啟動會帶有圖形介面，能手動設定密碼和其它雜七雜八選項。
+執行前會要你設定 port 和要不要 ssl，
+然後才正式執行，並會常駐 icon 在通知欄。</p>
+<p>之後會跳一個設定介面，預設是沒有密碼，也不允許登入，
+要勾選允許登入，才能登入。
+可以不設密碼，但就比較危險。
+但有另一個選項能手動允許登入，
+就會變成有人嘗試登入時，
+會跳出視窗要你允許或拒絕；
+就能不設密碼，一律手動審核。</p>
+<p>也有選項可以讓登入者只能觀看不能操作，
+就單純分享畫面用。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

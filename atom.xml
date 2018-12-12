@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-12-12T05:11:44.695Z</updated>
+  <updated>2018-12-12T12:56:52.874Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,45 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/linux-x11vnc-server.html</id>
+<title>x11vnc 圖形介面啟動</title>
+<published>2018-12-12T12:53:42.533Z</published>
+<updated>2018-12-12T12:56:52.853Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/linux-x11vnc-server.html"/>
+<summary type="html">x11vnc 是一個在 x window 既有架構下，
+提供 vnc 連接的程式。
+除了命令列介面，也有簡單的圖形介面可以用。
+缺點是一般是用來分享已登入的 x window，
+要已經有登入的 x window，
+而且該 x window 要一直開著不能關掉。</summary>
+<category term="linux"/>
+<category term="x-window"/>
+<content type="html">&lt;h1 id=&quot;x11vnc 圖形介面啟動&quot;&gt;x11vnc 圖形介面啟動&lt;/h1&gt;
+&lt;p&gt;x11vnc 是一個在 x window 既有架構下，
+提供 vnc 連接的程式。
+除了命令列介面，也有簡單的圖形介面可以用。
+缺點是一般是用來分享已登入的 x window，
+要已經有登入的 x window，
+而且該 x window 要一直開著不能關掉。&lt;/p&gt;
+&lt;p&gt;我一開始在找遠程登入時，
+發現我系統裡不知道為什麼有 x11vnc 這個指令，
+研究了一下，就會用密碼登入了。
+可以用 &lt;code&gt;x11vnc -usepw&lt;/code&gt; 就能把密碼存在 &lt;code&gt;~/.vnc/passwd&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;後來發現他有一個 launcher，
+啟動會帶有圖形介面，能手動設定密碼和其它雜七雜八選項。
+執行前會要你設定 port 和要不要 ssl，
+然後才正式執行，並會常駐 icon 在通知欄。&lt;/p&gt;
+&lt;p&gt;之後會跳一個設定介面，預設是沒有密碼，也不允許登入，
+要勾選允許登入，才能登入。
+可以不設密碼，但就比較危險。
+但有另一個選項能手動允許登入，
+就會變成有人嘗試登入時，
+會跳出視窗要你允許或拒絕；
+就能不設密碼，一律手動審核。&lt;/p&gt;
+&lt;p&gt;也有選項可以讓登入者只能觀看不能操作，
+就單純分享畫面用。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/android-atom-tip.html#ringtone-customize-and-alternate-app</id>
 <title>atom 使用技巧</title>
 <published>2018-12-11T13:06:30.635Z</published>
@@ -1160,53 +1199,7 @@ mathJsEvaluator.initFromQueryString()
 <category term="ssh"/>
 <category term="無線"/>
 <category term="刷機"/>
-<content type="html">&lt;h1 id=&quot;經由 ssh tunnel 連上行動網路裡的 adb&quot;&gt;經由 ssh tunnel 連上行動網路裡的 adb&lt;/h1&gt;
-&lt;p&gt;adb 除了用 usb 線連接外，
-&lt;a href=&quot;adb-over-wifi.html&quot;&gt;也能走網路用 tcp 連接，最簡單是在區網中用 wifi 連結。&lt;/a&gt;
-但有時候電腦和 android 二者不在同一區網，
-那就得靠第三方有固定 ip 的 server 做中介，
-只要有網路就能經由 ssh port forward 遠端連上 adb，
-就算是行動網路浮動 ip 也能遠端做壞事了。&lt;/p&gt;
-&lt;p&gt;首先如果有 root 的話，有現成的 app 能控制 adb 走 tcp，
-不然就是用 &lt;a href=&quot;adb-over-wifi.html#-root&quot;&gt;前文所寫無 root 透過 wifi adb 的作法&lt;/a&gt; 。
-之前用的是 f-droid 的 &lt;a href=&quot;https://f-droid.org/en/packages/com.matoski.adbm/&quot;&gt;ADB Manager&lt;/a&gt; ，
-但他在我的新手機怪怪的，會一直跳出來要 root 權限，
-就換成 &lt;a href=&quot;https://f-droid.org/en/packages/com.github.sryze.wirebug/&quot;&gt;Wirebug&lt;/a&gt; 。
-反正都是很簡單的 app，就只有一個功能是切換透過 tcp adb。&lt;/p&gt;
-&lt;p&gt;然後 android 上的 ssh client 我是用 &lt;a href=&quot;http://connectbot.vx.sk/&quot;&gt;VX ConnectBot&lt;/a&gt; ，
-你也可以用其它能 ssh forward remote 的軟體。
-（也就是 &lt;code&gt;ssh -R&lt;/code&gt; 的功能。）
-設定過程就相當於在 android 上執行
-&lt;code&gt;ssh -R 55555:localhost:5555 my@static.sever.tw&lt;/code&gt; ，
-之後 static.server.tw 上的 38763 port
-就會被轉發到 android 上的 5555 port。&lt;/p&gt;
-&lt;p&gt;以 vx connect bot 來說，
-設定方法是登入過主機並加入清單後，
-長按該主機會有一個 &lt;em&gt;編輯端口轉發&lt;/em&gt; 的選項。
-按頂端的選單新建一個端口轉發，
-暱稱隨便取，我是取 adb， &lt;em&gt;轉發類型&lt;/em&gt; 選遠端，
-源端口看你要在 static.server.tw 上哪個 port 會連到 android，
-（例如上面是用 55555。）
-而目標端口則選 &lt;code&gt;localhost:5555&lt;/code&gt; 也就是 adb 的預設 port。&lt;/p&gt;
-&lt;p&gt;之後你用 vx connect bot 連上該主機時就會自動轉發，
-不管是走 wifi 還是 4g 網路；
-再用 wirebug 或 adb manager 或先前登入設定允許從網路連接 adb，
-就能登入 static.server.tw 後 &lt;code&gt;adb connect localhost:55555&lt;/code&gt; 
-連上 android。&lt;/p&gt;
-&lt;p&gt;如果你不想要再登入一次 static.server.tw 才能執行 adb，
-還能在 static.server.tw 上的 &lt;code&gt;/etc/ssh/sshd_config&lt;/code&gt; 裡
-設 &lt;code&gt;GatewayPorts yes&lt;/code&gt; ，
-就能讓 static.server.tw 的 55555 port 直接連到 android。
-預設因為安全起見，ssh server 是不允許綁到對外 ip 的；
-也就是只有在 static.server.tw 上看 localhost:55555
-才會連到 android 的 5555 port，
-但從外部連到 static.server.tw:55555 是連不上的。&lt;/p&gt;
-&lt;p&gt;另外 vx connect bot 的轉發類型有
-遠端、本地、動態套接字(socks) 三種可以選。
-其中遠端上面說明過了，也就是 ssh 的 &lt;code&gt;-R&lt;/code&gt; 選項，
-本地就是 &lt;code&gt;-L&lt;/code&gt; ，動態套接字則是 &lt;code&gt;-D&lt;/code&gt; 選項，
-用來當 http SOCKS 給瀏覽器用的。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/secret-reader.html#auto-decrypt-if-password-set</id>
 <title>解密閱讀器</title>

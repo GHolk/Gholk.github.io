@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-12-11T13:11:21.449Z</updated>
+  <updated>2018-12-12T05:11:44.695Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,125 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/android-atom-tip.html#ringtone-customize-and-alternate-app</id>
+<title>atom 使用技巧</title>
+<published>2018-12-11T13:06:30.635Z</published>
+<updated>2018-12-12T05:11:44.683Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/android-atom-tip.html#ringtone-customize-and-alternate-app"/>
+<summary type="html">
+* 自訂鈴聲
+* 替代的 app 像 vanilla music, slim social, open camera</summary>
+<category term="android"/>
+<content type="html">&lt;h1 id=&quot;atom 使用技巧&quot;&gt;atom 使用技巧&lt;/h1&gt;
+&lt;p&gt;最近入手了中國的一台小手機 unhertz atom。
+android 使用上有些快捷鍵，各品牌會不太一樣，
+像 atom 的截圖是同時按電源鍵和音量下，
+所以記錄下來一些有趣的用法。&lt;/p&gt;
+&lt;h2 id=&quot;螢幕截圖&quot;&gt;螢幕截圖&lt;/h2&gt;
+&lt;p&gt;同時按下電源鍵與音量向下鍵。
+這功能我找超久，後來 google 才在 atom 的使用者論壇看到這個按法。
+他們的 &lt;a href=&quot;https://drive.google.com/open?id=1Fv3wEG633XK3fEKz-or8C4OvBEnf6yQD&quot;&gt;使用者手冊&lt;/a&gt; 裡也有。這好像沒地方設定。
+手冊可能會有一些我漏掉的事，但更多廢話，
+有空的話會看看吧。&lt;/p&gt;
+&lt;h2 id=&quot;快速開啟相機&quot;&gt;快速開啟相機&lt;/h2&gt;
+&lt;p&gt;連按二下電源鍵，在待機時也效。
+可以在 &lt;em&gt;設定 &amp;gt; 系統 &amp;gt; 手勢&lt;/em&gt; 裡設定要不要使用。&lt;/p&gt;
+&lt;h2 id=&quot;返回鍵與選單鍵&quot;&gt;返回鍵與選單鍵&lt;/h2&gt;
+&lt;p&gt;可以交換二者順序。
+預設是左邊返回右邊選單，
+在 &lt;em&gt;設定 &amp;gt; 智能輔助 &amp;gt; 物理按鍵交換&lt;/em&gt; 可以調，
+如果勾選，就會讓二者交換。&lt;/p&gt;
+&lt;h2 id=&quot;Push-To-Talk 鍵&quot;&gt;Push-To-Talk 鍵&lt;/h2&gt;
+&lt;p&gt;快速開啟鍵，可以綁定快速開啟一個 app。
+預設是綁到 zello，可以在 &lt;em&gt;設定 &amp;gt; 智能輔助 &amp;gt; 快捷鍵&lt;/em&gt;
+設定要綁定的 app。&lt;/p&gt;
+&lt;p&gt;綁 zello 的話在待機時按也能啟動，
+用法就長按螢幕會自動解鎖並跳到 zello 的發話畫面，
+看到時間開始跑就能開始講話了。&lt;/p&gt;
+&lt;p&gt;比較想綁到 discord 的按鍵發話，但好像不行。
+有找到一個 &lt;a href=&quot;https://play.google.com/store/apps/details?id=flar2.homebutton&quot;&gt;button mapper&lt;/a&gt; 的 app
+能把硬體綁定動作或 app 的，但也沒有特別吸引人的用法。&lt;/p&gt;
+&lt;p&gt;比較想綁成錄音程式，可以在待機時按就開始錄音之類的，
+但還沒找到 solution。&lt;/p&gt;
+&lt;h2 id=&quot;分割螢幕&quot;&gt;分割螢幕&lt;/h2&gt;
+&lt;p&gt;本來不知知道這個功能，
+在上面的 button mapper 的 app 裡看到這個功能，
+又去 google 才知道怎麼用。
+預設是選單鍵會跳出最近使用的 app，
+長按任一 app 視窗，拉到頂端即可分割畫面。
+之後下半會維持在最近使用的 app 的多個視窗，
+之後也可以挑一個，但不能讓另一半分割是主畫面。&lt;/p&gt;
+&lt;h2 id=&quot;語音搜尋&quot;&gt;語音搜尋&lt;/h2&gt;
+&lt;p&gt;長按 home 鍵會叫出 google 助手，
+主要用來語音搜尋，也可以用語音交辦事務，
+像幾分鐘後叫我之類的。
+主要是以前我用倉頡滑動鍵盤時，在網址列不能打中文，
+所以要搜尋有點麻煩，後來就用長按 home 鍵叫出的快速搜尋，
+可以打中文。&lt;/p&gt;
+&lt;h2 id=&quot;google now&quot;&gt;google now&lt;/h2&gt;
+&lt;p&gt;原本 android o 的桌面往左滑會有 google now，
+但我實在想不出那有什麼用，而且會讓桌面被鎖在第一頁，
+只能往右延伸。
+所以後來就換掉預設的 launcher，
+找了一個舊的可以往左或往右的 open launcher。&lt;/p&gt;
+&lt;h2 id=&quot;解鎖&quot;&gt;解鎖&lt;/h2&gt;
+&lt;p&gt;atom 支援指紋、人臉辨識和其它多種解鎖。
+我現在是用指紋和 pin 碼，平常就都用指紋比較方便，
+之後可能會改用一個很長的密碼。&lt;/p&gt;
+&lt;h2 id=&quot;recovery 與 fastboot&quot;&gt;recovery 與 fastboot&lt;/h2&gt;
+&lt;p&gt;如 &lt;a href=&quot;android-root-atom.html&quot;&gt;root atom&lt;/a&gt; 這篇文章提到的，
+要進入 recovery 按著音量向下鍵與電源鍵開機，
+然後在 recovery 裡有選項可以進 fastboot。&lt;/p&gt;
+&lt;h2 id=&quot;鈴聲音量與通知音量&quot;&gt;鈴聲音量與通知音量&lt;/h2&gt;
+&lt;p&gt;android o 開始鈴聲音量和通知音量被合在一起，實在有點智障。
+通知通常還好，自己聽得到就好，漏掉就算了，也沒關係。
+鈴聲則是比較要緊的事，一定要大聲，在騎車、走路時也要能聽到。
+但 android o 這二個被合在一起，就不能各自調。&lt;/p&gt;
+&lt;p&gt;後來搜了一下，找到一個 &lt;a href=&quot;https://play.google.com/store/apps/details?id=netroken.android.persistfree&quot;&gt;volume control&lt;/a&gt; app，
+能分離這二者，就裝來用了。
+他能讓來電鈴聲獨立調整，然後系統其它通知鈴聲就能調小了。&lt;/p&gt;
+&lt;h2 id=&quot;自訂鈴聲&quot;&gt;自訂鈴聲&lt;/h2&gt;
+&lt;p&gt;以前我在 android 自訂鈴聲，
+都是放在 &lt;code&gt;/sdcard/media/audio/ringtones&lt;/code&gt; 之類的資料夾，
+然後在選擇鈴聲的介面就會出現；但我在 atom 上試沒用。&lt;/p&gt;
+&lt;p&gt;電話鈴聲可以直接在 &lt;em&gt;設定 &amp;gt; 音效 &amp;gt; 電話鈴聲 &amp;gt; 新增鈴聲&lt;/em&gt;
+裡面直接新增其它鈴聲，之後就會出現在介面裡了。&lt;/p&gt;
+&lt;p&gt;鬧鐘鈴聲則是在內建的時鐘 app 裡，
+選擇鈴聲的地方，可以從檔案系統新增其它鈴聲。&lt;/p&gt;
+&lt;h2 id=&quot;捷徑&quot;&gt;捷徑&lt;/h2&gt;
+&lt;p&gt;有些檔案會常需要快速查閱，像公車時刻表、校園地圖之類的。
+通常就是拍照或截圖成圖片，但在手機相簿久了就會被擠到後面，
+而且還要開相簿或檔案系統找蠻不方便的。&lt;/p&gt;
+&lt;p&gt;後來就找了一款 app &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.nagopy.android.fileshortcut&quot;&gt;file shortcut&lt;/a&gt; 可以在桌面設定檔案捷徑的，
+點該捷徑相當於用檔案管理員開該檔案。
+但如果久了捷徑積很多，
+也要關心哪些檔案是捷徑指向的不能刪，有點麻煩；
+所以後來換成只有一個指向資料夾的捷徑，
+要快速存取的就複製到該資料夾。&lt;/p&gt;
+&lt;h2 id=&quot;vanilla music&quot;&gt;vanilla music&lt;/h2&gt;
+&lt;p&gt;預設的怪怪的，只會在開機時掃描一次，
+之後丟進去的都不會出現，要重新開機。
+而且建播放清單時會 crash，沒辦法建。
+後來去 f-droid 上試了幾款，換成 &lt;a href=&quot;https://f-droid.org/packages/ch.blinkenlights.android.vanilla&quot;&gt;vanilla music&lt;/a&gt; 。&lt;/p&gt;
+&lt;h2 id=&quot;open camera&quot;&gt;open camera&lt;/h2&gt;
+&lt;p&gt;預設的相機 app 功能有點少，
+又無意間看到這款開源的相機 app &lt;a href=&quot;https://play.google.com/store/apps/details?id=net.sourceforge.opencamera&quot;&gt;open camera&lt;/a&gt; ，
+還不錯用，就把預設的相機 app 改成這款了；
+也就是上文提到的 &lt;a href=&quot;#快速開啟相機&quot;&gt;連按二下電源鍵快速開啟相機&lt;/a&gt; 。
+如果有多於一款相機 app，在連按二下電源鍵時會詢問你要用哪一款；
+如果已經有預設值，可以去 &lt;em&gt;設定 &amp;gt; 應用程式 &amp;gt; 已綁定的相機 app &amp;gt; 預設值&lt;/em&gt;
+清除預設值，下次再快速啟動時，就會再跳出詢問一次了。&lt;/p&gt;
+&lt;h2 id=&quot;facebook 圖片畫質&quot;&gt;facebook 圖片畫質&lt;/h2&gt;
+&lt;p&gt;我本來用 facebook 的官方 app，
+但他好像會根據手機螢幕尺寸載入不同畫質的圖片。
+我手機尺寸太小，所以圖片都很小，
+很多字都看不清楚，放大就糊掉，載下來也一樣不會變大。
+也換過官方的 facebook lite，也一樣糟，
+只好開始試第三方 app。
+目前是用 &lt;a href=&quot;https://f-droid.org/packages/it.rignanese.leo.slimfacebook/&quot;&gt;SlimSocial for Facebook&lt;/a&gt; ，
+介面和網頁版有點像，但分享的介面有點糟，字和按鈕會變很小。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/android-atom-tip.html</id>
 <title>atom 使用技巧</title>
 <published>2018-12-11T13:06:30.635Z</published>
@@ -1105,134 +1224,7 @@ mathJsEvaluator.initFromQueryString()
 &lt;/pre&gt;</summary>
 <category term="encrypt"/>
 <category term="blog"/>
-<content type="html">&lt;h1 id=&quot;解密閱讀器&quot;&gt;解密閱讀器&lt;/h1&gt;
-&lt;p&gt;用來讀全篇 pgp 加密的文章。
-需要載入 openpgpjs，流量會稍大。&lt;/p&gt;
-&lt;form&gt;
-&lt;label&gt;
-filepath
-&lt;input name=&quot;file-path&quot; type=&quot;text&quot;&gt;
-&lt;/label&gt;
 
-&lt;label&gt;
-password
-&lt;input name=&quot;pgp-password&quot; type=&quot;password&quot;&gt;
-&lt;/label&gt;
-
-&lt;label&gt;
-pgp private key
-&lt;textarea name=&quot;pgp-private-key&quot;&gt;&lt;/textarea&gt;
-&lt;/label&gt;
-
-&lt;button type=&quot;button&quot; onclick=&quot;secretReader.decryptForm()&quot;&gt;decrypt&lt;/button&gt;
-
-&lt;output name=&quot;plain-text&quot;&gt;&lt;/output&gt;
-&lt;/form&gt;
-
-&lt;style&gt;
-  output {
-    white-space: pre-wrap;
-  }
-  label, output, textarea {
-    display: block;
-  }
-&lt;/style&gt;
-
-&lt;script src=&quot;ext/decrypt-post.js&quot;&gt;&lt;/script&gt;
-
-&lt;script&gt;
-var secretReader
-loadOpenpgp.then(openpgp =&gt; {
-    secretReader = {
-        openpgp,
-        form: document.querySelector(&apos;form&apos;),
-        getFormName(name) {
-            return this.form.elements[name]
-        },
-        async fetchEncryptUint8Array(path) {
-            if (!path) path = this.getFormName(&apos;file-path&apos;).value
-            const response = await fetch(path)
-            const arrayBuffer = await response.arrayBuffer()
-            return new Uint8Array(arrayBuffer)
-        },
-        async decrypt(binary, type, key) {
-            const stream = false
-            const message = this.openpgp.message.read(binary, stream)
-            let typename
-            if (type == &apos;privateKey&apos;) typename = &apos;privateKeys&apos;
-            else typename = &apos;passwords&apos;
-            const plain = await this.openpgp.decrypt({
-                message, [typename]: key
-            })
-            return plain.data
-        },
-        async decryptForm() {
-            const password = this.getFormName(&apos;pgp-password&apos;).value
-            const armorPrivateKey = this.getFormName(&apos;pgp-private-key&apos;).value
-            let type
-            let key
-            if (armorPrivateKey) {
-                const privateKey = await this.openpgp.key.readArmored(armorPrivateKey)
-                try {
-                    await privateKey.keys[0].decrypt(password)
-                }
-                catch (privateKeyDecryptError) {
-                    alert(&apos;private key password wrong&apos;)
-                    throw privateKeyDecryptError
-                }
-                type = &apos;privateKey&apos;
-                key = privateKey.keys[0]
-            }
-            else {
-                type = &apos;password&apos;
-                key = password
-            }
-
-            const path = this.getFormName(&apos;file-path&apos;).value
-            let binary
-            try {
-                binary = await this.fetchEncryptUint8Array(path)
-            }
-            catch (fetchFileError) {
-                const filepath = this.getFormName(&apos;file-path&apos;).value
-                alert(`file &quot;${filepath}&quot; not exist`)
-                throw fetchFileError
-            }
-
-            let plain
-            try {
-                plain = await this.decrypt(binary, type, key)
-            }
-            catch (decryptError) {
-                alert(&apos;wrong pgp key&apos;)
-                throw decryptError
-            }
-            this.outputResult(path, plain)
-        },
-        outputResult(path, plain) {
-            if (/\.html?\.gpg$/.test(path)) this.outputReslutHtml(plain)
-            else this.getFormName(&apos;plain-text&apos;).textContent = plain
-        },
-        outputReslutHtml(html) {
-            const iframe = document.createElement(&apos;iframe&apos;)
-            const output = this.getFormName(&apos;plain-text&apos;)
-            output.textContent = &apos;&apos;
-            output.appendChild(iframe)
-            iframe.contentDocument.write(html)
-            iframe.contentDocument.close()
-        },
-        loadQueryString() {
-            for (const [name, value] of Object.entries(goption)) {
-                const node = this.getFormName(name)
-                if (node) node.value = value
-            }
-            if (goption[&apos;pgp-password&apos;]) this.decryptForm()
-        }
-    }
-    secretReader.loadQueryString()
-})
-&lt;/script&gt;
-</content>
 </entry>
 <entry>
 <id>http://gholk.github.io/secret-reader.html#support-html-format</id>

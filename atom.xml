@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-12-12T12:56:52.874Z</updated>
+  <updated>2018-12-12T16:04:12.040Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,62 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/tanet-roaming-wifi-nctu-login.html</id>
+<title>交大學生登入 tanetroaming wifi</title>
+<published>2018-12-12T16:03:12.947Z</published>
+<updated>2018-12-12T16:04:12.025Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/tanet-roaming-wifi-nctu-login.html"/>
+<summary type="html">tanetroaming 是在全台各大學都有的 wifi，
+用自己學校的帳號就能登入，全台校園暢行無阻。
+一般是用學校的 email 帳號密碼識別，
+但 &lt;abbr title=&quot;交通大學&quot;&gt;交大&lt;/abbr&gt; 的 email 托管給 g-suit 了，
+所以和學號無關，密碼也和 &lt;a href=&quot;https://portal.nctu.edu.tw&quot;&gt;交大入口&lt;/a&gt; 的不同。
+所以交大學生要用 &lt;code&gt;學號@nctu.edu.tw&lt;/code&gt; 當帳號，
+密碼則是交大入口的密碼。</summary>
+<category term="wifi"/>
+<category term="study"/>
+<category term="nctu"/>
+<category term="ncku"/>
+<category term="email"/>
+<category term="account"/>
+<category term="web"/>
+<content type="html">&lt;h1 id=&quot;交大學生登入 tanetroaming wifi&quot;&gt;交大學生登入 tanetroaming wifi&lt;/h1&gt;
+&lt;p&gt;tanetroaming 是在全台各大學都有的 wifi，
+用自己學校的帳號就能登入，全台校園暢行無阻。
+一般是用學校的 email 帳號密碼識別，
+但 &lt;abbr title=&quot;交通大學&quot;&gt;交大&lt;/abbr&gt; 的 email 托管給 g-suit 了，
+所以和學號無關，密碼也和 &lt;a href=&quot;https://portal.nctu.edu.tw&quot;&gt;交大入口&lt;/a&gt; 的不同。
+所以交大學生要用 &lt;code&gt;學號@nctu.edu.tw&lt;/code&gt; 當帳號，
+密碼則是交大入口的密碼。&lt;/p&gt;
+&lt;p&gt;現在交大新生已經不會自動被分配 email 了，
+只有基本資料卡上自己填的 email，
+和可以經由學校申請 g-suit 的 email。
+而申請的 g suit email 是可以自訂名稱的，
+只是會被加上 &lt;code&gt;.&lt;/code&gt; &lt;code&gt;學系簡寫&lt;/code&gt; &lt;code&gt;入學年&lt;/code&gt; &lt;code&gt;g&lt;/code&gt; ，
+像外語學院 06 年入學的，如果自己取的名字是 cyndi，
+那 g suit 帳號就會變 &lt;code&gt;cyndi.fl06g@nctu.edu.tw&lt;/code&gt; 。
+而且 g suit 的密碼也是自己設的，和學校原有的帳號密碼都不同。&lt;/p&gt;
+&lt;p&gt;交大有自己的一組帳號密碼，
+基本上帳號就是學號，密碼也是自己設，像 &lt;a href=&quot;https://portal.nctu.edu.tw&quot;&gt;交大入口&lt;/a&gt; 的。
+雖然也沒有完全統一，像選課系統就有自己的一組，
+宿舍網路也是獨立的。&lt;/p&gt;
+&lt;p&gt;所以問題就來了，學校理論上無法幫你驗證 g suit 的密碼，
+那只有 google 能做到，而且每人的 g suit 帳號不同，
+感覺就難以驗證；一般 tanet roaming 應該是要用學號來登入。
+所以後來才找到 &lt;a href=&quot;https://www.it.nctu.edu.tw/?page_id=48&quot;&gt;計中說明 tanetroaming 要用 &lt;code&gt;學號@nctu.edu.tw&lt;/code&gt; 登入&lt;/a&gt; ，
+雖然其中有個 &lt;code&gt;@&lt;/code&gt; ，也看起來很像 email；
+但那根本不是 email，只是代表你和交大而已。
+總之終於成功在清華大學的 tanet roaming 登入了。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.wlan.nthu.edu.tw/~wlan/NM/wlanUserStep.html&quot;&gt;清大的比較有趣，一樣是學號，但域名則是綁到 &lt;code&gt;wlan.nthu.edu.tw&lt;/code&gt; ，&lt;/a&gt; 。
+總之終於可以用交大的身份登入了，
+之前都還是用成功大學的 email 在登入，
+成功大學就簡單多了， &lt;a href=&quot;https://i.ncku.edu.tw/&quot;&gt;成功入口&lt;/a&gt; 基本上已經整合所有服務了，
+email 帳號密碼也就是成功入口的帳號密碼。
+（雖然系所代碼有時大寫有時小寫，
+但網頁介面上多會自動幫你糾正，這又是另一個坑了。）
+除了今年剛加入的 g suit 外。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/linux-x11vnc-server.html</id>
 <title>x11vnc 圖形介面啟動</title>
 <published>2018-12-12T12:53:42.533Z</published>
@@ -1038,151 +1094,7 @@ interpolate_point(p2) # 51.80235472239709
 <category term="octave"/>
 <category term="javascript"/>
 <category term="tool"/>
-<content type="html">&lt;h1 id=&quot;mathjs 執行介面&quot;&gt;mathjs 執行介面&lt;/h1&gt;
-&lt;p&gt;mathjs 是一套提供類似 matlab 語法，
-在 javascript 中執行的數學函式庫。
-可以在網頁上無需伺服器運作，
-也就可以靜態托管，甚至寫成 service worker 離線運作。&lt;/p&gt;
-&lt;p&gt;我現在的測量課程，大部份的作業可以以 mathjs 完成，
-只是繪圖部份還沒搞定。
-一直用 octave 只是他的繪圖很方便，
-會自己彈出結果視窗，能直接存檔。
-js 繪圖就要靠其它函式庫輔助。
-如果是在網頁上，就能畫在 canvas 裡，
-也有所見即所得的效果。&lt;/p&gt;
-&lt;h2 id=&quot;math notepad&quot;&gt;math notepad&lt;/h2&gt;
-&lt;p&gt;結果後來想想 mathjs 的 parser 這麼完整，
-應該是有人做過類似的東西了，結果就找到了 &lt;a href=&quot;//mathnotepad.com&quot;&gt;math notepad&lt;/a&gt; 。
-功能蠻完整的，可以存檔、短網址分享，還有 plot 繪圖功能。
-那這個 mathjs 的 web shell 應該沒用了，
-功能太爛，就一個能把 script 嵌在 querystring 裡的功能比較特別，
-mathnotepad 則是要你存檔後分享短網址。
-二者比較 mathnotepad 應該是比較強。&lt;/p&gt;
-&lt;p&gt;唯一比較不順眼就是 math notepad 的 plot 函數有點奇怪，
-不是像 matlab 風格，而是輸入一種帶參數的函數？
-像 &lt;code&gt;plot(f(x))&lt;/code&gt; ，會畫出整個 f 函數，
-那個 x 則是自由變數，不用先定義 x。
-總之怪怪的，用起來不太順手。&lt;/p&gt;
-&lt;form&gt;
-&lt;textarea&gt;
-    A = [1, 3, 5;
-        2, 4, 6]
 
-    inv(A&amp;#39; * A)
-&lt;/textarea&gt;
-&lt;button type=&quot;button&quot; onclick=&quot;mathJsEvaluator.evalAndShow(&apos;javascript&apos;)&quot;&gt;
-    execute javascript&lt;/button&gt;
-&lt;button type=&quot;button&quot; onclick=&quot;mathJsEvaluator.evalAndShow(&apos;mathjs&apos;)&quot;&gt;
-    execute mathjs&lt;/button&gt;
-&lt;button type=&quot;button&quot; onclick=&quot;mathJsEvaluator.showScope()&quot;&gt;
-    show all variable&lt;/button&gt;
-&lt;button type=&quot;button&quot; onclick=&quot;mathJsEvaluator.clearOutput()&quot;&gt;
-    clear output&lt;/button&gt;
-&lt;button type=&quot;button&quot; onclick=&quot;mathJsEvaluator.syncUrl()&quot;&gt;
-    get script share url&lt;/button&gt;
-&lt;label&gt; &lt;input type=&quot;checkbox&quot; name=&quot;clear-after-execute&quot; checked&gt;
-        clear script after successful execute &lt;/label&gt;
-&lt;output&gt;&lt;/output&gt;
-&lt;/form&gt;
-
-&lt;style&gt;
-textarea {
-    display: block;
-    height: 8em;
-    width: 80%;
-}
-output {
-    display: block;
-    width: 80%;
-    height: 10em;
-    border: solid 1px;
-    white-space: pre-wrap;
-    overflow: auto;
-}
-label {
-    display: block;
-}
-&lt;/style&gt;
-
-&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.3.1/math.min.js&quot;&gt;&lt;/script&gt;
-
-&lt;script&gt;
-var mathJsEvaluator = {
-    mathjs: math,
-    scope: {},
-    inputNode: document.querySelector(&apos;textarea&apos;),
-    outputNode: document.querySelector(&apos;output&apos;),
-    isClearAfterExecuteNode: document.querySelector(&apos;[name=clear-after-execute]&apos;),
-    evalJavaScript(code) {
-        return eval(code)
-    },
-    evalMathJs(code) {
-        return this.mathjs.eval(code, this.scope)
-    },
-    showScope() {
-        this.showResult(JSON.stringify(this.scope))
-    },
-    syncUrl() {
-        const escapeScript = encodeURIComponent(this.inputNode.value)
-        const scriptUrl = &apos;?mathjs-script=&apos; + escapeScript
-        history.pushState(null, &apos;sync url&apos;, scriptUrl)
-    },
-    evalAndShow(type) {
-        let name
-        if (type == &apos;javascript&apos;) name = &apos;evalJavaScript&apos;
-        else name = &apos;evalMathJs&apos;
-
-        let result
-        try {
-            result = this[name](this.inputNode.value)
-        }
-        catch (evalError) {
-            return this.showResult(evalError)
-        }
-        if (this.isClearAfterExecuteNode.checked) this.inputNode.value = &apos;&apos;
-        this.showResult(result)
-    },
-    divider: &apos;\n\n######################\n\n&apos;,
-    showResult(result) {
-        let resultString
-        if (result.type == &apos;ResultSet&apos;) {
-            resultString = result.entries.map(String).join(&apos;\n\n&apos;)
-        }
-        else resultString = String(result)
-
-        if (this.outputNode.textContent == &apos;&apos;) {
-            this.outputNode.textContent = resultString
-        }
-        else {
-            this.outputNode.textContent += this.divider + resultString
-        }
-        this.outputNode.scrollTop = this.outputNode.scrollHeight
-    },
-    clearOutput() {
-        this.outputNode.textContent = &apos;&apos;
-    },
-    async initFromQueryString(relative = &apos;&apos;) {
-        const url = new URL(relative, location)
-        let scriptText = &apos;&apos;
-        if (url.searchParams.has(&apos;mathjs-script&apos;)) {
-            scriptText = url.searchParams.get(&apos;mathjs-script&apos;)
-        }
-        else if (url.searchParams.has(&apos;mathjs-script-url&apos;)) {
-            const scriptUrl = url.searchParams.get(&apos;mathjs-script-url&apos;)
-            const response = await fetch(scriptUrl)
-            const text = await response.text()
-            scriptText = text
-        }
-        if (scriptText) {
-            this.isClearAfterExecuteNode.checked = false
-            this.inputNode.value = scriptText
-            this.evalAndShow(&apos;mathjs&apos;)
-        }
-    }
-}
-mathJsEvaluator.initFromQueryString()
-&lt;/script&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/android-adb-4g-ssh-tunnel.html</id>
 <title>經由 ssh tunnel 連上行動網路裡的 adb</title>

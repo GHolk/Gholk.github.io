@@ -1,0 +1,55 @@
+# 交大學生登入 tanetroaming wifi
+tanetroaming 是在全台各大學都有的 wifi，
+用自己學校的帳號就能登入，全台校園暢行無阻。
+一般是用學校的 email 帳號密碼識別，
+但 <abbr title="交通大學">交大</abbr> 的 email 托管給 g-suit 了，
+所以和學號無關，密碼也和 [交大入口] 的不同。
+所以交大學生要用 `學號@nctu.edu.tw` 當帳號，
+密碼則是交大入口的密碼。
+
+[交大入口]: https://portal.nctu.edu.tw
+
+現在交大新生已經不會自動被分配 email 了，
+只有基本資料卡上自己填的 email，
+和可以經由學校申請 g-suit 的 email。
+而申請的 g suit email 是可以自訂名稱的，
+只是會被加上 `.` `學系簡寫` `入學年` `g` ，
+像外語學院 06 年入學的，如果自己取的名字是 cyndi，
+那 g suit 帳號就會變 `cyndi.fl06g@nctu.edu.tw` 。
+而且 g suit 的密碼也是自己設的，和學校原有的帳號密碼都不同。
+
+交大有自己的一組帳號密碼，
+基本上帳號就是學號，密碼也是自己設，像 [交大入口] 的。
+雖然也沒有完全統一，像選課系統就有自己的一組，
+宿舍網路也是獨立的。
+
+所以問題就來了，學校理論上無法幫你驗證 g suit 的密碼，
+那只有 google 能做到，而且每人的 g suit 帳號不同，
+感覺就難以驗證；一般 tanet roaming 應該是要用學號來登入。
+所以後來才找到 [計中說明 tanetroaming 要用 `學號@nctu.edu.tw` 登入][nctu tanet wifi] ，
+雖然其中有個 `@` ，也看起來很像 email；
+但那根本不是 email，只是代表你和交大而已。
+總之終於成功在清華大學的 tanet roaming 登入了。
+
+[nctu tanet wifi]: https://www.it.nctu.edu.tw/?page_id=48
+
+[清大的比較有趣，一樣是學號，但域名則是綁到 `wlan.nthu.edu.tw` ，][nthu tanet wifi] 。
+總之終於可以用交大的身份登入了，
+之前都還是用成功大學的 email 在登入，
+成功大學就簡單多了， [成功入口] 基本上已經整合所有服務了，
+email 帳號密碼也就是成功入口的帳號密碼。
+（雖然系所代碼有時大寫有時小寫，
+但網頁介面上多會自動幫你糾正，這又是另一個坑了。）
+除了今年剛加入的 g suit 外。
+
+[nthu tanet wifi]: http://www.wlan.nthu.edu.tw/~wlan/NM/wlanUserStep.html
+[成功入口]: https://i.ncku.edu.tw/
+
+
+#wifi
+#study
+#nctu
+#ncku
+#email
+#account
+#web

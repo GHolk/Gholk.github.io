@@ -1,0 +1,125 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-12-17T12:50:43.617Z">
+<meta name="keywords" property="og:article:tag" content="javascript,程式語言,closure">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="tanet-roaming-wifi-nctu-login.html" title="交大學生登入 tanetroaming wifi">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>javascript 中 for 迴圈變數的重覆宣告</title>
+</head>
+<body>
+<main><h1 id="javascript 中 for 迴圈變數的重覆宣告">javascript 中 for 迴圈變數的重覆宣告</h1>
+<p>javascript 的 <code>for (let i=0; i&lt;9; i++)</code> 形式迴圈，
+從前只有 var 時代時有共用變數的問題，
+但改用 let 後問題解決了，
+但仔細看會發現就語意來說問題不應該解決才對，
+因為 let 和 <code>i++</code> 代表每次迴圈中的 i
+只是上一個 i 的值改變了，但還是同一個變數。
+所以 var 時代的共用變數問題應該仍要存在，但實際使用上卻消失了，
+應該是在 es2016 的規格書中寫了不同的執行情況。</p>
+<h2 id="var 時代的問題">var 時代的問題</h2>
+<p>在從前只有 var 時，因為 var 的作用域是超出 for 迴圈 block 的，
+所以在迴圈結束後會殘留一個結束狀態的 i 在作用域。
+而且因為 i 在迴圈每次執行時是共用的，
+所以如果在迴圈中用了閉包把 i 包入函數，
+則所有函數中的 i 還是同一個 i，值也相同，
+在迴圈結束後所有 i 也都會停在那時的值。</p>
+<pre><code class="lang-javascript">var a = []
+for (var i=0; i&lt;9; i++) {
+  a.push(function () { return i })
+}
+// i = 9
+
+a.map(function (f) { return f() })
+// [9, 9, 9, 9, 9, 9, 9, 9, 9, 9]
+// 每個函數不同，但每個函數中的 i 都指向那個 var 宣告的 i，
+// 停在迴圈結束時的 9。
+</code></pre>
+<h2 id="let 各次迴圈的獨立">let 各次迴圈的獨立</h2>
+<p>其實我很少用 let，多半用 const，
+因為我不太需要去改變某個已經宣告的變數，
+多是宣告一個新的變數。
+只有字串相加的時候會用 <code>s += anotherString</code> ，
+所以得用 let；另外就是 for 迴圈計數的時候。</p>
+<p>雖然你在迴圈每次執行時，可能不會更改 i 的值，
+但你在 for 迴圈的第三個表達式 <code>i++</code> ，
+很明顯就是改了 i 的值，所以不能用 const，
+如果用 const 在執行到 <code>i++</code> 會丟
+<code>TypeError: Assignment to constant variable.</code> 。
+這就表示，你在迴圈每次執行的 i，
+都是上一次的 <code>i++</code> 的結果，都是同一個 i。</p>
+<p>可是如果是同一個 i，那和 var 相比
+雖然在迴圈結束後 i 就消失了；
+但用閉包包入的 i 還是會都指向同一個 i，
+也應該指到同一個值，但並沒有。</p>
+<pre><code>let a = []
+for (let i=0; i&lt;9; i++) {
+    a.push(() =&gt; i)
+}
+a.map(f =&gt; f()) // [0, 1, 2, 3, 4, 5, 6, 7, 8]
+</code></pre><h2 id="for let 只在當次迴圈有效">for let 只在當次迴圈有效</h2>
+<p>所以 <code>for (let i=0;;)</code> 形式的迴圈中，
+第一個表達式如果是 let 或 const 宣告，
+那該變數在第二和第三表達式裡是同一個，
+同時如果在迴圈執行中改變了 i 的值，
+是會將改變帶到下一輪的。
+可是如果是在迴圈進到下一圈後，
+上一圈用閉包捕捉的 i 就和新的 i 無關了。</p>
+<p>也許可以想像成，在進入迴圈內前，
+會將 i 複製一份到迴圈內的作用域，
+然後迴圈執行完一次後再複製出來，
+因此這次的 i 和下次的 i 是獨立的，
+但在迴圈內用閉包抓的 i，
+在離開單次迴圈前仍有效。</p>
+<pre><code>let f = () =&gt; null
+for (let i=0; i&lt;9; i++) {
+    console.log(&apos;init&apos;, i)
+    f() // 這時 f 是上一次的 f 和上一次的 i，不會對當下的 i 造成影響。
+    console.log(&apos;after previous increment&apos;, i)
+    f = () =&gt; i++ // 現在的 i
+    f() // 這次就有影響了。
+    console.log(&apos;after current increment&apos;, i)
+}
+</code></pre><h2 id="更加混亂的共用變數">更加混亂的共用變數</h2>
+<p>但我異想天開，又想如果把 f 和 i 一起宣告在迴圈頭呢？
+結果發現該 f 所捕捉到的 i 竟然完全和迴圈內的 i 無關，
+頂多只有一開始值相同，之後任一方改變都不會影響到另一方。</p>
+<pre><code>for (let i=0, set=v=&gt;i=v, get=()=&gt;i; i&lt;9; i++) {
+    console.log(&apos;before&apos;, i,get())
+    set(get()-1)
+    console.log(&apos;after&apos;, i,get())
+}
+</code></pre><h2 id="結論">結論</h2>
+<p>總之，想完全弄懂可以去看 <a href="http://www.ecma-international.org/ecma-262/6.0/#sec-forbodyevaluation">ecma script spec</a> ，
+（網頁有點大，注意流量。）
+但太冗長了，我沒有看完也沒有全看懂，
+反正看起來和我想像的沒有衝突。</p>
+<p>這整件事，就是為了解決一開始 var 時代不只因 var 造成的問題，
+所有閉包都指到同一個變數，
+所以讓各次迴圈共用的變數不再共用，而是指向當下的值。
+但因此表現的行為會和對語法的想像有出入，
+同時又因為增加的複雜度，製造了更多的與想像不合的地方。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

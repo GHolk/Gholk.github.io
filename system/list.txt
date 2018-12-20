@@ -256,3 +256,4 @@ android-atom-tip.html
 linux-x11vnc-server.html
 tanet-roaming-wifi-nctu-login.html
 javascript-for-let-loop-change.html
+window-system-full-screen-tab-think.html

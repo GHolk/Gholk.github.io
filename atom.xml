@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-12-19T15:11:14.719Z</updated>
+  <updated>2018-12-20T13:48:41.157Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,202 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/window-system-full-screen-tab-think.html</id>
+<title>從 youtube 縮小視窗播放影片思考視窗系統</title>
+<published>2018-12-20T13:46:08.140Z</published>
+<updated>2018-12-20T13:48:41.142Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/window-system-full-screen-tab-think.html"/>
+<summary type="html">我認為 youtube 甚至其它程式的 &lt;strong&gt;全螢幕&lt;/strong&gt; 功能，
+應該要改成全視窗，視窗內的程式不應該超出視窗範圍，
+全螢幕應該要在整個視窗系統的層級操作，
+讓一個視窗全螢幕，而不是視窗的部份。
+另外就是像瀏覽器中的分頁系統的成功其實很詭異，
+分頁就是一種閹割的功能不完全的視窗，
+但卻比視窗系統好用，這代表現今的視窗系統都設計得太爛嗎？</summary>
+<category term="x-window"/>
+<category term="javascript"/>
+<category term="linux"/>
+<category term="gui"/>
+<content type="html">&lt;h1 id=&quot;從 youtube 縮小視窗播放影片思考視窗系統&quot;&gt;從 youtube 縮小視窗播放影片思考視窗系統&lt;/h1&gt;
+&lt;p&gt;我認為 youtube 甚至其它程式的 &lt;strong&gt;全螢幕&lt;/strong&gt; 功能，
+應該要改成全視窗，視窗內的程式不應該超出視窗範圍，
+全螢幕應該要在整個視窗系統的層級操作，
+讓一個視窗全螢幕，而不是視窗的部份。
+另外就是像瀏覽器中的分頁系統的成功其實很詭異，
+分頁就是一種閹割的功能不完全的視窗，
+但卻比視窗系統好用，這代表現今的視窗系統都設計得太爛嗎？&lt;/p&gt;
+&lt;h2 id=&quot;youtube 緣起&quot;&gt;youtube 緣起&lt;/h2&gt;
+&lt;p&gt;有時我會想一邊看影片一邊做事，
+影片來源多是 youtube 網頁，
+我會把 youtube 網頁獨立開成一個視窗，
+調整到大概 1/4 的大小，放在右上或其它角落。
+然後把該視窗的階層調成置頂，就算焦點移到其它視窗，
+還是會維持在置頂最上層的位置。&lt;/p&gt;
+&lt;p&gt;在做事的視窗，像原本開了一堆分頁的瀏覽器、終端機、emacs，
+雖然部份會被那 1/4 的 youtube 擋住，
+但多半還可以勉強使用，大不了也縮小。
+像現代的網站文章主體多半只佔中間一部份，
+左右都是不重要的測邊欄；
+終端機也是，最右邊一大堆空間不一定用得到，
+只要最左邊的游標、提示符還看得到就好。&lt;/p&gt;
+&lt;h2 id=&quot;youtube 的版面&quot;&gt;youtube 的版面&lt;/h2&gt;
+&lt;p&gt;但有個問題：youtube 網站裡除了影片，
+還有頂部的搜尋欄，1/4 的視窗已經很小，
+還要被佔去大片位置，實在是很不爽。
+所以後來用 &lt;strong&gt;custom style script&lt;/strong&gt; 寫了個腳本，
+讓頂部搜尋欄不再會 fix 在視窗頂部，
+只要往下滑就會消失了。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-css&quot;&gt;#masthead-container {
+  position: absolute !important;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;另外雖然 youtube 有側邊欄，但適應性設計做得不錯，
+在我把視窗縮小到一定程度，
+側邊欄就會自動變成排在影片下面，影片就會變全視窗寬。
+所以不用特別改其它部份的 css。&lt;/p&gt;
+&lt;p&gt;我是希望 youtube 能有一個按鈕是 &lt;strong&gt;全視窗&lt;/strong&gt; ，
+按下去就會讓影片佔滿整個視窗，
+以網頁來說，就是佔滿整個網頁版面，
+而不是現在的佔滿整個螢幕。
+但好像不應該佔到上方的分頁欄、工具欄，
+而是分頁欄要有地方讓使用者關掉。&lt;/p&gt;
+&lt;p&gt;但其實 youtube 有個內嵌用的網頁：
+&lt;a href=&quot;https://youtube.com/embed/UtF6Jej8yb4&quot;&gt;https://youtube.com/embed/UtF6Jej8yb4&lt;/a&gt;
+把最後的那串影片 id 換成你要放的影片，
+該網頁就直接是全螢幕影片了，
+只是要換網址有點麻煩。&lt;/p&gt;
+&lt;p&gt;而其它影片網站，像巴哈的動畫瘋，或 bili bili，也各有不同。
+巴哈的我好像寫了不少 css 才讓影片佔滿版面；
+bili bili 就有我上面說的全視窗按鈕，
+按了就會像 youtube 的內嵌播放器一樣，
+整個版面都是影片。&lt;/p&gt;
+&lt;h2 id=&quot;視窗頂部工具列佔的空間&quot;&gt;視窗頂部工具列佔的空間&lt;/h2&gt;
+&lt;p&gt;另一個問題是，我發現分頁列佔太多空間了。
+我用瀏覽器時，習慣把工具列、書籤列都收掉，
+只留最基本的網址列和分頁列。
+如果要找書籤再用 ctrl-b 叫出來，
+但其實更常直接在網址列裡打關鍵字，
+直接在歷史記錄和書籤裡搜，真搜不到就用 google 搜，
+書籤列裡已經太多東西了。&lt;/p&gt;
+&lt;p&gt;視窗縮到 1/4 已經很小，所以我才要縮掉 youtube 頂部的搜尋欄，
+但還有更佔空間的縮不掉的網址列和分頁列。
+就算該視窗用來開 youtube，也只開一個分頁，
+還是會顯示那沒用的分頁列和網址列。
+其它工具列都關得掉，但這二個是日常使用瀏覽器時 &lt;em&gt;必要&lt;/em&gt; 的，
+所以不能預設關掉，也沒辦法簡單的關掉。&lt;/p&gt;
+&lt;h2 id=&quot;消去分頁列與網址列&quot;&gt;消去分頁列與網址列&lt;/h2&gt;
+&lt;p&gt;後來發現其實有辦法關掉，只是也很麻煩。
+一是用 javascript 的 &lt;code&gt;window.open()&lt;/code&gt; ，
+&lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features&quot;&gt;第三個參數可以控制開啟視窗的功能&lt;/a&gt; ，
+可以控制不要有哪些功能，
+所以可以開啟一個沒有分頁列也沒有網址列的視窗。&lt;/p&gt;
+&lt;p&gt;只是因為網頁如果沒有這二列，會容易使使用者不知所措，
+（不知道怎麼回上一頁，看不到網址不能確定是不是詐騙網站。）
+所以要另外到 about:config 去調，允許開啟沒有網址列、分頁列的網頁。
+以 firefox 來說是 &lt;code&gt;dom.disable_window_open_feature.location&lt;/code&gt; 要設成 false。
+而分頁列好像是屬於工具列 &lt;code&gt;toolbar&lt;/code&gt; 的一部份，
+本來就能關掉。（只是關掉了還是可以有分頁，
+但沒有分頁列可以點，就只能用 ctrl-tab 切換。）&lt;/p&gt;
+&lt;p&gt;而 chromium 的 location bar 我就不知道怎麼關了，
+只有分頁列關得掉。但有找到另一個 &lt;code&gt;--app&lt;/code&gt; 選項，
+可以用來開啟一個沒有分頁、網址、什麼都沒有的乾淨瀏覽器。
+一般是給 chrome app 用的，創造類似原生 app 的體驗，
+像是 &lt;code&gt;chromium --app=&amp;quot;https://term.ptt.cc&amp;quot;&lt;/code&gt; 。&lt;/p&gt;
+&lt;h2 id=&quot;分頁與視窗&quot;&gt;分頁與視窗&lt;/h2&gt;
+&lt;p&gt;最後，經歷了那麼多，我發現瀏覽器分頁系統的出現是很神奇的一件事。
+因為上述 youtube 獨立視窗的使用經驗，
+讓我了解到視窗系統其實某種程度上是不可取代的，
+不可能永遠活在單一視窗的分頁裡。&lt;/p&gt;
+&lt;p&gt;我以前還曾經找過有沒有辦法在瀏覽器裡分割視窗，
+把一個分頁割成左右，分別顯示不同網站之類的。
+有找到一個用頁框，有點像早期 html 的 frameset 的外掛程式，
+但後來 firefox 改版到 web extension 框架，
+沒有 api 了；那個外掛作者改寫成分割成不同視窗，
+一開始用我覺得很難用就沒繼續試了。&lt;/p&gt;
+&lt;p&gt;後來我才驚覺視窗的彈性比分頁大很多，從整體來看，
+分頁就像在瀏覽器裡又實作了一個視窗系統，
+而且這個系統功能很少，一次只能顯示一個視窗，
+一定會佔滿整個瀏覽器。
+而且分頁還不能和視窗系統裡的視窗一樣平等，
+而是被關在瀏覽器視窗裡，要獨立出來還得另外從分頁列拉。&lt;/p&gt;
+&lt;h3 id=&quot;ptt 瀏覽器板的舊文&quot;&gt;ptt 瀏覽器板的舊文&lt;/h3&gt;
+&lt;p&gt;總之，分頁系統相當於一個閹割版的小型視窗系統。
+之前 &lt;a href=&quot;ptt/M.1526967650.A.775.html&quot;&gt;在 ptt 瀏覽器版寫了一篇文章&lt;/a&gt; ，
+探討過這個問題，全文如下：&lt;/p&gt;
+&lt;p&gt;&amp;gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;想討論個問題，
+為什麼主流瀏覽器都使用分頁而非視窗？&lt;/p&gt;
+&lt;p&gt;從功能面來看，瀏覽器的分頁 (tab) ，
+就是個退化了的視窗 (window) 。
+只能顯示並佔滿整個母視窗，
+不能讓二兩個視窗並列，
+也不能把其一縮到右下角 1/4 同時看二個。&lt;/p&gt;
+&lt;p&gt;而整個視窗系統，也可以看成增強版的分頁，
+只是分頁列是顯示在下面，
+（對主流視窗系統來說。）
+而且上面沒有 x 可以直接關掉。&lt;/p&gt;
+&lt;p&gt;從接觸 firefox 後，我一直覺得分頁比較好用。
+唯一例外情況是看 youtube，
+會把 youtube 開到另一個獨立視窗，
+然後縮到右下角 1/4，讓他顯示在最上層，
+（這是 linux 一些視窗系統的功能，
+可以讓某個視窗保持在最上層不會被其它視窗蓋住。）
+就能邊看其它網頁邊看影片。&lt;/p&gt;
+&lt;p&gt;然後也漸漸發現視窗的好用，
+可以任意移動、調整長寬，
+最後就發現分頁和視窗的問題。&lt;/p&gt;
+&lt;p&gt;甚至這個問題可以擴展到一些有分頁系統的軟體，
+像一些編輯器可以用分頁開多個檔案，
+也比開多個編輯器好用。
+所以為什麼分頁比視窗好用？
+求 UI/UX 大師解惑。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;分頁的原因&quot;&gt;分頁的原因&lt;/h3&gt;
+&lt;p&gt;原文的下面也有些推文討論，就不一一列舉了。
+我的結論是：
+因為瀏覽器使用者會開啟大量的網頁，
+但無論是 windows linux 主流的視窗系統，
+都沒有處理這種大量視窗的問題，
+所以瀏覽器就自幹了一個適用於瀏覽器的分頁系統。&lt;/p&gt;
+&lt;p&gt;許多軟體中也都存在這種自幹分頁的情況，
+但情況和瀏覽器不一定相同。
+比較類似的是一些 xterm 有分頁，
+但我通常不用 xterm 的分頁，而是直接用 tmux。&lt;/p&gt;
+&lt;p&gt;另外就是 matlab 和一些 IDE 會有分頁，
+各檔案甚至執行畫面會有各自的分頁，有時也能獨立成視窗。
+還有 gimp cinelerra 之類的大型軟體也是，
+其中 gimp 可以合在一起，也能分成不同視窗。&lt;/p&gt;
+&lt;p&gt;而 vi emacs 之類的編輯器，和命令列程式，
+則是在還沒有視窗系統 x-window 的時代出現，
+一個使用者只有一台終端機，那個時代也沒有 screen tmux，
+要編輯多個檔案 ctrl-z 跳出來再開一個編輯器太麻煩，
+而且這樣會有二個 process，所以很多編輯器都自幹了分頁系統。&lt;/p&gt;
+&lt;p&gt;而且編輯器和 ide 可能會有跨檔案交流的情況，
+所以自幹分頁系統在同一視窗下，
+是比較好掌控不同檔案關係的作法。&lt;/p&gt;
+&lt;h2 id=&quot;理想的視窗系統&quot;&gt;理想的視窗系統&lt;/h2&gt;
+&lt;p&gt;總之，無論是現代常見的 &lt;strong&gt;全螢幕&lt;/strong&gt; 而非 &lt;strong&gt;全視窗&lt;/strong&gt; ，
+或是分頁與視窗不統一，
+都應該歸咎於現有的視窗系統設計不夠完美。&lt;/p&gt;
+&lt;p&gt;如果要讓視窗系統整合分頁的問題，
+應該要有一個類似視窗群組的功能，
+能把數個視窗分成一群，可以同時顯示或快速切換。
+做得夠好就能將分頁整合成視窗。&lt;/p&gt;
+&lt;p&gt;另外就是要有 &lt;em&gt;讓一個視窗全螢幕&lt;/em&gt; 的能力，
+或者說，能收縮側欄、底欄、頂欄，
+能讓使用者 &lt;em&gt;掌控整個螢幕&lt;/em&gt; 的能力。
+而各視窗內的程式，只要管好自己視窗內部，
+適時佔滿 &lt;em&gt;全視窗&lt;/em&gt; 即可。&lt;/p&gt;
+&lt;p&gt;如果還要加上方便性，要對多視窗有善，
+像 xfce 與 windows 都有將視窗拖曳到邊界後，
+自動收窄成 1/2 或 1/4 的大小；
+甚至是像 i3 那樣的 tiling window manager，
+自動把視窗平鋪在畫面上，而不是像一般那樣重疊，
+以 i3 來講已經不需要 tmux 了，
+直接開啟多個終端機要比一個來得方便。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/expose-internal-state.html#object-inherit-better-closure</id>
 <title>儲存與暴露程式的內部狀態</title>
 <published>2017-12-05T12:32:06.444Z</published>
@@ -956,213 +1152,7 @@ interpolate_point(p2) # 51.80235472239709
 <category term="geomatics"/>
 <category term="adjustment"/>
 <category term="nctu"/>
-<content type="html">&lt;h1 id=&quot;平差作業七&quot;&gt;平差作業七&lt;/h1&gt;
-&lt;p&gt;平差理論的第七次作業，
-計算線性回歸模型，使用全台各處高程取樣，
-內差出任意座標的高程值。&lt;/p&gt;
-&lt;h2 id=&quot;線性迴歸內差&quot;&gt;線性迴歸內差&lt;/h2&gt;
-&lt;p&gt;給定多組座標與對應高程值與不同座標間高程的共變異數矩陣，
-可以用線性迴歸模型內差出任意點的高程。
-公式如下：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;\hat \gamma = \Sigma _ { \gamma y } ( \Sigma_y + \Sigma_n )^{-1} y
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;假設距離與高程的共變異數計算如下：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;C(d) = 400 exp( \frac {-d^2} {5000^2} )
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;迴歸模型中 Σy 即為已知點位數的 NxN 矩陣，
-其中 Σy(i,j) 為第 i 點與第 j 點間距離 dij 帶入
-共變異數函數 C(d) 的結果。
-而 Σγy 也類似，只是是 1xN 矩陣，
-內容 Σγy(i) 為待求點與第 i 點的距離 di 帶入 C(d) 的結果。&lt;/p&gt;
-&lt;h2 id=&quot;經緯度與距離&quot;&gt;經緯度與距離&lt;/h2&gt;
-&lt;p&gt;給定的 DEM 中座標是使用經緯度，
-為了方便計算距離，統一轉換成 twd97 平面座標，
-有了平面座標，任二點的距離就能以畢氏定理計算。
-使用 &lt;a href=&quot;http://proj4.org&quot;&gt;proj.4&lt;/a&gt; 做轉換過程：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;$ proj +init=epsg:3826 &amp;lt;&amp;lt;TWD97
-&amp;gt; 121.643707 24.294325
-&amp;gt; 121.687935 24.294930
-&amp;gt; 121.747860 24.307419
-&amp;gt; 121.747704 24.308607
-&amp;gt; 121.768066 24.334843
-&amp;gt; 121.638969 24.350378
-&amp;gt; 121.770851 24.342606
-&amp;gt; 121.718277 24.368301
-&amp;gt; 121.779121 24.369247
-&amp;gt; 121.784531 24.387468
-&amp;gt; 121.785973 24.400999
-&amp;gt; 121.728401 24.442059
-&amp;gt; 121.782791 24.444590
-&amp;gt; 121.783516 24.460348
-&amp;gt; 121.804192 24.466047
-&amp;gt; 121.816399 24.474068
-&amp;gt; 121.750992 24.484215
-&amp;gt; 121.535110 24.492928
-&amp;gt; 121.836288 24.505154
-&amp;gt; 121.563942 24.509218
-&amp;gt; 121.830872 24.517241
-&amp;gt; 121.847576 24.522772
-&amp;gt; 121.760681 24.537601
-&amp;gt; 121.849899 24.552010
-&amp;gt; 121.642738 24.558874
-&amp;gt; 121.492306 24.577706
-&amp;gt; 121.751938 24.588795
-&amp;gt; 121.495644 24.604677
-&amp;gt; 121.511536 24.597583
-&amp;gt; 121.835426 24.596592
-&amp;gt; 121.854218 24.596045
-&amp;gt; TWD97
 
-315342.88       2687770.43
-319832.29       2687858.90
-325908.07       2689273.52
-325891.53       2689405.01
-327942.29       2692322.12
-314833.40       2693976.44
-328220.16       2693183.51
-322870.44       2696000.86
-329042.82       2696138.92
-329580.29       2698160.16
-329718.07       2699659.68
-323854.65       2704175.57
-329368.05       2704486.00
-329431.68       2706231.78
-331524.20       2706875.03
-332756.48       2707770.70
-326119.96       2708857.01
-304234.09       2709720.25
-334751.85       2711225.90
-307148.95       2711536.12
-334194.89       2712561.37
-335883.88       2713184.29
-327069.50       2714775.47
-336099.33       2716424.22
-315108.59       2717070.88
-299862.27       2719093.94
-326152.72       2720440.94
-300189.61       2722082.42
-301801.80       2721302.58
-334603.12       2721353.31
-336506.64       2721304.40
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;共變異數矩陣計算&quot;&gt;共變異數矩陣計算&lt;/h2&gt;
-&lt;p&gt;共變異數矩陣 Σy 是所有已知點的共變異數矩陣，
-其中第 i 列 j 行 Σy(i,j) 的值，
-為第 i 點與第 j 點間距離 dij 帶入
-共變異數函數 C(d) 的結果，
-也就是第 i 點與第 j 點的共變異數。&lt;/p&gt;
-&lt;h2 id=&quot;noise 矩陣&quot;&gt;noise 矩陣&lt;/h2&gt;
-&lt;p&gt;如果有高程的標準差，變異數是標準差的平方，
-可以計算出 noise 矩陣。
-但 DEM 只有給重力異常的標準差，
-和高程單位不同，不能相加； 因此沒有使用。&lt;/p&gt;
-&lt;h2 id=&quot;完整計算流程&quot;&gt;完整計算流程&lt;/h2&gt;
-&lt;p&gt;程式使用 &lt;a href=&quot;http://mathjs.org&quot;&gt;mathjs&lt;/a&gt; 計算，語法類似 matlab。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-mathjs&quot;&gt;# 上面計算的平面座標
-data = [
-    # 經度,      緯度,      E,         N,          高程,     重力異常標準差;
-    121.643707, 24.294325, 315342.88, 2687770.43, 178.699, 0.04;
-    121.687935, 24.294930, 319832.29, 2687858.90, 119.084, 0.05;
-    121.747860, 24.307419, 325908.07, 2689273.52, 25.441, 0.03;
-    121.747704, 24.308607, 325891.53, 2689405.01, 23.657, 0.04;
-    121.768066, 24.334843, 327942.29, 2692322.12, 25.600, 0.03;
-    121.638969, 24.350378, 314833.40, 2693976.44, 61.407, 0.02;
-    121.770851, 24.342606, 328220.16, 2693183.51, 17.983, 0.01;
-    121.718277, 24.368301, 322870.44, 2696000.86, 135.044, 0.04;
-    121.779121, 24.369247, 329042.82, 2696138.92, 10.943, 0.05;
-    121.784531, 24.387468, 329580.29, 2698160.16, 5.072, 0.06;
-    121.785973, 24.400999, 329718.07, 2699659.68, 5.371, 0.04;
-    121.728401, 24.442059, 323854.65, 2704175.57, 81.512, 0.04;
-    121.782791, 24.444590, 329368.05, 2704486.00, 13.584, 0.06;
-    121.783516, 24.460348, 329431.68, 2706231.78, 12.202, 0.07;
-    121.804192, 24.466047, 331524.20, 2706875.03, 10.725, 0.05;
-    121.816399, 24.474068, 332756.48, 2707770.70, 3.144, 0.06;
-    121.750992, 24.484215, 326119.96, 2708857.01, 99.407, 0.09;
-    121.535110, 24.492928, 304234.09, 2709720.25, 168.485, 0.05;
-    121.836288, 24.505154, 334751.85, 2711225.90, 17.825, 0.04;
-    121.563942, 24.509218, 307148.95, 2711536.12, 190.186, 0.05;
-    121.830872, 24.517241, 334194.89, 2712561.37, 1.243, 0.06;
-    121.847576, 24.522772, 335883.88, 2713184.29, 13.435, 0.05;
-    121.760681, 24.537601, 327069.50, 2714775.47, 122.804, 0.06;
-    121.849899, 24.552010, 336099.33, 2716424.22, 15.764, 0.07;
-    121.642738, 24.558874, 315108.59, 2717070.88, 113.688, 0.08;
-    121.492306, 24.577706, 299862.27, 2719093.94, 6.237, 0.07;
-    121.751938, 24.588795, 326152.72, 2720440.94, 70.245, 0.06;
-    121.495644, 24.604677, 300189.61, 2722082.42, 40.148, 0.06;
-    121.511536, 24.597583, 301801.80, 2721302.58, 8.103, 0.08;
-    121.835426, 24.596592, 334603.12, 2721353.31, 10.748, 0.07;
-    121.854218, 24.596045, 336506.64, 2721304.40, 8.320, 0.09
-]
-
-# 平均高程
-data_mean_height = mean(data[:,5])
-
-# 第 i 個點的座標
-data_point(i) = [data[i,3], data[i,4]]
-# 第 i 個點的高程
-data_height(i) = data[i,5]
-# 第 i 個點的重力異常標準差
-data_std(i) = data[i,6]
-
-
-# 平面二點距離公式
-distance(p1, p2) = norm(p1 - p2)
-
-# 根據距離計算共變異數
-covariance_distance(d) = 400*exp(-d^2 / 5000^2)
-covariance_point(p1,p2) = covariance_distance(distance(p1,p2))
-
-rows(A) = size(A)[1]
-columns(A) = size(A)[2]
-
-# 計算一點與所有已知點的 Σγy 矩陣公式
-Sigma_ph(p) = map(1:rows(data), cf(i) = covariance_point(p, data_point(i)))
-
-# 所有高程點的共變異數矩陣
-Sigma_hh = map(zeros(rows(data), rows(data)),
-               cf(x, index) = covariance_point(data_point(index[1]),
-                                               data_point(index[2])))
-
-# 如果有給定高程的標準差，就能算出 noise 矩陣
-# Sigma_n = diag(map(1:rows(data), data_std))
-
-# 高程殘差
-height_residual = data_height(1:rows(data)) - data_mean_height
-
-# 由整體計算特定一點的內差
-interpolate_point(p) = (
-    Sigma_ph(p) * inv(Sigma_hh) * height_residual + data_mean_height
-)
-
-p1 = [326039.96, 2705066.8] # [124.45, 121.75]
-p2 = [346165.75, 2727344.37] # [24.65, 121.95]
-
-interpolate_point(p1) # 40.32176363428874
-interpolate_point(p2) # 51.80235472239709
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;結果&quot;&gt;結果&lt;/h2&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;點位&lt;/th&gt;
-&lt;th&gt;高程&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;40.322&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;2&lt;/td&gt;
-&lt;td&gt;51.802&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;script defer src=&quot;ext/header-nctu.js?execute&amp;editable&quot;&gt;&lt;/script&gt;
-
-&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/taiwan-consensus-stolen-base.html</id>
 <title>台灣共識就是贏球不能盜壘</title>

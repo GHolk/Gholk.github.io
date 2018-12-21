@@ -49,19 +49,23 @@ nav a {
 article {
     margin: 2em 0;
 }
-article ul {
+article > ul:last-child {
     padding: 0;
 }
-article ul li {
+article > ul:last-child li {
     display: inline-block;
     margin-right: 0.5em;
     color: grey;
 }
-article ul li:before {
+article > ul:last-child li:before {
     content: '#';
 }
 
 body > button {
     display: block;
     margin: auto;
+}
+
+article .summary > pre.diff {
+    white-space: pre-wrap;
 }

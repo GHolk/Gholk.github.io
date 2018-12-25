@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-12-21T14:28:15.558Z</updated>
+  <updated>2018-12-25T04:28:00.508Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,165 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/adjustment-homework-8.html</id>
+<title>平差作業八</title>
+<published>2018-12-23T08:46:43.198Z</published>
+<updated>2018-12-25T04:28:00.497Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/adjustment-homework-8.html"/>
+<summary type="html">gnss 基線平差練習，分別使用極大權約制，
+與使用條件平差二種作法，比較成果差異。</summary>
+<category term="matlab"/>
+<category term="adjustment"/>
+<category term="report"/>
+<category term="nctu"/>
+<content type="html">&lt;h1 id=&quot;平差作業八&quot;&gt;平差作業八&lt;/h1&gt;
+&lt;p&gt;gnss 基線平差練習，分別使用極大權約制，
+與使用條件平差二種作法，比較成果差異。&lt;/p&gt;
+&lt;h2 id=&quot;基線觀測方程式&quot;&gt;基線觀測方程式&lt;/h2&gt;
+&lt;p&gt;基線是三維空間中連接二個點的向量，
+而三維空間中的一點由三個維度的座標決定。
+所以一條基線方程式應該在三個維度上展開，
+成為三條觀測方程式；
+對應的未知點也應該在三維上展開，成為三個未知數。&lt;/p&gt;
+&lt;p&gt;程式中函數 &lt;code&gt;expand_3d_design_matrix&lt;/code&gt; 
+可以將針對向量的設計矩陣，
+在三維上展開成 x y z 座標的設計矩陣。&lt;/p&gt;
+&lt;h2 id=&quot;間接平差模型&quot;&gt;間接平差模型&lt;/h2&gt;
+&lt;h3 id=&quot;程式&quot;&gt;程式&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-matlab&quot;&gt;% constrain adjustment
+
+design_vector_matrix = [
+  -1   1   0   0   0
+   0  -1   1   0   0
+   0   0  -1   1   0
+   0   0   0  -1   1
+  -1   0   1   0   0
+   0  -1   0   1   0
+   0   0  -1   0   1
+];
+
+function m = expand_3d_design_matrix(mv)
+  %% expand [1 0 -1 0 0]
+  %% to [1   0   0   0   0   0  -1   0   0   0   0   0   0   0   0
+  %%     0   1   0   0   0   0   0  -1   0   0   0   0   0   0   0
+  %%     0   0   1   0   0   0   0   0  -1   0   0   0   0   0   0]
+  m = zeros(size(mv)*3);
+
+  for i = 1:rows(m)
+    for j = 1:columns(m)
+      if (mod(j,3) == mod(i,3))
+        m(i,j) = mv(ceil(i/3), ceil(j/3));
+      else
+        m(i,j) = 0;
+      end
+    end
+  end
+end
+
+design_magrix = expand_3d_design_matrix(design_vector_matrix);
+
+baseline_vector_vector = [
+ 11488.973 -13224.866 19.446
+ -5605.975 -6047.976 -7.814
+ 13505.271 28936.647 5.247
+ -14911.055 -35571.005 -6.257
+ 5882.998 -19272.842 11.632
+ 7899.296 22888.671 -2.567
+ -1405.784 -6634.358 -1.010
+];
+
+baseline_vector = reshape(
+                      baseline_vector_vector&amp;apos;,
+                      1, prod(size(baseline_vector_vector)))&amp;apos;;
+
+constrain_matrix = expand_3d_design_matrix([1 0 0 0 0]);
+constrain_value = [177597.421 2639738.678 25.375]&amp;apos;;
+
+priority = 100;
+
+normal_matrix = (
+  design_magrix&amp;apos;*design_magrix +
+  priority * constrain_matrix&amp;apos; * constrain_matrix
+);
+
+point = inv(normal_matrix) * (
+          design_magrix&amp;apos; * baseline_vector +
+          priority * constrain_matrix&amp;apos; * constrain_value
+        );
+
+point_vector = reshape(point, 3, rows(point)/3)&amp;apos;;
+
+observation_residule = baseline_vector - design_magrix * point;
+variance_post = observation_residule&amp;apos; * observation_residule / (
+    rows(baseline_vector) - rows(point) + rows(constrain_value)
+);
+point_covariance_matrix = variance_post * inv(normal_matrix);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;\begin{bmatrix}
+A \\ B \\ C \\ D \\ E
+\end{bmatrix}
+=
+\begin{bmatrix}
+1.7760 \times 10^{+05} &amp;amp; 2.6397 \times 10^{+06} &amp;amp; 2.5375 \times 10^{+01} \\
+1.8909 \times 10^{+05} &amp;amp; 2.6265 \times 10^{+06} &amp;amp; 4.4821 \times 10^{+01} \\
+1.8348 \times 10^{+05} &amp;amp; 2.6205 \times 10^{+06} &amp;amp; 3.7007 \times 10^{+01} \\
+1.9699 \times 10^{+05} &amp;amp; 2.6494 \times 10^{+06} &amp;amp; 4.2254 \times 10^{+01} \\
+1.8207 \times 10^{+05} &amp;amp; 2.6138 \times 10^{+06} &amp;amp; 3.5997 \times 10^{+01}
+\end{bmatrix}
+
+\\
+
+\hat {\sigma_0} = 4.4228 \times 10 ^ {-10}
+
+\\
+
+\begin{bmatrix}
+\sigma_{A_x}^2 &amp;amp; \sigma_{A_y}^2 &amp;amp; \sigma_{A_z}^2 \\
+\vdots \\
+\sigma_{E_x}^2 &amp;amp; \sigma_{E_y}^2 &amp;amp; \sigma_{E_z}^2
+\end{bmatrix}
+=
+\begin{bmatrix}
+1.9561 \times 10^{-23} &amp;amp; 1.9561 \times 10^{-23} &amp;amp; 1.9561 \times 10^{-23} \\
+1.2111 \times 10^{-19} &amp;amp; 1.2111 \times 10^{-19} &amp;amp; 1.2111 \times 10^{-19} \\
+1.2111 \times 10^{-19} &amp;amp; 1.2111 \times 10^{-19} &amp;amp; 1.2111 \times 10^{-19} \\
+1.7700 \times 10^{-19} &amp;amp; 1.7700 \times 10^{-19} &amp;amp; 1.7700 \times 10^{-19} \\
+2.2357 \times 10^{-19} &amp;amp; 2.2357 \times 10^{-19} &amp;amp; 2.2357 \times 10^{-19}
+\end{bmatrix}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;條件觀測平差&quot;&gt;條件觀測平差&lt;/h2&gt;
+&lt;p&gt;條件觀測平差是計算量較少，但較難以程式計算的平差方法。
+需要針對觀測量，列出所有不相關的條件式。&lt;/p&gt;
+&lt;p&gt;題目中有 5 未知數，7 觀測方程式，1 條件，
+應列出 7-5+1=3 條條件式。
+各條件式寫成向量如下，純量形式一樣是在三維上展開。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;v_1 + v_2 - v_5 = \vec{A B} + \vec{B C} - \vec{A C} \\
+v_2 + v_3 - v_6 = \vec{B C} + \vec{C D} - \vec{B D} \\
+v_3 + v_4 - v_7 = \vec{C D} + \vec{D E} - \vec{C E}
+
+\\
+
+A V = W \\
+
+A = \begin{bmatrix}
+1 &amp;amp; 1 &amp;amp; 0 &amp;amp; 0 &amp;amp; -1 &amp;amp; 0 &amp;amp; 0 \\
+0 &amp;amp; 1 &amp;amp; 1 &amp;amp; 0 &amp;amp; 0 &amp;amp; -1 &amp;amp; 0 \\
+0 &amp;amp; 0 &amp;amp; 1 &amp;amp; 1 &amp;amp; 0 &amp;amp; 0 &amp;amp; -1
+\end{bmatrix}
+
+\\
+
+W = \begin{bmatrix}
+\vec{A B} + \vec{B C} - \vec{A C} \\
+\vec{B C} + \vec{C D} - \vec{B D} \\
+\vec{C D} + \vec{D E} - \vec{C E}
+\end{bmatrix}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;解法則是要先解出聯系數矩陣 K， 才能解殘差 V。
+因為是條件式，解出來只有觀測量的殘差，
+要再將殘差修正後的觀測量組合才能得出絕對點座標。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/taiwan-consensus-stolen-base.html#china-minus</id>
 <title>台灣共識就是贏球不能盜壘</title>
 <published>2018-12-08T09:50:42.438Z</published>
@@ -884,119 +1043,7 @@ android 使用上有些快捷鍵，各品牌會不太一樣，
 另外再加了對人工合成食品的看法。</summary>
 <category term="food"/>
 <category term="思辨"/>
-<content type="html">&lt;h1 id=&quot;務實的素食主義者&quot;&gt;務實的素食主義者&lt;/h1&gt;
-&lt;p&gt;身為一個正常飲食長大的人，吃肉是很正常的事。
-但有時候接觸到真實的屠宰場，還是會感到一份噁心。
-這時候我會短暫的成為素食者，
-少吃一天肉，少迫害一點生命；
-雖然不是全職素食者，至少少一餐是一餐。&lt;/p&gt;
-&lt;p&gt;PTT 一些鄉民，會把只吃某種生物稱為偽善，
-把不吃狗肉稱為偽善，
-或直接滑坡開大絕說植物也是生命，吃素是智障。&lt;/p&gt;
-&lt;p&gt;我吃肉的原因不複雜，
-因為人類對肉的大量需求，
-讓這麼多生命處在痛苦的環境中。
-因為要殺死豬、雞，對現代人幾乎都是做不到的，
-只是因為工業化的生產線，
-讓現代人不用接觸這些，而對殺生麻木。&lt;/p&gt;
-&lt;p&gt;很多事不是一翻二瞪眼，
-不是只能吃肉或吃全素二選一，
-不要太理想，在現實你會受不了的。
-不用一次從 0 到 1，可以學著 0.1 0.2，
-慢慢來，有總勝過無。&lt;/p&gt;
-&lt;p&gt;我從不吃牛開始，因為牛的飼養最不環保，
-再來依序是豬、雞、魚，
-因為雞和魚的換肉率最高。&lt;/p&gt;
-&lt;p&gt;從方便素開始，試著不去點豬排丼、牛肉丼，
-單純吃蔬菜丼，或魚排丼也好。
-如果便當有素的可以選，就點素的，
-不用太強迫自己一定要吃素，
-想到再吃，已經比大半數的肉食者好了。&lt;/p&gt;
-&lt;p&gt;我的理想，是未來有一天可以不用殺生，但可以吃肉。
-因為肉很好吃，人類應該追求更好的生活，
-味覺的享受，享受更好的食物，好吃且健康。
-吃肉不是罪惡，殺生才是，
-我要的是不再殺生，吃素肉不是偽善。&lt;/p&gt;
-&lt;p&gt;我認為那會是組織培養未來可以做到的，
-可以直接培養出肌肉組織，不用再飼養整隻豬。
-或是現在的做法，直接做素肉，
-不過現在大多素肉都很難吃就是了。&lt;/p&gt;
-&lt;h2 id=&quot;例子與重整過的論點&quot;&gt;例子與重整過的論點&lt;/h2&gt;
-&lt;p&gt;2018-12-09，又看到 ptt 在戰素肉，
-&lt;a href=&quot;ptt/M.1544351271.A.E18.html&quot;&gt;想了二個例子來回文。&lt;/a&gt;
-之後又補上了一段對合成食品的見解。&lt;/p&gt;
-&lt;p&gt;剛好想到二個例子，分別是乳酪與豆皮。
-先說我的主張是，食物的味道和來源是獨立的，
-這已經裡台灣頂尖的食品工業證明了。
-所以可以沒有牛肉的牛肉泡麵，
-或沒有草莓的草莓牛奶。&lt;/p&gt;
-&lt;h3 id=&quot;味道與來源的獨立&quot;&gt;味道與來源的獨立&lt;/h3&gt;
-&lt;p&gt;人可以喜歡一種味道，無論味道的來源。
-因為味道是可以由料理技術、化工廠產生，
-味道 ≠  來源。
-豬肉的味道 ≠  殺豬，而吃素的人，
-多半是對殺生這個過程感冒，
-而非肉的味道本身。
-（當然也是有人討厭肉味的。）&lt;/p&gt;
-&lt;p&gt;所以如果有不用殺生的肉味，
-那也只是一種素菜而已。
-想像如果有種香菇，吃起來和牛肉一樣，
-那他會因此變成葷的嗎？是不會。
-但酸民就喜歡酸那些吃香菇的人；
-什麼六根不清淨啊、還眷戀物質生活。&lt;/p&gt;
-&lt;p&gt;吃素的意義，不在於能戒除口腹之欲，
-也是允許烹煮調味的。
-吃素的意義在於不想殺生。
-素肉，只是調味過比較好吃的素菜而已，
-只是他剛好味道像肉的味道而已；
-而肉的味道也和吃素吃葷無關，
-只是肉的味道最大來源是宰殺而已。&lt;/p&gt;
-&lt;h3 id=&quot;豆皮與炸豬皮&quot;&gt;豆皮與炸豬皮&lt;/h3&gt;
-&lt;p&gt;各位應該也吃過炸豬皮吧。
-就是黃黃的像海綿，
-雖然是方型但常常會捲起來，
-常在白菜滷或菜湯裡看到。&lt;/p&gt;
-&lt;p&gt;他口感和豆皮蠻像的，
-但你會因此說豆皮是素膨皮，
-吃豆皮的都是六根不清淨又假掰嗎？&lt;/p&gt;
-&lt;h3 id=&quot;乳酪與凝乳酶&quot;&gt;乳酪與凝乳酶&lt;/h3&gt;
-&lt;p&gt;再來說說乳酪的故事。
-很久以前，乳酪都是用羊或牛的胃做的，
-因為只有胃袋裡有凝乳酶。
-理所當然，乳酪就必須要宰殺牛羊才能製做。
-所以你可以說乳酪是葷的。&lt;/p&gt;
-&lt;p&gt;但現在已經有基因改造用微生物合成的凝乳酶，
-也有來自植物的類似化學成份，
-所以可以有植物性的素的乳酪。&lt;/p&gt;
-&lt;p&gt;照你們嗆吃素肉的邏輯，
-用植物性凝乳的也都是假掰，
-大家通通回去殺牛殺羊取胃袋做乳酪，
-最正直最光明磊落了。&lt;/p&gt;
-&lt;h3 id=&quot;人工合成&quot;&gt;人工合成&lt;/h3&gt;
-&lt;p&gt;雖然現代人都很討厭化學的，比較喜歡所謂天然。
-但其實如果合成食品，最早是為了解決物資缺乏，
-而在歐洲產生的。&lt;/p&gt;
-&lt;p&gt;想像奶精，如果是用牛奶，就必須要養牛；
-而現代的集約的畜牧業，環境都不會太好，
-母牛其實蠻可憐的。&lt;/p&gt;
-&lt;p&gt;想像豆漿紅茶，其實喝起來就有點像奶茶了。
-豆漿其實就是牛奶的替代品，也是植物來源的。
-奶精很大的成份也是豆類，但他為了模仿牛奶味道，
-還加了其它調味料。
-如果能考量上健康，人工合成的奶精，
-應該可以做到和牛奶一樣健康，
-而且還是植物來源。
-所以其實不用那麼討厭合成食品。&lt;/p&gt;
-&lt;h3 id=&quot;結論&quot;&gt;結論&lt;/h3&gt;
-&lt;p&gt;說那麼多，我也不是吃素的，
-已經習慣吃肉，要改吃素有點難度，也沒有很大動機。
-只是有時候心情不好會去點沒主菜的便當，
-或直接吃素自助餐。&lt;/p&gt;
-&lt;p&gt;只是覺得屠宰場的動物有點可憐，
-人養那麼多雞豬牛殺來吃也有點浪費。
-希望有一天，人能直接從能量和元素合成食物，
-就不用想這些問題了。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/adjustment-homework-7.html#move-comment-out-matrix-literal</id>
 <title>平差作業七</title>

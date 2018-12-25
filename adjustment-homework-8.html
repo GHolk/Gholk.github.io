@@ -1,0 +1,180 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2018-12-23T08:46:43.198Z">
+<meta name="keywords" property="og:article:tag" content="matlab,adjustment,report,nctu">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="window-system-full-screen-tab-think.html" title="從 youtube 縮小視窗播放影片思考視窗系統">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>平差作業八</title>
+</head>
+<body>
+<main><h1 id="平差作業八">平差作業八</h1>
+<p>gnss 基線平差練習，分別使用極大權約制，
+與使用條件平差二種作法，比較成果差異。</p>
+<h2 id="基線觀測方程式">基線觀測方程式</h2>
+<p>基線是三維空間中連接二個點的向量，
+而三維空間中的一點由三個維度的座標決定。
+所以一條基線方程式應該在三個維度上展開，
+成為三條觀測方程式；
+對應的未知點也應該在三維上展開，成為三個未知數。</p>
+<p>程式中函數 <code>expand_3d_design_matrix</code> 
+可以將針對向量的設計矩陣，
+在三維上展開成 x y z 座標的設計矩陣。</p>
+<h2 id="間接平差模型">間接平差模型</h2>
+<h3 id="程式">程式</h3>
+<pre><code class="lang-matlab">% constrain adjustment
+
+design_vector_matrix = [
+  -1   1   0   0   0
+   0  -1   1   0   0
+   0   0  -1   1   0
+   0   0   0  -1   1
+  -1   0   1   0   0
+   0  -1   0   1   0
+   0   0  -1   0   1
+];
+
+function m = expand_3d_design_matrix(mv)
+  %% expand [1 0 -1 0 0]
+  %% to [1   0   0   0   0   0  -1   0   0   0   0   0   0   0   0
+  %%     0   1   0   0   0   0   0  -1   0   0   0   0   0   0   0
+  %%     0   0   1   0   0   0   0   0  -1   0   0   0   0   0   0]
+  m = zeros(size(mv)*3);
+
+  for i = 1:rows(m)
+    for j = 1:columns(m)
+      if (mod(j,3) == mod(i,3))
+        m(i,j) = mv(ceil(i/3), ceil(j/3));
+      else
+        m(i,j) = 0;
+      end
+    end
+  end
+end
+
+design_magrix = expand_3d_design_matrix(design_vector_matrix);
+
+baseline_vector_vector = [
+ 11488.973 -13224.866 19.446
+ -5605.975 -6047.976 -7.814
+ 13505.271 28936.647 5.247
+ -14911.055 -35571.005 -6.257
+ 5882.998 -19272.842 11.632
+ 7899.296 22888.671 -2.567
+ -1405.784 -6634.358 -1.010
+];
+
+baseline_vector = reshape(
+                      baseline_vector_vector&apos;,
+                      1, prod(size(baseline_vector_vector)))&apos;;
+
+constrain_matrix = expand_3d_design_matrix([1 0 0 0 0]);
+constrain_value = [177597.421 2639738.678 25.375]&apos;;
+
+priority = 100;
+
+normal_matrix = (
+  design_magrix&apos;*design_magrix +
+  priority * constrain_matrix&apos; * constrain_matrix
+);
+
+point = inv(normal_matrix) * (
+          design_magrix&apos; * baseline_vector +
+          priority * constrain_matrix&apos; * constrain_value
+        );
+
+point_vector = reshape(point, 3, rows(point)/3)&apos;;
+
+observation_residule = baseline_vector - design_magrix * point;
+variance_post = observation_residule&apos; * observation_residule / (
+    rows(baseline_vector) - rows(point) + rows(constrain_value)
+);
+point_covariance_matrix = variance_post * inv(normal_matrix);
+</code></pre>
+<pre><code class="lang-math">\begin{bmatrix}
+A \\ B \\ C \\ D \\ E
+\end{bmatrix}
+=
+\begin{bmatrix}
+1.7760 \times 10^{+05} &amp; 2.6397 \times 10^{+06} &amp; 2.5375 \times 10^{+01} \\
+1.8909 \times 10^{+05} &amp; 2.6265 \times 10^{+06} &amp; 4.4821 \times 10^{+01} \\
+1.8348 \times 10^{+05} &amp; 2.6205 \times 10^{+06} &amp; 3.7007 \times 10^{+01} \\
+1.9699 \times 10^{+05} &amp; 2.6494 \times 10^{+06} &amp; 4.2254 \times 10^{+01} \\
+1.8207 \times 10^{+05} &amp; 2.6138 \times 10^{+06} &amp; 3.5997 \times 10^{+01}
+\end{bmatrix}
+
+\\
+
+\hat {\sigma_0} = 4.4228 \times 10 ^ {-10}
+
+\\
+
+\begin{bmatrix}
+\sigma_{A_x}^2 &amp; \sigma_{A_y}^2 &amp; \sigma_{A_z}^2 \\
+\vdots \\
+\sigma_{E_x}^2 &amp; \sigma_{E_y}^2 &amp; \sigma_{E_z}^2
+\end{bmatrix}
+=
+\begin{bmatrix}
+1.9561 \times 10^{-23} &amp; 1.9561 \times 10^{-23} &amp; 1.9561 \times 10^{-23} \\
+1.2111 \times 10^{-19} &amp; 1.2111 \times 10^{-19} &amp; 1.2111 \times 10^{-19} \\
+1.2111 \times 10^{-19} &amp; 1.2111 \times 10^{-19} &amp; 1.2111 \times 10^{-19} \\
+1.7700 \times 10^{-19} &amp; 1.7700 \times 10^{-19} &amp; 1.7700 \times 10^{-19} \\
+2.2357 \times 10^{-19} &amp; 2.2357 \times 10^{-19} &amp; 2.2357 \times 10^{-19}
+\end{bmatrix}
+</code></pre>
+<h2 id="條件觀測平差">條件觀測平差</h2>
+<p>條件觀測平差是計算量較少，但較難以程式計算的平差方法。
+需要針對觀測量，列出所有不相關的條件式。</p>
+<p>題目中有 5 未知數，7 觀測方程式，1 條件，
+應列出 7-5+1=3 條條件式。
+各條件式寫成向量如下，純量形式一樣是在三維上展開。</p>
+<pre><code class="lang-math">v_1 + v_2 - v_5 = \vec{A B} + \vec{B C} - \vec{A C} \\
+v_2 + v_3 - v_6 = \vec{B C} + \vec{C D} - \vec{B D} \\
+v_3 + v_4 - v_7 = \vec{C D} + \vec{D E} - \vec{C E}
+
+\\
+
+A V = W \\
+
+A = \begin{bmatrix}
+1 &amp; 1 &amp; 0 &amp; 0 &amp; -1 &amp; 0 &amp; 0 \\
+0 &amp; 1 &amp; 1 &amp; 0 &amp; 0 &amp; -1 &amp; 0 \\
+0 &amp; 0 &amp; 1 &amp; 1 &amp; 0 &amp; 0 &amp; -1
+\end{bmatrix}
+
+\\
+
+W = \begin{bmatrix}
+\vec{A B} + \vec{B C} - \vec{A C} \\
+\vec{B C} + \vec{C D} - \vec{B D} \\
+\vec{C D} + \vec{D E} - \vec{C E}
+\end{bmatrix}
+</code></pre>
+<p>解法則是要先解出聯系數矩陣 K， 才能解殘差 V。
+因為是條件式，解出來只有觀測量的殘差，
+要再將殘差修正後的觀測量組合才能得出絕對點座標。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

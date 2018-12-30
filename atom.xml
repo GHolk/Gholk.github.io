@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-12-30T15:36:42.679Z</updated>
+  <updated>2018-12-30T15:44:53.447Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,125 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/linux-try-and-error-build.html#origin-version-linux</id>
+<title>試誤編譯法</title>
+<published>2018-12-30T15:29:22.823Z</published>
+<updated>2018-12-30T15:44:53.436Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/linux-try-and-error-build.html#origin-version-linux"/>
+<summary type="html">&lt;pre class=&quot;diff&quot;&gt;@@ -83,7 +83,8 @@ make 時會跳很多訊息，有時我也不清楚有沒有 make 成功，
+ 而且很多還有鎖版本；
+ gipsyx 的 python 腳本都編譯成 byte code `*.pyc` ，
+ 而 python byte code 在各版本是不相容的。
+-總之最簡單的作法，就是把軟體裝好後那一刻整個系統備份下來，
++總之最簡單的作法，就是挑軟體發行時的linux版本來裝，
++之後可以再把軟體裝好後那一刻整個系統備份下來，
+ 也就是 docker 的作法了。
+ 
+ 裝 gipsy-oasis 遇到比較多問題，
+&lt;/pre&gt;</summary>
+<category term="linux"/>
+<category term="安裝"/>
+<category term="交大"/>
+<category term="gipsy"/>
+<content type="html">&lt;h1 id=&quot;試誤編譯法&quot;&gt;試誤編譯法&lt;/h1&gt;
+&lt;p&gt;我當年初入 linux 界時，對自行編譯軟體一直有障礙，
+到現在對 linux 已經很熟悉了，
+自行編譯絕大多數軟體應該都沒問題了。
+除了稍微了解通行的編譯流程，
+最簡單的做法就是依編譯時的錯誤訊息，
+去 google 或去 apt 裝缺少的函式庫。
+雖然實行起來有點蠢，但的確是有用的，
+絕大多數軟體都能這樣編譯起來。&lt;/p&gt;
+&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
+&lt;p&gt;初入 linux 時，對自行編譯軟體一直有種恐懼感，
+除了對命令列還不太熟悉，就是曾經在剛開始用 ubuntu 時，
+試著編譯過 purple line，
+一個讓 &lt;a href=&quot;http://zh.wikipedia.org/wiki/pidgin&quot;&gt;pidgin&lt;/a&gt; 能連上 line 的模組。
+記得搞了很久很麻煩，最後好像是有成功，
+總之讓我留下了不小的陰影。&lt;/p&gt;
+&lt;p&gt;到現在隨著越來越深入，對 linux 和各工具鏈的了解，
+自認已經可以用試誤法編譯出絕大多數的開源專案了。
+頂多就是花很久時間，和要裝很多函式庫很佔空間；
+有時發現很基礎的東西不合，幾乎要自己編譯系統，
+就會放棄或用 docker 或其它虛擬機解決。&lt;/p&gt;
+&lt;h2 id=&quot;makefile&quot;&gt;makefile&lt;/h2&gt;
+&lt;p&gt;用最簡單的 Makefile 來舉例。
+夠簡單的專案就一個 make 就編譯的起來了，
+中間如果會有缺什麼函式庫，gcc 丟錯誤訊息，
+基本上都看得出來缺什麼。&lt;/p&gt;
+&lt;p&gt;如果知道是缺 &lt;code&gt;libxxx.so.xxx&lt;/code&gt; 之類的檔名，
+可以直接用 &lt;code&gt;apt-file search libxxx.so&lt;/code&gt; 搜檔名，
+看套件管理系統有沒有。
+apt file 可以搜各套件提供了什麼檔案，不只是套件名稱，
+有時候從函式庫名字看不出來套件名是什麼。&lt;/p&gt;
+&lt;p&gt;如果錯誤訊息看不懂，可以直接把整句丟去 google，
+如果是夠大的專案，通常找得到 stack overflow 的討論串，
+就看有沒有解法。
+當然最好還是能直接看專案的說明文件，
+看需要哪些函式庫先裝好，
+不然這樣一直用試誤法覺得自己有點蠢。&lt;/p&gt;
+&lt;p&gt;之後看要不要 &lt;code&gt;make install&lt;/code&gt; 安裝。
+如果只是要用一二次，可以直接執行就好了，不用安裝到系統。
+也可以自己看 make install 是執行哪些程式，自己手動裝。
+但有時用 gnu tool chain 系的自動產生的 makefile 太醜，會看不懂。
+可以看有沒有提供 make uninstall，
+如果有就能放心裝下去，不用怕不知道怎麼解除安裝。&lt;/p&gt;
+&lt;h2 id=&quot;gnu tool chain&quot;&gt;gnu tool chain&lt;/h2&gt;
+&lt;p&gt;如果比較複雜的會需要用到 &lt;code&gt;./configure&lt;/code&gt; 來檢測環境，
+產生 makefile。這是比較常見的，
+一般有缺什麼東西在 configure 就會報錯退出，
+就裝好再 configure 一次。&lt;/p&gt;
+&lt;p&gt;之後用 configure 的 makefile 可能不會太好看，
+make 時會跳很多訊息，有時我也不清楚有沒有 make 成功，
+就直接 &lt;code&gt;echo $?&lt;/code&gt; 看上一個命令的返回值，
+也就是看 make 是正常退出還是錯誤退出，
+如果是正常就會是 0，代表編譯成功了。&lt;/p&gt;
+&lt;p&gt;有時代包衭的大專案，常見用 gnu tool chain，
+也就是 autoconf 系列工具，
+會需要裝 autoconf 這支程式。
+通常專案內會有 &lt;code&gt;autogen.sh&lt;/code&gt; 之類的執行檔，
+自動化一些編譯前要做的事。&lt;/p&gt;
+&lt;h2 id=&quot;meson ninja&quot;&gt;meson ninja&lt;/h2&gt;
+&lt;p&gt;最近碰到的比較新的專案是用 meson 和 ninja。
+我用 meson 一直鬼打牆，用 apt 裝的被抱怨太舊，
+用 pip 裝的在 sudo 執行時一直出問題。
+用二個的一般專案會有寫怎麼 build，就照作就好。&lt;/p&gt;
+&lt;h2 id=&quot;docker&quot;&gt;docker&lt;/h2&gt;
+&lt;p&gt;最近在交大用 gipsy 來算 gnss，
+教授表示 gipsy 要在 linux 下運作，
+他們也不太會裝。
+之後我花了半天把 gipsyx 裝好，
+二天把 gipsy-oasis 裝好。&lt;/p&gt;
+&lt;p&gt;但 gipsy 是運行時會相依很多函式庫的程式，
+而且很多還有鎖版本；
+gipsyx 的 python 腳本都編譯成 byte code &lt;code&gt;*.pyc&lt;/code&gt; ，
+而 python byte code 在各版本是不相容的。
+總之最簡單的作法，就是挑軟體發行時的linux版本來裝，
+之後可以再把軟體裝好後那一刻整個系統備份下來，
+也就是 docker 的作法了。&lt;/p&gt;
+&lt;p&gt;裝 gipsy-oasis 遇到比較多問題，
+gipsy-oasis 的程式除了核心的 fortran，
+還用了很多 perl 和 csh 的腳本，
+而且架構組合很複雜。&lt;/p&gt;
+&lt;p&gt;我裝好 gipsyx 後跑 &lt;code&gt;verify.py&lt;/code&gt; 腳本驗證，
+如果哪個函式庫有問題，因為全都是 python，
+從 log 就能直接看到從哪個腳本 throw 出 error，
+就算 error 看不懂，也能直接去看 python code 問題在哪。&lt;/p&gt;
+&lt;p&gt;但 gipsy oasis 的程式是一個混一個，
+一大堆 perl csh 互相呼叫。
+在 verify.py 和其它被他呼叫的 perl 或 csh 測試，
+有時呼叫會存 stderr，但不可能每行命令都檢查，
+所以就會有這一行錯了所以沒有產出某個檔案，
+又過幾行 code 才跳出某檔案不存在的錯誤。&lt;/p&gt;
+&lt;p&gt;但誰知道那檔案為什麼不存在？
+我根本還沒用過 gipsy oasis，
+也就不會知道各指令的意思，
+也就不知道哪個指令應產出該檔案卻出錯了。
+而且因為包了很多層，原始層可能丟出numpy 不存在，
+但外面那層的log是誤差超過門檻，
+之類八竿子打不著的訊息。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/linux-try-and-error-build.html</id>
 <title>試誤編譯法</title>
 <published>2018-12-30T15:29:22.823Z</published>
@@ -1023,85 +1142,7 @@ android 使用上有些快捷鍵，各品牌會不太一樣，
 像 atom 的截圖是同時按電源鍵和音量下，
 所以記錄下來一些有趣的用法。</summary>
 <category term="android"/>
-<content type="html">&lt;h1 id=&quot;atom 使用技巧&quot;&gt;atom 使用技巧&lt;/h1&gt;
-&lt;p&gt;最近入手了中國的一台小手機 unhertz atom。
-android 使用上有些快捷鍵，各品牌會不太一樣，
-像 atom 的截圖是同時按電源鍵和音量下，
-所以記錄下來一些有趣的用法。&lt;/p&gt;
-&lt;h2 id=&quot;螢幕截圖&quot;&gt;螢幕截圖&lt;/h2&gt;
-&lt;p&gt;同時按下電源鍵與音量向下鍵。
-這功能我找超久，後來 google 才在 atom 的使用者論壇看到這個按法。
-他們的 &lt;a href=&quot;https://drive.google.com/open?id=1Fv3wEG633XK3fEKz-or8C4OvBEnf6yQD&quot;&gt;使用者手冊&lt;/a&gt; 裡也有。這好像沒地方設定。
-手冊可能會有一些我漏掉的事，但更多廢話，
-有空的話會看看吧。&lt;/p&gt;
-&lt;h2 id=&quot;快速開啟相機&quot;&gt;快速開啟相機&lt;/h2&gt;
-&lt;p&gt;連按二下電源鍵，在待機時也效。
-可以在 &lt;em&gt;設定 &amp;gt; 系統 &amp;gt; 手勢&lt;/em&gt; 裡設定要不要使用。&lt;/p&gt;
-&lt;h2 id=&quot;返回鍵與選單鍵&quot;&gt;返回鍵與選單鍵&lt;/h2&gt;
-&lt;p&gt;可以交換二者順序。
-預設是左邊返回右邊選單，
-在 &lt;em&gt;設定 &amp;gt; 智能輔助 &amp;gt; 物理按鍵交換&lt;/em&gt; 可以調，
-如果勾選，就會讓二者交換。&lt;/p&gt;
-&lt;h2 id=&quot;Push-To-Talk 鍵&quot;&gt;Push-To-Talk 鍵&lt;/h2&gt;
-&lt;p&gt;快速開啟鍵，可以綁定快速開啟一個 app。
-預設是綁到 zello，可以在 &lt;em&gt;設定 &amp;gt; 智能輔助 &amp;gt; 快捷鍵&lt;/em&gt;
-設定要綁定的 app。&lt;/p&gt;
-&lt;p&gt;綁 zello 的話在待機時按也能啟動，
-用法就長按螢幕會自動解鎖並跳到 zello 的發話畫面，
-看到時間開始跑就能開始講話了。&lt;/p&gt;
-&lt;p&gt;比較想綁到 discord 的按鍵發話，但好像不行。
-有找到一個 &lt;a href=&quot;https://play.google.com/store/apps/details?id=flar2.homebutton&quot;&gt;button mapper&lt;/a&gt; 的 app
-能把硬體綁定動作或 app 的，但也沒有特別吸引人的用法。&lt;/p&gt;
-&lt;p&gt;比較想綁成錄音程式，可以在待機時按就開始錄音之類的，
-但還沒找到 solution。&lt;/p&gt;
-&lt;h2 id=&quot;分割螢幕&quot;&gt;分割螢幕&lt;/h2&gt;
-&lt;p&gt;本來不知知道這個功能，
-在上面的 button mapper 的 app 裡看到這個功能，
-又去 google 才知道怎麼用。
-預設是選單鍵會跳出最近使用的 app，
-長按任一 app 視窗，拉到頂端即可分割畫面。
-之後下半會維持在最近使用的 app 的多個視窗，
-之後也可以挑一個，但不能讓另一半分割是主畫面。&lt;/p&gt;
-&lt;h2 id=&quot;語音搜尋&quot;&gt;語音搜尋&lt;/h2&gt;
-&lt;p&gt;長按 home 鍵會叫出 google 助手，
-主要用來語音搜尋，也可以用語音交辦事務，
-像幾分鐘後叫我之類的。
-主要是以前我用倉頡滑動鍵盤時，在網址列不能打中文，
-所以要搜尋有點麻煩，後來就用長按 home 鍵叫出的快速搜尋，
-可以打中文。&lt;/p&gt;
-&lt;h2 id=&quot;google now&quot;&gt;google now&lt;/h2&gt;
-&lt;p&gt;原本 android o 的桌面往左滑會有 google now，
-但我實在想不出那有什麼用，而且會讓桌面被鎖在第一頁，
-只能往右延伸。
-所以後來就換掉預設的 launcher，
-找了一個舊的可以往左或往右的 open launcher。&lt;/p&gt;
-&lt;h2 id=&quot;解鎖&quot;&gt;解鎖&lt;/h2&gt;
-&lt;p&gt;atom 支援指紋、人臉辨識和其它多種解鎖。
-我現在是用指紋和 pin 碼，平常就都用指紋比較方便，
-之後可能會改用一個很長的密碼。&lt;/p&gt;
-&lt;h2 id=&quot;recovery 與 fastboot&quot;&gt;recovery 與 fastboot&lt;/h2&gt;
-&lt;p&gt;如 &lt;a href=&quot;android-root-atom.html&quot;&gt;root atom&lt;/a&gt; 這篇文章提到的，
-要進入 recovery 按著音量向下鍵與電源鍵開機，
-然後在 recovery 裡有選項可以進 fastboot。&lt;/p&gt;
-&lt;h2 id=&quot;鈴聲音量與通知音量&quot;&gt;鈴聲音量與通知音量&lt;/h2&gt;
-&lt;p&gt;android o 開始鈴聲音量和通知音量被合在一起，實在有點智障。
-通知通常還好，自己聽得到就好，漏掉就算了，也沒關係。
-鈴聲則是比較要緊的事，一定要大聲，在騎車、走路時也要能聽到。
-但 android o 這二個被合在一起，就不能各自調。&lt;/p&gt;
-&lt;p&gt;後來搜了一下，找到一個 &lt;a href=&quot;https://play.google.com/store/apps/details?id=netroken.android.persistfree&quot;&gt;volume control&lt;/a&gt; app，
-能分離這二者，就裝來用了。
-他能讓來電鈴聲獨立調整，然後系統其它通知鈴聲就能調小了。&lt;/p&gt;
-&lt;h2 id=&quot;捷徑&quot;&gt;捷徑&lt;/h2&gt;
-&lt;p&gt;有些檔案會常需要快速查閱，像公車時刻表、校園地圖之類的。
-通常就是拍照或截圖成圖片，但在手機相簿久了就會被擠到後面，
-而且還要開相簿或檔案系統找蠻不方便的。&lt;/p&gt;
-&lt;p&gt;後來就找了一款 app &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.nagopy.android.fileshortcut&quot;&gt;file shortcut&lt;/a&gt; 可以在桌面設定檔案捷徑的，
-點該捷徑相當於用檔案管理員開該檔案。
-但如果久了捷徑積很多，
-也要關心哪些檔案是捷徑指向的不能刪，有點麻煩；
-所以後來換成只有一個指向資料夾的捷徑，
-要快速存取的就複製到該資料夾。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/taiwan-consensus-stolen-base.html#world-walking-approach</id>
 <title>台灣共識就是贏球不能盜壘</title>

@@ -87,6 +87,15 @@ variance_post = observation_residule' * observation_residule / (
 point_covariance_matrix = variance_post * inv(normal_matrix);
 ```
 
+### 結果
+用 matlab 計算結果誤差極小。
+若照題目看來，實際上是沒有誤差的，
+各基線在題目給定的有效位數上閉合差為 0。
+但用 matlab 計算會產生誤差，
+實際上是因為二進位浮點數無法精確表示十進位小數。
+例如許多程式語言中，0.1+0.2-0.3≠0。
+因此這些誤差是沒有意義的，實際上都能視作 0。
+
 ```math
 \begin{bmatrix}
 A \\ B \\ C \\ D \\ E
@@ -121,6 +130,7 @@ A \\ B \\ C \\ D \\ E
 \end{bmatrix}
 ```
 
+
 ## 條件觀測平差
 條件觀測平差是計算量較少，但較難以程式計算的平差方法。
 需要針對觀測量，列出所有不相關的條件式。
@@ -133,9 +143,14 @@ A \\ B \\ C \\ D \\ E
 v_1 + v_2 - v_5 = \vec{A B} + \vec{B C} - \vec{A C} \\
 v_2 + v_3 - v_6 = \vec{B C} + \vec{C D} - \vec{B D} \\
 v_3 + v_4 - v_7 = \vec{C D} + \vec{D E} - \vec{C E}
+```
 
-\\
+解法則是要先解出聯系數矩陣 K， 才能解殘差 V。
+因為是條件式，解出來只有觀測量的殘差，
+要再將殘差修正後的觀測量組合才能得出絕對點座標。
+而本次作業等權，所以 P 矩陣為單位矩陣，可以忽略。
 
+```math
 A V = W \\
 
 A = \begin{bmatrix}
@@ -151,12 +166,145 @@ W = \begin{bmatrix}
 \vec{B C} + \vec{C D} - \vec{B D} \\
 \vec{C D} + \vec{D E} - \vec{C E}
 \end{bmatrix}
+
+\\
+
+K = N^{-1} W = (A P^{-1} A^T)^{-1} W \\
+V = P^{-1} A^T K
 ```
 
-解法則是要先解出聯系數矩陣 K， 才能解殘差 V。
-因為是條件式，解出來只有觀測量的殘差，
-要再將殘差修正後的觀測量組合才能得出絕對點座標。
+### 程式
 
+```matlab
+condition_vector_equation = [
+1 1 0 0 -1 0 0 
+0 1 1 0 0 -1 0 
+0 0 1 1 0 0 -1
+];
+condition_equation = expand_3d_design_matrix(condition_vector_equation);
+
+condition_vector_value = [
+  baseline_vector_vector(1,:) + baseline_vector_vector(2,:) - baseline_vector_vector(5,:);
+  baseline_vector_vector(2,:) + baseline_vector_vector(3,:) - baseline_vector_vector(6,:);
+  baseline_vector_vector(3,:) + baseline_vector_vector(4,:) - baseline_vector_vector(7,:);
+];
+
+condition_value = reshape(
+                      condition_vector_value',
+                      prod(size(condition_vector_value)), 1);
+
+condition_normal = condition_equation * condition_equation';
+condition_K = inv(condition_normal) * condition_value;
+condition_residue = condition_equation' * condition_K;
+
+condition_variance_post = (
+  condition_residue' * condition_residue / rows(condition_equation)
+);
+```
+
+### 結果
+
+條件平差解出來的結果是各觀測量的殘差，
+所以需要把殘差加回觀測量，
+再把觀測量組合，求出各點的絕對座標。
+
+```matlab
+condition_fix_observation = baseline_vector - condition_residue;
+condition_fix_vector = reshape(condition_fix_observation, 3, rows(condition_fix_observation) / 3)';
+
+condition_point = zeros(columns(design_vector_matrix), 3);
+condition_point(1,:) = constrain_value';
+condition_point(2,:) = condition_point(1,:) + condition_fix_vector(1,:);
+condition_point(3,:) = condition_point(1,:) + condition_fix_vector(5,:);
+condition_point(4,:) = condition_point(3,:) + condition_fix_vector(3,:);
+condition_point(5,:) = condition_point(4,:) + condition_fix_vector(4,:);
+```
+
+結果應該要與間接平差的結果相同。
+但已知題目的基線是無誤差的，
+在間接平差時只有浮點數誤差，條件平差也有。
+但這二者的誤差，又因為計算不同，浮點數誤差也不同。
+
+```math
+\begin{bmatrix}
+A \\ B \\ C \\ D \\ E
+\end{bmatrix}
+=
+\begin{bmatrix}
+1.7760 \times 10^{+05} & 2.6397 \times 10^{+06} & 2.5375 \times 10^{+01} \\
+1.8909 \times 10^{+05} & 2.6265 \times 10^{+06} & 4.4821 \times 10^{+01} \\
+1.8348 \times 10^{+05} & 2.6205 \times 10^{+06} & 3.7007 \times 10^{+01} \\
+1.9699 \times 10^{+05} & 2.6494 \times 10^{+06} & 4.2254 \times 10^{+01} \\
+1.8207 \times 10^{+05} & 2.6138 \times 10^{+06} & 3.5997 \times 10^{+01}
+\end{bmatrix}
+```
+
+## 比較
+### 浮點數誤差
+條件平差結果應該會與間接觀測平差相同，
+但程式計算數值上，二者的結果不同。
+單純是因為計算過程不同，造成浮點數誤差不同的結果。
+
+條件平差殘差 | 間接觀測平差殘差
+-----------|------------
+2.1655 e-14 | 8.9130 e-11
+-3.4647 e-13 | 8.5311 e-10
+6.8728 e-16 | 1.0658 e-14
+-4.3309 e-14 | -2.3647 e-11
+6.9295 e-13 | -2.0827 e-10
+4.0179 e-16 | -7.1054 e-15
+1.0827 e-13 | -7.2760 e-12
+1.9056 e-12 | -3.4561 e-10
+-1.1631 e-16 | -7.1054 e-15
+1.7324 e-13 | 5.0932 e-11
+8.6619 e-13 | 3.5652 e-10
+1.6918 e-16 | 1.9540 e-14
+-2.1655 e-14 | 6.5484 e-11
+3.4647 e-13 | 6.4392 e-10
+-6.8728 e-16 | 1.7764 e-15
+6.4964 e-14 | -3.0923 e-11
+-1.0394 e-12 | -5.5661 e-10
+2.8549 e-16 | -1.4211 e-14
+-1.7324 e-13 | 4.3201 e-11
+-8.6619 e-13 | 7.2760 e-12
+-1.6918 e-16 | 1.2212 e-14
+
+例如以 AB BC AC 三條基線舉例，
+這三條基線應該是無閉合差的，
+但在 matlab 中計算後，
+三條基線卻在 z 方向出現了 1.7764e-15 的誤差。
+
+```
+>> ( [11488.973 -13224.866 19.446] + 
+     [-5605.975 -6047.976 -7.814] -
+     [5882.998 -19272.842 11.632] )
+
+ans =
+
+   0.0000e+00   0.0000e+00   1.7764e-15
+```
+
+如果在以無閉合差計算，條件平差的 W 應為 0 向量，
+連帶連系數矩陣 K 與殘差 V 也都會是 0。
+但因為浮點數誤差，如同上面的計算 W 不為 0，
+解出來的殘差 V 也就不為 0。
+
+### 條件式的列式
+相比間接平差直接列出所有觀測方程即可，
+條件平差需要列出所有獨立的條件式。
+我一開始還列不出來，把 ABCDE 連成一圈，
+之後就找不到剩下的二條了。
+後來用最小閉合圈去想才找到三條獨立的條件式。
+
+而且所謂計算量較小，也是相對間接平差而已。
+在計算基線平差時，由於是三維向量的平差，
+一條向量式就是三條純量式，要手算也是很辛苦。
+只有傳統的三角網，只有角度未知數會少一點，
+用條件式可能較好算而已。
+
+<link rel="stylesheet" href="ext/paper.css">
+
+<script src="ext/header-nctu.js?execute&editable"></script>
 
 #matlab
 #adjustment

@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-12-30T15:44:53.447Z</updated>
+  <updated>2018-12-31T07:20:29.543Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,362 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/adjustment-homework-8.html#finish-condition-and-float-error</id>
+<title>平差作業八</title>
+<published>2018-12-23T08:46:43.198Z</published>
+<updated>2018-12-31T07:20:29.533Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/adjustment-homework-8.html#finish-condition-and-float-error"/>
+<summary type="html">
+完成條件平差部份，並比較間接平差與條件平差結果，
+分析原始數據無誤差，誤差來自浮點數誤差。</summary>
+<category term="matlab"/>
+<category term="adjustment"/>
+<category term="report"/>
+<category term="nctu"/>
+<content type="html">&lt;h1 id=&quot;平差作業八&quot;&gt;平差作業八&lt;/h1&gt;
+&lt;p&gt;gnss 基線平差練習，分別使用極大權約制，
+與使用條件平差二種作法，比較成果差異。&lt;/p&gt;
+&lt;h2 id=&quot;基線觀測方程式&quot;&gt;基線觀測方程式&lt;/h2&gt;
+&lt;p&gt;基線是三維空間中連接二個點的向量，
+而三維空間中的一點由三個維度的座標決定。
+所以一條基線方程式應該在三個維度上展開，
+成為三條觀測方程式；
+對應的未知點也應該在三維上展開，成為三個未知數。&lt;/p&gt;
+&lt;p&gt;程式中函數 &lt;code&gt;expand_3d_design_matrix&lt;/code&gt; 
+可以將針對向量的設計矩陣，
+在三維上展開成 x y z 座標的設計矩陣。&lt;/p&gt;
+&lt;h2 id=&quot;間接平差模型&quot;&gt;間接平差模型&lt;/h2&gt;
+&lt;h3 id=&quot;程式&quot;&gt;程式&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-matlab&quot;&gt;% constrain adjustment
+
+design_vector_matrix = [
+  -1   1   0   0   0
+   0  -1   1   0   0
+   0   0  -1   1   0
+   0   0   0  -1   1
+  -1   0   1   0   0
+   0  -1   0   1   0
+   0   0  -1   0   1
+];
+
+function m = expand_3d_design_matrix(mv)
+  %% expand [1 0 -1 0 0]
+  %% to [1   0   0   0   0   0  -1   0   0   0   0   0   0   0   0
+  %%     0   1   0   0   0   0   0  -1   0   0   0   0   0   0   0
+  %%     0   0   1   0   0   0   0   0  -1   0   0   0   0   0   0]
+  m = zeros(size(mv)*3);
+
+  for i = 1:rows(m)
+    for j = 1:columns(m)
+      if (mod(j,3) == mod(i,3))
+        m(i,j) = mv(ceil(i/3), ceil(j/3));
+      else
+        m(i,j) = 0;
+      end
+    end
+  end
+end
+
+design_magrix = expand_3d_design_matrix(design_vector_matrix);
+
+baseline_vector_vector = [
+ 11488.973 -13224.866 19.446
+ -5605.975 -6047.976 -7.814
+ 13505.271 28936.647 5.247
+ -14911.055 -35571.005 -6.257
+ 5882.998 -19272.842 11.632
+ 7899.296 22888.671 -2.567
+ -1405.784 -6634.358 -1.010
+];
+
+baseline_vector = reshape(
+                      baseline_vector_vector&amp;apos;,
+                      1, prod(size(baseline_vector_vector)))&amp;apos;;
+
+constrain_matrix = expand_3d_design_matrix([1 0 0 0 0]);
+constrain_value = [177597.421 2639738.678 25.375]&amp;apos;;
+
+priority = 100;
+
+normal_matrix = (
+  design_magrix&amp;apos;*design_magrix +
+  priority * constrain_matrix&amp;apos; * constrain_matrix
+);
+
+point = inv(normal_matrix) * (
+          design_magrix&amp;apos; * baseline_vector +
+          priority * constrain_matrix&amp;apos; * constrain_value
+        );
+
+point_vector = reshape(point, 3, rows(point)/3)&amp;apos;;
+
+observation_residule = baseline_vector - design_magrix * point;
+variance_post = observation_residule&amp;apos; * observation_residule / (
+    rows(baseline_vector) - rows(point) + rows(constrain_value)
+);
+point_covariance_matrix = variance_post * inv(normal_matrix);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;結果&quot;&gt;結果&lt;/h3&gt;
+&lt;p&gt;用 matlab 計算結果誤差極小。
+若照題目看來，實際上是沒有誤差的，
+各基線在題目給定的有效位數上閉合差為 0。
+但用 matlab 計算會產生誤差，
+實際上是因為二進位浮點數無法精確表示十進位小數。
+例如許多程式語言中，0.1+0.2-0.3≠0。
+因此這些誤差是沒有意義的，實際上都能視作 0。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;\begin{bmatrix}
+A \\ B \\ C \\ D \\ E
+\end{bmatrix}
+=
+\begin{bmatrix}
+1.7760 \times 10^{+05} &amp;amp; 2.6397 \times 10^{+06} &amp;amp; 2.5375 \times 10^{+01} \\
+1.8909 \times 10^{+05} &amp;amp; 2.6265 \times 10^{+06} &amp;amp; 4.4821 \times 10^{+01} \\
+1.8348 \times 10^{+05} &amp;amp; 2.6205 \times 10^{+06} &amp;amp; 3.7007 \times 10^{+01} \\
+1.9699 \times 10^{+05} &amp;amp; 2.6494 \times 10^{+06} &amp;amp; 4.2254 \times 10^{+01} \\
+1.8207 \times 10^{+05} &amp;amp; 2.6138 \times 10^{+06} &amp;amp; 3.5997 \times 10^{+01}
+\end{bmatrix}
+
+\\
+
+\hat {\sigma_0} = 4.4228 \times 10 ^ {-10}
+
+\\
+
+\begin{bmatrix}
+\sigma_{A_x}^2 &amp;amp; \sigma_{A_y}^2 &amp;amp; \sigma_{A_z}^2 \\
+\vdots \\
+\sigma_{E_x}^2 &amp;amp; \sigma_{E_y}^2 &amp;amp; \sigma_{E_z}^2
+\end{bmatrix}
+=
+\begin{bmatrix}
+1.9561 \times 10^{-23} &amp;amp; 1.9561 \times 10^{-23} &amp;amp; 1.9561 \times 10^{-23} \\
+1.2111 \times 10^{-19} &amp;amp; 1.2111 \times 10^{-19} &amp;amp; 1.2111 \times 10^{-19} \\
+1.2111 \times 10^{-19} &amp;amp; 1.2111 \times 10^{-19} &amp;amp; 1.2111 \times 10^{-19} \\
+1.7700 \times 10^{-19} &amp;amp; 1.7700 \times 10^{-19} &amp;amp; 1.7700 \times 10^{-19} \\
+2.2357 \times 10^{-19} &amp;amp; 2.2357 \times 10^{-19} &amp;amp; 2.2357 \times 10^{-19}
+\end{bmatrix}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;條件觀測平差&quot;&gt;條件觀測平差&lt;/h2&gt;
+&lt;p&gt;條件觀測平差是計算量較少，但較難以程式計算的平差方法。
+需要針對觀測量，列出所有不相關的條件式。&lt;/p&gt;
+&lt;p&gt;題目中有 5 未知數，7 觀測方程式，1 條件，
+應列出 7-5+1=3 條條件式。
+各條件式寫成向量如下，純量形式一樣是在三維上展開。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;v_1 + v_2 - v_5 = \vec{A B} + \vec{B C} - \vec{A C} \\
+v_2 + v_3 - v_6 = \vec{B C} + \vec{C D} - \vec{B D} \\
+v_3 + v_4 - v_7 = \vec{C D} + \vec{D E} - \vec{C E}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;解法則是要先解出聯系數矩陣 K， 才能解殘差 V。
+因為是條件式，解出來只有觀測量的殘差，
+要再將殘差修正後的觀測量組合才能得出絕對點座標。
+而本次作業等權，所以 P 矩陣為單位矩陣，可以忽略。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;A V = W \\
+
+A = \begin{bmatrix}
+1 &amp;amp; 1 &amp;amp; 0 &amp;amp; 0 &amp;amp; -1 &amp;amp; 0 &amp;amp; 0 \\
+0 &amp;amp; 1 &amp;amp; 1 &amp;amp; 0 &amp;amp; 0 &amp;amp; -1 &amp;amp; 0 \\
+0 &amp;amp; 0 &amp;amp; 1 &amp;amp; 1 &amp;amp; 0 &amp;amp; 0 &amp;amp; -1
+\end{bmatrix}
+
+\\
+
+W = \begin{bmatrix}
+\vec{A B} + \vec{B C} - \vec{A C} \\
+\vec{B C} + \vec{C D} - \vec{B D} \\
+\vec{C D} + \vec{D E} - \vec{C E}
+\end{bmatrix}
+
+\\
+
+K = N^{-1} W = (A P^{-1} A^T)^{-1} W \\
+V = P^{-1} A^T K
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;程式&quot;&gt;程式&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-matlab&quot;&gt;condition_vector_equation = [
+1 1 0 0 -1 0 0 
+0 1 1 0 0 -1 0 
+0 0 1 1 0 0 -1
+];
+condition_equation = expand_3d_design_matrix(condition_vector_equation);
+
+condition_vector_value = [
+  baseline_vector_vector(1,:) + baseline_vector_vector(2,:) - baseline_vector_vector(5,:);
+  baseline_vector_vector(2,:) + baseline_vector_vector(3,:) - baseline_vector_vector(6,:);
+  baseline_vector_vector(3,:) + baseline_vector_vector(4,:) - baseline_vector_vector(7,:);
+];
+
+condition_value = reshape(
+                      condition_vector_value&amp;apos;,
+                      prod(size(condition_vector_value)), 1);
+
+condition_normal = condition_equation * condition_equation&amp;apos;;
+condition_K = inv(condition_normal) * condition_value;
+condition_residue = condition_equation&amp;apos; * condition_K;
+
+condition_variance_post = (
+  condition_residue&amp;apos; * condition_residue / rows(condition_equation)
+);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;結果&quot;&gt;結果&lt;/h3&gt;
+&lt;p&gt;條件平差解出來的結果是各觀測量的殘差，
+所以需要把殘差加回觀測量，
+再把觀測量組合，求出各點的絕對座標。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-matlab&quot;&gt;condition_fix_observation = baseline_vector - condition_residue;
+condition_fix_vector = reshape(condition_fix_observation, 3, rows(condition_fix_observation) / 3)&amp;apos;;
+
+condition_point = zeros(columns(design_vector_matrix), 3);
+condition_point(1,:) = constrain_value&amp;apos;;
+condition_point(2,:) = condition_point(1,:) + condition_fix_vector(1,:);
+condition_point(3,:) = condition_point(1,:) + condition_fix_vector(5,:);
+condition_point(4,:) = condition_point(3,:) + condition_fix_vector(3,:);
+condition_point(5,:) = condition_point(4,:) + condition_fix_vector(4,:);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;結果應該要與間接平差的結果相同。
+但已知題目的基線是無誤差的，
+在間接平差時只有浮點數誤差，條件平差也有。
+但這二者的誤差，又因為計算不同，浮點數誤差也不同。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;\begin{bmatrix}
+A \\ B \\ C \\ D \\ E
+\end{bmatrix}
+=
+\begin{bmatrix}
+1.7760 \times 10^{+05} &amp;amp; 2.6397 \times 10^{+06} &amp;amp; 2.5375 \times 10^{+01} \\
+1.8909 \times 10^{+05} &amp;amp; 2.6265 \times 10^{+06} &amp;amp; 4.4821 \times 10^{+01} \\
+1.8348 \times 10^{+05} &amp;amp; 2.6205 \times 10^{+06} &amp;amp; 3.7007 \times 10^{+01} \\
+1.9699 \times 10^{+05} &amp;amp; 2.6494 \times 10^{+06} &amp;amp; 4.2254 \times 10^{+01} \\
+1.8207 \times 10^{+05} &amp;amp; 2.6138 \times 10^{+06} &amp;amp; 3.5997 \times 10^{+01}
+\end{bmatrix}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;比較&quot;&gt;比較&lt;/h2&gt;
+&lt;h3 id=&quot;浮點數誤差&quot;&gt;浮點數誤差&lt;/h3&gt;
+&lt;p&gt;條件平差結果應該會與間接觀測平差相同，
+但程式計算數值上，二者的結果不同。
+單純是因為計算過程不同，造成浮點數誤差不同的結果。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;條件平差殘差&lt;/th&gt;
+&lt;th&gt;間接觀測平差殘差&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;2.1655 e-14&lt;/td&gt;
+&lt;td&gt;8.9130 e-11&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-3.4647 e-13&lt;/td&gt;
+&lt;td&gt;8.5311 e-10&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;6.8728 e-16&lt;/td&gt;
+&lt;td&gt;1.0658 e-14&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-4.3309 e-14&lt;/td&gt;
+&lt;td&gt;-2.3647 e-11&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;6.9295 e-13&lt;/td&gt;
+&lt;td&gt;-2.0827 e-10&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;4.0179 e-16&lt;/td&gt;
+&lt;td&gt;-7.1054 e-15&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1.0827 e-13&lt;/td&gt;
+&lt;td&gt;-7.2760 e-12&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1.9056 e-12&lt;/td&gt;
+&lt;td&gt;-3.4561 e-10&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-1.1631 e-16&lt;/td&gt;
+&lt;td&gt;-7.1054 e-15&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1.7324 e-13&lt;/td&gt;
+&lt;td&gt;5.0932 e-11&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;8.6619 e-13&lt;/td&gt;
+&lt;td&gt;3.5652 e-10&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;1.6918 e-16&lt;/td&gt;
+&lt;td&gt;1.9540 e-14&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-2.1655 e-14&lt;/td&gt;
+&lt;td&gt;6.5484 e-11&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;3.4647 e-13&lt;/td&gt;
+&lt;td&gt;6.4392 e-10&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-6.8728 e-16&lt;/td&gt;
+&lt;td&gt;1.7764 e-15&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;6.4964 e-14&lt;/td&gt;
+&lt;td&gt;-3.0923 e-11&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-1.0394 e-12&lt;/td&gt;
+&lt;td&gt;-5.5661 e-10&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;2.8549 e-16&lt;/td&gt;
+&lt;td&gt;-1.4211 e-14&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-1.7324 e-13&lt;/td&gt;
+&lt;td&gt;4.3201 e-11&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-8.6619 e-13&lt;/td&gt;
+&lt;td&gt;7.2760 e-12&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-1.6918 e-16&lt;/td&gt;
+&lt;td&gt;1.2212 e-14&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;例如以 AB BC AC 三條基線舉例，
+這三條基線應該是無閉合差的，
+但在 matlab 中計算後，
+三條基線卻在 z 方向出現了 1.7764e-15 的誤差。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt; ( [11488.973 -13224.866 19.446] + 
+     [-5605.975 -6047.976 -7.814] -
+     [5882.998 -19272.842 11.632] )
+
+ans =
+
+   0.0000e+00   0.0000e+00   1.7764e-15
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;如果在以無閉合差計算，條件平差的 W 應為 0 向量，
+連帶連系數矩陣 K 與殘差 V 也都會是 0。
+但因為浮點數誤差，如同上面的計算 W 不為 0，
+解出來的殘差 V 也就不為 0。&lt;/p&gt;
+&lt;h3 id=&quot;條件式的列式&quot;&gt;條件式的列式&lt;/h3&gt;
+&lt;p&gt;相比間接平差直接列出所有觀測方程即可，
+條件平差需要列出所有獨立的條件式。
+我一開始還列不出來，把 ABCDE 連成一圈，
+之後就找不到剩下的二條了。
+後來用最小閉合圈去想才找到三條獨立的條件式。&lt;/p&gt;
+&lt;p&gt;而且所謂計算量較小，也是相對間接平差而已。
+在計算基線平差時，由於是三維向量的平差，
+一條向量式就是三條純量式，要手算也是很辛苦。
+只有傳統的三角網，只有角度未知數會少一點，
+用條件式可能較好算而已。&lt;/p&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
+
+&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/linux-try-and-error-build.html#origin-version-linux</id>
 <title>試誤編譯法</title>
 <published>2018-12-30T15:29:22.823Z</published>
@@ -1022,115 +1378,7 @@ email 帳號密碼也就是成功入口的帳號密碼。
 * 自訂鈴聲
 * 替代的 app 像 vanilla music, slim social, open camera</summary>
 <category term="android"/>
-<content type="html">&lt;h1 id=&quot;atom 使用技巧&quot;&gt;atom 使用技巧&lt;/h1&gt;
-&lt;p&gt;最近入手了中國的一台小手機 unhertz atom。
-android 使用上有些快捷鍵，各品牌會不太一樣，
-像 atom 的截圖是同時按電源鍵和音量下，
-所以記錄下來一些有趣的用法。&lt;/p&gt;
-&lt;h2 id=&quot;螢幕截圖&quot;&gt;螢幕截圖&lt;/h2&gt;
-&lt;p&gt;同時按下電源鍵與音量向下鍵。
-這功能我找超久，後來 google 才在 atom 的使用者論壇看到這個按法。
-他們的 &lt;a href=&quot;https://drive.google.com/open?id=1Fv3wEG633XK3fEKz-or8C4OvBEnf6yQD&quot;&gt;使用者手冊&lt;/a&gt; 裡也有。這好像沒地方設定。
-手冊可能會有一些我漏掉的事，但更多廢話，
-有空的話會看看吧。&lt;/p&gt;
-&lt;h2 id=&quot;快速開啟相機&quot;&gt;快速開啟相機&lt;/h2&gt;
-&lt;p&gt;連按二下電源鍵，在待機時也效。
-可以在 &lt;em&gt;設定 &amp;gt; 系統 &amp;gt; 手勢&lt;/em&gt; 裡設定要不要使用。&lt;/p&gt;
-&lt;h2 id=&quot;返回鍵與選單鍵&quot;&gt;返回鍵與選單鍵&lt;/h2&gt;
-&lt;p&gt;可以交換二者順序。
-預設是左邊返回右邊選單，
-在 &lt;em&gt;設定 &amp;gt; 智能輔助 &amp;gt; 物理按鍵交換&lt;/em&gt; 可以調，
-如果勾選，就會讓二者交換。&lt;/p&gt;
-&lt;h2 id=&quot;Push-To-Talk 鍵&quot;&gt;Push-To-Talk 鍵&lt;/h2&gt;
-&lt;p&gt;快速開啟鍵，可以綁定快速開啟一個 app。
-預設是綁到 zello，可以在 &lt;em&gt;設定 &amp;gt; 智能輔助 &amp;gt; 快捷鍵&lt;/em&gt;
-設定要綁定的 app。&lt;/p&gt;
-&lt;p&gt;綁 zello 的話在待機時按也能啟動，
-用法就長按螢幕會自動解鎖並跳到 zello 的發話畫面，
-看到時間開始跑就能開始講話了。&lt;/p&gt;
-&lt;p&gt;比較想綁到 discord 的按鍵發話，但好像不行。
-有找到一個 &lt;a href=&quot;https://play.google.com/store/apps/details?id=flar2.homebutton&quot;&gt;button mapper&lt;/a&gt; 的 app
-能把硬體綁定動作或 app 的，但也沒有特別吸引人的用法。&lt;/p&gt;
-&lt;p&gt;比較想綁成錄音程式，可以在待機時按就開始錄音之類的，
-但還沒找到 solution。&lt;/p&gt;
-&lt;h2 id=&quot;分割螢幕&quot;&gt;分割螢幕&lt;/h2&gt;
-&lt;p&gt;本來不知知道這個功能，
-在上面的 button mapper 的 app 裡看到這個功能，
-又去 google 才知道怎麼用。
-預設是選單鍵會跳出最近使用的 app，
-長按任一 app 視窗，拉到頂端即可分割畫面。
-之後下半會維持在最近使用的 app 的多個視窗，
-之後也可以挑一個，但不能讓另一半分割是主畫面。&lt;/p&gt;
-&lt;h2 id=&quot;語音搜尋&quot;&gt;語音搜尋&lt;/h2&gt;
-&lt;p&gt;長按 home 鍵會叫出 google 助手，
-主要用來語音搜尋，也可以用語音交辦事務，
-像幾分鐘後叫我之類的。
-主要是以前我用倉頡滑動鍵盤時，在網址列不能打中文，
-所以要搜尋有點麻煩，後來就用長按 home 鍵叫出的快速搜尋，
-可以打中文。&lt;/p&gt;
-&lt;h2 id=&quot;google now&quot;&gt;google now&lt;/h2&gt;
-&lt;p&gt;原本 android o 的桌面往左滑會有 google now，
-但我實在想不出那有什麼用，而且會讓桌面被鎖在第一頁，
-只能往右延伸。
-所以後來就換掉預設的 launcher，
-找了一個舊的可以往左或往右的 open launcher。&lt;/p&gt;
-&lt;h2 id=&quot;解鎖&quot;&gt;解鎖&lt;/h2&gt;
-&lt;p&gt;atom 支援指紋、人臉辨識和其它多種解鎖。
-我現在是用指紋和 pin 碼，平常就都用指紋比較方便，
-之後可能會改用一個很長的密碼。&lt;/p&gt;
-&lt;h2 id=&quot;recovery 與 fastboot&quot;&gt;recovery 與 fastboot&lt;/h2&gt;
-&lt;p&gt;如 &lt;a href=&quot;android-root-atom.html&quot;&gt;root atom&lt;/a&gt; 這篇文章提到的，
-要進入 recovery 按著音量向下鍵與電源鍵開機，
-然後在 recovery 裡有選項可以進 fastboot。&lt;/p&gt;
-&lt;h2 id=&quot;鈴聲音量與通知音量&quot;&gt;鈴聲音量與通知音量&lt;/h2&gt;
-&lt;p&gt;android o 開始鈴聲音量和通知音量被合在一起，實在有點智障。
-通知通常還好，自己聽得到就好，漏掉就算了，也沒關係。
-鈴聲則是比較要緊的事，一定要大聲，在騎車、走路時也要能聽到。
-但 android o 這二個被合在一起，就不能各自調。&lt;/p&gt;
-&lt;p&gt;後來搜了一下，找到一個 &lt;a href=&quot;https://play.google.com/store/apps/details?id=netroken.android.persistfree&quot;&gt;volume control&lt;/a&gt; app，
-能分離這二者，就裝來用了。
-他能讓來電鈴聲獨立調整，然後系統其它通知鈴聲就能調小了。&lt;/p&gt;
-&lt;h2 id=&quot;自訂鈴聲&quot;&gt;自訂鈴聲&lt;/h2&gt;
-&lt;p&gt;以前我在 android 自訂鈴聲，
-都是放在 &lt;code&gt;/sdcard/media/audio/ringtones&lt;/code&gt; 之類的資料夾，
-然後在選擇鈴聲的介面就會出現；但我在 atom 上試沒用。&lt;/p&gt;
-&lt;p&gt;電話鈴聲可以直接在 &lt;em&gt;設定 &amp;gt; 音效 &amp;gt; 電話鈴聲 &amp;gt; 新增鈴聲&lt;/em&gt;
-裡面直接新增其它鈴聲，之後就會出現在介面裡了。&lt;/p&gt;
-&lt;p&gt;鬧鐘鈴聲則是在內建的時鐘 app 裡，
-選擇鈴聲的地方，可以從檔案系統新增其它鈴聲。&lt;/p&gt;
-&lt;h2 id=&quot;捷徑&quot;&gt;捷徑&lt;/h2&gt;
-&lt;p&gt;有些檔案會常需要快速查閱，像公車時刻表、校園地圖之類的。
-通常就是拍照或截圖成圖片，但在手機相簿久了就會被擠到後面，
-而且還要開相簿或檔案系統找蠻不方便的。&lt;/p&gt;
-&lt;p&gt;後來就找了一款 app &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.nagopy.android.fileshortcut&quot;&gt;file shortcut&lt;/a&gt; 可以在桌面設定檔案捷徑的，
-點該捷徑相當於用檔案管理員開該檔案。
-但如果久了捷徑積很多，
-也要關心哪些檔案是捷徑指向的不能刪，有點麻煩；
-所以後來換成只有一個指向資料夾的捷徑，
-要快速存取的就複製到該資料夾。&lt;/p&gt;
-&lt;h2 id=&quot;vanilla music&quot;&gt;vanilla music&lt;/h2&gt;
-&lt;p&gt;預設的怪怪的，只會在開機時掃描一次，
-之後丟進去的都不會出現，要重新開機。
-而且建播放清單時會 crash，沒辦法建。
-後來去 f-droid 上試了幾款，換成 &lt;a href=&quot;https://f-droid.org/packages/ch.blinkenlights.android.vanilla&quot;&gt;vanilla music&lt;/a&gt; 。&lt;/p&gt;
-&lt;h2 id=&quot;open camera&quot;&gt;open camera&lt;/h2&gt;
-&lt;p&gt;預設的相機 app 功能有點少，
-又無意間看到這款開源的相機 app &lt;a href=&quot;https://play.google.com/store/apps/details?id=net.sourceforge.opencamera&quot;&gt;open camera&lt;/a&gt; ，
-還不錯用，就把預設的相機 app 改成這款了；
-也就是上文提到的 &lt;a href=&quot;#快速開啟相機&quot;&gt;連按二下電源鍵快速開啟相機&lt;/a&gt; 。
-如果有多於一款相機 app，在連按二下電源鍵時會詢問你要用哪一款；
-如果已經有預設值，可以去 &lt;em&gt;設定 &amp;gt; 應用程式 &amp;gt; 已綁定的相機 app &amp;gt; 預設值&lt;/em&gt;
-清除預設值，下次再快速啟動時，就會再跳出詢問一次了。&lt;/p&gt;
-&lt;h2 id=&quot;facebook 圖片畫質&quot;&gt;facebook 圖片畫質&lt;/h2&gt;
-&lt;p&gt;我本來用 facebook 的官方 app，
-但他好像會根據手機螢幕尺寸載入不同畫質的圖片。
-我手機尺寸太小，所以圖片都很小，
-很多字都看不清楚，放大就糊掉，載下來也一樣不會變大。
-也換過官方的 facebook lite，也一樣糟，
-只好開始試第三方 app。
-目前是用 &lt;a href=&quot;https://f-droid.org/packages/it.rignanese.leo.slimfacebook/&quot;&gt;SlimSocial for Facebook&lt;/a&gt; ，
-介面和網頁版有點像，但分享的介面有點糟，字和按鈕會變很小。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/android-atom-tip.html</id>
 <title>atom 使用技巧</title>

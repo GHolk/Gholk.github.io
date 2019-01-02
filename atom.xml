@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-01-02T15:49:23.470Z</updated>
+  <updated>2019-01-02T16:13:25.446Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,83 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/geomatics-seminar-sar-usage.html</id>
+<title>SAR 雷達影像</title>
+<published>2019-01-02T16:12:59.999Z</published>
+<updated>2019-01-02T16:13:25.432Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/geomatics-seminar-sar-usage.html"/>
+<summary type="html">&lt;abbr title=&quot;Synthetic Aperture Radar&quot;&gt;SAR&lt;/abbr&gt;
+合成孔徑雷達影像近年逐漸受到關注，
+因雷達影像不受雲層、日夜影響，可以全天候觀測。
+常見的 SAR 影像分析方法有干涉分析、強度分析、時序分析，
+在防災、救援方面有巨大的貢獻。</summary>
+<category term="nctu"/>
+<category term="report"/>
+<category term="geomatics"/>
+<content type="html">&lt;h1 id=&quot;SAR 雷達影像&quot;&gt;SAR 雷達影像&lt;/h1&gt;
+&lt;p&gt;&lt;abbr title=&quot;Synthetic Aperture Radar&quot;&gt;SAR&lt;/abbr&gt;
+合成孔徑雷達影像近年逐漸受到關注，
+因雷達影像不受雲層、日夜影響，可以全天候觀測。
+常見的 SAR 影像分析方法有干涉分析、強度分析、時序分析，
+在防災、救援方面有巨大的貢獻。&lt;/p&gt;
+&lt;h2 id=&quot;雷達影像相比可見光的優勢&quot;&gt;雷達影像相比可見光的優勢&lt;/h2&gt;
+&lt;p&gt;雷達主動發射電磁波後觀測反射訊號的技術，
+使用的波長主要在數公厘到數十公尺等級。
+由於波長較長，不會像可見光完全被雲層遮蔽，
+因此可以不論天候觀測。
+更由於雷達屬主動觀測，不像可見光光源為太陽，
+只能在白天觀測，更可以不受限制。&lt;/p&gt;
+&lt;p&gt;相比可見光，先是受日夜限制，晚上無法觀測，
+就去掉一半的時間是無法運作的。
+再加上人類活動地區，多數是有降雨分布的，
+也就有更多的雲層遮蔽，可見光影像常因此無用武之地。&lt;/p&gt;
+&lt;p&gt;以東亞地區來說，防災是雷達影像的主要應用，
+在地震、颱風、海嘯過後，要能快速掌握受災區域情況，
+最快就是用衛星影像製圖。
+但颱風或洪水時，災區常都是雲雨天，
+可見光根本看不到東西；也就造成關鍵時刻無圖可用的窘境。
+而雷達影像正好可以解決此一問題，
+也就成為災後製圖的首選。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46552080601&quot;&gt;&lt;img src=&quot;http://farm5.staticflickr.com/4898/46552080601_cd0696c080.jpg&quot; alt=&quot;earth with cloud and night&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;合成孔徑雷達&quot;&gt;合成孔徑雷達&lt;/h2&gt;
+&lt;p&gt;傳統雷達使用實體天線發出雷達波，稱為 &lt;strong&gt;實孔徑雷達&lt;/strong&gt; 。
+雷達波的解析度也就是雷達波束的寬度，
+若要發出極窄的雷達波，必須有極長的天線。
+但以飛機或衛星而言，配備巨大的天線是不可能的。&lt;/p&gt;
+&lt;p&gt;合成孔徑雷達則突破了這層限制，
+合成孔徑雷達是在飛機前進時，連續發出多次雷達波，
+再將在航線上成一直線的各點雷達波回波記錄合成，
+就能摸擬出一個長天線的結果。&lt;/p&gt;
+&lt;h2 id=&quot;雷達影像特性&quot;&gt;雷達影像特性&lt;/h2&gt;
+&lt;h2 id=&quot;強度分析&quot;&gt;強度分析&lt;/h2&gt;
+&lt;p&gt;強度分析是直接用回波強度值成像，
+和一般可見光影像展示的方式相同。
+雷達影像可以只用強度成像成類似灰階影像的結果。
+雷達回波強度方便的用途是用來分析水體，
+因為無論是水面或單純潮濕的地面，
+對雷達波的回波強度都較乾燥區域低。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://earth.esa.int/web/guest/missions/esa-operational-eo-missions/ers/instruments/sar/applications/radar-courses/content-2/-/asset_publisher/qIBc6NYRXfnG/content/radar-course-2-parameters-affecting-radar-backscatter&quot; title=&quot;earth esa radar&quot;&gt;另一主要用途是分析地型粗糙度。&lt;/a&gt;
+一般來說，越粗糙的地型回波越強。
+上例的水體則是極為平滑的面，所以回波較弱。
+而粗糙度如果應用在海面上的話，
+&lt;a href=&quot;https://scitechvista.nat.gov.tw/c/sWZj.htm&quot; title=&quot;科技大觀園 從太空看海洋&quot;&gt;則是在風速越強處，海浪會越破碎，&lt;/a&gt;
+因此可以做為海上天氣預報的參考。&lt;/p&gt;
+&lt;h3 id=&quot;偏振方向&quot;&gt;偏振方向&lt;/h3&gt;
+&lt;p&gt;或者雷達波也可以依雷磁波的偏振分為水平偏振與垂直偏振，
+分別可以組合四種不同的回波強度：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;發出水平接受回波中的水平偏振強度&lt;/li&gt;
+&lt;li&gt;發出水平接受回波中的垂直偏振強度&lt;/li&gt;
+&lt;li&gt;發出垂直接受回波中的垂直偏振強度&lt;/li&gt;
+&lt;li&gt;發出垂直接受回波中的水平偏振強度&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;偏振在某種程度上可以達到類似可見光中不同波段的效果；
+不同的地物對不同偏振的雷達波，
+會有不同的反射， 可以以此判別不同地物。
+雖然一般衛星只會發出一種方向的偏振，
+然後接受水平與垂直，所以只會有四種中的二種。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/linux-easy-debian-package.html</id>
 <title>debian 簡易套件打包</title>
 <published>2019-01-02T15:47:06.679Z</published>
@@ -1347,42 +1424,7 @@ for (let i=0; i&amp;lt;9; i++) {
 <category term="email"/>
 <category term="account"/>
 <category term="web"/>
-<content type="html">&lt;h1 id=&quot;交大學生登入 tanetroaming wifi&quot;&gt;交大學生登入 tanetroaming wifi&lt;/h1&gt;
-&lt;p&gt;tanetroaming 是在全台各大學都有的 wifi，
-用自己學校的帳號就能登入，全台校園暢行無阻。
-一般是用學校的 email 帳號密碼識別，
-但 &lt;abbr title=&quot;交通大學&quot;&gt;交大&lt;/abbr&gt; 的 email 托管給 g-suit 了，
-所以和學號無關，密碼也和 &lt;a href=&quot;https://portal.nctu.edu.tw&quot;&gt;交大入口&lt;/a&gt; 的不同。
-所以交大學生要用 &lt;code&gt;學號@nctu.edu.tw&lt;/code&gt; 當帳號，
-密碼則是交大入口的密碼。&lt;/p&gt;
-&lt;p&gt;現在交大新生已經不會自動被分配 email 了，
-只有基本資料卡上自己填的 email，
-和可以經由學校申請 g-suit 的 email。
-而申請的 g suit email 是可以自訂名稱的，
-只是會被加上 &lt;code&gt;.&lt;/code&gt; &lt;code&gt;學系簡寫&lt;/code&gt; &lt;code&gt;入學年&lt;/code&gt; &lt;code&gt;g&lt;/code&gt; ，
-像外語學院 06 年入學的，如果自己取的名字是 cyndi，
-那 g suit 帳號就會變 &lt;code&gt;cyndi.fl06g@nctu.edu.tw&lt;/code&gt; 。
-而且 g suit 的密碼也是自己設的，和學校原有的帳號密碼都不同。&lt;/p&gt;
-&lt;p&gt;交大有自己的一組帳號密碼，
-基本上帳號就是學號，密碼也是自己設，像 &lt;a href=&quot;https://portal.nctu.edu.tw&quot;&gt;交大入口&lt;/a&gt; 的。
-雖然也沒有完全統一，像選課系統就有自己的一組，
-宿舍網路也是獨立的。&lt;/p&gt;
-&lt;p&gt;所以問題就來了，學校理論上無法幫你驗證 g suit 的密碼，
-那只有 google 能做到，而且每人的 g suit 帳號不同，
-感覺就難以驗證；一般 tanet roaming 應該是要用學號來登入。
-所以後來才找到 &lt;a href=&quot;https://www.it.nctu.edu.tw/?page_id=48&quot;&gt;計中說明 tanetroaming 要用 &lt;code&gt;學號@nctu.edu.tw&lt;/code&gt; 登入&lt;/a&gt; ，
-雖然其中有個 &lt;code&gt;@&lt;/code&gt; ，也看起來很像 email；
-但那根本不是 email，只是代表你和交大而已。
-總之終於成功在清華大學的 tanet roaming 登入了。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.wlan.nthu.edu.tw/~wlan/NM/wlanUserStep.html&quot;&gt;清大的比較有趣，一樣是學號，但域名則是綁到 &lt;code&gt;wlan.nthu.edu.tw&lt;/code&gt; ，&lt;/a&gt; 。
-總之終於可以用交大的身份登入了，
-之前都還是用成功大學的 email 在登入，
-成功大學就簡單多了， &lt;a href=&quot;https://i.ncku.edu.tw/&quot;&gt;成功入口&lt;/a&gt; 基本上已經整合所有服務了，
-email 帳號密碼也就是成功入口的帳號密碼。
-（雖然系所代碼有時大寫有時小寫，
-但網頁介面上多會自動幫你糾正，這又是另一個坑了。）
-除了今年剛加入的 g suit 外。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/linux-x11vnc-server.html</id>
 <title>x11vnc 圖形介面啟動</title>

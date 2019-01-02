@@ -1,0 +1,96 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2019-01-02T16:12:59.999Z">
+<meta name="keywords" property="og:article:tag" content="nctu,report,geomatics">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="linux-easy-debian-package.html" title="debian 簡易套件打包">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>SAR 雷達影像</title>
+</head>
+<body>
+<main><h1 id="SAR 雷達影像">SAR 雷達影像</h1>
+<p><abbr title="Synthetic Aperture Radar">SAR</abbr>
+合成孔徑雷達影像近年逐漸受到關注，
+因雷達影像不受雲層、日夜影響，可以全天候觀測。
+常見的 SAR 影像分析方法有干涉分析、強度分析、時序分析，
+在防災、救援方面有巨大的貢獻。</p>
+<h2 id="雷達影像相比可見光的優勢">雷達影像相比可見光的優勢</h2>
+<p>雷達主動發射電磁波後觀測反射訊號的技術，
+使用的波長主要在數公厘到數十公尺等級。
+由於波長較長，不會像可見光完全被雲層遮蔽，
+因此可以不論天候觀測。
+更由於雷達屬主動觀測，不像可見光光源為太陽，
+只能在白天觀測，更可以不受限制。</p>
+<p>相比可見光，先是受日夜限制，晚上無法觀測，
+就去掉一半的時間是無法運作的。
+再加上人類活動地區，多數是有降雨分布的，
+也就有更多的雲層遮蔽，可見光影像常因此無用武之地。</p>
+<p>以東亞地區來說，防災是雷達影像的主要應用，
+在地震、颱風、海嘯過後，要能快速掌握受災區域情況，
+最快就是用衛星影像製圖。
+但颱風或洪水時，災區常都是雲雨天，
+可見光根本看不到東西；也就造成關鍵時刻無圖可用的窘境。
+而雷達影像正好可以解決此一問題，
+也就成為災後製圖的首選。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/46552080601"><img src="http://farm5.staticflickr.com/4898/46552080601_cd0696c080.jpg" alt="earth with cloud and night"></a></p>
+<h2 id="合成孔徑雷達">合成孔徑雷達</h2>
+<p>傳統雷達使用實體天線發出雷達波，稱為 <strong>實孔徑雷達</strong> 。
+雷達波的解析度也就是雷達波束的寬度，
+若要發出極窄的雷達波，必須有極長的天線。
+但以飛機或衛星而言，配備巨大的天線是不可能的。</p>
+<p>合成孔徑雷達則突破了這層限制，
+合成孔徑雷達是在飛機前進時，連續發出多次雷達波，
+再將在航線上成一直線的各點雷達波回波記錄合成，
+就能摸擬出一個長天線的結果。</p>
+<h2 id="雷達影像特性">雷達影像特性</h2>
+<h2 id="強度分析">強度分析</h2>
+<p>強度分析是直接用回波強度值成像，
+和一般可見光影像展示的方式相同。
+雷達影像可以只用強度成像成類似灰階影像的結果。
+雷達回波強度方便的用途是用來分析水體，
+因為無論是水面或單純潮濕的地面，
+對雷達波的回波強度都較乾燥區域低。</p>
+<p><a href="https://earth.esa.int/web/guest/missions/esa-operational-eo-missions/ers/instruments/sar/applications/radar-courses/content-2/-/asset_publisher/qIBc6NYRXfnG/content/radar-course-2-parameters-affecting-radar-backscatter" title="earth esa radar">另一主要用途是分析地型粗糙度。</a>
+一般來說，越粗糙的地型回波越強。
+上例的水體則是極為平滑的面，所以回波較弱。
+而粗糙度如果應用在海面上的話，
+<a href="https://scitechvista.nat.gov.tw/c/sWZj.htm" title="科技大觀園 從太空看海洋">則是在風速越強處，海浪會越破碎，</a>
+因此可以做為海上天氣預報的參考。</p>
+<h3 id="偏振方向">偏振方向</h3>
+<p>或者雷達波也可以依雷磁波的偏振分為水平偏振與垂直偏振，
+分別可以組合四種不同的回波強度：</p>
+<ul>
+<li>發出水平接受回波中的水平偏振強度</li>
+<li>發出水平接受回波中的垂直偏振強度</li>
+<li>發出垂直接受回波中的垂直偏振強度</li>
+<li>發出垂直接受回波中的水平偏振強度</li>
+</ul>
+<p>偏振在某種程度上可以達到類似可見光中不同波段的效果；
+不同的地物對不同偏振的雷達波，
+會有不同的反射， 可以以此判別不同地物。
+雖然一般衛星只會發出一種方向的偏振，
+然後接受水平與垂直，所以只會有四種中的二種。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

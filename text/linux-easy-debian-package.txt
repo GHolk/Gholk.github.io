@@ -1,0 +1,53 @@
+# debian 簡易套件打包
+在 debian 中簡單打包二進位安裝包的作法，
+就是用 checkinstall 或 `dpkg --build` ；
+讀 debian 文件讀半天，繞了一圈才回來找到這個最簡單的做法。
+以前都只能當伸手牌，現在可以編譯完作善事，
+把編譯結果上傳給其它使用者安裝了。
+[我編譯的一些軟體包放在 google drive 上。][debian package]
+
+[debian package]: https://drive.google.com/drive/folders/1ypXybmO6mGB_xjjcZnkNdDNDnH0Vtxcc?usp=sharing
+
+## debian source
+一開始我從 debian wiki 開始找，
+讀了幾篇都是從 tarball 打包的，
+而且多是半自動從原始碼編譯到執行檔再打包。
+就我的理解是這套流程是打包成 **deb-src** ，
+也就是一個包裡面有 tarball 和可以自動編譯的腳本；
+然後可以再在 deb-src 的基礎上自動建構出 deb，
+也就是不含原始碼只含執行檔的包。
+
+雖然常說編譯就是 `make && make install` ，
+但還是有多眉角，要完全自動化就多少會撞一點牆。
+大部份是依賴 debian 一些自動化工具，
+像引入魔改的 makefile header 再引用原始的，
+就能辦到很多神奇的事。
+一般流程就是直接自動 build 一次，看哪裡出錯就調，
+再 re-build 再改到成功為止。
+
+全自動好處是，下次有新版本發布時，
+腳本可以繼續用，只要更新 tarball 就可以了。
+而且從 deb-src 建構 deb 也是全自動的。
+但流程較複雜，我試了好幾次都失敗。
+另外就是很多教學都是教 *更新現有包的 tarball*
+或是 *打包 tarball* ；
+但我想打包的專案 [scrcpy] 是用 git，
+而且用的 build system 是 meson。
+
+[scrcpy]: https://github.com/Genymobile/scrcpy
+
+## debian binary
+隔一天又繼續試，無意間換了關鍵字，
+結果就出了 [超好懂的文章][create debian package] ，
+才發現昨天看得都是打包原始碼，
+如果只打包編譯結果的執行檔就超簡單的。
+只要把要包的檔案按目錄結構放好，
+然後寫一下套件的資訊就好了，
+如果要指定此套件依賴其它套件也可以。
+
+[create debian package]: http://www.king-foo.com/2011/11/creating-debianubuntu-deb-packages/
+
+
+#linux
+#debian
+#安裝

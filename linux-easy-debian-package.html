@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2019-01-02T15:47:06.679Z">
+<meta name="keywords" property="og:article:tag" content="linux,debian,安裝">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="linux-try-and-error-build.html" title="試誤編譯法">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>debian 簡易套件打包</title>
+</head>
+<body>
+<main><h1 id="debian 簡易套件打包">debian 簡易套件打包</h1>
+<p>在 debian 中簡單打包二進位安裝包的作法，
+就是用 checkinstall 或 <code>dpkg --build</code> ；
+讀 debian 文件讀半天，繞了一圈才回來找到這個最簡單的做法。
+以前都只能當伸手牌，現在可以編譯完作善事，
+把編譯結果上傳給其它使用者安裝了。
+<a href="https://drive.google.com/drive/folders/1ypXybmO6mGB_xjjcZnkNdDNDnH0Vtxcc?usp=sharing">我編譯的一些軟體包放在 google drive 上。</a></p>
+<h2 id="debian source">debian source</h2>
+<p>一開始我從 debian wiki 開始找，
+讀了幾篇都是從 tarball 打包的，
+而且多是半自動從原始碼編譯到執行檔再打包。
+就我的理解是這套流程是打包成 <strong>deb-src</strong> ，
+也就是一個包裡面有 tarball 和可以自動編譯的腳本；
+然後可以再在 deb-src 的基礎上自動建構出 deb，
+也就是不含原始碼只含執行檔的包。</p>
+<p>雖然常說編譯就是 <code>make &amp;&amp; make install</code> ，
+但還是有多眉角，要完全自動化就多少會撞一點牆。
+大部份是依賴 debian 一些自動化工具，
+像引入魔改的 makefile header 再引用原始的，
+就能辦到很多神奇的事。
+一般流程就是直接自動 build 一次，看哪裡出錯就調，
+再 re-build 再改到成功為止。</p>
+<p>全自動好處是，下次有新版本發布時，
+腳本可以繼續用，只要更新 tarball 就可以了。
+而且從 deb-src 建構 deb 也是全自動的。
+但流程較複雜，我試了好幾次都失敗。
+另外就是很多教學都是教 <em>更新現有包的 tarball</em>
+或是 <em>打包 tarball</em> ；
+但我想打包的專案 <a href="https://github.com/Genymobile/scrcpy">scrcpy</a> 是用 git，
+而且用的 build system 是 meson。</p>
+<h2 id="debian binary">debian binary</h2>
+<p>隔一天又繼續試，無意間換了關鍵字，
+結果就出了 <a href="http://www.king-foo.com/2011/11/creating-debianubuntu-deb-packages/">超好懂的文章</a> ，
+才發現昨天看得都是打包原始碼，
+如果只打包編譯結果的執行檔就超簡單的。
+只要把要包的檔案按目錄結構放好，
+然後寫一下套件的資訊就好了，
+如果要指定此套件依賴其它套件也可以。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

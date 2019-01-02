@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2018-12-31T07:20:29.543Z</updated>
+  <updated>2019-01-02T15:49:23.470Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,60 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/linux-easy-debian-package.html</id>
+<title>debian 簡易套件打包</title>
+<published>2019-01-02T15:47:06.679Z</published>
+<updated>2019-01-02T15:49:23.460Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/linux-easy-debian-package.html"/>
+<summary type="html">在 debian 中簡單打包二進位安裝包的作法，
+就是用 checkinstall 或 &lt;code&gt;dpkg --build&lt;/code&gt; ；
+讀 debian 文件讀半天，繞了一圈才回來找到這個最簡單的做法。
+以前都只能當伸手牌，現在可以編譯完作善事，
+把編譯結果上傳給其它使用者安裝了。
+&lt;a href=&quot;https://drive.google.com/drive/folders/1ypXybmO6mGB_xjjcZnkNdDNDnH0Vtxcc?usp=sharing&quot;&gt;我編譯的一些軟體包放在 google drive 上。&lt;/a&gt;</summary>
+<category term="linux"/>
+<category term="debian"/>
+<category term="安裝"/>
+<content type="html">&lt;h1 id=&quot;debian 簡易套件打包&quot;&gt;debian 簡易套件打包&lt;/h1&gt;
+&lt;p&gt;在 debian 中簡單打包二進位安裝包的作法，
+就是用 checkinstall 或 &lt;code&gt;dpkg --build&lt;/code&gt; ；
+讀 debian 文件讀半天，繞了一圈才回來找到這個最簡單的做法。
+以前都只能當伸手牌，現在可以編譯完作善事，
+把編譯結果上傳給其它使用者安裝了。
+&lt;a href=&quot;https://drive.google.com/drive/folders/1ypXybmO6mGB_xjjcZnkNdDNDnH0Vtxcc?usp=sharing&quot;&gt;我編譯的一些軟體包放在 google drive 上。&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;debian source&quot;&gt;debian source&lt;/h2&gt;
+&lt;p&gt;一開始我從 debian wiki 開始找，
+讀了幾篇都是從 tarball 打包的，
+而且多是半自動從原始碼編譯到執行檔再打包。
+就我的理解是這套流程是打包成 &lt;strong&gt;deb-src&lt;/strong&gt; ，
+也就是一個包裡面有 tarball 和可以自動編譯的腳本；
+然後可以再在 deb-src 的基礎上自動建構出 deb，
+也就是不含原始碼只含執行檔的包。&lt;/p&gt;
+&lt;p&gt;雖然常說編譯就是 &lt;code&gt;make &amp;amp;&amp;amp; make install&lt;/code&gt; ，
+但還是有多眉角，要完全自動化就多少會撞一點牆。
+大部份是依賴 debian 一些自動化工具，
+像引入魔改的 makefile header 再引用原始的，
+就能辦到很多神奇的事。
+一般流程就是直接自動 build 一次，看哪裡出錯就調，
+再 re-build 再改到成功為止。&lt;/p&gt;
+&lt;p&gt;全自動好處是，下次有新版本發布時，
+腳本可以繼續用，只要更新 tarball 就可以了。
+而且從 deb-src 建構 deb 也是全自動的。
+但流程較複雜，我試了好幾次都失敗。
+另外就是很多教學都是教 &lt;em&gt;更新現有包的 tarball&lt;/em&gt;
+或是 &lt;em&gt;打包 tarball&lt;/em&gt; ；
+但我想打包的專案 &lt;a href=&quot;https://github.com/Genymobile/scrcpy&quot;&gt;scrcpy&lt;/a&gt; 是用 git，
+而且用的 build system 是 meson。&lt;/p&gt;
+&lt;h2 id=&quot;debian binary&quot;&gt;debian binary&lt;/h2&gt;
+&lt;p&gt;隔一天又繼續試，無意間換了關鍵字，
+結果就出了 &lt;a href=&quot;http://www.king-foo.com/2011/11/creating-debianubuntu-deb-packages/&quot;&gt;超好懂的文章&lt;/a&gt; ，
+才發現昨天看得都是打包原始碼，
+如果只打包編譯結果的執行檔就超簡單的。
+只要把要包的檔案按目錄結構放好，
+然後寫一下套件的資訊就好了，
+如果要指定此套件依賴其它套件也可以。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/adjustment-homework-8.html#finish-condition-and-float-error</id>
 <title>平差作業八</title>
 <published>2018-12-23T08:46:43.198Z</published>
@@ -1343,31 +1397,7 @@ email 帳號密碼也就是成功入口的帳號密碼。
 而且該 x window 要一直開著不能關掉。</summary>
 <category term="linux"/>
 <category term="x-window"/>
-<content type="html">&lt;h1 id=&quot;x11vnc 圖形介面啟動&quot;&gt;x11vnc 圖形介面啟動&lt;/h1&gt;
-&lt;p&gt;x11vnc 是一個在 x window 既有架構下，
-提供 vnc 連接的程式。
-除了命令列介面，也有簡單的圖形介面可以用。
-缺點是一般是用來分享已登入的 x window，
-要已經有登入的 x window，
-而且該 x window 要一直開著不能關掉。&lt;/p&gt;
-&lt;p&gt;我一開始在找遠程登入時，
-發現我系統裡不知道為什麼有 x11vnc 這個指令，
-研究了一下，就會用密碼登入了。
-可以用 &lt;code&gt;x11vnc -usepw&lt;/code&gt; 就能把密碼存在 &lt;code&gt;~/.vnc/passwd&lt;/code&gt; 。&lt;/p&gt;
-&lt;p&gt;後來發現他有一個 launcher，
-啟動會帶有圖形介面，能手動設定密碼和其它雜七雜八選項。
-執行前會要你設定 port 和要不要 ssl，
-然後才正式執行，並會常駐 icon 在通知欄。&lt;/p&gt;
-&lt;p&gt;之後會跳一個設定介面，預設是沒有密碼，也不允許登入，
-要勾選允許登入，才能登入。
-可以不設密碼，但就比較危險。
-但有另一個選項能手動允許登入，
-就會變成有人嘗試登入時，
-會跳出視窗要你允許或拒絕；
-就能不設密碼，一律手動審核。&lt;/p&gt;
-&lt;p&gt;也有選項可以讓登入者只能觀看不能操作，
-就單純分享畫面用。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/android-atom-tip.html#ringtone-customize-and-alternate-app</id>
 <title>atom 使用技巧</title>

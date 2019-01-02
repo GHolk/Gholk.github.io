@@ -259,3 +259,4 @@ javascript-for-let-loop-change.html
 window-system-full-screen-tab-think.html
 adjustment-homework-8.html
 linux-try-and-error-build.html
+linux-easy-debian-package.html

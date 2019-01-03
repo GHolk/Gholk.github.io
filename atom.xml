@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-01-03T13:16:00.281Z</updated>
+  <updated>2019-01-03T15:39:42.739Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,99 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/geomatics-seminar-sar-usage.html#sar-optical-geometry</id>
+<title>SAR 雷達影像</title>
+<published>2019-01-02T16:12:59.999Z</published>
+<updated>2019-01-03T15:39:42.725Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/geomatics-seminar-sar-usage.html#sar-optical-geometry"/>
+<summary type="html">
+sar 影像幾何原理與偏振作為特徵</summary>
+<category term="nctu"/>
+<category term="report"/>
+<category term="geomatics"/>
+<content type="html">&lt;h1 id=&quot;SAR 雷達影像&quot;&gt;SAR 雷達影像&lt;/h1&gt;
+&lt;p&gt;&lt;abbr title=&quot;Synthetic Aperture Radar&quot;&gt;SAR&lt;/abbr&gt;
+合成孔徑雷達影像近年逐漸受到關注，
+因雷達影像不受雲層、日夜影響，可以全天候觀測。
+常見的 SAR 影像分析方法有干涉分析、強度分析、時序分析，
+在防災、救援方面有巨大的貢獻。&lt;/p&gt;
+&lt;h2 id=&quot;引言&quot;&gt;引言&lt;/h2&gt;
+&lt;p&gt;交通大學土木系，在 2018-12-18 邀請到中研院的林玉儂院士，
+分享 sar 合成孔徑雷達影像在遙測上的應用。
+sar 影像近年越發受重視，因為能不受天候觀測，
+同時 sar 影像的特性也與傳統光學影像不同，
+需要特殊的分析方法，是可以期待的發展方向。&lt;/p&gt;
+&lt;h2 id=&quot;雷達影像相比可見光的優勢&quot;&gt;雷達影像相比可見光的優勢&lt;/h2&gt;
+&lt;p&gt;雷達主動發射電磁波後觀測反射訊號的技術，
+使用的波長主要在數公厘到數十公尺等級。
+由於波長較長，不會像可見光完全被雲層遮蔽，
+因此可以不論天候觀測。
+更由於雷達屬主動觀測，不像可見光光源為太陽，
+只能在白天觀測，更可以不受限制。&lt;/p&gt;
+&lt;p&gt;相比可見光，先是受日夜限制，晚上無法觀測，
+就去掉一半的時間是無法運作的。
+再加上人類活動地區，多數是有降雨分布的，
+也就有更多的雲層遮蔽，可見光影像常因此無用武之地。&lt;/p&gt;
+&lt;p&gt;以東亞地區來說，防災是雷達影像的主要應用，
+在地震、颱風、海嘯過後，要能快速掌握受災區域情況，
+最快就是用衛星影像製圖。
+但颱風或洪水時，災區常都是雲雨天，
+可見光根本看不到東西；也就造成關鍵時刻無圖可用的窘境。
+而雷達影像正好可以解決此一問題，
+也就成為災後製圖的首選。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46552080601&quot;&gt;&lt;img src=&quot;http://farm5.staticflickr.com/4898/46552080601_cd0696c080.jpg&quot; alt=&quot;earth with cloud and night&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;合成孔徑雷達&quot;&gt;合成孔徑雷達&lt;/h2&gt;
+&lt;p&gt;傳統雷達使用實體天線發出雷達波，稱為 &lt;strong&gt;實孔徑雷達&lt;/strong&gt; 。
+雷達波的解析度也就是雷達波束的寬度，
+若要發出極窄的雷達波，必須有極長的天線。
+但以飛機或衛星而言，配備巨大的天線是不可能的。&lt;/p&gt;
+&lt;p&gt;合成孔徑雷達則突破了這層限制，
+合成孔徑雷達是在飛機前進時，連續發出多次雷達波，
+再將在航線上成一直線的各點雷達波回波記錄合成，
+就能摸擬出一個長天線的結果。&lt;/p&gt;
+&lt;h2 id=&quot;雷達影像特性&quot;&gt;雷達影像特性&lt;/h2&gt;
+&lt;p&gt;雷達影像採用傾斜觀測，
+和一般光學影像是中心投影成像不同。
+因為雷達的波長較長，解析度較低，
+需要介由傾斜觀測不同時間的回波分辨不同距離的地物。
+也因此雷達影像會有與中心投影中
+高差位移方向相反的 &lt;em&gt;forward shortening&lt;/em&gt; 現象。&lt;/p&gt;
+&lt;p&gt;而在地型上，也會因為坡向朝向波源，
+倒致回波訊號較強，或是背向波源倒致回波較弱。
+在背向波源坡度過大時，也會出現陰影。&lt;/p&gt;
+&lt;h2 id=&quot;強度分析&quot;&gt;強度分析&lt;/h2&gt;
+&lt;p&gt;強度分析是直接用回波強度值成像，
+和一般可見光影像展示的方式相同。
+雷達影像可以只用強度成像成類似灰階影像的結果。
+雷達回波強度方便的用途是用來分析水體，
+因為無論是水面或單純潮濕的地面，
+對雷達波的回波強度都較乾燥區域低。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://earth.esa.int/web/guest/missions/esa-operational-eo-missions/ers/instruments/sar/applications/radar-courses/content-2/-/asset_publisher/qIBc6NYRXfnG/content/radar-course-2-parameters-affecting-radar-backscatter&quot; title=&quot;earth esa radar&quot;&gt;另一主要用途是分析地型粗糙度。&lt;/a&gt;
+一般來說，越粗糙的地型回波越強。
+上例的水體則是極為平滑的面，所以回波較弱。
+而粗糙度如果應用在海面上的話，
+&lt;a href=&quot;https://scitechvista.nat.gov.tw/c/sWZj.htm&quot; title=&quot;科技大觀園 從太空看海洋&quot;&gt;則是在風速越強處，海浪會越破碎，&lt;/a&gt;
+因此可以做為海上天氣預報的參考。&lt;/p&gt;
+&lt;h3 id=&quot;偏振方向&quot;&gt;偏振方向&lt;/h3&gt;
+&lt;p&gt;或者雷達波也可以依雷磁波的偏振分為水平偏振與垂直偏振，
+分別可以組合四種不同的回波強度：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;發出水平接受回波中的水平偏振強度&lt;/li&gt;
+&lt;li&gt;發出水平接受回波中的垂直偏振強度&lt;/li&gt;
+&lt;li&gt;發出垂直接受回波中的垂直偏振強度&lt;/li&gt;
+&lt;li&gt;發出垂直接受回波中的水平偏振強度&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;偏振在某種程度上可以達到類似可見光中不同波段的效果；
+不同的地物對不同偏振的雷達波，
+會有不同的反射， 可以以此判別不同地物。
+雖然一般衛星只會發出一種方向的偏振，
+然後接受水平與垂直，所以只會有四種中的二種。&lt;/p&gt;
+&lt;p&gt;這類雷達影像分析就類似一般可見光影像或多頻段的影像，
+可以跑監督式分類或非監督式分類。
+只是在成像上會有雷達影像的特徵，
+幾何和一般中心投影、正射投影不同。。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/lisp-lexical-scheme.html#function-name-space-separate-for-function-internal</id>
 <title>lisp、閉包與 scheme</title>
 <published>2017-12-05T07:41:24.643Z</published>
@@ -1144,185 +1237,7 @@ To all the Linux that bring us to kernel.&lt;/p&gt;
 <category term="javascript"/>
 <category term="linux"/>
 <category term="gui"/>
-<content type="html">&lt;h1 id=&quot;從 youtube 縮小視窗播放影片思考視窗系統&quot;&gt;從 youtube 縮小視窗播放影片思考視窗系統&lt;/h1&gt;
-&lt;p&gt;我認為 youtube 甚至其它程式的 &lt;strong&gt;全螢幕&lt;/strong&gt; 功能，
-應該要改成全視窗，視窗內的程式不應該超出視窗範圍，
-全螢幕應該要在整個視窗系統的層級操作，
-讓一個視窗全螢幕，而不是視窗的部份。
-另外就是像瀏覽器中的分頁系統的成功其實很詭異，
-分頁就是一種閹割的功能不完全的視窗，
-但卻比視窗系統好用，這代表現今的視窗系統都設計得太爛嗎？&lt;/p&gt;
-&lt;h2 id=&quot;youtube 緣起&quot;&gt;youtube 緣起&lt;/h2&gt;
-&lt;p&gt;有時我會想一邊看影片一邊做事，
-影片來源多是 youtube 網頁，
-我會把 youtube 網頁獨立開成一個視窗，
-調整到大概 1/4 的大小，放在右上或其它角落。
-然後把該視窗的階層調成置頂，就算焦點移到其它視窗，
-還是會維持在置頂最上層的位置。&lt;/p&gt;
-&lt;p&gt;在做事的視窗，像原本開了一堆分頁的瀏覽器、終端機、emacs，
-雖然部份會被那 1/4 的 youtube 擋住，
-但多半還可以勉強使用，大不了也縮小。
-像現代的網站文章主體多半只佔中間一部份，
-左右都是不重要的測邊欄；
-終端機也是，最右邊一大堆空間不一定用得到，
-只要最左邊的游標、提示符還看得到就好。&lt;/p&gt;
-&lt;h2 id=&quot;youtube 的版面&quot;&gt;youtube 的版面&lt;/h2&gt;
-&lt;p&gt;但有個問題：youtube 網站裡除了影片，
-還有頂部的搜尋欄，1/4 的視窗已經很小，
-還要被佔去大片位置，實在是很不爽。
-所以後來用 &lt;strong&gt;custom style script&lt;/strong&gt; 寫了個腳本，
-讓頂部搜尋欄不再會 fix 在視窗頂部，
-只要往下滑就會消失了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-css&quot;&gt;#masthead-container {
-  position: absolute !important;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;另外雖然 youtube 有側邊欄，但適應性設計做得不錯，
-在我把視窗縮小到一定程度，
-側邊欄就會自動變成排在影片下面，影片就會變全視窗寬。
-所以不用特別改其它部份的 css。&lt;/p&gt;
-&lt;p&gt;我是希望 youtube 能有一個按鈕是 &lt;strong&gt;全視窗&lt;/strong&gt; ，
-按下去就會讓影片佔滿整個視窗，
-以網頁來說，就是佔滿整個網頁版面，
-而不是現在的佔滿整個螢幕。
-但好像不應該佔到上方的分頁欄、工具欄，
-而是分頁欄要有地方讓使用者關掉。&lt;/p&gt;
-&lt;p&gt;但其實 youtube 有個內嵌用的網頁：
-&lt;a href=&quot;https://youtube.com/embed/UtF6Jej8yb4&quot;&gt;https://youtube.com/embed/UtF6Jej8yb4&lt;/a&gt;
-把最後的那串影片 id 換成你要放的影片，
-該網頁就直接是全螢幕影片了，
-只是要換網址有點麻煩。&lt;/p&gt;
-&lt;p&gt;而其它影片網站，像巴哈的動畫瘋，或 bili bili，也各有不同。
-巴哈的我好像寫了不少 css 才讓影片佔滿版面；
-bili bili 就有我上面說的全視窗按鈕，
-按了就會像 youtube 的內嵌播放器一樣，
-整個版面都是影片。&lt;/p&gt;
-&lt;h2 id=&quot;視窗頂部工具列佔的空間&quot;&gt;視窗頂部工具列佔的空間&lt;/h2&gt;
-&lt;p&gt;另一個問題是，我發現分頁列佔太多空間了。
-我用瀏覽器時，習慣把工具列、書籤列都收掉，
-只留最基本的網址列和分頁列。
-如果要找書籤再用 ctrl-b 叫出來，
-但其實更常直接在網址列裡打關鍵字，
-直接在歷史記錄和書籤裡搜，真搜不到就用 google 搜，
-書籤列裡已經太多東西了。&lt;/p&gt;
-&lt;p&gt;視窗縮到 1/4 已經很小，所以我才要縮掉 youtube 頂部的搜尋欄，
-但還有更佔空間的縮不掉的網址列和分頁列。
-就算該視窗用來開 youtube，也只開一個分頁，
-還是會顯示那沒用的分頁列和網址列。
-其它工具列都關得掉，但這二個是日常使用瀏覽器時 &lt;em&gt;必要&lt;/em&gt; 的，
-所以不能預設關掉，也沒辦法簡單的關掉。&lt;/p&gt;
-&lt;h2 id=&quot;消去分頁列與網址列&quot;&gt;消去分頁列與網址列&lt;/h2&gt;
-&lt;p&gt;後來發現其實有辦法關掉，只是也很麻煩。
-一是用 javascript 的 &lt;code&gt;window.open()&lt;/code&gt; ，
-&lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/API/Window/open#Window_features&quot;&gt;第三個參數可以控制開啟視窗的功能&lt;/a&gt; ，
-可以控制不要有哪些功能，
-所以可以開啟一個沒有分頁列也沒有網址列的視窗。&lt;/p&gt;
-&lt;p&gt;只是因為網頁如果沒有這二列，會容易使使用者不知所措，
-（不知道怎麼回上一頁，看不到網址不能確定是不是詐騙網站。）
-所以要另外到 about:config 去調，允許開啟沒有網址列、分頁列的網頁。
-以 firefox 來說是 &lt;code&gt;dom.disable_window_open_feature.location&lt;/code&gt; 要設成 false。
-而分頁列好像是屬於工具列 &lt;code&gt;toolbar&lt;/code&gt; 的一部份，
-本來就能關掉。（只是關掉了還是可以有分頁，
-但沒有分頁列可以點，就只能用 ctrl-tab 切換。）&lt;/p&gt;
-&lt;p&gt;而 chromium 的 location bar 我就不知道怎麼關了，
-只有分頁列關得掉。但有找到另一個 &lt;code&gt;--app&lt;/code&gt; 選項，
-可以用來開啟一個沒有分頁、網址、什麼都沒有的乾淨瀏覽器。
-一般是給 chrome app 用的，創造類似原生 app 的體驗，
-像是 &lt;code&gt;chromium --app=&amp;quot;https://term.ptt.cc&amp;quot;&lt;/code&gt; 。&lt;/p&gt;
-&lt;h2 id=&quot;分頁與視窗&quot;&gt;分頁與視窗&lt;/h2&gt;
-&lt;p&gt;最後，經歷了那麼多，我發現瀏覽器分頁系統的出現是很神奇的一件事。
-因為上述 youtube 獨立視窗的使用經驗，
-讓我了解到視窗系統其實某種程度上是不可取代的，
-不可能永遠活在單一視窗的分頁裡。&lt;/p&gt;
-&lt;p&gt;我以前還曾經找過有沒有辦法在瀏覽器裡分割視窗，
-把一個分頁割成左右，分別顯示不同網站之類的。
-有找到一個用頁框，有點像早期 html 的 frameset 的外掛程式，
-但後來 firefox 改版到 web extension 框架，
-沒有 api 了；那個外掛作者改寫成分割成不同視窗，
-一開始用我覺得很難用就沒繼續試了。&lt;/p&gt;
-&lt;p&gt;後來我才驚覺視窗的彈性比分頁大很多，從整體來看，
-分頁就像在瀏覽器裡又實作了一個視窗系統，
-而且這個系統功能很少，一次只能顯示一個視窗，
-一定會佔滿整個瀏覽器。
-而且分頁還不能和視窗系統裡的視窗一樣平等，
-而是被關在瀏覽器視窗裡，要獨立出來還得另外從分頁列拉。&lt;/p&gt;
-&lt;h3 id=&quot;ptt 瀏覽器板的舊文&quot;&gt;ptt 瀏覽器板的舊文&lt;/h3&gt;
-&lt;p&gt;總之，分頁系統相當於一個閹割版的小型視窗系統。
-之前 &lt;a href=&quot;ptt/M.1526967650.A.775.html&quot;&gt;在 ptt 瀏覽器版寫了一篇文章&lt;/a&gt; ，
-探討過這個問題，全文如下：&lt;/p&gt;
-&lt;p&gt;&amp;gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;想討論個問題，
-為什麼主流瀏覽器都使用分頁而非視窗？&lt;/p&gt;
-&lt;p&gt;從功能面來看，瀏覽器的分頁 (tab) ，
-就是個退化了的視窗 (window) 。
-只能顯示並佔滿整個母視窗，
-不能讓二兩個視窗並列，
-也不能把其一縮到右下角 1/4 同時看二個。&lt;/p&gt;
-&lt;p&gt;而整個視窗系統，也可以看成增強版的分頁，
-只是分頁列是顯示在下面，
-（對主流視窗系統來說。）
-而且上面沒有 x 可以直接關掉。&lt;/p&gt;
-&lt;p&gt;從接觸 firefox 後，我一直覺得分頁比較好用。
-唯一例外情況是看 youtube，
-會把 youtube 開到另一個獨立視窗，
-然後縮到右下角 1/4，讓他顯示在最上層，
-（這是 linux 一些視窗系統的功能，
-可以讓某個視窗保持在最上層不會被其它視窗蓋住。）
-就能邊看其它網頁邊看影片。&lt;/p&gt;
-&lt;p&gt;然後也漸漸發現視窗的好用，
-可以任意移動、調整長寬，
-最後就發現分頁和視窗的問題。&lt;/p&gt;
-&lt;p&gt;甚至這個問題可以擴展到一些有分頁系統的軟體，
-像一些編輯器可以用分頁開多個檔案，
-也比開多個編輯器好用。
-所以為什麼分頁比視窗好用？
-求 UI/UX 大師解惑。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&quot;分頁的原因&quot;&gt;分頁的原因&lt;/h3&gt;
-&lt;p&gt;原文的下面也有些推文討論，就不一一列舉了。
-我的結論是：
-因為瀏覽器使用者會開啟大量的網頁，
-但無論是 windows linux 主流的視窗系統，
-都沒有處理這種大量視窗的問題，
-所以瀏覽器就自幹了一個適用於瀏覽器的分頁系統。&lt;/p&gt;
-&lt;p&gt;許多軟體中也都存在這種自幹分頁的情況，
-但情況和瀏覽器不一定相同。
-比較類似的是一些 xterm 有分頁，
-但我通常不用 xterm 的分頁，而是直接用 tmux。&lt;/p&gt;
-&lt;p&gt;另外就是 matlab 和一些 IDE 會有分頁，
-各檔案甚至執行畫面會有各自的分頁，有時也能獨立成視窗。
-還有 gimp cinelerra 之類的大型軟體也是，
-其中 gimp 可以合在一起，也能分成不同視窗。&lt;/p&gt;
-&lt;p&gt;而 vi emacs 之類的編輯器，和命令列程式，
-則是在還沒有視窗系統 x-window 的時代出現，
-一個使用者只有一台終端機，那個時代也沒有 screen tmux，
-要編輯多個檔案 ctrl-z 跳出來再開一個編輯器太麻煩，
-而且這樣會有二個 process，所以很多編輯器都自幹了分頁系統。&lt;/p&gt;
-&lt;p&gt;而且編輯器和 ide 可能會有跨檔案交流的情況，
-所以自幹分頁系統在同一視窗下，
-是比較好掌控不同檔案關係的作法。&lt;/p&gt;
-&lt;h2 id=&quot;理想的視窗系統&quot;&gt;理想的視窗系統&lt;/h2&gt;
-&lt;p&gt;總之，無論是現代常見的 &lt;strong&gt;全螢幕&lt;/strong&gt; 而非 &lt;strong&gt;全視窗&lt;/strong&gt; ，
-或是分頁與視窗不統一，
-都應該歸咎於現有的視窗系統設計不夠完美。&lt;/p&gt;
-&lt;p&gt;如果要讓視窗系統整合分頁的問題，
-應該要有一個類似視窗群組的功能，
-能把數個視窗分成一群，可以同時顯示或快速切換。
-做得夠好就能將分頁整合成視窗。&lt;/p&gt;
-&lt;p&gt;另外就是要有 &lt;em&gt;讓一個視窗全螢幕&lt;/em&gt; 的能力，
-或者說，能收縮側欄、底欄、頂欄，
-能讓使用者 &lt;em&gt;掌控整個螢幕&lt;/em&gt; 的能力。
-而各視窗內的程式，只要管好自己視窗內部，
-適時佔滿 &lt;em&gt;全視窗&lt;/em&gt; 即可。&lt;/p&gt;
-&lt;p&gt;如果還要加上方便性，要對多視窗有善，
-像 xfce 與 windows 都有將視窗拖曳到邊界後，
-自動收窄成 1/2 或 1/4 的大小；
-甚至是像 i3 那樣的 tiling window manager，
-自動把視窗平鋪在畫面上，而不是像一般那樣重疊，
-以 i3 來講已經不需要 tmux 了，
-直接開啟多個終端機要比一個來得方便。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/expose-internal-state.html#object-inherit-better-closure</id>
 <title>儲存與暴露程式的內部狀態</title>

@@ -21,7 +21,7 @@
 
 <script src="ext/meta-bloging.js"></script>
 
-<title> lisp、閉包與 scheme</title>
+<title>lisp、閉包與 scheme</title>
 </head>
 <body>
 <main><h1 id="lisp、閉包與 scheme">lisp、閉包與 scheme</h1>
@@ -45,6 +45,24 @@ lexical 則是要在每一函數宣告時，
 <p>這似乎是友善或優雅的對立。
 dynamic 的實現較簡單直覺優雅，但使用上為人詬病；
 lexical 的使用直覺，但實作上有難處。</p>
+<h2 id="函數命名空間與函數的內涵">函數命名空間與函數的內涵</h2>
+<p>lisp 還有另一個我不喜歡的地方，
+把函數和變數的命名空間分開放，
+lisp 之根源也是這樣做的。
+後來發現他這樣做是 <em>對函數的保護</em> 。</p>
+<p>因為如果照上所述，單純用列表達函數，
+又把函數和變數放在同一命名空間，
+那當使用者就會看到函數只是單純的列表，
+而且無法分別函數與列表。
+（或者是就單純把用 <code>&apos;lambda</code> 開頭的列表都當作函數。）
+但如果把這二者命名空間分開，
+使用者就根本接觸不到函數了。
+（要不要提供 function-quote <code>#&apos;</code> 又是另一回事了；
+雖然用 lambda 宣告暱名函數時還是看得到。）</p>
+<p>至於要不要讓使用者看得到函數，
+有些人不喜歡程式暴露內部狀態；
+但我是認為應該要暴露的，
+使用者應該要能知道程式在做什麼，以及知道自己想幹什麼。</p>
 </main>
 
 <script defer src="ext/meta-meta.js"></script>

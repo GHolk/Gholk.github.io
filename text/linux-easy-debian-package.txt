@@ -47,6 +47,46 @@
 
 [create debian package]: http://www.king-foo.com/2011/11/creating-debianubuntu-deb-packages/
 
+## check install
+另外一個很方便的程式是 checkinstall，
+可以把 make install 過程中做過的事，
+打包成一個 deb 包。
+內部怎麼實作我不太清楚，
+大概就是在會監視 make install 的指令中，
+把哪些檔案複製到系統內，然後做出一個一樣的 deb 包。
+之後要移除時，可以直接移除該個包，就回到乾淨的系統。
+因為一些軟體發行時，makefile 裡沒有提供 uninstall 的目標可以用，
+要移除比較麻煩，所以就生出了 checkinstall 這個軟體。
+
+而且 checkinstall 不只支援 makefile，
+任意的安裝程式都可以；只是你要把指令傳進去。
+像 meson 就是 `checkinstall meson install` ，
+而 sudo 加在 checkinstall 或 meson 上都可以。
+如果你只傳安裝命令，checkinstall 會自動檢查系統種類，
+然後可以互動更改，看要做成 rpm deb 還是 slackware 的包。
+
+## 自己包的軟體
+總之自己用 checkinstall 包了幾個以前編譯的軟體，
+[丟到 google 雲端放][debian package] ，如果有需要就拿吧。
+建議裝 deb 的裝法是 `sudo apt install ./*.deb` 之類，
+不要用 `dpkg -i ./*.deb` 裝，
+用 apt 裝會幫你處理相依性問題，
+如果 deb 包裡有相依其它包會一併幫你裝好。
+
+### scrcpy
+一個在電腦上顯示、操作 android 手機的軟體，
+透過 adb 無需 root。
+
+### libccid
+在 linux 上如果要用晶片讀卡機，
+[就之前的經驗][compile libccid] ，如果是支援 ccid 規格，
+debian 的套件庫太舊，要自己 compile libccid。
+
+[compile libccid]: linux-iccard-ccid-compile.html
+
+### cconv
+簡單的繁簡轉換程式，用 iconv 實現的。
+apt 的版本有 bug，如果輸入帶換行會自己退出。
 
 #linux
 #debian

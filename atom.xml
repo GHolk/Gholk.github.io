@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-01-02T16:13:25.446Z</updated>
+  <updated>2019-01-03T09:07:03.617Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,89 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/linux-easy-debian-package.html#checkinstall-usage-and-package-archieve</id>
+<title>debian 簡易套件打包</title>
+<published>2019-01-02T15:47:06.679Z</published>
+<updated>2019-01-03T09:07:03.607Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/linux-easy-debian-package.html#checkinstall-usage-and-package-archieve"/>
+<summary type="html">
+checkinstall 的用法和自己放 debian package 的雲端。</summary>
+<category term="linux"/>
+<category term="debian"/>
+<category term="安裝"/>
+<content type="html">&lt;h1 id=&quot;debian 簡易套件打包&quot;&gt;debian 簡易套件打包&lt;/h1&gt;
+&lt;p&gt;在 debian 中簡單打包二進位安裝包的作法，
+就是用 checkinstall 或 &lt;code&gt;dpkg --build&lt;/code&gt; ；
+讀 debian 文件讀半天，繞了一圈才回來找到這個最簡單的做法。
+以前都只能當伸手牌，現在可以編譯完作善事，
+把編譯結果上傳給其它使用者安裝了。
+&lt;a href=&quot;https://drive.google.com/drive/folders/1ypXybmO6mGB_xjjcZnkNdDNDnH0Vtxcc?usp=sharing&quot;&gt;我編譯的一些軟體包放在 google drive 上。&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;debian source&quot;&gt;debian source&lt;/h2&gt;
+&lt;p&gt;一開始我從 debian wiki 開始找，
+讀了幾篇都是從 tarball 打包的，
+而且多是半自動從原始碼編譯到執行檔再打包。
+就我的理解是這套流程是打包成 &lt;strong&gt;deb-src&lt;/strong&gt; ，
+也就是一個包裡面有 tarball 和可以自動編譯的腳本；
+然後可以再在 deb-src 的基礎上自動建構出 deb，
+也就是不含原始碼只含執行檔的包。&lt;/p&gt;
+&lt;p&gt;雖然常說編譯就是 &lt;code&gt;make &amp;amp;&amp;amp; make install&lt;/code&gt; ，
+但還是有多眉角，要完全自動化就多少會撞一點牆。
+大部份是依賴 debian 一些自動化工具，
+像引入魔改的 makefile header 再引用原始的，
+就能辦到很多神奇的事。
+一般流程就是直接自動 build 一次，看哪裡出錯就調，
+再 re-build 再改到成功為止。&lt;/p&gt;
+&lt;p&gt;全自動好處是，下次有新版本發布時，
+腳本可以繼續用，只要更新 tarball 就可以了。
+而且從 deb-src 建構 deb 也是全自動的。
+但流程較複雜，我試了好幾次都失敗。
+另外就是很多教學都是教 &lt;em&gt;更新現有包的 tarball&lt;/em&gt;
+或是 &lt;em&gt;打包 tarball&lt;/em&gt; ；
+但我想打包的專案 &lt;a href=&quot;https://github.com/Genymobile/scrcpy&quot;&gt;scrcpy&lt;/a&gt; 是用 git，
+而且用的 build system 是 meson。&lt;/p&gt;
+&lt;h2 id=&quot;debian binary&quot;&gt;debian binary&lt;/h2&gt;
+&lt;p&gt;隔一天又繼續試，無意間換了關鍵字，
+結果就出了 &lt;a href=&quot;http://www.king-foo.com/2011/11/creating-debianubuntu-deb-packages/&quot;&gt;超好懂的文章&lt;/a&gt; ，
+才發現昨天看得都是打包原始碼，
+如果只打包編譯結果的執行檔就超簡單的。
+只要把要包的檔案按目錄結構放好，
+然後寫一下套件的資訊就好了，
+如果要指定此套件依賴其它套件也可以。&lt;/p&gt;
+&lt;h2 id=&quot;check install&quot;&gt;check install&lt;/h2&gt;
+&lt;p&gt;另外一個很方便的程式是 checkinstall，
+可以把 make install 過程中做過的事，
+打包成一個 deb 包。
+內部怎麼實作我不太清楚，
+大概就是在會監視 make install 的指令中，
+把哪些檔案複製到系統內，然後做出一個一樣的 deb 包。
+之後要移除時，可以直接移除該個包，就回到乾淨的系統。
+因為一些軟體發行時，makefile 裡沒有提供 uninstall 的目標可以用，
+要移除比較麻煩，所以就生出了 checkinstall 這個軟體。&lt;/p&gt;
+&lt;p&gt;而且 checkinstall 不只支援 makefile，
+任意的安裝程式都可以；只是你要把指令傳進去。
+像 meson 就是 &lt;code&gt;checkinstall meson install&lt;/code&gt; ，
+而 sudo 加在 checkinstall 或 meson 上都可以。
+如果你只傳安裝命令，checkinstall 會自動檢查系統種類，
+然後可以互動更改，看要做成 rpm deb 還是 slackware 的包。&lt;/p&gt;
+&lt;h2 id=&quot;自己包的軟體&quot;&gt;自己包的軟體&lt;/h2&gt;
+&lt;p&gt;總之自己用 checkinstall 包了幾個以前編譯的軟體，
+&lt;a href=&quot;https://drive.google.com/drive/folders/1ypXybmO6mGB_xjjcZnkNdDNDnH0Vtxcc?usp=sharing&quot;&gt;丟到 google 雲端放&lt;/a&gt; ，如果有需要就拿吧。
+建議裝 deb 的裝法是 &lt;code&gt;sudo apt install ./*.deb&lt;/code&gt; 之類，
+不要用 &lt;code&gt;dpkg -i ./*.deb&lt;/code&gt; 裝，
+用 apt 裝會幫你處理相依性問題，
+如果 deb 包裡有相依其它包會一併幫你裝好。&lt;/p&gt;
+&lt;h3 id=&quot;scrcpy&quot;&gt;scrcpy&lt;/h3&gt;
+&lt;p&gt;一個在電腦上顯示、操作 android 手機的軟體，
+透過 adb 無需 root。&lt;/p&gt;
+&lt;h3 id=&quot;libccid&quot;&gt;libccid&lt;/h3&gt;
+&lt;p&gt;在 linux 上如果要用晶片讀卡機，
+&lt;a href=&quot;linux-iccard-ccid-compile.html&quot;&gt;就之前的經驗&lt;/a&gt; ，如果是支援 ccid 規格，
+debian 的套件庫太舊，要自己 compile libccid。&lt;/p&gt;
+&lt;h3 id=&quot;cconv&quot;&gt;cconv&lt;/h3&gt;
+&lt;p&gt;簡單的繁簡轉換程式，用 iconv 實現的。
+apt 的版本有 bug，如果輸入帶換行會自己退出。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/geomatics-seminar-sar-usage.html</id>
 <title>SAR 雷達影像</title>
 <published>2019-01-02T16:12:59.999Z</published>
@@ -1312,98 +1395,7 @@ bili bili 就有我上面說的全視窗按鈕，
 <category term="javascript"/>
 <category term="程式語言"/>
 <category term="closure"/>
-<content type="html">&lt;h1 id=&quot;javascript 中 for 迴圈變數的重覆宣告&quot;&gt;javascript 中 for 迴圈變數的重覆宣告&lt;/h1&gt;
-&lt;p&gt;javascript 的 &lt;code&gt;for (let i=0; i&amp;lt;9; i++)&lt;/code&gt; 形式迴圈，
-從前只有 var 時代時有共用變數的問題，
-但改用 let 後問題解決了，
-但仔細看會發現就語意來說問題不應該解決才對，
-因為 let 和 &lt;code&gt;i++&lt;/code&gt; 代表每次迴圈中的 i
-只是上一個 i 的值改變了，但還是同一個變數。
-所以 var 時代的共用變數問題應該仍要存在，但實際使用上卻消失了，
-應該是在 es2016 的規格書中寫了不同的執行情況。&lt;/p&gt;
-&lt;h2 id=&quot;var 時代的問題&quot;&gt;var 時代的問題&lt;/h2&gt;
-&lt;p&gt;在從前只有 var 時，因為 var 的作用域是超出 for 迴圈 block 的，
-所以在迴圈結束後會殘留一個結束狀態的 i 在作用域。
-而且因為 i 在迴圈每次執行時是共用的，
-所以如果在迴圈中用了閉包把 i 包入函數，
-則所有函數中的 i 還是同一個 i，值也相同，
-在迴圈結束後所有 i 也都會停在那時的值。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;var a = []
-for (var i=0; i&amp;lt;9; i++) {
-  a.push(function () { return i })
-}
-// i = 9
 
-a.map(function (f) { return f() })
-// [9, 9, 9, 9, 9, 9, 9, 9, 9, 9]
-// 每個函數不同，但每個函數中的 i 都指向那個 var 宣告的 i，
-// 停在迴圈結束時的 9。
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;let 各次迴圈的獨立&quot;&gt;let 各次迴圈的獨立&lt;/h2&gt;
-&lt;p&gt;其實我很少用 let，多半用 const，
-因為我不太需要去改變某個已經宣告的變數，
-多是宣告一個新的變數。
-只有字串相加的時候會用 &lt;code&gt;s += anotherString&lt;/code&gt; ，
-所以得用 let；另外就是 for 迴圈計數的時候。&lt;/p&gt;
-&lt;p&gt;雖然你在迴圈每次執行時，可能不會更改 i 的值，
-但你在 for 迴圈的第三個表達式 &lt;code&gt;i++&lt;/code&gt; ，
-很明顯就是改了 i 的值，所以不能用 const，
-如果用 const 在執行到 &lt;code&gt;i++&lt;/code&gt; 會丟
-&lt;code&gt;TypeError: Assignment to constant variable.&lt;/code&gt; 。
-這就表示，你在迴圈每次執行的 i，
-都是上一次的 &lt;code&gt;i++&lt;/code&gt; 的結果，都是同一個 i。&lt;/p&gt;
-&lt;p&gt;可是如果是同一個 i，那和 var 相比
-雖然在迴圈結束後 i 就消失了；
-但用閉包包入的 i 還是會都指向同一個 i，
-也應該指到同一個值，但並沒有。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;let a = []
-for (let i=0; i&amp;lt;9; i++) {
-    a.push(() =&amp;gt; i)
-}
-a.map(f =&amp;gt; f()) // [0, 1, 2, 3, 4, 5, 6, 7, 8]
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;for let 只在當次迴圈有效&quot;&gt;for let 只在當次迴圈有效&lt;/h2&gt;
-&lt;p&gt;所以 &lt;code&gt;for (let i=0;;)&lt;/code&gt; 形式的迴圈中，
-第一個表達式如果是 let 或 const 宣告，
-那該變數在第二和第三表達式裡是同一個，
-同時如果在迴圈執行中改變了 i 的值，
-是會將改變帶到下一輪的。
-可是如果是在迴圈進到下一圈後，
-上一圈用閉包捕捉的 i 就和新的 i 無關了。&lt;/p&gt;
-&lt;p&gt;也許可以想像成，在進入迴圈內前，
-會將 i 複製一份到迴圈內的作用域，
-然後迴圈執行完一次後再複製出來，
-因此這次的 i 和下次的 i 是獨立的，
-但在迴圈內用閉包抓的 i，
-在離開單次迴圈前仍有效。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;let f = () =&amp;gt; null
-for (let i=0; i&amp;lt;9; i++) {
-    console.log(&amp;apos;init&amp;apos;, i)
-    f() // 這時 f 是上一次的 f 和上一次的 i，不會對當下的 i 造成影響。
-    console.log(&amp;apos;after previous increment&amp;apos;, i)
-    f = () =&amp;gt; i++ // 現在的 i
-    f() // 這次就有影響了。
-    console.log(&amp;apos;after current increment&amp;apos;, i)
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;更加混亂的共用變數&quot;&gt;更加混亂的共用變數&lt;/h2&gt;
-&lt;p&gt;但我異想天開，又想如果把 f 和 i 一起宣告在迴圈頭呢？
-結果發現該 f 所捕捉到的 i 竟然完全和迴圈內的 i 無關，
-頂多只有一開始值相同，之後任一方改變都不會影響到另一方。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;for (let i=0, set=v=&amp;gt;i=v, get=()=&amp;gt;i; i&amp;lt;9; i++) {
-    console.log(&amp;apos;before&amp;apos;, i,get())
-    set(get()-1)
-    console.log(&amp;apos;after&amp;apos;, i,get())
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;結論&quot;&gt;結論&lt;/h2&gt;
-&lt;p&gt;總之，想完全弄懂可以去看 &lt;a href=&quot;http://www.ecma-international.org/ecma-262/6.0/#sec-forbodyevaluation&quot;&gt;ecma script spec&lt;/a&gt; ，
-（網頁有點大，注意流量。）
-但太冗長了，我沒有看完也沒有全看懂，
-反正看起來和我想像的沒有衝突。&lt;/p&gt;
-&lt;p&gt;這整件事，就是為了解決一開始 var 時代不只因 var 造成的問題，
-所有閉包都指到同一個變數，
-所以讓各次迴圈共用的變數不再共用，而是指向當下的值。
-但因此表現的行為會和對語法的想像有出入，
-同時又因為增加的複雜度，製造了更多的與想像不合的地方。&lt;/p&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/tanet-roaming-wifi-nctu-login.html</id>
 <title>交大學生登入 tanetroaming wifi</title>

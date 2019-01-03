@@ -63,6 +63,39 @@
 只要把要包的檔案按目錄結構放好，
 然後寫一下套件的資訊就好了，
 如果要指定此套件依賴其它套件也可以。</p>
+<h2 id="check install">check install</h2>
+<p>另外一個很方便的程式是 checkinstall，
+可以把 make install 過程中做過的事，
+打包成一個 deb 包。
+內部怎麼實作我不太清楚，
+大概就是在會監視 make install 的指令中，
+把哪些檔案複製到系統內，然後做出一個一樣的 deb 包。
+之後要移除時，可以直接移除該個包，就回到乾淨的系統。
+因為一些軟體發行時，makefile 裡沒有提供 uninstall 的目標可以用，
+要移除比較麻煩，所以就生出了 checkinstall 這個軟體。</p>
+<p>而且 checkinstall 不只支援 makefile，
+任意的安裝程式都可以；只是你要把指令傳進去。
+像 meson 就是 <code>checkinstall meson install</code> ，
+而 sudo 加在 checkinstall 或 meson 上都可以。
+如果你只傳安裝命令，checkinstall 會自動檢查系統種類，
+然後可以互動更改，看要做成 rpm deb 還是 slackware 的包。</p>
+<h2 id="自己包的軟體">自己包的軟體</h2>
+<p>總之自己用 checkinstall 包了幾個以前編譯的軟體，
+<a href="https://drive.google.com/drive/folders/1ypXybmO6mGB_xjjcZnkNdDNDnH0Vtxcc?usp=sharing">丟到 google 雲端放</a> ，如果有需要就拿吧。
+建議裝 deb 的裝法是 <code>sudo apt install ./*.deb</code> 之類，
+不要用 <code>dpkg -i ./*.deb</code> 裝，
+用 apt 裝會幫你處理相依性問題，
+如果 deb 包裡有相依其它包會一併幫你裝好。</p>
+<h3 id="scrcpy">scrcpy</h3>
+<p>一個在電腦上顯示、操作 android 手機的軟體，
+透過 adb 無需 root。</p>
+<h3 id="libccid">libccid</h3>
+<p>在 linux 上如果要用晶片讀卡機，
+<a href="linux-iccard-ccid-compile.html">就之前的經驗</a> ，如果是支援 ccid 規格，
+debian 的套件庫太舊，要自己 compile libccid。</p>
+<h3 id="cconv">cconv</h3>
+<p>簡單的繁簡轉換程式，用 iconv 實現的。
+apt 的版本有 bug，如果輸入帶換行會自己退出。</p>
 </main>
 
 <script defer src="ext/meta-meta.js"></script>

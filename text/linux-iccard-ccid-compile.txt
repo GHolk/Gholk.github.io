@@ -133,6 +133,13 @@ EZ-100PU 是官方有提供 linux 的驅動，
 
 [support]: https://ccid.apdu.fr/ccid/supported.html
 
+## 包好的 libccid
+[學會怎麼用 checkinstall 包 deb 後][easy debian] ，
+[就自己包了一份上傳到 google][debian package] 。
+
+[easy debian]: linux-easy-debian-package.html
+[debian package]: https://drive.google.com/drive/folders/1ypXybmO6mGB_xjjcZnkNdDNDnH0Vtxcc?usp=sharing
+
 #linux
 #driver
 #方便

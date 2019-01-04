@@ -1,0 +1,62 @@
+# linux 下連接 l2tp vpn
+[CCNS] 在機房架了 l2tp 的 vpn server，
+最近覺得有點需要，就查了一下怎麼在 linux 下連 l2tp vpn。
+發現自己手動設定蠻麻煩的，用 network manager 管理比較簡單，
+[但 network manager l2tp 的外掛目前只發行在 debian sid][l2tp sid only] ，
+又不想手動編譯；google 發現 [有人成功在 stretch 裡
+裝 debian sid 裡舊的版本，是可以運作的][l2tp cross sid] ，
+就試成功了。
+
+[CCNS]: https://www.ccns.io/
+
+[l2tp sid only]: https://github.com/nm-l2tp/network-manager-l2tp/wiki/Prebuilt-Packages#debian
+[l2tp cross sid]: https://thomask.sdf.org/blog/2018/01/16/l2tp-vpn-networkmanager-debian-stretch.html
+
+以前有 ssh 登入權限的時候，會用 ccns 機房的機器當 ssh 跳板上 ptt：
+`ssh -J lab.ccns.ncku.edu.tw bbsu@ptt.cc` 。
+後來機房大翻修，一些機器也虛擬化，帳號就被洗掉了，也沒再要。
+有個社員自己會用 l2tp 開 vpn，在機房變得很潮後，
+就把 l2tp server 架到機房去，變 ccns 共用 vpn。
+一開始剛架好時試了，手動設定一直失敗，
+今天心血來潮，又嘗試終於成功連上了。
+
+## l2tp 手動設定
+手動設定就是裝 xl2tpd 寫 config，
+就會多出一個 ppp 網路裝置，
+要自己用 route 把封包導過去。
+如果要加密還要裝 openswan 或其它 swan 系列。
+之前試過手動設定失敗， 今天又試第一次還是失敗。
+
+我看過幾篇教學，有 [arch wiki 的][l2tp arch wiki]
+也有 [github 上別人寫的文件][l2tp github] 。
+後來在 github 上那篇又重試了一遍，
+整理重寫了複製貼上的 config 才成功；
+後面那些手動 route 好像也不是那麼難了，
+`echo "c my-vpn" > /var/run/xl2tpd/l2tp-control`
+相當於啟動連上 l2tp 並創建一個 ppp 網路裝置，
+之後的 route 就是把預設路由改成該 ppp。
+
+[l2tp arch wiki]: https://wiki.archlinux.org/index.php/Openswan_L2TP/IPsec_VPN_client_setup
+
+一開始我連 l2tp ipsec openswan 之間是什麼關係都沒弄清楚，
+分不清楚教學到底是在教 l2tp client 還是 l2tp server。
+現在裝好了才發現一直卡住的 ipsec 部份，
+其實是加密部份而已，不是必須的。
+另外就是 ipsec 有個雷點，
+幾篇教學是寫 `ipsec auto --add my-l2tp` ，
+但我的版本應該是 `ipsec up my-l2tp` ，
+翻了整篇手冊頁想破頭，
+還是不確定 auto 和 add 到底要對應到哪個命令。
+
+## network manager 介面
+
+## 舊 debian archieve
+
+[l2tp 1.2.8]: https://snapshot.debian.org/package/network-manager-l2tp/1.2.8-2/
+
+#linux
+#debian
+#vpn
+#安裝
+
+

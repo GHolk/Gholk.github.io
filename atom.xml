@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-01-03T15:39:42.739Z</updated>
+  <updated>2019-01-04T17:43:49.654Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,64 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/linux-l2tp-vpn-debian-stretch.html</id>
+<title>linux 下連接 l2tp vpn</title>
+<published>2019-01-04T17:35:53.804Z</published>
+<updated>2019-01-04T17:43:49.634Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/linux-l2tp-vpn-debian-stretch.html"/>
+<summary type="html">&lt;a href=&quot;https://www.ccns.io/&quot;&gt;CCNS&lt;/a&gt; 在機房架了 l2tp 的 vpn server，
+最近覺得有點需要，就查了一下怎麼在 linux 下連 l2tp vpn。
+發現自己手動設定蠻麻煩的，用 network manager 管理比較簡單，
+&lt;a href=&quot;https://github.com/nm-l2tp/network-manager-l2tp/wiki/Prebuilt-Packages#debian&quot;&gt;但 network manager l2tp 的外掛目前只發行在 debian sid&lt;/a&gt; ，
+又不想手動編譯；google 發現 &lt;a href=&quot;https://thomask.sdf.org/blog/2018/01/16/l2tp-vpn-networkmanager-debian-stretch.html&quot;&gt;有人成功在 stretch 裡
+裝 debian sid 裡舊的版本，是可以運作的&lt;/a&gt; ，
+就試成功了。</summary>
+<category term="linux"/>
+<category term="debian"/>
+<category term="vpn"/>
+<category term="安裝"/>
+<content type="html">&lt;h1 id=&quot;linux 下連接 l2tp vpn&quot;&gt;linux 下連接 l2tp vpn&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.ccns.io/&quot;&gt;CCNS&lt;/a&gt; 在機房架了 l2tp 的 vpn server，
+最近覺得有點需要，就查了一下怎麼在 linux 下連 l2tp vpn。
+發現自己手動設定蠻麻煩的，用 network manager 管理比較簡單，
+&lt;a href=&quot;https://github.com/nm-l2tp/network-manager-l2tp/wiki/Prebuilt-Packages#debian&quot;&gt;但 network manager l2tp 的外掛目前只發行在 debian sid&lt;/a&gt; ，
+又不想手動編譯；google 發現 &lt;a href=&quot;https://thomask.sdf.org/blog/2018/01/16/l2tp-vpn-networkmanager-debian-stretch.html&quot;&gt;有人成功在 stretch 裡
+裝 debian sid 裡舊的版本，是可以運作的&lt;/a&gt; ，
+就試成功了。&lt;/p&gt;
+&lt;p&gt;以前有 ssh 登入權限的時候，會用 ccns 機房的機器當 ssh 跳板上 ptt：
+&lt;code&gt;ssh -J lab.ccns.ncku.edu.tw bbsu@ptt.cc&lt;/code&gt; 。
+後來機房大翻修，一些機器也虛擬化，帳號就被洗掉了，也沒再要。
+有個社員自己會用 l2tp 開 vpn，在機房變得很潮後，
+就把 l2tp server 架到機房去，變 ccns 共用 vpn。
+一開始剛架好時試了，手動設定一直失敗，
+今天心血來潮，又嘗試終於成功連上了。&lt;/p&gt;
+&lt;h2 id=&quot;l2tp 手動設定&quot;&gt;l2tp 手動設定&lt;/h2&gt;
+&lt;p&gt;手動設定就是裝 xl2tpd 寫 config，
+就會多出一個 ppp 網路裝置，
+要自己用 route 把封包導過去。
+如果要加密還要裝 openswan 或其它 swan 系列。
+之前試過手動設定失敗， 今天又試第一次還是失敗。&lt;/p&gt;
+&lt;p&gt;我看過幾篇教學，有 &lt;a href=&quot;https://wiki.archlinux.org/index.php/Openswan_L2TP/IPsec_VPN_client_setup&quot;&gt;arch wiki 的&lt;/a&gt;
+也有 [github 上別人寫的文件][l2tp github] 。
+後來在 github 上那篇又重試了一遍，
+整理重寫了複製貼上的 config 才成功；
+後面那些手動 route 好像也不是那麼難了，
+&lt;code&gt;echo &amp;quot;c my-vpn&amp;quot; &amp;gt; /var/run/xl2tpd/l2tp-control&lt;/code&gt;
+相當於啟動連上 l2tp 並創建一個 ppp 網路裝置，
+之後的 route 就是把預設路由改成該 ppp。&lt;/p&gt;
+&lt;p&gt;一開始我連 l2tp ipsec openswan 之間是什麼關係都沒弄清楚，
+分不清楚教學到底是在教 l2tp client 還是 l2tp server。
+現在裝好了才發現一直卡住的 ipsec 部份，
+其實是加密部份而已，不是必須的。
+另外就是 ipsec 有個雷點，
+幾篇教學是寫 &lt;code&gt;ipsec auto --add my-l2tp&lt;/code&gt; ，
+但我的版本應該是 &lt;code&gt;ipsec up my-l2tp&lt;/code&gt; ，
+翻了整篇手冊頁想破頭，
+還是不確定 auto 和 add 到底要對應到哪個命令。&lt;/p&gt;
+&lt;h2 id=&quot;network manager 介面&quot;&gt;network manager 介面&lt;/h2&gt;
+&lt;h2 id=&quot;舊 debian archieve&quot;&gt;舊 debian archieve&lt;/h2&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/geomatics-seminar-sar-usage.html#sar-optical-geometry</id>
 <title>SAR 雷達影像</title>
 <published>2019-01-02T16:12:59.999Z</published>
@@ -1155,71 +1213,7 @@ W = \begin{bmatrix}
  &lt;/pre&gt;</summary>
 <category term="funny"/>
 <category term="daily"/>
-<content type="html">&lt;h1 id=&quot;台灣共識就是贏球不能盜壘&quot;&gt;台灣共識就是贏球不能盜壘&lt;/h1&gt;
-&lt;p&gt;明明記得有聽過這句話，但一直找不到來源，
-只有找到幾篇 &lt;a href=&quot;https://www.ptt.cc/man/Elephants/D3D2/D7D0/D46E/D4B3/M.1307776582.A.092.html&quot;&gt;兄弟象故意砸觸身球的新聞&lt;/a&gt; ，
-沒有找到台灣共識。
-之前的 &lt;a href=&quot;short-life-expensive-price.html&quot;&gt;逢人短命&lt;/a&gt; 也很長了，該換篇了。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.ptt.cc/man/Elephants/D3D2/D7D0/D46E/D4B3/M.1307776582.A.092.html&quot;&gt;台灣共識就是贏球不能盜壘！&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt; 標題  [新聞] 就愛 488 公分　女與飛機模型做愛超興奮
-蜜雪兒說，她曾經嘗試與人類做愛，但怎麼做就是無法讓她興奮，但她與飛機模型做愛之
-後，幾乎每架飛機模型都可以讓她得到高潮。
-→  Leeng: 打飛機(物理)                                             04/20 09:10
-推 PiZ1129: 操飛機 操飛機，來到青草地                              04/20 09:54
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt; 作者  billjason (billjason)                                  看板  Gossiping 
- 標題  [問卦] line 到底為什麼ㄧ堆人用？                                        
- 時間  Sun Dec  9 19:16:30 2018                                               
-※  文章網址: https://www.ptt.cc/bbs/Gossiping/M.1544354192.A.9D0.html
-→  wadeabc: 就一開始女森先用，馬子狗跟上，結果最後大家都在用       12/09 19:19
-→  wadeabc: 你要知道這世界是跟著女森尿尿的地方前進的               12/09 19:19
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;p&gt;這些理工科宅男們一說起妹子來總是很激動的樣子，但你真讓他們去和妹子組織個聯誼卻
-反而沒有什麼行動力。大多數情況下他們會想一想要做的準備以及到時候搞些什麼活動，
-然後會開始頭疼，然後該啃書的啃書、運動的運動、遊戲的遊戲，聯誼的事再無下文。哎
-，所以說性格決定命運，不是因為他們讀了理工科才成為宅男才沒有妹子，而是因為他們
-這個性格讓他們選了理科並成了個宅男，才沒有妹子！&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;魔鬼又帶他上了一座最高的山，將世上的御姊，與萬國的蘿莉，都指給他看。&lt;/p&gt;
-&lt;p&gt;對他說：「你若俯伏拜我，我就把這一切都賜給你。」&lt;/p&gt;
-&lt;p&gt;他說：「魔鬼退去吧！因為本本上記著說，當拜主你的偽娘，單要侍奉他。」&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt; Life is dear, love is dearer. Both can be given up for freedom.
-匈牙利人，裴多菲．山陀爾 (Shandor Petefi, 1823—1849) 於 1847 年 1 月寫下的著名詩篇《自由與愛情》。
-那學習自由軟體？&lt;/p&gt;
-&lt;p&gt;千羽純一如是說：Windows 誠可貴，Apple 價更高；若為 Linux 故，兩者皆可拋。&lt;/p&gt;
-&lt;p&gt;李士傑：自由不是離開某套軟體、某種系統，而是找到自由。&lt;/p&gt;
-&lt;p&gt;Rex：geek by nature linux by choice&lt;/p&gt;
-&lt;p&gt;Tetralet：我們極力抗拒我們所不認同的事物，然後變成我們所認同的事物的奴隸。&lt;/p&gt;
-&lt;p&gt;kenduest：如果真的愛一個作業系統 怎能不害怕不再能使用它 而我們必須接受現實
-於是長大了  寂寞就是沒有了機會再用它  比沒有電腦還要寂寞
-而那些點亮我們生命的作業系統  就彷彿電影中發生在暹邏的愛情故事
-即使短暫使用也會刻骨銘心
-To all the Linux that bring us to kernel.&lt;/p&gt;
-&lt;p&gt;LGJ：①公平的選擇權利②開放的檔案格式&lt;/p&gt;
-&lt;p&gt;RMS：FS 對教育：①最簡單的就是省錢②利於發掘、教育天生的軟體工程師。&lt;/p&gt;
-&lt;p&gt;eliu：free software 是用一種有建設性&amp;amp;免錢的電玩，不要想太多了。&lt;/p&gt;
-&lt;p&gt;caleb 常見誤解：①用自由軟體就要推廣自由軟體 ← 莫名其妙，難道我開 Toyota 的車就得推廣 Toyota 的車？
-             ②要 寫程式/debug 才是對自由軟體有貢獻 ← 其實 下載/安裝/使用/討論/回報問題/提出 wishlist/改善美工/... 很多都是對自由軟體有貢獻&lt;/p&gt;
-&lt;p&gt;↑當然還很多敝人沒有記下來的
-但敝人感受到那麼多前輩們默默的付出和努力
-敝人更該心存感激啊
-敝人有機會分享給別人就多說
-現在不說話
-以後誰為敝人的小 p 說話&lt;/p&gt;
-&lt;p&gt;jserv：「想做就去作」，我天真的認為
-             想寫作業系統，就去寫啊
-             想寫編譯器，就去寫啊
-             想寫電動遊戲，就去寫啊
-             想進行社會主義運動，要花幾百年的時間，但最起碼可以協助讓世界變得更美好，作多少算多少&lt;/p&gt;
-&lt;p&gt;引用自 &lt;a href=&quot;https://hyperrate.com/thread.php?tid=12773&quot;&gt;https://hyperrate.com/thread.php?tid=12773&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;在菜场看到的，神一般的大爷！ 那大爷买西红柿来着的，挑了三个放到秤盘里，摊主秤了下说：“一斤半，三块七。” 大爷说：“我就做个汤，用不着那么多。”说完就去掉了个儿最大的那个西红柿。 摊主迅速又瞧一眼秤子，“一斤二两，三块。” 正当我看不过去想提醒大爷注意摊主的秤子时，大爷从容的掏出了七毛钱，拿起刚刚去掉的那个大的西红柿，扭头就走了…… 摊主当场就凌乱了，我憋成内伤，把头扭向一边……&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;人口普查员： “请问您家里是几口人？” “是一口人” “十一口？” “不是十一口，而是一口人。” “二十一口？” “ 不是二十一口，其实一口人。” “七十一口？不会吧？” “ 不是七十一口，就是一口人！” “ 九十一口？” “ 对了，就是一口人&amp;quot;&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/window-system-full-screen-tab-think.html</id>
 <title>從 youtube 縮小視窗播放影片思考視窗系統</title>

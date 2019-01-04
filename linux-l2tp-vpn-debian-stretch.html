@@ -1,0 +1,74 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2019-01-04T17:35:53.804Z">
+<meta name="keywords" property="og:article:tag" content="linux,debian,vpn,安裝">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="geomatics-seminar-sar-usage.html" title="SAR 雷達影像">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>linux 下連接 l2tp vpn</title>
+</head>
+<body>
+<main><h1 id="linux 下連接 l2tp vpn">linux 下連接 l2tp vpn</h1>
+<p><a href="https://www.ccns.io/">CCNS</a> 在機房架了 l2tp 的 vpn server，
+最近覺得有點需要，就查了一下怎麼在 linux 下連 l2tp vpn。
+發現自己手動設定蠻麻煩的，用 network manager 管理比較簡單，
+<a href="https://github.com/nm-l2tp/network-manager-l2tp/wiki/Prebuilt-Packages#debian">但 network manager l2tp 的外掛目前只發行在 debian sid</a> ，
+又不想手動編譯；google 發現 <a href="https://thomask.sdf.org/blog/2018/01/16/l2tp-vpn-networkmanager-debian-stretch.html">有人成功在 stretch 裡
+裝 debian sid 裡舊的版本，是可以運作的</a> ，
+就試成功了。</p>
+<p>以前有 ssh 登入權限的時候，會用 ccns 機房的機器當 ssh 跳板上 ptt：
+<code>ssh -J lab.ccns.ncku.edu.tw bbsu@ptt.cc</code> 。
+後來機房大翻修，一些機器也虛擬化，帳號就被洗掉了，也沒再要。
+有個社員自己會用 l2tp 開 vpn，在機房變得很潮後，
+就把 l2tp server 架到機房去，變 ccns 共用 vpn。
+一開始剛架好時試了，手動設定一直失敗，
+今天心血來潮，又嘗試終於成功連上了。</p>
+<h2 id="l2tp 手動設定">l2tp 手動設定</h2>
+<p>手動設定就是裝 xl2tpd 寫 config，
+就會多出一個 ppp 網路裝置，
+要自己用 route 把封包導過去。
+如果要加密還要裝 openswan 或其它 swan 系列。
+之前試過手動設定失敗， 今天又試第一次還是失敗。</p>
+<p>我看過幾篇教學，有 <a href="https://wiki.archlinux.org/index.php/Openswan_L2TP/IPsec_VPN_client_setup">arch wiki 的</a>
+也有 [github 上別人寫的文件][l2tp github] 。
+後來在 github 上那篇又重試了一遍，
+整理重寫了複製貼上的 config 才成功；
+後面那些手動 route 好像也不是那麼難了，
+<code>echo &quot;c my-vpn&quot; &gt; /var/run/xl2tpd/l2tp-control</code>
+相當於啟動連上 l2tp 並創建一個 ppp 網路裝置，
+之後的 route 就是把預設路由改成該 ppp。</p>
+<p>一開始我連 l2tp ipsec openswan 之間是什麼關係都沒弄清楚，
+分不清楚教學到底是在教 l2tp client 還是 l2tp server。
+現在裝好了才發現一直卡住的 ipsec 部份，
+其實是加密部份而已，不是必須的。
+另外就是 ipsec 有個雷點，
+幾篇教學是寫 <code>ipsec auto --add my-l2tp</code> ，
+但我的版本應該是 <code>ipsec up my-l2tp</code> ，
+翻了整篇手冊頁想破頭，
+還是不確定 auto 和 add 到底要對應到哪個命令。</p>
+<h2 id="network manager 介面">network manager 介面</h2>
+<h2 id="舊 debian archieve">舊 debian archieve</h2>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

@@ -55,7 +55,7 @@ sar 影像近年越發受重視，因為能不受天候觀測，
 可見光根本看不到東西；也就造成關鍵時刻無圖可用的窘境。
 而雷達影像正好可以解決此一問題，
 也就成為災後製圖的首選。</p>
-<p><a href="http://www.flickr.com/photos/144554087@N04/46552080601"><img src="http://farm5.staticflickr.com/4898/46552080601_cd0696c080.jpg" alt="earth with cloud and night"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/46552080601"><img src="http://farm5.staticflickr.com/4898/46552080601_cd0696c080.jpg" alt="earth with cloud and night" title="由於夜間與雲雨的限制，可見光影像的觀測受限"></a></p>
 <h2 id="合成孔徑雷達">合成孔徑雷達</h2>
 <p>傳統雷達使用實體天線發出雷達波，稱為 <strong>實孔徑雷達</strong> 。
 雷達波的解析度也就是雷達波束的寬度，
@@ -88,6 +88,21 @@ sar 影像近年越發受重視，因為能不受天候觀測，
 而粗糙度如果應用在海面上的話，
 <a href="https://scitechvista.nat.gov.tw/c/sWZj.htm" title="科技大觀園 從太空看海洋">則是在風速越強處，海浪會越破碎，</a>
 因此可以做為海上天氣預報的參考。</p>
+<h3 id="淹水偵測">淹水偵測</h3>
+<p>SAR 影像很大的功能是做淹水範圍的偵測。
+如上所述，sar 在水面、甚至潮濕土壤上的回波都很弱，
+可以據此快速判斷洪患過後，哪些地方為淹水受災區。
+在洪水發生很大機會是由於降雨，
+以傳統可見光影像在有雲雨時根本無法觀測，
+雷達波可以穿透雲層全天候觀測，
+SAR 影像也就不受干擾。</p>
+<p>但以 SAR 影像判斷淹水地區也有所侷限，
+雖然說無論淹水或潮濕情況下，雷達回波都會較弱，
+但在水面上漂浮了雜物，或是與建築物混雜等一些特殊情況，
+雷達會出現在 <a href="https://en.wikipedia.org/wiki/Corner_reflector" title="維基百科上對 corner reflector 的解釋">角落的全反射</a> ，
+或是只因為水面上雜物而表現出不同於水面的反射情況。
+全反射是因為在水面近鏡面反射後，又在其它垂直面上進行一次反射，
+共以將近 180° 反射，而在單點上出現極強回波訊號。</p>
 <h3 id="偏振方向">偏振方向</h3>
 <p>或者雷達波也可以依雷磁波的偏振分為水平偏振與垂直偏振，
 分別可以組合四種不同的回波強度：</p>
@@ -106,6 +121,33 @@ sar 影像近年越發受重視，因為能不受天候觀測，
 可以跑監督式分類或非監督式分類。
 只是在成像上會有雷達影像的特徵，
 幾何和一般中心投影、正射投影不同。。</p>
+<h2 id="干涉分析">干涉分析</h2>
+<p><abbr title="Interferometry SAR">InSAR</abbr> 是另一種 SAR 影像分析方法，
+使用二張帶有相位資訊的 SAR 影像相減，以相位差分析地表高程變化。
+在衛星軌道上同一點不同時間對同一地所拍攝的 SAR 影像，
+如果地表無變化的話，每一點與衛星的距離不變，
+那二張影像中各點的相位應該會相同。
+如果地表有起伏，例如抬升了 5 公分，來回距離會少 10 公分；
+那對波長是 20 公分的 L band，回波就會快半個波長，
+就會有半個波長的相位差，以此就能看出地型變動。</p>
+<p>但也因為只能觀測到相位差，當變動到一個相位差時，就會回到同一相位。
+而以地表變型來說，多數變型都是漸變的；
+也就是二張影像中，少部份地區開始抬升時，相位差會漸增，
+然後超過一個相位差又歸零，周而複始。
+以偽彩色表現的話，解讀上可以看成連續但無標高
+以彩度表現的高差等高線圖。
+在高程變化上表現為規律的同方向花紋，
+高程變化越劇烈花紋也越密集。</p>
+<p><a href="http://earthice.hi.is/insar_interferometry_synthetic_aperture_radar_satellites"><img src="http://earthice.hi.is/sites/earthice.hi.is/files/myndir/Jardskorpuferli/insar_2008.jpg" alt="insar image" title="InSAR 影像範例"></a></p>
+<p>相對 GNSS 只能在點上觀測，InSAR 可以一次分析大範圍的面的地型變化，
+在分析地震前後之類短時間內大範圍的地型變動十分適合，
+可以簡單看出地震前後各地在垂直方向上的移動情況，
+從而推出斷層位置。</p>
+<script src="ext/header-nctu.js?execute&amp;editable"></script>
+
+<script src="ext/paper.js?execute"></script>
+
+<link rel="stylesheet" href="ext/paper.css">
 </main>
 
 <script defer src="ext/meta-meta.js"></script>

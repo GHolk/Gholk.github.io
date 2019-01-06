@@ -1,0 +1,128 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2019-01-06T13:27:27.397Z">
+<meta name="keywords" property="og:article:tag" content="nctu,geomatics,adjustment,report">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="linux-l2tp-vpn-debian-stretch.html" title="linux 下連接 l2tp vpn">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>平差作業九</title>
+</head>
+<body>
+<main><h1 id="平差作業九">平差作業九</h1>
+<p>平差 GNSS 基線後的誤差橢圓計算。</p>
+<h2 id="變方協變方矩陣">變方協變方矩陣</h2>
+<p>平差過程與第八次作業大致相同，就不再列式，
+直接進入間接觀測平差後，可以計算得所有未知數的變方協變方矩陣。</p>
+<pre><code class="lang-math">\hat \Sigma _ {\hat x} = \hat {\sigma_0} N^{-1} = \
+\begin{bmatrix}
+\sigma_{X_A} ^2  &amp; \sigma_{X_A Y_A} &amp; \dots \\
+\sigma_{X_A Y_A} &amp; \sigma_{Y_A} ^2  &amp; \dots \\
+\vdots
+\end{bmatrix}
+</code></pre>
+<p>協變方矩陣中，各元素是變方或二未知數的協變方。
+單一點上的 x y 座標的變方協變方矩陣，
+就是其中的一小區塊。</p>
+<pre><code class="lang-matlab">%% xy_matrix(3) 就是取出第三點的 X Y 相關矩陣
+xy_matrix = @(i) point_covariance_matrix(i*3-2:i*3-1, i*3-2:i*3-1);
+</code></pre>
+<h2 id="誤差橢圓">誤差橢圓</h2>
+<p>有了 x y 的協變方矩陣，就能計算平面上的誤差橢圓。
+誤差橢圓可以用三個參數表示，
+分別是橢圓的長軸長、短軸長、長軸角度。</p>
+<pre><code class="lang-math">C_1 = \hat {\sigma_0} \\
+C_2 = \hat {\sigma_0} \\
+\theta = \frac{1}{2} arctan (
+\frac { 2 \sigma_{x y} } {\sigma_x^2 - \sigma_y^2} )
+</code></pre>
+<pre><code class="lang-matlab">function elips_parameter = compute_error_elips(xy_covariance, sigma0)
+  eigenvalue = eig(xy_covariance);
+  elips_parameter = zeros(1, 3);
+  elips_parameter(1:2) = sqrt(eigenvalue(1:2)) * sigma0;
+
+  orintation2 = atan2(
+      2*xy_covariance(1,2),
+      (xy_covariance(1,1) - xy_covariance(2,2))
+  );
+  elips_parameter(3) = orintation2 / 2;
+end
+</code></pre>
+<h2 id="繪圖">繪圖</h2>
+<p>要從橢圓參數畫出誤差橢圓，我是用參數式與 sin cos 計算。</p>
+<pre><code class="lang-matlab">function xy = compute_ellipse_xy(long, short, orientation)
+  m = 40;
+  x = zeros(m,1);
+  y = zeros(m,1);
+  theta = linspace(0,2*pi,m);
+  for k = 1:m
+    x(k) = long * cos(theta(k));
+    y(k) = short * sin(theta(k));
+  end
+  alpha = -orientation;
+  R  = [cos(alpha) -sin(alpha)
+        sin(alpha)  cos(alpha)];
+  rCoords = R*[x&apos; ; y&apos;];
+  xr = rCoords(1,:)&apos;;
+  yr = rCoords(2,:)&apos;;
+
+  xy = [xr&apos;; yr&apos;];
+end
+
+function plot_name(todo, file)
+  fig = figure(&apos;visible&apos;, &apos;off&apos;);
+  todo();
+  print(&apos;-dpng&apos;, file);
+  close(fig);
+end
+
+
+for i = 1:rows(point_vector)
+  elips_parameter = compute_error_elips(
+                        xy_matrix(i), variance_post);
+  elips_xy = compute_ellipse_xy(
+                 elips_parameter(1),
+                 elips_parameter(2),
+                 elips_parameter(3));
+  plot_name(@() plot(elips_xy(1,:), elips_xy(2,:)),
+            [&apos;ellipse-&apos; num2str(i) &apos;.png&apos;]);
+end
+</code></pre>
+<p><a href="http://www.flickr.com/photos/144554087@N04/32755448228"><img src="http://farm5.staticflickr.com/4900/32755448228_4046d89d5e.jpg" alt="ellipse-1.png" title="點 A"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/46577469722"><img src="http://farm5.staticflickr.com/4858/46577469722_cfb538d9d7.jpg" alt="ellipse-2.png" title="點 B"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/32755448828"><img src="http://farm8.staticflickr.com/7840/32755448828_a072743f00.jpg" alt="ellipse-3.png" title="點 C"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/32755449148"><img src="http://farm5.staticflickr.com/4836/32755449148_1d53e5a267.jpg" alt="ellipse-4.png" title="點 D"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/46577471012"><img src="http://farm8.staticflickr.com/7806/46577471012_39a9abb90f.jpg" alt="ellipse-5.png" title="點 E"></a></p>
+<p>但繪圖結果中的 X Y 座標軸好像不一致，
+所以看起來變成橢圓，其實都是正圓。
+從協變方矩陣中各點的 $\sigma_{x y}$ 都為 0，
+也就是各點的 x y 座標無相關，
+誤差橢圓的長短軸等長，即為正圓。</p>
+<script src="ext/header-nctu.js?execute&amp;editable"></script>
+
+<link rel="stylesheet" href="ext/paper.css">
+
+<script src="ext/paper.js?execute"></script>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

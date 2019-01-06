@@ -262,3 +262,4 @@ linux-try-and-error-build.html
 linux-easy-debian-package.html
 geomatics-seminar-sar-usage.html
 linux-l2tp-vpn-debian-stretch.html
+adjustment-homework-9.html

@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-01-06T13:32:25.150Z</updated>
+  <updated>2019-01-07T03:01:10.158Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,123 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/adjustment-homework-9.html#fix-ellipse-parameter-formula</id>
+<title>平差作業九</title>
+<published>2019-01-06T13:27:27.397Z</published>
+<updated>2019-01-07T03:01:10.149Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/adjustment-homework-9.html#fix-ellipse-parameter-formula"/>
+<summary type="html">&lt;pre class=&quot;diff&quot;&gt;@@ -29,8 +29,8 @@ xy_matrix = @(i) point_covariance_matrix(i*3-2:i*3-1, i*3-2:i*3-1);
+ 分別是橢圓的長軸長、短軸長、長軸角度。
+ 
+ ```math
+-C_1 = \hat {\sigma_0} \\
+-C_2 = \hat {\sigma_0} \\
++C_1 = \hat {\sigma_0} \sqrt \lambda_1 \\
++C_2 = \hat {\sigma_0} \sqrt \lambda_2 \\
+ \theta = \frac{1}{2} arctan (
+ \frac { 2 \sigma_{x y} } {\sigma_x^2 - \sigma_y^2} )
+ ```
+&lt;/pre&gt;</summary>
+<category term="nctu"/>
+<category term="geomatics"/>
+<category term="adjustment"/>
+<category term="report"/>
+<content type="html">&lt;h1 id=&quot;平差作業九&quot;&gt;平差作業九&lt;/h1&gt;
+&lt;p&gt;平差 GNSS 基線後的誤差橢圓計算。&lt;/p&gt;
+&lt;h2 id=&quot;變方協變方矩陣&quot;&gt;變方協變方矩陣&lt;/h2&gt;
+&lt;p&gt;平差過程與第八次作業大致相同，就不再列式，
+直接進入間接觀測平差後，可以計算得所有未知數的變方協變方矩陣。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;\hat \Sigma _ {\hat x} = \hat {\sigma_0} N^{-1} = \
+\begin{bmatrix}
+\sigma_{X_A} ^2  &amp;amp; \sigma_{X_A Y_A} &amp;amp; \dots \\
+\sigma_{X_A Y_A} &amp;amp; \sigma_{Y_A} ^2  &amp;amp; \dots \\
+\vdots
+\end{bmatrix}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;協變方矩陣中，各元素是變方或二未知數的協變方。
+單一點上的 x y 座標的變方協變方矩陣，
+就是其中的一小區塊。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-matlab&quot;&gt;%% xy_matrix(3) 就是取出第三點的 X Y 相關矩陣
+xy_matrix = @(i) point_covariance_matrix(i*3-2:i*3-1, i*3-2:i*3-1);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;誤差橢圓&quot;&gt;誤差橢圓&lt;/h2&gt;
+&lt;p&gt;有了 x y 的協變方矩陣，就能計算平面上的誤差橢圓。
+誤差橢圓可以用三個參數表示，
+分別是橢圓的長軸長、短軸長、長軸角度。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;C_1 = \hat {\sigma_0} \sqrt \lambda_1 \\
+C_2 = \hat {\sigma_0} \sqrt \lambda_2 \\
+\theta = \frac{1}{2} arctan (
+\frac { 2 \sigma_{x y} } {\sigma_x^2 - \sigma_y^2} )
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-matlab&quot;&gt;function elips_parameter = compute_error_elips(xy_covariance, sigma0)
+  eigenvalue = eig(xy_covariance);
+  elips_parameter = zeros(1, 3);
+  elips_parameter(1:2) = sqrt(eigenvalue(1:2)) * sigma0;
+
+  orintation2 = atan2(
+      2*xy_covariance(1,2),
+      (xy_covariance(1,1) - xy_covariance(2,2))
+  );
+  elips_parameter(3) = orintation2 / 2;
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;繪圖&quot;&gt;繪圖&lt;/h2&gt;
+&lt;p&gt;要從橢圓參數畫出誤差橢圓，我是用參數式與 sin cos 計算。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-matlab&quot;&gt;function xy = compute_ellipse_xy(long, short, orientation)
+  m = 40;
+  x = zeros(m,1);
+  y = zeros(m,1);
+  theta = linspace(0,2*pi,m);
+  for k = 1:m
+    x(k) = long * cos(theta(k));
+    y(k) = short * sin(theta(k));
+  end
+  alpha = -orientation;
+  R  = [cos(alpha) -sin(alpha)
+        sin(alpha)  cos(alpha)];
+  rCoords = R*[x&amp;apos; ; y&amp;apos;];
+  xr = rCoords(1,:)&amp;apos;;
+  yr = rCoords(2,:)&amp;apos;;
+
+  xy = [xr&amp;apos;; yr&amp;apos;];
+end
+
+function plot_name(todo, file)
+  fig = figure(&amp;apos;visible&amp;apos;, &amp;apos;off&amp;apos;);
+  todo();
+  print(&amp;apos;-dpng&amp;apos;, file);
+  close(fig);
+end
+
+
+for i = 1:rows(point_vector)
+  elips_parameter = compute_error_elips(
+                        xy_matrix(i), variance_post);
+  elips_xy = compute_ellipse_xy(
+                 elips_parameter(1),
+                 elips_parameter(2),
+                 elips_parameter(3));
+  plot_name(@() plot(elips_xy(1,:), elips_xy(2,:)),
+            [&amp;apos;ellipse-&amp;apos; num2str(i) &amp;apos;.png&amp;apos;]);
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/32755448228&quot;&gt;&lt;img src=&quot;http://farm5.staticflickr.com/4900/32755448228_4046d89d5e.jpg&quot; alt=&quot;ellipse-1.png&quot; title=&quot;點 A&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46577469722&quot;&gt;&lt;img src=&quot;http://farm5.staticflickr.com/4858/46577469722_cfb538d9d7.jpg&quot; alt=&quot;ellipse-2.png&quot; title=&quot;點 B&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/32755448828&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7840/32755448828_a072743f00.jpg&quot; alt=&quot;ellipse-3.png&quot; title=&quot;點 C&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/32755449148&quot;&gt;&lt;img src=&quot;http://farm5.staticflickr.com/4836/32755449148_1d53e5a267.jpg&quot; alt=&quot;ellipse-4.png&quot; title=&quot;點 D&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46577471012&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7806/46577471012_39a9abb90f.jpg&quot; alt=&quot;ellipse-5.png&quot; title=&quot;點 E&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;但繪圖結果中的 X Y 座標軸好像不一致，
+所以看起來變成橢圓，其實都是正圓。
+從協變方矩陣中各點的 $\sigma_{x y}$ 都為 0，
+也就是各點的 x y 座標無相關，
+誤差橢圓的長短軸等長，即為正圓。&lt;/p&gt;
+&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
+
+&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
+
+&lt;script src=&quot;ext/paper.js?execute&quot;&gt;&lt;/script&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/adjustment-homework-9.html</id>
 <title>平差作業九</title>
 <published>2019-01-06T13:27:27.397Z</published>
@@ -1059,104 +1176,7 @@ ans =
 <category term="安裝"/>
 <category term="交大"/>
 <category term="gipsy"/>
-<content type="html">&lt;h1 id=&quot;試誤編譯法&quot;&gt;試誤編譯法&lt;/h1&gt;
-&lt;p&gt;我當年初入 linux 界時，對自行編譯軟體一直有障礙，
-到現在對 linux 已經很熟悉了，
-自行編譯絕大多數軟體應該都沒問題了。
-除了稍微了解通行的編譯流程，
-最簡單的做法就是依編譯時的錯誤訊息，
-去 google 或去 apt 裝缺少的函式庫。
-雖然實行起來有點蠢，但的確是有用的，
-絕大多數軟體都能這樣編譯起來。&lt;/p&gt;
-&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
-&lt;p&gt;初入 linux 時，對自行編譯軟體一直有種恐懼感，
-除了對命令列還不太熟悉，就是曾經在剛開始用 ubuntu 時，
-試著編譯過 purple line，
-一個讓 &lt;a href=&quot;http://zh.wikipedia.org/wiki/pidgin&quot;&gt;pidgin&lt;/a&gt; 能連上 line 的模組。
-記得搞了很久很麻煩，最後好像是有成功，
-總之讓我留下了不小的陰影。&lt;/p&gt;
-&lt;p&gt;到現在隨著越來越深入，對 linux 和各工具鏈的了解，
-自認已經可以用試誤法編譯出絕大多數的開源專案了。
-頂多就是花很久時間，和要裝很多函式庫很佔空間；
-有時發現很基礎的東西不合，幾乎要自己編譯系統，
-就會放棄或用 docker 或其它虛擬機解決。&lt;/p&gt;
-&lt;h2 id=&quot;makefile&quot;&gt;makefile&lt;/h2&gt;
-&lt;p&gt;用最簡單的 Makefile 來舉例。
-夠簡單的專案就一個 make 就編譯的起來了，
-中間如果會有缺什麼函式庫，gcc 丟錯誤訊息，
-基本上都看得出來缺什麼。&lt;/p&gt;
-&lt;p&gt;如果知道是缺 &lt;code&gt;libxxx.so.xxx&lt;/code&gt; 之類的檔名，
-可以直接用 &lt;code&gt;apt-file search libxxx.so&lt;/code&gt; 搜檔名，
-看套件管理系統有沒有。
-apt file 可以搜各套件提供了什麼檔案，不只是套件名稱，
-有時候從函式庫名字看不出來套件名是什麼。&lt;/p&gt;
-&lt;p&gt;如果錯誤訊息看不懂，可以直接把整句丟去 google，
-如果是夠大的專案，通常找得到 stack overflow 的討論串，
-就看有沒有解法。
-當然最好還是能直接看專案的說明文件，
-看需要哪些函式庫先裝好，
-不然這樣一直用試誤法覺得自己有點蠢。&lt;/p&gt;
-&lt;p&gt;之後看要不要 &lt;code&gt;make install&lt;/code&gt; 安裝。
-如果只是要用一二次，可以直接執行就好了，不用安裝到系統。
-也可以自己看 make install 是執行哪些程式，自己手動裝。
-但有時用 gnu tool chain 系的自動產生的 makefile 太醜，會看不懂。
-可以看有沒有提供 make uninstall，
-如果有就能放心裝下去，不用怕不知道怎麼解除安裝。&lt;/p&gt;
-&lt;h2 id=&quot;gnu tool chain&quot;&gt;gnu tool chain&lt;/h2&gt;
-&lt;p&gt;如果比較複雜的會需要用到 &lt;code&gt;./configure&lt;/code&gt; 來檢測環境，
-產生 makefile。這是比較常見的，
-一般有缺什麼東西在 configure 就會報錯退出，
-就裝好再 configure 一次。&lt;/p&gt;
-&lt;p&gt;之後用 configure 的 makefile 可能不會太好看，
-make 時會跳很多訊息，有時我也不清楚有沒有 make 成功，
-就直接 &lt;code&gt;echo $?&lt;/code&gt; 看上一個命令的返回值，
-也就是看 make 是正常退出還是錯誤退出，
-如果是正常就會是 0，代表編譯成功了。&lt;/p&gt;
-&lt;p&gt;有時代包衭的大專案，常見用 gnu tool chain，
-也就是 autoconf 系列工具，
-會需要裝 autoconf 這支程式。
-通常專案內會有 &lt;code&gt;autogen.sh&lt;/code&gt; 之類的執行檔，
-自動化一些編譯前要做的事。&lt;/p&gt;
-&lt;h2 id=&quot;meson ninja&quot;&gt;meson ninja&lt;/h2&gt;
-&lt;p&gt;最近碰到的比較新的專案是用 meson 和 ninja。
-我用 meson 一直鬼打牆，用 apt 裝的被抱怨太舊，
-用 pip 裝的在 sudo 執行時一直出問題。
-用二個的一般專案會有寫怎麼 build，就照作就好。&lt;/p&gt;
-&lt;h2 id=&quot;docker&quot;&gt;docker&lt;/h2&gt;
-&lt;p&gt;最近在交大用 gipsy 來算 gnss，
-教授表示 gipsy 要在 linux 下運作，
-他們也不太會裝。
-之後我花了半天把 gipsyx 裝好，
-二天把 gipsy-oasis 裝好。&lt;/p&gt;
-&lt;p&gt;但 gipsy 是運行時會相依很多函式庫的程式，
-而且很多還有鎖版本；
-gipsyx 的 python 腳本都編譯成 byte code &lt;code&gt;*.pyc&lt;/code&gt; ，
-而 python byte code 在各版本是不相容的。
-總之最簡單的作法，就是挑軟體發行時的linux版本來裝，
-之後可以再把軟體裝好後那一刻整個系統備份下來，
-也就是 docker 的作法了。&lt;/p&gt;
-&lt;p&gt;裝 gipsy-oasis 遇到比較多問題，
-gipsy-oasis 的程式除了核心的 fortran，
-還用了很多 perl 和 csh 的腳本，
-而且架構組合很複雜。&lt;/p&gt;
-&lt;p&gt;我裝好 gipsyx 後跑 &lt;code&gt;verify.py&lt;/code&gt; 腳本驗證，
-如果哪個函式庫有問題，因為全都是 python，
-從 log 就能直接看到從哪個腳本 throw 出 error，
-就算 error 看不懂，也能直接去看 python code 問題在哪。&lt;/p&gt;
-&lt;p&gt;但 gipsy oasis 的程式是一個混一個，
-一大堆 perl csh 互相呼叫。
-在 verify.py 和其它被他呼叫的 perl 或 csh 測試，
-有時呼叫會存 stderr，但不可能每行命令都檢查，
-所以就會有這一行錯了所以沒有產出某個檔案，
-又過幾行 code 才跳出某檔案不存在的錯誤。&lt;/p&gt;
-&lt;p&gt;但誰知道那檔案為什麼不存在？
-我根本還沒用過 gipsy oasis，
-也就不會知道各指令的意思，
-也就不知道哪個指令應產出該檔案卻出錯了。
-而且因為包了很多層，原始層可能丟出numpy 不存在，
-但外面那層的log是誤差超過門檻，
-之類八竿子打不著的訊息。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/linux-try-and-error-build.html</id>
 <title>試誤編譯法</title>

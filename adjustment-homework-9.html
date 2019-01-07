@@ -47,8 +47,8 @@ xy_matrix = @(i) point_covariance_matrix(i*3-2:i*3-1, i*3-2:i*3-1);
 <p>有了 x y 的協變方矩陣，就能計算平面上的誤差橢圓。
 誤差橢圓可以用三個參數表示，
 分別是橢圓的長軸長、短軸長、長軸角度。</p>
-<pre><code class="lang-math">C_1 = \hat {\sigma_0} \\
-C_2 = \hat {\sigma_0} \\
+<pre><code class="lang-math">C_1 = \hat {\sigma_0} \sqrt \lambda_1 \\
+C_2 = \hat {\sigma_0} \sqrt \lambda_2 \\
 \theta = \frac{1}{2} arctan (
 \frac { 2 \sigma_{x y} } {\sigma_x^2 - \sigma_y^2} )
 </code></pre>

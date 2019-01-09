@@ -148,6 +148,7 @@ SAR 影像也就不受干擾。
 可以簡單看出地震前後各地在垂直方向上的移動情況，
 從而推出斷層位置。
 
+## 災損地圖
 
 <script src="ext/header-nctu.js?execute&editable"></script>
 

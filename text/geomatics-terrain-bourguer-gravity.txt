@@ -1,0 +1,137 @@
+# 地型重力積分作業
+物理大地測量的作業，將地型切割成一塊塊長方體，
+以 DEM 為基礎，用簡單的積分計算地型起伏、土壤中水份對重力的影響。
+
+## DEM
+給定 DEM，格式為經度、緯度、E、N、正高，
+其中 E N 的取樣間距分別是 92.47 92.68。
+
+```
+   120.9802780    24.7972221     0.0000000     0.0000000    44.013
+   120.9811096    24.7972221    92.4697010     0.0000000    44.651
+   120.9819412    24.7972221   184.9394020     0.0000000    45.191
+   120.9827805    24.7972221   278.2653039     0.0000000    46.322
+```
+
+
+## 長方體積分
+一塊長方體質量在垂直方向對相對位置 (x0,y0,z0) 處的重力加速度用積分計算為：
+
+```matlab
+function Az=nt(tho,leng,width,thick,x0,y0,z0) %密度，長，寬，高，測站座標
+    G=6.67E-11; % unit : MKS 制
+    x(1)=width/2;
+    x(2)=-x(1);
+    y(1)=leng/2;
+    y(2)=-y(1);
+    z(2)=thick/2;
+    z(1)=-z(2);
+
+    for i=1:2
+        xi(i)=x(i)-x0;
+        et(i)=y(i)-y0;
+        zt(i)=z(i)-z0;
+    end
+
+    f1=fz(xi(2),et(2),zt(2));
+    f2=fz(xi(1),et(2),zt(2));
+    f3=fz(xi(2),et(1),zt(2));
+    f4=fz(xi(1),et(1),zt(2));
+    f5=fz(xi(2),et(2),zt(1));
+    f6=fz(xi(1),et(2),zt(1));
+    f7=fz(xi(2),et(1),zt(1));
+    f8=fz(xi(1),et(1),zt(1));
+
+    Az=G*tho*(f1-f2-f3+f4-f5+f6+f7-f8);
+end
+
+function f=fz(xi,et,zt)
+    s=sqrt(xi*xi+et*et+zt*zt);
+    azt=abs(zt);
+    f=xi*log(s+et)+et*log(s+xi)+2*azt*atan2(s+xi+et,azt);
+end
+```
+
+## 積分地型
+測站座標 (555.674, -185.362, 58.000) ，
+將 DEM 給定地型範圍看成一根根長方柱，
+就能用上面長方體對一點質量的垂直重力加速度公式
+計算 DEM 中各平面對該位置的垂直重力加速度貢獻。
+在用上式積分時，座標原點視為在長方體中心，
+所以以 DEM 一塊長方柱來說，就是在高度為一半處。
+
+```matlab
+data = dlmread('tw_dem_1a.xyz');
+%% neh = [north east height]
+neh = data(:, 3:5);
+
+station = [555.67441 -185.36194 58];
+
+
+%% Q1
+gravity_z = 0;
+
+%% nt m kg
+%% 2.67 g/cm^3 = 2670 kg/m^3
+nt92 = @(thick, p) nt(2670, 92.4697010, 92.6809714, thick, p(1), p(2), p(3));
+
+for i=1:rows(neh)
+  %% 一個長方體 cell 的質心作為原點
+  center = neh(i, :);
+  thick = center(3);
+  %% 長方體的質心在高度為一半處
+  center(3) /= 2;
+  gravity_z += nt92(thick, station - center);
+end
+
+%% gravity_z = 5.5722e-05 (m/s²)
+```
+
+## 土壤濕度
+若加上土壤濕度的影響，假設土壤中水份的密度隨深度函數為
+`f(d) = 0.52-m*d/10` ，其中係數 m 在冬天為 1.3，夏天為 0.7，
+且 f(d) 不會小於 0 則視為等於 0。
+積分時因為不同深度時密度會不同，
+所以我把一根長方柱在高度方向切為 64 份，
+一塊塊視為內部密度相同的長方體，最後再加總。
+
+```matlab
+%% Q2
+water_density_winter = @(depth) (0.52 - 1.3*depth/10) * 1000;
+water_density_summer = @(depth) (0.52 - 0.7*depth/10) * 1000;
+
+function gravity = water_gravity(height, vector, season)
+  count = 64;
+  thick = height / count;
+  gravity = 0;
+  for i = 0:(count-1)
+    height_i = i*thick + thick/2;
+    depth_i = height - height_i;
+    density_i = season(depth_i);
+    if (density_i < 0)
+      density_i = 0;
+    end
+    gravity += nt(density_i, 92.4697010, 92.6809714, thick,
+                  vector(1), vector(2), vector(3)-height_i);
+  end
+end
+
+gravity_z_summer = gravity_z;
+gravity_z_winter = gravity_z;
+
+for i=1:rows(neh)
+  cell = neh(i, :);
+  height = cell(3);
+  cell(3) = 0;
+  vector = station - cell;
+  gravity_z_summer += water_gravity(height, vector, water_density_summer);
+  gravity_z_winter += water_gravity(height, vector, water_density_winter);
+end
+
+%% [gravity_z_winter gravity_z_summer] = [5.6078e-05 5.6385e-05] (m/s²)
+```
+
+#matlab
+#geomatics
+#report
+#geodesy

@@ -145,6 +145,10 @@ end
 但依題意土壤水份應該越深越低，
 所以題目可能多了一個負號，或是深度為負值。
 
+<script src="ext/header-nctu.js?execute&editable"></script>
+
+<link rel="stylesheet" href="ext/paper.css">
+
 #matlab
 #geomatics
 #report

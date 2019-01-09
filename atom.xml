@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-01-09T14:06:20.194Z</updated>
+  <updated>2019-01-09T14:08:29.017Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,162 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/geomatics-terrain-bourguer-gravity.html#nctu-header</id>
+<title>地型重力積分作業</title>
+<published>2019-01-09T13:25:34.518Z</published>
+<updated>2019-01-09T14:08:29.005Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/geomatics-terrain-bourguer-gravity.html#nctu-header"/>
+<summary type="html">&lt;pre class=&quot;diff&quot;&gt;@@ -145,6 +145,10 @@ end
+ 但依題意土壤水份應該越深越低，
+ 所以題目可能多了一個負號，或是深度為負值。
+ 
++&amp;lt;script src=&amp;quot;ext/header-nctu.js?execute&amp;amp;editable&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
++
++&amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;ext/paper.css&amp;quot;&amp;gt;
++
+ #matlab
+ #geomatics
+ #report
+&lt;/pre&gt;</summary>
+<category term="matlab"/>
+<category term="geomatics"/>
+<category term="report"/>
+<category term="geodesy"/>
+<content type="html">&lt;h1 id=&quot;地型重力積分作業&quot;&gt;地型重力積分作業&lt;/h1&gt;
+&lt;p&gt;物理大地測量的作業，將地型切割成一塊塊長方體，
+以 DEM 為基礎，用簡單的積分計算地型起伏、土壤中水份對重力的影響。&lt;/p&gt;
+&lt;h2 id=&quot;DEM&quot;&gt;DEM&lt;/h2&gt;
+&lt;p&gt;給定 DEM，格式為經度、緯度、E、N、正高，
+其中 E N 的取樣間距分別是 92.47 92.68。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;   120.9802780    24.7972221     0.0000000     0.0000000    44.013
+   120.9811096    24.7972221    92.4697010     0.0000000    44.651
+   120.9819412    24.7972221   184.9394020     0.0000000    45.191
+   120.9827805    24.7972221   278.2653039     0.0000000    46.322
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;長方體積分&quot;&gt;長方體積分&lt;/h2&gt;
+&lt;p&gt;一塊長方體質量在垂直方向對相對位置 (x0,y0,z0) 處的重力加速度用積分計算為：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-matlab&quot;&gt;function Az=nt(tho,leng,width,thick,x0,y0,z0) %密度，長，寬，高，測站座標
+    G=6.67E-11; % unit : MKS 制
+    x(1)=width/2;
+    x(2)=-x(1);
+    y(1)=leng/2;
+    y(2)=-y(1);
+    z(2)=thick/2;
+    z(1)=-z(2);
+
+    for i=1:2
+        xi(i)=x(i)-x0;
+        et(i)=y(i)-y0;
+        zt(i)=z(i)-z0;
+    end
+
+    f1=fz(xi(2),et(2),zt(2));
+    f2=fz(xi(1),et(2),zt(2));
+    f3=fz(xi(2),et(1),zt(2));
+    f4=fz(xi(1),et(1),zt(2));
+    f5=fz(xi(2),et(2),zt(1));
+    f6=fz(xi(1),et(2),zt(1));
+    f7=fz(xi(2),et(1),zt(1));
+    f8=fz(xi(1),et(1),zt(1));
+
+    Az=G*tho*(f1-f2-f3+f4-f5+f6+f7-f8);
+end
+
+function f=fz(xi,et,zt)
+    s=sqrt(xi*xi+et*et+zt*zt);
+    azt=abs(zt);
+    f=xi*log(s+et)+et*log(s+xi)+2*azt*atan2(s+xi+et,azt);
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;積分地型&quot;&gt;積分地型&lt;/h2&gt;
+&lt;p&gt;測站座標 (555.674, -185.362, 58.000) ，
+將 DEM 給定地型範圍看成一根根長方柱，
+就能用上面長方體對一點質量的垂直重力加速度公式
+計算 DEM 中各平面對該位置的垂直重力加速度貢獻。
+在用上式積分時，座標原點視為在長方體中心，
+所以以 DEM 一塊長方柱來說，就是在高度為一半處。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-matlab&quot;&gt;data = dlmread(&amp;apos;tw_dem_1a.xyz&amp;apos;);
+%% neh = [north east height]
+neh = data(:, 3:5);
+
+station = [555.67441 -185.36194 58];
+
+
+%% Q1
+gravity_z = 0;
+
+%% nt m kg
+%% 2.67 g/cm^3 = 2670 kg/m^3
+nt92 = @(thick, p) nt(2670, 92.4697010, 92.6809714, thick, p(1), p(2), p(3));
+
+for i=1:rows(neh)
+  %% 一個長方體 cell 的質心作為原點
+  center = neh(i, :);
+  thick = center(3);
+  %% 長方體的質心在高度為一半處
+  center(3) /= 2;
+  gravity_z += nt92(thick, station - center);
+end
+
+%% gravity_z = 5.5722e-05 (m/s²)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;土壤濕度&quot;&gt;土壤濕度&lt;/h2&gt;
+&lt;p&gt;若加上土壤濕度的影響，假設土壤中水份的密度隨深度函數為
+&lt;code&gt;f(d) = 0.52-m*d/10&lt;/code&gt; ，其中係數 m 在冬天為 1.3，夏天為 0.7，
+且 f(d) 不會小於 0 則視為等於 0。
+積分時因為不同深度時密度會不同，
+所以我把一根長方柱在高度方向切為 64 份，
+一塊塊視為內部密度相同的長方體，最後再加總。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-matlab&quot;&gt;%% Q2
+water_density_winter = @(depth) (0.52 - 1.3*depth/10) * 1000;
+water_density_summer = @(depth) (0.52 - 0.7*depth/10) * 1000;
+
+function gravity = water_gravity(height, vector, season)
+  count = 64;
+  thick = height / count;
+  gravity = 0;
+  for i = 0:(count-1)
+    height_i = i*thick + thick/2;
+    depth_i = height - height_i;
+    density_i = season(depth_i);
+    if (density_i &amp;lt; 0)
+      density_i = 0;
+    end
+    gravity += nt(density_i, 92.4697010, 92.6809714, thick,
+                  vector(1), vector(2), vector(3)-height_i);
+  end
+end
+
+gravity_z_summer = gravity_z;
+gravity_z_winter = gravity_z;
+
+for i=1:rows(neh)
+  cell = neh(i, :);
+  height = cell(3);
+  cell(3) = 0;
+  vector = station - cell;
+  gravity_z_summer += water_gravity(height, vector, water_density_summer);
+  gravity_z_winter += water_gravity(height, vector, water_density_winter);
+end
+
+%% [gravity_z_winter gravity_z_summer] = [5.6078e-05 5.6385e-05] (m/s²)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;勘誤&quot;&gt;勘誤&lt;/h2&gt;
+&lt;h3 id=&quot;nt.m&quot;&gt;nt.m&lt;/h3&gt;
+&lt;p&gt;其中最後一行為 &lt;code&gt;Az=G*tho*(f1-f2-f3+f4-f5+f6+f7+f8);&lt;/code&gt; ，
+但計算結果和 fortran 程式不同，結果上也和直覺相悖。
+（密度加倍加速度不會加倍，距離增加加速度的變化異常。）
+和 fortran 逐行比對後才發現最後一項應為 &lt;code&gt;-f8&lt;/code&gt; ，
+最後一行應為 &lt;code&gt;Az=G*tho*(f1-f2-f3+f4-f5+f6+f7-f8);&lt;/code&gt; 。&lt;/p&gt;
+&lt;h3 id=&quot;土壤水份公式&quot;&gt;土壤水份公式&lt;/h3&gt;
+&lt;p&gt;題目中的土壤水份公式為 &lt;code&gt;[water density] = -m * [depth] / 10 + 0.52&lt;/code&gt; ，
+下文又說 m 在冬天為 &lt;code&gt;-1.3&lt;/code&gt; 夏天為 &lt;code&gt;-0.7&lt;/code&gt; ，
+但依題意土壤水份應該越深越低，
+所以題目可能多了一個負號，或是深度為負值。&lt;/p&gt;
+&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
+
+&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/geomatics-terrain-bourguer-gravity.html#point-error</id>
 <title>地型重力積分作業</title>
 <published>2019-01-09T13:25:34.518Z</published>
@@ -956,69 +1112,7 @@ apt 的版本有 bug，如果輸入帶換行會自己退出。&lt;/p&gt;
 <category term="nctu"/>
 <category term="report"/>
 <category term="geomatics"/>
-<content type="html">&lt;h1 id=&quot;SAR 雷達影像&quot;&gt;SAR 雷達影像&lt;/h1&gt;
-&lt;p&gt;&lt;abbr title=&quot;Synthetic Aperture Radar&quot;&gt;SAR&lt;/abbr&gt;
-合成孔徑雷達影像近年逐漸受到關注，
-因雷達影像不受雲層、日夜影響，可以全天候觀測。
-常見的 SAR 影像分析方法有干涉分析、強度分析、時序分析，
-在防災、救援方面有巨大的貢獻。&lt;/p&gt;
-&lt;h2 id=&quot;雷達影像相比可見光的優勢&quot;&gt;雷達影像相比可見光的優勢&lt;/h2&gt;
-&lt;p&gt;雷達主動發射電磁波後觀測反射訊號的技術，
-使用的波長主要在數公厘到數十公尺等級。
-由於波長較長，不會像可見光完全被雲層遮蔽，
-因此可以不論天候觀測。
-更由於雷達屬主動觀測，不像可見光光源為太陽，
-只能在白天觀測，更可以不受限制。&lt;/p&gt;
-&lt;p&gt;相比可見光，先是受日夜限制，晚上無法觀測，
-就去掉一半的時間是無法運作的。
-再加上人類活動地區，多數是有降雨分布的，
-也就有更多的雲層遮蔽，可見光影像常因此無用武之地。&lt;/p&gt;
-&lt;p&gt;以東亞地區來說，防災是雷達影像的主要應用，
-在地震、颱風、海嘯過後，要能快速掌握受災區域情況，
-最快就是用衛星影像製圖。
-但颱風或洪水時，災區常都是雲雨天，
-可見光根本看不到東西；也就造成關鍵時刻無圖可用的窘境。
-而雷達影像正好可以解決此一問題，
-也就成為災後製圖的首選。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46552080601&quot;&gt;&lt;img src=&quot;http://farm5.staticflickr.com/4898/46552080601_cd0696c080.jpg&quot; alt=&quot;earth with cloud and night&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;合成孔徑雷達&quot;&gt;合成孔徑雷達&lt;/h2&gt;
-&lt;p&gt;傳統雷達使用實體天線發出雷達波，稱為 &lt;strong&gt;實孔徑雷達&lt;/strong&gt; 。
-雷達波的解析度也就是雷達波束的寬度，
-若要發出極窄的雷達波，必須有極長的天線。
-但以飛機或衛星而言，配備巨大的天線是不可能的。&lt;/p&gt;
-&lt;p&gt;合成孔徑雷達則突破了這層限制，
-合成孔徑雷達是在飛機前進時，連續發出多次雷達波，
-再將在航線上成一直線的各點雷達波回波記錄合成，
-就能摸擬出一個長天線的結果。&lt;/p&gt;
-&lt;h2 id=&quot;雷達影像特性&quot;&gt;雷達影像特性&lt;/h2&gt;
-&lt;h2 id=&quot;強度分析&quot;&gt;強度分析&lt;/h2&gt;
-&lt;p&gt;強度分析是直接用回波強度值成像，
-和一般可見光影像展示的方式相同。
-雷達影像可以只用強度成像成類似灰階影像的結果。
-雷達回波強度方便的用途是用來分析水體，
-因為無論是水面或單純潮濕的地面，
-對雷達波的回波強度都較乾燥區域低。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://earth.esa.int/web/guest/missions/esa-operational-eo-missions/ers/instruments/sar/applications/radar-courses/content-2/-/asset_publisher/qIBc6NYRXfnG/content/radar-course-2-parameters-affecting-radar-backscatter&quot; title=&quot;earth esa radar&quot;&gt;另一主要用途是分析地型粗糙度。&lt;/a&gt;
-一般來說，越粗糙的地型回波越強。
-上例的水體則是極為平滑的面，所以回波較弱。
-而粗糙度如果應用在海面上的話，
-&lt;a href=&quot;https://scitechvista.nat.gov.tw/c/sWZj.htm&quot; title=&quot;科技大觀園 從太空看海洋&quot;&gt;則是在風速越強處，海浪會越破碎，&lt;/a&gt;
-因此可以做為海上天氣預報的參考。&lt;/p&gt;
-&lt;h3 id=&quot;偏振方向&quot;&gt;偏振方向&lt;/h3&gt;
-&lt;p&gt;或者雷達波也可以依雷磁波的偏振分為水平偏振與垂直偏振，
-分別可以組合四種不同的回波強度：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;發出水平接受回波中的水平偏振強度&lt;/li&gt;
-&lt;li&gt;發出水平接受回波中的垂直偏振強度&lt;/li&gt;
-&lt;li&gt;發出垂直接受回波中的垂直偏振強度&lt;/li&gt;
-&lt;li&gt;發出垂直接受回波中的水平偏振強度&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;偏振在某種程度上可以達到類似可見光中不同波段的效果；
-不同的地物對不同偏振的雷達波，
-會有不同的反射， 可以以此判別不同地物。
-雖然一般衛星只會發出一種方向的偏振，
-然後接受水平與垂直，所以只會有四種中的二種。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/linux-easy-debian-package.html</id>
 <title>debian 簡易套件打包</title>

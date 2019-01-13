@@ -47,7 +47,7 @@ gmeta.patchCjkCounter = {
     numberToCjk(n) {
         if (n <= 10) return this.string.charAt(n-1)
         else if (n <= 19) {
-            return this.string.charAt(9) + this.numberToCjk(n)
+            return this.string.charAt(9) + this.numberToCjk(n-10)
         }
         else if (n <= 99) {
             const ten = Math.floor(n / 10)

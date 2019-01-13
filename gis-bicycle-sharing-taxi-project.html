@@ -109,17 +109,41 @@
 <p>最後再找到 <a href="https://data.taipei/dataset/detail/metadata?id=758e5ae0-e6ee-448b-81f5-316eb68a5ba7" title="捷運各站座標">台北市資料開放平台上的捷運站點座標</a> ，
 以站名將座標和捷運站平均進出人次的資料關聯。</p>
 <h3 id="空間分析">空間分析</h3>
-<p>篩選出在捷運站附近的 youbike 站，
+<p>估計會受 youbike 站影響的捷運站，
+也就是在捷運站徒步範圍內有 youbike 站的捷運站。
+因此我打算用基本的環域分析篩選出在捷運站附近的 youbike 站，
 以行人徒步可接受的 500 公尺作半徑，
 篩選出會可能對該捷運站人流造成影響的 youbike 站。</p>
+<p>過程將上述的捷運站、youbike 站都匯入 qgis 中，
+以所有捷運站作環域分析，得到捷運站周圍 500 公尺的範圍。
+再將範圍與 youbike 的站點作交集，
+濾出位在捷運站 500 公尺內的 youbike 站。</p>
 <h3 id="作圖比較">作圖比較</h3>
-<p>使用 chart.js 作圖，
-視覺化捷運站在設立 youbike 站前後一個月與逐年的變化。</p>
+<p>篩出的 youbike 設站時間從 2009 年到 2018 都有，
+但捷運運量資料只有 2015 到 2018 年。
+另一種情況是一個捷運站方圓 500 公尺內有多個 youbike 站，
+我認為有一個站和二個站帶來的人流是差不多的，
+都是 <em>有車可以騎</em> 的結果。</p>
+<p>所以我決定只採用第一個在捷運站範圍設站的 youbike，
+再來是只留下有捷運運量資料期間的資料。
+另外就是 <strong>關渡站</strong> 比較特別，二次設站都是在有捷運運量資料期間，
+所以也留下來分析。
+總共原始有 70 個 youbike 站在捷運站附近，
+過濾後含關渡剩下 11 個站。</p>
+<p>有了想分析的設站日期和捷運站月均日運量，
+我用設站前後一個月共三個月的資料，
+及前後一年同樣三個月份，共九個月份的資料作圖。
+每個站一張圖，用不同顏色代表不同年份，
+重疊在同樣月份上。
+因為數據較複雜，有很多要客製化的地方，
+我使用 <a href="https://www.chartjs.org/" title="基於 canvas 的 javascript 繪圖函式庫 chart.js">javascript 函式庫 chart.js 作圖</a> ，
+javascript 為完整的程式語言，chart.js 也是完整的函式庫，
+能滿足客製化的需求。</p>
 <pre><code class="lang-json-change-youbike">{&quot;關渡&quot;:[[&quot;2015-07-01T16:00:00.000Z&quot;,&quot;2015-08-01T16:00:00.000Z&quot;,&quot;2015-09-01T16:00:00.000Z&quot;,&quot;2016-07-01T16:00:00.000Z&quot;,&quot;2016-08-01T16:00:00.000Z&quot;,&quot;2016-09-01T16:00:00.000Z&quot;,&quot;2017-07-01T16:00:00.000Z&quot;,&quot;2017-08-01T16:00:00.000Z&quot;,&quot;2017-09-01T16:00:00.000Z&quot;,&quot;2015-11-01T16:00:00.000Z&quot;,&quot;2015-12-01T16:00:00.000Z&quot;,&quot;2016-01-01T16:00:00.000Z&quot;,&quot;2016-11-01T16:00:00.000Z&quot;,&quot;2016-12-01T16:00:00.000Z&quot;,&quot;2017-01-01T16:00:00.000Z&quot;,&quot;2017-11-01T16:00:00.000Z&quot;,&quot;2017-12-01T16:00:00.000Z&quot;,&quot;2018-01-01T16:00:00.000Z&quot;],[22336.3225806452,20830.8709677419,25097.4666666667,21670.2258064516,21856.9677419355,24305.7,22260.3870967742,22233.0967741935,24396.5333333333,24549.6333333333,25446,22906.8387096774,25048.5,26407.2258064516,24239.9677419355,23563,25368.4838709677,23719]],&quot;辛亥&quot;:[[&quot;2015-05-01T16:00:00.000Z&quot;,&quot;2015-06-01T16:00:00.000Z&quot;,&quot;2015-07-01T16:00:00.000Z&quot;,&quot;2016-05-01T16:00:00.000Z&quot;,&quot;2016-06-01T16:00:00.000Z&quot;,&quot;2016-07-01T16:00:00.000Z&quot;,&quot;2017-05-01T16:00:00.000Z&quot;,&quot;2017-06-01T16:00:00.000Z&quot;,&quot;2017-07-01T16:00:00.000Z&quot;],[5874.38709677419,5763.4,5871.12903225806,5671.35483870968,5803.86666666667,5658.70967741936,5632.16129032258,5796.16666666667,5686]],&quot;萬芳社區&quot;:[[&quot;2015-03-01T16:00:00.000Z&quot;,&quot;2015-04-01T16:00:00.000Z&quot;,&quot;2015-05-01T16:00:00.000Z&quot;,&quot;2016-03-01T16:00:00.000Z&quot;,&quot;2016-04-01T16:00:00.000Z&quot;,&quot;2016-05-01T16:00:00.000Z&quot;,&quot;2017-03-01T16:00:00.000Z&quot;,&quot;2017-04-01T16:00:00.000Z&quot;,&quot;2017-05-01T16:00:00.000Z&quot;],[4209.61290322581,4320.23333333333,4213.48387096774,4280.74193548387,4310.6,4149.51612903226,4168.83870967742,4360.73333333333,4126.90322580645]],&quot;忠義&quot;:[[&quot;2015-06-01T16:00:00.000Z&quot;,&quot;2015-07-01T16:00:00.000Z&quot;,&quot;2015-08-01T16:00:00.000Z&quot;,&quot;2016-06-01T16:00:00.000Z&quot;,&quot;2016-07-01T16:00:00.000Z&quot;,&quot;2016-08-01T16:00:00.000Z&quot;,&quot;2017-06-01T16:00:00.000Z&quot;,&quot;2017-07-01T16:00:00.000Z&quot;,&quot;2017-08-01T16:00:00.000Z&quot;],[5191.96666666667,5126.45161290323,4768.45161290323,5182.63333333333,5025.96774193548,4986.45161290323,5185.26666666667,5217.12903225806,5244.67741935484]],&quot;萬隆&quot;:[[&quot;2016-06-01T16:00:00.000Z&quot;,&quot;2016-07-01T16:00:00.000Z&quot;,&quot;2016-08-01T16:00:00.000Z&quot;,&quot;2017-06-01T16:00:00.000Z&quot;,&quot;2017-07-01T16:00:00.000Z&quot;,&quot;2017-08-01T16:00:00.000Z&quot;,&quot;2018-06-01T16:00:00.000Z&quot;,&quot;2018-07-01T16:00:00.000Z&quot;,&quot;2018-08-01T16:00:00.000Z&quot;],[18045.3,17887.6129032258,17893.8709677419,17952.2,17898.1290322581,17679.064516129,17853.8666666667,18105.1935483871,17842.5161290323]],&quot;中山&quot;:[[&quot;2016-06-01T16:00:00.000Z&quot;,&quot;2016-07-01T16:00:00.000Z&quot;,&quot;2016-08-01T16:00:00.000Z&quot;,&quot;2017-06-01T16:00:00.000Z&quot;,&quot;2017-07-01T16:00:00.000Z&quot;,&quot;2017-08-01T16:00:00.000Z&quot;,&quot;2018-06-01T16:00:00.000Z&quot;,&quot;2018-07-01T16:00:00.000Z&quot;,&quot;2018-08-01T16:00:00.000Z&quot;],[73450.5333333333,74735.9032258065,75170.935483871,73447.8333333333,75673.5483870968,77326.1612903226,72763.0666666667,74052.064516129,73916.3870967742]],&quot;頭前庄&quot;:[[&quot;2015-01-01T16:00:00.000Z&quot;,&quot;2015-02-01T16:00:00.000Z&quot;,&quot;2015-03-01T16:00:00.000Z&quot;,&quot;2016-01-01T16:00:00.000Z&quot;,&quot;2016-02-01T16:00:00.000Z&quot;,&quot;2016-03-01T16:00:00.000Z&quot;,&quot;2017-01-01T16:00:00.000Z&quot;,&quot;2017-02-01T16:00:00.000Z&quot;,&quot;2017-03-01T16:00:00.000Z&quot;],[9519.58064516129,9804.25,9432.61290322581,9402.48387096774,9114.93103448276,9255.06451612903,9182.77419354839,9629.07142857143,8762.41935483871]],&quot;輔大&quot;:[[&quot;2015-06-01T16:00:00.000Z&quot;,&quot;2015-07-01T16:00:00.000Z&quot;,&quot;2015-08-01T16:00:00.000Z&quot;,&quot;2016-06-01T16:00:00.000Z&quot;,&quot;2016-07-01T16:00:00.000Z&quot;,&quot;2016-08-01T16:00:00.000Z&quot;,&quot;2017-06-01T16:00:00.000Z&quot;,&quot;2017-07-01T16:00:00.000Z&quot;,&quot;2017-08-01T16:00:00.000Z&quot;],[22807.4333333333,20497.6129032258,17829.7096774194,21714.9666666667,19498.7419354839,18371.3225806452,21676.2,19801.4516129032,19027.4516129032]],&quot;紅樹林&quot;:[[&quot;2016-05-01T16:00:00.000Z&quot;,&quot;2016-06-01T16:00:00.000Z&quot;,&quot;2016-07-01T16:00:00.000Z&quot;,&quot;2017-05-01T16:00:00.000Z&quot;,&quot;2017-06-01T16:00:00.000Z&quot;,&quot;2017-07-01T16:00:00.000Z&quot;,&quot;2018-05-01T16:00:00.000Z&quot;,&quot;2018-06-01T16:00:00.000Z&quot;,&quot;2018-07-01T16:00:00.000Z&quot;],[12781.2580645161,12926.3333333333,12898.6451612903,12944.9032258065,13113.4333333333,12966.2903225806,13616.5161290323,14072.9,13767.935483871]]}
 </code></pre>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js"></script>
 
-<script type="module">
+<script>
 const youbikeJsonNode = document.querySelector('.lang-json-change-youbike')
 function fetchYoubikeData() {
     const json = JSON.parse(youbikeJsonNode.textContent)
@@ -198,11 +222,21 @@ function plotStation(canvas, station, data) {
     })
 }
 
+function wrapCanvas(canvas, title) {
+    canvas.title = title
+    const fig = document.createElement('figure')
+    fig.innerHTML = `<a class="image"></a>
+<figcaption>${title}</figcaption>`
+    fig.querySelector('a').appendChild(canvas)
+    return fig
+}
+
 const json = fetchYoubikeData()
 for (const station in json) {
     const canvas = document.createElement('canvas')
     plotStation(canvas, station, json[station])
-    youbikeJsonNode.before(canvas)
+    const figure = wrapCanvas(canvas, station + '捷運站人次曲線')
+    youbikeJsonNode.parentNode.before(figure)
 }
 </script>
 
@@ -236,6 +270,8 @@ function $html(template, ...text) {
     .replace(/>/g, '&gt;')
   }
 }
+
+
 gmeta.reference = {
   imageCounter: 1,
   add(title, url, context) {
@@ -271,13 +307,17 @@ gmeta.reference = {
   }
 }
 document.querySelectorAll('a').forEach(anchor => {
-  const reference = gmeta.reference
-  if (anchor.classList.contains('image')) {
-    const cjk = gmeta.patchCjkCounter.numberToCjk(reference.imageCounter)
-    reference.add('圖' + cjk, anchor.href, anchor.title)
-    reference.imageCounter++
+  if (!anchor.classList.contains('image')) {
+    gmeta.reference.add(anchor.title, anchor.href, anchor.textContent)
   }
-  else reference.add(anchor.title, anchor.href, anchor.textContent)
+})
+document.querySelectorAll('figure').forEach(figure => {
+  const reference = gmeta.reference
+  const title = figure.querySelector('figcaption').textContent
+  const url = figure.querySelector('a').href
+  const cjk = gmeta.patchCjkCounter.numberToCjk(reference.imageCounter)
+  reference.add(`圖${cjk}、` + title, url, '')
+  reference.imageCounter++
 })
 gmeta.reference.render()
 </script>
@@ -293,7 +333,7 @@ a::after {
   content: "[" counter(reference-id) "]";
   font-size: smaller;
 }
-dd.context::before, dd.context::after {
+dd.context:not(:empty)::before, dd.context:not(:empty)::after {
   content: "……";
 }
 

@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-01-12T13:51:01.622Z</updated>
+  <updated>2019-01-13T05:12:01.707Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,264 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/gis-bicycle-sharing-taxi-project.html#fix-month-axis</id>
+<title>共享單車發展對計程車與公共運輸系統影響分析</title>
+<published>2018-11-27T09:06:37.910Z</published>
+<updated>2019-01-13T05:12:01.696Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/gis-bicycle-sharing-taxi-project.html#fix-month-axis"/>
+<summary type="html">
+* 將月份日期定位在該月一號。
+* 以數字顯示月份橫軸。
+* 為橫軸縱軸標上標籤。</summary>
+<category term="gis"/>
+<category term="nctu"/>
+<category term="report"/>
+<content type="html">&lt;h1 id=&quot;共享單車發展對計程車與公共運輸系統影響分析&quot;&gt;共享單車發展對計程車與公共運輸系統影響分析&lt;/h1&gt;
+&lt;p&gt;近年來世界各國吹起共享單車風，
+台灣以台北地區的 ubike 系統最為發達。
+許多民眾也開始以 ubike 代步，不再騎自己的機車或開車。
+同時因為 ubike 的方便甚至限時免費策略，
+也分走了計程車與其它公共運輸系統的一部份乘客數，
+一些計程車司機也因此抱怨 ubike 搶走了他們的生意。
+本計劃預計用台北地區 ubike 與計程車的開放資料，
+分析二者在地區、時間上彼此消長的情形。&lt;/p&gt;
+&lt;h2 id=&quot;研究方法&quot;&gt;研究方法&lt;/h2&gt;
+&lt;p&gt;希望能取得不同年份上 ubike 的各站點位置與使用人次，
+分析 ubike 擴展據點與使用人次的成長關係，
+及在 ubike 擴張範圍內，捷運、公車運量是否困此有變化。
+更進一步，希望能取得 ubike 借還地資料，
+計算 ubike 的使用距離，與捷運進出站距離的比較。&lt;/p&gt;
+&lt;h2 id=&quot;數據&quot;&gt;數據&lt;/h2&gt;
+&lt;p&gt;ubike 可以在官網找到現有站點對應的地址，
+而 &lt;a href=&quot;https://zh.wikipedia.org/wiki/%E8%87%BA%E5%8C%97%E5%B8%82%E5%85%AC%E5%85%B1%E8%87%AA%E8%A1%8C%E8%BB%8A%E7%A7%9F%E8%B3%83%E7%B3%BB%E7%B5%B1%E7%AB%99%E9%BB%9E%E5%88%97%E8%A1%A8&quot; title=&quot;維基百科上的 youbike 站點列表&quot;&gt;各站點設置日期則在維基百科有記錄&lt;/a&gt; ，
+同時有 &lt;a href=&quot;http://dotstat.taipei.gov.tw/pxweb2007P/Dialog/varval.asp?ma=TP10502M&amp;amp;ti=%BBO%A5_%A5%AB%A4%BD%A6@%A6%DB%A6%E6%A8%AE%AF%B2%B8%EE%B1%A1%A7%CE&amp;amp;path=../PXfile/CountyStatistics&amp;amp;lang=9&amp;amp;strList=L&quot; title=&quot;台北市政府對 youbike 租借人次的逐月統計&quot;&gt;每月租賃人次的統計&lt;/a&gt; 。
+&lt;a href=&quot;https://data.gov.tw/dataset/6252&quot; title=&quot;政府開放資料平台上的計程車營運統計資料&quot;&gt;計程車營運可以在政府的開放資料平台找到二年統計一次的資料&lt;/a&gt; 。&lt;/p&gt;
+&lt;h2 id=&quot;問題&quot;&gt;問題&lt;/h2&gt;
+&lt;p&gt;維基百科中，新北和台北的資料是分開的。&lt;/p&gt;
+&lt;h2 id=&quot;預期成果&quot;&gt;預期成果&lt;/h2&gt;
+&lt;p&gt;預計能看出計程車司機所抱怨的，因為 ubike 的普及，
+造成部份市民轉用 ubike，讓計程車使用率下滑。
+如果能找到公車、捷運的資料，預計也會出現類似的結果；
+但不少 ubike 站是設在捷運站，故捷運站的情況可能較複雜。&lt;/p&gt;
+&lt;h2 id=&quot;改變主題為 youbike 與捷運&quot;&gt;改變主題為 youbike 與捷運&lt;/h2&gt;
+&lt;p&gt;由於計程車的資料難以取得，
+改變主題為 youbike 的設站是否會影響捷運站的流量。
+所搜集到的資料有維基百科上各 youbike 站設站時間，
+&lt;a href=&quot;https://www.metro.taipei/cp.aspx?n=FF31501BEBDD0136&quot; title=&quot;捷運每月各站人數統計&quot;&gt;2015 年到 2018 年間每日捷運的各站進出人數統計。&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;youbike 與捷運流程&quot;&gt;youbike 與捷運流程&lt;/h2&gt;
+&lt;h3 id=&quot;整理 youbike 資料&quot;&gt;整理 youbike 資料&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;使用 javascript 從維基百科頁面中整理出所有站點的設立日期。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;使用 javascript 以站點名作聯繫，
+將站點設立日期與 youbike 官方提供的站點空間座標關聯。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;整理捷運資料&quot;&gt;整理捷運資料&lt;/h3&gt;
+&lt;p&gt;資料合併，合併各站各日為各站每月總人數。
+因每日流量變化較大，且受平日假日影響，
+合併為月流量後才較穩定。&lt;/p&gt;
+&lt;p&gt;之後發現月流量仍不穩定，
+主要變化來自各月份天數不同，
+因此再將月流量除以天數得到平均日流量。&lt;/p&gt;
+&lt;h3 id=&quot;空間分析&quot;&gt;空間分析&lt;/h3&gt;
+&lt;p&gt;篩選出在捷運站附近的 youbike 站，
+以行人徒步可接受的 500 公尺作半徑，
+篩選出會可能對該捷運站人流造成影響的 youbike 站。&lt;/p&gt;
+&lt;h3 id=&quot;作圖比較&quot;&gt;作圖比較&lt;/h3&gt;
+&lt;p&gt;使用 chart.js 作圖，
+視覺化捷運站在設立 youbike 站前後一個月與逐年的變化。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-json-change-youbike&quot;&gt;{&amp;quot;關渡&amp;quot;:[[&amp;quot;2015-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-09-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-09-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-09-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-11-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-12-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-01-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-11-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-12-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-01-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-11-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-12-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-01-01T16:00:00.000Z&amp;quot;],[22336.3225806452,20830.8709677419,25097.4666666667,21670.2258064516,21856.9677419355,24305.7,22260.3870967742,22233.0967741935,24396.5333333333,24549.6333333333,25446,22906.8387096774,25048.5,26407.2258064516,24239.9677419355,23563,25368.4838709677,23719]],&amp;quot;辛亥&amp;quot;:[[&amp;quot;2015-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-07-01T16:00:00.000Z&amp;quot;],[5874.38709677419,5763.4,5871.12903225806,5671.35483870968,5803.86666666667,5658.70967741936,5632.16129032258,5796.16666666667,5686]],&amp;quot;萬芳社區&amp;quot;:[[&amp;quot;2015-03-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-04-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-03-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-04-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-03-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-04-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-05-01T16:00:00.000Z&amp;quot;],[4209.61290322581,4320.23333333333,4213.48387096774,4280.74193548387,4310.6,4149.51612903226,4168.83870967742,4360.73333333333,4126.90322580645]],&amp;quot;忠義&amp;quot;:[[&amp;quot;2015-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-08-01T16:00:00.000Z&amp;quot;],[5191.96666666667,5126.45161290323,4768.45161290323,5182.63333333333,5025.96774193548,4986.45161290323,5185.26666666667,5217.12903225806,5244.67741935484]],&amp;quot;萬隆&amp;quot;:[[&amp;quot;2016-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-08-01T16:00:00.000Z&amp;quot;],[18045.3,17887.6129032258,17893.8709677419,17952.2,17898.1290322581,17679.064516129,17853.8666666667,18105.1935483871,17842.5161290323]],&amp;quot;中山&amp;quot;:[[&amp;quot;2016-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-08-01T16:00:00.000Z&amp;quot;],[73450.5333333333,74735.9032258065,75170.935483871,73447.8333333333,75673.5483870968,77326.1612903226,72763.0666666667,74052.064516129,73916.3870967742]],&amp;quot;頭前庄&amp;quot;:[[&amp;quot;2015-01-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-02-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-03-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-01-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-02-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-03-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-01-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-02-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-03-01T16:00:00.000Z&amp;quot;],[9519.58064516129,9804.25,9432.61290322581,9402.48387096774,9114.93103448276,9255.06451612903,9182.77419354839,9629.07142857143,8762.41935483871]],&amp;quot;輔大&amp;quot;:[[&amp;quot;2015-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-08-01T16:00:00.000Z&amp;quot;],[22807.4333333333,20497.6129032258,17829.7096774194,21714.9666666667,19498.7419354839,18371.3225806452,21676.2,19801.4516129032,19027.4516129032]],&amp;quot;紅樹林&amp;quot;:[[&amp;quot;2016-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-07-01T16:00:00.000Z&amp;quot;],[12781.2580645161,12926.3333333333,12898.6451612903,12944.9032258065,13113.4333333333,12966.2903225806,13616.5161290323,14072.9,13767.935483871]]}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js&quot;&gt;&lt;/script&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+const youbikeJsonNode = document.querySelector(&apos;.lang-json-change-youbike&apos;)
+function fetchYoubikeData() {
+    const json = JSON.parse(youbikeJsonNode.textContent)
+    for (const station in json) {
+        json[station][0] = json[station][0].map(d =&gt; {
+            const date = new Date(d)
+            if (date.valueOf()) return date
+            else return d
+        })
+    }
+    return json
+}
+
+const color = {
+    &quot;-1&quot;: &apos;rgba(0, 255, 255, 1)&apos;,
+    &quot;0&quot;: &apos;rgba(0, 180, 237, 1)&apos;,
+    &quot;1&quot;: &apos;rgba(0, 110, 220, 1)&apos;,
+    &quot;null&quot;: &apos;rgba(0, 0, 0, 0)&apos;
+}
+
+function plotStation(canvas, station, data) {
+    const lines = []
+    const date = data[0].slice()
+    const count = data[1].slice()
+    while (count.length &gt; 0) {
+        for (const yearResidue of [-1, 0, 1]) {
+            const year = {}
+            const monthCount = count.splice(0, 3)
+            const monthDate = date.splice(0, 3)
+            year.data = monthDate.map((d, i) =&gt; {
+                const correctDate = new Date(d)
+                const year = d.getFullYear() - yearResidue
+                correctDate.setFullYear(year)
+                return {t: correctDate, y: monthCount[i]}
+            })
+            year.label = String(monthDate[0].getFullYear())
+            year.pointStyle = &apos;circle&apos;
+            year.borderColor = color[yearResidue]
+            year.backgroundColor = color[null]
+            lines.push(year)
+        }
+    }
+
+    const chart = new Chart(canvas, {
+        type: &apos;line&apos;,
+        data: {
+            datasets: lines
+        },
+        options: {
+            title: {
+                display: true,
+                text: station
+            },
+            scales: {
+                xAxes: [{
+                    type: &apos;time&apos;,
+                    scaleLabel: {
+                        display: true,
+                        labelString: &apos;月份&apos;
+                    },
+                    time: {
+                        unit: &apos;month&apos;,
+                        displayFormats: {
+                            month: &apos;M&apos;
+                        }
+                    }
+                }],
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: &apos;平均日人次&apos;
+                    }
+                }]
+            }
+        }
+    })
+}
+
+const json = fetchYoubikeData()
+for (const station in json) {
+    const canvas = document.createElement(&apos;canvas&apos;)
+    plotStation(canvas, station, json[station])
+    youbikeJsonNode.before(canvas)
+}
+&lt;/script&gt;
+
+&lt;h2 id=&quot;結果分析&quot;&gt;結果分析&lt;/h2&gt;
+&lt;p&gt;影響捷運流量的因素太多了，
+像是一開始作圖就發現捷運流量
+很明顯在大月就會多、小月就會少。
+雖然已除去每月天數的影響，
+但仍沒有消除的是每月工作日與休息日的差異。
+而單就 youbike 造成的影響相對很小，
+也就無法從波動中看出。&lt;/p&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
+
+&lt;script src=&quot;ext/paper.js?execute&quot;&gt;&lt;/script&gt;
+
+&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
+
+&lt;script&gt;
+function $html(template, ...text) {
+  const result = []
+  for (let i=0; i&lt;template.length; i++) {
+    if (i&gt;0) result.push(encodeHtml(text[i-1]))
+    result.push(template[i])
+  }
+  return result.join(&apos;&apos;)
+
+  function encodeHtml(text) {
+    return text
+    .replace(/&amp;/g, &apos;&amp;amp;&apos;)
+    .replace(/&lt;/g, &apos;&amp;lt;&apos;)
+    .replace(/&gt;/g, &apos;&amp;gt;&apos;)
+  }
+}
+gmeta.reference = {
+  imageCounter: 1,
+  add(title, url, context) {
+    const entry = this.createEntry(title, url, context)
+    this.node.appendChild(entry)
+  },
+  createEntry(title, url, context) {
+    const dl = document.createElement(&apos;dl&apos;)
+    const dt = document.createElement(&apos;dt&apos;)
+    dt.textContent = title
+    dl.appendChild(dt)
+    dl.innerHTML = $html`&lt;dt&gt;${title}&lt;/dt&gt;
+    &lt;dd&gt;${url}&lt;/dd&gt;
+    &lt;dd class=&quot;context&quot;&gt;${context}&lt;/dd&gt;`
+    return dl
+  },
+  node: document.createDocumentFragment(),
+  render() {
+    const main = document.querySelector(&apos;main&apos;)
+    let referenceHeader = document.querySelector(&apos;h2.reference&apos;)
+    if (!referenceHeader) {
+      referenceHeader = document.createElement(&apos;h2&apos;)
+      referenceHeader.textContent = &apos;參考資料&apos;
+      referenceHeader.classList.add(&apos;reference&apos;)
+      main.appendChild(referenceHeader)
+    }
+    if (referenceHeader.nextSibling) {
+      referenceHeader.parentNode.insertBefore(
+        this.node, referenceHeader.nextSibling
+      )
+    }
+    else main.appendChild(this.node)
+  }
+}
+document.querySelectorAll(&apos;a&apos;).forEach(anchor =&gt; {
+  const reference = gmeta.reference
+  if (anchor.classList.contains(&apos;image&apos;)) {
+    const cjk = gmeta.patchCjkCounter.numberToCjk(reference.imageCounter)
+    reference.add(&apos;圖&apos; + cjk, anchor.href, anchor.title)
+    reference.imageCounter++
+  }
+  else reference.add(anchor.title, anchor.href, anchor.textContent)
+})
+gmeta.reference.render()
+&lt;/script&gt;
+
+&lt;style&gt;
+main {
+  counter-reset: reference-id;
+}
+a {
+  counter-increment: reference-id;
+}
+a::after {
+  content: &quot;[&quot; counter(reference-id) &quot;]&quot;;
+  font-size: smaller;
+}
+dd.context::before, dd.context::after {
+  content: &quot;……&quot;;
+}
+
+script, style {
+  display: none;
+}
+.lang-json-change-youbike {
+  display: none;
+}
+&lt;/style&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/gis-bicycle-sharing-taxi-project.html#scratch-mrt</id>
 <title>共享單車發展對計程車與公共運輸系統影響分析</title>
 <published>2018-11-27T09:06:37.910Z</published>
@@ -1216,46 +1474,7 @@ sar 影像近年越發受重視，因為能不受天候觀測，
 <category term="scheme"/>
 <category term="scope"/>
 <category term="closure"/>
-<content type="html">&lt;h1 id=&quot;lisp、閉包與 scheme&quot;&gt;lisp、閉包與 scheme&lt;/h1&gt;
-&lt;p&gt;傳統 lisp 是動態作用域，沒有閉包的概念，
-但現代詞法作用域 lexical scope 似乎是主流。
-其實回到最初，是沒有 scope 這個問題的。
-lisp 就只是一個純粹的用列表表示的語言，
-似乎動態作用域才是主流。&lt;/p&gt;
-&lt;h2 id=&quot;程式的直覺或人的直覺&quot;&gt;程式的直覺或人的直覺&lt;/h2&gt;
-&lt;p&gt;一群鼓吹函數式編程與 lexical scope 的人創造了 scheme；
-到現在另一大 lisp 分支 common lisp 也採用了動態作用域。
-我也一直以為 scheme 較先進，
-直到我讀了 &lt;a href=&quot;http://daiyuwen.freeshell.org/gb/rol/roots_of_lisp.html&quot;&gt;lisp 之根源&lt;/a&gt; ，
-才知道 lisp 並不是有意的選擇了 dynamic 或 lexical，
-而是他什麼都沒做，便成了 dynamic。&lt;/p&gt;
-&lt;p&gt;似乎 dynamic 是較自然的作法，
-lisp 最初很簡單的把函數表示為一個列表，
-自然沒有多餘的地方放所謂閉包。
-lexical 則是要在每一函數宣告時，
-將目前的 scope 保存一份到函數內。&lt;/p&gt;
-&lt;p&gt;這似乎是友善或優雅的對立。
-dynamic 的實現較簡單直覺優雅，但使用上為人詬病；
-lexical 的使用直覺，但實作上有難處。&lt;/p&gt;
-&lt;h2 id=&quot;函數命名空間與函數的內涵&quot;&gt;函數命名空間與函數的內涵&lt;/h2&gt;
-&lt;p&gt;lisp 還有另一個我不喜歡的地方，
-把函數和變數的命名空間分開放，
-lisp 之根源也是這樣做的。
-後來發現他這樣做是 &lt;em&gt;對函數的保護&lt;/em&gt; 。&lt;/p&gt;
-&lt;p&gt;因為如果照上所述，單純用列表達函數，
-又把函數和變數放在同一命名空間，
-那當使用者就會看到函數只是單純的列表，
-而且無法分別函數與列表。
-（或者是就單純把用 &lt;code&gt;&amp;apos;lambda&lt;/code&gt; 開頭的列表都當作函數。）
-但如果把這二者命名空間分開，
-使用者就根本接觸不到函數了。
-（要不要提供 function-quote &lt;code&gt;#&amp;apos;&lt;/code&gt; 又是另一回事了；
-雖然用 lambda 宣告暱名函數時還是看得到。）&lt;/p&gt;
-&lt;p&gt;至於要不要讓使用者看得到函數，
-有些人不喜歡程式暴露內部狀態；
-但我是認為應該要暴露的，
-使用者應該要能知道程式在做什麼，以及知道自己想幹什麼。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/linux-easy-debian-package.html#checkinstall-usage-and-package-archieve</id>
 <title>debian 簡易套件打包</title>

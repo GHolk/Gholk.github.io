@@ -22,50 +22,67 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="ext/meta-bloging.js"></script>
 
-<title>共享單車發展對計程車與公共運輸系統影響分析</title>
+<title>共享單車發展對捷運影響分析</title>
 </head>
 <body>
-<main><h1 id="共享單車發展對計程車與公共運輸系統影響分析">共享單車發展對計程車與公共運輸系統影響分析</h1>
+<main><h1 id="共享單車發展對捷運影響分析">共享單車發展對捷運影響分析</h1>
 <p>近年來世界各國吹起共享單車風，
-台灣以台北地區的 ubike 系統最為發達。
-許多民眾也開始以 ubike 代步，不再騎自己的機車或開車。
-同時因為 ubike 的方便甚至限時免費策略，
-也分走了計程車與其它公共運輸系統的一部份乘客數，
-一些計程車司機也因此抱怨 ubike 搶走了他們的生意。
-本計劃預計用台北地區 ubike 與計程車的開放資料，
+台灣以台北地區的 youbike 系統最為發達。
+許多民眾也開始以 youbike 代步，不再騎自己的機車或開車。
+同時因為 youbike 的方便甚至限時免費策略，
+也分走了其它運輸系統的一部份乘客數。
+本研究預計用台北地區 youbike 與捷運運量的開放資料，
 分析二者在地區、時間上彼此消長的情形。</p>
 <h2 id="研究方法">研究方法</h2>
-<p>希望能取得不同年份上 ubike 的各站點位置與使用人次，
-分析 ubike 擴展據點與使用人次的成長關係，
-及在 ubike 擴張範圍內，捷運、公車運量是否困此有變化。
-更進一步，希望能取得 ubike 借還地資料，
-計算 ubike 的使用距離，與捷運進出站距離的比較。</p>
+<p>希望能取得不同年份上 youbike 的各站點位置與使用人次，
+分析 youbike 擴展據點與使用人次的成長關係，
+及在 youbike 擴張範圍內，捷運、公車運量是否困此有變化。
+更進一步，希望能取得 youbike 借還地資料，
+計算 youbike 的使用距離，與捷運進出站距離的比較。</p>
 <h2 id="數據">數據</h2>
-<p>ubike 可以在官網找到現有站點對應的地址，
+<p>youbike 可以在官網找到現有站點對應的地址，
 而 <a href="https://zh.wikipedia.org/wiki/%E8%87%BA%E5%8C%97%E5%B8%82%E5%85%AC%E5%85%B1%E8%87%AA%E8%A1%8C%E8%BB%8A%E7%A7%9F%E8%B3%83%E7%B3%BB%E7%B5%B1%E7%AB%99%E9%BB%9E%E5%88%97%E8%A1%A8" title="維基百科上的 youbike 站點列表">各站點設置日期則在維基百科有記錄</a> ，
 同時有 <a href="http://dotstat.taipei.gov.tw/pxweb2007P/Dialog/varval.asp?ma=TP10502M&amp;ti=%BBO%A5_%A5%AB%A4%BD%A6@%A6%DB%A6%E6%A8%AE%AF%B2%B8%EE%B1%A1%A7%CE&amp;path=../PXfile/CountyStatistics&amp;lang=9&amp;strList=L" title="台北市政府對 youbike 租借人次的逐月統計">每月租賃人次的統計</a> 。
 <a href="https://data.gov.tw/dataset/6252" title="政府開放資料平台上的計程車營運統計資料">計程車營運可以在政府的開放資料平台找到二年統計一次的資料</a> 。</p>
-<h2 id="問題">問題</h2>
-<p>維基百科中，新北和台北的資料是分開的。</p>
-<h2 id="預期成果">預期成果</h2>
-<p>預計能看出計程車司機所抱怨的，因為 ubike 的普及，
-造成部份市民轉用 ubike，讓計程車使用率下滑。
-如果能找到公車、捷運的資料，預計也會出現類似的結果；
-但不少 ubike 站是設在捷運站，故捷運站的情況可能較複雜。</p>
-<h2 id="改變主題為 youbike 與捷運">改變主題為 youbike 與捷運</h2>
-<p>由於計程車的資料難以取得，
+<h3 id="改變主題為 youbike 與捷運">改變主題為 youbike 與捷運</h3>
+<p>最初因為聽說計程車因 youbike 生意變差，
+想做計程車營運狀況與 youbike 站點設立的影響。
+<a href="https://hdl.handle.net/11296/k5hkz9" title="計程車空車巡行路徑推估方法之研究 3.2 資料處理">計程車依法規加裝的 <strong>新式計費表</strong> ，
+在載客時會向車行回報起始、結束位置，</a>
+但該資料因為過於詳細隱私並無公開，
+唯一找到的 <a href="https://data.gov.tw/dataset/6252" title="政府開放資料平台上的計程車營運統計資料">上述統計資料</a> 
+則只有精確到縣市內的計程車總量，
+無法與 youbike 的分布相比。</p>
+<p>最後由於計程車的精確空間資料難以取得，
 改變主題為 youbike 的設站是否會影響捷運站的流量。
-所搜集到的資料有維基百科上各 youbike 站設站時間，
-<a href="https://www.metro.taipei/cp.aspx?n=FF31501BEBDD0136" title="捷運每月各站人數統計">2015 年到 2018 年間每日捷運的各站進出人數統計。</a></p>
-<h2 id="youbike 與捷運流程">youbike 與捷運流程</h2>
+所搜集到的資料有 <a href="https://zh.wikipedia.org/wiki/%E8%87%BA%E5%8C%97%E5%B8%82%E5%85%AC%E5%85%B1%E8%87%AA%E8%A1%8C%E8%BB%8A%E7%A7%9F%E8%B3%83%E7%B3%BB%E7%B5%B1%E7%AB%99%E9%BB%9E%E5%88%97%E8%A1%A8" title="維基百科上的 youbike 站點列表">維基百科上各 youbike 站設站時間</a> ，
+與 <a href="https://www.metro.taipei/cp.aspx?n=FF31501BEBDD0136" title="捷運每月各站人數統計">2015 年到 2018 年間每日捷運的各站進出人數統計。</a></p>
+<h2 id="預期成果">預期成果</h2>
+<p>不確定 youbike 對捷運的實際影響。可能因為捷運附近有了 youbike 站，
+使住得較遠的人也能騎到捷運站從而提升捷運站人次。
+或是在較近的路程時，因為有 youbike 就直接騎 youbike 不搭捷運，
+造成捷運使用人次下降。
+但捷運一般是較長程的通勤，應該不會被 youbike 取代，
+故期望是看到 youbike 設站後，捷運運量也增加。</p>
+<h2 id="研究流程">研究流程</h2>
 <h3 id="整理 youbike 資料">整理 youbike 資料</h3>
-<ol>
-<li><p>使用 javascript 從維基百科頁面中整理出所有站點的設立日期。</p>
-</li>
-<li><p>使用 javascript 以站點名作聯繫，
-將站點設立日期與 youbike 官方提供的站點空間座標關聯。</p>
-</li>
-</ol>
+<p>youbike 站點設立日期沒有找到整理好的公開資料，
+但維基百科上的 <a href="https://zh.wikipedia.org/wiki/%E8%87%BA%E5%8C%97%E5%B8%82%E5%85%AC%E5%85%B1%E8%87%AA%E8%A1%8C%E8%BB%8A%E7%A7%9F%E8%B3%83%E7%B3%BB%E7%B5%B1%E7%AB%99%E9%BB%9E%E5%88%97%E8%A1%A8" title="維基百科上的 youbike 站點列表">臺北市公共自行車租賃系統站點列表</a> 
+條目裡有記錄現有的站點及其設立日期。
+根據編輯記錄，每次編輯都是來自未登入的用戶的匿名編輯，
+嘗試過在該條目討論頁上與該編輯者要求資料來源，但沒有得到回應。
+只能直接相信其編輯結果，並以 javascript 將頁面中的表格整理為程式可讀取的格式，
+產生站點名、設立日期、車位、位置描述的表格。</p>
+<p>但上述資料只有對位置的模糊描述，沒有座標，
+甚至連地址都不是。（youbike 站沒有門牌。）
+於是再從 [台北市][youbike geospatial taipei]
+[新北市][youbike geospatial ntp] 政府的開放資料找出
+二地所有站點的座標與詳細資訊，並以站名作連結，
+與上述維基百科中的設站日期關聯為一大表格。
+（以 javascript 處理。）</p>
+<p>最後得到現有所有站點的座標資料與設站日期，
+以座標資料在 qgis 中展示如下圖：</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/32848042818"><img src="http://farm8.staticflickr.com/7874/32848042818_5c95992886.jpg" alt="youbike-date.png" title="youbike 站的設站時間"></a></p>
 <h3 id="整理捷運資料">整理捷運資料</h3>
 <p>資料合併，合併各站各日為各站每月總人數。
 因每日流量變化較大，且受平日假日影響，

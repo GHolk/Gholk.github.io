@@ -10,8 +10,10 @@ gmeta.postPaper = {
         document.querySelectorAll(selector).forEach(todo)
     },
     auto(execute) {
-        console.log('autoing')
-        if (execute || getParameter('execute') != undefined) {
+        const toExecute = execute ||
+              getParameter('execute') != undefined ||
+              getParameter('reference') != undefined
+        if (toExecute) {
             for (const item of this.list) this.executeItem(item)
         }
     }
@@ -41,6 +43,86 @@ gmeta.postPaper.regist('table', (table) => {
     if (table.title) caption.textContent = table.title
     table.appendChild(caption)
 })
+if (getParameter('reference') != undefined) {
+    const reference = {
+        createEntry(title) {
+            const dl = document.createElement('dl')
+            const dt = this.toNode('dt', title)
+            dl.appendChild(dt)
+            return dl
+        },
+        toNode(tag, string, className = '') {
+            const node = document.createElement(tag)
+            node.textContent = string
+            if (className) node.className = className
+            return node
+        },
+        createAnchorEntry(title, url, context) {
+            const dl = this.createEntry(title)
+            dl.classList.add('url')
+            dl.appendChild(this.toNode('dd', url, 'url'))
+            dl.appendChild(this.toNode('dd', context, 'context'))
+            return dl
+        },
+        createImageEntry(title, url) {
+            const dl = this.createEntry(title)
+            dl.classList.add('image')
+            dl.appendChild(this.toNode('dd', url, 'url'))
+            return dl
+        },
+        node: document.createDocumentFragment(),
+        urlList: [],
+        addAnchor(title, url, context) {
+            let index = this.urlList.indexOf(url) + 1
+            if (index == 0) {
+                index = this.urlList.push(url)
+                const entry = this.createAnchorEntry(title, url, context)
+                entry.querySelector('dt').dataset.referenceId = index
+                this.node.appendChild(entry)
+            }
+            return index
+        },
+        imageCount: 1,
+        addImage(title, url) {
+            const entry = this.createImageEntry(title, url)
+            const dt = entry.querySelector('dt')
+            dt.dataset.referenceId = this.imageCount
+            dt.dataset.referenceCjk =
+                gmeta.patchCjkCounter.numberToCjk(this.imageCount)
+            this.node.appendChild(entry)
+            this.imageCount += 1
+            return this.imageCount
+        },
+        render() {
+            const main = document.querySelector('main')
+            let header = document.querySelector('h2.reference')
+            if (!header) {
+                header = document.createElement('h2')
+                header.textContent = '參考資料'
+                header.classList.add('reference')
+                main.appendChild(header)
+            }
+            header.after(this.node)
+        }
+    }
+
+    gmeta.postPaper.regist('a:not(.image)', a => {
+        const index = reference.addAnchor(a.title, a.href, a.textContent)
+        a.dataset.referenceId = index
+    })
+    gmeta.postPaper.regist('figure', figure => {
+        const caption = figure.querySelector('figcaption')
+        const title = caption.textContent
+        const urlNode = figure.querySelector('a, img')
+        let url = urlNode.href || urlNode.src
+        const index = reference.addImage(title, url)
+        caption.dataset.referenceId = index
+    })
+    gmeta.postPaper.regist('body', () => reference.render())
+    gmeta.reference = reference
+
+    // window.addEventListener('load', () => reference.render())
+}
 gmeta.patchCjkCounter = {
     count: 1,
     string: '一二三四五六七八九十',

@@ -470,3 +470,19 @@ a.reference::after {
     content: "]";
 }
 
+h2.reference ~ dl > dd.context:not(:empty)::before,
+h2.reference ~ dl > dd.context:not(:empty)::after {
+    content: "……";
+}
+
+a[data-reference-id]::after {
+    content: "[" attr(data-reference-id) "] ";
+    font-size: smaller;
+}
+
+dt[data-reference-id]::before {
+    content: attr(data-reference-id) ". ";
+}
+dl.image > dt[data-reference-cjk]::before {
+    content: "圖" attr(data-reference-cjk) "、";
+}

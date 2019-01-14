@@ -72,8 +72,8 @@ youbike 站點設立日期沒有找到整理好的公開資料，
 與上述維基百科中的設站日期關聯為一大表格。
 （以 javascript 處理。）
 
-[youbike station geospatial]: https://data.gov.tw/dataset/28318 "新北市政府開放資料上的 youbike 站點座標"
-[youbike station geospatial]: https://data.taipei/dataset/detail/metadata?id=8ef1626a-892a-4218-8344-f7ac46e1aa48 "臺北市政府開放資料上的 youbike 站點座標"
+[youbike geospatial taipei]: https://data.gov.tw/dataset/28318 "新北市政府開放資料上的 youbike 站點座標"
+[youbike geospatial ntp]: https://data.taipei/dataset/detail/metadata?id=8ef1626a-892a-4218-8344-f7ac46e1aa48 "臺北市政府開放資料上的 youbike 站點座標"
 
 最後得到現有所有站點的座標資料與設站日期，
 以座標資料在 qgis 中展示如下圖：
@@ -148,7 +148,9 @@ youbike 站點設立日期沒有找到整理好的公開資料，
 另外就是 **關渡站** 比較特別，二次設站都是在有捷運運量資料期間，
 所以也留下來分析。
 總共原始有 70 個 youbike 站在捷運站附近，
-過濾後含關渡剩下 11 個站。
+過濾後含關渡剩下 9 個站。
+因為作圖為曲線圖，需要人眼一一辨識每張圖，
+如果畫個 30 張太多沒什麼意義，9 張圖已經很多了。
 
 有了想分析的設站日期和捷運站月均日運量，
 我用設站前後一個月共三個月的資料，
@@ -266,13 +268,33 @@ for (const station in json) {
 </script>
 
 ## 結果分析
-影響捷運流量的因素太多了，
+所有 9 張曲線圖中，整體沒有很明顯的趨勢。
+其中有 4 張是設站後下個月份和前後一年比較，
+使用人次有上升，但也有 3 張是有下降。
+有 3 張是設站月份和隔年同一月份相比有上升，
+其它是沒有明顯趨勢。
+整體而言看不出 youbike 設站會對捷運站運量造成上升或下降。
+
+我認為看不出 youbike 對捷運流量影響，
+是因為影響捷運流量的因素太多了，
+而 youbike 的影響沒有大到和其它波動混合後仍看得出趨勢。
 像是一開始作圖就發現捷運流量
 很明顯在大月就會多、小月就會少。
-雖然已除去每月天數的影響，
-但仍沒有消除的是每月工作日與休息日的差異。
-而單就 youbike 造成的影響相對很小，
+雖然後來除去每月天數的影響，
+但仍沒有消除的是每月工作日與休息日日數不同的差異。
+幾張曲線圖可以看到 3 年的曲線好像有同一趨勢變化，
+但又不像與 youbike 設站有關。
+可能單就 youbike 造成的影響相對很小，
 也就無法從波動中看出。
+
+後續如果要作 youbike 對捷運影響的調查，
+就知道不能單純從捷運站總運量來看，因為影響總運量的變數太多，
+而 youbike 影響的量並不是很大。
+要看出單純因為 youbike 變化的量，
+可能還需要 youbike 站的使用率，
+甚至由使用 youbike 的悠遊卡記錄中查出
+由捷運出站後租借 youbike，
+或還 youbike 後轉乘捷運的人數。
 
 
 <link rel="stylesheet" href="ext/paper.css" />
@@ -300,10 +322,16 @@ function $html(template, ...text) {
 
 
 gmeta.reference = {
-  imageCounter: 1,
+  anchorList: [],
   add(title, url, context) {
-    const entry = this.createEntry(title, url, context)
-    this.node.appendChild(entry)
+    let index = this.anchorList.indexOf(url) + 1
+    if (index == 0) {
+      index = this.anchorList.push(url)
+      const entry = this.createEntry(title, url, context)
+      entry.querySelector('dt').dataset.referenceId = index
+      this.node.appendChild(entry)
+    }
+    return index
   },
   createEntry(title, url, context) {
     const dl = document.createElement('dl')
@@ -325,26 +353,23 @@ gmeta.reference = {
       referenceHeader.classList.add('reference')
       main.appendChild(referenceHeader)
     }
-    if (referenceHeader.nextSibling) {
-      referenceHeader.parentNode.insertBefore(
-        this.node, referenceHeader.nextSibling
-      )
-    }
-    else main.appendChild(this.node)
+    referenceHeader.after(this.node)
   }
 }
 document.querySelectorAll('a').forEach(anchor => {
   if (!anchor.classList.contains('image')) {
-    gmeta.reference.add(anchor.title, anchor.href, anchor.textContent)
+    const reference = gmeta.reference
+    const index = reference.add(anchor.title, anchor.href, anchor.textContent)
+    anchor.dataset.referenceId = index
   }
 })
 document.querySelectorAll('figure').forEach(figure => {
   const reference = gmeta.reference
   const title = figure.querySelector('figcaption').textContent
   const url = figure.querySelector('a').href
-  const cjk = gmeta.patchCjkCounter.numberToCjk(reference.imageCounter)
-  reference.add(`圖${cjk}、` + title, url, '')
-  reference.imageCounter++
+  const entry = reference.createEntry(title, url, '')
+  entry.classList.add('image')
+  reference.node.appendChild(entry)
 })
 gmeta.reference.render()
 </script>
@@ -353,16 +378,38 @@ gmeta.reference.render()
 main {
   counter-reset: reference-id;
 }
-a {
-  counter-increment: reference-id;
+
+canvas {
+  width: 100% !important;
 }
-a::after {
-  content: "[" counter(reference-id) "]";
+
+a:not(.image)::after {
+  content: "[" attr(data-reference-id) "]";
   font-size: smaller;
 }
-dd.context:not(:empty)::before, dd.context:not(:empty)::after {
+.reference ~ dl > dt::before {
+  content: "[" attr(data-reference-id) "] ";
+}
+
+.reference ~ dl > dd.context:not(:empty)::before,
+.reference ~ dl > dd.context:not(:empty)::after {
   content: "……";
 }
+.reference {
+  counter-reset: image-number;
+}
+.reference ~ dl.image {
+  counter-increment: image-number;
+}
+dl.image > dt::before {
+    content: "圖" counter(image-number) ". ";
+    content: "圖" counter(image-number, cjk-decimal) "、";
+}
+dl.image > dt:empty::before {
+    content: "圖" counter(image-number);
+    content: "圖" counter(image-number, cjk-decimal);
+}
+
 
 script, style {
   display: none;

@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-01-15T11:54:17.840Z</updated>
+  <updated>2019-01-15T14:29:58.434Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,52 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/tibet-sky-xian-zi-guitar-jeans.html</id>
+<title>西藏天邊弦子的吉他</title>
+<published>2019-01-15T14:19:12.468Z</published>
+<updated>2019-01-15T14:29:58.423Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/tibet-sky-xian-zi-guitar-jeans.html"/>
+<summary type="html">在 youtube 看了 &lt;u&gt;弦子&lt;/u&gt; &lt;cite&gt;西藏天邊&lt;/cite&gt; 的 mv，
+忽然被她穿著喇叭褲彈吉他的樣子吸引。
+歌詞中的直率，彈著吉他大步向前跨，
+陽光在背後綻放的樣子，彈著吉他律動的樣子。
+該把褲子改成喇叭褲了。</summary>
+<category term="youtube"/>
+<category term="歌"/>
+<content type="html">&lt;h1 id=&quot;西藏天邊弦子的吉他&quot;&gt;西藏天邊弦子的吉他&lt;/h1&gt;
+&lt;p&gt;在 youtube 看了 &lt;u&gt;弦子&lt;/u&gt; &lt;cite&gt;西藏天邊&lt;/cite&gt; 的 mv，
+忽然被她穿著喇叭褲彈吉他的樣子吸引。
+歌詞中的直率，彈著吉他大步向前跨，
+陽光在背後綻放的樣子，彈著吉他律動的樣子。
+該把褲子改成喇叭褲了。&lt;/p&gt;
+&lt;iframe src=&quot;https://www.youtube.com/embed/0QifqQgd5jk&quot;&gt;
+&lt;a href=&quot;https://www.youtube.com/watch?v=0QifqQgd5jk&quot;&gt;弦子 西藏天邊&lt;/a&gt;
+&lt;/iframe&gt;
+
+&lt;p&gt;我很喜歡看女生穿喇叭褲，或是寬鬆的長褲，
+我喜歡那種皺摺與寬鬆的美感。
+弦子在 mv 中雙腳邁開，膝蓋微彎彈著吉他的樣子，
+邁開大步邊走邊彈，讓陽光把自己和喇叭褲照成剪影。&lt;/p&gt;
+&lt;p&gt;陳綺貞在和五月天的 &lt;a href=&quot;https://www.youtube.com/watch?v=EK9z2B9wXQk&quot;&gt;私奔到月球&lt;/a&gt; 合唱，
+也有類似的裝扮，牛仔褲和肩背吉他。
+很喜歡女生彈吉他時，隨著音樂律動，前後搖擺的樣子；
+雙膝微彎，小腿叉開，大腿又收攏的樣子；
+視角從下往上，把褲腳拍得很大的樣子。
+大概以 youtube mv 中 2m20s 時的畫面為代表。&lt;/p&gt;
+&lt;p&gt;可能我對腳有種迷戀吧。
+應該說是褲子，我喜歡那種全包覆的褲子，
+褲腳很長，可以蓋到襪子不讓小腿露出來，
+最好把襪子也蓋住，褲腳掛在鞋子上。
+我一直覺得伊斯蘭文化，
+那個要求女人不得露出身體的宗教，
+也以自己的角度理解了這種美感。&lt;/p&gt;
+&lt;p&gt;另外就是背著吉他的樣子很迷人。
+吉他的位置垂於腰部之下、二腿之間，
+彈奏時身體跟著音樂律動搖擺，
+狀似男性炫耀自身性能力的動作，
+全無色情意味，帶有別種美感。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/geomatics-seminar-sar-usage.html#reference-and-time-statistic</id>
 <title>SAR 雷達影像</title>
 <published>2019-01-02T16:12:59.999Z</published>
@@ -2555,140 +2601,7 @@ script, style {
 <category term="geomatics"/>
 <category term="report"/>
 <category term="geodesy"/>
-<content type="html">&lt;h1 id=&quot;地型重力積分作業&quot;&gt;地型重力積分作業&lt;/h1&gt;
-&lt;p&gt;物理大地測量的作業，將地型切割成一塊塊長方體，
-以 DEM 為基礎，用簡單的積分計算地型起伏、土壤中水份對重力的影響。&lt;/p&gt;
-&lt;h2 id=&quot;DEM&quot;&gt;DEM&lt;/h2&gt;
-&lt;p&gt;給定 DEM，格式為經度、緯度、E、N、正高，
-其中 E N 的取樣間距分別是 92.47 92.68。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;   120.9802780    24.7972221     0.0000000     0.0000000    44.013
-   120.9811096    24.7972221    92.4697010     0.0000000    44.651
-   120.9819412    24.7972221   184.9394020     0.0000000    45.191
-   120.9827805    24.7972221   278.2653039     0.0000000    46.322
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;長方體積分&quot;&gt;長方體積分&lt;/h2&gt;
-&lt;p&gt;一塊長方體質量在垂直方向對相對位置 (x0,y0,z0) 處的重力加速度用積分計算為：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-matlab&quot;&gt;function Az=nt(tho,leng,width,thick,x0,y0,z0) %密度，長，寬，高，測站座標
-    G=6.67E-11; % unit : MKS 制
-    x(1)=width/2;
-    x(2)=-x(1);
-    y(1)=leng/2;
-    y(2)=-y(1);
-    z(2)=thick/2;
-    z(1)=-z(2);
 
-    for i=1:2
-        xi(i)=x(i)-x0;
-        et(i)=y(i)-y0;
-        zt(i)=z(i)-z0;
-    end
-
-    f1=fz(xi(2),et(2),zt(2));
-    f2=fz(xi(1),et(2),zt(2));
-    f3=fz(xi(2),et(1),zt(2));
-    f4=fz(xi(1),et(1),zt(2));
-    f5=fz(xi(2),et(2),zt(1));
-    f6=fz(xi(1),et(2),zt(1));
-    f7=fz(xi(2),et(1),zt(1));
-    f8=fz(xi(1),et(1),zt(1));
-
-    Az=G*tho*(f1-f2-f3+f4-f5+f6+f7-f8);
-end
-
-function f=fz(xi,et,zt)
-    s=sqrt(xi*xi+et*et+zt*zt);
-    azt=abs(zt);
-    f=xi*log(s+et)+et*log(s+xi)+2*azt*atan2(s+xi+et,azt);
-end
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;積分地型&quot;&gt;積分地型&lt;/h2&gt;
-&lt;p&gt;測站座標 (555.674, -185.362, 58.000) ，
-將 DEM 給定地型範圍看成一根根長方柱，
-就能用上面長方體對一點質量的垂直重力加速度公式
-計算 DEM 中各平面對該位置的垂直重力加速度貢獻。
-在用上式積分時，座標原點視為在長方體中心，
-所以以 DEM 一塊長方柱來說，就是在高度為一半處。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-matlab&quot;&gt;data = dlmread(&amp;apos;tw_dem_1a.xyz&amp;apos;);
-%% neh = [north east height]
-neh = data(:, 3:5);
-
-station = [555.67441 -185.36194 58];
-
-
-%% Q1
-gravity_z = 0;
-
-%% nt m kg
-%% 2.67 g/cm^3 = 2670 kg/m^3
-nt92 = @(thick, p) nt(2670, 92.4697010, 92.6809714, thick, p(1), p(2), p(3));
-
-for i=1:rows(neh)
-  %% 一個長方體 cell 的質心作為原點
-  center = neh(i, :);
-  thick = center(3);
-  %% 長方體的質心在高度為一半處
-  center(3) /= 2;
-  gravity_z += nt92(thick, station - center);
-end
-
-%% gravity_z = 5.5722e-05 (m/s²)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;土壤濕度&quot;&gt;土壤濕度&lt;/h2&gt;
-&lt;p&gt;若加上土壤濕度的影響，假設土壤中水份的密度隨深度函數為
-&lt;code&gt;f(d) = 0.52-m*d/10&lt;/code&gt; ，其中係數 m 在冬天為 1.3，夏天為 0.7，
-且 f(d) 不會小於 0 則視為等於 0。
-積分時因為不同深度時密度會不同，
-所以我把一根長方柱在高度方向切為 64 份，
-一塊塊視為內部密度相同的長方體，最後再加總。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-matlab&quot;&gt;%% Q2
-water_density_winter = @(depth) (0.52 - 1.3*depth/10) * 1000;
-water_density_summer = @(depth) (0.52 - 0.7*depth/10) * 1000;
-
-function gravity = water_gravity(height, vector, season)
-  count = 64;
-  thick = height / count;
-  gravity = 0;
-  for i = 0:(count-1)
-    height_i = i*thick + thick/2;
-    depth_i = height - height_i;
-    density_i = season(depth_i);
-    if (density_i &amp;lt; 0)
-      density_i = 0;
-    end
-    gravity += nt(density_i, 92.4697010, 92.6809714, thick,
-                  vector(1), vector(2), vector(3)-height_i);
-  end
-end
-
-gravity_z_summer = gravity_z;
-gravity_z_winter = gravity_z;
-
-for i=1:rows(neh)
-  cell = neh(i, :);
-  height = cell(3);
-  cell(3) = 0;
-  vector = station - cell;
-  gravity_z_summer += water_gravity(height, vector, water_density_summer);
-  gravity_z_winter += water_gravity(height, vector, water_density_winter);
-end
-
-%% [gravity_z_winter gravity_z_summer] = [5.6078e-05 5.6385e-05] (m/s²)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;勘誤&quot;&gt;勘誤&lt;/h2&gt;
-&lt;h3 id=&quot;nt.m&quot;&gt;nt.m&lt;/h3&gt;
-&lt;p&gt;其中最後一行為 &lt;code&gt;Az=G*tho*(f1-f2-f3+f4-f5+f6+f7+f8);&lt;/code&gt; ，
-但計算結果和 fortran 程式不同，結果上也和直覺相悖。
-（密度加倍加速度不會加倍，距離增加加速度的變化異常。）
-和 fortran 逐行比對後才發現最後一項應為 &lt;code&gt;-f8&lt;/code&gt; ，
-最後一行應為 &lt;code&gt;Az=G*tho*(f1-f2-f3+f4-f5+f6+f7-f8);&lt;/code&gt; 。&lt;/p&gt;
-&lt;h3 id=&quot;土壤水份公式&quot;&gt;土壤水份公式&lt;/h3&gt;
-&lt;p&gt;題目中的土壤水份公式為 &lt;code&gt;[water density] = -m * [depth] / 10 + 0.52&lt;/code&gt; ，
-下文又說 m 在冬天為 &lt;code&gt;-1.3&lt;/code&gt; 夏天為 &lt;code&gt;-0.7&lt;/code&gt; ，
-但依題意土壤水份應該越深越低，
-所以題目可能多了一個負號，或是深度為負值。&lt;/p&gt;
-&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
-
-&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/geomatics-terrain-bourguer-gravity.html#point-error</id>
 <title>地型重力積分作業</title>

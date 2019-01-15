@@ -99,6 +99,15 @@ SAR 影像也就不受干擾。
 
 [corner reflector]: https://en.wikipedia.org/wiki/Corner_reflector "維基百科上對 corner reflector 的解釋"
 
+#### 時間序列上的統計修正
+在做淹水地圖時，只有單張影像的作法
+是將整張影像中相對弱訊號就歸為水體。
+但不同地物本來會有不同反射，只要暗處就歸為水體易有誤判。
+可以長時間觀測同一地區，得到多幀非淹水時期的 sar 影像，
+在偵測淹水時，就和非淹水時期時的影像相比較，
+回波較低的才歸為水體；
+就能避免將反射本來就較低的地物都歸到水體。
+
 ### 偏振方向
 或者雷達波也可以依雷磁波的偏振分為水平偏振與垂直偏振，
 分別可以組合四種不同的回波強度：
@@ -148,11 +157,11 @@ SAR 影像也就不受干擾。
 可以簡單看出地震前後各地在垂直方向上的移動情況，
 從而推出斷層位置。
 
-## 災損地圖
+
 
 <script src="ext/header-nctu.js?execute&editable"></script>
 
-<script src="ext/paper.js?execute"></script>
+<script src="ext/paper.js?reference"></script>
 
 <link rel="stylesheet" href="ext/paper.css">
 

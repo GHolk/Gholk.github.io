@@ -9,9 +9,6 @@
 
 [CCNS]: https://www.ccns.io/
 
-[l2tp sid only]: https://github.com/nm-l2tp/network-manager-l2tp/wiki/Prebuilt-Packages#debian
-[l2tp cross sid]: https://thomask.sdf.org/blog/2018/01/16/l2tp-vpn-networkmanager-debian-stretch.html
-
 以前有 ssh 登入權限的時候，會用 ccns 機房的機器當 ssh 跳板上 ptt：
 `ssh -J lab.ccns.ncku.edu.tw bbsu@ptt.cc` 。
 後來機房大翻修，一些機器也虛擬化，帳號就被洗掉了，也沒再要。
@@ -53,11 +50,13 @@
 試幾次 xl2tp 都連不上，看到 network manager 有個外掛
 [network manager l2tp] 能在圖型介面上
 直接連上 l2tp vpn，就抱著姑且一試的心態試了。
-該外掛有提供預編譯好的套件，但 debian stretch 沒有支援，
-只有目前的 sid 未來的 buster 有。
+[該外掛有提供預編譯好的套件，但 debian stretch 沒有支援，
+只有目前的 sid 未來的 buster 有。][l2tp sid only]
 但我也懶得自己編譯，要裝的東西太多了，放棄。
 
 [network manager l2tp]: https://github.com/nm-l2tp/network-manager-l2tp/wiki/Prebuilt-Packages
+[l2tp sid only]: https://github.com/nm-l2tp/network-manager-l2tp/wiki/Prebuilt-Packages#debian
+
 
 試著去下載 ubuntu 預編好的 deb 包，直接用 apt 安裝。
 可以開出圖形介面，但連不上。
@@ -110,10 +109,16 @@ install_and_mark() {
 }
 ```
 
+## l2tp ipsec 連線設定
+網愛社的人的用法是設 l2tp 的帳號密碼，
+ipsec 則是用一個 pre share key，也和密碼差不多。
+其它欄位都留空。（server 網址當然不能留空，
+在 network manager 介面裡，看要打 domain name 或 ip 都可以。）
+詳情可以看 [一開始提到那篇 github 連接 l2tp 的教學。][l2tp github nm-l2tp]
+
+[l2tp github nm-l2tp]: https://github.com/hwdsl2/setup-ipsec-vpn/blob/master/docs/clients.md#linux
 
 #linux
 #debian
 #vpn
 #安裝
-
-

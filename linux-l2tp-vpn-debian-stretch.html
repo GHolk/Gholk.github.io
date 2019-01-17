@@ -30,8 +30,8 @@
 最近覺得有點需要，就查了一下怎麼在 linux 下連 l2tp vpn。
 發現自己手動設定蠻麻煩的，用 network manager 管理比較簡單，
 <a href="https://github.com/nm-l2tp/network-manager-l2tp/wiki/Prebuilt-Packages#debian">但 network manager l2tp 的外掛目前只發行在 debian sid</a> ，
-又不想手動編譯；google 發現 <a href="https://thomask.sdf.org/blog/2018/01/16/l2tp-vpn-networkmanager-debian-stretch.html">有人成功在 stretch 裡
-裝 debian sid 裡舊的版本，是可以運作的</a> ，
+又不想手動編譯；google 發現 [有人成功在 stretch 裡
+裝 debian sid 裡舊的版本，是可以運作的][l2tp cross sid] ，
 就試成功了。</p>
 <p>以前有 ssh 登入權限的時候，會用 ccns 機房的機器當 ssh 跳板上 ptt：
 <code>ssh -J lab.ccns.ncku.edu.tw bbsu@ptt.cc</code> 。
@@ -67,8 +67,8 @@
 <p>試幾次 xl2tp 都連不上，看到 network manager 有個外掛
 <a href="https://github.com/nm-l2tp/network-manager-l2tp/wiki/Prebuilt-Packages">network manager l2tp</a> 能在圖型介面上
 直接連上 l2tp vpn，就抱著姑且一試的心態試了。
-該外掛有提供預編譯好的套件，但 debian stretch 沒有支援，
-只有目前的 sid 未來的 buster 有。
+<a href="https://github.com/nm-l2tp/network-manager-l2tp/wiki/Prebuilt-Packages#debian">該外掛有提供預編譯好的套件，但 debian stretch 沒有支援，
+只有目前的 sid 未來的 buster 有。</a>
 但我也懶得自己編譯，要裝的東西太多了，放棄。</p>
 <p>試著去下載 ubuntu 預編好的 deb 包，直接用 apt 安裝。
 可以開出圖形介面，但連不上。
@@ -109,7 +109,13 @@ install_and_mark() {
     apt install ./network-manager-l2tp_1.2.8-2_amd64.deb
     apt-mark auto network-manager-l2tp-gnome
 }
-</code></pre></main>
+</code></pre><h2 id="l2tp ipsec 連線設定">l2tp ipsec 連線設定</h2>
+<p>網愛社的人的用法是設 l2tp 的帳號密碼，
+ipsec 則是用一個 pre share key，也和密碼差不多。
+其它欄位都留空。（server 網址當然不能留空，
+在 network manager 介面裡，看要打 domain name 或 ip 都可以。）
+詳情可以看 <a href="https://github.com/hwdsl2/setup-ipsec-vpn/blob/master/docs/clients.md#linux">一開始提到那篇 github 連接 l2tp 的教學。</a></p>
+</main>
 
 <script defer src="ext/meta-meta.js"></script>
 <script defer data-lazy src="ext/load-disqus.js"></script>

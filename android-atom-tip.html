@@ -133,6 +133,27 @@ android 使用上有些快捷鍵，各品牌會不太一樣，
 只好開始試第三方 app。
 目前是用 <a href="https://f-droid.org/packages/it.rignanese.leo.slimfacebook/">SlimSocial for Facebook</a> ，
 介面和網頁版有點像，但分享的介面有點糟，字和按鈕會變很小。</p>
+<h2 id="alpha vnc 遠端控制手機">alpha vnc 遠端控制手機</h2>
+<p>有時候在用電腦，懶得又拿起手機用螢幕打字，
+就找了有沒有能用電腦控制手機的方法。
+一開始找了很久以前的 <a href="./android-screen-monitor.html">./android-screen-monitor.html</a> ，
+版本太舊變得很慢，跳很多警告。
+後來找到 scrcpy，也 <a href="linux-easy-debian-package.html#scrcpy">自己編譯了</a> ，
+但還是覺得有點麻煩，操作個手機這麼麻煩。</p>
+<p>後來想到能不能在手機上開 vnc server，
+就能用任意客戶端遠端連進去了。
+搜尋了一下，有一個 <a href="https://f-droid.org/forums/topic/droid-vnc-server/">droid vpn</a> 是開源的， 但很久沒更新了。
+<a href="https://code.google.com/archive/p/android-vnc-server/downloads">android vpn server</a> 和 [fastdroid vnc] 都是執行檔，
+要在 root 下執行，而且也都很久沒更新了，現在的 android 版本不支援。</p>
+<p>最後能動的有一個 <a href="https://play.google.com/store/apps/details?id=de.abr.android.avnc">alpha vnc</a> 是可以免費用，其它是要付費的沒試。
+但好像只能試用 15 分鐘，本來以為是下載 app 只能用 15 分鐘，
+後來才發現是一次 vnc 連接只能連 15 分鐘。
+其實我也沒用超過 15 分鐘過，
+主要是沒有真正需要的使用情境，所以也就和沒限制差不多。</p>
+<h2 id="vnc 當簡報筆">vnc 當簡報筆</h2>
+<p><a href="https://play.google.com/store/apps/details?id=nine.controller">remote mouse</a> 可以透過 vnc 把手機摸擬成滑鼠和幾個鍵盤鍵來操作電腦，
+但要先在電腦上開好 vnc server， 主要功能是把手機當成簡報筆用。
+<a href="android-root-atom.html">之前 root atom 的文章有提過這件事。</a></p>
 </main>
 
 <script defer src="ext/meta-meta.js"></script>

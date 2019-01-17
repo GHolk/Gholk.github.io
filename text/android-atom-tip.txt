@@ -145,4 +145,42 @@ android o 開始鈴聲音量和通知音量被合在一起，實在有點智障�
 
 [SlimSocial for Facebook]: https://f-droid.org/packages/it.rignanese.leo.slimfacebook/
 
+## alpha vnc 遠端控制手機
+有時候在用電腦，懶得又拿起手機用螢幕打字，
+就找了有沒有能用電腦控制手機的方法。
+一開始找了很久以前的 <./android-screen-monitor.html> ，
+版本太舊變得很慢，跳很多警告。
+後來找到 scrcpy，也 [自己編譯了][compile scrcpy] ，
+但還是覺得有點麻煩，操作個手機這麼麻煩。
+
+[compile scrcpy]: linux-easy-debian-package.html#scrcpy
+
+後來想到能不能在手機上開 vnc server，
+就能用任意客戶端遠端連進去了。
+搜尋了一下，有一個 [droid vpn] 是開源的， 但很久沒更新了。
+[android vpn server] 和 [fastdroid vnc] 都是執行檔，
+要在 root 下執行，而且也都很久沒更新了，現在的 android 版本不支援。
+
+[fast droid vnc]: https://code.google.com/archive/p/fastdroid-vnc/downloads
+[android vpn server]: https://code.google.com/archive/p/android-vnc-server/downloads
+[droid vpn]: https://f-droid.org/forums/topic/droid-vnc-server/
+
+最後能動的有一個 [alpha vnc] 是可以免費用，其它是要付費的沒試。
+但好像只能試用 15 分鐘，本來以為是下載 app 只能用 15 分鐘，
+後來才發現是一次 vnc 連接只能連 15 分鐘。
+其實我也沒用超過 15 分鐘過，
+主要是沒有真正需要的使用情境，所以也就和沒限制差不多。
+
+[alpha vnc]: https://play.google.com/store/apps/details?id=de.abr.android.avnc
+
+## vnc 當簡報筆
+[remote mouse] 可以透過 vnc 把手機摸擬成滑鼠和幾個鍵盤鍵來操作電腦，
+但要先在電腦上開好 vnc server， 主要功能是把手機當成簡報筆用。
+[之前 root atom 的文章有提過這件事。][vnc slide pointer]
+
+[remote mouse]: https://play.google.com/store/apps/details?id=nine.controller
+[vnc slide pointer]: android-root-atom.html
+
+
+
 #android

@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-01-17T10:29:25.085Z</updated>
+  <updated>2019-01-17T14:45:18.604Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,146 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/android-atom-tip.html#alpha-vnc-遠端控制手機</id>
+<title>atom 使用技巧</title>
+<published>2018-12-11T13:06:30.635Z</published>
+<updated>2019-01-17T14:45:18.594Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/android-atom-tip.html#alpha-vnc-遠端控制手機"/>
+<summary type="html">
+二種 vnc 的用法：用 alpha vnc 從電腦控制手機。
+和用 remote mouse 從手機控制電腦，像用來播放簡報。</summary>
+<category term="android"/>
+<content type="html">&lt;h1 id=&quot;atom 使用技巧&quot;&gt;atom 使用技巧&lt;/h1&gt;
+&lt;p&gt;最近入手了中國的一台小手機 unhertz atom。
+android 使用上有些快捷鍵，各品牌會不太一樣，
+像 atom 的截圖是同時按電源鍵和音量下，
+所以記錄下來一些有趣的用法。&lt;/p&gt;
+&lt;h2 id=&quot;螢幕截圖&quot;&gt;螢幕截圖&lt;/h2&gt;
+&lt;p&gt;同時按下電源鍵與音量向下鍵。
+這功能我找超久，後來 google 才在 atom 的使用者論壇看到這個按法。
+他們的 &lt;a href=&quot;https://drive.google.com/open?id=1Fv3wEG633XK3fEKz-or8C4OvBEnf6yQD&quot;&gt;使用者手冊&lt;/a&gt; 裡也有。這好像沒地方設定。
+手冊可能會有一些我漏掉的事，但更多廢話，
+有空的話會看看吧。&lt;/p&gt;
+&lt;h2 id=&quot;快速開啟相機&quot;&gt;快速開啟相機&lt;/h2&gt;
+&lt;p&gt;連按二下電源鍵，在待機時也效。
+可以在 &lt;em&gt;設定 &amp;gt; 系統 &amp;gt; 手勢&lt;/em&gt; 裡設定要不要使用。&lt;/p&gt;
+&lt;h2 id=&quot;返回鍵與選單鍵&quot;&gt;返回鍵與選單鍵&lt;/h2&gt;
+&lt;p&gt;可以交換二者順序。
+預設是左邊返回右邊選單，
+在 &lt;em&gt;設定 &amp;gt; 智能輔助 &amp;gt; 物理按鍵交換&lt;/em&gt; 可以調，
+如果勾選，就會讓二者交換。&lt;/p&gt;
+&lt;h2 id=&quot;Push-To-Talk 鍵&quot;&gt;Push-To-Talk 鍵&lt;/h2&gt;
+&lt;p&gt;快速開啟鍵，可以綁定快速開啟一個 app。
+預設是綁到 zello，可以在 &lt;em&gt;設定 &amp;gt; 智能輔助 &amp;gt; 快捷鍵&lt;/em&gt;
+設定要綁定的 app。&lt;/p&gt;
+&lt;p&gt;綁 zello 的話在待機時按也能啟動，
+用法就長按螢幕會自動解鎖並跳到 zello 的發話畫面，
+看到時間開始跑就能開始講話了。&lt;/p&gt;
+&lt;p&gt;比較想綁到 discord 的按鍵發話，但好像不行。
+有找到一個 &lt;a href=&quot;https://play.google.com/store/apps/details?id=flar2.homebutton&quot;&gt;button mapper&lt;/a&gt; 的 app
+能把硬體綁定動作或 app 的，但也沒有特別吸引人的用法。&lt;/p&gt;
+&lt;p&gt;比較想綁成錄音程式，可以在待機時按就開始錄音之類的，
+但還沒找到 solution。&lt;/p&gt;
+&lt;h2 id=&quot;分割螢幕&quot;&gt;分割螢幕&lt;/h2&gt;
+&lt;p&gt;本來不知知道這個功能，
+在上面的 button mapper 的 app 裡看到這個功能，
+又去 google 才知道怎麼用。
+預設是選單鍵會跳出最近使用的 app，
+長按任一 app 視窗，拉到頂端即可分割畫面。
+之後下半會維持在最近使用的 app 的多個視窗，
+之後也可以挑一個，但不能讓另一半分割是主畫面。&lt;/p&gt;
+&lt;h2 id=&quot;語音搜尋&quot;&gt;語音搜尋&lt;/h2&gt;
+&lt;p&gt;長按 home 鍵會叫出 google 助手，
+主要用來語音搜尋，也可以用語音交辦事務，
+像幾分鐘後叫我之類的。
+主要是以前我用倉頡滑動鍵盤時，在網址列不能打中文，
+所以要搜尋有點麻煩，後來就用長按 home 鍵叫出的快速搜尋，
+可以打中文。&lt;/p&gt;
+&lt;h2 id=&quot;google now&quot;&gt;google now&lt;/h2&gt;
+&lt;p&gt;原本 android o 的桌面往左滑會有 google now，
+但我實在想不出那有什麼用，而且會讓桌面被鎖在第一頁，
+只能往右延伸。
+所以後來就換掉預設的 launcher，
+找了一個舊的可以往左或往右的 open launcher。&lt;/p&gt;
+&lt;h2 id=&quot;解鎖&quot;&gt;解鎖&lt;/h2&gt;
+&lt;p&gt;atom 支援指紋、人臉辨識和其它多種解鎖。
+我現在是用指紋和 pin 碼，平常就都用指紋比較方便，
+之後可能會改用一個很長的密碼。&lt;/p&gt;
+&lt;h2 id=&quot;recovery 與 fastboot&quot;&gt;recovery 與 fastboot&lt;/h2&gt;
+&lt;p&gt;如 &lt;a href=&quot;android-root-atom.html&quot;&gt;root atom&lt;/a&gt; 這篇文章提到的，
+要進入 recovery 按著音量向下鍵與電源鍵開機，
+然後在 recovery 裡有選項可以進 fastboot。&lt;/p&gt;
+&lt;h2 id=&quot;鈴聲音量與通知音量&quot;&gt;鈴聲音量與通知音量&lt;/h2&gt;
+&lt;p&gt;android o 開始鈴聲音量和通知音量被合在一起，實在有點智障。
+通知通常還好，自己聽得到就好，漏掉就算了，也沒關係。
+鈴聲則是比較要緊的事，一定要大聲，在騎車、走路時也要能聽到。
+但 android o 這二個被合在一起，就不能各自調。&lt;/p&gt;
+&lt;p&gt;後來搜了一下，找到一個 &lt;a href=&quot;https://play.google.com/store/apps/details?id=netroken.android.persistfree&quot;&gt;volume control&lt;/a&gt; app，
+能分離這二者，就裝來用了。
+他能讓來電鈴聲獨立調整，然後系統其它通知鈴聲就能調小了。&lt;/p&gt;
+&lt;h2 id=&quot;自訂鈴聲&quot;&gt;自訂鈴聲&lt;/h2&gt;
+&lt;p&gt;以前我在 android 自訂鈴聲，
+都是放在 &lt;code&gt;/sdcard/media/audio/ringtones&lt;/code&gt; 之類的資料夾，
+然後在選擇鈴聲的介面就會出現；但我在 atom 上試沒用。&lt;/p&gt;
+&lt;p&gt;電話鈴聲可以直接在 &lt;em&gt;設定 &amp;gt; 音效 &amp;gt; 電話鈴聲 &amp;gt; 新增鈴聲&lt;/em&gt;
+裡面直接新增其它鈴聲，之後就會出現在介面裡了。&lt;/p&gt;
+&lt;p&gt;鬧鐘鈴聲則是在內建的時鐘 app 裡，
+選擇鈴聲的地方，可以從檔案系統新增其它鈴聲。&lt;/p&gt;
+&lt;h2 id=&quot;捷徑&quot;&gt;捷徑&lt;/h2&gt;
+&lt;p&gt;有些檔案會常需要快速查閱，像公車時刻表、校園地圖之類的。
+通常就是拍照或截圖成圖片，但在手機相簿久了就會被擠到後面，
+而且還要開相簿或檔案系統找蠻不方便的。&lt;/p&gt;
+&lt;p&gt;後來就找了一款 app &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.nagopy.android.fileshortcut&quot;&gt;file shortcut&lt;/a&gt; 可以在桌面設定檔案捷徑的，
+點該捷徑相當於用檔案管理員開該檔案。
+但如果久了捷徑積很多，
+也要關心哪些檔案是捷徑指向的不能刪，有點麻煩；
+所以後來換成只有一個指向資料夾的捷徑，
+要快速存取的就複製到該資料夾。&lt;/p&gt;
+&lt;h2 id=&quot;vanilla music&quot;&gt;vanilla music&lt;/h2&gt;
+&lt;p&gt;預設的怪怪的，只會在開機時掃描一次，
+之後丟進去的都不會出現，要重新開機。
+而且建播放清單時會 crash，沒辦法建。
+後來去 f-droid 上試了幾款，換成 &lt;a href=&quot;https://f-droid.org/packages/ch.blinkenlights.android.vanilla&quot;&gt;vanilla music&lt;/a&gt; 。&lt;/p&gt;
+&lt;h2 id=&quot;open camera&quot;&gt;open camera&lt;/h2&gt;
+&lt;p&gt;預設的相機 app 功能有點少，
+又無意間看到這款開源的相機 app &lt;a href=&quot;https://play.google.com/store/apps/details?id=net.sourceforge.opencamera&quot;&gt;open camera&lt;/a&gt; ，
+還不錯用，就把預設的相機 app 改成這款了；
+也就是上文提到的 &lt;a href=&quot;#快速開啟相機&quot;&gt;連按二下電源鍵快速開啟相機&lt;/a&gt; 。
+如果有多於一款相機 app，在連按二下電源鍵時會詢問你要用哪一款；
+如果已經有預設值，可以去 &lt;em&gt;設定 &amp;gt; 應用程式 &amp;gt; 已綁定的相機 app &amp;gt; 預設值&lt;/em&gt;
+清除預設值，下次再快速啟動時，就會再跳出詢問一次了。&lt;/p&gt;
+&lt;h2 id=&quot;facebook 圖片畫質&quot;&gt;facebook 圖片畫質&lt;/h2&gt;
+&lt;p&gt;我本來用 facebook 的官方 app，
+但他好像會根據手機螢幕尺寸載入不同畫質的圖片。
+我手機尺寸太小，所以圖片都很小，
+很多字都看不清楚，放大就糊掉，載下來也一樣不會變大。
+也換過官方的 facebook lite，也一樣糟，
+只好開始試第三方 app。
+目前是用 &lt;a href=&quot;https://f-droid.org/packages/it.rignanese.leo.slimfacebook/&quot;&gt;SlimSocial for Facebook&lt;/a&gt; ，
+介面和網頁版有點像，但分享的介面有點糟，字和按鈕會變很小。&lt;/p&gt;
+&lt;h2 id=&quot;alpha vnc 遠端控制手機&quot;&gt;alpha vnc 遠端控制手機&lt;/h2&gt;
+&lt;p&gt;有時候在用電腦，懶得又拿起手機用螢幕打字，
+就找了有沒有能用電腦控制手機的方法。
+一開始找了很久以前的 &lt;a href=&quot;./android-screen-monitor.html&quot;&gt;./android-screen-monitor.html&lt;/a&gt; ，
+版本太舊變得很慢，跳很多警告。
+後來找到 scrcpy，也 &lt;a href=&quot;linux-easy-debian-package.html#scrcpy&quot;&gt;自己編譯了&lt;/a&gt; ，
+但還是覺得有點麻煩，操作個手機這麼麻煩。&lt;/p&gt;
+&lt;p&gt;後來想到能不能在手機上開 vnc server，
+就能用任意客戶端遠端連進去了。
+搜尋了一下，有一個 &lt;a href=&quot;https://f-droid.org/forums/topic/droid-vnc-server/&quot;&gt;droid vpn&lt;/a&gt; 是開源的， 但很久沒更新了。
+&lt;a href=&quot;https://code.google.com/archive/p/android-vnc-server/downloads&quot;&gt;android vpn server&lt;/a&gt; 和 [fastdroid vnc] 都是執行檔，
+要在 root 下執行，而且也都很久沒更新了，現在的 android 版本不支援。&lt;/p&gt;
+&lt;p&gt;最後能動的有一個 &lt;a href=&quot;https://play.google.com/store/apps/details?id=de.abr.android.avnc&quot;&gt;alpha vnc&lt;/a&gt; 是可以免費用，其它是要付費的沒試。
+但好像只能試用 15 分鐘，本來以為是下載 app 只能用 15 分鐘，
+後來才發現是一次 vnc 連接只能連 15 分鐘。
+其實我也沒用超過 15 分鐘過，
+主要是沒有真正需要的使用情境，所以也就和沒限制差不多。&lt;/p&gt;
+&lt;h2 id=&quot;vnc 當簡報筆&quot;&gt;vnc 當簡報筆&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://play.google.com/store/apps/details?id=nine.controller&quot;&gt;remote mouse&lt;/a&gt; 可以透過 vnc 把手機摸擬成滑鼠和幾個鍵盤鍵來操作電腦，
+但要先在電腦上開好 vnc server， 主要功能是把手機當成簡報筆用。
+&lt;a href=&quot;android-root-atom.html&quot;&gt;之前 root atom 的文章有提過這件事。&lt;/a&gt;&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/linux-l2tp-vpn-debian-stretch.html#l2tp-ipsec-連線設定</id>
 <title>linux 下連接 l2tp vpn</title>
 <published>2019-01-04T17:35:53.804Z</published>
@@ -2120,286 +2260,7 @@ script, style {
 <category term="gis"/>
 <category term="nctu"/>
 <category term="report"/>
-<content type="html">&lt;h1 id=&quot;共享單車發展對捷運影響分析&quot;&gt;共享單車發展對捷運影響分析&lt;/h1&gt;
-&lt;p&gt;近年來世界各國吹起共享單車風，
-台灣以台北地區的 youbike 系統最為發達。
-許多民眾也開始以 youbike 代步，不再騎自己的機車或開車。
-同時因為 youbike 的方便甚至限時免費策略，
-也分走了其它運輸系統的一部份乘客數。
-本研究預計用台北地區 youbike 與捷運運量的開放資料，
-分析二者在地區、時間上彼此消長的情形。&lt;/p&gt;
-&lt;h2 id=&quot;研究方法&quot;&gt;研究方法&lt;/h2&gt;
-&lt;p&gt;希望能取得不同年份上 youbike 的各站點位置與使用人次，
-分析 youbike 擴展據點與使用人次的成長關係，
-及在 youbike 擴張範圍內，捷運、公車運量是否困此有變化。
-更進一步，希望能取得 youbike 借還地資料，
-計算 youbike 的使用距離，與捷運進出站距離的比較。&lt;/p&gt;
-&lt;h2 id=&quot;數據&quot;&gt;數據&lt;/h2&gt;
-&lt;p&gt;youbike 可以在官網找到現有站點對應的地址，
-而 &lt;a href=&quot;https://zh.wikipedia.org/wiki/%E8%87%BA%E5%8C%97%E5%B8%82%E5%85%AC%E5%85%B1%E8%87%AA%E8%A1%8C%E8%BB%8A%E7%A7%9F%E8%B3%83%E7%B3%BB%E7%B5%B1%E7%AB%99%E9%BB%9E%E5%88%97%E8%A1%A8&quot; title=&quot;維基百科上的 youbike 站點列表&quot;&gt;各站點設置日期則在維基百科有記錄&lt;/a&gt; ，
-同時有 &lt;a href=&quot;http://dotstat.taipei.gov.tw/pxweb2007P/Dialog/varval.asp?ma=TP10502M&amp;amp;ti=%BBO%A5_%A5%AB%A4%BD%A6@%A6%DB%A6%E6%A8%AE%AF%B2%B8%EE%B1%A1%A7%CE&amp;amp;path=../PXfile/CountyStatistics&amp;amp;lang=9&amp;amp;strList=L&quot; title=&quot;台北市政府對 youbike 租借人次的逐月統計&quot;&gt;每月租賃人次的統計&lt;/a&gt; 。
-&lt;a href=&quot;https://data.gov.tw/dataset/6252&quot; title=&quot;政府開放資料平台上的計程車營運統計資料&quot;&gt;計程車營運可以在政府的開放資料平台找到二年統計一次的資料&lt;/a&gt; 。&lt;/p&gt;
-&lt;h3 id=&quot;改變主題為 youbike 與捷運&quot;&gt;改變主題為 youbike 與捷運&lt;/h3&gt;
-&lt;p&gt;最初因為聽說計程車因 youbike 生意變差，
-想做計程車營運狀況與 youbike 站點設立的影響。
-&lt;a href=&quot;https://hdl.handle.net/11296/k5hkz9&quot; title=&quot;計程車空車巡行路徑推估方法之研究 3.2 資料處理&quot;&gt;計程車依法規加裝的 &lt;strong&gt;新式計費表&lt;/strong&gt; ，
-在載客時會向車行回報起始、結束位置，&lt;/a&gt;
-但該資料因為過於詳細隱私並無公開，
-唯一找到的 &lt;a href=&quot;https://data.gov.tw/dataset/6252&quot; title=&quot;政府開放資料平台上的計程車營運統計資料&quot;&gt;上述統計資料&lt;/a&gt; 
-則只有精確到縣市內的計程車總量，
-無法與 youbike 的分布相比。&lt;/p&gt;
-&lt;p&gt;最後由於計程車的精確空間資料難以取得，
-改變主題為 youbike 的設站是否會影響捷運站的流量。
-所搜集到的資料有 &lt;a href=&quot;https://zh.wikipedia.org/wiki/%E8%87%BA%E5%8C%97%E5%B8%82%E5%85%AC%E5%85%B1%E8%87%AA%E8%A1%8C%E8%BB%8A%E7%A7%9F%E8%B3%83%E7%B3%BB%E7%B5%B1%E7%AB%99%E9%BB%9E%E5%88%97%E8%A1%A8&quot; title=&quot;維基百科上的 youbike 站點列表&quot;&gt;維基百科上各 youbike 站設站時間&lt;/a&gt; ，
-與 &lt;a href=&quot;https://www.metro.taipei/cp.aspx?n=FF31501BEBDD0136&quot; title=&quot;捷運每月各站人數統計&quot;&gt;2015 年到 2018 年間每日捷運的各站進出人數統計。&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;預期成果&quot;&gt;預期成果&lt;/h2&gt;
-&lt;p&gt;不確定 youbike 對捷運的實際影響。可能因為捷運附近有了 youbike 站，
-使住得較遠的人也能騎到捷運站從而提升捷運站人次。
-或是在較近的路程時，因為有 youbike 就直接騎 youbike 不搭捷運，
-造成捷運使用人次下降。
-但捷運一般是較長程的通勤，應該不會被 youbike 取代，
-故期望是看到 youbike 設站後，捷運運量也增加。&lt;/p&gt;
-&lt;h2 id=&quot;研究流程&quot;&gt;研究流程&lt;/h2&gt;
-&lt;h3 id=&quot;整理 youbike 資料&quot;&gt;整理 youbike 資料&lt;/h3&gt;
-&lt;p&gt;youbike 站點設立日期沒有找到整理好的公開資料，
-但維基百科上的 &lt;a href=&quot;https://zh.wikipedia.org/wiki/%E8%87%BA%E5%8C%97%E5%B8%82%E5%85%AC%E5%85%B1%E8%87%AA%E8%A1%8C%E8%BB%8A%E7%A7%9F%E8%B3%83%E7%B3%BB%E7%B5%B1%E7%AB%99%E9%BB%9E%E5%88%97%E8%A1%A8&quot; title=&quot;維基百科上的 youbike 站點列表&quot;&gt;臺北市公共自行車租賃系統站點列表&lt;/a&gt; 
-條目裡有記錄現有的站點及其設立日期。
-根據編輯記錄，每次編輯都是來自未登入的用戶的匿名編輯，
-嘗試過在該條目討論頁上與該編輯者要求資料來源，但沒有得到回應。
-只能直接相信其編輯結果，並以 javascript 將頁面中的表格整理為程式可讀取的格式，
-產生站點名、設立日期、車位、位置描述的表格。&lt;/p&gt;
-&lt;p&gt;但上述資料只有對位置的模糊描述，沒有座標，
-甚至連地址都不是。（youbike 站沒有門牌。）
-於是再從 [台北市][youbike geospatial taipei]
-[新北市][youbike geospatial ntp] 政府的開放資料找出
-二地所有站點的座標與詳細資訊，並以站名作連結，
-與上述維基百科中的設站日期關聯為一大表格。
-（以 javascript 處理。）&lt;/p&gt;
-&lt;p&gt;最後得到現有所有站點的座標資料與設站日期，
-以座標資料在 qgis 中展示如下圖：&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/32848042818&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7874/32848042818_5c95992886.jpg&quot; alt=&quot;youbike-date.png&quot; title=&quot;youbike 站的設站時間&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;整理捷運資料&quot;&gt;整理捷運資料&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.metro.taipei/cp.aspx?n=FF31501BEBDD0136&quot; title=&quot;捷運每月各站人數統計&quot;&gt;台北捷運公司官方網站上有公告自 104 年開始的各站每日進出人數統計，&lt;/a&gt;
-因為是每日每站，每日統計可能因為平日假日浮動較大，
-所以我決定一個月統計一次，只計算月總人次。
-另外在進站與出站上，二者對 youbike 設站的表現可能不同，
-但我沒有肯定想法，於是就簡單的將二者相加，
-作為該站的運量。
-這部份因為資料有點多，我是用 Libre office 的巨集
-將試算表統一匯出成 csv 檔，再用 sed awk 統計出每月總流量。&lt;/p&gt;
-&lt;p&gt;但之後檢查數據時發現，用月流量很明顯跟著大月小月
-每月的天數不同而浮動，以天數來看就是 1/30 的波動。
-於是為了消除這種浮動，
-就決定將每月的資料除以該月份的天數，
-得到稍微穩定的數據。
-雖然還是很明顯在特定月份，
-像冬天 11 月到 1 月可能因為較冷，
-使民眾搭乘捷運的意願較高。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/45998654964&quot;&gt;&lt;img src=&quot;http://farm5.staticflickr.com/4809/45998654964_fdba6f13e4.jpg&quot; alt=&quot;month-float-day.png&quot; title=&quot;月總流量明顯受大月小月波動&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/45807926805&quot;&gt;&lt;img src=&quot;http://farm5.staticflickr.com/4807/45807926805_f10434d8b9.jpg&quot; alt=&quot;month-mean-day.png&quot; title=&quot;去掉每月天數不同後的日平均&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;但每月的日均流量還是有很大的波動，和以年為單位的周期性，
-扣掉年為周期的波動後，不同年同一月也會有波動，
-我認為可能來自於每月假日與平日天數不同所造成，
-或是其它都市發展因素。&lt;/p&gt;
-&lt;p&gt;最後再找到 &lt;a href=&quot;https://data.taipei/dataset/detail/metadata?id=758e5ae0-e6ee-448b-81f5-316eb68a5ba7&quot; title=&quot;捷運各站座標&quot;&gt;台北市資料開放平台上的捷運站點座標&lt;/a&gt; ，
-以站名將座標和捷運站平均進出人次的資料關聯。&lt;/p&gt;
-&lt;h3 id=&quot;空間分析&quot;&gt;空間分析&lt;/h3&gt;
-&lt;p&gt;篩選出在捷運站附近的 youbike 站，
-以行人徒步可接受的 500 公尺作半徑，
-篩選出會可能對該捷運站人流造成影響的 youbike 站。&lt;/p&gt;
-&lt;h3 id=&quot;作圖比較&quot;&gt;作圖比較&lt;/h3&gt;
-&lt;p&gt;使用 chart.js 作圖，
-視覺化捷運站在設立 youbike 站前後一個月與逐年的變化。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-json-change-youbike&quot;&gt;{&amp;quot;關渡&amp;quot;:[[&amp;quot;2015-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-09-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-09-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-09-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-11-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-12-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-01-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-11-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-12-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-01-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-11-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-12-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-01-01T16:00:00.000Z&amp;quot;],[22336.3225806452,20830.8709677419,25097.4666666667,21670.2258064516,21856.9677419355,24305.7,22260.3870967742,22233.0967741935,24396.5333333333,24549.6333333333,25446,22906.8387096774,25048.5,26407.2258064516,24239.9677419355,23563,25368.4838709677,23719]],&amp;quot;辛亥&amp;quot;:[[&amp;quot;2015-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-07-01T16:00:00.000Z&amp;quot;],[5874.38709677419,5763.4,5871.12903225806,5671.35483870968,5803.86666666667,5658.70967741936,5632.16129032258,5796.16666666667,5686]],&amp;quot;萬芳社區&amp;quot;:[[&amp;quot;2015-03-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-04-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-03-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-04-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-03-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-04-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-05-01T16:00:00.000Z&amp;quot;],[4209.61290322581,4320.23333333333,4213.48387096774,4280.74193548387,4310.6,4149.51612903226,4168.83870967742,4360.73333333333,4126.90322580645]],&amp;quot;忠義&amp;quot;:[[&amp;quot;2015-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-08-01T16:00:00.000Z&amp;quot;],[5191.96666666667,5126.45161290323,4768.45161290323,5182.63333333333,5025.96774193548,4986.45161290323,5185.26666666667,5217.12903225806,5244.67741935484]],&amp;quot;萬隆&amp;quot;:[[&amp;quot;2016-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-08-01T16:00:00.000Z&amp;quot;],[18045.3,17887.6129032258,17893.8709677419,17952.2,17898.1290322581,17679.064516129,17853.8666666667,18105.1935483871,17842.5161290323]],&amp;quot;中山&amp;quot;:[[&amp;quot;2016-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-08-01T16:00:00.000Z&amp;quot;],[73450.5333333333,74735.9032258065,75170.935483871,73447.8333333333,75673.5483870968,77326.1612903226,72763.0666666667,74052.064516129,73916.3870967742]],&amp;quot;頭前庄&amp;quot;:[[&amp;quot;2015-01-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-02-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-03-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-01-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-02-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-03-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-01-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-02-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-03-01T16:00:00.000Z&amp;quot;],[9519.58064516129,9804.25,9432.61290322581,9402.48387096774,9114.93103448276,9255.06451612903,9182.77419354839,9629.07142857143,8762.41935483871]],&amp;quot;輔大&amp;quot;:[[&amp;quot;2015-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-08-01T16:00:00.000Z&amp;quot;],[22807.4333333333,20497.6129032258,17829.7096774194,21714.9666666667,19498.7419354839,18371.3225806452,21676.2,19801.4516129032,19027.4516129032]],&amp;quot;紅樹林&amp;quot;:[[&amp;quot;2016-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-07-01T16:00:00.000Z&amp;quot;],[12781.2580645161,12926.3333333333,12898.6451612903,12944.9032258065,13113.4333333333,12966.2903225806,13616.5161290323,14072.9,13767.935483871]]}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js&quot;&gt;&lt;/script&gt;
 
-&lt;script type=&quot;module&quot;&gt;
-const youbikeJsonNode = document.querySelector(&apos;.lang-json-change-youbike&apos;)
-function fetchYoubikeData() {
-    const json = JSON.parse(youbikeJsonNode.textContent)
-    for (const station in json) {
-        json[station][0] = json[station][0].map(d =&gt; {
-            const date = new Date(d)
-            if (date.valueOf()) return date
-            else return d
-        })
-    }
-    return json
-}
-
-const color = {
-    &quot;-1&quot;: &apos;rgba(0, 255, 255, 1)&apos;,
-    &quot;0&quot;: &apos;rgba(0, 180, 237, 1)&apos;,
-    &quot;1&quot;: &apos;rgba(0, 110, 220, 1)&apos;,
-    &quot;null&quot;: &apos;rgba(0, 0, 0, 0)&apos;
-}
-
-function plotStation(canvas, station, data) {
-    const lines = []
-    const date = data[0].slice()
-    const count = data[1].slice()
-    while (count.length &gt; 0) {
-        for (const yearResidue of [-1, 0, 1]) {
-            const year = {}
-            const monthCount = count.splice(0, 3)
-            const monthDate = date.splice(0, 3)
-            year.data = monthDate.map((d, i) =&gt; {
-                const correctDate = new Date(d)
-                const year = d.getFullYear() - yearResidue
-                correctDate.setFullYear(year)
-                return {t: correctDate, y: monthCount[i]}
-            })
-            year.label = String(monthDate[0].getFullYear())
-            year.pointStyle = &apos;circle&apos;
-            year.borderColor = color[yearResidue]
-            year.backgroundColor = color[null]
-            lines.push(year)
-        }
-    }
-
-    const chart = new Chart(canvas, {
-        type: &apos;line&apos;,
-        data: {
-            datasets: lines
-        },
-        options: {
-            title: {
-                display: true,
-                text: station
-            },
-            scales: {
-                xAxes: [{
-                    type: &apos;time&apos;,
-                    scaleLabel: {
-                        display: true,
-                        labelString: &apos;月份&apos;
-                    },
-                    time: {
-                        unit: &apos;month&apos;,
-                        displayFormats: {
-                            month: &apos;M&apos;
-                        }
-                    }
-                }],
-                yAxes: [{
-                    scaleLabel: {
-                        display: true,
-                        labelString: &apos;平均日人次&apos;
-                    }
-                }]
-            }
-        }
-    })
-}
-
-const json = fetchYoubikeData()
-for (const station in json) {
-    const canvas = document.createElement(&apos;canvas&apos;)
-    plotStation(canvas, station, json[station])
-    youbikeJsonNode.before(canvas)
-}
-&lt;/script&gt;
-
-&lt;h2 id=&quot;結果分析&quot;&gt;結果分析&lt;/h2&gt;
-&lt;p&gt;影響捷運流量的因素太多了，
-像是一開始作圖就發現捷運流量
-很明顯在大月就會多、小月就會少。
-雖然已除去每月天數的影響，
-但仍沒有消除的是每月工作日與休息日的差異。
-而單就 youbike 造成的影響相對很小，
-也就無法從波動中看出。&lt;/p&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
-
-&lt;script src=&quot;ext/paper.js?execute&quot;&gt;&lt;/script&gt;
-
-&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
-
-&lt;script&gt;
-function $html(template, ...text) {
-  const result = []
-  for (let i=0; i&lt;template.length; i++) {
-    if (i&gt;0) result.push(encodeHtml(text[i-1]))
-    result.push(template[i])
-  }
-  return result.join(&apos;&apos;)
-
-  function encodeHtml(text) {
-    return text
-    .replace(/&amp;/g, &apos;&amp;amp;&apos;)
-    .replace(/&lt;/g, &apos;&amp;lt;&apos;)
-    .replace(/&gt;/g, &apos;&amp;gt;&apos;)
-  }
-}
-gmeta.reference = {
-  imageCounter: 1,
-  add(title, url, context) {
-    const entry = this.createEntry(title, url, context)
-    this.node.appendChild(entry)
-  },
-  createEntry(title, url, context) {
-    const dl = document.createElement(&apos;dl&apos;)
-    const dt = document.createElement(&apos;dt&apos;)
-    dt.textContent = title
-    dl.appendChild(dt)
-    dl.innerHTML = $html`&lt;dt&gt;${title}&lt;/dt&gt;
-    &lt;dd&gt;${url}&lt;/dd&gt;
-    &lt;dd class=&quot;context&quot;&gt;${context}&lt;/dd&gt;`
-    return dl
-  },
-  node: document.createDocumentFragment(),
-  render() {
-    const main = document.querySelector(&apos;main&apos;)
-    let referenceHeader = document.querySelector(&apos;h2.reference&apos;)
-    if (!referenceHeader) {
-      referenceHeader = document.createElement(&apos;h2&apos;)
-      referenceHeader.textContent = &apos;參考資料&apos;
-      referenceHeader.classList.add(&apos;reference&apos;)
-      main.appendChild(referenceHeader)
-    }
-    if (referenceHeader.nextSibling) {
-      referenceHeader.parentNode.insertBefore(
-        this.node, referenceHeader.nextSibling
-      )
-    }
-    else main.appendChild(this.node)
-  }
-}
-document.querySelectorAll(&apos;a&apos;).forEach(anchor =&gt; {
-  const reference = gmeta.reference
-  if (anchor.classList.contains(&apos;image&apos;)) {
-    const cjk = gmeta.patchCjkCounter.numberToCjk(reference.imageCounter)
-    reference.add(&apos;圖&apos; + cjk, anchor.href, anchor.title)
-    reference.imageCounter++
-  }
-  else reference.add(anchor.title, anchor.href, anchor.textContent)
-})
-gmeta.reference.render()
-&lt;/script&gt;
-
-&lt;style&gt;
-main {
-  counter-reset: reference-id;
-}
-a {
-  counter-increment: reference-id;
-}
-a::after {
-  content: &quot;[&quot; counter(reference-id) &quot;]&quot;;
-  font-size: smaller;
-}
-dd.context::before, dd.context::after {
-  content: &quot;……&quot;;
-}
-
-script, style {
-  display: none;
-}
-.lang-json-change-youbike {
-  display: none;
-}
-&lt;/style&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/gis-bicycle-sharing-taxi-project.html#fix-title-youbike-mrt</id>
 <title>共享單車發展對捷運影響分析</title>

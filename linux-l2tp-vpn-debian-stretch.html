@@ -47,7 +47,7 @@
 如果要加密還要裝 openswan 或其它 swan 系列。
 之前試過手動設定失敗， 今天又試第一次還是失敗。</p>
 <p>我看過幾篇教學，有 <a href="https://wiki.archlinux.org/index.php/Openswan_L2TP/IPsec_VPN_client_setup">arch wiki 的</a>
-也有 [github 上別人寫的文件][l2tp github] 。
+也有 <a href="https://github.com/hwdsl2/setup-ipsec-vpn/blob/master/docs/clients.md#configure-linux-vpn-clients-using-the-command-line">github 上別人寫的文件</a> 。
 後來在 github 上那篇又重試了一遍，
 整理重寫了複製貼上的 config 才成功；
 後面那些手動 route 好像也不是那麼難了，
@@ -64,8 +64,52 @@
 翻了整篇手冊頁想破頭，
 還是不確定 auto 和 add 到底要對應到哪個命令。</p>
 <h2 id="network manager 介面">network manager 介面</h2>
+<p>試幾次 xl2tp 都連不上，看到 network manager 有個外掛
+<a href="https://github.com/nm-l2tp/network-manager-l2tp/wiki/Prebuilt-Packages">network manager l2tp</a> 能在圖型介面上
+直接連上 l2tp vpn，就抱著姑且一試的心態試了。
+該外掛有提供預編譯好的套件，但 debian stretch 沒有支援，
+只有目前的 sid 未來的 buster 有。
+但我也懶得自己編譯，要裝的東西太多了，放棄。</p>
+<p>試著去下載 ubuntu 預編好的 deb 包，直接用 apt 安裝。
+可以開出圖形介面，但連不上。
+又 google 了一下，
+找到 <a href="https://thomask.sdf.org/blog/2018/01/16/l2tp-vpn-networkmanager-debian-stretch.html">一篇部落格文章說可以裝 debian sid 的版本</a> ，
+在 debian stretch 也能用，但文內的版本是 1.2.8，
+現在 sid 已經更新到 1.2.10，
+試了現在的 1.2.10，和 ubuntu 一樣有介面但不能連。</p>
 <h2 id="舊 debian archieve">舊 debian archieve</h2>
-</main>
+<p>後來直接問部落格作者，看他有沒有留當時的 deb 包。
+他簡介還蠻有趣的，是 linux user 和 <a href="http://zh.wikipedia.org/wiki/%E7%81%AB%E8%85%BF%E6%97%8F">火腿族</a> ，
+目前主要掛在 <a href="http://zh.wikipedia.org/wiki/mastodon">mastodon</a> 上，
+所以我就開了塵封已久的 g0v 的 mastodon 發訊息給他。
+結果他說也沒在用 vpn 了，傳了一個 <a href="https://snapshot.debian.org/">debian snapshot</a> 的網站給我，
+裡面收錄了所有版本的 debian package，不只是每個 debian 版本，
+連同一 debian 版本中每一次更新都有。
+我就從上面抓了 <a href="https://snapshot.debian.org/package/network-manager-l2tp/1.2.8-2/">sid 的 1.2.8-2</a> 下來裝，就能動了。</p>
+<p>deb 包就是 apt 在操作的最小單位，每個包會記錄相依的其它包，
+在用 dpkg 安裝時就是檢查有滿足就直接安裝，沒滿足就報錯。
+而 apt 不只可以從倉庫安裝，也可以直接安裝本機的 deb 包，
+只要你傳入的名稱明顯是路徑，像是用 <code>./</code> 開頭。
+而且 apt 還會幫處理相依性問題，但只會從系統的 apt 設定的網路倉庫抓，
+所以如果是載下來在本機要手動安裝的二個相依的 deb 包，就沒辦法自動安裝。</p>
+<p>以 network-manager-l2tp 和 network-manager-l2tp-gnome 二個包來說，
+可以先裝被 network-manager-l2tp 相依的 network-manager-l2tp-gnome，
+再裝 network-manager-l2tp，
+之後再把 network-manager-l2tp-gnome 標記為自動安裝，
+未來 apt remove 後 network-manager-l2tp-gnome 也會被標成不需要，
+可以自動刪除。
+或是就在安裝時把所有包的檔名都傳入，
+apt 會檢測到其中數個包相依，就會自動處理相依性。</p>
+<pre><code>install_once() {
+    apt install ./network-manager-l2tp_1.2.8-2_amd64.deb \
+                ./network-manager-l2tp-gnome_1.2.8-2_amd64.deb
+}
+install_and_mark() {
+    apt install ./network-manager-l2tp-gnome_1.2.8-2_amd64.deb
+    apt install ./network-manager-l2tp_1.2.8-2_amd64.deb
+    apt-mark auto network-manager-l2tp-gnome
+}
+</code></pre></main>
 
 <script defer src="ext/meta-meta.js"></script>
 <script defer data-lazy src="ext/load-disqus.js"></script>

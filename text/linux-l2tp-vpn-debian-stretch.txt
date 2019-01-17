@@ -37,6 +37,7 @@
 之後的 route 就是把預設路由改成該 ppp。
 
 [l2tp arch wiki]: https://wiki.archlinux.org/index.php/Openswan_L2TP/IPsec_VPN_client_setup
+[l2tp github]: https://github.com/hwdsl2/setup-ipsec-vpn/blob/master/docs/clients.md#configure-linux-vpn-clients-using-the-command-line
 
 一開始我連 l2tp ipsec openswan 之間是什麼關係都沒弄清楚，
 分不清楚教學到底是在教 l2tp client 還是 l2tp server。
@@ -49,10 +50,66 @@
 還是不確定 auto 和 add 到底要對應到哪個命令。
 
 ## network manager 介面
+試幾次 xl2tp 都連不上，看到 network manager 有個外掛
+[network manager l2tp] 能在圖型介面上
+直接連上 l2tp vpn，就抱著姑且一試的心態試了。
+該外掛有提供預編譯好的套件，但 debian stretch 沒有支援，
+只有目前的 sid 未來的 buster 有。
+但我也懶得自己編譯，要裝的東西太多了，放棄。
+
+[network manager l2tp]: https://github.com/nm-l2tp/network-manager-l2tp/wiki/Prebuilt-Packages
+
+試著去下載 ubuntu 預編好的 deb 包，直接用 apt 安裝。
+可以開出圖形介面，但連不上。
+又 google 了一下，
+找到 [一篇部落格文章說可以裝 debian sid 的版本][l2tp blog deb] ，
+在 debian stretch 也能用，但文內的版本是 1.2.8，
+現在 sid 已經更新到 1.2.10，
+試了現在的 1.2.10，和 ubuntu 一樣有介面但不能連。
+
+[l2tp blog deb]: https://thomask.sdf.org/blog/2018/01/16/l2tp-vpn-networkmanager-debian-stretch.html
 
 ## 舊 debian archieve
+後來直接問部落格作者，看他有沒有留當時的 deb 包。
+他簡介還蠻有趣的，是 linux user 和 [[火腿族]] ，
+目前主要掛在 [[mastodon]] 上，
+所以我就開了塵封已久的 g0v 的 mastodon 發訊息給他。
+結果他說也沒在用 vpn 了，傳了一個 [debian snapshot] 的網站給我，
+裡面收錄了所有版本的 debian package，不只是每個 debian 版本，
+連同一 debian 版本中每一次更新都有。
+我就從上面抓了 [sid 的 1.2.8-2][l2tp 1.2.8] 下來裝，就能動了。
 
+[debian snapshot]: https://snapshot.debian.org/
 [l2tp 1.2.8]: https://snapshot.debian.org/package/network-manager-l2tp/1.2.8-2/
+
+deb 包就是 apt 在操作的最小單位，每個包會記錄相依的其它包，
+在用 dpkg 安裝時就是檢查有滿足就直接安裝，沒滿足就報錯。
+而 apt 不只可以從倉庫安裝，也可以直接安裝本機的 deb 包，
+只要你傳入的名稱明顯是路徑，像是用 `./` 開頭。
+而且 apt 還會幫處理相依性問題，但只會從系統的 apt 設定的網路倉庫抓，
+所以如果是載下來在本機要手動安裝的二個相依的 deb 包，就沒辦法自動安裝。
+
+以 network-manager-l2tp 和 network-manager-l2tp-gnome 二個包來說，
+可以先裝被 network-manager-l2tp 相依的 network-manager-l2tp-gnome，
+再裝 network-manager-l2tp，
+之後再把 network-manager-l2tp-gnome 標記為自動安裝，
+未來 apt remove 後 network-manager-l2tp-gnome 也會被標成不需要，
+可以自動刪除。
+或是就在安裝時把所有包的檔名都傳入，
+apt 會檢測到其中數個包相依，就會自動處理相依性。
+
+```
+install_once() {
+    apt install ./network-manager-l2tp_1.2.8-2_amd64.deb \
+                ./network-manager-l2tp-gnome_1.2.8-2_amd64.deb
+}
+install_and_mark() {
+    apt install ./network-manager-l2tp-gnome_1.2.8-2_amd64.deb
+    apt install ./network-manager-l2tp_1.2.8-2_amd64.deb
+    apt-mark auto network-manager-l2tp-gnome
+}
+```
+
 
 #linux
 #debian

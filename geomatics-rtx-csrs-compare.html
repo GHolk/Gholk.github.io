@@ -1,0 +1,172 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2019-01-30T13:52:35.944Z">
+<meta name="keywords" property="og:article:tag" content="geomatics,gnss,csrs">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="useful-program-shell-script.html" title="實用的程式設計">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>rtx csrs ppp 比較</title>
+</head>
+<body>
+<main><h1 id="rtx csrs ppp 比較">rtx csrs ppp 比較</h1>
+<p>rtx 是星基即時動態定位，可望成為取代 vbs-rtk 的下一代產品。
+除了 vbs-rtk 的定位精度，更免除了虛擬基站的計算負擔。
+本文將 rtx 與 csrs ppp 比較，探討 rtx 的定位精度。</p>
+<h2 id="isrs summary">isrs summary</h2>
+<style>
+blockquote h1, blockquote h2, blockquote h3 {
+  counter-increment: none;
+}
+blockquote h1::before, blockquote h2::before, blockquote h3::before {
+  content: none;
+}
+</style>
+
+<blockquote>
+<h2 id="RTX and CSRS PPP kinematic positioning&apos;s accuracy study">RTX and CSRS PPP kinematic positioning&apos;s accuracy study</h2>
+<p>This study inspect the accuracy of RTX by
+comparing <strong>RTX</strong> ™ to the <strong>CSRS</strong>
+<abbr title="precise point positioning">PPP</abbr> service.
+RTX is a realtime kinematic satelite base positioning service,
+which claim that its positioning is as precise as traditional
+<abbr title="virtual base station">VBS</abbr> - 
+<abbr title="real time kinematic">RTK</abbr> .
+Traditional VBS-RTK is constrained by the server&apos;s
+computing ablitity because the server need to compute
+a virtual base station for each user.
+Howevery, satelite base positioning service like RTK
+will broadcast the correction signal to every user;
+same correction signal can apply to all users,
+so satelite base positioning service only need one times computing.
+It is expect that satelite base RTK will replace traditional VBS-RTK.</p>
+</blockquote>
+<h2 id="綜合比較">綜合比較</h2>
+<p>綜合來說，rtx 較 csrs online 的解算成果較接近公告作標值，
+但 csrs online 的精度較佳。
+而本地端的舊版本 csrs 精度和準度
+都明顯低於 rtx 與 csrs online，就不作統計。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/33052347358"><img src="http://farm5.staticflickr.com/4914/33052347358_d319bf45e7.jpg" alt="twd97-east.png" title="rtx csrs 定位東西方向比較"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/46927812051"><img src="http://farm8.staticflickr.com/7856/46927812051_b8190b7810.jpg" alt="twd97-north.png" title="rtx csrs 定位南北方向比較"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/39963136943"><img src="http://farm5.staticflickr.com/4905/39963136943_da263f743b.jpg" alt="ellipsoid-height.png" title="rtx csrs 定位橢球高比較"></a></p>
+<h2 id="rtx 散布分析">rtx 散布分析</h2>
+<p>rtx 定位在三方向上的精度相近。</p>
+<table>
+<thead>
+<tr>
+<th>數值</th>
+<th>E</th>
+<th>N</th>
+<th>h</th>
+<th>斜距</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>平均值與與真值的誤差</td>
+<td>-0.056137</td>
+<td>0.129185</td>
+<td>-0.023663</td>
+<td>0.14283</td>
+</tr>
+<tr>
+<td>標準偏差</td>
+<td>0.044764</td>
+<td>0.024273</td>
+<td>0.050997</td>
+<td>0.072067</td>
+</tr>
+</tbody>
+</table>
+<p><a href="http://www.flickr.com/photos/144554087@N04/31986703477"><img src="http://farm8.staticflickr.com/7876/31986703477_1fb33dba6d.jpg" alt="destribution rtx" title="rtx 定位三方向散布情形"></a></p>
+<h2 id="csrs online 散布分析">csrs online 散布分析</h2>
+<p>csrs 的單點定位在平面精度極佳，但高程精度相對較低。</p>
+<table>
+<thead>
+<tr>
+<th>數值</th>
+<th>E</th>
+<th>N</th>
+<th>h</th>
+<th>斜距</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>平均值與與真值的誤差</td>
+<td>0.225205</td>
+<td>-0.033640</td>
+<td>-0.105672</td>
+<td>0.25103</td>
+</tr>
+<tr>
+<td>標準偏差</td>
+<td>0.0077312</td>
+<td>0.0068739</td>
+<td>0.0265718</td>
+<td>0.028515</td>
+</tr>
+</tbody>
+</table>
+<p><a href="http://www.flickr.com/photos/144554087@N04/46202988274"><img src="http://farm8.staticflickr.com/7856/46202988274_713beeb3f0.jpg" alt="destribution csrs online" title="csrs online 定位三方向散布情形"></a></p>
+<h2 id="rtx csrs 差距">rtx csrs 差距</h2>
+<p>逐秒比較 rtx 與 csrs 二者定位的座標差異。</p>
+<table>
+<thead>
+<tr>
+<th>種類</th>
+<th>E</th>
+<th>N</th>
+<th>h</th>
+<th>斜距</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>差異的平均</td>
+<td>0.28043</td>
+<td>-0.163352</td>
+<td>-0.0802983</td>
+<td>0.33432</td>
+</tr>
+<tr>
+<td>差異的標準差</td>
+<td>0.044771</td>
+<td>0.025687</td>
+<td>0.057144</td>
+<td>0.077005</td>
+</tr>
+</tbody>
+</table>
+<p><a href="http://www.flickr.com/photos/144554087@N04/46203489324"><img src="http://farm5.staticflickr.com/4885/46203489324_e40d77081b.jpg" alt="deviation-rtx-csrs.png" title="rtx csrs 二者在三方向上差異"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/46876044942"><img src="http://farm8.staticflickr.com/7815/46876044942_f97d74930c.jpg" alt="deviation-rtx-csrs-destribution.png" title="rtx csrs 二者在三方向上差異分布情形"></a></p>
+<h2 id="結論">結論</h2>
+<p>大致上 rtx csrs 的定位分布都接近常態分布，
+csrs ppp 的精度較佳，而 rtx 的精度稍低，
+但平均較接近公告座標。</p>
+<script src="ext/paper.js?reference"></script>
+
+<link rel="stylesheet" href="ext/paper.css">
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

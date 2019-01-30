@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-01-19T15:07:05.320Z</updated>
+  <updated>2019-01-30T16:43:31.267Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,157 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/geomatics-rtx-csrs-compare.html</id>
+<title>rtx csrs ppp 比較</title>
+<published>2019-01-30T13:52:35.944Z</published>
+<updated>2019-01-30T16:43:31.258Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/geomatics-rtx-csrs-compare.html"/>
+<summary type="html">rtx 是星基即時動態定位，可望成為取代 vbs-rtk 的下一代產品。
+除了 vbs-rtk 的定位精度，更免除了虛擬基站的計算負擔。
+本文將 rtx 與 csrs ppp 比較，探討 rtx 的定位精度。</summary>
+<category term="geomatics"/>
+<category term="gnss"/>
+<category term="csrs"/>
+<content type="html">&lt;h1 id=&quot;rtx csrs ppp 比較&quot;&gt;rtx csrs ppp 比較&lt;/h1&gt;
+&lt;p&gt;rtx 是星基即時動態定位，可望成為取代 vbs-rtk 的下一代產品。
+除了 vbs-rtk 的定位精度，更免除了虛擬基站的計算負擔。
+本文將 rtx 與 csrs ppp 比較，探討 rtx 的定位精度。&lt;/p&gt;
+&lt;h2 id=&quot;isrs summary&quot;&gt;isrs summary&lt;/h2&gt;
+&lt;style&gt;
+blockquote h1, blockquote h2, blockquote h3 {
+  counter-increment: none;
+}
+blockquote h1::before, blockquote h2::before, blockquote h3::before {
+  content: none;
+}
+&lt;/style&gt;
+
+&lt;blockquote&gt;
+&lt;h2 id=&quot;RTX and CSRS PPP kinematic positioning&amp;apos;s accuracy study&quot;&gt;RTX and CSRS PPP kinematic positioning&amp;apos;s accuracy study&lt;/h2&gt;
+&lt;p&gt;This study inspect the accuracy of RTX by
+comparing &lt;strong&gt;RTX&lt;/strong&gt; ™ to the &lt;strong&gt;CSRS&lt;/strong&gt;
+&lt;abbr title=&quot;precise point positioning&quot;&gt;PPP&lt;/abbr&gt; service.
+RTX is a realtime kinematic satelite base positioning service,
+which claim that its positioning is as precise as traditional
+&lt;abbr title=&quot;virtual base station&quot;&gt;VBS&lt;/abbr&gt; - 
+&lt;abbr title=&quot;real time kinematic&quot;&gt;RTK&lt;/abbr&gt; .
+Traditional VBS-RTK is constrained by the server&amp;apos;s
+computing ablitity because the server need to compute
+a virtual base station for each user.
+Howevery, satelite base positioning service like RTK
+will broadcast the correction signal to every user;
+same correction signal can apply to all users,
+so satelite base positioning service only need one times computing.
+It is expect that satelite base RTK will replace traditional VBS-RTK.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;綜合比較&quot;&gt;綜合比較&lt;/h2&gt;
+&lt;p&gt;綜合來說，rtx 較 csrs online 的解算成果較接近公告作標值，
+但 csrs online 的精度較佳。
+而本地端的舊版本 csrs 精度和準度
+都明顯低於 rtx 與 csrs online，就不作統計。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33052347358&quot;&gt;&lt;img src=&quot;http://farm5.staticflickr.com/4914/33052347358_d319bf45e7.jpg&quot; alt=&quot;twd97-east.png&quot; title=&quot;rtx csrs 定位東西方向比較&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46927812051&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7856/46927812051_b8190b7810.jpg&quot; alt=&quot;twd97-north.png&quot; title=&quot;rtx csrs 定位南北方向比較&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/39963136943&quot;&gt;&lt;img src=&quot;http://farm5.staticflickr.com/4905/39963136943_da263f743b.jpg&quot; alt=&quot;ellipsoid-height.png&quot; title=&quot;rtx csrs 定位橢球高比較&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;rtx 散布分析&quot;&gt;rtx 散布分析&lt;/h2&gt;
+&lt;p&gt;rtx 定位在三方向上的精度相近。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;數值&lt;/th&gt;
+&lt;th&gt;E&lt;/th&gt;
+&lt;th&gt;N&lt;/th&gt;
+&lt;th&gt;h&lt;/th&gt;
+&lt;th&gt;斜距&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;平均值與與真值的誤差&lt;/td&gt;
+&lt;td&gt;-0.056137&lt;/td&gt;
+&lt;td&gt;0.129185&lt;/td&gt;
+&lt;td&gt;-0.023663&lt;/td&gt;
+&lt;td&gt;0.14283&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;標準偏差&lt;/td&gt;
+&lt;td&gt;0.044764&lt;/td&gt;
+&lt;td&gt;0.024273&lt;/td&gt;
+&lt;td&gt;0.050997&lt;/td&gt;
+&lt;td&gt;0.072067&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/31986703477&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7876/31986703477_1fb33dba6d.jpg&quot; alt=&quot;destribution rtx&quot; title=&quot;rtx 定位三方向散布情形&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;csrs online 散布分析&quot;&gt;csrs online 散布分析&lt;/h2&gt;
+&lt;p&gt;csrs 的單點定位在平面精度極佳，但高程精度相對較低。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;數值&lt;/th&gt;
+&lt;th&gt;E&lt;/th&gt;
+&lt;th&gt;N&lt;/th&gt;
+&lt;th&gt;h&lt;/th&gt;
+&lt;th&gt;斜距&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;平均值與與真值的誤差&lt;/td&gt;
+&lt;td&gt;0.225205&lt;/td&gt;
+&lt;td&gt;-0.033640&lt;/td&gt;
+&lt;td&gt;-0.105672&lt;/td&gt;
+&lt;td&gt;0.25103&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;標準偏差&lt;/td&gt;
+&lt;td&gt;0.0077312&lt;/td&gt;
+&lt;td&gt;0.0068739&lt;/td&gt;
+&lt;td&gt;0.0265718&lt;/td&gt;
+&lt;td&gt;0.028515&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46202988274&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7856/46202988274_713beeb3f0.jpg&quot; alt=&quot;destribution csrs online&quot; title=&quot;csrs online 定位三方向散布情形&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;rtx csrs 差距&quot;&gt;rtx csrs 差距&lt;/h2&gt;
+&lt;p&gt;逐秒比較 rtx 與 csrs 二者定位的座標差異。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;種類&lt;/th&gt;
+&lt;th&gt;E&lt;/th&gt;
+&lt;th&gt;N&lt;/th&gt;
+&lt;th&gt;h&lt;/th&gt;
+&lt;th&gt;斜距&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;差異的平均&lt;/td&gt;
+&lt;td&gt;0.28043&lt;/td&gt;
+&lt;td&gt;-0.163352&lt;/td&gt;
+&lt;td&gt;-0.0802983&lt;/td&gt;
+&lt;td&gt;0.33432&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;差異的標準差&lt;/td&gt;
+&lt;td&gt;0.044771&lt;/td&gt;
+&lt;td&gt;0.025687&lt;/td&gt;
+&lt;td&gt;0.057144&lt;/td&gt;
+&lt;td&gt;0.077005&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46203489324&quot;&gt;&lt;img src=&quot;http://farm5.staticflickr.com/4885/46203489324_e40d77081b.jpg&quot; alt=&quot;deviation-rtx-csrs.png&quot; title=&quot;rtx csrs 二者在三方向上差異&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46876044942&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7815/46876044942_f97d74930c.jpg&quot; alt=&quot;deviation-rtx-csrs-destribution.png&quot; title=&quot;rtx csrs 二者在三方向上差異分布情形&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;結論&quot;&gt;結論&lt;/h2&gt;
+&lt;p&gt;大致上 rtx csrs 的定位分布都接近常態分布，
+csrs ppp 的精度較佳，而 rtx 的精度稍低，
+但平均較接近公告座標。&lt;/p&gt;
+&lt;script src=&quot;ext/paper.js?reference&quot;&gt;&lt;/script&gt;
+
+&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/useful-program-shell-script.html</id>
 <title>實用的程式設計</title>
 <published>2019-01-19T14:53:04.213Z</published>
@@ -1595,371 +1746,7 @@ To all the Linux that bring us to kernel.&lt;/p&gt;
 <category term="gis"/>
 <category term="nctu"/>
 <category term="report"/>
-<content type="html">&lt;h1 id=&quot;共享單車發展對捷運影響分析&quot;&gt;共享單車發展對捷運影響分析&lt;/h1&gt;
-&lt;p&gt;近年來世界各國吹起共享單車風，
-台灣以台北地區的 youbike 系統最為發達。
-許多民眾也開始以 youbike 代步，不再騎自己的機車或開車。
-同時因為 youbike 的方便甚至限時免費策略，
-也分走了其它運輸系統的一部份乘客數。
-本研究預計用台北地區 youbike 與捷運運量的開放資料，
-分析二者在地區、時間上彼此消長的情形。&lt;/p&gt;
-&lt;h2 id=&quot;研究方法&quot;&gt;研究方法&lt;/h2&gt;
-&lt;p&gt;希望能取得不同年份上 youbike 的各站點位置與使用人次，
-分析 youbike 擴展據點與使用人次的成長關係，
-及在 youbike 擴張範圍內，捷運、公車運量是否困此有變化。
-更進一步，希望能取得 youbike 借還地資料，
-計算 youbike 的使用距離，與捷運進出站距離的比較。&lt;/p&gt;
-&lt;h2 id=&quot;數據&quot;&gt;數據&lt;/h2&gt;
-&lt;p&gt;youbike 可以在官網找到現有站點對應的地址，
-而 &lt;a href=&quot;https://zh.wikipedia.org/wiki/%E8%87%BA%E5%8C%97%E5%B8%82%E5%85%AC%E5%85%B1%E8%87%AA%E8%A1%8C%E8%BB%8A%E7%A7%9F%E8%B3%83%E7%B3%BB%E7%B5%B1%E7%AB%99%E9%BB%9E%E5%88%97%E8%A1%A8&quot; title=&quot;維基百科上的 youbike 站點列表&quot;&gt;各站點設置日期則在維基百科有記錄&lt;/a&gt; ，
-同時有 &lt;a href=&quot;http://dotstat.taipei.gov.tw/pxweb2007P/Dialog/varval.asp?ma=TP10502M&amp;amp;ti=%BBO%A5_%A5%AB%A4%BD%A6@%A6%DB%A6%E6%A8%AE%AF%B2%B8%EE%B1%A1%A7%CE&amp;amp;path=../PXfile/CountyStatistics&amp;amp;lang=9&amp;amp;strList=L&quot; title=&quot;台北市政府對 youbike 租借人次的逐月統計&quot;&gt;每月租賃人次的統計&lt;/a&gt; 。
-&lt;a href=&quot;https://data.gov.tw/dataset/6252&quot; title=&quot;政府開放資料平台上的計程車營運統計資料&quot;&gt;計程車營運可以在政府的開放資料平台找到二年統計一次的資料&lt;/a&gt; 。&lt;/p&gt;
-&lt;h3 id=&quot;改變主題為 youbike 與捷運&quot;&gt;改變主題為 youbike 與捷運&lt;/h3&gt;
-&lt;p&gt;最初因為聽說計程車因 youbike 生意變差，
-想做計程車營運狀況與 youbike 站點設立的影響。
-&lt;a href=&quot;https://hdl.handle.net/11296/k5hkz9&quot; title=&quot;計程車空車巡行路徑推估方法之研究 3.2 資料處理&quot;&gt;計程車依法規加裝的 &lt;strong&gt;新式計費表&lt;/strong&gt; ，
-在載客時會向車行回報起始、結束位置，&lt;/a&gt;
-但該資料因為過於詳細隱私並無公開，
-唯一找到的 &lt;a href=&quot;https://data.gov.tw/dataset/6252&quot; title=&quot;政府開放資料平台上的計程車營運統計資料&quot;&gt;上述統計資料&lt;/a&gt; 
-則只有精確到縣市內的計程車總量，
-無法與 youbike 的分布相比。&lt;/p&gt;
-&lt;p&gt;最後由於計程車的精確空間資料難以取得，
-改變主題為 youbike 的設站是否會影響捷運站的流量。
-所搜集到的資料有 &lt;a href=&quot;https://zh.wikipedia.org/wiki/%E8%87%BA%E5%8C%97%E5%B8%82%E5%85%AC%E5%85%B1%E8%87%AA%E8%A1%8C%E8%BB%8A%E7%A7%9F%E8%B3%83%E7%B3%BB%E7%B5%B1%E7%AB%99%E9%BB%9E%E5%88%97%E8%A1%A8&quot; title=&quot;維基百科上的 youbike 站點列表&quot;&gt;維基百科上各 youbike 站設站時間&lt;/a&gt; ，
-與 &lt;a href=&quot;https://www.metro.taipei/cp.aspx?n=FF31501BEBDD0136&quot; title=&quot;捷運每月各站人數統計&quot;&gt;2015 年到 2018 年間每日捷運的各站進出人數統計。&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;預期成果&quot;&gt;預期成果&lt;/h2&gt;
-&lt;p&gt;不確定 youbike 對捷運的實際影響。可能因為捷運附近有了 youbike 站，
-使住得較遠的人也能騎到捷運站從而提升捷運站人次。
-或是在較近的路程時，因為有 youbike 就直接騎 youbike 不搭捷運，
-造成捷運使用人次下降。
-但捷運一般是較長程的通勤，應該不會被 youbike 取代，
-故期望是看到 youbike 設站後，捷運運量也增加。&lt;/p&gt;
-&lt;h2 id=&quot;研究流程&quot;&gt;研究流程&lt;/h2&gt;
-&lt;h3 id=&quot;整理 youbike 資料&quot;&gt;整理 youbike 資料&lt;/h3&gt;
-&lt;p&gt;youbike 站點設立日期沒有找到整理好的公開資料，
-但維基百科上的 &lt;a href=&quot;https://zh.wikipedia.org/wiki/%E8%87%BA%E5%8C%97%E5%B8%82%E5%85%AC%E5%85%B1%E8%87%AA%E8%A1%8C%E8%BB%8A%E7%A7%9F%E8%B3%83%E7%B3%BB%E7%B5%B1%E7%AB%99%E9%BB%9E%E5%88%97%E8%A1%A8&quot; title=&quot;維基百科上的 youbike 站點列表&quot;&gt;臺北市公共自行車租賃系統站點列表&lt;/a&gt; 
-條目裡有記錄現有的站點及其設立日期。
-根據編輯記錄，每次編輯都是來自未登入的用戶的匿名編輯，
-嘗試過在該條目討論頁上與該編輯者要求資料來源，但沒有得到回應。
-只能直接相信其編輯結果，並以 javascript 將頁面中的表格整理為程式可讀取的格式，
-產生站點名、設立日期、車位、位置描述的表格。&lt;/p&gt;
-&lt;p&gt;但上述資料只有對位置的模糊描述，沒有座標，
-甚至連地址都不是。（youbike 站沒有門牌。）
-於是再從 &lt;a href=&quot;https://data.gov.tw/dataset/28318&quot; title=&quot;新北市政府開放資料上的 youbike 站點座標&quot;&gt;台北市&lt;/a&gt;
-&lt;a href=&quot;https://data.taipei/dataset/detail/metadata?id=8ef1626a-892a-4218-8344-f7ac46e1aa48&quot; title=&quot;臺北市政府開放資料上的 youbike 站點座標&quot;&gt;新北市&lt;/a&gt; 政府的開放資料找出
-二地所有站點的座標與詳細資訊，並以站名作連結，
-與上述維基百科中的設站日期關聯為一大表格。
-（以 javascript 處理。）&lt;/p&gt;
-&lt;p&gt;最後得到現有所有站點的座標資料與設站日期，
-以座標資料在 qgis 中展示如下圖：&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/32848042818&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7874/32848042818_5c95992886.jpg&quot; alt=&quot;youbike-date.png&quot; title=&quot;youbike 站的設站時間&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;整理捷運資料&quot;&gt;整理捷運資料&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.metro.taipei/cp.aspx?n=FF31501BEBDD0136&quot; title=&quot;捷運每月各站人數統計&quot;&gt;台北捷運公司官方網站上有公告自 104 年開始的各站每日進出人數統計，&lt;/a&gt;
-因為是每日每站，每日統計可能因為平日假日浮動較大，
-所以我決定一個月統計一次，只計算月總人次。
-另外在進站與出站上，二者對 youbike 設站的表現可能不同，
-但我沒有肯定想法，於是就簡單的將二者相加，
-作為該站的運量。
-這部份因為資料有點多，我是用 Libre office 的巨集
-將試算表統一匯出成 csv 檔，再用 sed awk 統計出每月總流量。&lt;/p&gt;
-&lt;p&gt;但之後檢查數據時發現，用月流量很明顯跟著大月小月
-每月的天數不同而浮動，以天數來看就是 1/30 的波動。
-於是為了消除這種浮動，
-就決定將每月的資料除以該月份的天數，
-得到稍微穩定的數據。
-雖然還是很明顯在特定月份，
-像冬天 11 月到 1 月可能因為較冷，
-使民眾搭乘捷運的意願較高。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/45998654964&quot;&gt;&lt;img src=&quot;http://farm5.staticflickr.com/4809/45998654964_fdba6f13e4.jpg&quot; alt=&quot;month-float-day.png&quot; title=&quot;月總流量明顯受大月小月波動&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/45807926805&quot;&gt;&lt;img src=&quot;http://farm5.staticflickr.com/4807/45807926805_f10434d8b9.jpg&quot; alt=&quot;month-mean-day.png&quot; title=&quot;去掉每月天數不同後的日平均&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;但每月的日均流量還是有很大的波動，和以年為單位的周期性，
-扣掉年為周期的波動後，不同年同一月也會有波動，
-我認為可能來自於每月假日與平日天數不同所造成，
-或是其它都市發展因素。&lt;/p&gt;
-&lt;p&gt;最後再找到 &lt;a href=&quot;https://data.taipei/dataset/detail/metadata?id=758e5ae0-e6ee-448b-81f5-316eb68a5ba7&quot; title=&quot;捷運各站座標&quot;&gt;台北市資料開放平台上的捷運站點座標&lt;/a&gt; ，
-以站名將座標和捷運站平均進出人次的資料關聯。&lt;/p&gt;
-&lt;h3 id=&quot;空間分析&quot;&gt;空間分析&lt;/h3&gt;
-&lt;p&gt;估計會受 youbike 站影響的捷運站，
-也就是在捷運站徒步範圍內有 youbike 站的捷運站。
-因此我打算用基本的環域分析篩選出在捷運站附近的 youbike 站，
-以行人徒步可接受的 500 公尺作半徑，
-篩選出會可能對該捷運站人流造成影響的 youbike 站。&lt;/p&gt;
-&lt;p&gt;過程將上述的捷運站、youbike 站都匯入 qgis 中，
-以所有捷運站作環域分析，得到捷運站周圍 500 公尺的範圍。
-再將範圍與 youbike 的站點作交集，
-濾出位在捷運站 500 公尺內的 youbike 站。&lt;/p&gt;
-&lt;h3 id=&quot;作圖比較&quot;&gt;作圖比較&lt;/h3&gt;
-&lt;p&gt;篩出的 youbike 設站時間從 2009 年到 2018 都有，
-但捷運運量資料只有 2015 到 2018 年。
-另一種情況是一個捷運站方圓 500 公尺內有多個 youbike 站，
-我認為有一個站和二個站帶來的人流是差不多的，
-都是 &lt;em&gt;有車可以騎&lt;/em&gt; 的結果。&lt;/p&gt;
-&lt;p&gt;所以我決定只採用第一個在捷運站範圍設站的 youbike，
-再來是只留下有捷運運量資料期間的資料。
-另外就是 &lt;strong&gt;關渡站&lt;/strong&gt; 比較特別，二次設站都是在有捷運運量資料期間，
-所以也留下來分析。
-總共原始有 70 個 youbike 站在捷運站附近，
-過濾後含關渡剩下 9 個站。
-因為作圖為曲線圖，需要人眼一一辨識每張圖，
-如果畫個 30 張太多沒什麼意義，9 張圖已經很多了。&lt;/p&gt;
-&lt;p&gt;有了想分析的設站日期和捷運站月均日運量，
-我用設站前後一個月共三個月的資料，
-及前後一年同樣三個月份，共九個月份的資料作圖。
-每個站一張圖，用不同顏色代表不同年份，
-重疊在同樣月份上。
-因為數據較複雜，有很多要客製化的地方，
-我使用 &lt;a href=&quot;https://www.chartjs.org/&quot; title=&quot;基於 canvas 的 javascript 繪圖函式庫 chart.js&quot;&gt;javascript 函式庫 chart.js 作圖&lt;/a&gt; ，
-javascript 為完整的程式語言，chart.js 也是完整的函式庫，
-能滿足客製化的需求。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-json-change-youbike&quot;&gt;{&amp;quot;關渡&amp;quot;:[[&amp;quot;2015-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-09-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-09-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-09-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-11-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-12-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-01-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-11-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-12-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-01-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-11-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-12-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-01-01T16:00:00.000Z&amp;quot;],[22336.3225806452,20830.8709677419,25097.4666666667,21670.2258064516,21856.9677419355,24305.7,22260.3870967742,22233.0967741935,24396.5333333333,24549.6333333333,25446,22906.8387096774,25048.5,26407.2258064516,24239.9677419355,23563,25368.4838709677,23719]],&amp;quot;辛亥&amp;quot;:[[&amp;quot;2015-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-07-01T16:00:00.000Z&amp;quot;],[5874.38709677419,5763.4,5871.12903225806,5671.35483870968,5803.86666666667,5658.70967741936,5632.16129032258,5796.16666666667,5686]],&amp;quot;萬芳社區&amp;quot;:[[&amp;quot;2015-03-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-04-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-03-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-04-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-03-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-04-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-05-01T16:00:00.000Z&amp;quot;],[4209.61290322581,4320.23333333333,4213.48387096774,4280.74193548387,4310.6,4149.51612903226,4168.83870967742,4360.73333333333,4126.90322580645]],&amp;quot;忠義&amp;quot;:[[&amp;quot;2015-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-08-01T16:00:00.000Z&amp;quot;],[5191.96666666667,5126.45161290323,4768.45161290323,5182.63333333333,5025.96774193548,4986.45161290323,5185.26666666667,5217.12903225806,5244.67741935484]],&amp;quot;萬隆&amp;quot;:[[&amp;quot;2016-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-08-01T16:00:00.000Z&amp;quot;],[18045.3,17887.6129032258,17893.8709677419,17952.2,17898.1290322581,17679.064516129,17853.8666666667,18105.1935483871,17842.5161290323]],&amp;quot;中山&amp;quot;:[[&amp;quot;2016-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-08-01T16:00:00.000Z&amp;quot;],[73450.5333333333,74735.9032258065,75170.935483871,73447.8333333333,75673.5483870968,77326.1612903226,72763.0666666667,74052.064516129,73916.3870967742]],&amp;quot;頭前庄&amp;quot;:[[&amp;quot;2015-01-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-02-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-03-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-01-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-02-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-03-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-01-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-02-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-03-01T16:00:00.000Z&amp;quot;],[9519.58064516129,9804.25,9432.61290322581,9402.48387096774,9114.93103448276,9255.06451612903,9182.77419354839,9629.07142857143,8762.41935483871]],&amp;quot;輔大&amp;quot;:[[&amp;quot;2015-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2015-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-08-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-08-01T16:00:00.000Z&amp;quot;],[22807.4333333333,20497.6129032258,17829.7096774194,21714.9666666667,19498.7419354839,18371.3225806452,21676.2,19801.4516129032,19027.4516129032]],&amp;quot;紅樹林&amp;quot;:[[&amp;quot;2016-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2016-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2017-07-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-05-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-06-01T16:00:00.000Z&amp;quot;,&amp;quot;2018-07-01T16:00:00.000Z&amp;quot;],[12781.2580645161,12926.3333333333,12898.6451612903,12944.9032258065,13113.4333333333,12966.2903225806,13616.5161290323,14072.9,13767.935483871]]}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js&quot;&gt;&lt;/script&gt;
 
-&lt;script&gt;
-const youbikeJsonNode = document.querySelector(&apos;.lang-json-change-youbike&apos;)
-function fetchYoubikeData() {
-    const json = JSON.parse(youbikeJsonNode.textContent)
-    for (const station in json) {
-        json[station][0] = json[station][0].map(d =&gt; {
-            const date = new Date(d)
-            if (date.valueOf()) return date
-            else return d
-        })
-    }
-    return json
-}
-
-const color = {
-    &quot;-1&quot;: &apos;rgba(0, 255, 255, 1)&apos;,
-    &quot;0&quot;: &apos;rgba(0, 180, 237, 1)&apos;,
-    &quot;1&quot;: &apos;rgba(0, 110, 220, 1)&apos;,
-    &quot;null&quot;: &apos;rgba(0, 0, 0, 0)&apos;
-}
-
-function plotStation(canvas, station, data) {
-    const lines = []
-    const date = data[0].slice()
-    const count = data[1].slice()
-    while (count.length &gt; 0) {
-        for (const yearResidue of [-1, 0, 1]) {
-            const year = {}
-            const monthCount = count.splice(0, 3)
-            const monthDate = date.splice(0, 3)
-            year.data = monthDate.map((d, i) =&gt; {
-                const correctDate = new Date(d)
-                const year = d.getFullYear() - yearResidue
-                correctDate.setFullYear(year)
-                return {t: correctDate, y: monthCount[i]}
-            })
-            year.label = String(monthDate[0].getFullYear())
-            year.pointStyle = &apos;circle&apos;
-            year.borderColor = color[yearResidue]
-            year.backgroundColor = color[null]
-            lines.push(year)
-        }
-    }
-
-    const chart = new Chart(canvas, {
-        type: &apos;line&apos;,
-        data: {
-            datasets: lines
-        },
-        options: {
-            title: {
-                display: true,
-                text: station
-            },
-            scales: {
-                xAxes: [{
-                    type: &apos;time&apos;,
-                    scaleLabel: {
-                        display: true,
-                        labelString: &apos;月份&apos;
-                    },
-                    time: {
-                        unit: &apos;month&apos;,
-                        displayFormats: {
-                            month: &apos;M&apos;
-                        }
-                    }
-                }],
-                yAxes: [{
-                    scaleLabel: {
-                        display: true,
-                        labelString: &apos;平均日人次&apos;
-                    }
-                }]
-            }
-        }
-    })
-}
-
-function wrapCanvas(canvas, title) {
-    canvas.title = title
-    const fig = document.createElement(&apos;figure&apos;)
-    fig.innerHTML = `&lt;a class=&quot;image&quot;&gt;&lt;/a&gt;
-&lt;figcaption&gt;${title}&lt;/figcaption&gt;`
-    fig.querySelector(&apos;a&apos;).appendChild(canvas)
-    return fig
-}
-
-const json = fetchYoubikeData()
-for (const station in json) {
-    const canvas = document.createElement(&apos;canvas&apos;)
-    plotStation(canvas, station, json[station])
-    const figure = wrapCanvas(canvas, station + &apos;捷運站人次曲線&apos;)
-    youbikeJsonNode.parentNode.before(figure)
-}
-&lt;/script&gt;
-
-&lt;h2 id=&quot;結果分析&quot;&gt;結果分析&lt;/h2&gt;
-&lt;p&gt;所有 9 張曲線圖中，整體沒有很明顯的趨勢。
-其中有 4 張是設站後下個月份和前後一年比較，
-使用人次有上升，但也有 3 張是有下降。
-有 3 張是設站月份和隔年同一月份相比有上升，
-其它是沒有明顯趨勢。
-整體而言看不出 youbike 設站會對捷運站運量造成上升或下降。&lt;/p&gt;
-&lt;p&gt;我認為看不出 youbike 對捷運流量影響，
-是因為影響捷運流量的因素太多了，
-而 youbike 的影響沒有大到和其它波動混合後仍看得出趨勢。
-像是一開始作圖就發現捷運流量
-很明顯在大月就會多、小月就會少。
-雖然後來除去每月天數的影響，
-但仍沒有消除的是每月工作日與休息日日數不同的差異。
-幾張曲線圖可以看到 3 年的曲線好像有同一趨勢變化，
-但又不像與 youbike 設站有關。
-可能單就 youbike 造成的影響相對很小，
-也就無法從波動中看出。&lt;/p&gt;
-&lt;p&gt;後續如果要作 youbike 對捷運影響的調查，
-就知道不能單純從捷運站總運量來看，因為影響總運量的變數太多，
-而 youbike 影響的量並不是很大。
-要看出單純因為 youbike 變化的量，
-可能還需要 youbike 站的使用率，
-甚至由使用 youbike 的悠遊卡記錄中查出
-由捷運出站後租借 youbike，
-或還 youbike 後轉乘捷運的人數。&lt;/p&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
-
-&lt;script src=&quot;ext/paper.js?execute&quot;&gt;&lt;/script&gt;
-
-&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
-
-&lt;script&gt;
-function $html(template, ...text) {
-  const result = []
-  for (let i=0; i&lt;template.length; i++) {
-    if (i&gt;0) result.push(encodeHtml(text[i-1]))
-    result.push(template[i])
-  }
-  return result.join(&apos;&apos;)
-
-  function encodeHtml(text) {
-    return text
-    .replace(/&amp;/g, &apos;&amp;amp;&apos;)
-    .replace(/&lt;/g, &apos;&amp;lt;&apos;)
-    .replace(/&gt;/g, &apos;&amp;gt;&apos;)
-  }
-}
-
-
-gmeta.reference = {
-  anchorList: [],
-  add(title, url, context) {
-    let index = this.anchorList.indexOf(url) + 1
-    if (index == 0) {
-      index = this.anchorList.push(url)
-      const entry = this.createEntry(title, url, context)
-      entry.querySelector(&apos;dt&apos;).dataset.referenceId = index
-      this.node.appendChild(entry)
-    }
-    return index
-  },
-  createEntry(title, url, context) {
-    const dl = document.createElement(&apos;dl&apos;)
-    const dt = document.createElement(&apos;dt&apos;)
-    dt.textContent = title
-    dl.appendChild(dt)
-    dl.innerHTML = $html`&lt;dt&gt;${title}&lt;/dt&gt;
-    &lt;dd&gt;${url}&lt;/dd&gt;
-    &lt;dd class=&quot;context&quot;&gt;${context}&lt;/dd&gt;`
-    return dl
-  },
-  node: document.createDocumentFragment(),
-  render() {
-    const main = document.querySelector(&apos;main&apos;)
-    let referenceHeader = document.querySelector(&apos;h2.reference&apos;)
-    if (!referenceHeader) {
-      referenceHeader = document.createElement(&apos;h2&apos;)
-      referenceHeader.textContent = &apos;參考資料&apos;
-      referenceHeader.classList.add(&apos;reference&apos;)
-      main.appendChild(referenceHeader)
-    }
-    referenceHeader.after(this.node)
-  }
-}
-document.querySelectorAll(&apos;a&apos;).forEach(anchor =&gt; {
-  if (!anchor.classList.contains(&apos;image&apos;)) {
-    const reference = gmeta.reference
-    const index = reference.add(anchor.title, anchor.href, anchor.textContent)
-    anchor.dataset.referenceId = index
-  }
-})
-document.querySelectorAll(&apos;figure&apos;).forEach(figure =&gt; {
-  const reference = gmeta.reference
-  const title = figure.querySelector(&apos;figcaption&apos;).textContent
-  const url = figure.querySelector(&apos;a&apos;).href
-  const entry = reference.createEntry(title, url, &apos;&apos;)
-  entry.classList.add(&apos;image&apos;)
-  reference.node.appendChild(entry)
-})
-gmeta.reference.render()
-&lt;/script&gt;
-
-&lt;style&gt;
-main {
-  counter-reset: reference-id;
-}
-
-canvas {
-  width: 100% !important;
-}
-
-a:not(.image)::after {
-  content: &quot;[&quot; attr(data-reference-id) &quot;]&quot;;
-  font-size: smaller;
-}
-.reference ~ dl &gt; dt::before {
-  content: &quot;[&quot; attr(data-reference-id) &quot;] &quot;;
-}
-
-.reference ~ dl &gt; dd.context:not(:empty)::before,
-.reference ~ dl &gt; dd.context:not(:empty)::after {
-  content: &quot;……&quot;;
-}
-.reference {
-  counter-reset: image-number;
-}
-.reference ~ dl.image {
-  counter-increment: image-number;
-}
-dl.image &gt; dt::before {
-    content: &quot;圖&quot; counter(image-number) &quot;. &quot;;
-    content: &quot;圖&quot; counter(image-number, cjk-decimal) &quot;、&quot;;
-}
-dl.image &gt; dt:empty::before {
-    content: &quot;圖&quot; counter(image-number);
-    content: &quot;圖&quot; counter(image-number, cjk-decimal);
-}
-
-
-script, style {
-  display: none;
-}
-.lang-json-change-youbike {
-  display: none;
-}
-&lt;/style&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/gis-bicycle-sharing-taxi-project.html#plot-summary-and-layout-code</id>
 <title>共享單車發展對捷運影響分析</title>

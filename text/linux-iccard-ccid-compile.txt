@@ -114,7 +114,7 @@ EZ-100PU 是官方有提供 linux 的驅動，
 然後在選購讀卡機時，是跑了交大附近的 nova 和順發。
 感覺順發是間好企業，捐出 20% 利潤幫偏鄉孩童，
 之後要買什麼盡量去哪買吧。
-但昨天是在 nova 一間小店看到 IT-500U 的，
+但昨天是在 nova 日本橋看到 IT-500U 的，
 看到還蠻意外的，就立刻買了。
 
 其它在順發有還有看到 EZ-100PU，
@@ -132,6 +132,26 @@ EZ-100PU 是官方有提供 linux 的驅動，
 台灣只有 InfoThink 的那幾台。
 
 [support]: https://ccid.apdu.fr/ccid/supported.html
+
+### 日木橋看到幾台支援 linux 的
+最近因為家裡的讀卡機壞了，想就再買一台帶回家，
+順便試一下哪些讀卡機也支援 linux，
+就又跑了一次 nova。
+
+除了上面說的 IT-500U 之前就知道支援 linux，
+又買了上面寫在日本橋看到的 KTHCROATM003，也確定支援 linux ccid 了。
+他的品牌是 hotlife， 但名稱有點亂，
+之前打的 KTHCROATM003 是 *商品型號* ，
+*形式/型號* 是 **PS-C03** ，
+然後正面的名字是 *超輕薄晶片讀卡機* 。
+[網頁上也沒有寫得很清楚。][KTHCROATM003]
+
+[KTHCROATM003]: https://www.ktnet.com.tw/OfficialProductDesc.aspx?PID=KTHCROATM003BK
+
+另一台是 easy atm k50，
+[上面那篇 ubuntu 論壇的文章是說不確定能不能用][firefox plugin] ，
+但我看包裝寫支援 pc/sc，那應該在 linux 下也能用。
+但比較貴也較確定，就沒有買來試。
 
 ## 包好的 libccid
 [學會怎麼用 checkinstall 包 deb 後][easy debian] ，

@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-02-13T14:22:47.412Z</updated>
+  <updated>2019-02-13T15:12:01.877Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,146 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/linux-iccard-ccid-compile.html#新測試二台讀卡機</id>
+<title>在 linux 上使用晶片卡</title>
+<published>2018-09-07T14:06:35.593Z</published>
+<updated>2019-02-13T15:12:01.858Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/linux-iccard-ccid-compile.html#新測試二台讀卡機"/>
+<summary type="html">
+新測試了 KTHCROATM300BK ，
+確定可以用，是走 ccid 的。
+另一台 easy atm k50 應該也能用，
+包裝都明寫支援 pc/sc了，
+只是沒有買來試。</summary>
+<category term="linux"/>
+<category term="driver"/>
+<category term="方便"/>
+<content type="html">&lt;h1 id=&quot;在 linux 上使用晶片卡&quot;&gt;在 linux 上使用晶片卡&lt;/h1&gt;
+&lt;p&gt;因為辦了自然人憑證，自辦了 visa 卡開始做一些消費，
+也一直想用 web atm 讓生活更方便。
+於是做足功課後，終於買了第一台支援 linux 的讀卡機， &lt;strong&gt;IT-500U&lt;/strong&gt; 。
+在自行編譯最新版的函式庫後，終於成功驅動，
+再胡亂摸索後，web atm 與自然人憑證都能使用了。&lt;/p&gt;
+&lt;p&gt;一開始是想要用新台幣支持支援 linux 的讀卡機廠商，
+雖然說 web atm 還是可能要換回 windows 下，
+因為各網路銀行還是 IE only，
+要用 ActiveX 和 java applet 才能動，
+只有讀卡機讀得到是沒用的。
+但總之既然有廠商願意支援 Linux，
+還是應該要用新台幣給予鼓勵。&lt;/p&gt;
+&lt;p&gt;所以就 google 了一下，找到哪些讀卡機支援 linux。
+很多人說 &lt;strong&gt;EZ-100PU&lt;/strong&gt; 支援，也的確有找到，
+但 &lt;a href=&quot;http://dd-han.tw/2018/smart-card-reader-for-linux&quot;&gt;據呆呆翰的說法&lt;/a&gt; ，
+他是比較推買支援 ccid 標準的讀卡機，
+然後自然各平台都能用。
+EZ-100PU 是官方有提供 linux 的驅動，
+要自己載下來裝，比較不安全。
+而且如果支來 linux 更新了，可能會不再支援。&lt;/p&gt;
+&lt;h2 id=&quot;自然人憑證與健保卡&quot;&gt;自然人憑證與健保卡&lt;/h2&gt;
+&lt;p&gt;自然人憑證是電腦報稅時需要用的，
+以前就一直被抱怨對 windows 以外系統很不友善，
+所以 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E5%94%90%E9%B3%B3&quot;&gt;唐鳳&lt;/a&gt; 出任政務委員後，
+就風風火火的推出了在 linux Mac 都能用的軟體。&lt;/p&gt;
+&lt;p&gt;這次本來是要更正駕照的地址，
+監理所說要註冊才能線上更改，
+可以用健保卡或自然人憑證註冊，
+媽就叫我去辦自然人憑證，以後比較方便。&lt;/p&gt;
+&lt;p&gt;就先裝好 pcscd pcsc-tools 二個套件，
+可是讀卡機插進去 pcsc_scan 卻沒反應，
+總之先繼續，裝自然人憑證的網頁版元件。
+自然人憑證的 linux 版像是在本機執行一個 daemon，
+然後和瀏覽器互動。
+之後也順手試了健保卡，他是安裝到 &lt;code&gt;/etc/init.d&lt;/code&gt; ……，
+只好手動 disable 掉，讓他不要自動啟動。&lt;/p&gt;
+&lt;p&gt;但還是不能動，說抓不到讀卡機。
+難道這台其實不能用？有夠倒楣。
+總之也試用 windows 下正不正常，
+就切到 windows 下試用，到官網裝了驅動就能用。
+郵政儲金、第一銀行、自然人憑證、健保卡都能用。&lt;/p&gt;
+&lt;h2 id=&quot;編譯最新的 libccid&quot;&gt;編譯最新的 libccid&lt;/h2&gt;
+&lt;p&gt;然後回到 linux 下不甘心，
+想說試下最新版的 pcsc-lite，
+先移除 pcscd，重新編譯了 pcsc-tools，還是沒反應。
+又編譯了 pcscd，也沒用。
+中間也試了幾個不同版本，舊的或新的都沒用。&lt;/p&gt;
+&lt;p&gt;然後開始仔細研究 &lt;a href=&quot;//pcsclite.apdu.fr&quot;&gt;pcsclite 官網&lt;/a&gt; ，
+才發現驅動好像和 pcscd 是不同 repository，
+二者都屬於 &lt;a href=&quot;//muscle.apdu.fr&quot;&gt;muscle 專案&lt;/a&gt; ，
+是另外一個 &lt;a href=&quot;//ccid.apdu.fr&quot;&gt;library libccid&lt;/a&gt; 。
+在裡面看到 &lt;a href=&quot;https://ccid.apdu.fr/#CCID_compliant&quot;&gt;一支程式可以檢驗讀卡機的相容性&lt;/a&gt; ，
+試了竟然抓到了！
+又看了 &lt;a href=&quot;https://ccid.apdu.fr/ccid/shouldwork.html&quot;&gt;支援的清單&lt;/a&gt; ，
+搜得到 IT-500U；上面同為 &lt;strong&gt;InfoThink&lt;/strong&gt; 的 &lt;strong&gt;IT-102MU&lt;/strong&gt;
+是寫 release 1.4.27，但 IT-500U 是顯示 git，
+應該是還沒 release 的意思。&lt;/p&gt;
+&lt;p&gt;所以應該是 libccid 不支援的鍋，只好自己來編譯 git 上的最新版。
+這專案的編譯都蠻簡單的，
+&lt;code&gt;./configure &amp;amp;&amp;amp; make &amp;amp;&amp;amp; sudo make install&lt;/code&gt; 就裝好了。
+如果有缺什麼，在 &lt;code&gt;./configure&lt;/code&gt; 會跟你說，我就用 apt 裝。
+忘了哪個有用到 libusb，正常應該是裝 libusb-dev，
+結果裝了一看都是 &lt;code&gt;/usr/share/doc&lt;/code&gt; 的文件，
+又用 apt 找一下，結果應該是裝 libusb-1.0-0-dev。
+但 libccid 還有多一個 &lt;code&gt;./bootstrap&lt;/code&gt; 才能 &lt;code&gt;./configure&lt;/code&gt; ，
+不知道是什麼意思。另外還有用到 lex，就裝了 flex。&lt;/p&gt;
+&lt;p&gt;之後就裝回 apt 的 pcscd 和 pcsc-tools，
+移除 apt 的 libccid，然後 make install。
+就抓到讀卡機了！&lt;/p&gt;
+&lt;h2 id=&quot;web atm 可以跨行使用&quot;&gt;web atm 可以跨行使用&lt;/h2&gt;
+&lt;p&gt;但抓到後自然人憑證是能用了，但網路銀行還是不行，
+不像自然人憑證有提供 linux 的網頁元件。
+然後在找有沒有可能時，
+無意間發現玉山銀行的 web atm 要求安裝擴充，就裝裝看。&lt;/p&gt;
+&lt;p&gt;想說好玩，插郵局的卡進去，竟然登入了！還成功轉帳了！
+原來 web atm 不一定要同一間的卡片，其它間也能用。
+玉山銀行目前是要手動允許外掛程式，
+因為我是 debian 的 firefox52-esr  ，
+比較舊，也是最後一版支援外掛程式的 firefox。
+設定的部份有點繁雜，我是照 &lt;a href=&quot;https://www.ubuntu-tw.org/modules/newbb/viewtopic.php?viewmode=flat&amp;amp;type=&amp;amp;topic_id=106848&amp;amp;forum=7&quot;&gt;這篇自然人憑證報稅&lt;/a&gt; 的，
+可以依需求自由刪減步驟。&lt;/p&gt;
+&lt;h2 id=&quot;讀卡機推薦&quot;&gt;讀卡機推薦&lt;/h2&gt;
+&lt;p&gt;總之之後就能在 linux 下使用 atm 了。
+本來想推薦個 IT-102MU，
+畢竟他是 libccid 已經支援的讀卡機。
+但他後來發現他價格較高，要 500 多，
+其它 IT-1XX 系列的也都是。
+最便宜就這台 IT-500U 我買 199。&lt;/p&gt;
+&lt;p&gt;然後在選購讀卡機時，是跑了交大附近的 nova 和順發。
+感覺順發是間好企業，捐出 20% 利潤幫偏鄉孩童，
+之後要買什麼盡量去哪買吧。
+但昨天是在 nova 日本橋看到 IT-500U 的，
+看到還蠻意外的，就立刻買了。&lt;/p&gt;
+&lt;p&gt;其它在順發有還有看到 EZ-100PU，
+和少數幾台有寫支援 linux，
+但 google 沒有情報，不太敢買。
+在看到 IT-500U 的小店也有一台 &lt;strong&gt;KTHCROATM003&lt;/strong&gt; 才 168，
+也寫支援 linux，但也 google 不到。
+也許可以買一台來踩雷，
+反正家裡也舊的那台也壞了，頂多丟回家用。&lt;/p&gt;
+&lt;p&gt;最保險可能就是去找 libccid 的支援清單，
+有分 &lt;a href=&quot;https://ccid.apdu.fr/ccid/supported.html&quot;&gt;support&lt;/a&gt; 和 &lt;a href=&quot;https://ccid.apdu.fr/ccid/shouldwork.html&quot;&gt;should work&lt;/a&gt; 二個等級，
+看哪些台灣也有賣的。
+雖然 &lt;a href=&quot;http://dd-han.tw/2018/smart-card-reader-for-linux&quot;&gt;據呆呆翰所說&lt;/a&gt; ，
+台灣只有 InfoThink 的那幾台。&lt;/p&gt;
+&lt;h3 id=&quot;日木橋看到幾台支援 linux 的&quot;&gt;日木橋看到幾台支援 linux 的&lt;/h3&gt;
+&lt;p&gt;最近因為家裡的讀卡機壞了，想就再買一台帶回家，
+順便試一下哪些讀卡機也支援 linux，
+就又跑了一次 nova。&lt;/p&gt;
+&lt;p&gt;除了上面說的 IT-500U 之前就知道支援 linux，
+又買了上面寫在日本橋看到的 KTHCROATM003，也確定支援 linux ccid 了。
+他的品牌是 hotlife， 但名稱有點亂，
+之前打的 KTHCROATM003 是 &lt;em&gt;商品型號&lt;/em&gt; ，
+&lt;em&gt;形式/型號&lt;/em&gt; 是 &lt;strong&gt;PS-C03&lt;/strong&gt; ，
+然後正面的名字是 &lt;em&gt;超輕薄晶片讀卡機&lt;/em&gt; 。
+&lt;a href=&quot;https://www.ktnet.com.tw/OfficialProductDesc.aspx?PID=KTHCROATM003BK&quot;&gt;網頁上也沒有寫得很清楚。&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;另一台是 easy atm k50，
+&lt;a href=&quot;https://www.ubuntu-tw.org/modules/newbb/viewtopic.php?viewmode=flat&amp;amp;type=&amp;amp;topic_id=106848&amp;amp;forum=7&quot;&gt;上面那篇 ubuntu 論壇的文章是說不確定能不能用&lt;/a&gt; ，
+但我看包裝寫支援 pc/sc，那應該在 linux 下也能用。
+但比較貴也較確定，就沒有買來試。&lt;/p&gt;
+&lt;h2 id=&quot;包好的 libccid&quot;&gt;包好的 libccid&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;linux-easy-debian-package.html&quot;&gt;學會怎麼用 checkinstall 包 deb 後&lt;/a&gt; ，
+&lt;a href=&quot;https://drive.google.com/drive/folders/1ypXybmO6mGB_xjjcZnkNdDNDnH0Vtxcc?usp=sharing&quot;&gt;就自己包了一份上傳到 google&lt;/a&gt; 。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/shell-script-skill-fifo.html</id>
 <title>shell 編程奇淫技巧</title>
 <published>2019-02-13T14:07:22.434Z</published>
@@ -1320,138 +1460,7 @@ script, style {
 <category term="nctu"/>
 <category term="report"/>
 <category term="geomatics"/>
-<content type="html">&lt;h1 id=&quot;SAR 雷達影像&quot;&gt;SAR 雷達影像&lt;/h1&gt;
-&lt;p&gt;&lt;abbr title=&quot;Synthetic Aperture Radar&quot;&gt;SAR&lt;/abbr&gt;
-合成孔徑雷達影像近年逐漸受到關注，
-因雷達影像不受雲層、日夜影響，可以全天候觀測。
-常見的 SAR 影像分析方法有干涉分析、強度分析、時序分析，
-在防災、救援方面有巨大的貢獻。&lt;/p&gt;
-&lt;h2 id=&quot;引言&quot;&gt;引言&lt;/h2&gt;
-&lt;p&gt;交通大學土木系，在 2018-12-18 邀請到中研院的林玉儂院士，
-分享 sar 合成孔徑雷達影像在遙測上的應用。
-sar 影像近年越發受重視，因為能不受天候觀測，
-同時 sar 影像的特性也與傳統光學影像不同，
-需要特殊的分析方法，是可以期待的發展方向。&lt;/p&gt;
-&lt;h2 id=&quot;雷達影像相比可見光的優勢&quot;&gt;雷達影像相比可見光的優勢&lt;/h2&gt;
-&lt;p&gt;雷達主動發射電磁波後觀測反射訊號的技術，
-使用的波長主要在數公厘到數十公尺等級。
-由於波長較長，不會像可見光完全被雲層遮蔽，
-因此可以不論天候觀測。
-更由於雷達屬主動觀測，不像可見光光源為太陽，
-只能在白天觀測，更可以不受限制。&lt;/p&gt;
-&lt;p&gt;相比可見光，先是受日夜限制，晚上無法觀測，
-就去掉一半的時間是無法運作的。
-再加上人類活動地區，多數是有降雨分布的，
-也就有更多的雲層遮蔽，可見光影像常因此無用武之地。&lt;/p&gt;
-&lt;p&gt;以東亞地區來說，防災是雷達影像的主要應用，
-在地震、颱風、海嘯過後，要能快速掌握受災區域情況，
-最快就是用衛星影像製圖。
-但颱風或洪水時，災區常都是雲雨天，
-可見光根本看不到東西；也就造成關鍵時刻無圖可用的窘境。
-而雷達影像正好可以解決此一問題，
-也就成為災後製圖的首選。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46552080601&quot;&gt;&lt;img src=&quot;http://farm5.staticflickr.com/4898/46552080601_cd0696c080.jpg&quot; alt=&quot;earth with cloud and night&quot; title=&quot;由於夜間與雲雨的限制，可見光影像的觀測受限&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;合成孔徑雷達&quot;&gt;合成孔徑雷達&lt;/h2&gt;
-&lt;p&gt;傳統雷達使用實體天線發出雷達波，稱為 &lt;strong&gt;實孔徑雷達&lt;/strong&gt; 。
-雷達波的解析度也就是雷達波束的寬度，
-若要發出極窄的雷達波，必須有極長的天線。
-但以飛機或衛星而言，配備巨大的天線是不可能的。&lt;/p&gt;
-&lt;p&gt;合成孔徑雷達則突破了這層限制，
-合成孔徑雷達是在飛機前進時，連續發出多次雷達波，
-再將在航線上成一直線的各點雷達波回波記錄合成，
-就能摸擬出一個長天線的結果。&lt;/p&gt;
-&lt;h2 id=&quot;雷達影像特性&quot;&gt;雷達影像特性&lt;/h2&gt;
-&lt;p&gt;雷達影像採用傾斜觀測，
-和一般光學影像是中心投影成像不同。
-因為雷達的波長較長，解析度較低，
-需要介由傾斜觀測不同時間的回波分辨不同距離的地物。
-也因此雷達影像會有與中心投影中
-高差位移方向相反的 &lt;em&gt;forward shortening&lt;/em&gt; 現象。&lt;/p&gt;
-&lt;p&gt;而在地型上，也會因為坡向朝向波源，
-倒致回波訊號較強，或是背向波源倒致回波較弱。
-在背向波源坡度過大時，也會出現陰影。&lt;/p&gt;
-&lt;h2 id=&quot;強度分析&quot;&gt;強度分析&lt;/h2&gt;
-&lt;p&gt;強度分析是直接用回波強度值成像，
-和一般可見光影像展示的方式相同。
-雷達影像可以只用強度成像成類似灰階影像的結果。
-雷達回波強度方便的用途是用來分析水體，
-因為無論是水面或單純潮濕的地面，
-對雷達波的回波強度都較乾燥區域低。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://earth.esa.int/web/guest/missions/esa-operational-eo-missions/ers/instruments/sar/applications/radar-courses/content-2/-/asset_publisher/qIBc6NYRXfnG/content/radar-course-2-parameters-affecting-radar-backscatter&quot; title=&quot;earth esa radar&quot;&gt;另一主要用途是分析地型粗糙度。&lt;/a&gt;
-一般來說，越粗糙的地型回波越強。
-上例的水體則是極為平滑的面，所以回波較弱。
-而粗糙度如果應用在海面上的話，
-&lt;a href=&quot;https://scitechvista.nat.gov.tw/c/sWZj.htm&quot; title=&quot;科技大觀園 從太空看海洋&quot;&gt;則是在風速越強處，海浪會越破碎，&lt;/a&gt;
-因此可以做為海上天氣預報的參考。&lt;/p&gt;
-&lt;h3 id=&quot;淹水偵測&quot;&gt;淹水偵測&lt;/h3&gt;
-&lt;p&gt;SAR 影像很大的功能是做淹水範圍的偵測。
-如上所述，sar 在水面、甚至潮濕土壤上的回波都很弱，
-可以據此快速判斷洪患過後，哪些地方為淹水受災區。
-在洪水發生很大機會是由於降雨，
-以傳統可見光影像在有雲雨時根本無法觀測，
-雷達波可以穿透雲層全天候觀測，
-SAR 影像也就不受干擾。&lt;/p&gt;
-&lt;p&gt;但以 SAR 影像判斷淹水地區也有所侷限，
-雖然說無論淹水或潮濕情況下，雷達回波都會較弱，
-但在水面上漂浮了雜物，或是與建築物混雜等一些特殊情況，
-雷達會出現在 &lt;a href=&quot;https://en.wikipedia.org/wiki/Corner_reflector&quot; title=&quot;維基百科上對 corner reflector 的解釋&quot;&gt;角落的全反射&lt;/a&gt; ，
-或是只因為水面上雜物而表現出不同於水面的反射情況。
-全反射是因為在水面近鏡面反射後，又在其它垂直面上進行一次反射，
-共以將近 180° 反射，而在單點上出現極強回波訊號。&lt;/p&gt;
-&lt;h4 id=&quot;時間序列上的統計修正&quot;&gt;時間序列上的統計修正&lt;/h4&gt;
-&lt;p&gt;在做淹水地圖時，只有單張影像的作法
-是將整張影像中相對弱訊號就歸為水體。
-但不同地物本來會有不同反射，只要暗處就歸為水體易有誤判。
-可以長時間觀測同一地區，得到多幀非淹水時期的 sar 影像，
-在偵測淹水時，就和非淹水時期時的影像相比較，
-回波較低的才歸為水體；
-就能避免將反射本來就較低的地物都歸到水體。&lt;/p&gt;
-&lt;h3 id=&quot;偏振方向&quot;&gt;偏振方向&lt;/h3&gt;
-&lt;p&gt;或者雷達波也可以依雷磁波的偏振分為水平偏振與垂直偏振，
-分別可以組合四種不同的回波強度：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;發出水平接受回波中的水平偏振強度&lt;/li&gt;
-&lt;li&gt;發出水平接受回波中的垂直偏振強度&lt;/li&gt;
-&lt;li&gt;發出垂直接受回波中的垂直偏振強度&lt;/li&gt;
-&lt;li&gt;發出垂直接受回波中的水平偏振強度&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;偏振在某種程度上可以達到類似可見光中不同波段的效果；
-不同的地物對不同偏振的雷達波，
-會有不同的反射， 可以以此判別不同地物。
-雖然一般衛星只會發出一種方向的偏振，
-然後接受水平與垂直，所以只會有四種中的二種。&lt;/p&gt;
-&lt;p&gt;這類雷達影像分析就類似一般可見光影像或多頻段的影像，
-可以跑監督式分類或非監督式分類。
-只是在成像上會有雷達影像的特徵，
-幾何和一般中心投影、正射投影不同。。&lt;/p&gt;
-&lt;h2 id=&quot;干涉分析&quot;&gt;干涉分析&lt;/h2&gt;
-&lt;p&gt;&lt;abbr title=&quot;Interferometry SAR&quot;&gt;InSAR&lt;/abbr&gt; 是另一種 SAR 影像分析方法，
-使用二張帶有相位資訊的 SAR 影像相減，以相位差分析地表高程變化。
-在衛星軌道上同一點不同時間對同一地所拍攝的 SAR 影像，
-如果地表無變化的話，每一點與衛星的距離不變，
-那二張影像中各點的相位應該會相同。
-如果地表有起伏，例如抬升了 5 公分，來回距離會少 10 公分；
-那對波長是 20 公分的 L band，回波就會快半個波長，
-就會有半個波長的相位差，以此就能看出地型變動。&lt;/p&gt;
-&lt;p&gt;但也因為只能觀測到相位差，當變動到一個相位差時，就會回到同一相位。
-而以地表變型來說，多數變型都是漸變的；
-也就是二張影像中，少部份地區開始抬升時，相位差會漸增，
-然後超過一個相位差又歸零，周而複始。
-以偽彩色表現的話，解讀上可以看成連續但無標高
-以彩度表現的高差等高線圖。
-在高程變化上表現為規律的同方向花紋，
-高程變化越劇烈花紋也越密集。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://earthice.hi.is/insar_interferometry_synthetic_aperture_radar_satellites&quot;&gt;&lt;img src=&quot;http://earthice.hi.is/sites/earthice.hi.is/files/myndir/Jardskorpuferli/insar_2008.jpg&quot; alt=&quot;insar image&quot; title=&quot;InSAR 影像範例&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;相對 GNSS 只能在點上觀測，InSAR 可以一次分析大範圍的面的地型變化，
-在分析地震前後之類短時間內大範圍的地型變動十分適合，
-可以簡單看出地震前後各地在垂直方向上的移動情況，
-從而推出斷層位置。&lt;/p&gt;
-&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
 
-&lt;script src=&quot;ext/paper.js?reference&quot;&gt;&lt;/script&gt;
-
-&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/gis-bicycle-sharing-taxi-project.html#no-matter-conclusion</id>
 <title>共享單車發展對捷運影響分析</title>

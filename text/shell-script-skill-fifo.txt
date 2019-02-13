@@ -49,7 +49,7 @@ amd 的顯卡驅動就是這樣做的。
 
 ### 附加壓縮檔
 ```sh
-cat self-extract.sh <<SHELL
+cat > self-extract.sh <<SHELL
 #!/bin/sh
 echo hello my name is $0
 echo i am self extract

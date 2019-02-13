@@ -63,7 +63,7 @@ seq 3 8 | read_n_row
 好像有個工具叫 <a href="https://makeself.io/">makeself</a> 可以自動完成這件事，
 amd 的顯卡驅動就是這樣做的。</p>
 <h3 id="附加壓縮檔">附加壓縮檔</h3>
-<pre><code class="lang-sh">cat self-extract.sh &lt;&lt;SHELL
+<pre><code class="lang-sh">cat &gt; self-extract.sh &lt;&lt;SHELL
 #!/bin/sh
 echo hello my name is $0
 echo i am self extract

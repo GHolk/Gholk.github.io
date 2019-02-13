@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-02-13T15:12:01.877Z</updated>
+  <updated>2019-02-13T15:54:39.955Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,189 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/shell-script-skill-fifo.html#forget-redirect-to-file</id>
+<title>shell 編程奇淫技巧</title>
+<published>2019-02-13T14:07:22.434Z</published>
+<updated>2019-02-13T15:54:39.938Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/shell-script-skill-fifo.html#forget-redirect-to-file"/>
+<summary type="html">&lt;pre class=&quot;diff&quot;&gt;@@ -49,7 +49,7 @@ amd 的顯卡驅動就是這樣做的。
+ 
+ ### 附加壓縮檔
+ ```sh
+-cat self-extract.sh &amp;lt;&amp;lt;SHELL
++cat &amp;gt; self-extract.sh &amp;lt;&amp;lt;SHELL
+ #!/bin/sh
+ echo hello my name is $0
+ echo i am self extract
+&lt;/pre&gt;</summary>
+<category term="linux"/>
+<category term="shell"/>
+<content type="html">&lt;h1 id=&quot;shell 編程奇淫技巧&quot;&gt;shell 編程奇淫技巧&lt;/h1&gt;
+&lt;p&gt;最近深刻認識到 linux 中 shell 是最全面的程式語言，
+也會用 shell script 寫一些小工具，而不是其它程式語言。
+這些是最近覺得一些有趣的技巧，整理成一篇文章，
+對同為常寫 shell script 的人可能會有幫助。&lt;/p&gt;
+&lt;h2 id=&quot;用 head truncat stream&quot;&gt;用 head truncat stream&lt;/h2&gt;
+&lt;p&gt;如果要從管道收資料，但需要截掉開頭的一部份，
+或邊讀取邊處理，可以用 shell 的命令群組或包成函數來處理。
+shell 中的小括號或大括號都可以是管道的來源或目標，
+或是 shell 函數也可以。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;cat data | { 
+    head -c 8 &amp;gt;/dev/null # 丟掉前 8 個 byte
+    dd bs=8K count=64 # 讀取 512KB 丟到標準輸出
+    tail -c 8 # 其它都丟掉，只留結尾的 8 個 byte
+} &amp;gt; truncate-data
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;read_n_row() {
+    read n
+    for i in `seq 1 $n`
+    do
+        read line
+        echo $line
+    done
+}
+seq 3 8 | read_n_row
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;小括號和大括號的差別在於內部變數會不會影響到外部，
+&lt;a href=&quot;https://stackoverflow.com/questions/13763942/why-piping-input-to-read-only-works-when-fed-into-while-read-construct&quot;&gt;但在 pipe 時因為 pipe 會自動 fork&lt;/a&gt; ，
+所以用大小括號好像沒差。&lt;/p&gt;
+&lt;h2 id=&quot;內嵌壓縮檔的 shell script&quot;&gt;內嵌壓縮檔的 shell script&lt;/h2&gt;
+&lt;p&gt;這比較有趣，之前在 amd 的 linux 顯卡驅動安裝程式看到的。
+大概就是用類似 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E5%9C%96%E7%A8%AE&quot;&gt;圖種&lt;/a&gt; 的方式
+把壓縮檔塞在 shell script 的 exit 命令後。
+反正 shell 執行到 exit 就退出了，後面塞什麼垃圾 shell 不在乎，
+而壓縮檔有自己的 header，header 前面有垃圾也沒關係。
+好像有個工具叫 &lt;a href=&quot;https://makeself.io/&quot;&gt;makeself&lt;/a&gt; 可以自動完成這件事，
+amd 的顯卡驅動就是這樣做的。&lt;/p&gt;
+&lt;h3 id=&quot;附加壓縮檔&quot;&gt;附加壓縮檔&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;cat &amp;gt; self-extract.sh &amp;lt;&amp;lt;SHELL
+#!/bin/sh
+echo hello my name is $0
+echo i am self extract
+echo my content is:
+7z l $0
+echo bye
+exit 0
+
+SHELL
+
+7z a archieve.7z some-file.png
+cat archieve.7z &amp;gt;&amp;gt; self-extract.sh
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;內嵌 base64&quot;&gt;內嵌 base64&lt;/h3&gt;
+&lt;p&gt;另一種比較簡單的作法是直接把檔案用 base64 編碼後
+內嵌在 shell script 裡。
+可以直接用 heredoc 的方式內嵌，
+也可以放在 exit 後面，用標籤隔開。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;base64 -d &amp;gt;outfile &amp;lt;&amp;lt;BASE64
+IyBzaGVsbCDnt6jnqIvlpYfmt6vmioDlt6cK5pyA6L+R5rex5Yi76KqN6K2Y5YiwIGxpbnV4IOS4
+rSBzaGVsbCDmmK/mnIDlhajpnaLnmoTnqIvlvI/oqp7oqIDvvIwK5Lmf5pyD55SoIHNoZWxsIHNj
+bAo=
+BASE64
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# some script
+extract_file() {
+    local filename
+    filename=&amp;quot;$1&amp;quot;
+    sed -n &amp;quot;/^__$filename__\$/,/^\$/p&amp;quot; $0 | {
+        head -n 1 &amp;gt;/dev/null
+        cat
+    } | base64 -d &amp;gt;file1
+}
+
+
+exit
+
+__file1__
+IyBzaGVsbCDnt6jnqIvlpYfmt6vmioDlt6cK5pyA6L+R5rex5Yi76KqN6K2Y5YiwIGxpbnV4IOS4
+rSBzaGVsbCDmmK/mnIDlhajpnaLnmoTnqIvlvI/oqp7oqIDvvIwK5Lmf5pyD55SoIHNoZWxsIHNj
+bAo=
+
+__file2__
+rSBzaGVsbCDmmK/mnIDlhajpnaLnmoTnqIvlvI/oqp7oqIDvvIwK5Lmf5pyD55SoIHNoZWxsIHNj
+bAo=
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;implicit space split&quot;&gt;implicit space split&lt;/h2&gt;
+&lt;p&gt;在 shell 中很麻煩一件事是要解析字串，
+像去掉附檔名、抓出附檔名、取出用冒號分隔的欄位等。
+如果在 javascript 裡就用 &lt;code&gt;string.split()&lt;/code&gt; 
+或 &lt;code&gt;string.match&lt;/code&gt; 能很簡單抓出。&lt;/p&gt;
+&lt;p&gt;在 bash 裡可以用 &lt;code&gt;${PATH##*:}&lt;/code&gt; 來代換，但在 sh 裡就不行。
+只能用 &lt;code&gt;echo $PATH | sed &amp;apos;s/^.*://&amp;apos;&lt;/code&gt; 或 grep 來抓。
+如果分隔符是空白，那可以用 shell 會用空白分割參數的特性，
+把變數傳到函數裡，就能用 &lt;code&gt;$1&lt;/code&gt; &lt;code&gt;$2&lt;/code&gt; 直接取用第 n 欄。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;gps_week_day=&amp;apos;1997 3&amp;apos;
+format_gps_url() {
+    week=$1
+    day=$2
+    echo ftp://cddis.nasa.gov/gnss/products/$week/igs$week$day.sp3.Z
+}
+format_gps_url $gps_week_day
+# ftp://cddis.nasa.gov/gnss/products/1997/igs19973.sp3.Z
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;tee 命名管道處理多個管道&quot;&gt;tee 命名管道處理多個管道&lt;/h2&gt;
+&lt;p&gt;有時候想把一個輸出 pipe 給多個 command，
+或需要從多個命令讀取輸出，但 shell 只能單一 pipe，
+像 diff 這種有二個檔案的命令，最多只能一個檔案來自管道，
+&lt;code&gt;cat file1 | diff - file2&lt;/code&gt; 。
+雖然可以用 &lt;code&gt;&amp;gt;&lt;/code&gt; 把資料導到檔案，再用 &lt;code&gt;&amp;lt;&lt;/code&gt; 讀出來，
+但有時候佔了空間之後還要移除很麻煩。&lt;/p&gt;
+&lt;h3 id=&quot;tee 複製 stream&quot;&gt;tee 複製 stream&lt;/h3&gt;
+&lt;p&gt;tee 可以把一個 stream 複製成多個，
+但複製是寫入到檔案，不能 pipe 給多個命令。
+可以把 tee 的目標指定成命令管道
+或 process substitution。&lt;/p&gt;
+&lt;p&gt;process substitution 是 bash 才有的功能，
+可以用 &lt;code&gt;&amp;gt;(wc)&lt;/code&gt; 的形式把輸入的目標檔案指到一組命令。
+或用 &lt;code&gt;&amp;lt;(cut -d &amp;apos; &amp;apos; -f 3 file)&lt;/code&gt; 之類的把輸入指向檔案。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;zcat backup.img.gz | tee &amp;gt;(cksum) &amp;gt; /dev/sdz
+# 或是也能 tee 到多個檔案，但 tee 仍會寫到標準輸出，所以手動丟掉。
+zcat backup.img.gz | tee &amp;gt;(cksum) &amp;gt;(md5sum) /dev/sdz &amp;gt;/dev/null
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;命令管道 fifo&quot;&gt;命令管道 fifo&lt;/h3&gt;
+&lt;p&gt;相比上面的 &lt;code&gt;&amp;gt;()&lt;/code&gt; &lt;code&gt;&amp;lt;()&lt;/code&gt; 是 bash 的功能，
+命名管道 fifo 就是在 sh 下也可以用。
+只是 fifo 要手動創建，用完要刪除。
+&lt;code&gt;mkfifo&lt;/code&gt; 可以創建管道，一樣用 rm 移除。&lt;/p&gt;
+&lt;p&gt;只是對 fifo 寫資料就會被阻塞，
+直到有另一個程式從 fifo 讀取，讀取也是一樣。
+所以如果要在同一個 script 中讀取與寫入，
+要用 &lt;code&gt;&amp;amp;&lt;/code&gt; 把程式丟到背景。&lt;/p&gt;
+&lt;p&gt;tee 一樣可以寫入多個命名管道，
+而 tee 的作法好像是任一個寫入的目標被阻塞，
+就停止所有目標的寫入。
+所以如果寫入了多個 fifo，
+要等所有 fifo 都開始讀取才能讀取．
+只有一個 fifo 在讀取，其它 fifo 還是會 block 住，
+tee 就會 block 住。&lt;/p&gt;
+&lt;p&gt;雖然 fifo 看起來和單純用檔案很像，
+但其實 fifo 根本沒有內容，只是借檔案系統的一個名字，
+管道內的資料不會存在檔案系統裡。
+所以你向 fifo 寫資料根本&lt;/p&gt;
+&lt;h3 id=&quot;簡單示範使用多重管道&quot;&gt;簡單示範使用多重管道&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;mkfifo yes no maybe
+yes yes &amp;gt; yes &amp;amp;
+yes no &amp;gt; no &amp;amp;
+yes maybe &amp;gt; maybe &amp;amp;
+paste yse no maybe | head
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;抓出數個檔案的數個欄位處理合併成一個檔案&quot;&gt;抓出數個檔案的數個欄位處理合併成一個檔案&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;basename=&amp;quot;$(basename -s .out &amp;quot;$1&amp;quot;)&amp;quot;
+
+tmpfifo=&amp;quot;inp2dms all2time inp2enh all2h&amp;quot;
+mkfifo $tmpfifo
+
+awk &amp;apos;{print $5,$6,$7, $2,$3,$4}&amp;apos; &amp;quot;$basename&amp;quot;.out &amp;gt; inp2dms &amp;amp;
+awk &amp;apos;{print $5&amp;quot;d&amp;quot; $6&amp;quot;\x27&amp;quot; $7&amp;quot;\x22&amp;quot;, $2&amp;quot;d&amp;quot; $3&amp;quot;\x27&amp;quot; $4&amp;quot;\x22&amp;quot;}&amp;apos; \
+    &amp;quot;$basename&amp;quot;.out | proj -f &amp;quot;%.4f&amp;quot; +init=epsg:3826 &amp;gt; inp2enh &amp;amp;
+cut -d &amp;apos;,&amp;apos; -f 1-3 --output-delimiter=&amp;apos;:&amp;apos; &amp;quot;$basename&amp;quot;.all &amp;gt; all2time &amp;amp;
+cut -d &amp;apos;,&amp;apos; -f 7 &amp;quot;$basename&amp;quot;.all &amp;gt; all2h &amp;amp;
+
+paste -d &amp;apos; &amp;apos; all2time inp2dms all2h inp2enh &amp;gt; &amp;quot;$basename&amp;quot;.gnuplot.data
+rm $tmpfifo
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/linux-iccard-ccid-compile.html#新測試二台讀卡機</id>
 <title>在 linux 上使用晶片卡</title>
 <published>2018-09-07T14:06:35.593Z</published>
@@ -1415,39 +1598,7 @@ script, style {
 該把褲子改成喇叭褲了。</summary>
 <category term="youtube"/>
 <category term="歌"/>
-<content type="html">&lt;h1 id=&quot;西藏天邊弦子的吉他&quot;&gt;西藏天邊弦子的吉他&lt;/h1&gt;
-&lt;p&gt;在 youtube 看了 &lt;u&gt;弦子&lt;/u&gt; &lt;cite&gt;西藏天邊&lt;/cite&gt; 的 mv，
-忽然被她穿著喇叭褲彈吉他的樣子吸引。
-歌詞中的直率，彈著吉他大步向前跨，
-陽光在背後綻放的樣子，彈著吉他律動的樣子。
-該把褲子改成喇叭褲了。&lt;/p&gt;
-&lt;iframe src=&quot;https://www.youtube.com/embed/0QifqQgd5jk&quot;&gt;
-&lt;a href=&quot;https://www.youtube.com/watch?v=0QifqQgd5jk&quot;&gt;弦子 西藏天邊&lt;/a&gt;
-&lt;/iframe&gt;
 
-&lt;p&gt;我很喜歡看女生穿喇叭褲，或是寬鬆的長褲，
-我喜歡那種皺摺與寬鬆的美感。
-弦子在 mv 中雙腳邁開，膝蓋微彎彈著吉他的樣子，
-邁開大步邊走邊彈，讓陽光把自己和喇叭褲照成剪影。&lt;/p&gt;
-&lt;p&gt;陳綺貞在和五月天的 &lt;a href=&quot;https://www.youtube.com/watch?v=EK9z2B9wXQk&quot;&gt;私奔到月球&lt;/a&gt; 合唱，
-也有類似的裝扮，牛仔褲和肩背吉他。
-很喜歡女生彈吉他時，隨著音樂律動，前後搖擺的樣子；
-雙膝微彎，小腿叉開，大腿又收攏的樣子；
-視角從下往上，把褲腳拍得很大的樣子。
-大概以 youtube mv 中 2m20s 時的畫面為代表。&lt;/p&gt;
-&lt;p&gt;可能我對腳有種迷戀吧。
-應該說是褲子，我喜歡那種全包覆的褲子，
-褲腳很長，可以蓋到襪子不讓小腿露出來，
-最好把襪子也蓋住，褲腳掛在鞋子上。
-我一直覺得伊斯蘭文化，
-那個要求女人不得露出身體的宗教，
-也以自己的角度理解了這種美感。&lt;/p&gt;
-&lt;p&gt;另外就是背著吉他的樣子很迷人。
-吉他的位置垂於腰部之下、二腿之間，
-彈奏時身體跟著音樂律動搖擺，
-狀似男性炫耀自身性能力的動作，
-全無色情意味，帶有別種美感。&lt;/p&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/geomatics-seminar-sar-usage.html#reference-and-time-statistic</id>
 <title>SAR 雷達影像</title>

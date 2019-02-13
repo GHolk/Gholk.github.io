@@ -108,7 +108,7 @@ uefi 也能用隨身碟開機，開機到 grub 後再手動開機 debian，
 土炮點可以 `head -c $(wc -c < live-cd.iso) > backup.img` 就好，
 但還有一些細節可以處理得更好，就寫了個腳本 flash-iso-recovery 處理。
 
-```
+```sh
 # 把 live-cd.iso 燒進 /dev/sdz，並備份 sdz 到 backup.img.gz
 ./flash-iso-recovery.sh live-cd.iso /dev/sdz backup.img.gz
 

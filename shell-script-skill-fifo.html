@@ -1,0 +1,198 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2019-02-13T14:07:22.434Z">
+<meta name="keywords" property="og:article:tag" content="linux,shell">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="linux-grub-uefi-var-bios.html" title="easy2boot 無法讀取 uefi var">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>shell 編程奇淫技巧</title>
+</head>
+<body>
+<main><h1 id="shell 編程奇淫技巧">shell 編程奇淫技巧</h1>
+<p>最近深刻認識到 linux 中 shell 是最全面的程式語言，
+也會用 shell script 寫一些小工具，而不是其它程式語言。
+這些是最近覺得一些有趣的技巧，整理成一篇文章，
+對同為常寫 shell script 的人可能會有幫助。</p>
+<h2 id="用 head truncat stream">用 head truncat stream</h2>
+<p>如果要從管道收資料，但需要截掉開頭的一部份，
+或邊讀取邊處理，可以用 shell 的命令群組或包成函數來處理。
+shell 中的小括號或大括號都可以是管道的來源或目標，
+或是 shell 函數也可以。</p>
+<pre><code class="lang-sh">cat data | { 
+    head -c 8 &gt;/dev/null # 丟掉前 8 個 byte
+    dd bs=8K count=64 # 讀取 512KB 丟到標準輸出
+    tail -c 8 # 其它都丟掉，只留結尾的 8 個 byte
+} &gt; truncate-data
+</code></pre>
+<pre><code class="lang-sh">read_n_row() {
+    read n
+    for i in `seq 1 $n`
+    do
+        read line
+        echo $line
+    done
+}
+seq 3 8 | read_n_row
+</code></pre>
+<p>小括號和大括號的差別在於內部變數會不會影響到外部，
+<a href="https://stackoverflow.com/questions/13763942/why-piping-input-to-read-only-works-when-fed-into-while-read-construct">但在 pipe 時因為 pipe 會自動 fork</a> ，
+所以用大小括號好像沒差。</p>
+<h2 id="內嵌壓縮檔的 shell script">內嵌壓縮檔的 shell script</h2>
+<p>這比較有趣，之前在 amd 的 linux 顯卡驅動安裝程式看到的。
+大概就是用類似 <a href="http://zh.wikipedia.org/wiki/%E5%9C%96%E7%A8%AE">圖種</a> 的方式
+把壓縮檔塞在 shell script 的 exit 命令後。
+反正 shell 執行到 exit 就退出了，後面塞什麼垃圾 shell 不在乎，
+而壓縮檔有自己的 header，header 前面有垃圾也沒關係。
+好像有個工具叫 <a href="https://makeself.io/">makeself</a> 可以自動完成這件事，
+amd 的顯卡驅動就是這樣做的。</p>
+<h3 id="附加壓縮檔">附加壓縮檔</h3>
+<pre><code class="lang-sh">cat self-extract.sh &lt;&lt;SHELL
+#!/bin/sh
+echo hello my name is $0
+echo i am self extract
+echo my content is:
+7z l $0
+echo bye
+exit 0
+
+SHELL
+
+7z a archieve.7z some-file.png
+cat archieve.7z &gt;&gt; self-extract.sh
+</code></pre>
+<h3 id="內嵌 base64">內嵌 base64</h3>
+<p>另一種比較簡單的作法是直接把檔案用 base64 編碼後
+內嵌在 shell script 裡。
+可以直接用 heredoc 的方式內嵌，
+也可以放在 exit 後面，用標籤隔開。</p>
+<pre><code class="lang-sh">base64 -d &gt;outfile &lt;&lt;BASE64
+IyBzaGVsbCDnt6jnqIvlpYfmt6vmioDlt6cK5pyA6L+R5rex5Yi76KqN6K2Y5YiwIGxpbnV4IOS4
+rSBzaGVsbCDmmK/mnIDlhajpnaLnmoTnqIvlvI/oqp7oqIDvvIwK5Lmf5pyD55SoIHNoZWxsIHNj
+bAo=
+BASE64
+</code></pre>
+<pre><code class="lang-sh"># some script
+extract_file() {
+    local filename
+    filename=&quot;$1&quot;
+    sed -n &quot;/^__$filename__\$/,/^\$/p&quot; $0 | {
+        head -n 1 &gt;/dev/null
+        cat
+    } | base64 -d &gt;file1
+}
+
+
+exit
+
+__file1__
+IyBzaGVsbCDnt6jnqIvlpYfmt6vmioDlt6cK5pyA6L+R5rex5Yi76KqN6K2Y5YiwIGxpbnV4IOS4
+rSBzaGVsbCDmmK/mnIDlhajpnaLnmoTnqIvlvI/oqp7oqIDvvIwK5Lmf5pyD55SoIHNoZWxsIHNj
+bAo=
+
+__file2__
+rSBzaGVsbCDmmK/mnIDlhajpnaLnmoTnqIvlvI/oqp7oqIDvvIwK5Lmf5pyD55SoIHNoZWxsIHNj
+bAo=
+</code></pre>
+<h2 id="implicit space split">implicit space split</h2>
+<p>在 shell 中很麻煩一件事是要解析字串，
+像去掉附檔名、抓出附檔名、取出用冒號分隔的欄位等。
+如果在 javascript 裡就用 <code>string.split()</code> 
+或 <code>string.match</code> 能很簡單抓出。</p>
+<p>在 bash 裡可以用 <code>${PATH##*:}</code> 來代換，但在 sh 裡就不行。
+只能用 <code>echo $PATH | sed &apos;s/^.*://&apos;</code> 或 grep 來抓。
+如果分隔符是空白，那可以用 shell 會用空白分割參數的特性，
+把變數傳到函數裡，就能用 <code>$1</code> <code>$2</code> 直接取用第 n 欄。</p>
+<pre><code class="lang-sh">gps_week_day=&apos;1997 3&apos;
+format_gps_url() {
+    week=$1
+    day=$2
+    echo ftp://cddis.nasa.gov/gnss/products/$week/igs$week$day.sp3.Z
+}
+format_gps_url $gps_week_day
+# ftp://cddis.nasa.gov/gnss/products/1997/igs19973.sp3.Z
+</code></pre>
+<h2 id="tee 命名管道處理多個管道">tee 命名管道處理多個管道</h2>
+<p>有時候想把一個輸出 pipe 給多個 command，
+或需要從多個命令讀取輸出，但 shell 只能單一 pipe，
+像 diff 這種有二個檔案的命令，最多只能一個檔案來自管道，
+<code>cat file1 | diff - file2</code> 。
+雖然可以用 <code>&gt;</code> 把資料導到檔案，再用 <code>&lt;</code> 讀出來，
+但有時候佔了空間之後還要移除很麻煩。</p>
+<h3 id="tee 複製 stream">tee 複製 stream</h3>
+<p>tee 可以把一個 stream 複製成多個，
+但複製是寫入到檔案，不能 pipe 給多個命令。
+可以把 tee 的目標指定成命令管道
+或 process substitution。</p>
+<p>process substitution 是 bash 才有的功能，
+可以用 <code>&gt;(wc)</code> 的形式把輸入的目標檔案指到一組命令。
+或用 <code>&lt;(cut -d &apos; &apos; -f 3 file)</code> 之類的把輸入指向檔案。</p>
+<pre><code class="lang-sh">zcat backup.img.gz | tee &gt;(cksum) &gt; /dev/sdz
+# 或是也能 tee 到多個檔案，但 tee 仍會寫到標準輸出，所以手動丟掉。
+zcat backup.img.gz | tee &gt;(cksum) &gt;(md5sum) /dev/sdz &gt;/dev/null
+</code></pre>
+<h3 id="命令管道 fifo">命令管道 fifo</h3>
+<p>相比上面的 <code>&gt;()</code> <code>&lt;()</code> 是 bash 的功能，
+命名管道 fifo 就是在 sh 下也可以用。
+只是 fifo 要手動創建，用完要刪除。
+<code>mkfifo</code> 可以創建管道，一樣用 rm 移除。</p>
+<p>只是對 fifo 寫資料就會被阻塞，
+直到有另一個程式從 fifo 讀取，讀取也是一樣。
+所以如果要在同一個 script 中讀取與寫入，
+要用 <code>&amp;</code> 把程式丟到背景。</p>
+<p>tee 一樣可以寫入多個命名管道，
+而 tee 的作法好像是任一個寫入的目標被阻塞，
+就停止所有目標的寫入。
+所以如果寫入了多個 fifo，
+要等所有 fifo 都開始讀取才能讀取．
+只有一個 fifo 在讀取，其它 fifo 還是會 block 住，
+tee 就會 block 住。</p>
+<p>雖然 fifo 看起來和單純用檔案很像，
+但其實 fifo 根本沒有內容，只是借檔案系統的一個名字，
+管道內的資料不會存在檔案系統裡。
+所以你向 fifo 寫資料根本</p>
+<h3 id="簡單示範使用多重管道">簡單示範使用多重管道</h3>
+<pre><code class="lang-sh">mkfifo yes no maybe
+yes yes &gt; yes &amp;
+yes no &gt; no &amp;
+yes maybe &gt; maybe &amp;
+paste yse no maybe | head
+</code></pre>
+<h3 id="抓出數個檔案的數個欄位處理合併成一個檔案">抓出數個檔案的數個欄位處理合併成一個檔案</h3>
+<pre><code class="lang-sh">basename=&quot;$(basename -s .out &quot;$1&quot;)&quot;
+
+tmpfifo=&quot;inp2dms all2time inp2enh all2h&quot;
+mkfifo $tmpfifo
+
+awk &apos;{print $5,$6,$7, $2,$3,$4}&apos; &quot;$basename&quot;.out &gt; inp2dms &amp;
+awk &apos;{print $5&quot;d&quot; $6&quot;\x27&quot; $7&quot;\x22&quot;, $2&quot;d&quot; $3&quot;\x27&quot; $4&quot;\x22&quot;}&apos; \
+    &quot;$basename&quot;.out | proj -f &quot;%.4f&quot; +init=epsg:3826 &gt; inp2enh &amp;
+cut -d &apos;,&apos; -f 1-3 --output-delimiter=&apos;:&apos; &quot;$basename&quot;.all &gt; all2time &amp;
+cut -d &apos;,&apos; -f 7 &quot;$basename&quot;.all &gt; all2h &amp;
+
+paste -d &apos; &apos; all2time inp2dms all2h inp2enh &gt; &quot;$basename&quot;.gnuplot.data
+rm $tmpfifo
+</code></pre>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

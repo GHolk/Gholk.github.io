@@ -1,0 +1,203 @@
+# shell 編程奇淫技巧
+最近深刻認識到 linux 中 shell 是最全面的程式語言，
+也會用 shell script 寫一些小工具，而不是其它程式語言。
+這些是最近覺得一些有趣的技巧，整理成一篇文章，
+對同為常寫 shell script 的人可能會有幫助。
+
+## 用 head truncat stream
+如果要從管道收資料，但需要截掉開頭的一部份，
+或邊讀取邊處理，可以用 shell 的命令群組或包成函數來處理。
+shell 中的小括號或大括號都可以是管道的來源或目標，
+或是 shell 函數也可以。
+
+```sh
+cat data | { 
+    head -c 8 >/dev/null # 丟掉前 8 個 byte
+    dd bs=8K count=64 # 讀取 512KB 丟到標準輸出
+    tail -c 8 # 其它都丟掉，只留結尾的 8 個 byte
+} > truncate-data
+```
+
+```sh
+read_n_row() {
+    read n
+    for i in `seq 1 $n`
+    do
+        read line
+        echo $line
+    done
+}
+seq 3 8 | read_n_row
+```
+
+小括號和大括號的差別在於內部變數會不會影響到外部，
+[但在 pipe 時因為 pipe 會自動 fork][pipe auto fork] ，
+所以用大小括號好像沒差。
+
+[pipe auto fork]: https://stackoverflow.com/questions/13763942/why-piping-input-to-read-only-works-when-fed-into-while-read-construct
+
+## 內嵌壓縮檔的 shell script
+這比較有趣，之前在 amd 的 linux 顯卡驅動安裝程式看到的。
+大概就是用類似 [[圖種]] 的方式
+把壓縮檔塞在 shell script 的 exit 命令後。
+反正 shell 執行到 exit 就退出了，後面塞什麼垃圾 shell 不在乎，
+而壓縮檔有自己的 header，header 前面有垃圾也沒關係。
+好像有個工具叫 [makeself] 可以自動完成這件事，
+amd 的顯卡驅動就是這樣做的。
+
+[makeself]: https://makeself.io/
+
+### 附加壓縮檔
+```sh
+cat self-extract.sh <<SHELL
+#!/bin/sh
+echo hello my name is $0
+echo i am self extract
+echo my content is:
+7z l $0
+echo bye
+exit 0
+
+SHELL
+
+7z a archieve.7z some-file.png
+cat archieve.7z >> self-extract.sh
+```
+
+### 內嵌 base64
+另一種比較簡單的作法是直接把檔案用 base64 編碼後
+內嵌在 shell script 裡。
+可以直接用 heredoc 的方式內嵌，
+也可以放在 exit 後面，用標籤隔開。
+
+```sh
+base64 -d >outfile <<BASE64
+IyBzaGVsbCDnt6jnqIvlpYfmt6vmioDlt6cK5pyA6L+R5rex5Yi76KqN6K2Y5YiwIGxpbnV4IOS4
+rSBzaGVsbCDmmK/mnIDlhajpnaLnmoTnqIvlvI/oqp7oqIDvvIwK5Lmf5pyD55SoIHNoZWxsIHNj
+bAo=
+BASE64
+```
+
+```sh
+# some script
+extract_file() {
+    local filename
+    filename="$1"
+    sed -n "/^__$filename__\$/,/^\$/p" $0 | {
+        head -n 1 >/dev/null
+        cat
+    } | base64 -d >file1
+}
+    
+    
+exit
+
+__file1__
+IyBzaGVsbCDnt6jnqIvlpYfmt6vmioDlt6cK5pyA6L+R5rex5Yi76KqN6K2Y5YiwIGxpbnV4IOS4
+rSBzaGVsbCDmmK/mnIDlhajpnaLnmoTnqIvlvI/oqp7oqIDvvIwK5Lmf5pyD55SoIHNoZWxsIHNj
+bAo=
+
+__file2__
+rSBzaGVsbCDmmK/mnIDlhajpnaLnmoTnqIvlvI/oqp7oqIDvvIwK5Lmf5pyD55SoIHNoZWxsIHNj
+bAo=
+```
+
+
+## implicit space split
+在 shell 中很麻煩一件事是要解析字串，
+像去掉附檔名、抓出附檔名、取出用冒號分隔的欄位等。
+如果在 javascript 裡就用 `string.split()` 
+或 `string.match` 能很簡單抓出。
+
+在 bash 裡可以用 `${PATH##*:}` 來代換，但在 sh 裡就不行。
+只能用 `echo $PATH | sed 's/^.*://'` 或 grep 來抓。
+如果分隔符是空白，那可以用 shell 會用空白分割參數的特性，
+把變數傳到函數裡，就能用 `$1` `$2` 直接取用第 n 欄。
+
+```sh
+gps_week_day='1997 3'
+format_gps_url() {
+    week=$1
+    day=$2
+    echo ftp://cddis.nasa.gov/gnss/products/$week/igs$week$day.sp3.Z
+}
+format_gps_url $gps_week_day
+# ftp://cddis.nasa.gov/gnss/products/1997/igs19973.sp3.Z
+```
+
+## tee 命名管道處理多個管道
+有時候想把一個輸出 pipe 給多個 command，
+或需要從多個命令讀取輸出，但 shell 只能單一 pipe，
+像 diff 這種有二個檔案的命令，最多只能一個檔案來自管道，
+`cat file1 | diff - file2` 。
+雖然可以用 `>` 把資料導到檔案，再用 `<` 讀出來，
+但有時候佔了空間之後還要移除很麻煩。
+
+### tee 複製 stream
+tee 可以把一個 stream 複製成多個，
+但複製是寫入到檔案，不能 pipe 給多個命令。
+可以把 tee 的目標指定成命令管道
+或 process substitution。
+
+process substitution 是 bash 才有的功能，
+可以用 `>(wc)` 的形式把輸入的目標檔案指到一組命令。
+或用 `<(cut -d ' ' -f 3 file)` 之類的把輸入指向檔案。
+
+```sh
+zcat backup.img.gz | tee >(cksum) > /dev/sdz
+# 或是也能 tee 到多個檔案，但 tee 仍會寫到標準輸出，所以手動丟掉。
+zcat backup.img.gz | tee >(cksum) >(md5sum) /dev/sdz >/dev/null
+```
+
+### 命令管道 fifo
+相比上面的 `>()` `<()` 是 bash 的功能，
+命名管道 fifo 就是在 sh 下也可以用。
+只是 fifo 要手動創建，用完要刪除。
+`mkfifo` 可以創建管道，一樣用 rm 移除。
+
+只是對 fifo 寫資料就會被阻塞，
+直到有另一個程式從 fifo 讀取，讀取也是一樣。
+所以如果要在同一個 script 中讀取與寫入，
+要用 `&` 把程式丟到背景。
+
+tee 一樣可以寫入多個命名管道，
+而 tee 的作法好像是任一個寫入的目標被阻塞，
+就停止所有目標的寫入。
+所以如果寫入了多個 fifo，
+要等所有 fifo 都開始讀取才能讀取．
+只有一個 fifo 在讀取，其它 fifo 還是會 block 住，
+tee 就會 block 住。
+
+雖然 fifo 看起來和單純用檔案很像，
+但其實 fifo 根本沒有內容，只是借檔案系統的一個名字，
+管道內的資料不會存在檔案系統裡。
+所以你向 fifo 寫資料根本
+
+### 簡單示範使用多重管道
+```sh
+mkfifo yes no maybe
+yes yes > yes &
+yes no > no &
+yes maybe > maybe &
+paste yse no maybe | head
+```
+
+### 抓出數個檔案的數個欄位處理合併成一個檔案
+```sh
+basename="$(basename -s .out "$1")"
+
+tmpfifo="inp2dms all2time inp2enh all2h"
+mkfifo $tmpfifo
+
+awk '{print $5,$6,$7, $2,$3,$4}' "$basename".out > inp2dms &
+awk '{print $5"d" $6"\x27" $7"\x22", $2"d" $3"\x27" $4"\x22"}' \
+    "$basename".out | proj -f "%.4f" +init=epsg:3826 > inp2enh &
+cut -d ',' -f 1-3 --output-delimiter=':' "$basename".all > all2time &
+cut -d ',' -f 7 "$basename".all > all2h &
+
+paste -d ' ' all2time inp2dms all2h inp2enh > "$basename".gnuplot.data
+rm $tmpfifo
+```
+
+#linux
+#shell

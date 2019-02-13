@@ -1,0 +1,149 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2019-02-13T03:36:06.066Z">
+<meta name="keywords" property="og:article:tag" content="linux,boot,shell">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="geomatics-rtx-csrs-compare.html" title="rtx csrs 比較">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>easy2boot 無法讀取 uefi var</title>
+</head>
+<body>
+<main><h1 id="easy2boot 無法讀取 uefi var">easy2boot 無法讀取 uefi var</h1>
+<p>之前又開始用 easy2boot，只要把光碟映像檔複製進去就能開機。
+但一次把 uefi 中的 grub 開機項目刪掉，
+想用 easy2boot 中的 live-cd 修，
+卻發現 live-cd 都沒有 grub，
+而且用 easy2boot 開機後都看不到 efivar。
+原來 e2b 是用 legacy，要用 uefi 開機才看得到，
+得直接把隨身碟燒成開機碟。</p>
+<h2 id="試誤 uefi usb 選項並洗掉 grub">試誤 uefi usb 選項並洗掉 grub</h2>
+<p>我的筆電 thinkpad 13 沒有乙太網路孔，
+在宿舍等只有有線網路的地方，
+是用一個 usb type c 轉網路孔的乙太網卡，
+接在筆電的 type c 孔上來上網。
+但前幾天讀不到乙太網卡，
+不確定是 type c 孔壞了還是網卡壞了，
+於是就在 uefi 裡動動看各種設定，看會不會重啟設定就修好。</p>
+<p>原本以為是孔壞了，因為 type c 孔連充電都充不進去，
+但後來發現開機的狀態還是能用 type c 充電，
+懷疑是 uefi 裡一個 <em>在待機狀態時 usb 孔仍對外供電</em> 
+的選項讓電充不進去，就開始逐一嘗試 uefi 的設定。
+（這選項在手機沒電但有帶筆電出門時蠻有用的，
+可以把筆電當行動電源用，不然以前要讓筆電在開機狀態，
+塞在背包裡拉一條線出來蠻麻煩的。）</p>
+<p>最後試了一個還原預設選項，然後 uefi 就被重置了。
+然後在 windows 下也確定 type c 孔可以充電了，
+（充電指示燈有亮。）所以 type c 孔可能是只能在開機時充，
+或讀寫有問題但充電沒問題，
+或都沒問題只是乙太網卡壞了。
+（後來發現關機時也可以充了，
+不知道是之前我沒看到還是東方神祕力量？）
+所以就只剩 uefi 被重置，要想辦法把 grub 灌回去的問題了。</p>
+<h2 id="用 easy2boot 嘗試複原 grub">用 easy2boot 嘗試複原 grub</h2>
+<p>以前灌 linux 時就把複原 grub 的流程抓得蠻熟了，
+因為常常不小心把 grub 洗掉或重灌。
+因為 os 還在，只要能進到 grub shell 就能手動開機回原本的 os，
+在原 os 就能用 grub-install 重裝 grub。
+或用 live-cd 開機後，也能用 live-cd 裡的 grub-install，
+或在 live-cd 裡 chroot 回原 os，再用原 os 的 grub-install。</p>
+<p>但 easy2boot 裡的 live cd 開機後都看不到 grub？
+不確定是不是 grub，但沒辦法按 c 叫出 shell，
+也不能按 e 編輯開機指令，而是按 tab，
+而且指令只有一行，不太像 grub 的開機指令。
+試了 finnix <a href="https://newtoypia.blogspot.com/2018/02/antix.html">gantix</a> sarbian remixos ubuntu18 好幾個 live-cd 都是這樣，
+最後爆怒去抓了 <a href="https://www.supergrubdisk.org/super-grub2-disk/">super grub2 disk</a> 專門用來救援的 grub 映像檔，
+終於進到 grub，接下來就是 <a href="https://www.openfoundry.org/tw/foss-programs/9267-linux-grub2-fixing">簡單的手動用 grub 開機</a> ，
+openfoundry 的網頁好像掛了，也附上 <a href="https://www.linux.com/learn/how-rescue-non-booting-grub-2-LINUX">簡易修 grub 的英文原文</a>。</p>
+<h2 id="看不到 efivarfs">看不到 efivarfs</h2>
+<p>之前用 finnix gantix ubuntu 雖然沒有 grub，但能開機進 live-cd，
+但在 finnix 版本太舊，掛載 ext4 時說有不認識的 meta data。
+gantix 則是 32 位元的，無法 chroot 進我的 64 位元 debian，
+裝 32 位元的 grub 時也報錯。
+ubuntu 也是在裝 grub 時報錯，不管直接裝或 chroot 進 debian 裝，
+都說找不到 efivars。</p>
+<p>我之前的經驗 linux 會把 uefi 儲存的資料用虛擬檔案系統的方式
+暴露在 <code>/sys/firmware/efi/</code> 下，
+（不是 uefi 分割，uefi 分割一般掛載在 <code>/boot/efi/</code> 。）
+但在上面幾種情況都是 <code>/sys/firmware/</code> 下沒有 efi 這個資料夾；
+包括用 easy2boot 進到 grub cd 再開原本的 debian 也是沒有 efi。</p>
+<p>google 了一下發現大概是 <strong>用 uefi 開機後 linux 才能看到 efi</strong> ，
+easy2boot 是傳統的 bios 或稱 legacy，
+能在 uefi 中運作是因為 uefi 可以模擬成 legacy 模式，
+但也因為摸擬成 legacy，當然看不到 efi 存的資料。</p>
+<h2 id="直接燒的開機碟就能用 uefi">直接燒的開機碟就能用 uefi</h2>
+<p>最後知道原因就好辦了，不要用 e2b，
+直接把隨身碟燒成開機碟開機，
+也就是 <code>cat super-grub2-disk.iso &gt;/dev/sdz</code> 。
+之後該隨身碟就能被當成光碟開機了。
+uefi 也能用隨身碟開機，開機到 grub 後再手動開機 debian，
+果然就看得到 <code>/sys/firmware/efi/</code> 了，
+<code>grub-install</code> 也能正常運作了。</p>
+<p>後來查一下， <a href="http://www.easy2boot.com/add-payload-files/e2b-uefi/">e2b 也能開 uefi</a> ，
+但好像需要把映像檔作特殊處理，就懶得研究了。
+反正有下面的 flash-iso-recovery 了，
+只要映像檔不要太大就不麻煩。</p>
+<h2 id="[flash iso recovery]"><a href="//github.com/gholk/loco/blob/master/bin/flash-iso-recovery.sh">flash iso recovery</a></h2>
+<p>最後推廣一下之前寫的小工具 <code>flash-iso-recovery.sh</code> 。
+因為覺得每次燒一次開機碟都要毀掉整顆隨身碟的資料太麻煩，
+就寫了個小腳本先把隨身碟備份。</p>
+<h3 id="原理">原理</h3>
+<p>在燒開機碟時是 <code>cat live-cd.iso &gt; /dev/sdz</code> 或
+<code>dd if=live-cd.iso of=/dev/sdz</code> ，
+其實只會動到隨身碟的前幾 G，
+看映像檔多大，就只會佔掉隨身碟開頭的同樣大小。</p>
+<p>所以我們只要在燒進去前先把開頭的同樣大小的資料備份出來，
+之後再用 dd 或 cat 寫回去就能復原原本的樣子了。
+土炮點可以 <code>head -c $(wc -c &lt; live-cd.iso) &gt; backup.img</code> 就好，
+但還有一些細節可以處理得更好，就寫了個腳本 flash-iso-recovery 處理。</p>
+<pre><code># 把 live-cd.iso 燒進 /dev/sdz，並備份 sdz 到 backup.img.gz
+./flash-iso-recovery.sh live-cd.iso /dev/sdz backup.img.gz
+
+# 還原時 zcat 或 dd 都可以
+zcat backup.img.gz &gt; /dev/sdz
+zcat backup.img.gz | dd bs=4M of=/dev/sdz
+</code></pre><h3 id="細節處理">細節處理</h3>
+<p>以我的腳本 flash-iso-recovery.sh 是給定映像檔、裝置、備份檔名，
+就會根據映像檔大小，抓出該裝置開頭同樣大小的資料，存成備份檔名。</p>
+<p>我是用 dd 可以控制 io 速度，block size 調成 4MB，
+用 cat 好像會把所有 cpu io 都吃光。</p>
+<p>另外因為 dd 只能指定 block size 和 count，
+而映像檔的大小不可能每次都是某個 block size 的整數倍 count，
+（而且我直接指定 bs 4mb，好達到一定讀寫速度。
+雖然可以指定 <code>bs=1 count=$(wc &lt;live-cd.iso)</code> 或
+<code>count=1 bs=$(wc &lt;live-cd.iso)</code> 精確要讀的大小，
+但一個會因為次數過多太慢，另一個則是需要的記憶體太多。）
+所以我把映像檔大小上取整到 4mb 的倍數，
+備份多一點資料比較保險；
+雖然 dd 就算指定了 bs 和 count，
+但遇到檔案太小 eof 時還是會讀完就退出，
+並報出不滿一個 bs 的資料大小。
+（如果用 head 是指定總 byte 數就沒這個問題。）</p>
+<p>另外抓出來的資料好像蠻多都是無意義的，
+因為開頭會放分割表和檔案系統的資料，但一般都只會有一二個分割，
+檔案系統也會有很多沒用到的空白，
+用 gzip 壓縮可以縮小很多；
+所以我有把抓出來的資料用 gzip 壓縮，減少大小。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

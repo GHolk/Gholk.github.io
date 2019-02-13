@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-01-30T16:43:31.267Z</updated>
+  <updated>2019-02-13T03:45:12.705Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,138 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/linux-grub-uefi-var-bios.html</id>
+<title>easy2boot 無法讀取 uefi var</title>
+<published>2019-02-13T03:36:06.066Z</published>
+<updated>2019-02-13T03:45:12.691Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/linux-grub-uefi-var-bios.html"/>
+<summary type="html">之前又開始用 easy2boot，只要把光碟映像檔複製進去就能開機。
+但一次把 uefi 中的 grub 開機項目刪掉，
+想用 easy2boot 中的 live-cd 修，
+卻發現 live-cd 都沒有 grub，
+而且用 easy2boot 開機後都看不到 efivar。
+原來 e2b 是用 legacy，要用 uefi 開機才看得到，
+得直接把隨身碟燒成開機碟。</summary>
+<category term="linux"/>
+<category term="boot"/>
+<category term="shell"/>
+<content type="html">&lt;h1 id=&quot;easy2boot 無法讀取 uefi var&quot;&gt;easy2boot 無法讀取 uefi var&lt;/h1&gt;
+&lt;p&gt;之前又開始用 easy2boot，只要把光碟映像檔複製進去就能開機。
+但一次把 uefi 中的 grub 開機項目刪掉，
+想用 easy2boot 中的 live-cd 修，
+卻發現 live-cd 都沒有 grub，
+而且用 easy2boot 開機後都看不到 efivar。
+原來 e2b 是用 legacy，要用 uefi 開機才看得到，
+得直接把隨身碟燒成開機碟。&lt;/p&gt;
+&lt;h2 id=&quot;試誤 uefi usb 選項並洗掉 grub&quot;&gt;試誤 uefi usb 選項並洗掉 grub&lt;/h2&gt;
+&lt;p&gt;我的筆電 thinkpad 13 沒有乙太網路孔，
+在宿舍等只有有線網路的地方，
+是用一個 usb type c 轉網路孔的乙太網卡，
+接在筆電的 type c 孔上來上網。
+但前幾天讀不到乙太網卡，
+不確定是 type c 孔壞了還是網卡壞了，
+於是就在 uefi 裡動動看各種設定，看會不會重啟設定就修好。&lt;/p&gt;
+&lt;p&gt;原本以為是孔壞了，因為 type c 孔連充電都充不進去，
+但後來發現開機的狀態還是能用 type c 充電，
+懷疑是 uefi 裡一個 &lt;em&gt;在待機狀態時 usb 孔仍對外供電&lt;/em&gt; 
+的選項讓電充不進去，就開始逐一嘗試 uefi 的設定。
+（這選項在手機沒電但有帶筆電出門時蠻有用的，
+可以把筆電當行動電源用，不然以前要讓筆電在開機狀態，
+塞在背包裡拉一條線出來蠻麻煩的。）&lt;/p&gt;
+&lt;p&gt;最後試了一個還原預設選項，然後 uefi 就被重置了。
+然後在 windows 下也確定 type c 孔可以充電了，
+（充電指示燈有亮。）所以 type c 孔可能是只能在開機時充，
+或讀寫有問題但充電沒問題，
+或都沒問題只是乙太網卡壞了。
+（後來發現關機時也可以充了，
+不知道是之前我沒看到還是東方神祕力量？）
+所以就只剩 uefi 被重置，要想辦法把 grub 灌回去的問題了。&lt;/p&gt;
+&lt;h2 id=&quot;用 easy2boot 嘗試複原 grub&quot;&gt;用 easy2boot 嘗試複原 grub&lt;/h2&gt;
+&lt;p&gt;以前灌 linux 時就把複原 grub 的流程抓得蠻熟了，
+因為常常不小心把 grub 洗掉或重灌。
+因為 os 還在，只要能進到 grub shell 就能手動開機回原本的 os，
+在原 os 就能用 grub-install 重裝 grub。
+或用 live-cd 開機後，也能用 live-cd 裡的 grub-install，
+或在 live-cd 裡 chroot 回原 os，再用原 os 的 grub-install。&lt;/p&gt;
+&lt;p&gt;但 easy2boot 裡的 live cd 開機後都看不到 grub？
+不確定是不是 grub，但沒辦法按 c 叫出 shell，
+也不能按 e 編輯開機指令，而是按 tab，
+而且指令只有一行，不太像 grub 的開機指令。
+試了 finnix &lt;a href=&quot;https://newtoypia.blogspot.com/2018/02/antix.html&quot;&gt;gantix&lt;/a&gt; sarbian remixos ubuntu18 好幾個 live-cd 都是這樣，
+最後爆怒去抓了 &lt;a href=&quot;https://www.supergrubdisk.org/super-grub2-disk/&quot;&gt;super grub2 disk&lt;/a&gt; 專門用來救援的 grub 映像檔，
+終於進到 grub，接下來就是 &lt;a href=&quot;https://www.openfoundry.org/tw/foss-programs/9267-linux-grub2-fixing&quot;&gt;簡單的手動用 grub 開機&lt;/a&gt; ，
+openfoundry 的網頁好像掛了，也附上 &lt;a href=&quot;https://www.linux.com/learn/how-rescue-non-booting-grub-2-LINUX&quot;&gt;簡易修 grub 的英文原文&lt;/a&gt;。&lt;/p&gt;
+&lt;h2 id=&quot;看不到 efivarfs&quot;&gt;看不到 efivarfs&lt;/h2&gt;
+&lt;p&gt;之前用 finnix gantix ubuntu 雖然沒有 grub，但能開機進 live-cd，
+但在 finnix 版本太舊，掛載 ext4 時說有不認識的 meta data。
+gantix 則是 32 位元的，無法 chroot 進我的 64 位元 debian，
+裝 32 位元的 grub 時也報錯。
+ubuntu 也是在裝 grub 時報錯，不管直接裝或 chroot 進 debian 裝，
+都說找不到 efivars。&lt;/p&gt;
+&lt;p&gt;我之前的經驗 linux 會把 uefi 儲存的資料用虛擬檔案系統的方式
+暴露在 &lt;code&gt;/sys/firmware/efi/&lt;/code&gt; 下，
+（不是 uefi 分割，uefi 分割一般掛載在 &lt;code&gt;/boot/efi/&lt;/code&gt; 。）
+但在上面幾種情況都是 &lt;code&gt;/sys/firmware/&lt;/code&gt; 下沒有 efi 這個資料夾；
+包括用 easy2boot 進到 grub cd 再開原本的 debian 也是沒有 efi。&lt;/p&gt;
+&lt;p&gt;google 了一下發現大概是 &lt;strong&gt;用 uefi 開機後 linux 才能看到 efi&lt;/strong&gt; ，
+easy2boot 是傳統的 bios 或稱 legacy，
+能在 uefi 中運作是因為 uefi 可以模擬成 legacy 模式，
+但也因為摸擬成 legacy，當然看不到 efi 存的資料。&lt;/p&gt;
+&lt;h2 id=&quot;直接燒的開機碟就能用 uefi&quot;&gt;直接燒的開機碟就能用 uefi&lt;/h2&gt;
+&lt;p&gt;最後知道原因就好辦了，不要用 e2b，
+直接把隨身碟燒成開機碟開機，
+也就是 &lt;code&gt;cat super-grub2-disk.iso &amp;gt;/dev/sdz&lt;/code&gt; 。
+之後該隨身碟就能被當成光碟開機了。
+uefi 也能用隨身碟開機，開機到 grub 後再手動開機 debian，
+果然就看得到 &lt;code&gt;/sys/firmware/efi/&lt;/code&gt; 了，
+&lt;code&gt;grub-install&lt;/code&gt; 也能正常運作了。&lt;/p&gt;
+&lt;p&gt;後來查一下， &lt;a href=&quot;http://www.easy2boot.com/add-payload-files/e2b-uefi/&quot;&gt;e2b 也能開 uefi&lt;/a&gt; ，
+但好像需要把映像檔作特殊處理，就懶得研究了。
+反正有下面的 flash-iso-recovery 了，
+只要映像檔不要太大就不麻煩。&lt;/p&gt;
+&lt;h2 id=&quot;[flash iso recovery]&quot;&gt;&lt;a href=&quot;//github.com/gholk/loco/blob/master/bin/flash-iso-recovery.sh&quot;&gt;flash iso recovery&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;最後推廣一下之前寫的小工具 &lt;code&gt;flash-iso-recovery.sh&lt;/code&gt; 。
+因為覺得每次燒一次開機碟都要毀掉整顆隨身碟的資料太麻煩，
+就寫了個小腳本先把隨身碟備份。&lt;/p&gt;
+&lt;h3 id=&quot;原理&quot;&gt;原理&lt;/h3&gt;
+&lt;p&gt;在燒開機碟時是 &lt;code&gt;cat live-cd.iso &amp;gt; /dev/sdz&lt;/code&gt; 或
+&lt;code&gt;dd if=live-cd.iso of=/dev/sdz&lt;/code&gt; ，
+其實只會動到隨身碟的前幾 G，
+看映像檔多大，就只會佔掉隨身碟開頭的同樣大小。&lt;/p&gt;
+&lt;p&gt;所以我們只要在燒進去前先把開頭的同樣大小的資料備份出來，
+之後再用 dd 或 cat 寫回去就能復原原本的樣子了。
+土炮點可以 &lt;code&gt;head -c $(wc -c &amp;lt; live-cd.iso) &amp;gt; backup.img&lt;/code&gt; 就好，
+但還有一些細節可以處理得更好，就寫了個腳本 flash-iso-recovery 處理。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# 把 live-cd.iso 燒進 /dev/sdz，並備份 sdz 到 backup.img.gz
+./flash-iso-recovery.sh live-cd.iso /dev/sdz backup.img.gz
+
+# 還原時 zcat 或 dd 都可以
+zcat backup.img.gz &amp;gt; /dev/sdz
+zcat backup.img.gz | dd bs=4M of=/dev/sdz
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;細節處理&quot;&gt;細節處理&lt;/h3&gt;
+&lt;p&gt;以我的腳本 flash-iso-recovery.sh 是給定映像檔、裝置、備份檔名，
+就會根據映像檔大小，抓出該裝置開頭同樣大小的資料，存成備份檔名。&lt;/p&gt;
+&lt;p&gt;我是用 dd 可以控制 io 速度，block size 調成 4MB，
+用 cat 好像會把所有 cpu io 都吃光。&lt;/p&gt;
+&lt;p&gt;另外因為 dd 只能指定 block size 和 count，
+而映像檔的大小不可能每次都是某個 block size 的整數倍 count，
+（而且我直接指定 bs 4mb，好達到一定讀寫速度。
+雖然可以指定 &lt;code&gt;bs=1 count=$(wc &amp;lt;live-cd.iso)&lt;/code&gt; 或
+&lt;code&gt;count=1 bs=$(wc &amp;lt;live-cd.iso)&lt;/code&gt; 精確要讀的大小，
+但一個會因為次數過多太慢，另一個則是需要的記憶體太多。）
+所以我把映像檔大小上取整到 4mb 的倍數，
+備份多一點資料比較保險；
+雖然 dd 就算指定了 bs 和 count，
+但遇到檔案太小 eof 時還是會讀完就退出，
+並報出不滿一個 bs 的資料大小。
+（如果用 head 是指定總 byte 數就沒這個問題。）&lt;/p&gt;
+&lt;p&gt;另外抓出來的資料好像蠻多都是無意義的，
+因為開頭會放分割表和檔案系統的資料，但一般都只會有一二個分割，
+檔案系統也會有很多沒用到的空白，
+用 gzip 壓縮可以縮小很多；
+所以我有把抓出來的資料用 gzip 壓縮，減少大小。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/geomatics-rtx-csrs-compare.html</id>
 <title>rtx csrs ppp 比較</title>
 <published>2019-01-30T13:52:35.944Z</published>
@@ -1551,190 +1683,7 @@ script, style {
 +&lt;/pre&gt;</summary>
 <category term="funny"/>
 <category term="daily"/>
-<content type="html">&lt;h1 id=&quot;台灣共識就是贏球不能盜壘&quot;&gt;台灣共識就是贏球不能盜壘&lt;/h1&gt;
-&lt;p&gt;明明記得有聽過這句話，但一直找不到來源，
-只有找到幾篇 &lt;a href=&quot;https://www.ptt.cc/man/Elephants/D3D2/D7D0/D46E/D4B3/M.1307776582.A.092.html&quot;&gt;兄弟象故意砸觸身球的新聞&lt;/a&gt; ，
-沒有找到台灣共識。
-之前的 &lt;a href=&quot;short-life-expensive-price.html&quot;&gt;逢人短命&lt;/a&gt; 也很長了，該換篇了。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.ptt.cc/man/Elephants/D3D2/D7D0/D46E/D4B3/M.1307776582.A.092.html&quot;&gt;台灣共識就是贏球不能盜壘！&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt; 標題  [新聞] 就愛 488 公分　女與飛機模型做愛超興奮
-蜜雪兒說，她曾經嘗試與人類做愛，但怎麼做就是無法讓她興奮，但她與飛機模型做愛之
-後，幾乎每架飛機模型都可以讓她得到高潮。
-→  Leeng: 打飛機(物理)                                             04/20 09:10
-推 PiZ1129: 操飛機 操飛機，來到青草地                              04/20 09:54
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt; 作者  billjason (billjason)                                  看板  Gossiping 
- 標題  [問卦] line 到底為什麼ㄧ堆人用？                                        
- 時間  Sun Dec  9 19:16:30 2018                                               
-※  文章網址: https://www.ptt.cc/bbs/Gossiping/M.1544354192.A.9D0.html
-→  wadeabc: 就一開始女森先用，馬子狗跟上，結果最後大家都在用       12/09 19:19
-→  wadeabc: 你要知道這世界是跟著女森尿尿的地方前進的               12/09 19:19
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;p&gt;這些理工科宅男們一說起妹子來總是很激動的樣子，但你真讓他們去和妹子組織個聯誼卻
-反而沒有什麼行動力。大多數情況下他們會想一想要做的準備以及到時候搞些什麼活動，
-然後會開始頭疼，然後該啃書的啃書、運動的運動、遊戲的遊戲，聯誼的事再無下文。哎
-，所以說性格決定命運，不是因為他們讀了理工科才成為宅男才沒有妹子，而是因為他們
-這個性格讓他們選了理科並成了個宅男，才沒有妹子！&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;魔鬼又帶他上了一座最高的山，將世上的御姊，與萬國的蘿莉，都指給他看。&lt;/p&gt;
-&lt;p&gt;對他說：「你若俯伏拜我，我就把這一切都賜給你。」&lt;/p&gt;
-&lt;p&gt;他說：「魔鬼退去吧！因為本本上記著說，當拜主你的偽娘，單要侍奉他。」&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt; Life is dear, love is dearer. Both can be given up for freedom.
-匈牙利人，裴多菲．山陀爾 (Shandor Petefi, 1823—1849) 於 1847 年 1 月寫下的著名詩篇《自由與愛情》。
-那學習自由軟體？&lt;/p&gt;
-&lt;p&gt;千羽純一如是說：Windows 誠可貴，Apple 價更高；若為 Linux 故，兩者皆可拋。&lt;/p&gt;
-&lt;p&gt;李士傑：自由不是離開某套軟體、某種系統，而是找到自由。&lt;/p&gt;
-&lt;p&gt;Rex：geek by nature linux by choice&lt;/p&gt;
-&lt;p&gt;Tetralet：我們極力抗拒我們所不認同的事物，然後變成我們所認同的事物的奴隸。&lt;/p&gt;
-&lt;p&gt;kenduest：如果真的愛一個作業系統 怎能不害怕不再能使用它 而我們必須接受現實
-於是長大了  寂寞就是沒有了機會再用它  比沒有電腦還要寂寞
-而那些點亮我們生命的作業系統  就彷彿電影中發生在暹邏的愛情故事
-即使短暫使用也會刻骨銘心
-To all the Linux that bring us to kernel.&lt;/p&gt;
-&lt;p&gt;LGJ：①公平的選擇權利②開放的檔案格式&lt;/p&gt;
-&lt;p&gt;RMS：FS 對教育：①最簡單的就是省錢②利於發掘、教育天生的軟體工程師。&lt;/p&gt;
-&lt;p&gt;eliu：free software 是用一種有建設性&amp;amp;免錢的電玩，不要想太多了。&lt;/p&gt;
-&lt;p&gt;caleb 常見誤解：①用自由軟體就要推廣自由軟體 ← 莫名其妙，難道我開 Toyota 的車就得推廣 Toyota 的車？
-             ②要 寫程式/debug 才是對自由軟體有貢獻 ← 其實 下載/安裝/使用/討論/回報問題/提出 wishlist/改善美工/... 很多都是對自由軟體有貢獻&lt;/p&gt;
-&lt;p&gt;↑當然還很多敝人沒有記下來的
-但敝人感受到那麼多前輩們默默的付出和努力
-敝人更該心存感激啊
-敝人有機會分享給別人就多說
-現在不說話
-以後誰為敝人的小 p 說話&lt;/p&gt;
-&lt;p&gt;jserv：「想做就去作」，我天真的認為
-             想寫作業系統，就去寫啊
-             想寫編譯器，就去寫啊
-             想寫電動遊戲，就去寫啊
-             想進行社會主義運動，要花幾百年的時間，但最起碼可以協助讓世界變得更美好，作多少算多少&lt;/p&gt;
-&lt;p&gt;引用自 &lt;a href=&quot;https://hyperrate.com/thread.php?tid=12773&quot;&gt;https://hyperrate.com/thread.php?tid=12773&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;在菜场看到的，神一般的大爷！ 那大爷买西红柿来着的，挑了三个放到秤盘里，摊主秤了下说：“一斤半，三块七。” 大爷说：“我就做个汤，用不着那么多。”说完就去掉了个儿最大的那个西红柿。 摊主迅速又瞧一眼秤子，“一斤二两，三块。” 正当我看不过去想提醒大爷注意摊主的秤子时，大爷从容的掏出了七毛钱，拿起刚刚去掉的那个大的西红柿，扭头就走了…… 摊主当场就凌乱了，我憋成内伤，把头扭向一边……&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;人口普查员： “请问您家里是几口人？” “是一口人” “十一口？” “不是十一口，而是一口人。” “二十一口？” “ 不是二十一口，其实一口人。” “七十一口？不会吧？” “ 不是七十一口，就是一口人！” “ 九十一口？” “ 对了，就是一口人&amp;quot;&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;男孩喜歡上了一個女孩。
 
-男孩是全校最後一名進來的，
-
-可是那個女孩很優秀。
-
-男孩費盡一切努力來引起女孩的注意。
-
-開學一星期後，
-
-他頂著染黃做了造型的頭發大搖大擺進了教室，
-
-看著禿頭班導張大了嘴巴看他。
-
-全班同學都哄堂大笑，看著禿頭班導的反應，
-
-可是男孩卻只是望著女孩。
-
-女孩頭也沒抬，靜靜的坐在座位上做題。
-
-後來，男孩在課上總是怪聲怪氣的接老師的話，
-
-課間在座位上放大音量講昨天他和誰又打了一架，
-
-因為在廁所抽煙點名被黑面校長在升旗儀式上大罵。
-
-他每次都會一臉無所謂，
-
-只是會偷偷地，很快地瞄一眼女孩。
-
-可是女孩的臉上總是驚不起一絲波瀾。
-
-終於他再也忍不住內心的情感，
-
-在一個放學的晚上，
-
-召集一群兄弟在教學樓下，
-
-當女孩安靜的走出樓梯口時，
-
-他用近乎嘶啞的聲音向她表白。
-
-人群一陣沸騰，高呼在一起。
-
-她愣了，白皙修長的手抓緊了書包背帶。
-
-過一會，她只是安靜的走到男孩面前，
-
-仰頭說，我的夢想是台大，我想在那裡等你。
-
-人群一陣哄笑，男孩紅了臉。
-
-以他的成績，專科也上不了。
-
-他一把把花塞到了旁邊的人懷裡，
-
-扭頭頭也不回擠出人群。
-
-第二天，傳來了男孩轉學的消息。
-
-後來的女孩，總是在課堂上看著那個空座位，發愣。
-
-3 年后，台大門口，
-
-她安靜地站著，
-
-比起 3 年前消瘦了許多，帶著行李，只是站著，像是在等誰。
-
-可是她也不知道她究竟在等著什麼，
-
-嘆了一口氣，走進校門。
-
-突然，身後一個明朗的聲音響起，你不是要等我嗎？
-
-怎麼不等了？
-
-女孩的眼淚流了下來，
-
-轉身。 男孩把頭發染回了黑色，
-
-一身簡單的白體恤牛仔褲，像是周遭泛著陽光。
-
-他帥氣地拉起了她的手，走進台大。
-
-後來，成為男孩女朋友多年的她偶然問道，
-
-你那年轉學去哪裡了，能考得這麼好？
-
-男孩說：我休學了，我爸叫我去公司上班，花個幾十萬動用一下関係就推甄上這間學校了。
-
-女孩也説：我早知道你家有錢，要不然我怎麼會跟你這笨小子在一起。
-
-你爸有錢，成就你的夢想
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;p&gt;如果中國發生戰爭，印度和俄羅斯會幹麻？&lt;/p&gt;
-&lt;p&gt;締結印俄互不侵犯條約。&lt;/p&gt;
-&lt;p&gt;俄羅斯：協助維穩內蒙古。&lt;/p&gt;
-&lt;p&gt;印度：人道救援西藏。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;Anonymous Tue 04 Dec 2018 07:11:13 No.786494451 Report&quot;&gt;Anonymous Tue 04 Dec 2018 07:11:13 No.786494451 Report&lt;/h2&gt;
-&lt;p&gt;&lt;em&gt;Quoted By: &amp;gt;&amp;gt;786497658 &amp;gt;&amp;gt;786504320 &amp;gt;&amp;gt;786506142 &amp;gt;&amp;gt;786506466 &amp;gt;&amp;gt;786515797 &amp;gt;&amp;gt;786520996 &amp;gt;&amp;gt;786521222 &amp;gt;&amp;gt;786526300 &amp;gt;&amp;gt;786528420 &amp;gt;&amp;gt;786530340 &amp;gt;&amp;gt;786532790 &amp;gt;&amp;gt;786533003&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;I met a trap at an anime convention who I expected to be a typical sissy cockfiend type.&lt;/p&gt;
-&lt;p&gt;Turns out he was a top who liked to dominate guys like me.&lt;/p&gt;
-&lt;p&gt;So instead of having him moan and beg for me to fuck him I spent the night with him cumming inside me as much as he wanted. I had never been bottom before, (though, to be fair, I had had sex like three times before then) so I figured why not? The only bad part was he basically only had three lines of dirty talk, which were along the lines of &amp;quot;You thought you were gonna be fucking a cute girl, didn&amp;apos;t you? So why don&amp;apos;t you beg for more of this cute girl&amp;apos;s dick?&amp;quot; etc.&lt;/p&gt;
-&lt;p&gt;I figured out that he probably just gets a lot of ass at these cons, and didn&amp;apos;t ever expect to go five times with the same guy, so he only has one set of material. I&amp;apos;m guessing he liked me, because afterwards, when I was cleaning his cum out for the fifth time, he asked me to spend the night with him and cuddle, and I asked him &amp;quot;Do I look gay to you?&amp;quot; &lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;把黑色的心臟
-
-          藏在腐爛的身體裡
-
-                        裹著這無趣的世界
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;  17856 +爆 8/11 織田信長     □  [認真] 最近眼皮一直在跳
-● 17857 +X7 8/14 明智光秀     □  [大喝] 敵人就在本能寺
-  17858 + 1 8/14 武田勝賴     □  [思考] 我是不是應該要切腹
-  17859  11 8/16 鄉民         □  [豪洨] 光秀你他媽雜碎
-  17860 +X6 8/16 德川家康     □  [認真] 再不快跑會被光秀幹掉
-  17861 +   8/16 織田秀忠     □  爹   我要跟你走了
-&lt;/code&gt;&lt;/pre&gt;</content>
 </entry><entry>
 <id>http://gholk.github.io/gis-bicycle-sharing-taxi-project.html#conclusion-and-layout-finish</id>
 <title>共享單車發展對捷運影響分析</title>

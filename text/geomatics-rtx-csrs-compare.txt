@@ -14,25 +14,29 @@ blockquote h1::before, blockquote h2::before, blockquote h3::before {
 }
 </style>
 
-> ## RTX and CSRS PPP kinematic positioning's accuracy study
->
-> This study inspect the accuracy of RTX by
-> comparing **RTX** ™ to the **CSRS**
-> <abbr title="precise point positioning">PPP</abbr> service.
-> RTX is a realtime kinematic satelite base positioning service,
-> which claim that its positioning is as precise as traditional
-> <abbr title="virtual base station">VBS</abbr> - 
-> <abbr title="real time kinematic">RTK</abbr> .
-> Traditional VBS-RTK is constrained by the server's
-> computing ablitity because the server need to compute
-> a virtual base station for each user.
-> Howevery, satelite base positioning service like RTK
-> will broadcast the correction signal to every user;
-> same correction signal can apply to all users,
-> so satelite base positioning service only need one times computing.
-> It is expect that satelite base RTK will replace traditional VBS-RTK.
+> ## A Preliminary Comparative Evaluation of Trimble RTX with CSRS-PPP
+> 
+> _Ding-Jyun_Wang_ , _Peter_T.Y._Shih_
+> 
+> *Department of Civil Engineering, National Chiao Tung University*
+> 
+> Kinematic positioning has important applications in bathymetric mapping, 
+> vehicle navigation, and many others. This study comparatively evaluated 
+> the differences among the real time kinematic positioning with Trimble 
+> CenterPoint RTX service and the post-processing kinematic solution 
+> obtained from CSRS-PPP service. The comparison is based on the data 
+> collected on Dec. 8 to 12 and 16 to 22, 2017 on a CORS station, NSB0. From 
+> observations made on these days, the standard deviation of height 
+> differences between these two services is 0.057m, while the bias is 
+> 0.080m. As compared with the official coordinates of this CORS, CSRS-PPP 
+> shows better agreement. 
 
 ## 綜合比較
+共使用三個軟體，分別是 trimble rtx 的即時定位結果，
+csrs 的線上 ppp spark，csrs 的舊版 ppp gpspace。
+目前 gpspace 已經開源在 github 上，可以自行在本機編譯解算；
+spark 則只有提供線上解算，允許使用者上傳觀測檔解算。
+
 綜合來說，rtx 較 csrs online 的解算成果較接近公告作標值，
 但 csrs online 的精度較佳。
 而本地端的舊版本 csrs 精度和準度
@@ -101,6 +105,12 @@ csrs 的單點定位在平面精度極佳，但高程精度相對較低。
 [deviation-rtx-csrs.png]: http://farm5.staticflickr.com/4885/46203489324_e40d77081b.jpg "rtx csrs 二者在三方向上差異"
 [![deviation-rtx-csrs.png]]: http://www.flickr.com/photos/144554087@N04/46203489324
 
+
+## 進度
+* 不使用 rtx 的平面座標，用 proj4 自行轉換。
+* proj4 geotrans coordp 的結果都和 rtx 的不同。
+* 2017-12-22 的 rtx 很不穩。
+* gpspace v1.10 的結果比 v1.05 標準偏差差十倍，不知道原因。
 
 
 ## 結論

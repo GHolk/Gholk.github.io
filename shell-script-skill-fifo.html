@@ -95,7 +95,7 @@ extract_file() {
     sed -n &quot;/^__$filename__\$/,/^\$/p&quot; $0 | {
         head -n 1 &gt;/dev/null
         cat
-    } | base64 -d &gt;file1
+    } | base64 -d &gt; &quot;$filename&quot;
 }
 
 
@@ -164,9 +164,10 @@ zcat backup.img.gz | tee &gt;(cksum) &gt;(md5sum) /dev/sdz &gt;/dev/null
 只有一個 fifo 在讀取，其它 fifo 還是會 block 住，
 tee 就會 block 住。</p>
 <p>雖然 fifo 看起來和單純用檔案很像，
-但其實 fifo 根本沒有內容，只是借檔案系統的一個名字，
+但其實 fifo 檔案根本沒有內容，只是借檔案系統的一個名字，
 管道內的資料不會存在檔案系統裡。
-所以你向 fifo 寫資料根本</p>
+所以你向 fifo 寫資料也不會寫到那個檔案裡，
+多半會阻塞，直到有其它程式去讀。</p>
 <h3 id="簡單示範使用多重管道">簡單示範使用多重管道</h3>
 <pre><code class="lang-sh">mkfifo yes no maybe
 yes yes &gt; yes &amp;

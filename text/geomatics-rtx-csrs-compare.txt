@@ -25,7 +25,7 @@ blockquote h1::before, blockquote h2::before, blockquote h3::before {
 > the differences among the real time kinematic positioning with Trimble 
 > CenterPoint RTX service and the post-processing kinematic solution 
 > obtained from CSRS-PPP service. The comparison is based on the data 
-> collected on Dec. 8 to 12 and 16 to 22, 2017 on a CORS station, NSB0. From 
+> collected on Dec. 16 to 22, 2017 on a CORS station, NSB0. From 
 > observations made on these days, the standard deviation of height 
 > differences between these two services is 0.057m, while the bias is 
 > 0.080m. As compared with the official coordinates of this CORS, CSRS-PPP 

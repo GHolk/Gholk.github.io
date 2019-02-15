@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-02-14T13:07:47.142Z</updated>
+  <updated>2019-02-15T04:42:20.293Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,64 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/tibet-sky-xian-zi-guitar-jeans.html#重點放在身體曲線</id>
+<title>西藏天邊弦子的吉他</title>
+<published>2019-01-15T14:19:12.468Z</published>
+<updated>2019-02-15T04:42:20.274Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/tibet-sky-xian-zi-guitar-jeans.html#重點放在身體曲線"/>
+<summary type="html">&lt;pre class=&quot;diff&quot;&gt;@@ -19,12 +19,14 @@
+ 很喜歡女生彈吉他時，隨著音樂律動，前後搖擺的樣子；
+ 雙膝微彎，小腿叉開，大腿又收攏的樣子；
+ 視角從下往上，把褲腳拍得很大的樣子。
+-大概以 youtube mv 中 2m20s 時的畫面為代表。
++大概以 youtube mv 中 2 分 20 秒時的畫面為代表。
+ 
+ [私奔到月球]: https://www.youtube.com/watch?v=EK9z2B9wXQk
+ 
+ 可能我對腳有種迷戀吧。
+ 應該說是褲子，我喜歡那種全包覆的褲子，
++不一定要鬆鬆挎挎的，只要夠包覆住身體，
++不要像緊身褲露出曲線就好。
+ 褲腳很長，可以蓋到襪子不讓小腿露出來，
+ 最好把襪子也蓋住，褲腳掛在鞋子上。&lt;/pre&gt;</summary>
+<category term="youtube"/>
+<category term="歌"/>
+<content type="html">&lt;h1 id=&quot;西藏天邊弦子的吉他&quot;&gt;西藏天邊弦子的吉他&lt;/h1&gt;
+&lt;p&gt;在 youtube 看了 &lt;u&gt;弦子&lt;/u&gt; &lt;cite&gt;西藏天邊&lt;/cite&gt; 的 mv，
+忽然被她穿著喇叭褲彈吉他的樣子吸引。
+歌詞中的直率，彈著吉他大步向前跨，
+陽光在背後綻放的樣子，彈著吉他律動的樣子。
+該把褲子改成喇叭褲了。&lt;/p&gt;
+&lt;iframe src=&quot;https://www.youtube.com/embed/0QifqQgd5jk&quot;&gt;
+&lt;a href=&quot;https://www.youtube.com/watch?v=0QifqQgd5jk&quot;&gt;弦子 西藏天邊&lt;/a&gt;
+&lt;/iframe&gt;
+
+&lt;p&gt;我很喜歡看女生穿喇叭褲，或是寬鬆的長褲，
+我喜歡那種皺摺與寬鬆的美感。
+弦子在 mv 中雙腳邁開，膝蓋微彎彈著吉他的樣子，
+邁開大步邊走邊彈，讓陽光把自己和喇叭褲照成剪影。&lt;/p&gt;
+&lt;p&gt;陳綺貞在和五月天的 &lt;a href=&quot;https://www.youtube.com/watch?v=EK9z2B9wXQk&quot;&gt;私奔到月球&lt;/a&gt; 合唱，
+也有類似的裝扮，牛仔褲和肩背吉他。
+很喜歡女生彈吉他時，隨著音樂律動，前後搖擺的樣子；
+雙膝微彎，小腿叉開，大腿又收攏的樣子；
+視角從下往上，把褲腳拍得很大的樣子。
+大概以 youtube mv 中 2 分 20 秒時的畫面為代表。&lt;/p&gt;
+&lt;p&gt;可能我對腳有種迷戀吧。
+應該說是褲子，我喜歡那種全包覆的褲子，
+不一定要鬆鬆挎挎的，只要夠包覆住身體，
+不要像緊身褲露出曲線就好。
+褲腳很長，可以蓋到襪子不讓小腿露出來，
+最好把襪子也蓋住，褲腳掛在鞋子上。
+我一直覺得伊斯蘭文化，
+那個要求女人不得露出身體的宗教，
+也以自己的角度理解了這種美感。&lt;/p&gt;
+&lt;p&gt;另外就是背著吉他的樣子很迷人。
+吉他的位置垂於腰部之下、二腿之間，
+彈奏時身體跟著音樂律動搖擺，
+狀似男性炫耀自身性能力的動作，
+全無色情意味，帶有別種美感。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/taiwan-consensus-stolen-base.html#clarify-humiliate-female</id>
 <title>台灣共識就是贏球不能盜壘</title>
 <published>2018-12-08T09:50:42.438Z</published>
@@ -1393,91 +1451,7 @@ ipsec 則是用一個 pre share key，也和密碼差不多。
 <category term="debian"/>
 <category term="vpn"/>
 <category term="安裝"/>
-<content type="html">&lt;h1 id=&quot;linux 下連接 l2tp vpn&quot;&gt;linux 下連接 l2tp vpn&lt;/h1&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.ccns.io/&quot;&gt;CCNS&lt;/a&gt; 在機房架了 l2tp 的 vpn server，
-最近覺得有點需要，就查了一下怎麼在 linux 下連 l2tp vpn。
-發現自己手動設定蠻麻煩的，用 network manager 管理比較簡單，
-&lt;a href=&quot;https://github.com/nm-l2tp/network-manager-l2tp/wiki/Prebuilt-Packages#debian&quot;&gt;但 network manager l2tp 的外掛目前只發行在 debian sid&lt;/a&gt; ，
-又不想手動編譯；google 發現 &lt;a href=&quot;https://thomask.sdf.org/blog/2018/01/16/l2tp-vpn-networkmanager-debian-stretch.html&quot;&gt;有人成功在 stretch 裡
-裝 debian sid 裡舊的版本，是可以運作的&lt;/a&gt; ，
-就試成功了。&lt;/p&gt;
-&lt;p&gt;以前有 ssh 登入權限的時候，會用 ccns 機房的機器當 ssh 跳板上 ptt：
-&lt;code&gt;ssh -J lab.ccns.ncku.edu.tw bbsu@ptt.cc&lt;/code&gt; 。
-後來機房大翻修，一些機器也虛擬化，帳號就被洗掉了，也沒再要。
-有個社員自己會用 l2tp 開 vpn，在機房變得很潮後，
-就把 l2tp server 架到機房去，變 ccns 共用 vpn。
-一開始剛架好時試了，手動設定一直失敗，
-今天心血來潮，又嘗試終於成功連上了。&lt;/p&gt;
-&lt;h2 id=&quot;l2tp 手動設定&quot;&gt;l2tp 手動設定&lt;/h2&gt;
-&lt;p&gt;手動設定就是裝 xl2tpd 寫 config，
-就會多出一個 ppp 網路裝置，
-要自己用 route 把封包導過去。
-如果要加密還要裝 openswan 或其它 swan 系列。
-之前試過手動設定失敗， 今天又試第一次還是失敗。&lt;/p&gt;
-&lt;p&gt;我看過幾篇教學，有 &lt;a href=&quot;https://wiki.archlinux.org/index.php/Openswan_L2TP/IPsec_VPN_client_setup&quot;&gt;arch wiki 的&lt;/a&gt;
-也有 &lt;a href=&quot;https://github.com/hwdsl2/setup-ipsec-vpn/blob/master/docs/clients.md#configure-linux-vpn-clients-using-the-command-line&quot;&gt;github 上別人寫的文件&lt;/a&gt; 。
-後來在 github 上那篇又重試了一遍，
-整理重寫了複製貼上的 config 才成功；
-後面那些手動 route 好像也不是那麼難了，
-&lt;code&gt;echo &amp;quot;c my-vpn&amp;quot; &amp;gt; /var/run/xl2tpd/l2tp-control&lt;/code&gt;
-相當於啟動連上 l2tp 並創建一個 ppp 網路裝置，
-之後的 route 就是把預設路由改成該 ppp。&lt;/p&gt;
-&lt;p&gt;一開始我連 l2tp ipsec openswan 之間是什麼關係都沒弄清楚，
-分不清楚教學到底是在教 l2tp client 還是 l2tp server。
-現在裝好了才發現一直卡住的 ipsec 部份，
-其實是加密部份而已，不是必須的。
-另外就是 ipsec 有個雷點，
-幾篇教學是寫 &lt;code&gt;ipsec auto --add my-l2tp&lt;/code&gt; ，
-但我的版本應該是 &lt;code&gt;ipsec up my-l2tp&lt;/code&gt; ，
-翻了整篇手冊頁想破頭，
-還是不確定 auto 和 add 到底要對應到哪個命令。&lt;/p&gt;
-&lt;h2 id=&quot;network manager 介面&quot;&gt;network manager 介面&lt;/h2&gt;
-&lt;p&gt;試幾次 xl2tp 都連不上，看到 network manager 有個外掛
-&lt;a href=&quot;https://github.com/nm-l2tp/network-manager-l2tp/wiki/Prebuilt-Packages&quot;&gt;network manager l2tp&lt;/a&gt; 能在圖型介面上
-直接連上 l2tp vpn，就抱著姑且一試的心態試了。
-該外掛有提供預編譯好的套件，但 debian stretch 沒有支援，
-只有目前的 sid 未來的 buster 有。
-但我也懶得自己編譯，要裝的東西太多了，放棄。&lt;/p&gt;
-&lt;p&gt;試著去下載 ubuntu 預編好的 deb 包，直接用 apt 安裝。
-可以開出圖形介面，但連不上。
-又 google 了一下，
-找到 &lt;a href=&quot;https://thomask.sdf.org/blog/2018/01/16/l2tp-vpn-networkmanager-debian-stretch.html&quot;&gt;一篇部落格文章說可以裝 debian sid 的版本&lt;/a&gt; ，
-在 debian stretch 也能用，但文內的版本是 1.2.8，
-現在 sid 已經更新到 1.2.10，
-試了現在的 1.2.10，和 ubuntu 一樣有介面但不能連。&lt;/p&gt;
-&lt;h2 id=&quot;舊 debian archieve&quot;&gt;舊 debian archieve&lt;/h2&gt;
-&lt;p&gt;後來直接問部落格作者，看他有沒有留當時的 deb 包。
-他簡介還蠻有趣的，是 linux user 和 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E7%81%AB%E8%85%BF%E6%97%8F&quot;&gt;火腿族&lt;/a&gt; ，
-目前主要掛在 &lt;a href=&quot;http://zh.wikipedia.org/wiki/mastodon&quot;&gt;mastodon&lt;/a&gt; 上，
-所以我就開了塵封已久的 g0v 的 mastodon 發訊息給他。
-結果他說也沒在用 vpn 了，傳了一個 &lt;a href=&quot;https://snapshot.debian.org/&quot;&gt;debian snapshot&lt;/a&gt; 的網站給我，
-裡面收錄了所有版本的 debian package，不只是每個 debian 版本，
-連同一 debian 版本中每一次更新都有。
-我就從上面抓了 &lt;a href=&quot;https://snapshot.debian.org/package/network-manager-l2tp/1.2.8-2/&quot;&gt;sid 的 1.2.8-2&lt;/a&gt; 下來裝，就能動了。&lt;/p&gt;
-&lt;p&gt;deb 包就是 apt 在操作的最小單位，每個包會記錄相依的其它包，
-在用 dpkg 安裝時就是檢查有滿足就直接安裝，沒滿足就報錯。
-而 apt 不只可以從倉庫安裝，也可以直接安裝本機的 deb 包，
-只要你傳入的名稱明顯是路徑，像是用 &lt;code&gt;./&lt;/code&gt; 開頭。
-而且 apt 還會幫處理相依性問題，但只會從系統的 apt 設定的網路倉庫抓，
-所以如果是載下來在本機要手動安裝的二個相依的 deb 包，就沒辦法自動安裝。&lt;/p&gt;
-&lt;p&gt;以 network-manager-l2tp 和 network-manager-l2tp-gnome 二個包來說，
-可以先裝被 network-manager-l2tp 相依的 network-manager-l2tp-gnome，
-再裝 network-manager-l2tp，
-之後再把 network-manager-l2tp-gnome 標記為自動安裝，
-未來 apt remove 後 network-manager-l2tp-gnome 也會被標成不需要，
-可以自動刪除。
-或是就在安裝時把所有包的檔名都傳入，
-apt 會檢測到其中數個包相依，就會自動處理相依性。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;install_once() {
-    apt install ./network-manager-l2tp_1.2.8-2_amd64.deb \
-                ./network-manager-l2tp-gnome_1.2.8-2_amd64.deb
-}
-install_and_mark() {
-    apt install ./network-manager-l2tp-gnome_1.2.8-2_amd64.deb
-    apt install ./network-manager-l2tp_1.2.8-2_amd64.deb
-    apt-mark auto network-manager-l2tp-gnome
-}
-&lt;/code&gt;&lt;/pre&gt;</content>
+
 </entry><entry>
 <id>http://gholk.github.io/gis-bicycle-sharing-taxi-project.html#change-impact-to-coherent</id>
 <title>共享單車發展對捷運影響分析</title>

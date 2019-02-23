@@ -13,6 +13,9 @@ magisk 是 systemless root，
 就能用 magisk manager patch 該映像檔，
 用 fastboot 刷入達成 root。
 
+[magisk manager]: https://github.com/topjohnwu/Magisk/releases
+[gdrive rom]: https://drive.google.com/drive/folders/1ECG5ebmTM6w-9sg0n4X7Ll2jcARBN2q5?usp=sharing
+
  1. 取得你手機的 boot 分區映像檔。
     據 xda 老鳥的說法，
     小廠的手機可以和原廠要，原廠一般會給。
@@ -22,16 +25,16 @@ magisk 是 systemless root，
     原廠是給了一份壓縮檔，裡面有各分區的映像檔，
     像刷 magisk 要的 boot 分區是 `boot-verified.img` 。
     
-[gdrive rom]: https://drive.google.com/drive/folders/1ECG5ebmTM6w-9sg0n4X7Ll2jcARBN2q5?usp=sharing
- 
  2. 在手機上安裝 magisk manager，
     可以 [在 magisk 的 github 載 apk][magisk manager] 。
-    
-[magisk manager]: https://github.com/topjohnwu/Magisk/releases
     
  3. 之後把該映像檔傳到手機上，啟動 magisk manager，
     選擇安裝，補丁該映像檔。
     之後 magisk 就會修改該映像檔。
+ 
+ 3. 在 *設定 > 系統 > 關於手機* 裡連按版本號碼，
+    直到出現 *設定 > 系統 > 開發人員選項* 。
+    之後把 adb 和 oem 解鎖打開。
  
  4. 再把該 patch 過的映像檔傳回電腦。
     接著把手機開機到 fastboot 模式，接上電腦。

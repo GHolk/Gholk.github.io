@@ -270,3 +270,4 @@ geomatics-rtx-csrs-compare.html
 linux-grub-uefi-var-bios.html
 shell-script-skill-fifo.html
 politic-communist-as-enemy-of-taiwan-china.html
+politic-negotiate-china-reason.html

@@ -47,15 +47,16 @@
 原廠是給了一份壓縮檔，裡面有各分區的映像檔，
 像刷 magisk 要的 boot 分區是 <code>boot-verified.img</code> 。</p>
 </li>
-</ol>
-<ol>
-<li>在手機上安裝 magisk manager，
-可以 <a href="https://github.com/topjohnwu/Magisk/releases">在 magisk 的 github 載 apk</a> 。</li>
-</ol>
-<ol>
+<li><p>在手機上安裝 magisk manager，
+可以 <a href="https://github.com/topjohnwu/Magisk/releases">在 magisk 的 github 載 apk</a> 。</p>
+</li>
 <li><p>之後把該映像檔傳到手機上，啟動 magisk manager，
 選擇安裝，補丁該映像檔。
 之後 magisk 就會修改該映像檔。</p>
+</li>
+<li><p>在 <em>設定 &gt; 系統 &gt; 關於手機</em> 裡連按版本號碼，
+直到出現 <em>設定 &gt; 系統 &gt; 開發人員選項</em> 。
+之後把 adb 和 oem 解鎖打開。</p>
 </li>
 <li><p>再把該 patch 過的映像檔傳回電腦。
 接著把手機開機到 fastboot 模式，接上電腦。
@@ -159,7 +160,7 @@ debian ubunti 系就 <code>apt install xdotool ssh</code> 。
 </main>
 
 <script defer src="ext/meta-meta.js"></script>
-<script defer data-lazy="" src="ext/load-disqus.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
 <script>autoLoader.autoLoad()</script>
 
 </body></html>

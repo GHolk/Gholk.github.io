@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-02-22T09:59:21.520Z</updated>
+  <updated>2019-02-23T13:30:30.614Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,155 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/android-root-atom.html#oem-unlock-setting</id>
+<title>root 新小手機 atom 過程</title>
+<published>2018-11-22T02:43:06.828Z</published>
+<updated>2019-02-23T13:30:30.594Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/android-root-atom.html#oem-unlock-setting"/>
+<summary type="html">
+需要在開機狀態下，從開發者功能裡允許 unlock ，
+才能再在 fastboot 下 unlock 。</summary>
+<category term="android"/>
+<category term="slide"/>
+<category term="root"/>
+<category term="app"/>
+<content type="html">&lt;h1 id=&quot;root 新小手機 atom 過程&quot;&gt;root 新小手機 atom 過程&lt;/h1&gt;
+&lt;p&gt;最近入手群眾募資的新手機，unihertz 的 atom。
+因為想裝把手機摸擬成藍牙鍵盤或滑鼠的 app，
+所以就搜尋到 xda 上 root 的方法，
+用 magisk 還蠻簡單的，就照作也成功了。
+雖然結果因為手機是 mtk， 藍牙模組和 aosp 不合，
+所以 bluetooth+ 不能動。總之 root 了。&lt;/p&gt;
+&lt;h2 id=&quot;刷機流程&quot;&gt;刷機流程&lt;/h2&gt;
+&lt;p&gt;magisk 是 systemless root，
+大概是不會改到 system 分區的 root。
+用 magisk manager 時只要有系統的 &lt;code&gt;boot.img&lt;/code&gt; ，
+就能用 magisk manager patch 該映像檔，
+用 fastboot 刷入達成 root。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;取得你手機的 boot 分區映像檔。
+據 xda 老鳥的說法，
+小廠的手機可以和原廠要，原廠一般會給。
+手機變磚可以用原廠 rom 刷回來。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://drive.google.com/drive/folders/1ECG5ebmTM6w-9sg0n4X7Ll2jcARBN2q5?usp=sharing&quot;&gt;這裡也備份一份 rom&lt;/a&gt; ，預防原連結死掉。
+原廠是給了一份壓縮檔，裡面有各分區的映像檔，
+像刷 magisk 要的 boot 分區是 &lt;code&gt;boot-verified.img&lt;/code&gt; 。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ol&gt;
+&lt;li&gt;在手機上安裝 magisk manager，
+可以 &lt;a href=&quot;https://github.com/topjohnwu/Magisk/releases&quot;&gt;在 magisk 的 github 載 apk&lt;/a&gt; 。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;之後把該映像檔傳到手機上，啟動 magisk manager，
+選擇安裝，補丁該映像檔。
+之後 magisk 就會修改該映像檔。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;在 &lt;em&gt;設定 &amp;gt; 系統 &amp;gt; 關於手機&lt;/em&gt; 裡連按版本號碼，
+直到出現 &lt;em&gt;設定 &amp;gt; 系統 &amp;gt; 開發人員選項&lt;/em&gt; 。
+之後把 adb 和 oem 解鎖打開。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;再把該 patch 過的映像檔傳回電腦。
+接著把手機開機到 fastboot 模式，接上電腦。
+如果不知道怎麼按，可以用 &lt;code&gt;adb reboot bootloader&lt;/code&gt; 。
+之後可以用 &lt;code&gt;fastboot devices&lt;/code&gt; 檢查接上電腦的 android。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;接著要刷 boot 分區，所以要先解鎖。
+現在的 android 如果要刷，要先解鎖，
+同時為了安全性，解鎖時會同時清空手機的資料，
+回復原廠設定，防止使用者資料外洩。&lt;/p&gt;
+&lt;p&gt;下指令 &lt;code&gt;fastboot oem unlock&lt;/code&gt; ，
+手機會上會和你確定是否要解鎖，用音量鍵確定。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;之後就能用 &lt;code&gt;fastboot flash boot patch_boot.img&lt;/code&gt;
+把映像檔刷進去。
+刷完後為了安全，可以再 &lt;code&gt;fastboot oem lock&lt;/code&gt; 鎖回來，
+這樣別人要 hack 進你的手機，
+也要 oem unlock，也會清空資料，也就不會外洩。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;最後就能開機了。
+刷完後第一次開機時會稍久，好像還會重開機一次。
+總之就完成了。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;我是根據 &lt;a href=&quot;https://forum.xda-developers.com/showpost.php?p=78112885&amp;amp;postcount=27&quot;&gt;xda 上的 atom thread 的人的說明&lt;/a&gt; root 成功的，
+感覺用 fastboot 蠻方便的，好像很多手機都可以直接刷。
+只是要下一點指令，且要 unlock 會清空資料。&lt;/p&gt;
+&lt;p&gt;atom 好像沒有區的問題，我也沒看到映像檔也分區。
+刷機時就直接刷了，也沒碰到問題。&lt;/p&gt;
+&lt;h2 id=&quot;android 模擬藍牙鍵鼠&quot;&gt;android 模擬藍牙鍵鼠&lt;/h2&gt;
+&lt;p&gt;之前想要 root 是因為想要用手機控制投影片，感覺還蠻方便的。
+一開始是想到用無線滑鼠，就能拿著滑鼠遠程當簡報筆。
+後來又想到現在的手機都有藍牙功能，
+可能可以用手機模擬滑鼠或鍵盤，就能用手機當簡報筆用。&lt;/p&gt;
+&lt;p&gt;結果在 google play 找到的 app 都是需要 root 的，
+不然就是要另外在電腦上裝其它軟體。
+其實也有找到一些可以控制簡報的，
+但比較想要能直接當滑鼠用的，
+因為可能會用瀏覽器放簡報，
+所以能模擬基礎鍵盤滑鼠比較好。
+有一款叫 &lt;strong&gt;true mouth/kb&lt;/strong&gt; 的，
+就是能辦到類似的事，但他要先裝 &lt;strong&gt;bluetooth+&lt;/strong&gt; 。
+bluetooth+ 試了就發現要 root，所以就 root 了。&lt;/p&gt;
+&lt;p&gt;root 後執行 bluetooth+ ，
+他顯示 atom 是用 mtk 的模組，
+可能和 aosp 的一些 api 不合。
+結果真得不合，root 後 bluetooth+ 還是不能跑。&lt;/p&gt;
+&lt;p&gt;總之就 root 成功了，但還是不能用手機來模擬藍牙鍵鼠。
+之後可能會用到其它 root 功能吧。&lt;/p&gt;
+&lt;h2 id=&quot;&amp;lt;ins datetime=&amp;quot;2018-11-26&amp;quot;&amp;gt;atom 開機到 fastboot&amp;lt;/ins&amp;gt;&quot;&gt;&lt;ins datetime=&quot;2018-11-26&quot;&gt;atom 開機到 fastboot&lt;/ins&gt;&lt;/h2&gt;
+&lt;p&gt;雖然可以簡單連上 adb 後，
+下指令 &lt;code&gt;adb reboot bootloader&lt;/code&gt; 開機到 fastboot，
+但如果手機半磚了進不了系統，那就不能用 adb 重開了。
+大部份手機也提供直接從關機狀態開機到 fastboot 或 recovery 的方式，
+以 atom 來說，可以按著音量向上與電源鍵開機，
+（到 unihertz 字樣出現就能放掉了。）
+就能進入 recovery 模式。
+如果是重新開機，就是在螢幕黑掉後開始按著音量向上。&lt;/p&gt;
+&lt;p&gt;這模式一開始會只出現一個躺在地上胸口打開
+有一個三角驚嘆號的 android，顯示一行沒有指令。
+你需要同時按著音量向上與電源鍵剛好三秒，
+（這步驟要多試幾次，時間不好抓。）
+然後先放開音量鍵，再放開電源鍵，就能看到選單了。
+只是這是 recovery，不是 fastboot，
+可以用音量鍵上下移動，用電源鍵選取，
+有一個 reboot to bootloader 才是開機到 bootloader 的選項。&lt;/p&gt;
+&lt;p&gt;atom 好像沒辦法直接開機到 fastboot，
+只能經由 recovery，所以 recovery 刷壞也不能靠 fastboot 救。
+另一個音量下向鍵則是開機到 factory mode，
+裡面有一些簡單的測試，但和刷機無關。
+最後提醒一下，沒事不要按著電源鍵太久，
+按超過五秒，（多久不確定，但有點久。）會強制關機。
+我一開始以為顯示 recovery 選單是要按超過 3 秒，
+就一直按著向上和電源鍵，按到強制關機好幾次
+才發現不對，才發現是要 &lt;strong&gt;剛好三秒&lt;/strong&gt; 。&lt;/p&gt;
+&lt;h2 id=&quot;&amp;lt;ins datetime=&amp;quot;2018-11-28&amp;quot;&amp;gt;透過 vnc 控制投影片&amp;lt;/ins&amp;gt;&quot;&gt;&lt;ins datetime=&quot;2018-11-28&quot;&gt;透過 vnc 控制投影片&lt;/ins&gt;&lt;/h2&gt;
+&lt;p&gt;要讓電腦接受作為像滑鼠、鍵盤的輸入裝置，除了最簡單的藍牙裝置、usb 外，
+多需要在電腦上預先安裝軟體接受來自手機的訊號，無論是透過藍牙或網路。
+比起為了一個 app 自幹 client 與 server，
+較簡單的作法是重用既有的架構，例如 x window 或 vnc。
+雖然 vnc 是用來遠端操作整台電腦畫面的，
+但也能傳送滑鼠移動或按鍵，所以能視作多了畫面功能的遠端裝置。&lt;/p&gt;
+&lt;p&gt;目前有二款試用過的，一是走 vnc 的 &lt;a href=&quot;https://play.google.com/store/apps/details?id=nine.controller&quot;&gt;Remote mouse&lt;/a&gt; ，
+一是走 ssh 和 x window 的 &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.stripe1.xmouse&quot;&gt;XMouse Remote Mouse &amp;amp; Keyboard&lt;/a&gt; 。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://play.google.com/store/apps/details?id=nine.controller&quot;&gt;Remote mouse&lt;/a&gt; 是走 vnc 的，要在電腦裝 vnc server。
+windows 下可以用 tiger vnc，linux 可以用 x11vnc。
+用來放投影片是沒什麼問題，
+用音量鍵能模擬捲動翻頁，滑動螢幕就會移動游標。
+預設好像會自己搜尋區網內的 vnc port。
+感覺這 app 蠻實用的，如果有實際用到的話，
+可能會贊助一下吧。&lt;/p&gt;
+&lt;p&gt;另一款是 &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.stripe1.xmouse&quot;&gt;XMouse Remote Mouse &amp;amp; Keyboard&lt;/a&gt; ，
+就是走 ssh 然後用 xdotool 命令來發送按鍵與移動滑鼠。
+所以電腦要有裝這二個軟體。
+debian ubunti 系就 &lt;code&gt;apt install xdotool ssh&lt;/code&gt; 。
+但因為是用 xdotool 控制，
+在移動游標的連續動作時會有點頓。&lt;/p&gt;
+&lt;p&gt;因為 xdotool 只有 linux 下能用，而且他會頓，
+目前是用 remote mouse。
+雖然一般 windows 也沒有 vnc server 就是了。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/politic-communist-as-enemy-of-taiwan-china.html</id>
 <title>中國共產黨是台灣與中國人民的共同敵人</title>
 <published>2019-02-22T09:57:44.658Z</published>
@@ -1559,34 +1708,7 @@ csrs ppp 的精度較佳，而 rtx 的精度稍低，
 只是電腦課不教這些。</summary>
 <category term="linux"/>
 <category term="study"/>
-<content type="html">&lt;h1 id=&quot;實用的程式設計&quot;&gt;實用的程式設計&lt;/h1&gt;
-&lt;p&gt;現代高中電腦課會教基礎程設計，但教的多是 C 語言，
-是只能留在課本或打打演算法競賽的空談，
-無法應用在電腦的日常使用中。
-在學完高中程式設計後，電腦對使用者來說還是一顆黑盒子，
-只能用滑鼠點點操作，軟體沒有提供的功能就只能乾瞪眼，
-那些課程上教的，完全出不了 dos 的小黑窗。
-其實在電腦中的軟體操作，都可以對應到程式中的指令，
-都可以以程式來自動化完成。
-只是電腦課不教這些。&lt;/p&gt;
-&lt;h2 id=&quot;高中電腦課&quot;&gt;高中電腦課&lt;/h2&gt;
-&lt;p&gt;在我高中電腦課是教 C，學 C 後就是練習迴圈，
-用星星輸出三角形、金字塔之類的。
-C 有很大的問題，因為太低階限制太多，
-而且檔案讀取與寫入太麻煩，陣列和指標太複雜，
-以我高中時根本沒學到指標和檔案讀寫。&lt;/p&gt;
-&lt;p&gt;這些東西都太原始， 已經和真實使用者日常操作電腦的內容相去甚遠。
-雖然那些日常操作說穿也不過是這些邏輯，
-但還需要很多背景知識，尤其是 gui 的程式間通訊。&lt;/p&gt;
-&lt;p&gt;而且以高中來說，寫 c 執行 c 全部都在 dev c++ 裡，
-很多人只會點編譯後執行來執行，
-程式的變數參數都寫死在原始碼裡，
-離開 dev c++ 離開 IDE 就不知道怎麼寫程式，
-也根本寫不出所謂實用可以互動的程式，
-在 dev c++ 外運行的程式。&lt;/p&gt;
-&lt;p&gt;有的會教稍微過時的 basic，可能可以用 dos 運行，
-還能簡單跳圖形介面，或在 office 裡的 VBA。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/android-atom-tip.html#alpha-vnc-遠端控制手機</id>
 <title>atom 使用技巧</title>

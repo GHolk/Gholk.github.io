@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-02-28T08:01:14.490Z</updated>
+  <updated>2019-03-01T09:16:00.243Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,120 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/tmux-give-p.html</id>
+<title>用 tmux 在 ptt 發錢</title>
+<published>2019-03-01T09:14:20.055Z</published>
+<updated>2019-03-01T09:16:00.224Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/tmux-give-p.html"/>
+<summary type="html">最近因為好玩，想試試發錢要鄉民去噓別人的文，
+於是之後兌現承諾發錢時，試了 &lt;a href=&quot;https://github.com/wabilin/MumiGiveP&quot;&gt;mumi 發錢程式&lt;/a&gt; 有問題，
+所以 &lt;a href=&quot;//github.com/GHolk/loco/blob/master/bin/tmux-give-p.sh&quot;&gt;自己用 tmux 和 ssh 當介面
+寫了個簡單的 shell script 來發錢&lt;/a&gt; 。
+這個 script 大概是我認同的 shell script 風格吧，
+用了很多我流的奇淫技巧。</summary>
+<category term="ptt"/>
+<category term="tmux"/>
+<category term="linux"/>
+<category term="shell"/>
+<content type="html">&lt;h1 id=&quot;用 tmux 在 ptt 發錢&quot;&gt;用 tmux 在 ptt 發錢&lt;/h1&gt;
+&lt;p&gt;最近因為好玩，想試試發錢要鄉民去噓別人的文，
+於是之後兌現承諾發錢時，試了 &lt;a href=&quot;https://github.com/wabilin/MumiGiveP&quot;&gt;mumi 發錢程式&lt;/a&gt; 有問題，
+所以 &lt;a href=&quot;//github.com/GHolk/loco/blob/master/bin/tmux-give-p.sh&quot;&gt;自己用 tmux 和 ssh 當介面
+寫了個簡單的 shell script 來發錢&lt;/a&gt; 。
+這個 script 大概是我認同的 shell script 風格吧，
+用了很多我流的奇淫技巧。&lt;/p&gt;
+&lt;h2 id=&quot;使用方法&quot;&gt;使用方法&lt;/h2&gt;
+&lt;p&gt;要先有 tmux，在 window 0 連上 ptt，
+進入發 p 幣的選單，
+然後可以在 window 1 執行這個腳本。
+這個腳本有互動介面，所以什麼選項都不給還是能正常運行，
+腳本缺的變數就會要求你輸入。&lt;/p&gt;
+&lt;p&gt;執行就是 &lt;code&gt;sh tmux-give-p.sh 10 iXXXXGAY5566 seabox freeunixer RS5566&lt;/code&gt; ，
+第一個參數是稅前 P 幣，後面是要送的 id，
+ptt 不分大小寫，所以可以一律小寫。
+或是 id 也可以從 stdin 送進去，一行一個 id。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;sh tmux-give-p.sh 10 &amp;lt;&amp;lt;USER_LIST
+iXXXXGAY5566
+seabox
+freeunixer
+RS5566
+
+USER_LIST
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;然後會要求你輸入 ptt 密碼，
+密碼不能放在參數傳，因為會被 top ps pgrep 看到。
+所以我是用 tmux 的 buffer 存。
+又基於腳本要可以批次操作，
+你也可以事先存在 tmux 的 &lt;code&gt;ptt_password&lt;/code&gt; buffer。
+就不會要求輸入，可以直接開始發錢。&lt;/p&gt;
+&lt;p&gt;每發一個人會切回 window 1，
+所以如果出錯可以按 ctrl-c 中斷。
+但我沒有做很完整的判斷，
+如果出什麼意外可能會在 ptt 亂輸入一堆東西。&lt;/p&gt;
+&lt;p&gt;另外這腳本可以很大程度由環境變數改變行為，
+像如果要算稅後，可以 &lt;code&gt;after_tax=1 sh tmux-give-p.sh 10&lt;/code&gt;
+錢、使用者名單也都可以從環境數傳
+&lt;code&gt;money=10 username_list=&amp;apos;seabox rs5566&amp;apos; sh tmux-give-p.sh&lt;/code&gt; 。&lt;/p&gt;
+&lt;h3 id=&quot;環境變數&quot;&gt;環境變數&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;money: P 幣數量，必須大於零。&lt;/li&gt;
+&lt;li&gt;after_tax: P 幣計算稅後，預設是稅錢，只要不是空字串就代表計算稅後。&lt;/li&gt;
+&lt;li&gt;username_list: 要發的 id 列表，可以用空格或換行或 tab 分割。
+優先順序是環境變數、參數、stdin。&lt;/li&gt;
+&lt;li&gt;user_interval: 發一位使用者後會停多久，
+預設是 2，預設單位是秒，也可以傳 1m 就變成停一分鐘。&lt;/li&gt;
+&lt;li&gt;ptt_pane: ptt 發錢畫面的 tmux window，預設是 0。&lt;/li&gt;
+&lt;li&gt;script_pane: 腳本執行的 tmux window，預設是 1，
+只是跳回去後讓你可以 ctrl-c 中斷用的。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果要批次作業，就要先開好 tmux，
+在 window 0 連上 ptt 進到發錢介面，
+然後把密碼存到 tmux buffer，
+像是 &lt;code&gt;pass show ptt | tmux load-buffer -b ptt_password -&lt;/code&gt; ，
+再執行這個腳本，id 建議用 stdin 傳，比較不會被限制長度。
+&lt;code&gt;cat userlist | sh tmux-give-p.sh 10&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;如果什麼參數都不給，就會要求你輸入要發的 P 幣，
+ptt 密碼，之後要求你一行行輸入 id。
+另外把 tmux 開起來後，也可以在另外的終端機執行這個腳本，
+tmux 好像會自己找到自己。&lt;/p&gt;
+&lt;h2 id=&quot;腳本技巧&quot;&gt;腳本技巧&lt;/h2&gt;
+&lt;p&gt;最近我寫程式最大的觀注是
+如何讓使用者在無需改寫原始碼的情況下，
+改變程式行為；也就程式的重用。
+例如 emacs 的 emacs lisp 就在這點下了很大心力，
+你可以用 hook advice 來在不更動原始碼的情況下，
+改變某些函數的行為。&lt;/p&gt;
+&lt;p&gt;我大量使用了 &lt;code&gt;set_if_empty&lt;/code&gt; 這個函數，
+也就是在 script 裡不直接指派值給變數，
+而是先檢查外部有沒有給值，沒有再指定。
+因為 shell 裡在讀取變數時，
+變數和環境變數是沒有差異的。&lt;/p&gt;
+&lt;p&gt;之前學 common lisp，
+有個 &lt;code&gt;defparameter&lt;/code&gt; 就是類似的意思，
+定義一個參數，但可以被其它 defparameter 改變。
+在 Makefile 或 C 的巨集裡，好像也有類似的語法。&lt;/p&gt;
+&lt;p&gt;現在寫腳本，如果是可以改變的參數，
+我都會用 &lt;code&gt;set_if_empty&lt;/code&gt; 來定義，
+執行時如果想改可以直接傳環境變數覆寫。&lt;/p&gt;
+&lt;h2 id=&quot;緣起&quot;&gt;緣起&lt;/h2&gt;
+&lt;p&gt;最近幾個月 ptt 在流行 &lt;a href=&quot;//pttpedia.fandom.com/zh/%E6%90%B6777777&quot;&gt;搶第 777777 篇文章&lt;/a&gt; ，
+搶到的人都會被推爆，還會被要求發錢。
+對這行為有點反感，所以之後想試試在 777777 前後發一篇文，
+發錢請鄉民在 777777 文章下面噓文，
+看能不能把推爆變噓爆。&lt;/p&gt;
+&lt;p&gt;但後來剛好看到一篇沒什麼意義的發錢文，
+就在他之後發了文章後要求鄉民去噓他，
+可惜沒有成功，因為發錢文大部份都會推超過 100，
+我後來統計有 173 噓，但扣掉後還是有二十幾推，
+還是不到噓爆。&lt;/p&gt;
+&lt;p&gt;但不知道為什麼一堆人噓我，噓我又沒錢，
+可能看不爽我要鄉民去噓別人吧，
+或是單純看到噓就被當成 &lt;a href=&quot;//pttpedia.fandom.com/zh/討噓文&quot;&gt;討噓文&lt;/a&gt; 。
+後來那篇文章作者也來我的文章噓，
+說他不能噓自己，能不能多少給他一點；
+把他的爆文噓掉也不太好意思，發一點錢給他也剛好而已。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/politic-negotiate-china-reason.html#忍辱負重的務實</id>
 <title>國民黨堅持與中國接觸的務實</title>
 <published>2019-02-22T14:17:29.064Z</published>
@@ -1490,171 +1604,7 @@ EZ-100PU 是官方有提供 linux 的驅動，
 對同為常寫 shell script 的人可能會有幫助。</summary>
 <category term="linux"/>
 <category term="shell"/>
-<content type="html">&lt;h1 id=&quot;shell 編程奇淫技巧&quot;&gt;shell 編程奇淫技巧&lt;/h1&gt;
-&lt;p&gt;最近深刻認識到 linux 中 shell 是最全面的程式語言，
-也會用 shell script 寫一些小工具，而不是其它程式語言。
-這些是最近覺得一些有趣的技巧，整理成一篇文章，
-對同為常寫 shell script 的人可能會有幫助。&lt;/p&gt;
-&lt;h2 id=&quot;用 head truncat stream&quot;&gt;用 head truncat stream&lt;/h2&gt;
-&lt;p&gt;如果要從管道收資料，但需要截掉開頭的一部份，
-或邊讀取邊處理，可以用 shell 的命令群組或包成函數來處理。
-shell 中的小括號或大括號都可以是管道的來源或目標，
-或是 shell 函數也可以。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;cat data | { 
-    head -c 8 &amp;gt;/dev/null # 丟掉前 8 個 byte
-    dd bs=8K count=64 # 讀取 512KB 丟到標準輸出
-    tail -c 8 # 其它都丟掉，只留結尾的 8 個 byte
-} &amp;gt; truncate-data
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;read_n_row() {
-    read n
-    for i in `seq 1 $n`
-    do
-        read line
-        echo $line
-    done
-}
-seq 3 8 | read_n_row
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;小括號和大括號的差別在於內部變數會不會影響到外部，
-&lt;a href=&quot;https://stackoverflow.com/questions/13763942/why-piping-input-to-read-only-works-when-fed-into-while-read-construct&quot;&gt;但在 pipe 時因為 pipe 會自動 fork&lt;/a&gt; ，
-所以用大小括號好像沒差。&lt;/p&gt;
-&lt;h2 id=&quot;內嵌壓縮檔的 shell script&quot;&gt;內嵌壓縮檔的 shell script&lt;/h2&gt;
-&lt;p&gt;這比較有趣，之前在 amd 的 linux 顯卡驅動安裝程式看到的。
-大概就是用類似 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E5%9C%96%E7%A8%AE&quot;&gt;圖種&lt;/a&gt; 的方式
-把壓縮檔塞在 shell script 的 exit 命令後。
-反正 shell 執行到 exit 就退出了，後面塞什麼垃圾 shell 不在乎，
-而壓縮檔有自己的 header，header 前面有垃圾也沒關係。
-好像有個工具叫 &lt;a href=&quot;https://makeself.io/&quot;&gt;makeself&lt;/a&gt; 可以自動完成這件事，
-amd 的顯卡驅動就是這樣做的。&lt;/p&gt;
-&lt;h3 id=&quot;附加壓縮檔&quot;&gt;附加壓縮檔&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;cat self-extract.sh &amp;lt;&amp;lt;SHELL
-#!/bin/sh
-echo hello my name is $0
-echo i am self extract
-echo my content is:
-7z l $0
-echo bye
-exit 0
 
-SHELL
-
-7z a archieve.7z some-file.png
-cat archieve.7z &amp;gt;&amp;gt; self-extract.sh
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;內嵌 base64&quot;&gt;內嵌 base64&lt;/h3&gt;
-&lt;p&gt;另一種比較簡單的作法是直接把檔案用 base64 編碼後
-內嵌在 shell script 裡。
-可以直接用 heredoc 的方式內嵌，
-也可以放在 exit 後面，用標籤隔開。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;base64 -d &amp;gt;outfile &amp;lt;&amp;lt;BASE64
-IyBzaGVsbCDnt6jnqIvlpYfmt6vmioDlt6cK5pyA6L+R5rex5Yi76KqN6K2Y5YiwIGxpbnV4IOS4
-rSBzaGVsbCDmmK/mnIDlhajpnaLnmoTnqIvlvI/oqp7oqIDvvIwK5Lmf5pyD55SoIHNoZWxsIHNj
-bAo=
-BASE64
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# some script
-extract_file() {
-    local filename
-    filename=&amp;quot;$1&amp;quot;
-    sed -n &amp;quot;/^__$filename__\$/,/^\$/p&amp;quot; $0 | {
-        head -n 1 &amp;gt;/dev/null
-        cat
-    } | base64 -d &amp;gt;file1
-}
-
-
-exit
-
-__file1__
-IyBzaGVsbCDnt6jnqIvlpYfmt6vmioDlt6cK5pyA6L+R5rex5Yi76KqN6K2Y5YiwIGxpbnV4IOS4
-rSBzaGVsbCDmmK/mnIDlhajpnaLnmoTnqIvlvI/oqp7oqIDvvIwK5Lmf5pyD55SoIHNoZWxsIHNj
-bAo=
-
-__file2__
-rSBzaGVsbCDmmK/mnIDlhajpnaLnmoTnqIvlvI/oqp7oqIDvvIwK5Lmf5pyD55SoIHNoZWxsIHNj
-bAo=
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;implicit space split&quot;&gt;implicit space split&lt;/h2&gt;
-&lt;p&gt;在 shell 中很麻煩一件事是要解析字串，
-像去掉附檔名、抓出附檔名、取出用冒號分隔的欄位等。
-如果在 javascript 裡就用 &lt;code&gt;string.split()&lt;/code&gt; 
-或 &lt;code&gt;string.match&lt;/code&gt; 能很簡單抓出。&lt;/p&gt;
-&lt;p&gt;在 bash 裡可以用 &lt;code&gt;${PATH##*:}&lt;/code&gt; 來代換，但在 sh 裡就不行。
-只能用 &lt;code&gt;echo $PATH | sed &amp;apos;s/^.*://&amp;apos;&lt;/code&gt; 或 grep 來抓。
-如果分隔符是空白，那可以用 shell 會用空白分割參數的特性，
-把變數傳到函數裡，就能用 &lt;code&gt;$1&lt;/code&gt; &lt;code&gt;$2&lt;/code&gt; 直接取用第 n 欄。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;gps_week_day=&amp;apos;1997 3&amp;apos;
-format_gps_url() {
-    week=$1
-    day=$2
-    echo ftp://cddis.nasa.gov/gnss/products/$week/igs$week$day.sp3.Z
-}
-format_gps_url $gps_week_day
-# ftp://cddis.nasa.gov/gnss/products/1997/igs19973.sp3.Z
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;tee 命名管道處理多個管道&quot;&gt;tee 命名管道處理多個管道&lt;/h2&gt;
-&lt;p&gt;有時候想把一個輸出 pipe 給多個 command，
-或需要從多個命令讀取輸出，但 shell 只能單一 pipe，
-像 diff 這種有二個檔案的命令，最多只能一個檔案來自管道，
-&lt;code&gt;cat file1 | diff - file2&lt;/code&gt; 。
-雖然可以用 &lt;code&gt;&amp;gt;&lt;/code&gt; 把資料導到檔案，再用 &lt;code&gt;&amp;lt;&lt;/code&gt; 讀出來，
-但有時候佔了空間之後還要移除很麻煩。&lt;/p&gt;
-&lt;h3 id=&quot;tee 複製 stream&quot;&gt;tee 複製 stream&lt;/h3&gt;
-&lt;p&gt;tee 可以把一個 stream 複製成多個，
-但複製是寫入到檔案，不能 pipe 給多個命令。
-可以把 tee 的目標指定成命令管道
-或 process substitution。&lt;/p&gt;
-&lt;p&gt;process substitution 是 bash 才有的功能，
-可以用 &lt;code&gt;&amp;gt;(wc)&lt;/code&gt; 的形式把輸入的目標檔案指到一組命令。
-或用 &lt;code&gt;&amp;lt;(cut -d &amp;apos; &amp;apos; -f 3 file)&lt;/code&gt; 之類的把輸入指向檔案。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;zcat backup.img.gz | tee &amp;gt;(cksum) &amp;gt; /dev/sdz
-# 或是也能 tee 到多個檔案，但 tee 仍會寫到標準輸出，所以手動丟掉。
-zcat backup.img.gz | tee &amp;gt;(cksum) &amp;gt;(md5sum) /dev/sdz &amp;gt;/dev/null
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;命令管道 fifo&quot;&gt;命令管道 fifo&lt;/h3&gt;
-&lt;p&gt;相比上面的 &lt;code&gt;&amp;gt;()&lt;/code&gt; &lt;code&gt;&amp;lt;()&lt;/code&gt; 是 bash 的功能，
-命名管道 fifo 就是在 sh 下也可以用。
-只是 fifo 要手動創建，用完要刪除。
-&lt;code&gt;mkfifo&lt;/code&gt; 可以創建管道，一樣用 rm 移除。&lt;/p&gt;
-&lt;p&gt;只是對 fifo 寫資料就會被阻塞，
-直到有另一個程式從 fifo 讀取，讀取也是一樣。
-所以如果要在同一個 script 中讀取與寫入，
-要用 &lt;code&gt;&amp;amp;&lt;/code&gt; 把程式丟到背景。&lt;/p&gt;
-&lt;p&gt;tee 一樣可以寫入多個命名管道，
-而 tee 的作法好像是任一個寫入的目標被阻塞，
-就停止所有目標的寫入。
-所以如果寫入了多個 fifo，
-要等所有 fifo 都開始讀取才能讀取．
-只有一個 fifo 在讀取，其它 fifo 還是會 block 住，
-tee 就會 block 住。&lt;/p&gt;
-&lt;p&gt;雖然 fifo 看起來和單純用檔案很像，
-但其實 fifo 根本沒有內容，只是借檔案系統的一個名字，
-管道內的資料不會存在檔案系統裡。
-所以你向 fifo 寫資料根本&lt;/p&gt;
-&lt;h3 id=&quot;簡單示範使用多重管道&quot;&gt;簡單示範使用多重管道&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;mkfifo yes no maybe
-yes yes &amp;gt; yes &amp;amp;
-yes no &amp;gt; no &amp;amp;
-yes maybe &amp;gt; maybe &amp;amp;
-paste yse no maybe | head
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;抓出數個檔案的數個欄位處理合併成一個檔案&quot;&gt;抓出數個檔案的數個欄位處理合併成一個檔案&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;basename=&amp;quot;$(basename -s .out &amp;quot;$1&amp;quot;)&amp;quot;
-
-tmpfifo=&amp;quot;inp2dms all2time inp2enh all2h&amp;quot;
-mkfifo $tmpfifo
-
-awk &amp;apos;{print $5,$6,$7, $2,$3,$4}&amp;apos; &amp;quot;$basename&amp;quot;.out &amp;gt; inp2dms &amp;amp;
-awk &amp;apos;{print $5&amp;quot;d&amp;quot; $6&amp;quot;\x27&amp;quot; $7&amp;quot;\x22&amp;quot;, $2&amp;quot;d&amp;quot; $3&amp;quot;\x27&amp;quot; $4&amp;quot;\x22&amp;quot;}&amp;apos; \
-    &amp;quot;$basename&amp;quot;.out | proj -f &amp;quot;%.4f&amp;quot; +init=epsg:3826 &amp;gt; inp2enh &amp;amp;
-cut -d &amp;apos;,&amp;apos; -f 1-3 --output-delimiter=&amp;apos;:&amp;apos; &amp;quot;$basename&amp;quot;.all &amp;gt; all2time &amp;amp;
-cut -d &amp;apos;,&amp;apos; -f 7 &amp;quot;$basename&amp;quot;.all &amp;gt; all2h &amp;amp;
-
-paste -d &amp;apos; &amp;apos; all2time inp2dms all2h inp2enh &amp;gt; &amp;quot;$basename&amp;quot;.gnuplot.data
-rm $tmpfifo
-&lt;/code&gt;&lt;/pre&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/linux-grub-uefi-var-bios.html</id>
 <title>easy2boot 無法讀取 uefi var</title>

@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2019-03-01T09:14:20.055Z">
+<meta name="keywords" property="og:article:tag" content="ptt,tmux,linux,shell">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="politic-negotiate-china-reason.html" title="國民黨的務實">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>用 tmux 在 ptt 發錢</title>
+</head>
+<body>
+<main><h1 id="用 tmux 在 ptt 發錢">用 tmux 在 ptt 發錢</h1>
+<p>最近因為好玩，想試試發錢要鄉民去噓別人的文，
+於是之後兌現承諾發錢時，試了 <a href="https://github.com/wabilin/MumiGiveP">mumi 發錢程式</a> 有問題，
+所以 <a href="//github.com/GHolk/loco/blob/master/bin/tmux-give-p.sh">自己用 tmux 和 ssh 當介面
+寫了個簡單的 shell script 來發錢</a> 。
+這個 script 大概是我認同的 shell script 風格吧，
+用了很多我流的奇淫技巧。</p>
+<h2 id="使用方法">使用方法</h2>
+<p>要先有 tmux，在 window 0 連上 ptt，
+進入發 p 幣的選單，
+然後可以在 window 1 執行這個腳本。
+這個腳本有互動介面，所以什麼選項都不給還是能正常運行，
+腳本缺的變數就會要求你輸入。</p>
+<p>執行就是 <code>sh tmux-give-p.sh 10 iXXXXGAY5566 seabox freeunixer RS5566</code> ，
+第一個參數是稅前 P 幣，後面是要送的 id，
+ptt 不分大小寫，所以可以一律小寫。
+或是 id 也可以從 stdin 送進去，一行一個 id。</p>
+<pre><code class="lang-sh">sh tmux-give-p.sh 10 &lt;&lt;USER_LIST
+iXXXXGAY5566
+seabox
+freeunixer
+RS5566
+
+USER_LIST
+</code></pre>
+<p>然後會要求你輸入 ptt 密碼，
+密碼不能放在參數傳，因為會被 top ps pgrep 看到。
+所以我是用 tmux 的 buffer 存。
+又基於腳本要可以批次操作，
+你也可以事先存在 tmux 的 <code>ptt_password</code> buffer。
+就不會要求輸入，可以直接開始發錢。</p>
+<p>每發一個人會切回 window 1，
+所以如果出錯可以按 ctrl-c 中斷。
+但我沒有做很完整的判斷，
+如果出什麼意外可能會在 ptt 亂輸入一堆東西。</p>
+<p>另外這腳本可以很大程度由環境變數改變行為，
+像如果要算稅後，可以 <code>after_tax=1 sh tmux-give-p.sh 10</code>
+錢、使用者名單也都可以從環境數傳
+<code>money=10 username_list=&apos;seabox rs5566&apos; sh tmux-give-p.sh</code> 。</p>
+<h3 id="環境變數">環境變數</h3>
+<ul>
+<li>money: P 幣數量，必須大於零。</li>
+<li>after_tax: P 幣計算稅後，預設是稅錢，只要不是空字串就代表計算稅後。</li>
+<li>username_list: 要發的 id 列表，可以用空格或換行或 tab 分割。
+優先順序是環境變數、參數、stdin。</li>
+<li>user_interval: 發一位使用者後會停多久，
+預設是 2，預設單位是秒，也可以傳 1m 就變成停一分鐘。</li>
+<li>ptt_pane: ptt 發錢畫面的 tmux window，預設是 0。</li>
+<li>script_pane: 腳本執行的 tmux window，預設是 1，
+只是跳回去後讓你可以 ctrl-c 中斷用的。</li>
+</ul>
+<p>如果要批次作業，就要先開好 tmux，
+在 window 0 連上 ptt 進到發錢介面，
+然後把密碼存到 tmux buffer，
+像是 <code>pass show ptt | tmux load-buffer -b ptt_password -</code> ，
+再執行這個腳本，id 建議用 stdin 傳，比較不會被限制長度。
+<code>cat userlist | sh tmux-give-p.sh 10</code> 。</p>
+<p>如果什麼參數都不給，就會要求你輸入要發的 P 幣，
+ptt 密碼，之後要求你一行行輸入 id。
+另外把 tmux 開起來後，也可以在另外的終端機執行這個腳本，
+tmux 好像會自己找到自己。</p>
+<h2 id="腳本技巧">腳本技巧</h2>
+<p>最近我寫程式最大的觀注是
+如何讓使用者在無需改寫原始碼的情況下，
+改變程式行為；也就程式的重用。
+例如 emacs 的 emacs lisp 就在這點下了很大心力，
+你可以用 hook advice 來在不更動原始碼的情況下，
+改變某些函數的行為。</p>
+<p>我大量使用了 <code>set_if_empty</code> 這個函數，
+也就是在 script 裡不直接指派值給變數，
+而是先檢查外部有沒有給值，沒有再指定。
+因為 shell 裡在讀取變數時，
+變數和環境變數是沒有差異的。</p>
+<p>之前學 common lisp，
+有個 <code>defparameter</code> 就是類似的意思，
+定義一個參數，但可以被其它 defparameter 改變。
+在 Makefile 或 C 的巨集裡，好像也有類似的語法。</p>
+<p>現在寫腳本，如果是可以改變的參數，
+我都會用 <code>set_if_empty</code> 來定義，
+執行時如果想改可以直接傳環境變數覆寫。</p>
+<h2 id="緣起">緣起</h2>
+<p>最近幾個月 ptt 在流行 <a href="//pttpedia.fandom.com/zh/%E6%90%B6777777">搶第 777777 篇文章</a> ，
+搶到的人都會被推爆，還會被要求發錢。
+對這行為有點反感，所以之後想試試在 777777 前後發一篇文，
+發錢請鄉民在 777777 文章下面噓文，
+看能不能把推爆變噓爆。</p>
+<p>但後來剛好看到一篇沒什麼意義的發錢文，
+就在他之後發了文章後要求鄉民去噓他，
+可惜沒有成功，因為發錢文大部份都會推超過 100，
+我後來統計有 173 噓，但扣掉後還是有二十幾推，
+還是不到噓爆。</p>
+<p>但不知道為什麼一堆人噓我，噓我又沒錢，
+可能看不爽我要鄉民去噓別人吧，
+或是單純看到噓就被當成 <a href="//pttpedia.fandom.com/zh/討噓文">討噓文</a> 。
+後來那篇文章作者也來我的文章噓，
+說他不能噓自己，能不能多少給他一點；
+把他的爆文噓掉也不太好意思，發一點錢給他也剛好而已。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

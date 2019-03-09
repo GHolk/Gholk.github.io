@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-03-05T11:14:33.954Z</updated>
+  <updated>2019-03-09T13:16:54.840Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,184 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/android-gnss-height-report.html</id>
+<title>智慧型手機中的 GNSS 定位高程</title>
+<published>2019-03-09T10:00:33.655Z</published>
+<updated>2019-03-09T13:16:54.822Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/android-gnss-height-report.html"/>
+<summary type="html">現代智慧型手機中多內建 GNSS 定位，
+定位結果為三維座標，一般以經緯度及高程表示。
+但高程從計算的方式不同，有不同高程，
+常用的有 &lt;strong&gt;正高&lt;/strong&gt; 、 &lt;strong&gt;橢球高&lt;/strong&gt; 、 &lt;strong&gt;正常高&lt;/strong&gt; 。
+手機的因為是以 GNSS 定位，一般是橢球高，
+需要經高程現代化，以大地起伏模型改正為正高。</summary>
+<category term="android"/>
+<category term="nctu"/>
+<category term="report"/>
+<content type="html">&lt;h1 id=&quot;智慧型手機中的 GNSS 定位高程&quot;&gt;智慧型手機中的 GNSS 定位高程&lt;/h1&gt;
+&lt;p&gt;現代智慧型手機中多內建 GNSS 定位，
+定位結果為三維座標，一般以經緯度及高程表示。
+但高程從計算的方式不同，有不同高程，
+常用的有 &lt;strong&gt;正高&lt;/strong&gt; 、 &lt;strong&gt;橢球高&lt;/strong&gt; 、 &lt;strong&gt;正常高&lt;/strong&gt; 。
+手機的因為是以 GNSS 定位，一般是橢球高，
+需要經高程現代化，以大地起伏模型改正為正高。&lt;/p&gt;
+&lt;h2 id=&quot;android 系統中使用 gnss 定位&quot;&gt;android 系統中使用 gnss 定位&lt;/h2&gt;
+&lt;p&gt;由於 gnss 的衛星已完善，
+只要有接收儀在空曠處就能用 gnss 定位。
+現代智慧型手機多能夠接收美國的 gps 的信號，
+使用 gps 定位。&lt;/p&gt;
+&lt;p&gt;手機的 gps 定位功能也被廣泛應用在不同的應用程式中：
+例如 android 上的 google map 可以由 gps 定位，
+將使用者所在位置標示在地圖中，
+供使者用在地圖上確認與周遭地物的相對位置。
+facebook 則可以由 gps 定位，
+讓使用者在地標上 &lt;em&gt;打卡&lt;/em&gt; ，標記到此一遊。&lt;/p&gt;
+&lt;p&gt;但一般 app 多是直接解析定位結果為地標或地圖上的位置，
+而不會顯示詳細的 gps 座標資訊；
+所以要另外裝專門顯示詳細 gps 定位座標的 app，
+我裝了課程中史天元老師推薦的開源軟體 &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.chartcross.gpstest&quot; title=&quot;play 商店中的 gps test&quot;&gt;gps test&lt;/a&gt;
+與免費軟體 &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.eclipsim.gpsstatus2&quot; title=&quot;play 商店中的 gps status&quot;&gt;gps status&lt;/a&gt; 。&lt;/p&gt;
+&lt;h2 id=&quot;正高、橢球高與大地起伏&quot;&gt;正高、橢球高與大地起伏&lt;/h2&gt;
+&lt;p&gt;gps 定位的結果是橢球高，但橢球高是沒有物理意義的，
+因為小區域內的重力與橢球高無關，而是與正高的方向垂直，
+也就是在橢球高較高處，水不一定會往橢球高低處流。
+橢球高與正高間的差異為大地起伏，
+橢球高減去大地起伏即為正高。&lt;/p&gt;
+&lt;p&gt;一般人不一定清楚橢球高與正高的差異，
+也不清楚 gps 定位出來的高是什麼高，
+所以很多 gps app 都會用內建的大地起伏網格，
+將定位結果的橢球高轉換為一般人概念中的高，
+也就是與重力方向垂直的高。&lt;/p&gt;
+&lt;p&gt;大地起伏可以由重力測量的結果計算，
+因此，在全國進行重力測量，
+計算出全國各地的大地起伏後，
+就能由橢球高計算正高，稱為 &lt;strong&gt;高程現代化&lt;/strong&gt; 。
+&lt;a href=&quot;https://egnss.nlsc.gov.tw/trans/geo.aspx&quot; title=&quot;國土測繪中心提供全台大地起伏的網頁&quot;&gt;國土測繪中心的網頁，有提供全台灣大地起伏的資料&lt;/a&gt; ，
+只要輸入 twd97 經緯度座標，就會計算出該地的大地起伏，
+供只能觀測橢球高的 gps 定位化算為正高。&lt;/p&gt;
+&lt;h2 id=&quot;app 測試&quot;&gt;app 測試&lt;/h2&gt;
+&lt;p&gt;我測試了 gps test 與 gps status 二款 app 的定位，
+二者都有選項供使用者調整是否使用大地起伏改正，
+切換橢球高與正高，由此可以觀察正高與橢球高的差異。
+再將二款 app 中測出的經緯度，
+輸入國土測繪中心的網頁中，計算台灣標準的大地起伏，
+與 app 中提供的大地起伏比較。&lt;/p&gt;
+&lt;h3 id=&quot;gps test&quot;&gt;gps test&lt;/h3&gt;
+&lt;p&gt;gps test 中可以正常切換是否使用 geoid，
+我所測試地點在交通大學博愛校區正門和校區內的圓環中間，
+時間是 2019-03-09T15:05。&lt;/p&gt;
+&lt;h4 id=&quot;截圖&quot;&gt;截圖&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/32383100117&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7846/32383100117_faf384232c.jpg&quot; alt=&quot;Screenshot_20190309-150746.png&quot; title=&quot;gps test 給出的經緯度&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/32383084027&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7861/32383084027_d486aef34b.jpg&quot; alt=&quot;Screenshot_20190309-150451.png&quot; title=&quot;gps test 給出在 geoid 上的橢球高&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/32383084057&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7874/32383084057_c0074067a5.jpg&quot; alt=&quot;Screenshot_20190309-150456.png&quot; title=&quot;gps test 給出的正高&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&quot;測試結果&quot;&gt;測試結果&lt;/h4&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;種類&lt;/th&gt;
+&lt;th&gt;數值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;經度&lt;/td&gt;
+&lt;td&gt;120°59′00.180″&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;緯度&lt;/td&gt;
+&lt;td&gt;24°47′53.652″&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gps test 橢球高&lt;/td&gt;
+&lt;td&gt;27m&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gps test 正高&lt;/td&gt;
+&lt;td&gt;10m&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gps test 大地起伏&lt;/td&gt;
+&lt;td&gt;17m&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;e-gnss 大地起伏&lt;/td&gt;
+&lt;td&gt;19.466m&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&quot;gps status&quot;&gt;gps status&lt;/h3&gt;
+&lt;p&gt;gps status 是另一款顯示 gps 定位結果的 app，
+在高程可以選擇要用 wgs 橢球高，或是 msl 平均海水面高。
+但我在我現在用的 unihertz atom 手機上運作不正常，
+選擇 wgs 與 msl 顯示的高程均相同。
+後來換成以前的紅米手機，切換 wgs 與 msl 就會有變化了。
+所以我就用以前的紅米手機截圖。&lt;/p&gt;
+&lt;p&gt;這是在 2019-03-03T19-38 測的，
+位置大概在新竹高中正門口外的馬路上。&lt;/p&gt;
+&lt;h4 id=&quot;截圖&quot;&gt;截圖&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/47273239382&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7851/47273239382_1a39b48779.jpg&quot; alt=&quot;Screenshot_2019-03-03-19-38-27.png&quot; title=&quot;gps status 中的橢球高模式&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/47273239742&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7834/47273239742_4b59e1574b.jpg&quot; alt=&quot;Screenshot_2019-03-03-19-38-40.png&quot; title=&quot;gps status 中的正高模式&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&quot;測試結果&quot;&gt;測試結果&lt;/h4&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;種類&lt;/th&gt;
+&lt;th&gt;數值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;經度&lt;/td&gt;
+&lt;td&gt;120°58.8360′&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;緯度&lt;/td&gt;
+&lt;td&gt;24°47.7200′&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gps status 橢球高&lt;/td&gt;
+&lt;td&gt;42.5m&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gps status 正高&lt;/td&gt;
+&lt;td&gt;27.6m&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gps status 大地起伏&lt;/td&gt;
+&lt;td&gt;14.9m&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;e-gnss 大地起伏&lt;/td&gt;
+&lt;td&gt;19.463&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&quot;GPSTest (barbeuDev)&quot;&gt;GPSTest (barbeuDev)&lt;/h3&gt;
+&lt;p&gt;另外我還找到一個也叫 &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.android.gpstest&quot; title=&quot;另一個也叫 gpstest 的開源 app&quot;&gt;gps test&lt;/a&gt; 的 app，
+開發者名字是掛 barbeuDev，他是 open source 的，
+在高程方面是直接二種高，橢球高和正高。
+但在我二台手機上使用都不正常，
+顯示的橢球高和正高都一樣，所以不使用。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33450963288&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7875/33450963288_725bc545fb.jpg&quot; alt=&quot;Screenshot_20190309-150642.png&quot; title=&quot;gpstest 中橢球高和正高數值相同&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;結論&quot;&gt;結論&lt;/h2&gt;
+&lt;p&gt;我在室外觀測 gps 時，數值極不穩定，
+就算我都沒有移動，在二三分鐘內
+gps 的橢球高可能會有三公尺左右的變化。&lt;/p&gt;
+&lt;p&gt;而大地起伏是用現成的事先計算好的資料不會改變，
+如果橢球高增加 3 公尺，因為大地起伏不變，
+那正高也就增加 3 公尺。&lt;/p&gt;
+&lt;p&gt;而 app 內建的大地起伏，
+看來 gps test 的較接近台灣官方的資料。
+以現成資料計算的大地起伏，
+本來就會依球諧級數的階數不同、內插的方式不同有差異。&lt;/p&gt;
+&lt;script src=&quot;ext/header-nctu.js&quot;&gt;&lt;/script&gt;
+
+&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
+
+&lt;script src=&quot;ext/paper.js?reference&quot;&gt;&lt;/script&gt;
+
+</content>
+</entry><entry>
 <id>http://gholk.github.io/tmux-give-p.html#pass-argument-by-environment</id>
 <title>用 tmux 在 ptt 發錢</title>
 <published>2019-03-01T09:14:20.055Z</published>
@@ -1282,269 +1460,7 @@ To all the Linux that bring us to kernel.&lt;/p&gt;
 +&lt;/pre&gt;</summary>
 <category term="funny"/>
 <category term="daily"/>
-<content type="html">&lt;h1 id=&quot;台灣共識就是贏球不能盜壘&quot;&gt;台灣共識就是贏球不能盜壘&lt;/h1&gt;
-&lt;p&gt;明明記得有聽過這句話，但一直找不到來源，
-只有找到幾篇 &lt;a href=&quot;https://www.ptt.cc/man/Elephants/D3D2/D7D0/D46E/D4B3/M.1307776582.A.092.html&quot;&gt;兄弟象故意砸觸身球的新聞&lt;/a&gt; ，
-沒有找到台灣共識。
-之前的 &lt;a href=&quot;short-life-expensive-price.html&quot;&gt;逢人短命&lt;/a&gt; 也很長了，該換篇了。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.ptt.cc/man/Elephants/D3D2/D7D0/D46E/D4B3/M.1307776582.A.092.html&quot;&gt;台灣共識就是贏球不能盜壘！&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt; 標題  [新聞] 就愛 488 公分　女與飛機模型做愛超興奮
-蜜雪兒說，她曾經嘗試與人類做愛，但怎麼做就是無法讓她興奮，但她與飛機模型做愛之
-後，幾乎每架飛機模型都可以讓她得到高潮。
-→  Leeng: 打飛機(物理)                                             04/20 09:10
-推 PiZ1129: 操飛機 操飛機，來到青草地                              04/20 09:54
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt; 作者  billjason (billjason)                                  看板  Gossiping 
- 標題  [問卦] line 到底為什麼ㄧ堆人用？                                        
- 時間  Sun Dec  9 19:16:30 2018                                               
-※  文章網址: https://www.ptt.cc/bbs/Gossiping/M.1544354192.A.9D0.html
-→  wadeabc: 就一開始女森先用，馬子狗跟上，結果最後大家都在用       12/09 19:19
-→  wadeabc: 你要知道這世界是跟著女森尿尿的地方前進的               12/09 19:19
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;p&gt;這些理工科宅男們一說起妹子來總是很激動的樣子，但你真讓他們去和妹子組織個聯誼卻
-反而沒有什麼行動力。大多數情況下他們會想一想要做的準備以及到時候搞些什麼活動，
-然後會開始頭疼，然後該啃書的啃書、運動的運動、遊戲的遊戲，聯誼的事再無下文。哎
-，所以說性格決定命運，不是因為他們讀了理工科才成為宅男才沒有妹子，而是因為他們
-這個性格讓他們選了理科並成了個宅男，才沒有妹子！&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;魔鬼又帶他上了一座最高的山，將世上的御姊，與萬國的蘿莉，都指給他看。&lt;/p&gt;
-&lt;p&gt;對他說：「你若俯伏拜我，我就把這一切都賜給你。」&lt;/p&gt;
-&lt;p&gt;他說：「魔鬼退去吧！因為本本上記著說，當拜主你的偽娘，單要侍奉他。」&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt; Life is dear, love is dearer. Both can be given up for freedom.
-匈牙利人，裴多菲．山陀爾 (Shandor Petefi, 1823—1849) 於 1847 年 1 月寫下的著名詩篇《自由與愛情》。
-那學習自由軟體？&lt;/p&gt;
-&lt;p&gt;千羽純一如是說：Windows 誠可貴，Apple 價更高；若為 Linux 故，兩者皆可拋。&lt;/p&gt;
-&lt;p&gt;李士傑：自由不是離開某套軟體、某種系統，而是找到自由。&lt;/p&gt;
-&lt;p&gt;Rex：geek by nature linux by choice&lt;/p&gt;
-&lt;p&gt;Tetralet：我們極力抗拒我們所不認同的事物，然後變成我們所認同的事物的奴隸。&lt;/p&gt;
-&lt;p&gt;kenduest：如果真的愛一個作業系統 怎能不害怕不再能使用它 而我們必須接受現實
-於是長大了  寂寞就是沒有了機會再用它  比沒有電腦還要寂寞
-而那些點亮我們生命的作業系統  就彷彿電影中發生在暹邏的愛情故事
-即使短暫使用也會刻骨銘心
-To all the Linux that bring us to kernel.&lt;/p&gt;
-&lt;p&gt;LGJ：①公平的選擇權利②開放的檔案格式&lt;/p&gt;
-&lt;p&gt;RMS：FS 對教育：①最簡單的就是省錢②利於發掘、教育天生的軟體工程師。&lt;/p&gt;
-&lt;p&gt;eliu：free software 是用一種有建設性&amp;amp;免錢的電玩，不要想太多了。&lt;/p&gt;
-&lt;p&gt;caleb 常見誤解：①用自由軟體就要推廣自由軟體 ← 莫名其妙，難道我開 Toyota 的車就得推廣 Toyota 的車？
-             ②要 寫程式/debug 才是對自由軟體有貢獻 ← 其實 下載/安裝/使用/討論/回報問題/提出 wishlist/改善美工/... 很多都是對自由軟體有貢獻&lt;/p&gt;
-&lt;p&gt;↑當然還很多敝人沒有記下來的
-但敝人感受到那麼多前輩們默默的付出和努力
-敝人更該心存感激啊
-敝人有機會分享給別人就多說
-現在不說話
-以後誰為敝人的小 p 說話&lt;/p&gt;
-&lt;p&gt;jserv：「想做就去作」，我天真的認為
-             想寫作業系統，就去寫啊
-             想寫編譯器，就去寫啊
-             想寫電動遊戲，就去寫啊
-             想進行社會主義運動，要花幾百年的時間，但最起碼可以協助讓世界變得更美好，作多少算多少&lt;/p&gt;
-&lt;p&gt;引用自 &lt;a href=&quot;https://hyperrate.com/thread.php?tid=12773&quot;&gt;https://hyperrate.com/thread.php?tid=12773&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;在菜场看到的，神一般的大爷！ 那大爷买西红柿来着的，挑了三个放到秤盘里，摊主秤了下说：“一斤半，三块七。” 大爷说：“我就做个汤，用不着那么多。”说完就去掉了个儿最大的那个西红柿。 摊主迅速又瞧一眼秤子，“一斤二两，三块。” 正当我看不过去想提醒大爷注意摊主的秤子时，大爷从容的掏出了七毛钱，拿起刚刚去掉的那个大的西红柿，扭头就走了…… 摊主当场就凌乱了，我憋成内伤，把头扭向一边……&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;人口普查员： “请问您家里是几口人？” “是一口人” “十一口？” “不是十一口，而是一口人。” “二十一口？” “ 不是二十一口，其实一口人。” “七十一口？不会吧？” “ 不是七十一口，就是一口人！” “ 九十一口？” “ 对了，就是一口人&amp;quot;&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;男孩喜歡上了一個女孩。
 
-男孩是全校最後一名進來的，
-
-可是那個女孩很優秀。
-
-男孩費盡一切努力來引起女孩的注意。
-
-開學一星期後，
-
-他頂著染黃做了造型的頭發大搖大擺進了教室，
-
-看著禿頭班導張大了嘴巴看他。
-
-全班同學都哄堂大笑，看著禿頭班導的反應，
-
-可是男孩卻只是望著女孩。
-
-女孩頭也沒抬，靜靜的坐在座位上做題。
-
-後來，男孩在課上總是怪聲怪氣的接老師的話，
-
-課間在座位上放大音量講昨天他和誰又打了一架，
-
-因為在廁所抽煙點名被黑面校長在升旗儀式上大罵。
-
-他每次都會一臉無所謂，
-
-只是會偷偷地，很快地瞄一眼女孩。
-
-可是女孩的臉上總是驚不起一絲波瀾。
-
-終於他再也忍不住內心的情感，
-
-在一個放學的晚上，
-
-召集一群兄弟在教學樓下，
-
-當女孩安靜的走出樓梯口時，
-
-他用近乎嘶啞的聲音向她表白。
-
-人群一陣沸騰，高呼在一起。
-
-她愣了，白皙修長的手抓緊了書包背帶。
-
-過一會，她只是安靜的走到男孩面前，
-
-仰頭說，我的夢想是台大，我想在那裡等你。
-
-人群一陣哄笑，男孩紅了臉。
-
-以他的成績，專科也上不了。
-
-他一把把花塞到了旁邊的人懷裡，
-
-扭頭頭也不回擠出人群。
-
-第二天，傳來了男孩轉學的消息。
-
-後來的女孩，總是在課堂上看著那個空座位，發愣。
-
-3 年后，台大門口，
-
-她安靜地站著，
-
-比起 3 年前消瘦了許多，帶著行李，只是站著，像是在等誰。
-
-可是她也不知道她究竟在等著什麼，
-
-嘆了一口氣，走進校門。
-
-突然，身後一個明朗的聲音響起，你不是要等我嗎？
-
-怎麼不等了？
-
-女孩的眼淚流了下來，
-
-轉身。 男孩把頭發染回了黑色，
-
-一身簡單的白體恤牛仔褲，像是周遭泛著陽光。
-
-他帥氣地拉起了她的手，走進台大。
-
-後來，成為男孩女朋友多年的她偶然問道，
-
-你那年轉學去哪裡了，能考得這麼好？
-
-男孩說：我休學了，我爸叫我去公司上班，花個幾十萬動用一下関係就推甄上這間學校了。
-
-女孩也説：我早知道你家有錢，要不然我怎麼會跟你這笨小子在一起。
-
-你爸有錢，成就你的夢想
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;p&gt;如果中國發生戰爭，印度和俄羅斯會幹麻？&lt;/p&gt;
-&lt;p&gt;締結印俄互不侵犯條約。&lt;/p&gt;
-&lt;p&gt;俄羅斯：協助維穩內蒙古。&lt;/p&gt;
-&lt;p&gt;印度：人道救援西藏。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;Anonymous Tue 04 Dec 2018 07:11:13 No.786494451 Report&quot;&gt;Anonymous Tue 04 Dec 2018 07:11:13 No.786494451 Report&lt;/h2&gt;
-&lt;p&gt;&lt;em&gt;Quoted By: &amp;gt;&amp;gt;786497658 &amp;gt;&amp;gt;786504320 &amp;gt;&amp;gt;786506142 &amp;gt;&amp;gt;786506466 &amp;gt;&amp;gt;786515797 &amp;gt;&amp;gt;786520996 &amp;gt;&amp;gt;786521222 &amp;gt;&amp;gt;786526300 &amp;gt;&amp;gt;786528420 &amp;gt;&amp;gt;786530340 &amp;gt;&amp;gt;786532790 &amp;gt;&amp;gt;786533003&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;I met a trap at an anime convention who I expected to be a typical sissy cockfiend type.&lt;/p&gt;
-&lt;p&gt;Turns out he was a top who liked to dominate guys like me.&lt;/p&gt;
-&lt;p&gt;So instead of having him moan and beg for me to fuck him I spent the night with him cumming inside me as much as he wanted. I had never been bottom before, (though, to be fair, I had had sex like three times before then) so I figured why not? The only bad part was he basically only had three lines of dirty talk, which were along the lines of &amp;quot;You thought you were gonna be fucking a cute girl, didn&amp;apos;t you? So why don&amp;apos;t you beg for more of this cute girl&amp;apos;s dick?&amp;quot; etc.&lt;/p&gt;
-&lt;p&gt;I figured out that he probably just gets a lot of ass at these cons, and didn&amp;apos;t ever expect to go five times with the same guy, so he only has one set of material. I&amp;apos;m guessing he liked me, because afterwards, when I was cleaning his cum out for the fifth time, he asked me to spend the night with him and cuddle, and I asked him &amp;quot;Do I look gay to you?&amp;quot; &lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;把黑色的心臟
-
-          藏在腐爛的身體裡
-
-                        裹著這無趣的世界
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;  17856 +爆 8/11 織田信長     □  [認真] 最近眼皮一直在跳
-● 17857 +X7 8/14 明智光秀     □  [大喝] 敵人就在本能寺
-  17858 + 1 8/14 武田勝賴     □  [思考] 我是不是應該要切腹
-  17859  11 8/16 鄉民         □  [豪洨] 光秀你他媽雜碎
-  17860 +X6 8/16 德川家康     □  [認真] 再不快跑會被光秀幹掉
-  17861 +   8/16 織田秀忠     □  爹   我要跟你走了
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;p&gt;算命的:「你的命格不能吃牛，會衰」&lt;/p&gt;
-&lt;p&gt;員慶：「好，不用吃的就行了吧」&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;1985/10/30 出生的某位心律不整男子的傳奇事蹟
-華人幼稚園→ 中埔國小→ 慈文國中→ 桃園高中→ 宜大電機→ 中正通訊所
-支持學運 在 PTT 痛罵對岸 經常開分身大戰自己幻想中的中國人 認為大陸沒有前途
-去紐西蘭失敗 居然在對岸支身當台勞 長期幫共匪貢獻 GDP 存了好幾桶金 功在黨國
-與政黑某位被大陸女友甩的花癡齊名，可說是 PTT 上的兩大活寶
-預知詳情，可用站內信詢問原 po 或自行餵狗
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;推 gundam0613: 真金不怕火煉 甲屌不怕大便    01/22 11:01
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;Raken Chen
-13 小時 ·
-
-越來越多的誤會，使我身敗名裂
-為了讓謠言不再猖獗，讓傷口不再擴大
-這一次我決定要捍衛我的清白，挽救我的名聲
-再次挺身而出，來澄清所有的誤會！
-
-「讓我上她」
-有一次有串正妹文，大家都在私她的臉書
-我也很有興趣，我就留言 讓我上她的臉書看看
-沒想到截圖的人很惡劣，把後面的字拿掉
-變成 讓我上她 ，使我蒙受不白之冤
-
-「我整個硬你知道嗎」
-有一次大家在討論肩膀酸痛的問題
-每個人在說自己肩膀的僵硬程度
-我一摸我自己，發現整個是硬的
-所以我才會有這樣的留言
-
-「好想從後面進去喔」
-有一次搭公車，前門已經一堆人排隊
-後面的門卻遲遲不開，我才很生氣的說
-好想從後面進去，難道這樣也不行嗎?
-
-「好想跟她狠狠的做愛」
-有一次我看到一個公益團體
-正妹主持人號召大家一起來送溫暖 做愛心
-我覺得這活動很有意義
-於是立刻義不容辭留言說：好想跟她狠狠的做愛心
-但打字打太快，打到愛，心還沒出來，就送出去了
-這的確是我的疏失，但我本意是純潔的
-
-「好想跳起來插下去喔」
-有一次在廟裡拜拜完要插香，但那香爐做得太高
-我根本沒辦法去插，所以我才說好想跳起來插下去
-後來卻被人惡意截圖，我覺得很莫名其妙
-
-「好想去弄髒她的身體」
-有一次去參加海邊的玩泥巴活動
-看到有一個女生，從頭到尾不敢碰泥巴
-身體都乾淨的，我知道這時需要有一個人
-為她開一扇窗，帶她走出第一步
-所以我才留言好想去弄髒她的身體
-這也是出自善意不是嗎?
-
-「好想把奶揉到噴出汁來」
-有一次我去農場，看到很多乳牛在吃草
-農場主人邀我去參加擠牛奶的活動
-因為我技術不好，怎麼擠 牛都不給奶
-所以我才留言好想把奶揉到噴出汁來
-
-「好想填滿她身上的每個洞」
-有一次在路上看到一個女生，身上穿的衣服與牛仔褲，
-上面很多破洞，我最討厭這種穿著風格，
-我覺得很破壞道德風俗，所以才說想把她身上的每個洞
-用一針一線給填起來，沒想到這樣你們也能想歪
-
-「如果沒有法律，我一定讓她懷孕」
-大家都知道，台灣不少婦女都患有不孕症
-但礙於法律，很多民俗藥物，都無法讓這些婦女來使用
-所以我在想，如果沒有法律的規範，我真的很想把這些民俗偏方
-來提供給這些不孕症婦女，讓她們可以如願懷孕
-難道這樣也錯了嗎?
-5454
-23 則留言 9 次分享
-&lt;/code&gt;&lt;/pre&gt;</content>
 </entry><entry>
 <id>http://gholk.github.io/shell-script-skill-fifo.html#forget-redirect-to-file</id>
 <title>shell 編程奇淫技巧</title>

@@ -1,0 +1,196 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2019-03-09T10:00:33.655Z">
+<meta name="keywords" property="og:article:tag" content="android,nctu,report">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="tmux-give-p.html" title="用 tmux 在 ptt 發錢">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>智慧型手機中的 GNSS 定位高程</title>
+</head>
+<body>
+<main><h1 id="智慧型手機中的 GNSS 定位高程">智慧型手機中的 GNSS 定位高程</h1>
+<p>現代智慧型手機中多內建 GNSS 定位，
+定位結果為三維座標，一般以經緯度及高程表示。
+但高程從計算的方式不同，有不同高程，
+常用的有 <strong>正高</strong> 、 <strong>橢球高</strong> 、 <strong>正常高</strong> 。
+手機的因為是以 GNSS 定位，一般是橢球高，
+需要經高程現代化，以大地起伏模型改正為正高。</p>
+<h2 id="android 系統中使用 gnss 定位">android 系統中使用 gnss 定位</h2>
+<p>由於 gnss 的衛星已完善，
+只要有接收儀在空曠處就能用 gnss 定位。
+現代智慧型手機多能夠接收美國的 gps 的信號，
+使用 gps 定位。</p>
+<p>手機的 gps 定位功能也被廣泛應用在不同的應用程式中：
+例如 android 上的 google map 可以由 gps 定位，
+將使用者所在位置標示在地圖中，
+供使者用在地圖上確認與周遭地物的相對位置。
+facebook 則可以由 gps 定位，
+讓使用者在地標上 <em>打卡</em> ，標記到此一遊。</p>
+<p>但一般 app 多是直接解析定位結果為地標或地圖上的位置，
+而不會顯示詳細的 gps 座標資訊；
+所以要另外裝專門顯示詳細 gps 定位座標的 app，
+我裝了課程中史天元老師推薦的開源軟體 <a href="https://play.google.com/store/apps/details?id=com.chartcross.gpstest" title="play 商店中的 gps test">gps test</a>
+與免費軟體 <a href="https://play.google.com/store/apps/details?id=com.eclipsim.gpsstatus2" title="play 商店中的 gps status">gps status</a> 。</p>
+<h2 id="正高、橢球高與大地起伏">正高、橢球高與大地起伏</h2>
+<p>gps 定位的結果是橢球高，但橢球高是沒有物理意義的，
+因為小區域內的重力與橢球高無關，而是與正高的方向垂直，
+也就是在橢球高較高處，水不一定會往橢球高低處流。
+橢球高與正高間的差異為大地起伏，
+橢球高減去大地起伏即為正高。</p>
+<p>一般人不一定清楚橢球高與正高的差異，
+也不清楚 gps 定位出來的高是什麼高，
+所以很多 gps app 都會用內建的大地起伏網格，
+將定位結果的橢球高轉換為一般人概念中的高，
+也就是與重力方向垂直的高。</p>
+<p>大地起伏可以由重力測量的結果計算，
+因此，在全國進行重力測量，
+計算出全國各地的大地起伏後，
+就能由橢球高計算正高，稱為 <strong>高程現代化</strong> 。
+<a href="https://egnss.nlsc.gov.tw/trans/geo.aspx" title="國土測繪中心提供全台大地起伏的網頁">國土測繪中心的網頁，有提供全台灣大地起伏的資料</a> ，
+只要輸入 twd97 經緯度座標，就會計算出該地的大地起伏，
+供只能觀測橢球高的 gps 定位化算為正高。</p>
+<h2 id="app 測試">app 測試</h2>
+<p>我測試了 gps test 與 gps status 二款 app 的定位，
+二者都有選項供使用者調整是否使用大地起伏改正，
+切換橢球高與正高，由此可以觀察正高與橢球高的差異。
+再將二款 app 中測出的經緯度，
+輸入國土測繪中心的網頁中，計算台灣標準的大地起伏，
+與 app 中提供的大地起伏比較。</p>
+<h3 id="gps test">gps test</h3>
+<p>gps test 中可以正常切換是否使用 geoid，
+我所測試地點在交通大學博愛校區正門和校區內的圓環中間，
+時間是 2019-03-09T15:05。</p>
+<h4 id="截圖">截圖</h4>
+<p><a href="http://www.flickr.com/photos/144554087@N04/32383100117"><img src="http://farm8.staticflickr.com/7846/32383100117_faf384232c.jpg" alt="Screenshot_20190309-150746.png" title="gps test 給出的經緯度"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/32383084027"><img src="http://farm8.staticflickr.com/7861/32383084027_d486aef34b.jpg" alt="Screenshot_20190309-150451.png" title="gps test 給出在 geoid 上的橢球高"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/32383084057"><img src="http://farm8.staticflickr.com/7874/32383084057_c0074067a5.jpg" alt="Screenshot_20190309-150456.png" title="gps test 給出的正高"></a></p>
+<h4 id="測試結果">測試結果</h4>
+<table>
+<thead>
+<tr>
+<th>種類</th>
+<th>數值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>經度</td>
+<td>120°59′00.180″</td>
+</tr>
+<tr>
+<td>緯度</td>
+<td>24°47′53.652″</td>
+</tr>
+<tr>
+<td>gps test 橢球高</td>
+<td>27m</td>
+</tr>
+<tr>
+<td>gps test 正高</td>
+<td>10m</td>
+</tr>
+<tr>
+<td>gps test 大地起伏</td>
+<td>17m</td>
+</tr>
+<tr>
+<td>e-gnss 大地起伏</td>
+<td>19.466m</td>
+</tr>
+</tbody>
+</table>
+<h3 id="gps status">gps status</h3>
+<p>gps status 是另一款顯示 gps 定位結果的 app，
+在高程可以選擇要用 wgs 橢球高，或是 msl 平均海水面高。
+但我在我現在用的 unihertz atom 手機上運作不正常，
+選擇 wgs 與 msl 顯示的高程均相同。
+後來換成以前的紅米手機，切換 wgs 與 msl 就會有變化了。
+所以我就用以前的紅米手機截圖。</p>
+<p>這是在 2019-03-03T19-38 測的，
+位置大概在新竹高中正門口外的馬路上。</p>
+<h4 id="截圖">截圖</h4>
+<p><a href="http://www.flickr.com/photos/144554087@N04/47273239382"><img src="http://farm8.staticflickr.com/7851/47273239382_1a39b48779.jpg" alt="Screenshot_2019-03-03-19-38-27.png" title="gps status 中的橢球高模式"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/47273239742"><img src="http://farm8.staticflickr.com/7834/47273239742_4b59e1574b.jpg" alt="Screenshot_2019-03-03-19-38-40.png" title="gps status 中的正高模式"></a></p>
+<h4 id="測試結果">測試結果</h4>
+<table>
+<thead>
+<tr>
+<th>種類</th>
+<th>數值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>經度</td>
+<td>120°58.8360′</td>
+</tr>
+<tr>
+<td>緯度</td>
+<td>24°47.7200′</td>
+</tr>
+<tr>
+<td>gps status 橢球高</td>
+<td>42.5m</td>
+</tr>
+<tr>
+<td>gps status 正高</td>
+<td>27.6m</td>
+</tr>
+<tr>
+<td>gps status 大地起伏</td>
+<td>14.9m</td>
+</tr>
+<tr>
+<td>e-gnss 大地起伏</td>
+<td>19.463</td>
+</tr>
+</tbody>
+</table>
+<h3 id="GPSTest (barbeuDev)">GPSTest (barbeuDev)</h3>
+<p>另外我還找到一個也叫 <a href="https://play.google.com/store/apps/details?id=com.android.gpstest" title="另一個也叫 gpstest 的開源 app">gps test</a> 的 app，
+開發者名字是掛 barbeuDev，他是 open source 的，
+在高程方面是直接二種高，橢球高和正高。
+但在我二台手機上使用都不正常，
+顯示的橢球高和正高都一樣，所以不使用。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/33450963288"><img src="http://farm8.staticflickr.com/7875/33450963288_725bc545fb.jpg" alt="Screenshot_20190309-150642.png" title="gpstest 中橢球高和正高數值相同"></a></p>
+<h2 id="結論">結論</h2>
+<p>我在室外觀測 gps 時，數值極不穩定，
+就算我都沒有移動，在二三分鐘內
+gps 的橢球高可能會有三公尺左右的變化。</p>
+<p>而大地起伏是用現成的事先計算好的資料不會改變，
+如果橢球高增加 3 公尺，因為大地起伏不變，
+那正高也就增加 3 公尺。</p>
+<p>而 app 內建的大地起伏，
+看來 gps test 的較接近台灣官方的資料。
+以現成資料計算的大地起伏，
+本來就會依球諧級數的階數不同、內插的方式不同有差異。</p>
+<script src="ext/header-nctu.js"></script>
+
+<link rel="stylesheet" href="ext/paper.css">
+
+<script src="ext/paper.js?reference"></script>
+
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

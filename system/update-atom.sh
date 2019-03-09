@@ -6,7 +6,13 @@ text_path=../text/$(basename -s .html $html_path).txt
 
 if [ $add_style = "append" ]
 then
-    change_log=$(true | vipe)
+    if [ -t 0 ]
+    then
+        change_log=$(true | vipe)
+    else
+        change_log=$(cat)
+    fi
+    
     if [ $(echo "$change_log" | wc -l) -gt 1 ]
     then
         node update-to-atom.js $html_path "$change_log"

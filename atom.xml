@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-03-09T13:16:54.840Z</updated>
+  <updated>2019-03-09T13:54:03.830Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,188 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/android-gnss-height-report.html#add-nctu-header</id>
+<title>智慧型手機中的 GNSS 定位高程</title>
+<published>2019-03-09T10:00:33.655Z</published>
+<updated>2019-03-09T13:54:03.817Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/android-gnss-height-report.html#add-nctu-header"/>
+<summary type="html">&lt;pre class=&quot;diff&quot;&gt;@@ -155,7 +155,7 @@ gps 的橢球高可能會有三公尺左右的變化。
+ 以現成資料計算的大地起伏，
+ 本來就會依球諧級數的階數不同、內插的方式不同有差異。
+ 
+-&amp;lt;script src=&amp;quot;ext/header-nctu.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
++&amp;lt;script src=&amp;quot;ext/header-nctu.js?execute&amp;amp;editable&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+ 
+ &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;ext/paper.css&amp;quot;&amp;gt;
+ 
+&lt;/pre&gt;</summary>
+<category term="android"/>
+<category term="nctu"/>
+<category term="report"/>
+<content type="html">&lt;h1 id=&quot;智慧型手機中的 GNSS 定位高程&quot;&gt;智慧型手機中的 GNSS 定位高程&lt;/h1&gt;
+&lt;p&gt;現代智慧型手機中多內建 GNSS 定位，
+定位結果為三維座標，一般以經緯度及高程表示。
+但高程從計算的方式不同，有不同高程，
+常用的有 &lt;strong&gt;正高&lt;/strong&gt; 、 &lt;strong&gt;橢球高&lt;/strong&gt; 、 &lt;strong&gt;正常高&lt;/strong&gt; 。
+手機的因為是以 GNSS 定位，一般是橢球高，
+需要經高程現代化，以大地起伏模型改正為正高。&lt;/p&gt;
+&lt;h2 id=&quot;android 系統中使用 gnss 定位&quot;&gt;android 系統中使用 gnss 定位&lt;/h2&gt;
+&lt;p&gt;由於 gnss 的衛星已完善，
+只要有接收儀在空曠處就能用 gnss 定位。
+現代智慧型手機多能夠接收美國的 gps 的信號，
+使用 gps 定位。&lt;/p&gt;
+&lt;p&gt;手機的 gps 定位功能也被廣泛應用在不同的應用程式中：
+例如 android 上的 google map 可以由 gps 定位，
+將使用者所在位置標示在地圖中，
+供使者用在地圖上確認與周遭地物的相對位置。
+facebook 則可以由 gps 定位，
+讓使用者在地標上 &lt;em&gt;打卡&lt;/em&gt; ，標記到此一遊。&lt;/p&gt;
+&lt;p&gt;但一般 app 多是直接解析定位結果為地標或地圖上的位置，
+而不會顯示詳細的 gps 座標資訊；
+所以要另外裝專門顯示詳細 gps 定位座標的 app，
+我裝了課程中史天元老師推薦的開源軟體 &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.chartcross.gpstest&quot; title=&quot;play 商店中的 gps test&quot;&gt;gps test&lt;/a&gt;
+與免費軟體 &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.eclipsim.gpsstatus2&quot; title=&quot;play 商店中的 gps status&quot;&gt;gps status&lt;/a&gt; 。&lt;/p&gt;
+&lt;h2 id=&quot;正高、橢球高與大地起伏&quot;&gt;正高、橢球高與大地起伏&lt;/h2&gt;
+&lt;p&gt;gps 定位的結果是橢球高，但橢球高是沒有物理意義的，
+因為小區域內的重力與橢球高無關，而是與正高的方向垂直，
+也就是在橢球高較高處，水不一定會往橢球高低處流。
+橢球高與正高間的差異為大地起伏，
+橢球高減去大地起伏即為正高。&lt;/p&gt;
+&lt;p&gt;一般人不一定清楚橢球高與正高的差異，
+也不清楚 gps 定位出來的高是什麼高，
+所以很多 gps app 都會用內建的大地起伏網格，
+將定位結果的橢球高轉換為一般人概念中的高，
+也就是與重力方向垂直的高。&lt;/p&gt;
+&lt;p&gt;大地起伏可以由重力測量的結果計算，
+因此，在全國進行重力測量，
+計算出全國各地的大地起伏後，
+就能由橢球高計算正高，稱為 &lt;strong&gt;高程現代化&lt;/strong&gt; 。
+&lt;a href=&quot;https://egnss.nlsc.gov.tw/trans/geo.aspx&quot; title=&quot;國土測繪中心提供全台大地起伏的網頁&quot;&gt;國土測繪中心的網頁，有提供全台灣大地起伏的資料&lt;/a&gt; ，
+只要輸入 twd97 經緯度座標，就會計算出該地的大地起伏，
+供只能觀測橢球高的 gps 定位化算為正高。&lt;/p&gt;
+&lt;h2 id=&quot;app 測試&quot;&gt;app 測試&lt;/h2&gt;
+&lt;p&gt;我測試了 gps test 與 gps status 二款 app 的定位，
+二者都有選項供使用者調整是否使用大地起伏改正，
+切換橢球高與正高，由此可以觀察正高與橢球高的差異。
+再將二款 app 中測出的經緯度，
+輸入國土測繪中心的網頁中，計算台灣標準的大地起伏，
+與 app 中提供的大地起伏比較。&lt;/p&gt;
+&lt;h3 id=&quot;gps test&quot;&gt;gps test&lt;/h3&gt;
+&lt;p&gt;gps test 中可以正常切換是否使用 geoid，
+我所測試地點在交通大學博愛校區正門和校區內的圓環中間，
+時間是 2019-03-09T15:05。&lt;/p&gt;
+&lt;h4 id=&quot;截圖&quot;&gt;截圖&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/32383100117&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7846/32383100117_faf384232c.jpg&quot; alt=&quot;Screenshot_20190309-150746.png&quot; title=&quot;gps test 給出的經緯度&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/32383084027&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7861/32383084027_d486aef34b.jpg&quot; alt=&quot;Screenshot_20190309-150451.png&quot; title=&quot;gps test 給出在 geoid 上的橢球高&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/32383084057&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7874/32383084057_c0074067a5.jpg&quot; alt=&quot;Screenshot_20190309-150456.png&quot; title=&quot;gps test 給出的正高&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&quot;測試結果&quot;&gt;測試結果&lt;/h4&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;種類&lt;/th&gt;
+&lt;th&gt;數值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;經度&lt;/td&gt;
+&lt;td&gt;120°59′00.180″&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;緯度&lt;/td&gt;
+&lt;td&gt;24°47′53.652″&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gps test 橢球高&lt;/td&gt;
+&lt;td&gt;27m&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gps test 正高&lt;/td&gt;
+&lt;td&gt;10m&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gps test 大地起伏&lt;/td&gt;
+&lt;td&gt;17m&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;e-gnss 大地起伏&lt;/td&gt;
+&lt;td&gt;19.466m&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&quot;gps status&quot;&gt;gps status&lt;/h3&gt;
+&lt;p&gt;gps status 是另一款顯示 gps 定位結果的 app，
+在高程可以選擇要用 wgs 橢球高，或是 msl 平均海水面高。
+但我在我現在用的 unihertz atom 手機上運作不正常，
+選擇 wgs 與 msl 顯示的高程均相同。
+後來換成以前的紅米手機，切換 wgs 與 msl 就會有變化了。
+所以我就用以前的紅米手機截圖。&lt;/p&gt;
+&lt;p&gt;這是在 2019-03-03T19-38 測的，
+位置大概在新竹高中正門口外的馬路上。&lt;/p&gt;
+&lt;h4 id=&quot;截圖&quot;&gt;截圖&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/47273239382&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7851/47273239382_1a39b48779.jpg&quot; alt=&quot;Screenshot_2019-03-03-19-38-27.png&quot; title=&quot;gps status 中的橢球高模式&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/47273239742&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7834/47273239742_4b59e1574b.jpg&quot; alt=&quot;Screenshot_2019-03-03-19-38-40.png&quot; title=&quot;gps status 中的正高模式&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&quot;測試結果&quot;&gt;測試結果&lt;/h4&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;種類&lt;/th&gt;
+&lt;th&gt;數值&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;經度&lt;/td&gt;
+&lt;td&gt;120°58.8360′&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;緯度&lt;/td&gt;
+&lt;td&gt;24°47.7200′&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gps status 橢球高&lt;/td&gt;
+&lt;td&gt;42.5m&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gps status 正高&lt;/td&gt;
+&lt;td&gt;27.6m&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gps status 大地起伏&lt;/td&gt;
+&lt;td&gt;14.9m&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;e-gnss 大地起伏&lt;/td&gt;
+&lt;td&gt;19.463&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&quot;GPSTest (barbeuDev)&quot;&gt;GPSTest (barbeuDev)&lt;/h3&gt;
+&lt;p&gt;另外我還找到一個也叫 &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.android.gpstest&quot; title=&quot;另一個也叫 gpstest 的開源 app&quot;&gt;gps test&lt;/a&gt; 的 app，
+開發者名字是掛 barbeuDev，他是 open source 的，
+在高程方面是直接二種高，橢球高和正高。
+但在我二台手機上使用都不正常，
+顯示的橢球高和正高都一樣，所以不使用。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33450963288&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7875/33450963288_725bc545fb.jpg&quot; alt=&quot;Screenshot_20190309-150642.png&quot; title=&quot;gpstest 中橢球高和正高數值相同&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;結論&quot;&gt;結論&lt;/h2&gt;
+&lt;p&gt;我在室外觀測 gps 時，數值極不穩定，
+就算我都沒有移動，在二三分鐘內
+gps 的橢球高可能會有三公尺左右的變化。&lt;/p&gt;
+&lt;p&gt;而大地起伏是用現成的事先計算好的資料不會改變，
+如果橢球高增加 3 公尺，因為大地起伏不變，
+那正高也就增加 3 公尺。&lt;/p&gt;
+&lt;p&gt;而 app 內建的大地起伏，
+看來 gps test 的較接近台灣官方的資料。
+以現成資料計算的大地起伏，
+本來就會依球諧級數的階數不同、內插的方式不同有差異。&lt;/p&gt;
+&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
+
+&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
+
+&lt;script src=&quot;ext/paper.js?reference&quot;&gt;&lt;/script&gt;
+
+</content>
+</entry><entry>
 <id>http://gholk.github.io/android-gnss-height-report.html</id>
 <title>智慧型手機中的 GNSS 定位高程</title>
 <published>2019-03-09T10:00:33.655Z</published>
@@ -1402,41 +1584,7 @@ To all the Linux that bring us to kernel.&lt;/p&gt;
  最好把襪子也蓋住，褲腳掛在鞋子上。&lt;/pre&gt;</summary>
 <category term="youtube"/>
 <category term="歌"/>
-<content type="html">&lt;h1 id=&quot;西藏天邊弦子的吉他&quot;&gt;西藏天邊弦子的吉他&lt;/h1&gt;
-&lt;p&gt;在 youtube 看了 &lt;u&gt;弦子&lt;/u&gt; &lt;cite&gt;西藏天邊&lt;/cite&gt; 的 mv，
-忽然被她穿著喇叭褲彈吉他的樣子吸引。
-歌詞中的直率，彈著吉他大步向前跨，
-陽光在背後綻放的樣子，彈著吉他律動的樣子。
-該把褲子改成喇叭褲了。&lt;/p&gt;
-&lt;iframe src=&quot;https://www.youtube.com/embed/0QifqQgd5jk&quot;&gt;
-&lt;a href=&quot;https://www.youtube.com/watch?v=0QifqQgd5jk&quot;&gt;弦子 西藏天邊&lt;/a&gt;
-&lt;/iframe&gt;
 
-&lt;p&gt;我很喜歡看女生穿喇叭褲，或是寬鬆的長褲，
-我喜歡那種皺摺與寬鬆的美感。
-弦子在 mv 中雙腳邁開，膝蓋微彎彈著吉他的樣子，
-邁開大步邊走邊彈，讓陽光把自己和喇叭褲照成剪影。&lt;/p&gt;
-&lt;p&gt;陳綺貞在和五月天的 &lt;a href=&quot;https://www.youtube.com/watch?v=EK9z2B9wXQk&quot;&gt;私奔到月球&lt;/a&gt; 合唱，
-也有類似的裝扮，牛仔褲和肩背吉他。
-很喜歡女生彈吉他時，隨著音樂律動，前後搖擺的樣子；
-雙膝微彎，小腿叉開，大腿又收攏的樣子；
-視角從下往上，把褲腳拍得很大的樣子。
-大概以 youtube mv 中 2 分 20 秒時的畫面為代表。&lt;/p&gt;
-&lt;p&gt;可能我對腳有種迷戀吧。
-應該說是褲子，我喜歡那種全包覆的褲子，
-不一定要鬆鬆挎挎的，只要夠包覆住身體，
-不要像緊身褲露出曲線就好。
-褲腳很長，可以蓋到襪子不讓小腿露出來，
-最好把襪子也蓋住，褲腳掛在鞋子上。
-我一直覺得伊斯蘭文化，
-那個要求女人不得露出身體的宗教，
-也以自己的角度理解了這種美感。&lt;/p&gt;
-&lt;p&gt;另外就是背著吉他的樣子很迷人。
-吉他的位置垂於腰部之下、二腿之間，
-彈奏時身體跟著音樂律動搖擺，
-狀似男性炫耀自身性能力的動作，
-全無色情意味，帶有別種美感。&lt;/p&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/taiwan-consensus-stolen-base.html#clarify-humiliate-female</id>
 <title>台灣共識就是贏球不能盜壘</title>

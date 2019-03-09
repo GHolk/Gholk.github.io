@@ -155,7 +155,7 @@ gps 的橢球高可能會有三公尺左右的變化。
 以現成資料計算的大地起伏，
 本來就會依球諧級數的階數不同、內插的方式不同有差異。
 
-<script src="ext/header-nctu.js"></script>
+<script src="ext/header-nctu.js?execute&editable"></script>
 
 <link rel="stylesheet" href="ext/paper.css">
 

@@ -273,3 +273,4 @@ politic-communist-as-enemy-of-taiwan-china.html
 politic-negotiate-china-reason.html
 tmux-give-p.html
 android-gnss-height-report.html
+linux-easy-shell-send-file.html

@@ -104,7 +104,7 @@ xxd image.png | xxd -r &gt; origin.png
 ## 省去行數與明文
 xxd -p image.png | xxd -r -p &gt; origin.png
 </code></pre>
-<h2 id="直接 pipe 給遠端 shell">直接 pipe 給遠端 shell</h2>
+<h2 id="直接 pipe 給遠端命令">直接 pipe 給遠端命令</h2>
 <p>上面的作法都是經由剪貼簿，直接在終端機把純文字送過去。
 但其實剪貼簿沒那麼大，要送太大的檔案不太方便。
 最好是可以直接 pipe 給遠端。
@@ -192,7 +192,78 @@ diff --new-file --unified --recursive --text not-exist .ssh \
 <code>--new-file</code> 是將不存在的檔案視為空檔案，
 <code>--text</code> 則是將所有檔案都視為文字檔，
 也就是對二進位檔也照樣 diff。</p>
-<h2 id="只透過 stdin 傳送多個檔案">只透過 stdin 傳送多個檔案</h2>
+<h2 id="adb 也可以通">adb 也可以通</h2>
+<p>上面都是用 ssh 遠端登入傳送，
+其實像 android 的 adb 也可以用類似的功能。
+<code>adb shell</code> 可以連線到 android 上開啟一個 shell，
+<code>adb shell ls</code> 則是連進去執行 ls 就退出，
+所以只要用 tar 命令，就能簡單把資料夾整個送過去。</p>
+<pre><code class="lang-sh"># 在 android 上開起 shell
+adb shell
+
+# 在 android 上執行 df 命令後退出
+adb shell df
+
+# 把 pictures 資料夾整個送過去
+tar -czf - pictures | adb shell tar -xzf -
+
+# 備份 sd 卡裡的所有資料
+adb shell tar -czf - /sdcard &gt;sdcard.tgz
+</code></pre>
+<p>我記得 adb 的連線不像 ssh，是沒有壓縮的。
+所以建議手動壓縮，會快一點；
+除非你手機太爛 cpu 壓縮很慢。</p>
+<h2 id="只透過 stdin 傳送指令與檔案">只透過 stdin 傳送指令與檔案</h2>
+<p>以上的作法都是建立在 ssh 可以直接指定執行的程式，
+並把資料直接送到該程式的 stdin。
+但如果遠端無法指定執行的程式呢？
+像 telnet，只能登入進 shell，沒辦法指定命令，
+那就只能把檔案嵌在腳本裡，把整個腳本餵給 telnet 了。</p>
+<h3 id="用 here doc 嵌入檔案">用 here doc 嵌入檔案</h3>
+<p><a href="shell-script-skill-fifo.html#內嵌-base64">之前也有提過這種作法，
+把檔案嵌入在腳本的 here doc 裡，</a>
+如果是二進位檔案可能要先 base64 編碼。
+也就是產生一個腳本長這樣的：</p>
+<pre><code class="lang-sh">base64 -d &gt;file &lt;&lt;EOF
+5aaC5p6c5piv5LqM6YCy5L2N5qqU5qGI5Y+v6IO96KaB5YWIYmFzZTY057eo56K844CCCuS5n+Ww
+seaYr+eUoueUn+S4gOWAi+iFs+acrOmVt+mAmeaoo+eahO+8mgo=
+EOF
+</code></pre>
+<p>然後把整個腳本 pipe 給 telnet，登入後執行。</p>
+<p>結合上面那篇文章中的技巧，我們可以用命令群組產生腳本，
+而不用把腳本存成檔案後再 pipe 過去：</p>
+<pre><code class="lang-sh"># 直接用命令產生
+{
+    echo &quot;base64 -d &gt;file &lt;&lt;EOF&quot;
+    base64 file
+    echo &quot;EOF&quot;
+} | telnet host
+
+# 用 here doc 產生
+cat &lt;&lt;CAT | telnet host
+base64 -d &gt;file &lt;&lt;BASE64
+$(base64 file)
+BASE64
+CAT
+</code></pre>
+<p>其中二種作法，我是較推薦第一種，
+第二種嵌套了二層 here doc，不好閱讀。
+而且把整個 base64 編碼的檔案用命令代換進 here doc，
+here doc 會變很長，對 shell 的負擔有點大。</p>
+<p>但其實第一種作法也是把整個檔案送到遠端的 here doc 裡，
+shell 在處理 here doc 上
+必須全部 buffer 起來後才能送出， 一樣會造成很大負擔。
+只是第一種是只有遠端 buffer 一次，第二種是本機也要 buffer 一次。</p>
+<p>當然，也可以一次傳送多個檔案，
+原本是直接 base64 編碼檔案，
+改成 tar 打包後再 pipe 給 base64 就好。</p>
+<pre><code class="lang-sh">{
+    echo &quot;base64 -d | tar -xf - &lt;&lt;EOF&quot;
+    tar -cf - . | base64
+    echo &quot;EOF&quot;
+} | telnet host
+</code></pre>
+<h2 id="直接使用 stdin 不使用here doc">直接使用 stdin 不使用here doc</h2>
 </main>
 
 <script defer src="ext/meta-meta.js"></script>

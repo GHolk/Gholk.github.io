@@ -22,47 +22,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="ext/meta-bloging.js"></script>
 
-<title>rtx csrs ppp 比較</title>
+<title>A Preliminary Comparative Evaluation of Trimble RTX with CSRS-PPP</title>
 </head>
 <body>
-<main><h1 id="rtx csrs ppp 比較">rtx csrs ppp 比較</h1>
-<p>rtx 是星基即時動態定位，可望成為取代 vbs-rtk 的下一代產品。
-除了 vbs-rtk 的定位精度，更免除了虛擬基站的計算負擔。
-本文將 rtx 與 csrs ppp 比較，探討 rtx 的定位精度。</p>
-<h2 id="isrs summary">isrs summary</h2>
-<style>
-blockquote h1, blockquote h2, blockquote h3 {
-  counter-increment: none;
-}
-blockquote h1::before, blockquote h2::before, blockquote h3::before {
-  content: none;
-}
-</style>
-
-<blockquote>
-<h2 id="A Preliminary Comparative Evaluation of Trimble RTX with CSRS-PPP">A Preliminary Comparative Evaluation of Trimble RTX with CSRS-PPP</h2>
-<p><u>Ding-Jyun Wang</u> , <u>Peter T.Y. Shih</u></p>
-<p><em>Department of Civil Engineering, National Chiao Tung University</em></p>
-<p>Kinematic positioning has important applications in bathymetric mapping, 
-vehicle navigation, and many others. This study comparatively evaluated 
-the differences among the real time kinematic positioning with Trimble 
-CenterPoint RTX service and the post-processing kinematic solution 
-obtained from CSRS-PPP service. The comparison is based on the data 
-collected on Dec. 16 to 22, 2017 on a CORS station, NSB0. From 
-observations made on these days, the standard deviation of height 
-differences between these two services is 0.057m, while the bias is 
-0.080m. As compared with the official coordinates of this CORS, CSRS-PPP 
-shows better agreement. </p>
-</blockquote>
-<h2 id="rtx 作為星基增益技術">rtx 作為星基增益技術</h2>
+<main><h1 id="A Preliminary Comparative Evaluation of Trimble RTX with CSRS-PPP">A Preliminary Comparative Evaluation of Trimble RTX with CSRS-PPP</h1>
+<p>Kinematic positioning has important applications in bathymetric mapping,
+vehicle navigation, and many others. This study comparatively evaluated
+the differences among the real time kinematic positioning with Trimble
+CenterPoint RTX service and the post-processing kinematic solution
+obtained from CSRS-PPP service. The comparison is based on the data
+collected on Dec. 16 to 22, 2017 on a CORS station, NSB0. From
+observations made on these days, the standard deviation of height
+differences between these two services is 0.057m, while the bias is
+0.080m. As compared with the official coordinates of this CORS, CSRS-PPP
+shows better agreement.</p>
+<h2 id="rtx 與 csrs-ppp">rtx 與 csrs-ppp</h2>
 <p>rtx 與 csrs-ppp 都是基於 GNSS 系統的絕對定位。
 rtx 是星基增益的即時動態定位，
 藉由地面站即時解算部份地區的精密星曆，
 並由網路或衛星廣播到使用者端，
 可以實現即時動態基於載波相位的絕對定位。</p>
-<h3 id="相對傳統 VBS-RTK 的優勢">相對傳統 VBS-RTK 的優勢</h3>
+<h3 id="rtx 相對傳統 VBS-RTK 的優勢">rtx 相對傳統 VBS-RTK 的優勢</h3>
 <p>且相較於傳統的即時動態差分定位，
-不需要受限於基站與虛擬基站。
+星基增益系統不需要受限於基站與虛擬基站。
 傳統的差分定位，需要架站基站，
 或是以基站網內差出虛擬基站。
 虛擬基站雖然免除架站基站的困擾，
@@ -72,7 +54,7 @@ rtx 是星基增益的即時動態定位，
 由於所有使用者需要的是相同的星曆，
 不會像 vbs 因使用者增加而加重計算負擔，
 透過衛星廣播訊號的話，可以服務無上限人數的使用者。</p>
-<h2 id="csrs-ppp">csrs-ppp</h2>
+<h3 id="csrs-ppp">csrs-ppp</h3>
 <p>csrs-ppp 是 <strong>加拿大自然資源局</strong> 提供的線上解算精密單點定位服務，
 允許使用者在網頁介面上提交 rinex 格式的觀測資料，
 在伺服器端解算完畢後，會將成果 email 到使用者信箱。</p>
@@ -81,7 +63,7 @@ rtx 是星基增益的即時動態定位，
 <a href="https://github.com/CGS-GIS/GPSPACE/" title="csrs 開源 gpspace">舊版 gpspace 已開源在 github 上，可以自行編譯取用；</a>
 而新版 gpspark 仍在活躍開發中，沒有釋出原始碼，
 只有透過網頁介面提供服務，也就是現今的 csrs-ppp。</p>
-<h2 id="rtx 與 ppp">rtx 與 ppp</h2>
+<h3 id="rtx 與 ppp 的異同">rtx 與 ppp 的異同</h3>
 <p>rtx 是即時動態定位，
 csrs-ppp 則要在觀測後輸出觀測檔案上傳，非即時定位。
 而 csrs-ppp 在解算時，可以解算移動中觀測的觀測檔，
@@ -332,10 +314,10 @@ gpspark 的定位結果遠勝 gpspace，
 <p>將四者畫成散布圖如下。
 圖中是沒有過濾三倍標準差的數據，
 但也有部份極端值超過圖片邊界而沒有展示。
-其中黑線為真值，三種顏色分別為 rtx gpspace gpspark。</p>
+其中黑線為座標真值，三種顏色分別為 rtx gpspace gpspark。</p>
 <p><a href="http://www.flickr.com/photos/144554087@N04/33490726908"><img src="http://farm8.staticflickr.com/7886/33490726908_fa9ea30069.jpg" alt="LSB0-all-small.png" title="rtx gpspace gpspark 定位結果與真值依時間在 E N h 三方向上的散布圖"></a></p>
 <h3 id="rtx 與 gpspark 的差異">rtx 與 gpspark 的差異</h3>
-<p>作為二種精度較佳的定位方法，單獨作比較。</p>
+<p>作為二種精度較佳的定位方法，單獨作圖比較。</p>
 <p><a href="http://www.flickr.com/photos/144554087@N04/33490727288"><img src="http://farm8.staticflickr.com/7838/33490727288_bce7063bdf.jpg" alt="LSB0-rtx-gpspark.png" title="將 rtx 減去 gpspark 的定位結果作圖"></a></p>
 <table>
 <thead>
@@ -349,25 +331,26 @@ gpspark 的定位結果遠勝 gpspace，
 <tbody>
 <tr>
 <td>E</td>
-<td>0.231867336288540</td>
-<td>0.380166210406507</td>
+<td>0.2319</td>
+<td>0.3802</td>
 <td>446670</td>
 </tr>
 <tr>
 <td>N</td>
-<td>-0.224075212125265</td>
-<td>0.443210114127836</td>
+<td>-0.2241</td>
+<td>0.4432</td>
 <td>446670</td>
 </tr>
 <tr>
 <td>h</td>
-<td>-0.262113910717083</td>
-<td>0.995704156476117</td>
+<td>-0.2621</td>
+<td>0.9957</td>
 <td>446670</td>
 </tr>
 </tbody>
 </table>
-<p>剔除三倍標準差後：</p>
+<p>由於 rtx 有較多的極端值，因此採用三倍標準差過濾數據，
+剔除三倍標準差後：</p>
 <table>
 <thead>
 <tr>
@@ -380,148 +363,243 @@ gpspark 的定位結果遠勝 gpspace，
 <tbody>
 <tr>
 <td>h</td>
-<td>-0.0738842003994430</td>
-<td>0.0415281011653995</td>
+<td>-0.0739</td>
+<td>0.04153</td>
 <td>383035</td>
 </tr>
 <tr>
 <td>E</td>
-<td>0.2823083015167943</td>
-<td>0.0135755887259359</td>
+<td>0.2823</td>
+<td>0.01358</td>
 <td>384496</td>
 </tr>
 <tr>
 <td>N</td>
-<td>-0.1625613484716249</td>
-<td>0.0117006627728922</td>
+<td>-0.1626</td>
+<td>0.01170</td>
 <td>382166</td>
 </tr>
 </tbody>
 </table>
 <h3 id="統計分析">統計分析</h3>
-<p><em>一個把所有表格整合的大表格</em></p>
-<hr>
-<h2 id="以下是之前寫的還沒修改">以下是之前寫的還沒修改</h2>
-<p>雖然觀測站固定，但由於 rtx 為動態定位，
-因此在 gpspace 與 gpspark 解算時，也使用動態解算。</p>
-<p>為了合理比較二者的準確度，</p>
-<h2 id="綜合比較">綜合比較</h2>
-<p>共使用三個軟體，分別是 trimble rtx 的即時定位結果，
-csrs 的線上 ppp spark，csrs 的舊版 ppp gpspace。
-目前 gpspace 已經開源在 github 上，可以自行在本機編譯解算；
-spark 則只有提供線上解算，允許使用者上傳觀測檔解算。</p>
-<p>綜合來說，rtx 較 csrs online 的解算成果較接近公告作標值，
-但 csrs online 的精度較佳。
-而本地端的舊版本 csrs 精度和準度
-都明顯低於 rtx 與 csrs online，就不作統計。</p>
-<p><a href="http://www.flickr.com/photos/144554087@N04/33052347358"><img src="http://farm5.staticflickr.com/4914/33052347358_d319bf45e7.jpg" alt="twd97-east.png" title="rtx csrs 定位東西方向比較"></a></p>
-<p><a href="http://www.flickr.com/photos/144554087@N04/46927812051"><img src="http://farm8.staticflickr.com/7856/46927812051_b8190b7810.jpg" alt="twd97-north.png" title="rtx csrs 定位南北方向比較"></a></p>
-<p><a href="http://www.flickr.com/photos/144554087@N04/39963136943"><img src="http://farm5.staticflickr.com/4905/39963136943_da263f743b.jpg" alt="ellipsoid-height.png" title="rtx csrs 定位橢球高比較"></a></p>
-<h2 id="rtx 散布分析">rtx 散布分析</h2>
-<p>rtx 定位在三方向上的精度相近。</p>
 <table>
 <thead>
 <tr>
-<th>數值</th>
-<th>E</th>
-<th>N</th>
-<th>h</th>
-<th>斜距</th>
+<th>軟體</th>
+<th>三倍標準差過濾</th>
+<th>方向</th>
+<th>平均</th>
+<th>標準偏差</th>
+<th>數據數</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>平均值與與真值的誤差</td>
-<td>-0.056137</td>
-<td>0.129185</td>
-<td>-0.023663</td>
-<td>0.14283</td>
+<td>rtx</td>
+<td>before</td>
+<td>E</td>
+<td>212830.0887</td>
+<td>0.3809</td>
+<td>446670</td>
 </tr>
 <tr>
-<td>標準偏差</td>
-<td>0.044764</td>
-<td>0.024273</td>
-<td>0.050997</td>
-<td>0.072067</td>
+<td>rtx</td>
+<td>before</td>
+<td>N</td>
+<td>2672057.8082</td>
+<td>0.4441</td>
+<td>446670</td>
+</tr>
+<tr>
+<td>rtx</td>
+<td>before</td>
+<td>h</td>
+<td>121.9551</td>
+<td>0.9938</td>
+<td>446670</td>
+</tr>
+<tr>
+<td>rtx</td>
+<td>after</td>
+<td>E</td>
+<td>212830.0376</td>
+<td>0.01230</td>
+<td>384425</td>
+</tr>
+<tr>
+<td>rtx</td>
+<td>after</td>
+<td>N</td>
+<td>2672057.7456</td>
+<td>0.0096</td>
+<td>380365</td>
+</tr>
+<tr>
+<td>rtx</td>
+<td>after</td>
+<td>h</td>
+<td>121.7674</td>
+<td>0.0357</td>
+<td>380894</td>
+</tr>
+<tr>
+<td>gpspace</td>
+<td>before</td>
+<td>E</td>
+<td>212830.3149</td>
+<td>0.2005</td>
+<td>585324</td>
+</tr>
+<tr>
+<td>gpspace</td>
+<td>before</td>
+<td>N</td>
+<td>2672057.5671</td>
+<td>0.1460</td>
+<td>585324</td>
+</tr>
+<tr>
+<td>gpspace</td>
+<td>before</td>
+<td>h</td>
+<td>121.7856</td>
+<td>0.3982</td>
+<td>585324</td>
+</tr>
+<tr>
+<td>gpspace</td>
+<td>after</td>
+<td>E</td>
+<td>212830.3439</td>
+<td>0.1355</td>
+<td>560509</td>
+</tr>
+<tr>
+<td>gpspace</td>
+<td>after</td>
+<td>N</td>
+<td>2672057.5883</td>
+<td>0.0771</td>
+<td>559062</td>
+</tr>
+<tr>
+<td>gpspace</td>
+<td>after</td>
+<td>h</td>
+<td>121.7457</td>
+<td>0.2483</td>
+<td>560993</td>
+</tr>
+<tr>
+<td>gpspark</td>
+<td>before</td>
+<td>E</td>
+<td>212830.3209</td>
+<td>0.0092</td>
+<td>604800</td>
+</tr>
+<tr>
+<td>gpspark</td>
+<td>before</td>
+<td>N</td>
+<td>2672057.5840</td>
+<td>0.0084</td>
+<td>604800</td>
+</tr>
+<tr>
+<td>gpspark</td>
+<td>before</td>
+<td>h</td>
+<td>121.6928</td>
+<td>0.0293</td>
+<td>604800</td>
+</tr>
+<tr>
+<td>gpspark</td>
+<td>after</td>
+<td>E</td>
+<td>212830.3211</td>
+<td>0.0086</td>
+<td>598610</td>
+</tr>
+<tr>
+<td>gpspark</td>
+<td>after</td>
+<td>N</td>
+<td>2672057.5841</td>
+<td>0.0080</td>
+<td>599439</td>
+</tr>
+<tr>
+<td>gpspark</td>
+<td>after</td>
+<td>h</td>
+<td>121.6928</td>
+<td>0.0282</td>
+<td>602013</td>
+</tr>
+<tr>
+<td>rtx - gpspark</td>
+<td>before</td>
+<td>E</td>
+<td>0.2319</td>
+<td>0.3802</td>
+<td>446670</td>
+</tr>
+<tr>
+<td>rtx - gpspark</td>
+<td>before</td>
+<td>N</td>
+<td>-0.2241</td>
+<td>0.4432</td>
+<td>446670</td>
+</tr>
+<tr>
+<td>rtx - gpspark</td>
+<td>before</td>
+<td>h</td>
+<td>-0.2621</td>
+<td>0.9957</td>
+<td>446670</td>
+</tr>
+<tr>
+<td>rtx - gpspark</td>
+<td>after</td>
+<td>h</td>
+<td>-0.0739</td>
+<td>0.04153</td>
+<td>383035</td>
+</tr>
+<tr>
+<td>rtx - gpspark</td>
+<td>after</td>
+<td>E</td>
+<td>0.2823</td>
+<td>0.01358</td>
+<td>384496</td>
+</tr>
+<tr>
+<td>rtx - gpspark</td>
+<td>after</td>
+<td>N</td>
+<td>-0.1626</td>
+<td>0.01170</td>
+<td>382166</td>
 </tr>
 </tbody>
 </table>
-<p><a href="http://www.flickr.com/photos/144554087@N04/31986703477"><img src="http://farm8.staticflickr.com/7876/31986703477_1fb33dba6d.jpg" alt="destribution rtx" title="rtx 定位三方向散布情形"></a></p>
-<h2 id="csrs online 散布分析">csrs online 散布分析</h2>
-<p>csrs 的單點定位在平面精度極佳，但高程精度相對較低。</p>
-<table>
-<thead>
-<tr>
-<th>數值</th>
-<th>E</th>
-<th>N</th>
-<th>h</th>
-<th>斜距</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>平均值與與真值的誤差</td>
-<td>0.225205</td>
-<td>-0.033640</td>
-<td>-0.105672</td>
-<td>0.25103</td>
-</tr>
-<tr>
-<td>標準偏差</td>
-<td>0.0077312</td>
-<td>0.0068739</td>
-<td>0.0265718</td>
-<td>0.028515</td>
-</tr>
-</tbody>
-</table>
-<p><a href="http://www.flickr.com/photos/144554087@N04/46202988274"><img src="http://farm8.staticflickr.com/7856/46202988274_713beeb3f0.jpg" alt="destribution csrs online" title="csrs online 定位三方向散布情形"></a></p>
-<h2 id="rtx csrs 差距">rtx csrs 差距</h2>
-<p>逐秒比較 rtx 與 csrs 二者定位的座標差異。</p>
-<table>
-<thead>
-<tr>
-<th>種類</th>
-<th>E</th>
-<th>N</th>
-<th>h</th>
-<th>斜距</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>差異的平均</td>
-<td>0.28043</td>
-<td>-0.163352</td>
-<td>-0.0802983</td>
-<td>0.33432</td>
-</tr>
-<tr>
-<td>差異的標準差</td>
-<td>0.044771</td>
-<td>0.025687</td>
-<td>0.057144</td>
-<td>0.077005</td>
-</tr>
-</tbody>
-</table>
-<p><a href="http://www.flickr.com/photos/144554087@N04/46203489324"><img src="http://farm5.staticflickr.com/4885/46203489324_e40d77081b.jpg" alt="deviation-rtx-csrs.png" title="rtx csrs 二者在三方向上差異"></a></p>
-<p><a href="http://www.flickr.com/photos/144554087@N04/46876044942"><img src="http://farm8.staticflickr.com/7815/46876044942_f97d74930c.jpg" alt="deviation-rtx-csrs-destribution.png" title="rtx csrs 二者在三方向上差異分布情形"></a></p>
-<h2 id="進度">進度</h2>
-<ul>
-<li>不使用 rtx 的平面座標，用 proj4 自行轉換。</li>
-<li>proj4 geotrans coordp 的結果都和 rtx 的不同。</li>
-<li>2017-12-22 的 rtx 很不穩。</li>
-<li>gpspace v1.10 的結果比 v1.05 標準偏差差十倍，不知道原因。</li>
-</ul>
-<h2 id="結論">結論</h2>
-<p>大致上 rtx csrs 的定位分布都接近常態分布，
-csrs ppp 的精度較佳，而 rtx 的精度稍低，
-但平均較接近公告座標。</p>
 <script src="ext/paper.js?reference"></script>
 
 <link rel="stylesheet" href="ext/paper.css">
+
+<script src="ext/header-nctu.js?execute&amp;editable"></script>
+
+<script>
+document.body.prepend(
+    document.querySelector('h1'),
+    document.querySelector('header')
+)
+</script>
 </main>
 
 <script defer src="ext/meta-meta.js"></script>

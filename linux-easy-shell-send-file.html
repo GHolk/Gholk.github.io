@@ -212,7 +212,7 @@ adb shell tar -czf - /sdcard &gt;sdcard.tgz
 </code></pre>
 <p>我記得 adb 的連線不像 ssh，是沒有壓縮的。
 所以建議手動壓縮，會快一點；
-除非你手機太爛 cpu 壓縮很慢。</p>
+除非你手機太爛 cpu 壓縮和解壓縮很慢。</p>
 <h2 id="只透過 stdin 傳送指令與檔案">只透過 stdin 傳送指令與檔案</h2>
 <p>以上的作法都是建立在 ssh 可以直接指定執行的程式，
 並把資料直接送到該程式的 stdin。
@@ -263,7 +263,50 @@ shell 在處理 here doc 上
     echo &quot;EOF&quot;
 } | telnet host
 </code></pre>
-<h2 id="直接使用 stdin 不使用here doc">直接使用 stdin 不使用here doc</h2>
+<h2 id="直接使用 stdin 不使用 here doc">直接使用 stdin 不使用 here doc</h2>
+<p>最後再提一個我自己也不太清楚的用法。
+在 shell 中如果直接用 cat，會嘗試從標準輸入讀取，
+這時候就能直接從 shell 輸入，按 ctrl-d 可以退出。
+我記得以前也聽過一個建議， <em>盡量不要把腳本 pipe 給 shell，
+而是把腳本存成檔案，再用 <code>sh script.sh</code> 的方式執行。</em>
+因為像 cat 這種命令會需要讀取 stdin，
+但 pipe 給 shell 時 stdin 已經被腳本佔住了，
+那就不可能再從 stdin 讀取。</p>
+<p>如果在 shell script 檔案中呼叫 cat，
+就會從執行時的 stdin 讀取，
+所以 pipe 給執行的 script 是可以的：</p>
+<pre><code class="lang-sh">cat file | sh script.sh
+cat file | perl script.pl
+</code></pre>
+<p>但如果 script 是在 stdin，那讀取時會發生什麼事？
+可能是接下來 stdin 都被當成該程式的輸入，
+或是該程式讀 stdin 時直接讀到 eof。
+我發現 dash 和 bash 的行為不同，
+bash 會把接下來的內容輸入給程式，dash 則直接 eof。
+可以用下列程式來驗證，如果 eof tr 則不會有輸出，
+ls 也會被執行。如果 ls 被當作 tr 的輸入，
+那就會輸出大寫的 <code>LS</code> 。</p>
+<pre><code class="lang-sh">dash &lt;&lt;SHELL
+tr a-z A-Z
+ls
+SHELL
+
+bash &lt;&lt;SHELL
+tr a-z A-Z
+ls
+SHELL
+</code></pre>
+<p>總之，這也可以用來傳送檔案，
+只是要確定遠端的 shell 是 bash，
+zsh 好像也支援？</p>
+<pre><code class="lang-sh">{
+    echo &apos;tar -xf -&apos;
+    tar -cf - ./
+} | ssh user@host
+</code></pre>
+<p>只是我對背後的原理還不是很確定。
+比 here doc 好是不需要 shell buffer 所有資料，
+也不需要 base64 編碼，可以直接用 shell 傳送二進位資料。</p>
 </main>
 
 <script defer src="ext/meta-meta.js"></script>

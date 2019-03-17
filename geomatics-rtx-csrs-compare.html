@@ -316,6 +316,58 @@ gpspark 的定位結果遠勝 gpspace，
 但也有部份極端值超過圖片邊界而沒有展示。
 其中黑線為座標真值，三種顏色分別為 rtx gpspace gpspark。</p>
 <p><a href="http://www.flickr.com/photos/144554087@N04/33490726908"><img src="http://farm8.staticflickr.com/7886/33490726908_fa9ea30069.jpg" alt="LSB0-all-small.png" title="rtx gpspace gpspark 定位結果與真值依時間在 E N h 三方向上的散布圖"></a></p>
+<h3 id="rtx 與 gpspark 和真值的差異">rtx 與 gpspark 和真值的差異</h3>
+<p>由於 rtx 在過濾前的誤差過大，沒有比較意義，
+因此只取過濾三倍標準差後的數據。
+綜合來看是 rtx 的結果較接近真值。</p>
+<table>
+<thead>
+<tr>
+<th>軟體</th>
+<th>方向</th>
+<th>均誤差</th>
+<th>方均誤差</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rtx</td>
+<td>E</td>
+<td>-0.057857</td>
+<td>0.059150</td>
+</tr>
+<tr>
+<td>rtx</td>
+<td>N</td>
+<td>0.13009</td>
+<td>0.13044</td>
+</tr>
+<tr>
+<td>rtx</td>
+<td>h</td>
+<td>-0.030842</td>
+<td>0.047148</td>
+</tr>
+<tr>
+<td>gpspark</td>
+<td>E</td>
+<td>0.22562</td>
+<td>0.22578</td>
+</tr>
+<tr>
+<td>gpspark</td>
+<td>N</td>
+<td>-0.031426</td>
+<td>0.032426</td>
+</tr>
+<tr>
+<td>gpspark</td>
+<td>h</td>
+<td>-0.10545</td>
+<td>0.10917</td>
+</tr>
+</tbody>
+</table>
 <h3 id="rtx 與 gpspark 的差異">rtx 與 gpspark 的差異</h3>
 <p>作為二種精度較佳的定位方法，單獨作圖比較。</p>
 <p><a href="http://www.flickr.com/photos/144554087@N04/33490727288"><img src="http://farm8.staticflickr.com/7838/33490727288_bce7063bdf.jpg" alt="LSB0-rtx-gpspark.png" title="將 rtx 減去 gpspark 的定位結果作圖"></a></p>
@@ -386,7 +438,7 @@ gpspark 的定位結果遠勝 gpspace，
 <thead>
 <tr>
 <th>軟體</th>
-<th>三倍標準差過濾</th>
+<th>過濾</th>
 <th>方向</th>
 <th>平均</th>
 <th>標準偏差</th>
@@ -396,7 +448,7 @@ gpspark 的定位結果遠勝 gpspace，
 <tbody>
 <tr>
 <td>rtx</td>
-<td>before</td>
+<td>否</td>
 <td>E</td>
 <td>212830.0887</td>
 <td>0.3809</td>
@@ -404,7 +456,7 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 <tr>
 <td>rtx</td>
-<td>before</td>
+<td>否</td>
 <td>N</td>
 <td>2672057.8082</td>
 <td>0.4441</td>
@@ -412,7 +464,7 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 <tr>
 <td>rtx</td>
-<td>before</td>
+<td>否</td>
 <td>h</td>
 <td>121.9551</td>
 <td>0.9938</td>
@@ -420,7 +472,7 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 <tr>
 <td>rtx</td>
-<td>after</td>
+<td>是</td>
 <td>E</td>
 <td>212830.0376</td>
 <td>0.01230</td>
@@ -428,7 +480,7 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 <tr>
 <td>rtx</td>
-<td>after</td>
+<td>是</td>
 <td>N</td>
 <td>2672057.7456</td>
 <td>0.0096</td>
@@ -436,7 +488,7 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 <tr>
 <td>rtx</td>
-<td>after</td>
+<td>是</td>
 <td>h</td>
 <td>121.7674</td>
 <td>0.0357</td>
@@ -444,7 +496,7 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 <tr>
 <td>gpspace</td>
-<td>before</td>
+<td>否</td>
 <td>E</td>
 <td>212830.3149</td>
 <td>0.2005</td>
@@ -452,7 +504,7 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 <tr>
 <td>gpspace</td>
-<td>before</td>
+<td>否</td>
 <td>N</td>
 <td>2672057.5671</td>
 <td>0.1460</td>
@@ -460,7 +512,7 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 <tr>
 <td>gpspace</td>
-<td>before</td>
+<td>否</td>
 <td>h</td>
 <td>121.7856</td>
 <td>0.3982</td>
@@ -468,7 +520,7 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 <tr>
 <td>gpspace</td>
-<td>after</td>
+<td>是</td>
 <td>E</td>
 <td>212830.3439</td>
 <td>0.1355</td>
@@ -476,7 +528,7 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 <tr>
 <td>gpspace</td>
-<td>after</td>
+<td>是</td>
 <td>N</td>
 <td>2672057.5883</td>
 <td>0.0771</td>
@@ -484,7 +536,7 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 <tr>
 <td>gpspace</td>
-<td>after</td>
+<td>是</td>
 <td>h</td>
 <td>121.7457</td>
 <td>0.2483</td>
@@ -492,7 +544,7 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 <tr>
 <td>gpspark</td>
-<td>before</td>
+<td>否</td>
 <td>E</td>
 <td>212830.3209</td>
 <td>0.0092</td>
@@ -500,7 +552,7 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 <tr>
 <td>gpspark</td>
-<td>before</td>
+<td>否</td>
 <td>N</td>
 <td>2672057.5840</td>
 <td>0.0084</td>
@@ -508,7 +560,7 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 <tr>
 <td>gpspark</td>
-<td>before</td>
+<td>否</td>
 <td>h</td>
 <td>121.6928</td>
 <td>0.0293</td>
@@ -516,7 +568,7 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 <tr>
 <td>gpspark</td>
-<td>after</td>
+<td>是</td>
 <td>E</td>
 <td>212830.3211</td>
 <td>0.0086</td>
@@ -524,7 +576,7 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 <tr>
 <td>gpspark</td>
-<td>after</td>
+<td>是</td>
 <td>N</td>
 <td>2672057.5841</td>
 <td>0.0080</td>
@@ -532,7 +584,7 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 <tr>
 <td>gpspark</td>
-<td>after</td>
+<td>是</td>
 <td>h</td>
 <td>121.6928</td>
 <td>0.0282</td>
@@ -540,7 +592,7 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 <tr>
 <td>rtx - gpspark</td>
-<td>before</td>
+<td>否</td>
 <td>E</td>
 <td>0.2319</td>
 <td>0.3802</td>
@@ -548,7 +600,7 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 <tr>
 <td>rtx - gpspark</td>
-<td>before</td>
+<td>否</td>
 <td>N</td>
 <td>-0.2241</td>
 <td>0.4432</td>
@@ -556,7 +608,7 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 <tr>
 <td>rtx - gpspark</td>
-<td>before</td>
+<td>否</td>
 <td>h</td>
 <td>-0.2621</td>
 <td>0.9957</td>
@@ -564,7 +616,7 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 <tr>
 <td>rtx - gpspark</td>
-<td>after</td>
+<td>是</td>
 <td>h</td>
 <td>-0.0739</td>
 <td>0.04153</td>
@@ -572,7 +624,7 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 <tr>
 <td>rtx - gpspark</td>
-<td>after</td>
+<td>是</td>
 <td>E</td>
 <td>0.2823</td>
 <td>0.01358</td>
@@ -580,7 +632,7 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 <tr>
 <td>rtx - gpspark</td>
-<td>after</td>
+<td>是</td>
 <td>N</td>
 <td>-0.1626</td>
 <td>0.01170</td>

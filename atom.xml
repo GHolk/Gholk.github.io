@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-03-17T09:17:07.081Z</updated>
+  <updated>2019-03-17T13:57:10.425Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,645 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/geomatics-rtx-csrs-compare.html#rtx-與-gpspark-和真值的差異</id>
+<title>A Preliminary Comparative Evaluation of Trimble RTX with CSRS-PPP</title>
+<published>2019-01-30T13:52:35.944Z</published>
+<updated>2019-03-17T13:57:10.412Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/geomatics-rtx-csrs-compare.html#rtx-與-gpspark-和真值的差異"/>
+<summary type="html">
+製表比較 rtx gpspark 和真值的殘差與方均誤差。</summary>
+<category term="geomatics"/>
+<category term="gnss"/>
+<category term="csrs"/>
+<content type="html">&lt;h1 id=&quot;A Preliminary Comparative Evaluation of Trimble RTX with CSRS-PPP&quot;&gt;A Preliminary Comparative Evaluation of Trimble RTX with CSRS-PPP&lt;/h1&gt;
+&lt;p&gt;Kinematic positioning has important applications in bathymetric mapping,
+vehicle navigation, and many others. This study comparatively evaluated
+the differences among the real time kinematic positioning with Trimble
+CenterPoint RTX service and the post-processing kinematic solution
+obtained from CSRS-PPP service. The comparison is based on the data
+collected on Dec. 16 to 22, 2017 on a CORS station, NSB0. From
+observations made on these days, the standard deviation of height
+differences between these two services is 0.057m, while the bias is
+0.080m. As compared with the official coordinates of this CORS, CSRS-PPP
+shows better agreement.&lt;/p&gt;
+&lt;h2 id=&quot;rtx 與 csrs-ppp&quot;&gt;rtx 與 csrs-ppp&lt;/h2&gt;
+&lt;p&gt;rtx 與 csrs-ppp 都是基於 GNSS 系統的絕對定位。
+rtx 是星基增益的即時動態定位，
+藉由地面站即時解算部份地區的精密星曆，
+並由網路或衛星廣播到使用者端，
+可以實現即時動態基於載波相位的絕對定位。&lt;/p&gt;
+&lt;h3 id=&quot;rtx 相對傳統 VBS-RTK 的優勢&quot;&gt;rtx 相對傳統 VBS-RTK 的優勢&lt;/h3&gt;
+&lt;p&gt;且相較於傳統的即時動態差分定位，
+星基增益系統不需要受限於基站與虛擬基站。
+傳統的差分定位，需要架站基站，
+或是以基站網內差出虛擬基站。
+虛擬基站雖然免除架站基站的困擾，
+但需要為每個使用者都內差計算出不同的虛擬基站。&lt;/p&gt;
+&lt;p&gt;而 rtx 等星基增益技術，只要有固定數量的靜態衛星接收站，
+即可即時解算出衛星的精密星曆，透過廣播服務所有使用者。
+由於所有使用者需要的是相同的星曆，
+不會像 vbs 因使用者增加而加重計算負擔，
+透過衛星廣播訊號的話，可以服務無上限人數的使用者。&lt;/p&gt;
+&lt;h3 id=&quot;csrs-ppp&quot;&gt;csrs-ppp&lt;/h3&gt;
+&lt;p&gt;csrs-ppp 是 &lt;strong&gt;加拿大自然資源局&lt;/strong&gt; 提供的線上解算精密單點定位服務，
+允許使用者在網頁介面上提交 rinex 格式的觀測資料，
+在伺服器端解算完畢後，會將成果 email 到使用者信箱。&lt;/p&gt;
+&lt;p&gt;csrs-ppp 為服務名稱，其內部使用的軟體有過變化，
+舊版軟體為 gpspace，現行的新版為 gpspark。
+&lt;a href=&quot;https://github.com/CGS-GIS/GPSPACE/&quot; title=&quot;csrs 開源 gpspace&quot;&gt;舊版 gpspace 已開源在 github 上，可以自行編譯取用；&lt;/a&gt;
+而新版 gpspark 仍在活躍開發中，沒有釋出原始碼，
+只有透過網頁介面提供服務，也就是現今的 csrs-ppp。&lt;/p&gt;
+&lt;h3 id=&quot;rtx 與 ppp 的異同&quot;&gt;rtx 與 ppp 的異同&lt;/h3&gt;
+&lt;p&gt;rtx 是即時動態定位，
+csrs-ppp 則要在觀測後輸出觀測檔案上傳，非即時定位。
+而 csrs-ppp 在解算時，可以解算移動中觀測的觀測檔，
+也就是動態定位；亦能假設接收儀是在固定座標，解算靜態定位。
+且 rtx 與 csrs-ppp 均是屬於基於載波相位的精密單點定位，
+rtx 使用的是即時解算的星曆，ppp 使用的則是事後解算的精密星曆。
+二者在理論上相似。&lt;/p&gt;
+&lt;h2 id=&quot;數據與解算&quot;&gt;數據與解算&lt;/h2&gt;
+&lt;p&gt;數據為 2017-12-16 到 2017-12-22 間觀測，
+測站位置為 TWD97 的固定衛星追蹤站 LSB0。
+rtx 數據為即時定位的座標，
+同時有使用傳統 gnss 接收儀，
+輸出 T02 格式並在事後轉換為 rinex 格式。
+csrs-ppp 再以 rinex 格式觀測檔進行精密單點定位。&lt;/p&gt;
+&lt;p&gt;總共會有四種定位方式的結果座標，
+分別為 rtx、gpspace、gpspark、座標真值。&lt;/p&gt;
+&lt;h3 id=&quot;座標真值&quot;&gt;座標真值&lt;/h3&gt;
+&lt;p&gt;測站位置為 TWD97 固定衛星追縱站，點號 LSB0，
+座標真值為：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;\begin{bmatrix}
+E \\ N \\ h
+\end{bmatrix}
+=
+\begin{bmatrix}
+212830.095483593 \\
+2672057.61548927 \\ 
+121.798217289174
+\end{bmatrix}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;rtx 資料&quot;&gt;rtx 資料&lt;/h3&gt;
+&lt;p&gt;rtx 資料有定位結果的經緯度座標與 twd97 平面座標，
+但用 &lt;a href=&quot;http://proj4.org&quot; title=&quot;地圖投影與大地線計算軟體&quot;&gt;proj4&lt;/a&gt; 將經緯度轉換成平面座標驗證後發現，
+二者不相符，在南北方向約誤差 1.7mm。
+最後決定使用 proj4 手動將經緯度座標轉成平面座標，
+原本的平面座標則忽略不使用。&lt;/p&gt;
+&lt;p&gt;整理後發現 rtx 定位座標在尚未收斂時，會有極大的誤差，
+原數據如下：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;方向&lt;/th&gt;
+&lt;th&gt;平均&lt;/th&gt;
+&lt;th&gt;標準偏差&lt;/th&gt;
+&lt;th&gt;數據數&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.0887&lt;/td&gt;
+&lt;td&gt;0.3809&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.8082&lt;/td&gt;
+&lt;td&gt;0.4441&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.9551&lt;/td&gt;
+&lt;td&gt;0.9938&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;但經過作圖後發現，少量數據偏離平均值、真值極大，
+故決定以三倍標準差為基準籂選數據。
+將數據中離平均值超過三倍標準差的記錄剔除，
+再重新計算，再剔除三倍標準差以外的，
+重覆直到所有數據都在三倍標準差以內。
+過濾後整體標準偏差大幅下降，但也剔除了 14.73% 的數據。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;方向&lt;/th&gt;
+&lt;th&gt;平均&lt;/th&gt;
+&lt;th&gt;標準偏差&lt;/th&gt;
+&lt;th&gt;數據數&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.0376&lt;/td&gt;
+&lt;td&gt;0.01230&lt;/td&gt;
+&lt;td&gt;384425&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.7456&lt;/td&gt;
+&lt;td&gt;0.0096&lt;/td&gt;
+&lt;td&gt;380365&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.7674&lt;/td&gt;
+&lt;td&gt;0.0357&lt;/td&gt;
+&lt;td&gt;380894&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&quot;gpspace&quot;&gt;gpspace&lt;/h3&gt;
+&lt;p&gt;gpspace 是 csrs-ppp 使用的舊版 ppp 解算軟體，
+目前已在 github 上開源。
+gpspace 可以從 rinex 格式觀測資料與精密星曆，
+解算動態或靜態單點定位。
+因為 rtx 為動態定位，為了使二者在同一基準上比較，
+在 gpspace 也使用動態定位求解。&lt;/p&gt;
+&lt;p&gt;gpspace 的定位結果不是很穩定。
+相比 rtx 雖然在未收斂時會有極大誤差，
+但收斂後表現極佳。
+gpspace 則一直處在不穩定的狀態，
+雖然不像 rtx 有極端誤差， 但也不會收斂到穩定的值。
+整體不如 rtx。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;方向&lt;/th&gt;
+&lt;th&gt;平均&lt;/th&gt;
+&lt;th&gt;標準偏差&lt;/th&gt;
+&lt;th&gt;數據數&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.3149&lt;/td&gt;
+&lt;td&gt;0.2005&lt;/td&gt;
+&lt;td&gt;585324&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.5671&lt;/td&gt;
+&lt;td&gt;0.1460&lt;/td&gt;
+&lt;td&gt;585324&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.7856&lt;/td&gt;
+&lt;td&gt;0.3982&lt;/td&gt;
+&lt;td&gt;585324&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;嘗試也對 gpspace 的結果用三倍標準差過濾，
+結果雖有提升，但不很明顯。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;方向&lt;/th&gt;
+&lt;th&gt;平均&lt;/th&gt;
+&lt;th&gt;標準偏差&lt;/th&gt;
+&lt;th&gt;數據數&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.3439&lt;/td&gt;
+&lt;td&gt;0.1355&lt;/td&gt;
+&lt;td&gt;560509&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.5883&lt;/td&gt;
+&lt;td&gt;0.0771&lt;/td&gt;
+&lt;td&gt;559062&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.7457&lt;/td&gt;
+&lt;td&gt;0.2483&lt;/td&gt;
+&lt;td&gt;560993&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&quot;gpspark&quot;&gt;gpspark&lt;/h3&gt;
+&lt;p&gt;gpspark 與 gpspace 同為 csrs-ppp，
+使用上也類似，都是從 rinex 觀測資料解算精密單點定位，
+也一樣能解算動態與靜態，本次研究也同 gpspace 使用動態。
+gpspark 的定位結果遠勝 gpspace，
+收斂後能超過 rtx，並也沒有 rtx 誇張的極端值。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;方向&lt;/th&gt;
+&lt;th&gt;平均&lt;/th&gt;
+&lt;th&gt;標準偏差&lt;/th&gt;
+&lt;th&gt;數據數&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.3209&lt;/td&gt;
+&lt;td&gt;0.0092&lt;/td&gt;
+&lt;td&gt;604800&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.5840&lt;/td&gt;
+&lt;td&gt;0.0084&lt;/td&gt;
+&lt;td&gt;604800&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.6928&lt;/td&gt;
+&lt;td&gt;0.0293&lt;/td&gt;
+&lt;td&gt;604800&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;也同樣計算三倍標準差過濾，但結果並沒有顯著提升。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;方向&lt;/th&gt;
+&lt;th&gt;平均&lt;/th&gt;
+&lt;th&gt;標準偏差&lt;/th&gt;
+&lt;th&gt;數據數&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.3211&lt;/td&gt;
+&lt;td&gt;0.0086&lt;/td&gt;
+&lt;td&gt;598610&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.5841&lt;/td&gt;
+&lt;td&gt;0.0080&lt;/td&gt;
+&lt;td&gt;599439&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.6928&lt;/td&gt;
+&lt;td&gt;0.0282&lt;/td&gt;
+&lt;td&gt;602013&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&quot;比較&quot;&gt;比較&lt;/h2&gt;
+&lt;h3 id=&quot;四者作圖比較&quot;&gt;四者作圖比較&lt;/h3&gt;
+&lt;p&gt;將四者畫成散布圖如下。
+圖中是沒有過濾三倍標準差的數據，
+但也有部份極端值超過圖片邊界而沒有展示。
+其中黑線為座標真值，三種顏色分別為 rtx gpspace gpspark。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33490726908&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7886/33490726908_fa9ea30069.jpg&quot; alt=&quot;LSB0-all-small.png&quot; title=&quot;rtx gpspace gpspark 定位結果與真值依時間在 E N h 三方向上的散布圖&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;rtx 與 gpspark 和真值的差異&quot;&gt;rtx 與 gpspark 和真值的差異&lt;/h3&gt;
+&lt;p&gt;由於 rtx 在過濾前的誤差過大，沒有比較意義，
+因此只取過濾三倍標準差後的數據。
+綜合來看是 rtx 的結果較接近真值。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;軟體&lt;/th&gt;
+&lt;th&gt;方向&lt;/th&gt;
+&lt;th&gt;均誤差&lt;/th&gt;
+&lt;th&gt;方均誤差&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx&lt;/td&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;-0.057857&lt;/td&gt;
+&lt;td&gt;0.059150&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx&lt;/td&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;0.13009&lt;/td&gt;
+&lt;td&gt;0.13044&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx&lt;/td&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;-0.030842&lt;/td&gt;
+&lt;td&gt;0.047148&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspark&lt;/td&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;0.22562&lt;/td&gt;
+&lt;td&gt;0.22578&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspark&lt;/td&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;-0.031426&lt;/td&gt;
+&lt;td&gt;0.032426&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspark&lt;/td&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;-0.10545&lt;/td&gt;
+&lt;td&gt;0.10917&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&quot;rtx 與 gpspark 的差異&quot;&gt;rtx 與 gpspark 的差異&lt;/h3&gt;
+&lt;p&gt;作為二種精度較佳的定位方法，單獨作圖比較。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33490727288&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7838/33490727288_bce7063bdf.jpg&quot; alt=&quot;LSB0-rtx-gpspark.png&quot; title=&quot;將 rtx 減去 gpspark 的定位結果作圖&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;方向&lt;/th&gt;
+&lt;th&gt;平均&lt;/th&gt;
+&lt;th&gt;標準偏差&lt;/th&gt;
+&lt;th&gt;數據數&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;0.2319&lt;/td&gt;
+&lt;td&gt;0.3802&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;-0.2241&lt;/td&gt;
+&lt;td&gt;0.4432&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;-0.2621&lt;/td&gt;
+&lt;td&gt;0.9957&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;由於 rtx 有較多的極端值，因此採用三倍標準差過濾數據，
+剔除三倍標準差後：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;方向&lt;/th&gt;
+&lt;th&gt;平均&lt;/th&gt;
+&lt;th&gt;標準偏差&lt;/th&gt;
+&lt;th&gt;數據數&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;-0.0739&lt;/td&gt;
+&lt;td&gt;0.04153&lt;/td&gt;
+&lt;td&gt;383035&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;0.2823&lt;/td&gt;
+&lt;td&gt;0.01358&lt;/td&gt;
+&lt;td&gt;384496&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;-0.1626&lt;/td&gt;
+&lt;td&gt;0.01170&lt;/td&gt;
+&lt;td&gt;382166&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&quot;統計分析&quot;&gt;統計分析&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;軟體&lt;/th&gt;
+&lt;th&gt;過濾&lt;/th&gt;
+&lt;th&gt;方向&lt;/th&gt;
+&lt;th&gt;平均&lt;/th&gt;
+&lt;th&gt;標準偏差&lt;/th&gt;
+&lt;th&gt;數據數&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.0887&lt;/td&gt;
+&lt;td&gt;0.3809&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.8082&lt;/td&gt;
+&lt;td&gt;0.4441&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.9551&lt;/td&gt;
+&lt;td&gt;0.9938&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.0376&lt;/td&gt;
+&lt;td&gt;0.01230&lt;/td&gt;
+&lt;td&gt;384425&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.7456&lt;/td&gt;
+&lt;td&gt;0.0096&lt;/td&gt;
+&lt;td&gt;380365&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.7674&lt;/td&gt;
+&lt;td&gt;0.0357&lt;/td&gt;
+&lt;td&gt;380894&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspace&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.3149&lt;/td&gt;
+&lt;td&gt;0.2005&lt;/td&gt;
+&lt;td&gt;585324&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspace&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.5671&lt;/td&gt;
+&lt;td&gt;0.1460&lt;/td&gt;
+&lt;td&gt;585324&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspace&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.7856&lt;/td&gt;
+&lt;td&gt;0.3982&lt;/td&gt;
+&lt;td&gt;585324&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspace&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.3439&lt;/td&gt;
+&lt;td&gt;0.1355&lt;/td&gt;
+&lt;td&gt;560509&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspace&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.5883&lt;/td&gt;
+&lt;td&gt;0.0771&lt;/td&gt;
+&lt;td&gt;559062&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspace&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.7457&lt;/td&gt;
+&lt;td&gt;0.2483&lt;/td&gt;
+&lt;td&gt;560993&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspark&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.3209&lt;/td&gt;
+&lt;td&gt;0.0092&lt;/td&gt;
+&lt;td&gt;604800&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspark&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.5840&lt;/td&gt;
+&lt;td&gt;0.0084&lt;/td&gt;
+&lt;td&gt;604800&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspark&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.6928&lt;/td&gt;
+&lt;td&gt;0.0293&lt;/td&gt;
+&lt;td&gt;604800&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspark&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.3211&lt;/td&gt;
+&lt;td&gt;0.0086&lt;/td&gt;
+&lt;td&gt;598610&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspark&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.5841&lt;/td&gt;
+&lt;td&gt;0.0080&lt;/td&gt;
+&lt;td&gt;599439&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspark&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.6928&lt;/td&gt;
+&lt;td&gt;0.0282&lt;/td&gt;
+&lt;td&gt;602013&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx - gpspark&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;0.2319&lt;/td&gt;
+&lt;td&gt;0.3802&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx - gpspark&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;-0.2241&lt;/td&gt;
+&lt;td&gt;0.4432&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx - gpspark&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;-0.2621&lt;/td&gt;
+&lt;td&gt;0.9957&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx - gpspark&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;-0.0739&lt;/td&gt;
+&lt;td&gt;0.04153&lt;/td&gt;
+&lt;td&gt;383035&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx - gpspark&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;0.2823&lt;/td&gt;
+&lt;td&gt;0.01358&lt;/td&gt;
+&lt;td&gt;384496&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx - gpspark&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;-0.1626&lt;/td&gt;
+&lt;td&gt;0.01170&lt;/td&gt;
+&lt;td&gt;382166&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;script src=&quot;ext/paper.js?reference&quot;&gt;&lt;/script&gt;
+
+&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
+
+&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
+
+&lt;script&gt;
+document.body.prepend(
+    document.querySelector(&apos;h1&apos;),
+    document.querySelector(&apos;header&apos;)
+)
+&lt;/script&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/satellite-geodesy-homework-2.html</id>
 <title>衛星大地測量作業二</title>
 <published>2019-03-17T06:46:39.987Z</published>
@@ -2553,127 +3192,7 @@ gps 的橢球高可能會有三公尺左右的變化。&lt;/p&gt;
 <category term="tmux"/>
 <category term="linux"/>
 <category term="shell"/>
-<content type="html">&lt;h1 id=&quot;用 tmux 在 ptt 發錢&quot;&gt;用 tmux 在 ptt 發錢&lt;/h1&gt;
-&lt;p&gt;最近因為好玩，想試試發錢要鄉民去噓別人的文，
-於是之後兌現承諾發錢時，試了 &lt;a href=&quot;https://github.com/wabilin/MumiGiveP&quot;&gt;mumi 發錢程式&lt;/a&gt; 有問題，
-所以 &lt;a href=&quot;//github.com/GHolk/loco/blob/master/bin/tmux-give-p.sh&quot;&gt;自己用 tmux 和 ssh 當介面
-寫了個簡單的 shell script 來發錢&lt;/a&gt; 。
-這個 script 大概是我認同的 shell script 風格吧，
-用了很多我流的奇淫技巧。&lt;/p&gt;
-&lt;h2 id=&quot;使用方法&quot;&gt;使用方法&lt;/h2&gt;
-&lt;p&gt;要先有 tmux，在 window 0 連上 ptt，
-進入發 p 幣的選單，
-然後可以在 window 1 執行這個腳本。
-這個腳本有互動介面，所以什麼選項都不給還是能正常運行，
-腳本缺的變數就會要求你輸入。&lt;/p&gt;
-&lt;p&gt;執行就是 &lt;code&gt;sh tmux-give-p.sh 10 iXXXXGAY5566 seabox freeunixer RS5566&lt;/code&gt; ，
-第一個參數是稅前 P 幣，後面是要送的 id，
-ptt 不分大小寫，所以可以一律小寫。
-或是 id 也可以從 stdin 送進去，一行一個 id。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;sh tmux-give-p.sh 10 &amp;lt;&amp;lt;USER_LIST
-iXXXXGAY5566
-seabox
-freeunixer
-RS5566
 
-USER_LIST
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;然後會要求你輸入 ptt 密碼，
-密碼不能放在參數傳，因為會被 top ps pgrep 看到。
-所以我是用 tmux 的 buffer 存。
-又基於腳本要可以批次操作，
-你也可以事先存在 tmux 的 &lt;code&gt;ptt_password&lt;/code&gt; buffer。
-就不會要求輸入，可以直接開始發錢。&lt;/p&gt;
-&lt;p&gt;每發一個人會切回 window 1，
-所以如果出錯可以按 ctrl-c 中斷。
-但我沒有做很完整的判斷，
-如果出什麼意外可能會在 ptt 亂輸入一堆東西。&lt;/p&gt;
-&lt;p&gt;另外這腳本可以很大程度由環境變數改變行為，
-像如果要算稅後，可以 &lt;code&gt;after_tax=1 sh tmux-give-p.sh 10&lt;/code&gt;
-錢、使用者名單也都可以從環境數傳
-&lt;code&gt;money=10 username_list=&amp;apos;seabox rs5566&amp;apos; sh tmux-give-p.sh&lt;/code&gt; 。&lt;/p&gt;
-&lt;h3 id=&quot;環境變數&quot;&gt;環境變數&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;money: P 幣數量，必須大於零。&lt;/li&gt;
-&lt;li&gt;after_tax: P 幣計算稅後，預設是稅錢，只要不是空字串就代表計算稅後。&lt;/li&gt;
-&lt;li&gt;username_list: 要發的 id 列表，可以用空格或換行或 tab 分割。
-優先順序是環境變數、參數、stdin。&lt;/li&gt;
-&lt;li&gt;user_interval: 發一位使用者後會停多久，
-預設是 2，預設單位是秒，也可以傳 1m 就變成停一分鐘。&lt;/li&gt;
-&lt;li&gt;ptt_pane: ptt 發錢畫面的 tmux window，預設是 0。&lt;/li&gt;
-&lt;li&gt;script_pane: 腳本執行的 tmux window，預設是 1，
-只是跳回去後讓你可以 ctrl-c 中斷用的。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;如果要批次作業，就要先開好 tmux，
-在 window 0 連上 ptt 進到發錢介面，
-然後把密碼存到 tmux buffer，
-像是 &lt;code&gt;pass show ptt | tmux load-buffer -b ptt_password -&lt;/code&gt; ，
-再執行這個腳本，id 建議用 stdin 傳，比較不會被限制長度。
-&lt;code&gt;cat userlist | sh tmux-give-p.sh 10&lt;/code&gt; 。&lt;/p&gt;
-&lt;p&gt;如果什麼參數都不給，就會要求你輸入要發的 P 幣，
-ptt 密碼，之後要求你一行行輸入 id。
-另外把 tmux 開起來後，也可以在另外的終端機執行這個腳本，
-tmux 好像會自己找到自己。&lt;/p&gt;
-&lt;h2 id=&quot;腳本技巧&quot;&gt;腳本技巧&lt;/h2&gt;
-&lt;p&gt;最近我寫程式最大的關注是
-如何讓使用者在無需改寫原始碼的情況下，
-改變程式行為；也就程式的重用。
-例如 emacs 的 emacs lisp 就在這點下了很大心力，
-你可以用 hook advice 來在不更動原始碼的情況下，
-改變某些函數的行為。&lt;/p&gt;
-&lt;p&gt;我大量使用了 &lt;code&gt;set_if_empty&lt;/code&gt; 這個函數，
-也就是在 script 裡不直接指派值給變數，
-而是先檢查外部有沒有給值，沒有再指定。
-因為 shell 裡在讀取變數時，
-變數和環境變數是沒有差異的。&lt;/p&gt;
-&lt;p&gt;之前學 common lisp，
-有個 &lt;code&gt;defparameter&lt;/code&gt; 就是類似的意思，
-定義一個參數，但可以被其它 defparameter 改變。
-在 Makefile 或 C 的巨集裡，好像也有類似的語法。&lt;/p&gt;
-&lt;p&gt;現在寫腳本，如果是可以改變的參數，
-我都會用 &lt;code&gt;set_if_empty&lt;/code&gt; 來定義，
-執行時如果想改可以直接傳環境變數覆寫。&lt;/p&gt;
-&lt;h3 id=&quot;使用環境變數&quot;&gt;使用環境變數&lt;/h3&gt;
-&lt;p&gt;雖然 unix 風格是以 &lt;code&gt;-&lt;/code&gt; 開頭的參數當作選項，
-來改變程式的行為。
-但用選項來傳遞參數實在是很麻煩，
-要考慮短選項長選項，有時 &lt;code&gt;-&lt;/code&gt; 又會被當作 stdin stdout，
-不然就是用 getopt 來解析參數。
-總之，用連字號傳參數寫起來一點都不直覺，
-所以我決定以後都直接用環境變數來傳參數。&lt;/p&gt;
-&lt;p&gt;環境變數也不像參數會有順序問題，也不像選項要解析，
-什麼變數要是什麼值，直接傳就好了。
-像 javascript 中某些行為很麻煩的函數，
-就直接傳一個參數物件進去，
-用環境變數也是差不多的意思，
-像傳一個 key value 集合。
-又 shell 取用環境變數也很簡單，以 shell 的風格，
-直接走最簡單直接暴力的作法就對了。&lt;/p&gt;
-&lt;h2 id=&quot;緣起&quot;&gt;緣起&lt;/h2&gt;
-&lt;p&gt;最近幾個月 ptt 在流行 &lt;a href=&quot;//pttpedia.fandom.com/zh/%E6%90%B6777777&quot;&gt;搶第 777777 篇文章&lt;/a&gt; ，
-搶到的人都會被推爆，還會被要求發錢。
-對這行為有點反感，所以之後想試試在 777777 前後發一篇文，
-發錢請鄉民在 777777 文章下面噓文，
-看能不能把推爆變噓爆。&lt;/p&gt;
-&lt;p&gt;但後來剛好看到一篇沒什麼意義的發錢文，
-就在他之後發了文章後要求鄉民去噓他，
-可惜沒有成功，因為發錢文大部份都會推超過 100，
-我後來統計有 173 噓，但扣掉後還是有二十幾推，
-還是不到噓爆。&lt;/p&gt;
-&lt;p&gt;但不知道為什麼一堆人噓我，噓我又沒錢，
-可能看不爽我要鄉民去噓別人吧，
-或是單純看到噓就被當成 &lt;a href=&quot;//pttpedia.fandom.com/zh/討噓文&quot;&gt;討噓文&lt;/a&gt; 。
-後來那篇文章作者也來我的文章噓，
-說他不能噓自己，能不能多少給他一點；
-把他的爆文噓掉也不太好意思，發一點錢給他也剛好而已。&lt;/p&gt;
-&lt;h2 id=&quot;ptt 應該內建群組發錢功能&quot;&gt;ptt 應該內建群組發錢功能&lt;/h2&gt;
-&lt;p&gt;雖然可以用 tmux 解決，
-但最簡單的作法還是 ptt 開個批次發錢的功能。
-站內信都可以群組寄信了，
-做個批次發錢的功能應該也不難吧。
-不然大家都自己 hack，
-雖然不複雜，但實在很沒必要。&lt;/p&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/tmux-give-p.html#build-in-give-p</id>
 <title>用 tmux 在 ptt 發錢</title>

@@ -1,0 +1,55 @@
+# 衛星大地測量作業二
+計算衛星軌道及推導相關公式。
+
+## 常見衛星周期
+由萬有引力公式與圓周運動公式，
+假設衛星軌道為圓，在軌道半徑已知下，
+衛星繞地球的周期、速度是可以唯一確定的。
+
+若衛星繞地球作圓周運動，需要的向心加速度為：
+
+```math
+a = \frac{V^2 } R
+```
+
+衛星的向心加速度來源為引力，
+引力加速度公式為： 
+
+```math
+a = \frac{G M} {R^2}
+```
+
+合併二式後，可以由軌道半徑推出衛星運動速度，
+有運動速度與半徑即可推出周期：
+
+```math
+\frac{V^2} R = \frac{G M} {R^2} \\
+V^2 = \frac {G M} R \\
+V = \sqrt \frac{G M}R \\
+t = \frac{2 \pi R }V = \frac {2 \pi R^{1.5}} { \sqrt{G M} }
+```
+
+G 為萬有引力常數，M 為地球質量，
+以地表 R = 6371km 時 a = g = 9.8 m/s² ，
+G M = 397778481800000 m³/s² 。
+
+
+衛星 | 軌道半徑 | 來源網址 | 周期
+----|---------|---------|-----
+Jason-3 | 7714.43km | <https://podaac.jpl.nasa.gov/JASON3> | 6750.17s
+GRACE-follow-on | 6861km | <https://gracefo.jpl.nasa.gov/resources/38/grace-fo-fact-sheet/> | 94.36s
+GPS satellite | 20200km | <https://www.nasa.gov/directorates/heo/scan/communications/policy/GPS.html> | 28601.33s
+BDs3 | 21500km |  <https://en.wikipedia.org/wiki/List_of_BeiDou_satellites#cite_note-gpsworld201501-3> | 31406.31s
+sentinel-1A | 7064km | <https://sentinel.esa.int/web/sentinel/missions/sentinel-1/satellite-description/orbit> | 5914.73s
+LAGEOS-2 | 5740km | <https://lageos.cddis.eosdis.nasa.gov/> | 4332.39s
+GOCE | 6606km | <http://www.esa.int/Our_Activities/Observing_the_Earth/GOCE/Satellite> | 5348.93s
+
+<link rel="stylesheet" href="ext/paper.css">
+
+<script src="ext/paper.js?reference"></script>
+
+<script src="ext/header-nctu.js?execute&editable"></script>
+
+#nctu
+#geodesy
+#report

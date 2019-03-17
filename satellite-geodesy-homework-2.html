@@ -1,0 +1,116 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2019-03-17T06:46:39.987Z">
+<meta name="keywords" property="og:article:tag" content="nctu,geodesy,report">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="linux-easy-shell-send-file.html" title="透過 shell 傳送檔案">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>衛星大地測量作業二</title>
+</head>
+<body>
+<main><h1 id="衛星大地測量作業二">衛星大地測量作業二</h1>
+<p>計算衛星軌道及推導相關公式。</p>
+<h2 id="常見衛星周期">常見衛星周期</h2>
+<p>由萬有引力公式與圓周運動公式，
+假設衛星軌道為圓，在軌道半徑已知下，
+衛星繞地球的周期、速度是可以唯一確定的。</p>
+<p>若衛星繞地球作圓周運動，需要的向心加速度為：</p>
+<pre><code class="lang-math">a = \frac{V^2 } R
+</code></pre>
+<p>衛星的向心加速度來源為引力，
+引力加速度公式為： </p>
+<pre><code class="lang-math">a = \frac{G M} {R^2}
+</code></pre>
+<p>合併二式後，可以由軌道半徑推出衛星運動速度，
+有運動速度與半徑即可推出周期：</p>
+<pre><code class="lang-math">\frac{V^2} R = \frac{G M} {R^2} \\
+V^2 = \frac {G M} R \\
+V = \sqrt \frac{G M}R \\
+t = \frac{2 \pi R }V = \frac {2 \pi R^{1.5}} { \sqrt{G M} }
+</code></pre>
+<p>G 為萬有引力常數，M 為地球質量，
+以地表 R = 6371km 時 a = g = 9.8 m/s² ，
+G M = 397778481800000 m³/s² 。</p>
+<table>
+<thead>
+<tr>
+<th>衛星</th>
+<th>軌道半徑</th>
+<th>來源網址</th>
+<th>周期</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Jason-3</td>
+<td>7714.43km</td>
+<td><a href="https://podaac.jpl.nasa.gov/JASON3">https://podaac.jpl.nasa.gov/JASON3</a></td>
+<td>6750.17s</td>
+</tr>
+<tr>
+<td>GRACE-follow-on</td>
+<td>6861km</td>
+<td><a href="https://gracefo.jpl.nasa.gov/resources/38/grace-fo-fact-sheet/">https://gracefo.jpl.nasa.gov/resources/38/grace-fo-fact-sheet/</a></td>
+<td>94.36s</td>
+</tr>
+<tr>
+<td>GPS satellite</td>
+<td>20200km</td>
+<td><a href="https://www.nasa.gov/directorates/heo/scan/communications/policy/GPS.html">https://www.nasa.gov/directorates/heo/scan/communications/policy/GPS.html</a></td>
+<td>28601.33s</td>
+</tr>
+<tr>
+<td>BDs3</td>
+<td>21500km</td>
+<td><a href="https://en.wikipedia.org/wiki/List_of_BeiDou_satellites#cite_note-gpsworld201501-3">https://en.wikipedia.org/wiki/List_of_BeiDou_satellites#cite_note-gpsworld201501-3</a></td>
+<td>31406.31s</td>
+</tr>
+<tr>
+<td>sentinel-1A</td>
+<td>7064km</td>
+<td><a href="https://sentinel.esa.int/web/sentinel/missions/sentinel-1/satellite-description/orbit">https://sentinel.esa.int/web/sentinel/missions/sentinel-1/satellite-description/orbit</a></td>
+<td>5914.73s</td>
+</tr>
+<tr>
+<td>LAGEOS-2</td>
+<td>5740km</td>
+<td><a href="https://lageos.cddis.eosdis.nasa.gov/">https://lageos.cddis.eosdis.nasa.gov/</a></td>
+<td>4332.39s</td>
+</tr>
+<tr>
+<td>GOCE</td>
+<td>6606km</td>
+<td><a href="http://www.esa.int/Our_Activities/Observing_the_Earth/GOCE/Satellite">http://www.esa.int/Our_Activities/Observing_the_Earth/GOCE/Satellite</a></td>
+<td>5348.93s</td>
+</tr>
+</tbody>
+</table>
+<link rel="stylesheet" href="ext/paper.css">
+
+<script src="ext/paper.js?reference"></script>
+
+<script src="ext/header-nctu.js?execute&amp;editable"></script>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

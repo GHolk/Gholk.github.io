@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-03-16T08:42:41.514Z</updated>
+  <updated>2019-03-17T09:17:07.081Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,99 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/satellite-geodesy-homework-2.html</id>
+<title>衛星大地測量作業二</title>
+<published>2019-03-17T06:46:39.987Z</published>
+<updated>2019-03-17T09:17:07.069Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/satellite-geodesy-homework-2.html"/>
+<summary type="html">計算衛星軌道及推導相關公式。</summary>
+<category term="nctu"/>
+<category term="geodesy"/>
+<category term="report"/>
+<content type="html">&lt;h1 id=&quot;衛星大地測量作業二&quot;&gt;衛星大地測量作業二&lt;/h1&gt;
+&lt;p&gt;計算衛星軌道及推導相關公式。&lt;/p&gt;
+&lt;h2 id=&quot;常見衛星周期&quot;&gt;常見衛星周期&lt;/h2&gt;
+&lt;p&gt;由萬有引力公式與圓周運動公式，
+假設衛星軌道為圓，在軌道半徑已知下，
+衛星繞地球的周期、速度是可以唯一確定的。&lt;/p&gt;
+&lt;p&gt;若衛星繞地球作圓周運動，需要的向心加速度為：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;a = \frac{V^2 } R
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;衛星的向心加速度來源為引力，
+引力加速度公式為： &lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;a = \frac{G M} {R^2}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;合併二式後，可以由軌道半徑推出衛星運動速度，
+有運動速度與半徑即可推出周期：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;\frac{V^2} R = \frac{G M} {R^2} \\
+V^2 = \frac {G M} R \\
+V = \sqrt \frac{G M}R \\
+t = \frac{2 \pi R }V = \frac {2 \pi R^{1.5}} { \sqrt{G M} }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;G 為萬有引力常數，M 為地球質量，
+以地表 R = 6371km 時 a = g = 9.8 m/s² ，
+G M = 397778481800000 m³/s² 。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;衛星&lt;/th&gt;
+&lt;th&gt;軌道半徑&lt;/th&gt;
+&lt;th&gt;來源網址&lt;/th&gt;
+&lt;th&gt;周期&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Jason-3&lt;/td&gt;
+&lt;td&gt;7714.43km&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;https://podaac.jpl.nasa.gov/JASON3&quot;&gt;https://podaac.jpl.nasa.gov/JASON3&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;6750.17s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;GRACE-follow-on&lt;/td&gt;
+&lt;td&gt;6861km&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;https://gracefo.jpl.nasa.gov/resources/38/grace-fo-fact-sheet/&quot;&gt;https://gracefo.jpl.nasa.gov/resources/38/grace-fo-fact-sheet/&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;94.36s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;GPS satellite&lt;/td&gt;
+&lt;td&gt;20200km&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;https://www.nasa.gov/directorates/heo/scan/communications/policy/GPS.html&quot;&gt;https://www.nasa.gov/directorates/heo/scan/communications/policy/GPS.html&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;28601.33s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;BDs3&lt;/td&gt;
+&lt;td&gt;21500km&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/List_of_BeiDou_satellites#cite_note-gpsworld201501-3&quot;&gt;https://en.wikipedia.org/wiki/List_of_BeiDou_satellites#cite_note-gpsworld201501-3&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;31406.31s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;sentinel-1A&lt;/td&gt;
+&lt;td&gt;7064km&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;https://sentinel.esa.int/web/sentinel/missions/sentinel-1/satellite-description/orbit&quot;&gt;https://sentinel.esa.int/web/sentinel/missions/sentinel-1/satellite-description/orbit&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;5914.73s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;LAGEOS-2&lt;/td&gt;
+&lt;td&gt;5740km&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;https://lageos.cddis.eosdis.nasa.gov/&quot;&gt;https://lageos.cddis.eosdis.nasa.gov/&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;4332.39s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;GOCE&lt;/td&gt;
+&lt;td&gt;6606km&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;http://www.esa.int/Our_Activities/Observing_the_Earth/GOCE/Satellite&quot;&gt;http://www.esa.int/Our_Activities/Observing_the_Earth/GOCE/Satellite&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;5348.93s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
+
+&lt;script src=&quot;ext/paper.js?reference&quot;&gt;&lt;/script&gt;
+
+&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/linux-easy-shell-send-file.html#直接使用-stdin-不使用-here-doc</id>
 <title>透過 shell 傳送檔案</title>
 <published>2019-03-10T15:46:04.278Z</published>
@@ -2606,111 +2699,7 @@ tmux 好像會自己找到自己。&lt;/p&gt;
 <category term="tmux"/>
 <category term="linux"/>
 <category term="shell"/>
-<content type="html">&lt;h1 id=&quot;用 tmux 在 ptt 發錢&quot;&gt;用 tmux 在 ptt 發錢&lt;/h1&gt;
-&lt;p&gt;最近因為好玩，想試試發錢要鄉民去噓別人的文，
-於是之後兌現承諾發錢時，試了 &lt;a href=&quot;https://github.com/wabilin/MumiGiveP&quot;&gt;mumi 發錢程式&lt;/a&gt; 有問題，
-所以 &lt;a href=&quot;//github.com/GHolk/loco/blob/master/bin/tmux-give-p.sh&quot;&gt;自己用 tmux 和 ssh 當介面
-寫了個簡單的 shell script 來發錢&lt;/a&gt; 。
-這個 script 大概是我認同的 shell script 風格吧，
-用了很多我流的奇淫技巧。&lt;/p&gt;
-&lt;h2 id=&quot;使用方法&quot;&gt;使用方法&lt;/h2&gt;
-&lt;p&gt;要先有 tmux，在 window 0 連上 ptt，
-進入發 p 幣的選單，
-然後可以在 window 1 執行這個腳本。
-這個腳本有互動介面，所以什麼選項都不給還是能正常運行，
-腳本缺的變數就會要求你輸入。&lt;/p&gt;
-&lt;p&gt;執行就是 &lt;code&gt;sh tmux-give-p.sh 10 iXXXXGAY5566 seabox freeunixer RS5566&lt;/code&gt; ，
-第一個參數是稅前 P 幣，後面是要送的 id，
-ptt 不分大小寫，所以可以一律小寫。
-或是 id 也可以從 stdin 送進去，一行一個 id。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;sh tmux-give-p.sh 10 &amp;lt;&amp;lt;USER_LIST
-iXXXXGAY5566
-seabox
-freeunixer
-RS5566
 
-USER_LIST
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;然後會要求你輸入 ptt 密碼，
-密碼不能放在參數傳，因為會被 top ps pgrep 看到。
-所以我是用 tmux 的 buffer 存。
-又基於腳本要可以批次操作，
-你也可以事先存在 tmux 的 &lt;code&gt;ptt_password&lt;/code&gt; buffer。
-就不會要求輸入，可以直接開始發錢。&lt;/p&gt;
-&lt;p&gt;每發一個人會切回 window 1，
-所以如果出錯可以按 ctrl-c 中斷。
-但我沒有做很完整的判斷，
-如果出什麼意外可能會在 ptt 亂輸入一堆東西。&lt;/p&gt;
-&lt;p&gt;另外這腳本可以很大程度由環境變數改變行為，
-像如果要算稅後，可以 &lt;code&gt;after_tax=1 sh tmux-give-p.sh 10&lt;/code&gt;
-錢、使用者名單也都可以從環境數傳
-&lt;code&gt;money=10 username_list=&amp;apos;seabox rs5566&amp;apos; sh tmux-give-p.sh&lt;/code&gt; 。&lt;/p&gt;
-&lt;h3 id=&quot;環境變數&quot;&gt;環境變數&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;money: P 幣數量，必須大於零。&lt;/li&gt;
-&lt;li&gt;after_tax: P 幣計算稅後，預設是稅錢，只要不是空字串就代表計算稅後。&lt;/li&gt;
-&lt;li&gt;username_list: 要發的 id 列表，可以用空格或換行或 tab 分割。
-優先順序是環境變數、參數、stdin。&lt;/li&gt;
-&lt;li&gt;user_interval: 發一位使用者後會停多久，
-預設是 2，預設單位是秒，也可以傳 1m 就變成停一分鐘。&lt;/li&gt;
-&lt;li&gt;ptt_pane: ptt 發錢畫面的 tmux window，預設是 0。&lt;/li&gt;
-&lt;li&gt;script_pane: 腳本執行的 tmux window，預設是 1，
-只是跳回去後讓你可以 ctrl-c 中斷用的。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;如果要批次作業，就要先開好 tmux，
-在 window 0 連上 ptt 進到發錢介面，
-然後把密碼存到 tmux buffer，
-像是 &lt;code&gt;pass show ptt | tmux load-buffer -b ptt_password -&lt;/code&gt; ，
-再執行這個腳本，id 建議用 stdin 傳，比較不會被限制長度。
-&lt;code&gt;cat userlist | sh tmux-give-p.sh 10&lt;/code&gt; 。&lt;/p&gt;
-&lt;p&gt;如果什麼參數都不給，就會要求你輸入要發的 P 幣，
-ptt 密碼，之後要求你一行行輸入 id。
-另外把 tmux 開起來後，也可以在另外的終端機執行這個腳本，
-tmux 好像會自己找到自己。&lt;/p&gt;
-&lt;h2 id=&quot;腳本技巧&quot;&gt;腳本技巧&lt;/h2&gt;
-&lt;p&gt;最近我寫程式最大的觀注是
-如何讓使用者在無需改寫原始碼的情況下，
-改變程式行為；也就程式的重用。
-例如 emacs 的 emacs lisp 就在這點下了很大心力，
-你可以用 hook advice 來在不更動原始碼的情況下，
-改變某些函數的行為。&lt;/p&gt;
-&lt;p&gt;我大量使用了 &lt;code&gt;set_if_empty&lt;/code&gt; 這個函數，
-也就是在 script 裡不直接指派值給變數，
-而是先檢查外部有沒有給值，沒有再指定。
-因為 shell 裡在讀取變數時，
-變數和環境變數是沒有差異的。&lt;/p&gt;
-&lt;p&gt;之前學 common lisp，
-有個 &lt;code&gt;defparameter&lt;/code&gt; 就是類似的意思，
-定義一個參數，但可以被其它 defparameter 改變。
-在 Makefile 或 C 的巨集裡，好像也有類似的語法。&lt;/p&gt;
-&lt;p&gt;現在寫腳本，如果是可以改變的參數，
-我都會用 &lt;code&gt;set_if_empty&lt;/code&gt; 來定義，
-執行時如果想改可以直接傳環境變數覆寫。&lt;/p&gt;
-&lt;h2 id=&quot;緣起&quot;&gt;緣起&lt;/h2&gt;
-&lt;p&gt;最近幾個月 ptt 在流行 &lt;a href=&quot;//pttpedia.fandom.com/zh/%E6%90%B6777777&quot;&gt;搶第 777777 篇文章&lt;/a&gt; ，
-搶到的人都會被推爆，還會被要求發錢。
-對這行為有點反感，所以之後想試試在 777777 前後發一篇文，
-發錢請鄉民在 777777 文章下面噓文，
-看能不能把推爆變噓爆。&lt;/p&gt;
-&lt;p&gt;但後來剛好看到一篇沒什麼意義的發錢文，
-就在他之後發了文章後要求鄉民去噓他，
-可惜沒有成功，因為發錢文大部份都會推超過 100，
-我後來統計有 173 噓，但扣掉後還是有二十幾推，
-還是不到噓爆。&lt;/p&gt;
-&lt;p&gt;但不知道為什麼一堆人噓我，噓我又沒錢，
-可能看不爽我要鄉民去噓別人吧，
-或是單純看到噓就被當成 &lt;a href=&quot;//pttpedia.fandom.com/zh/討噓文&quot;&gt;討噓文&lt;/a&gt; 。
-後來那篇文章作者也來我的文章噓，
-說他不能噓自己，能不能多少給他一點；
-把他的爆文噓掉也不太好意思，發一點錢給他也剛好而已。&lt;/p&gt;
-&lt;h2 id=&quot;ptt 應該內建群組發錢功能&quot;&gt;ptt 應該內建群組發錢功能&lt;/h2&gt;
-&lt;p&gt;雖然可以用 tmux 解決，
-但最簡單的作法還是 ptt 開個批次發錢的功能。
-站內信都可以群組寄信了，
-做個批次發錢的功能應該也不難吧。
-不然大家都自己 hack，
-雖然不複雜，但實在很沒必要。&lt;/p&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/tmux-give-p.html</id>
 <title>用 tmux 在 ptt 發錢</title>

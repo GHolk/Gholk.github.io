@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-03-19T13:37:33.455Z</updated>
+  <updated>2019-03-19T13:58:47.948Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,305 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/satellite-geodesy-homework-2.html#disable-reference</id>
+<title>衛星大地測量作業二</title>
+<published>2019-03-17T06:46:39.987Z</published>
+<updated>2019-03-19T13:58:47.939Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/satellite-geodesy-homework-2.html#disable-reference"/>
+<summary type="html">&lt;pre class=&quot;diff&quot;&gt;@@ -269,7 +269,7 @@ sqrt(GM) / a^1.5
+ 
+ &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;ext/paper.css&amp;quot;&amp;gt;
+ 
+-&amp;lt;script src=&amp;quot;ext/paper.js?reference&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
++&amp;lt;script src=&amp;quot;ext/paper.js?execute&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+ 
+ &amp;lt;script src=&amp;quot;ext/header-nctu.js?execute&amp;amp;editable&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+ 
+&lt;/pre&gt;</summary>
+<category term="nctu"/>
+<category term="geodesy"/>
+<category term="report"/>
+<content type="html">&lt;h1 id=&quot;衛星大地測量作業二&quot;&gt;衛星大地測量作業二&lt;/h1&gt;
+&lt;p&gt;計算衛星軌道及推導拉格朗日括號公式。&lt;/p&gt;
+&lt;h2 id=&quot;常見衛星周期&quot;&gt;常見衛星周期&lt;/h2&gt;
+&lt;p&gt;由萬有引力公式與圓周運動公式，
+假設衛星軌道為圓，在軌道半徑已知下，
+衛星繞地球的周期、速度是可以唯一確定的。&lt;/p&gt;
+&lt;p&gt;若衛星繞地球作圓周運動，需要的向心加速度為：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;a = \frac{V^2 } R
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;衛星的向心加速度來源為引力，
+引力加速度公式為： &lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;a = \frac{G M} {R^2}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;合併二式後，可以由軌道半徑推出衛星運動速度，
+有運動速度與半徑即可推出周期：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;\frac{V^2} R = \frac{G M} {R^2} \\
+V^2 = \frac {G M} R \\
+V = \sqrt \frac{G M}R \\
+t = \frac{2 \pi R }V = \frac {2 \pi R^{1.5}} { \sqrt{G M} }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;G 為萬有引力常數，M 為地球質量，
+以地表 R = 6371km 時 a = g = 9.8 m/s² ，
+G M = 397778481800000 m³/s² 。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;衛星&lt;/th&gt;
+&lt;th&gt;軌道半徑&lt;/th&gt;
+&lt;th&gt;來源網址&lt;/th&gt;
+&lt;th&gt;周期&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Jason-3&lt;/td&gt;
+&lt;td&gt;7714.43km&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;https://podaac.jpl.nasa.gov/JASON3&quot;&gt;https://podaac.jpl.nasa.gov/JASON3&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;6750.17s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;GRACE-follow-on&lt;/td&gt;
+&lt;td&gt;6861km&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;https://gracefo.jpl.nasa.gov/resources/38/grace-fo-fact-sheet/&quot;&gt;https://gracefo.jpl.nasa.gov/resources/38/grace-fo-fact-sheet/&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;94.36s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;GPS satellite&lt;/td&gt;
+&lt;td&gt;20200km&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;https://www.nasa.gov/directorates/heo/scan/communications/policy/GPS.html&quot;&gt;https://www.nasa.gov/directorates/heo/scan/communications/policy/GPS.html&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;28601.33s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;BDs3&lt;/td&gt;
+&lt;td&gt;21500km&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/List_of_BeiDou_satellites#cite_note-gpsworld201501-3&quot;&gt;https://en.wikipedia.org/wiki/List_of_BeiDou_satellites#cite_note-gpsworld201501-3&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;31406.31s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;sentinel-1A&lt;/td&gt;
+&lt;td&gt;7064km&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;https://sentinel.esa.int/web/sentinel/missions/sentinel-1/satellite-description/orbit&quot;&gt;https://sentinel.esa.int/web/sentinel/missions/sentinel-1/satellite-description/orbit&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;5914.73s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;LAGEOS-2&lt;/td&gt;
+&lt;td&gt;5740km&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;https://lageos.cddis.eosdis.nasa.gov/&quot;&gt;https://lageos.cddis.eosdis.nasa.gov/&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;4332.39s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;GOCE&lt;/td&gt;
+&lt;td&gt;6606km&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;http://www.esa.int/Our_Activities/Observing_the_Earth/GOCE/Satellite&quot;&gt;http://www.esa.int/Our_Activities/Observing_the_Earth/GOCE/Satellite&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;5348.93s&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&quot;拉格朗日括號&quot;&gt;拉格朗日括號&lt;/h2&gt;
+&lt;p&gt;驗證下列公式：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;[ \Omega , e ] = - [ e , \Omega ] =
+- \frac { - n a^2 e cos(i) }
+        { \sqrt { 1 - e^2 } }
+
+\\
+
+[ \omega , a ] = - [ a , \omega ] =
+\frac { \sqrt {1 - e^2} n a } 2
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;使用 emacs-calc 進行符號微分，
+以下是變數定義：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;qq = [a * (cos(E) - ee);
+      a * sin(E) * sqrt(1 - ee^2);
+      0]
+vqq = [a * n * sin(E) / (ee * cos(E) - 1);
+       a * cos(E) * n * sqrt(1 - ee^2) / (1 - ee * cos(E));
+       0]
+
+r3o = [ [cos(o), -sin(o), 0],
+  [sin(o), cos(o), 0],
+  [0, 0, 1] ]
+r1i = [ [1, 0, 0],
+  [0, cos(ii), -sin(ii)],
+  [0, sin(ii), cos(ii)] ]
+r3w = [ [cos(o), -sin(o), 0],
+  [sin(o), cos(o), 0],
+  [0, 0, 1] ]
+roiw = r3o * r1i * r3w
+xyz = roiw * qq
+vxyz = roiw * vqq
+
+bracketoe = sum(
+    deriv(evalv(xyz_k_1), o) * deriv(evalv(vxyz_k_1), ee) -
+    deriv(evalv(vxyz_k_1), o) * deriv(evalv(xyz_k_1), ee),
+    k, 1, 3
+)
+bracketwa = sum(
+    deriv(evalv(xyz_k_1), w) * deriv(evalv(vxyz_k_1), a) -
+    deriv(evalv(vxyz_k_1), w) * deriv(evalv(xyz_k_1), a),
+    k, 1, 3
+)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;其中 o 為 Ω ，w 為 ω ，ee 為 e，ii 為 i。
+微分的結果極長：&lt;/p&gt;
+&lt;style&gt;
+@media print {
+:this + pre code, :this + pre + pre code {
+    font-size: 70%;
+    line-height: 120%;
+    white-space: normal;
+}
+}
+&lt;/style&gt;
+
+&lt;pre&gt;&lt;code&gt;    bracketoe 
+      = ((a sin(E) sin(w) sqrt(1 - ee^2) 
+            - a*(cos(E) - ee) cos(w)) sin(o) 
+           - (a*(cos(E) - ee) sin(w) 
+      + a cos(w) sin(E) sqrt(1 - ee^2)) cos(ii) 
+      cos(o)) 
+          ((a ee cos(E) cos(w) n(a) 
+      / ((1 - ee cos(E)) sqrt(1 - ee^2)) 
+      + a cos(E) n(a) sin(E) sin(w) 
+          / (ee cos(E) - 1)^2 
+      - a cos(E)^2 cos(w) n(a) sqrt(1 - ee^2) 
+          / (1 - ee cos(E))^2) cos(ii) sin(o) 
+             - (a cos(E)^2 n(a) sin(w) 
+      sqrt(1 - ee^2) / (ee cos(E) - 1)^2 
+      + a ee cos(E) n(a) sin(w) 
+          / ((ee cos(E) - 1) sqrt(1 - ee^2)) 
+      + a cos(E) cos(w) n(a) sin(E) 
+          / (ee cos(E) - 1)^2) cos(o)) 
+          + ((a*(cos(E) - ee) cos(w) 
+      - a sin(E) sin(w) sqrt(1 - ee^2)) cos(o) 
+      - (a*(cos(E) - ee) sin(w) 
+           + a cos(w) sin(E) sqrt(1 - ee^2)) 
+          cos(ii) sin(o)) 
+      ((a cos(E)^2 cos(w) n(a) sqrt(1 - ee^2) 
+          / (1 - ee cos(E))^2 
+          - a cos(E) n(a) sin(E) sin(w) 
+      / (ee cos(E) - 1)^2 
+          - a ee cos(E) cos(w) n(a) 
+      / ((1 - ee cos(E)) sqrt(1 - ee^2))) 
+         cos(ii) cos(o) 
+         - (a cos(E)^2 n(a) sin(w) 
+      sqrt(1 - ee^2) / (ee cos(E) - 1)^2 
+      + a ee cos(E) n(a) sin(w) 
+          / ((ee cos(E) - 1) sqrt(1 - ee^2)) 
+      + a cos(E) cos(w) n(a) sin(E) 
+          / (ee cos(E) - 1)^2) sin(o)) 
+          + ((a ee cos(w) sin(E) 
+      / sqrt(1 - ee^2) + a sin(w)) cos(ii) 
+      sin(o) 
+      + (a ee sin(E) sin(w) / sqrt(1 - ee^2) 
+           - a cos(w)) cos(o)) 
+      ((a n(a) sin(E) sin(w) / (ee cos(E) - 1) 
+          + a cos(E) cos(w) n(a) sqrt(1 - ee^2) 
+      / (1 - ee cos(E))) cos(ii) cos(o) 
+         + (a cos(w) n(a) sin(E) 
+      / (ee cos(E) - 1) 
+      + a cos(E) n(a) sin(w) sqrt(1 - ee^2) 
+          / (ee cos(E) - 1)) sin(o)) 
+          + ((a n(a) sin(E) sin(w) 
+      / (ee cos(E) - 1) 
+      + a cos(E) cos(w) n(a) sqrt(1 - ee^2) 
+          / (1 - ee cos(E))) cos(ii) sin(o) 
+      - (a cos(w) n(a) sin(E) / (ee cos(E) - 1) 
+           + a cos(E) n(a) sin(w) sqrt(1 - ee^2) 
+      / (ee cos(E) - 1)) cos(o)) 
+      ((a ee sin(E) sin(w) / sqrt(1 - ee^2) 
+          - a cos(w)) sin(o) 
+         - (a ee cos(w) sin(E) / sqrt(1 - ee^2) 
+      + a sin(w)) cos(ii) cos(o))
+&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;    bracketwa 
+      = ((a*(ee - cos(E)) sin(w) 
+            - a cos(w) sin(E) sqrt(1 - ee^2)) 
+           cos(o) 
+           + (a sin(E) sin(w) sqrt(1 - ee^2) 
+      - a*(cos(E) - ee) cos(w)) cos(ii) sin(o)) 
+          (((cos(w) n(a) sin(E) 
+      + a cos(w) n&amp;apos;(a) sin(E)) / (ee cos(E) - 1) 
+      + (cos(E) n(a) sin(w) sqrt(1 - ee^2) 
+           + a cos(E) n&amp;apos;(a) sin(w) 
+      sqrt(1 - ee^2)) / (ee cos(E) - 1)) cos(o) 
+             - ((n(a) sin(E) sin(w) 
+      + a n&amp;apos;(a) sin(E) sin(w)) / (ee cos(E) - 1) 
+      + (cos(E) cos(w) n(a) sqrt(1 - ee^2) 
+           + a cos(E) cos(w) n&amp;apos;(a) 
+      sqrt(1 - ee^2)) / (1 - ee cos(E))) cos(ii) 
+      sin(o)) 
+          + (((cos(w) n(a) sin(E) 
+      + a cos(w) n&amp;apos;(a) sin(E)) / (ee cos(E) - 1) 
+      + (cos(E) n(a) sin(w) sqrt(1 - ee^2) 
+           + a cos(E) n&amp;apos;(a) sin(w) 
+      sqrt(1 - ee^2)) / (ee cos(E) - 1)) sin(o) 
+      + ((n(a) sin(E) sin(w) 
+            + a n&amp;apos;(a) sin(E) sin(w)) 
+           / (ee cos(E) - 1) 
+           + (cos(E) cos(w) n(a) sqrt(1 - ee^2) 
+      + a cos(E) cos(w) n&amp;apos;(a) sqrt(1 - ee^2)) 
+      / (1 - ee cos(E))) cos(ii) cos(o)) 
+      ((a*(ee - cos(E)) sin(w) 
+          - a cos(w) sin(E) sqrt(1 - ee^2)) 
+         sin(o) 
+         + (a*(cos(E) - ee) cos(w) 
+      - a sin(E) sin(w) sqrt(1 - ee^2)) cos(ii) 
+             cos(o)) 
+          + ((n(a) sin(E) sin(w) 
+      + a n&amp;apos;(a) sin(E) sin(w)) / (ee cos(E) - 1) 
+      + (cos(E) cos(w) n(a) sqrt(1 - ee^2) 
+           + a cos(E) cos(w) n&amp;apos;(a) 
+      sqrt(1 - ee^2)) / (1 - ee cos(E))) 
+          (a*(cos(E) - ee) cos(w) 
+         - a sin(E) sin(w) sqrt(1 - ee^2)) 
+      sin(ii)^2 
+          + ((a cos(w) n(a) sin(E) 
+      / (ee cos(E) - 1) 
+      + a cos(E) n(a) sin(w) sqrt(1 - ee^2) 
+          / (ee cos(E) - 1)) cos(ii) sin(o) 
+      - (a n(a) sin(E) sin(w) / (1 - ee cos(E)) 
+           + a cos(E) cos(w) n(a) sqrt(1 - ee^2) 
+      / (ee cos(E) - 1)) cos(o)) 
+      (((cos(E) - ee) cos(w) 
+          - sin(E) sin(w) sqrt(1 - ee^2)) cos(o) 
+         - ((cos(E) - ee) sin(w) 
+      + cos(w) sin(E) sqrt(1 - ee^2)) cos(ii) 
+             sin(o)) 
+          - ((a n(a) sin(E) sin(w) 
+      / (1 - ee cos(E)) 
+      + a cos(E) cos(w) n(a) sqrt(1 - ee^2) 
+          / (ee cos(E) - 1)) sin(o) 
+      + (a cos(w) n(a) sin(E) / (ee cos(E) - 1) 
+           + a cos(E) n(a) sin(w) sqrt(1 - ee^2) 
+      / (ee cos(E) - 1)) cos(ii) cos(o)) 
+      (((cos(E) - ee) cos(w) 
+          - sin(E) sin(w) sqrt(1 - ee^2)) sin(o) 
+         + ((cos(E) - ee) sin(w) 
+      + cos(w) sin(E) sqrt(1 - ee^2)) cos(ii) 
+             cos(o)) 
+          - ((cos(E) - ee) sin(w) 
+      + cos(w) sin(E) sqrt(1 - ee^2)) 
+      (a cos(w) n(a) sin(E) / (ee cos(E) - 1) 
+         + a cos(E) n(a) sin(w) sqrt(1 - ee^2) 
+             / (ee cos(E) - 1)) sin(ii)^2
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;之後代入數值驗證，
+E 也是事先算好代入：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# 虛擬碼
+[w, o, a, M, E, ii, ee, GM] = 
+[0.9, 1.1, 12000000, 0.456413411439, 0.47, 0.3, 0.03, 397778481800000]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;n 則是定義成 a 的函數。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ZFn
+sqrt(GM) / a^1.5
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;最後與講義上的公式比較，二者大約相同，
+代表符號微分正確。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[ω, a] = 2877.42825411
+[Ω, e] = -1980999688.28
+&lt;/code&gt;&lt;/pre&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
+
+&lt;script src=&quot;ext/paper.js?execute&quot;&gt;&lt;/script&gt;
+
+&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/satellite-geodesy-homework-2.html#拉格朗日括號</id>
 <title>衛星大地測量作業二</title>
 <published>2019-03-17T06:46:39.987Z</published>
@@ -3118,169 +3417,7 @@ diff --new-file --unified --recursive --text not-exist .ssh \
 <category term="android"/>
 <category term="nctu"/>
 <category term="report"/>
-<content type="html">&lt;h1 id=&quot;智慧型手機中的 GNSS 定位高程&quot;&gt;智慧型手機中的 GNSS 定位高程&lt;/h1&gt;
-&lt;p&gt;現代智慧型手機中多內建 GNSS 定位，
-定位結果為三維座標，一般以經緯度及高程表示。
-但高程從計算的方式不同，有不同高程，
-常用的有 &lt;strong&gt;正高&lt;/strong&gt; 、 &lt;strong&gt;橢球高&lt;/strong&gt; 、 &lt;strong&gt;正常高&lt;/strong&gt; 。
-手機的因為是以 GNSS 定位，一般是橢球高，
-需要經高程現代化，以大地起伏模型改正為正高。&lt;/p&gt;
-&lt;h2 id=&quot;android 系統中使用 gnss 定位&quot;&gt;android 系統中使用 gnss 定位&lt;/h2&gt;
-&lt;p&gt;由於 gnss 的衛星已完善，
-只要有接收儀在空曠處就能用 gnss 定位。
-現代智慧型手機多能夠接收美國的 gps 的信號，
-使用 gps 定位。&lt;/p&gt;
-&lt;p&gt;手機的 gps 定位功能也被廣泛應用在不同的應用程式中：
-例如 android 上的 google map 可以由 gps 定位，
-將使用者所在位置標示在地圖中，
-供使者用在地圖上確認與周遭地物的相對位置。
-facebook 則可以由 gps 定位，
-讓使用者在地標上 &lt;em&gt;打卡&lt;/em&gt; ，標記到此一遊。&lt;/p&gt;
-&lt;p&gt;但一般 app 多是直接解析定位結果為地標或地圖上的位置，
-而不會顯示詳細的 gps 座標資訊；
-所以要另外裝專門顯示詳細 gps 定位座標的 app，
-我裝了課程中史天元老師推薦的開源軟體 &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.chartcross.gpstest&quot; title=&quot;play 商店中的 gps test&quot;&gt;gps test&lt;/a&gt;
-與免費軟體 &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.eclipsim.gpsstatus2&quot; title=&quot;play 商店中的 gps status&quot;&gt;gps status&lt;/a&gt; 。&lt;/p&gt;
-&lt;h2 id=&quot;正高、橢球高與大地起伏&quot;&gt;正高、橢球高與大地起伏&lt;/h2&gt;
-&lt;p&gt;gps 定位的結果是橢球高，但橢球高是沒有物理意義的，
-因為小區域內的重力與橢球高無關，而是與正高的方向垂直，
-也就是在橢球高較高處，水不一定會往橢球高低處流。
-橢球高與正高間的差異為大地起伏，
-橢球高減去大地起伏即為正高。&lt;/p&gt;
-&lt;p&gt;一般人不一定清楚橢球高與正高的差異，
-也不清楚 gps 定位出來的高是什麼高，
-所以很多 gps app 都會用內建的大地起伏網格，
-將定位結果的橢球高轉換為一般人概念中的高，
-也就是與重力方向垂直的高。&lt;/p&gt;
-&lt;p&gt;大地起伏可以由重力測量的結果計算，
-因此，在全國進行重力測量，
-計算出全國各地的大地起伏後，
-就能由橢球高計算正高，稱為 &lt;strong&gt;高程現代化&lt;/strong&gt; 。
-&lt;a href=&quot;https://egnss.nlsc.gov.tw/trans/geo.aspx&quot; title=&quot;國土測繪中心提供全台大地起伏的網頁&quot;&gt;國土測繪中心的網頁，有提供全台灣大地起伏的資料&lt;/a&gt; ，
-只要輸入 twd97 經緯度座標，就會計算出該地的大地起伏，
-供只能觀測橢球高的 gps 定位化算為正高。&lt;/p&gt;
-&lt;h2 id=&quot;app 測試&quot;&gt;app 測試&lt;/h2&gt;
-&lt;p&gt;我測試了 gps test 與 gps status 二款 app 的定位，
-二者都有選項供使用者調整是否使用大地起伏改正，
-切換橢球高與正高，由此可以觀察正高與橢球高的差異。
-再將二款 app 中測出的經緯度，
-輸入國土測繪中心的網頁中，計算台灣標準的大地起伏，
-與 app 中提供的大地起伏比較。&lt;/p&gt;
-&lt;h3 id=&quot;gps test&quot;&gt;gps test&lt;/h3&gt;
-&lt;p&gt;gps test 中可以正常切換是否使用 geoid，
-我所測試地點在交通大學博愛校區正門和校區內的圓環中間，
-時間是 2019-03-09T15:05。&lt;/p&gt;
-&lt;h4 id=&quot;截圖&quot;&gt;截圖&lt;/h4&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/32383100117&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7846/32383100117_faf384232c.jpg&quot; alt=&quot;Screenshot_20190309-150746.png&quot; title=&quot;gps test 給出的經緯度&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/32383084027&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7861/32383084027_d486aef34b.jpg&quot; alt=&quot;Screenshot_20190309-150451.png&quot; title=&quot;gps test 給出在 geoid 上的橢球高&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/32383084057&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7874/32383084057_c0074067a5.jpg&quot; alt=&quot;Screenshot_20190309-150456.png&quot; title=&quot;gps test 給出的正高&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h4 id=&quot;測試結果&quot;&gt;測試結果&lt;/h4&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;種類&lt;/th&gt;
-&lt;th&gt;數值&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;經度&lt;/td&gt;
-&lt;td&gt;120°59′00.180″&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;緯度&lt;/td&gt;
-&lt;td&gt;24°47′53.652″&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gps test 橢球高&lt;/td&gt;
-&lt;td&gt;27m&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gps test 正高&lt;/td&gt;
-&lt;td&gt;10m&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gps test 大地起伏&lt;/td&gt;
-&lt;td&gt;17m&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;e-gnss 大地起伏&lt;/td&gt;
-&lt;td&gt;19.466m&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&quot;gps status&quot;&gt;gps status&lt;/h3&gt;
-&lt;p&gt;gps status 是另一款顯示 gps 定位結果的 app，
-在高程可以選擇要用 wgs 橢球高，或是 msl 平均海水面高。
-但我在我現在用的 unihertz atom 手機上運作不正常，
-選擇 wgs 與 msl 顯示的高程均相同。
-後來換成以前的紅米手機，切換 wgs 與 msl 就會有變化了。
-所以我就用以前的紅米手機截圖。&lt;/p&gt;
-&lt;p&gt;這是在 2019-03-03T19-38 測的，
-位置大概在新竹高中正門口外的馬路上。&lt;/p&gt;
-&lt;h4 id=&quot;截圖&quot;&gt;截圖&lt;/h4&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/47273239382&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7851/47273239382_1a39b48779.jpg&quot; alt=&quot;Screenshot_2019-03-03-19-38-27.png&quot; title=&quot;gps status 中的橢球高模式&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/47273239742&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7834/47273239742_4b59e1574b.jpg&quot; alt=&quot;Screenshot_2019-03-03-19-38-40.png&quot; title=&quot;gps status 中的正高模式&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h4 id=&quot;測試結果&quot;&gt;測試結果&lt;/h4&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;種類&lt;/th&gt;
-&lt;th&gt;數值&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;經度&lt;/td&gt;
-&lt;td&gt;120°58.8360′&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;緯度&lt;/td&gt;
-&lt;td&gt;24°47.7200′&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gps status 橢球高&lt;/td&gt;
-&lt;td&gt;42.5m&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gps status 正高&lt;/td&gt;
-&lt;td&gt;27.6m&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gps status 大地起伏&lt;/td&gt;
-&lt;td&gt;14.9m&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;e-gnss 大地起伏&lt;/td&gt;
-&lt;td&gt;19.463&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&quot;GPSTest (barbeuDev)&quot;&gt;GPSTest (barbeuDev)&lt;/h3&gt;
-&lt;p&gt;另外我還找到一個也叫 &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.android.gpstest&quot; title=&quot;另一個也叫 gpstest 的開源 app&quot;&gt;gps test&lt;/a&gt; 的 app，
-開發者名字是掛 barbeuDev，他是 open source 的，
-在高程方面是直接二種高，橢球高和正高。
-但在我二台手機上使用都不正常，
-顯示的橢球高和正高都一樣，所以不使用。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33450963288&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7875/33450963288_725bc545fb.jpg&quot; alt=&quot;Screenshot_20190309-150642.png&quot; title=&quot;gpstest 中橢球高和正高數值相同&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;結論&quot;&gt;結論&lt;/h2&gt;
-&lt;p&gt;我在室外觀測 gps 時，數值極不穩定，
-就算我都沒有移動，在二三分鐘內
-gps 的橢球高可能會有三公尺左右的變化。&lt;/p&gt;
-&lt;p&gt;而大地起伏是用現成的事先計算好的資料不會改變，
-如果橢球高增加 3 公尺，因為大地起伏不變，
-那正高也就增加 3 公尺。&lt;/p&gt;
-&lt;p&gt;而 app 內建的大地起伏，
-看來 gps test 的較接近台灣官方的資料。
-以現成資料計算的大地起伏，
-本來就會依球諧級數的階數不同、內插的方式不同有差異。&lt;/p&gt;
-&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
 
-&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
-
-&lt;script src=&quot;ext/paper.js?reference&quot;&gt;&lt;/script&gt;
-
-</content>
 </entry><entry>
 <id>http://gholk.github.io/android-gnss-height-report.html</id>
 <title>智慧型手機中的 GNSS 定位高程</title>

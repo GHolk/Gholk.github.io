@@ -1,5 +1,5 @@
 # 衛星大地測量作業二
-計算衛星軌道及推導相關公式。
+計算衛星軌道及推導拉格朗日括號公式。
 
 ## 常見衛星周期
 由萬有引力公式與圓周運動公式，
@@ -43,6 +43,229 @@ BDs3 | 21500km |  <https://en.wikipedia.org/wiki/List_of_BeiDou_satellites#cite_
 sentinel-1A | 7064km | <https://sentinel.esa.int/web/sentinel/missions/sentinel-1/satellite-description/orbit> | 5914.73s
 LAGEOS-2 | 5740km | <https://lageos.cddis.eosdis.nasa.gov/> | 4332.39s
 GOCE | 6606km | <http://www.esa.int/Our_Activities/Observing_the_Earth/GOCE/Satellite> | 5348.93s
+
+## 拉格朗日括號
+驗證下列公式：
+
+```math
+[ \Omega , e ] = - [ e , \Omega ] =
+- \frac { - n a^2 e cos(i) }
+        { \sqrt { 1 - e^2 } }
+
+\\
+
+[ \omega , a ] = - [ a , \omega ] =
+\frac { \sqrt {1 - e^2} n a } 2
+```
+
+使用 emacs-calc 進行符號微分，
+以下是變數定義：
+
+```
+qq = [a * (cos(E) - ee);
+      a * sin(E) * sqrt(1 - ee^2);
+      0]
+vqq = [a * n * sin(E) / (ee * cos(E) - 1);
+       a * cos(E) * n * sqrt(1 - ee^2) / (1 - ee * cos(E));
+       0]
+
+r3o = [ [cos(o), -sin(o), 0],
+  [sin(o), cos(o), 0],
+  [0, 0, 1] ]
+r1i = [ [1, 0, 0],
+  [0, cos(ii), -sin(ii)],
+  [0, sin(ii), cos(ii)] ]
+r3w = [ [cos(o), -sin(o), 0],
+  [sin(o), cos(o), 0],
+  [0, 0, 1] ]
+roiw = r3o * r1i * r3w
+xyz = roiw * qq
+vxyz = roiw * vqq
+
+bracketoe = sum(
+    deriv(evalv(xyz_k_1), o) * deriv(evalv(vxyz_k_1), ee) -
+    deriv(evalv(vxyz_k_1), o) * deriv(evalv(xyz_k_1), ee),
+    k, 1, 3
+)
+bracketwa = sum(
+    deriv(evalv(xyz_k_1), w) * deriv(evalv(vxyz_k_1), a) -
+    deriv(evalv(vxyz_k_1), w) * deriv(evalv(xyz_k_1), a),
+    k, 1, 3
+)
+```
+
+其中 o 為 Ω ，w 為 ω ，ee 為 e，ii 為 i。
+微分的結果極長：
+
+<style>
+@media print {
+:this + pre code, :this + pre + pre code {
+    font-size: 70%;
+    line-height: 120%;
+    white-space: normal;
+}
+}
+</style>
+
+```
+    bracketoe 
+      = ((a sin(E) sin(w) sqrt(1 - ee^2) 
+            - a*(cos(E) - ee) cos(w)) sin(o) 
+           - (a*(cos(E) - ee) sin(w) 
+      + a cos(w) sin(E) sqrt(1 - ee^2)) cos(ii) 
+      cos(o)) 
+          ((a ee cos(E) cos(w) n(a) 
+      / ((1 - ee cos(E)) sqrt(1 - ee^2)) 
+      + a cos(E) n(a) sin(E) sin(w) 
+          / (ee cos(E) - 1)^2 
+      - a cos(E)^2 cos(w) n(a) sqrt(1 - ee^2) 
+          / (1 - ee cos(E))^2) cos(ii) sin(o) 
+             - (a cos(E)^2 n(a) sin(w) 
+      sqrt(1 - ee^2) / (ee cos(E) - 1)^2 
+      + a ee cos(E) n(a) sin(w) 
+          / ((ee cos(E) - 1) sqrt(1 - ee^2)) 
+      + a cos(E) cos(w) n(a) sin(E) 
+          / (ee cos(E) - 1)^2) cos(o)) 
+          + ((a*(cos(E) - ee) cos(w) 
+      - a sin(E) sin(w) sqrt(1 - ee^2)) cos(o) 
+      - (a*(cos(E) - ee) sin(w) 
+           + a cos(w) sin(E) sqrt(1 - ee^2)) 
+          cos(ii) sin(o)) 
+      ((a cos(E)^2 cos(w) n(a) sqrt(1 - ee^2) 
+          / (1 - ee cos(E))^2 
+          - a cos(E) n(a) sin(E) sin(w) 
+      / (ee cos(E) - 1)^2 
+          - a ee cos(E) cos(w) n(a) 
+      / ((1 - ee cos(E)) sqrt(1 - ee^2))) 
+         cos(ii) cos(o) 
+         - (a cos(E)^2 n(a) sin(w) 
+      sqrt(1 - ee^2) / (ee cos(E) - 1)^2 
+      + a ee cos(E) n(a) sin(w) 
+          / ((ee cos(E) - 1) sqrt(1 - ee^2)) 
+      + a cos(E) cos(w) n(a) sin(E) 
+          / (ee cos(E) - 1)^2) sin(o)) 
+          + ((a ee cos(w) sin(E) 
+      / sqrt(1 - ee^2) + a sin(w)) cos(ii) 
+      sin(o) 
+      + (a ee sin(E) sin(w) / sqrt(1 - ee^2) 
+           - a cos(w)) cos(o)) 
+      ((a n(a) sin(E) sin(w) / (ee cos(E) - 1) 
+          + a cos(E) cos(w) n(a) sqrt(1 - ee^2) 
+      / (1 - ee cos(E))) cos(ii) cos(o) 
+         + (a cos(w) n(a) sin(E) 
+      / (ee cos(E) - 1) 
+      + a cos(E) n(a) sin(w) sqrt(1 - ee^2) 
+          / (ee cos(E) - 1)) sin(o)) 
+          + ((a n(a) sin(E) sin(w) 
+      / (ee cos(E) - 1) 
+      + a cos(E) cos(w) n(a) sqrt(1 - ee^2) 
+          / (1 - ee cos(E))) cos(ii) sin(o) 
+      - (a cos(w) n(a) sin(E) / (ee cos(E) - 1) 
+           + a cos(E) n(a) sin(w) sqrt(1 - ee^2) 
+      / (ee cos(E) - 1)) cos(o)) 
+      ((a ee sin(E) sin(w) / sqrt(1 - ee^2) 
+          - a cos(w)) sin(o) 
+         - (a ee cos(w) sin(E) / sqrt(1 - ee^2) 
+      + a sin(w)) cos(ii) cos(o))
+```
+
+```
+    bracketwa 
+      = ((a*(ee - cos(E)) sin(w) 
+            - a cos(w) sin(E) sqrt(1 - ee^2)) 
+           cos(o) 
+           + (a sin(E) sin(w) sqrt(1 - ee^2) 
+      - a*(cos(E) - ee) cos(w)) cos(ii) sin(o)) 
+          (((cos(w) n(a) sin(E) 
+      + a cos(w) n'(a) sin(E)) / (ee cos(E) - 1) 
+      + (cos(E) n(a) sin(w) sqrt(1 - ee^2) 
+           + a cos(E) n'(a) sin(w) 
+      sqrt(1 - ee^2)) / (ee cos(E) - 1)) cos(o) 
+             - ((n(a) sin(E) sin(w) 
+      + a n'(a) sin(E) sin(w)) / (ee cos(E) - 1) 
+      + (cos(E) cos(w) n(a) sqrt(1 - ee^2) 
+           + a cos(E) cos(w) n'(a) 
+      sqrt(1 - ee^2)) / (1 - ee cos(E))) cos(ii) 
+      sin(o)) 
+          + (((cos(w) n(a) sin(E) 
+      + a cos(w) n'(a) sin(E)) / (ee cos(E) - 1) 
+      + (cos(E) n(a) sin(w) sqrt(1 - ee^2) 
+           + a cos(E) n'(a) sin(w) 
+      sqrt(1 - ee^2)) / (ee cos(E) - 1)) sin(o) 
+      + ((n(a) sin(E) sin(w) 
+            + a n'(a) sin(E) sin(w)) 
+           / (ee cos(E) - 1) 
+           + (cos(E) cos(w) n(a) sqrt(1 - ee^2) 
+      + a cos(E) cos(w) n'(a) sqrt(1 - ee^2)) 
+      / (1 - ee cos(E))) cos(ii) cos(o)) 
+      ((a*(ee - cos(E)) sin(w) 
+          - a cos(w) sin(E) sqrt(1 - ee^2)) 
+         sin(o) 
+         + (a*(cos(E) - ee) cos(w) 
+      - a sin(E) sin(w) sqrt(1 - ee^2)) cos(ii) 
+             cos(o)) 
+          + ((n(a) sin(E) sin(w) 
+      + a n'(a) sin(E) sin(w)) / (ee cos(E) - 1) 
+      + (cos(E) cos(w) n(a) sqrt(1 - ee^2) 
+           + a cos(E) cos(w) n'(a) 
+      sqrt(1 - ee^2)) / (1 - ee cos(E))) 
+          (a*(cos(E) - ee) cos(w) 
+         - a sin(E) sin(w) sqrt(1 - ee^2)) 
+      sin(ii)^2 
+          + ((a cos(w) n(a) sin(E) 
+      / (ee cos(E) - 1) 
+      + a cos(E) n(a) sin(w) sqrt(1 - ee^2) 
+          / (ee cos(E) - 1)) cos(ii) sin(o) 
+      - (a n(a) sin(E) sin(w) / (1 - ee cos(E)) 
+           + a cos(E) cos(w) n(a) sqrt(1 - ee^2) 
+      / (ee cos(E) - 1)) cos(o)) 
+      (((cos(E) - ee) cos(w) 
+          - sin(E) sin(w) sqrt(1 - ee^2)) cos(o) 
+         - ((cos(E) - ee) sin(w) 
+      + cos(w) sin(E) sqrt(1 - ee^2)) cos(ii) 
+             sin(o)) 
+          - ((a n(a) sin(E) sin(w) 
+      / (1 - ee cos(E)) 
+      + a cos(E) cos(w) n(a) sqrt(1 - ee^2) 
+          / (ee cos(E) - 1)) sin(o) 
+      + (a cos(w) n(a) sin(E) / (ee cos(E) - 1) 
+           + a cos(E) n(a) sin(w) sqrt(1 - ee^2) 
+      / (ee cos(E) - 1)) cos(ii) cos(o)) 
+      (((cos(E) - ee) cos(w) 
+          - sin(E) sin(w) sqrt(1 - ee^2)) sin(o) 
+         + ((cos(E) - ee) sin(w) 
+      + cos(w) sin(E) sqrt(1 - ee^2)) cos(ii) 
+             cos(o)) 
+          - ((cos(E) - ee) sin(w) 
+      + cos(w) sin(E) sqrt(1 - ee^2)) 
+      (a cos(w) n(a) sin(E) / (ee cos(E) - 1) 
+         + a cos(E) n(a) sin(w) sqrt(1 - ee^2) 
+             / (ee cos(E) - 1)) sin(ii)^2
+```
+
+之後代入數值驗證，
+E 也是事先算好代入：
+
+```
+# 虛擬碼
+[w, o, a, M, E, ii, ee, GM] = 
+[0.9, 1.1, 12000000, 0.456413411439, 0.47, 0.3, 0.03, 397778481800000]
+```
+
+n 則是定義成 a 的函數。
+
+```
+ZFn
+sqrt(GM) / a^1.5
+```
+
+最後與講義上的公式比較，二者大約相同，
+代表符號微分正確。
+
+```
+[ω, a] = 2877.42825411
+[Ω, e] = -1980999688.28
+```
 
 <link rel="stylesheet" href="ext/paper.css">
 

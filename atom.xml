@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-03-19T13:58:47.948Z</updated>
+  <updated>2019-03-20T10:31:02.122Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,682 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/geomatics-rtx-csrs-compare.html#rtx-與-gpspark-和真值的差異</id>
+<title>A Preliminary Comparative Evaluation of Trimble RTX with CSRS-PPP</title>
+<published>2019-01-30T13:52:35.944Z</published>
+<updated>2019-03-20T10:31:02.109Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/geomatics-rtx-csrs-compare.html#rtx-與-gpspark-和真值的差異"/>
+<summary type="html">
+加入 rtx gpspark 與真值的差異，包含平面距、斜距。
+結論為 sbas 在收斂後可與 ppp 匹敵。</summary>
+<category term="geomatics"/>
+<category term="gnss"/>
+<category term="csrs"/>
+<content type="html">&lt;h1 id=&quot;A Preliminary Comparative Evaluation of Trimble RTX with CSRS-PPP&quot;&gt;A Preliminary Comparative Evaluation of Trimble RTX with CSRS-PPP&lt;/h1&gt;
+&lt;p&gt;Kinematic positioning has important applications in bathymetric mapping,
+vehicle navigation, and many others. This study comparatively evaluated
+the differences among the real time kinematic positioning with Trimble
+CenterPoint RTX service and the post-processing kinematic solution
+obtained from CSRS-PPP service. The comparison is based on the data
+collected on Dec. 16 to 22, 2017 on a CORS station, NSB0. From
+observations made on these days, the standard deviation of height
+differences between these two services is 0.057m, while the bias is
+0.080m. As compared with the official coordinates of this CORS, CSRS-PPP
+shows better agreement.&lt;/p&gt;
+&lt;h2 id=&quot;rtx 與 csrs-ppp&quot;&gt;rtx 與 csrs-ppp&lt;/h2&gt;
+&lt;p&gt;rtx 與 csrs-ppp 都是基於 GNSS 系統的絕對定位。
+rtx 是星基增益的即時動態定位，
+藉由地面站即時解算部份地區的精密星曆，
+並由網路或衛星廣播到使用者端，
+可以實現即時動態基於載波相位的絕對定位。&lt;/p&gt;
+&lt;h3 id=&quot;rtx 相對傳統 VBS-RTK 的優勢&quot;&gt;rtx 相對傳統 VBS-RTK 的優勢&lt;/h3&gt;
+&lt;p&gt;且相較於傳統的即時動態差分定位，
+星基增益系統不需要受限於基站與虛擬基站。
+傳統的差分定位，需要架站基站，
+或是以基站網內差出虛擬基站。
+虛擬基站雖然免除架站基站的困擾，
+但需要為每個使用者都內差計算出不同的虛擬基站。&lt;/p&gt;
+&lt;p&gt;而 rtx 等星基增益技術，只要有固定數量的靜態衛星接收站，
+即可即時解算出衛星的精密星曆，透過廣播服務所有使用者。
+由於所有使用者需要的是相同的星曆，
+不會像 vbs 因使用者增加而加重計算負擔，
+透過衛星廣播訊號的話，可以服務無上限人數的使用者。&lt;/p&gt;
+&lt;h3 id=&quot;csrs-ppp&quot;&gt;csrs-ppp&lt;/h3&gt;
+&lt;p&gt;csrs-ppp 是 &lt;strong&gt;加拿大自然資源局&lt;/strong&gt; 提供的線上解算精密單點定位服務，
+允許使用者在網頁介面上提交 rinex 格式的觀測資料，
+在伺服器端解算完畢後，會將成果 email 到使用者信箱。&lt;/p&gt;
+&lt;p&gt;csrs-ppp 為服務名稱，其內部使用的軟體有過變化，
+舊版軟體為 gpspace，現行的新版為 gpspark。
+&lt;a href=&quot;https://github.com/CGS-GIS/GPSPACE/&quot; title=&quot;csrs 開源 gpspace&quot;&gt;舊版 gpspace 已開源在 github 上，可以自行編譯取用；&lt;/a&gt;
+而新版 gpspark 仍在活躍開發中，沒有釋出原始碼，
+只有透過網頁介面提供服務，也就是現今的 csrs-ppp。&lt;/p&gt;
+&lt;h3 id=&quot;rtx 與 ppp 的異同&quot;&gt;rtx 與 ppp 的異同&lt;/h3&gt;
+&lt;p&gt;rtx 是即時動態定位，
+csrs-ppp 則要在觀測後輸出觀測檔案上傳，非即時定位。
+而 csrs-ppp 在解算時，可以解算移動中觀測的觀測檔，
+也就是動態定位；亦能假設接收儀是在固定座標，解算靜態定位。
+且 rtx 與 csrs-ppp 均是屬於基於載波相位的精密單點定位，
+rtx 使用的是即時解算的星曆，ppp 使用的則是事後解算的精密星曆。
+二者在理論上相似。&lt;/p&gt;
+&lt;h2 id=&quot;數據與解算&quot;&gt;數據與解算&lt;/h2&gt;
+&lt;p&gt;數據為 2017-12-16 到 2017-12-22 間觀測，
+測站位置為 TWD97 的固定衛星追蹤站 LSB0。
+rtx 數據為即時定位的座標，
+同時有使用傳統 gnss 接收儀，
+輸出 T02 格式並在事後轉換為 rinex 格式。
+csrs-ppp 再以 rinex 格式觀測檔進行精密單點定位。&lt;/p&gt;
+&lt;p&gt;總共會有四種定位方式的結果座標，
+分別為 rtx、gpspace、gpspark、座標真值。&lt;/p&gt;
+&lt;h3 id=&quot;座標真值&quot;&gt;座標真值&lt;/h3&gt;
+&lt;p&gt;測站位置為 TWD97 固定衛星追縱站，點號 LSB0，
+座標真值為：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;\begin{bmatrix}
+E \\ N \\ h
+\end{bmatrix}
+=
+\begin{bmatrix}
+212830.095483593 \\
+2672057.61548927 \\ 
+121.798217289174
+\end{bmatrix}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;rtx 資料&quot;&gt;rtx 資料&lt;/h3&gt;
+&lt;p&gt;rtx 資料有定位結果的經緯度座標與 twd97 平面座標，
+但用 &lt;a href=&quot;http://proj4.org&quot; title=&quot;地圖投影與大地線計算軟體&quot;&gt;proj4&lt;/a&gt; 將經緯度轉換成平面座標驗證後發現，
+二者不相符，在南北方向約誤差 1.7mm。
+最後決定使用 proj4 手動將經緯度座標轉成平面座標，
+原本的平面座標則忽略不使用。&lt;/p&gt;
+&lt;p&gt;整理後發現 rtx 定位座標在尚未收斂時，會有極大的誤差，
+原數據如下：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;方向&lt;/th&gt;
+&lt;th&gt;平均&lt;/th&gt;
+&lt;th&gt;標準偏差&lt;/th&gt;
+&lt;th&gt;數據數&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.0887&lt;/td&gt;
+&lt;td&gt;0.3809&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.8082&lt;/td&gt;
+&lt;td&gt;0.4441&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.9551&lt;/td&gt;
+&lt;td&gt;0.9938&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;但經過作圖後發現，少量數據偏離平均值、真值極大，
+故決定以三倍標準差為基準籂選數據。
+將數據中離平均值超過三倍標準差的記錄剔除，
+再重新計算，再剔除三倍標準差以外的，
+重覆直到所有數據都在三倍標準差以內。
+過濾後整體標準偏差大幅下降，但也剔除了 14.73% 的數據。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;方向&lt;/th&gt;
+&lt;th&gt;平均&lt;/th&gt;
+&lt;th&gt;標準偏差&lt;/th&gt;
+&lt;th&gt;數據數&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.0376&lt;/td&gt;
+&lt;td&gt;0.01230&lt;/td&gt;
+&lt;td&gt;384425&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.7456&lt;/td&gt;
+&lt;td&gt;0.0096&lt;/td&gt;
+&lt;td&gt;380365&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.7674&lt;/td&gt;
+&lt;td&gt;0.0357&lt;/td&gt;
+&lt;td&gt;380894&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&quot;gpspace&quot;&gt;gpspace&lt;/h3&gt;
+&lt;p&gt;gpspace 是 csrs-ppp 使用的舊版 ppp 解算軟體，
+目前已在 github 上開源。
+gpspace 可以從 rinex 格式觀測資料與精密星曆，
+解算動態或靜態單點定位。
+因為 rtx 為動態定位，為了使二者在同一基準上比較，
+在 gpspace 也使用動態定位求解。&lt;/p&gt;
+&lt;p&gt;gpspace 的定位結果不是很穩定。
+相比 rtx 雖然在未收斂時會有極大誤差，
+但收斂後表現極佳。
+gpspace 則一直處在不穩定的狀態，
+雖然不像 rtx 有極端誤差， 但也不會收斂到穩定的值。
+整體不如 rtx。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;方向&lt;/th&gt;
+&lt;th&gt;平均&lt;/th&gt;
+&lt;th&gt;標準偏差&lt;/th&gt;
+&lt;th&gt;數據數&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.3149&lt;/td&gt;
+&lt;td&gt;0.2005&lt;/td&gt;
+&lt;td&gt;585324&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.5671&lt;/td&gt;
+&lt;td&gt;0.1460&lt;/td&gt;
+&lt;td&gt;585324&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.7856&lt;/td&gt;
+&lt;td&gt;0.3982&lt;/td&gt;
+&lt;td&gt;585324&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;嘗試也對 gpspace 的結果用三倍標準差過濾，
+結果雖有提升，但不很明顯。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;方向&lt;/th&gt;
+&lt;th&gt;平均&lt;/th&gt;
+&lt;th&gt;標準偏差&lt;/th&gt;
+&lt;th&gt;數據數&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.3439&lt;/td&gt;
+&lt;td&gt;0.1355&lt;/td&gt;
+&lt;td&gt;560509&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.5883&lt;/td&gt;
+&lt;td&gt;0.0771&lt;/td&gt;
+&lt;td&gt;559062&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.7457&lt;/td&gt;
+&lt;td&gt;0.2483&lt;/td&gt;
+&lt;td&gt;560993&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&quot;gpspark&quot;&gt;gpspark&lt;/h3&gt;
+&lt;p&gt;gpspark 與 gpspace 同為 csrs-ppp，
+使用上也類似，都是從 rinex 觀測資料解算精密單點定位，
+也一樣能解算動態與靜態，本次研究也同 gpspace 使用動態。
+gpspark 的定位結果遠勝 gpspace，
+收斂後能超過 rtx，並也沒有 rtx 誇張的極端值。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;方向&lt;/th&gt;
+&lt;th&gt;平均&lt;/th&gt;
+&lt;th&gt;標準偏差&lt;/th&gt;
+&lt;th&gt;數據數&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.3209&lt;/td&gt;
+&lt;td&gt;0.0092&lt;/td&gt;
+&lt;td&gt;604800&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.5840&lt;/td&gt;
+&lt;td&gt;0.0084&lt;/td&gt;
+&lt;td&gt;604800&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.6928&lt;/td&gt;
+&lt;td&gt;0.0293&lt;/td&gt;
+&lt;td&gt;604800&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;也同樣計算三倍標準差過濾，但結果並沒有顯著提升。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;方向&lt;/th&gt;
+&lt;th&gt;平均&lt;/th&gt;
+&lt;th&gt;標準偏差&lt;/th&gt;
+&lt;th&gt;數據數&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.3211&lt;/td&gt;
+&lt;td&gt;0.0086&lt;/td&gt;
+&lt;td&gt;598610&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.5841&lt;/td&gt;
+&lt;td&gt;0.0080&lt;/td&gt;
+&lt;td&gt;599439&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.6928&lt;/td&gt;
+&lt;td&gt;0.0282&lt;/td&gt;
+&lt;td&gt;602013&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&quot;比較&quot;&gt;比較&lt;/h2&gt;
+&lt;h3 id=&quot;四者作圖比較&quot;&gt;四者作圖比較&lt;/h3&gt;
+&lt;p&gt;將四者畫成散布圖如下。
+圖中是沒有過濾三倍標準差的數據，
+但也有部份極端值超過圖片邊界而沒有展示。
+其中黑線為座標真值，三種顏色分別為 rtx gpspace gpspark。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33490726908&quot;&gt;&lt;img src=&quot;https://farm8.staticflickr.com/7886/33490726908_daebc213a8_o.png&quot; alt=&quot;LSB0-all-small.png&quot; title=&quot;rtx gpspace gpspark 定位結果與真值依時間在 E N h 三方向上的散布圖&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;可以看出，gpspace 的成果明顯不如 rtx 與 gpspark。
+而 rtx 在收斂後，與 gpspark 的精度是相當的。&lt;/p&gt;
+&lt;h3 id=&quot;rtx 與 gpspark 和真值的差異&quot;&gt;rtx 與 gpspark 和真值的差異&lt;/h3&gt;
+&lt;p&gt;由於 rtx 在過濾前的誤差過大，沒有比較意義，
+因此只取過濾三倍標準差後的數據。
+綜合來看是 rtx 的結果較接近真值。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;軟體&lt;/th&gt;
+&lt;th&gt;方向&lt;/th&gt;
+&lt;th&gt;均誤差&lt;/th&gt;
+&lt;th&gt;方均誤差&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx&lt;/td&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;-0.057857&lt;/td&gt;
+&lt;td&gt;0.059150&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx&lt;/td&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;0.13009&lt;/td&gt;
+&lt;td&gt;0.13044&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx&lt;/td&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;-0.030842&lt;/td&gt;
+&lt;td&gt;0.047148&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx&lt;/td&gt;
+&lt;td&gt;平面距&lt;/td&gt;
+&lt;td&gt;0.142376&lt;/td&gt;
+&lt;td&gt;0.1432247&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx&lt;/td&gt;
+&lt;td&gt;斜距&lt;/td&gt;
+&lt;td&gt;0.145678&lt;/td&gt;
+&lt;td&gt;0.150785&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspark&lt;/td&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;0.22562&lt;/td&gt;
+&lt;td&gt;0.22578&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspark&lt;/td&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;-0.031426&lt;/td&gt;
+&lt;td&gt;0.032426&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspark&lt;/td&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;-0.10545&lt;/td&gt;
+&lt;td&gt;0.10917&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspark&lt;/td&gt;
+&lt;td&gt;平面距&lt;/td&gt;
+&lt;td&gt;0.2510213&lt;/td&gt;
+&lt;td&gt;0.252876&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspark&lt;/td&gt;
+&lt;td&gt;斜距&lt;/td&gt;
+&lt;td&gt;0.227798&lt;/td&gt;
+&lt;td&gt;0.228097&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&quot;rtx 與 gpspark 的差異&quot;&gt;rtx 與 gpspark 的差異&lt;/h3&gt;
+&lt;p&gt;作為二種精度較佳的定位方法，單獨作圖比較。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33490727288&quot;&gt;&lt;img src=&quot;https://farm8.staticflickr.com/7838/33490727288_d2be19b298_o.png&quot; alt=&quot;LSB0-rtx-gpspark.png&quot; title=&quot;將 rtx 減去 gpspark 的定位結果作圖&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;方向&lt;/th&gt;
+&lt;th&gt;平均&lt;/th&gt;
+&lt;th&gt;標準偏差&lt;/th&gt;
+&lt;th&gt;數據數&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;0.2319&lt;/td&gt;
+&lt;td&gt;0.3802&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;-0.2241&lt;/td&gt;
+&lt;td&gt;0.4432&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;-0.2621&lt;/td&gt;
+&lt;td&gt;0.9957&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;由於 rtx 有較多的極端值，因此採用三倍標準差過濾數據，
+剔除三倍標準差後：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;方向&lt;/th&gt;
+&lt;th&gt;平均&lt;/th&gt;
+&lt;th&gt;標準偏差&lt;/th&gt;
+&lt;th&gt;數據數&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;-0.0739&lt;/td&gt;
+&lt;td&gt;0.04153&lt;/td&gt;
+&lt;td&gt;383035&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;0.2823&lt;/td&gt;
+&lt;td&gt;0.01358&lt;/td&gt;
+&lt;td&gt;384496&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;-0.1626&lt;/td&gt;
+&lt;td&gt;0.01170&lt;/td&gt;
+&lt;td&gt;382166&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&quot;統計分析&quot;&gt;統計分析&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;軟體&lt;/th&gt;
+&lt;th&gt;過濾&lt;/th&gt;
+&lt;th&gt;方向&lt;/th&gt;
+&lt;th&gt;平均&lt;/th&gt;
+&lt;th&gt;標準偏差&lt;/th&gt;
+&lt;th&gt;數據數&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.0887&lt;/td&gt;
+&lt;td&gt;0.3809&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.8082&lt;/td&gt;
+&lt;td&gt;0.4441&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.9551&lt;/td&gt;
+&lt;td&gt;0.9938&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.0376&lt;/td&gt;
+&lt;td&gt;0.01230&lt;/td&gt;
+&lt;td&gt;384425&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.7456&lt;/td&gt;
+&lt;td&gt;0.0096&lt;/td&gt;
+&lt;td&gt;380365&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.7674&lt;/td&gt;
+&lt;td&gt;0.0357&lt;/td&gt;
+&lt;td&gt;380894&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspace&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.3149&lt;/td&gt;
+&lt;td&gt;0.2005&lt;/td&gt;
+&lt;td&gt;585324&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspace&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.5671&lt;/td&gt;
+&lt;td&gt;0.1460&lt;/td&gt;
+&lt;td&gt;585324&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspace&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.7856&lt;/td&gt;
+&lt;td&gt;0.3982&lt;/td&gt;
+&lt;td&gt;585324&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspace&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.3439&lt;/td&gt;
+&lt;td&gt;0.1355&lt;/td&gt;
+&lt;td&gt;560509&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspace&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.5883&lt;/td&gt;
+&lt;td&gt;0.0771&lt;/td&gt;
+&lt;td&gt;559062&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspace&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.7457&lt;/td&gt;
+&lt;td&gt;0.2483&lt;/td&gt;
+&lt;td&gt;560993&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspark&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.3209&lt;/td&gt;
+&lt;td&gt;0.0092&lt;/td&gt;
+&lt;td&gt;604800&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspark&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.5840&lt;/td&gt;
+&lt;td&gt;0.0084&lt;/td&gt;
+&lt;td&gt;604800&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspark&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.6928&lt;/td&gt;
+&lt;td&gt;0.0293&lt;/td&gt;
+&lt;td&gt;604800&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspark&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;212830.3211&lt;/td&gt;
+&lt;td&gt;0.0086&lt;/td&gt;
+&lt;td&gt;598610&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspark&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;2672057.5841&lt;/td&gt;
+&lt;td&gt;0.0080&lt;/td&gt;
+&lt;td&gt;599439&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;gpspark&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;121.6928&lt;/td&gt;
+&lt;td&gt;0.0282&lt;/td&gt;
+&lt;td&gt;602013&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx - gpspark&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;0.2319&lt;/td&gt;
+&lt;td&gt;0.3802&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx - gpspark&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;-0.2241&lt;/td&gt;
+&lt;td&gt;0.4432&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx - gpspark&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;-0.2621&lt;/td&gt;
+&lt;td&gt;0.9957&lt;/td&gt;
+&lt;td&gt;446670&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx - gpspark&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;h&lt;/td&gt;
+&lt;td&gt;-0.0739&lt;/td&gt;
+&lt;td&gt;0.04153&lt;/td&gt;
+&lt;td&gt;383035&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx - gpspark&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;E&lt;/td&gt;
+&lt;td&gt;0.2823&lt;/td&gt;
+&lt;td&gt;0.01358&lt;/td&gt;
+&lt;td&gt;384496&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;rtx - gpspark&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;N&lt;/td&gt;
+&lt;td&gt;-0.1626&lt;/td&gt;
+&lt;td&gt;0.01170&lt;/td&gt;
+&lt;td&gt;382166&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&quot;結論&quot;&gt;結論&lt;/h3&gt;
+&lt;p&gt;目前 rtx 收斂後的精準度在平面與高程上，
+與 csrs-ppp 的服務，也就是 gpspark 軟體，
+相比都只略遜一疇。
+二者無論是標準偏差或是與真值的誤差，
+rtx 都有可與 csrs-ppp 相當的水準。
+代表使用星基增益系統的即時精密單點定位，
+已可以有接近後處理後的精密單點定位結果的精度。&lt;/p&gt;
+&lt;p&gt;只是 rtx 不穩定，過濾掉了 15% 的數據才有穩定的結果。
+在 rtx 動態定位時，應等待觀測收斂才能記錄數據。&lt;/p&gt;
+&lt;script src=&quot;ext/paper.js?reference&quot;&gt;&lt;/script&gt;
+
+&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
+
+&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
+
+&lt;script&gt;
+document.body.prepend(
+    document.querySelector(&apos;h1&apos;),
+    document.querySelector(&apos;header&apos;)
+)
+&lt;/script&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/satellite-geodesy-homework-2.html#disable-reference</id>
 <title>衛星大地測量作業二</title>
 <published>2019-03-17T06:46:39.987Z</published>
@@ -3229,175 +3905,7 @@ shell 在處理 here doc 上
 <category term="ssh"/>
 <category term="方便"/>
 <category term="funny"/>
-<content type="html">&lt;h1 id=&quot;透過 shell 傳送檔案&quot;&gt;透過 shell 傳送檔案&lt;/h1&gt;
-&lt;p&gt;現代 linux 主機幾乎必備 ssh 提供遠端登入功能，
-要傳送檔案的話，ssh 有提供 sftp 模組。
-但就算沒有 ftp，還是可以透過 shell 重導向
-直接傳送單一檔案，或用 base64 之類程式
-把二進位檔案編碼成純文字再傳送。
-如果要傳送多個資料夾，
-則可以用 tar 把資料夾和檔案的樹狀結構
-序列化成單一的 stream 來傳送。&lt;/p&gt;
-&lt;h2 id=&quot;遠端登入外再架一個檔案分享服務？&quot;&gt;遠端登入外再架一個檔案分享服務？&lt;/h2&gt;
-&lt;p&gt;基本上架好 linux，除非是當日常使用，
-不然當伺服器用的話，就會先裝好遠端登入的服務。
-最基礎就是 ssh，習慣圖形介面的可能裝 vnc rdp teamviewer。
-有些要和 windows 互通，就會裝 samba，
-可以共享檔案，或也可以裝 ftp。&lt;/p&gt;
-&lt;h3 id=&quot;sftp 與 scp&quot;&gt;sftp 與 scp&lt;/h3&gt;
-&lt;p&gt;但其實如果用 ssh，就有內建的 sftp 可以用，
-去改 &lt;code&gt;/etc/ssh/sshd.conf&lt;/code&gt; 打開就行了。
-有 sftp 就能像 ftp 傳送檔案，
-甚至用 gvfs-mount 可以掛載起來。
-只是 windows 原生不支援 sftp，
-要用 filezilla 或其它程式。&lt;/p&gt;
-&lt;p&gt;現在 windows 10 支援 ssh 後，也多了 sftp 的命令列工具，
-但 ftp 可以用 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E6%AA%94%E6%A1%88%E7%B8%BD%E7%AE%A1&quot;&gt;檔案總管&lt;/a&gt; 開，sftp 還是不行，
-而且 sftp 好像沒有處理編碼的問題，
-我複製回去 utf8 的檔名會變亂碼，
-windows 的檔案記得是 big5。&lt;/p&gt;
-&lt;p&gt;一般有 sftp 就有 scp，
-sftp 介面和 ftp 基本一樣，也可以寫成腳本。
-scp 則是簡化版，像 cp 一樣一個命令複製的。
-二個只要有存 ssh-key 都可以免密碼登入。&lt;/p&gt;
-&lt;h3 id=&quot;有關 samba&quot;&gt;有關 samba&lt;/h3&gt;
-&lt;p&gt;samba 就是 unix 下的 smb，
-但其實我一直不會用 smb，也不太知道 smb 能幹麻。
-家裡二台電腦好像有用 smb 連線過，高中電腦課也有用來交過作業。
-（照老師要求把作業檔案複製到網路上的芳鄰中某個資料夾中。）
-但我開始正式學電腦就是 linux，
-對 windows 下的 smb 也就沒接觸過。&lt;/p&gt;
-&lt;p&gt;感覺 smb 的功能就是簡單的分享檔案，
-無需另外設定，在同一區網下就能互連，
-還能直接用檔案總管開。
-我認為在 unix 下就該用 ftp，
-反正 gvfs 用 fuse 虛擬檔案系統把 ftp 掛載到本機下，
-就能像打開本機端檔案一樣，
-直接用檔案管理員或編輯器打開遠端 ftp 上的資料夾檔案讀寫。&lt;/p&gt;
-&lt;p&gt;只是對一間公司而言，大部份人都用 windows，
-那 linux 伺服器架個 samba，
-讓所有人直接存取是最簡單的作法。&lt;/p&gt;
-&lt;h2 id=&quot;在 shell 中傳送單一檔案&quot;&gt;在 shell 中傳送單一檔案&lt;/h2&gt;
-&lt;p&gt;最簡單的就是傳送單一文字檔，
-用 ssh 或其它遠端登入後，打開 vi 或 nano 進入編輯，
-然後把本地的檔案內容整個複製，在 ssh vi 中貼上就好了。
-進階一點會用 &lt;code&gt;cat &amp;gt; my.txt&lt;/code&gt; ，
-貼上後再 ctrl-d 就會把內容直接輸入到檔案裡。&lt;/p&gt;
-&lt;h3 id=&quot;二進位編碼為純文字&quot;&gt;二進位編碼為純文字&lt;/h3&gt;
-&lt;p&gt;但編輯器大多只能傳送純文字，
-就算用 cat 可以傳送二進位，剪貼簿也不一定能存二進位。
-這時候就能用 base64，用 base64 編碼把二進位資料轉成純文字，
-之後就能存到剪貼簿了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# 在本地的 shell 把圖片編碼成 base64
-base64 image.png &amp;gt; image.png.base64
-# 在遠端把 base64 還原成圖片
-base64 -d image.png.base64 &amp;gt; origin.png # 把 base64 轉回來
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;base64 會把編碼輸出到 stdout，
-如果不重導向就是直接顯示在終端機裡，
-可以直接選取複製。
-解碼就加 &lt;code&gt;-d&lt;/code&gt; 選項，預設也是從 stdin 讀，
-貼上後按 ctrl-d 就好了；
-注意記得把解碼結果重導向，
-不然二進位顯示在終端機會亂碼。&lt;/p&gt;
-&lt;p&gt;另外除了 base64，也可以用 xxd 來編碼。
-base64 會把三個 byte 編成四個字元，
-xxd 則是把一個 byte 編成二個字元。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;## 編碼與解碼
-xxd image.png | xxd -r &amp;gt; origin.png
-## 省去行數與明文
-xxd -p image.png | xxd -r -p &amp;gt; origin.png
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;直接 pipe 給遠端 shell&quot;&gt;直接 pipe 給遠端 shell&lt;/h2&gt;
-&lt;p&gt;上面的作法都是經由剪貼簿，直接在終端機把純文字送過去。
-但其實剪貼簿沒那麼大，要送太大的檔案不太方便。
-最好是可以直接 pipe 給遠端。
-這就要提到 ssh 其實是 security shell 的縮寫，
-也就是一種 shell，所以可以直接指定要執行的命令。&lt;/p&gt;
-&lt;p&gt;例如 &lt;code&gt;ssh user@host ls&lt;/code&gt; 就是登入後執行 ls 就退出。
-而這個執行結果，當然可以 pipe 給其它程式，
-甚至也可以把本機的程式 pipe 給 ssh 的遠端程式，
-像這樣：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;cat my.txt.gz | ssh user@host zcat &amp;gt;my.txt
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;要注意，遠端的 zcat 輸出是會送回本機，
-再被 shell 重導向到本機的檔案；
-如果要把檔案存到遠端，要把 &lt;code&gt;&amp;gt;&lt;/code&gt; 跳脫，
-才能把 &lt;code&gt;&amp;gt;&lt;/code&gt; 傳給遠端的 shell。&lt;/p&gt;
-&lt;h3 id=&quot;管道直接相連後可以安全傳送二進位資料&quot;&gt;管道直接相連後可以安全傳送二進位資料&lt;/h3&gt;
-&lt;p&gt;上面的 base64，其實可以直接放在 ssh 後面，
-只是之前用 base64 是要方便剪下貼上，
-現在雙方直接用管道連起來了，就不用再特地編碼成純文字，
-直接用 cat 就好了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;## 相比 cat，base64 多作一次編解碼，沒什麼意義。
-cat image.png | ssh user@host cat \&amp;gt; image.png
-base64 image.png | ssh user@host base64 -d \&amp;gt; image.png
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;然後如果是用 cat，就可以直接把輸出導向到檔案，
-類似複製的意思。
-這裡一定要用 cat 的原因是，從本機送過去是送到遠端的 stdin，
-但 shell 只能把 stdout 導到檔案，
-所以需要一支程式把 stdin 轉到 stdout，
-也就是 cat 了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;cat my.txt.gz | ssh user@host zcat \&amp;gt; my.txt
-cat my.txt | ssh user@host &amp;apos;cat &amp;gt;my.txt&amp;apos;
-ssh user@host cat \&amp;gt;my.txt &amp;lt;my.txt
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;scat&quot;&gt;scat&lt;/h3&gt;
-&lt;p&gt;早期的 scp，聽說就只是把 ssh cat 用 shell script 包裝一下，
-後來才改寫成完整的一支程式的。
-但 scp 有個問題，他不能把遠端的檔案輸出到 stdout，
-只能直接複製成檔案。
-有時候不想多複製一次檔案，但要 &lt;code&gt;ssh user@host cat file&lt;/code&gt; 又很麻煩，
-&lt;a href=&quot;https://github.com/GHolk/loco/tree/master/bin/scat.sh&quot;&gt;所以我就按照 scp 的格式，做了一個 scat。&lt;/a&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# 一樣意思的命令
-ssh user@host cat file | cksum
-scat user@host:file - | cksum # 輸出遠端的 file 到本機計算校檢合
-scat user@host:file | cksum # 第二個 `-` 可省
 
-# 一樣意思的命令
-cat file | ssh user@host cat \&amp;gt; file
-cat file | scat - user@host:file # 把 stdin 導向到遠端的 file
-scat - user@host:file &amp;lt;file # 與上面同義
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;偶爾會用到，然後 ssh 連線大部份都有預設用 gzip 壓縮，
-所以如果要傳送大檔案，可以不用考慮頻寬先壓縮，ssh 會幫你壓好。
-（主要看你的 &lt;code&gt;.ssh/config&lt;/code&gt; 或 &lt;code&gt;/etc/ssh/ssh_config&lt;/code&gt;
-有沒有 &lt;code&gt;Compression yes&lt;/code&gt; 。）&lt;/p&gt;
-&lt;h2 id=&quot;用 tar 傳送目錄樹狀結構&quot;&gt;用 tar 傳送目錄樹狀結構&lt;/h2&gt;
-&lt;p&gt;以上說到怎麼傳送一個 stream。
-但以目前的作法，都只能用 cat 傳送單一檔案，
-那要怎麼傳送多個檔案呢？
-只要把多個檔案、目錄結構變成單一檔案就能傳了。
-在 windows 下就是用 zip，
-在 linux 也有 zip，但因為 unix 下打包和壓縮是分離的二個工具，
-打包的工具是 tar，而上面提到 ssh 基本已經有壓縮功能，所以用 tar 就夠了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;tar -C $HOME -cf - . | ssh user@host tar -xf f # 把整個家目錄打包丟過去
-ssh user@host tar -cf - | tar -xf - # 丟回來
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;diff patch&quot;&gt;diff patch&lt;/h3&gt;
-&lt;p&gt;另外有一個有趣的東西叫 diff，
-用來比較二個文字檔、打 patch 的工具。
-diff 可以遞迴比較子目錄下所有檔案，產生一個大補丁，
-對不存在的檔案，如果選擇當作空檔案，就會把整個檔案記錄下來。
-一般是用來比較二個不同版本的原始碼目錄，
-產生一個補丁檔，之後就能用該補丁，
-把一個版本變成另一版本。&lt;/p&gt;
-&lt;p&gt;如果你把一個目錄和一個空目錄或不存在的目錄比較，
-就能把整個目錄打包成一個 diff 檔，
-patch 該 diff 就能憑空產生出原有的目錄。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# 把 .ssh 目錄打包成一個 diff，送到 host 上
-diff --new-file --unified --recursive --text not-exist .ssh \
-    | ssh user@host patch --strip=0
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;其中 diff 的行為有點怪，
-預設的行為不能遞迴 patch 整個資料夾，
-要 &lt;code&gt;--unifined&lt;/code&gt; 或 &lt;code&gt;--context&lt;/code&gt; 才可以。
-&lt;code&gt;--new-file&lt;/code&gt; 是將不存在的檔案視為空檔案，
-&lt;code&gt;--text&lt;/code&gt; 則是將所有檔案都視為文字檔，
-也就是對二進位檔也照樣 diff。&lt;/p&gt;
-&lt;h2 id=&quot;只透過 stdin 傳送多個檔案&quot;&gt;只透過 stdin 傳送多個檔案&lt;/h2&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/android-gnss-height-report.html#add-nctu-header</id>
 <title>智慧型手機中的 GNSS 定位高程</title>

@@ -171,8 +171,13 @@ h | 121.6928 | 0.0282 | 602013
 
 [![LSB0-all-small.png]]
 
-[LSB0-all-small.png]: http://farm8.staticflickr.com/7886/33490726908_fa9ea30069.jpg "rtx gpspace gpspark 定位結果與真值依時間在 E N h 三方向上的散布圖"
+[LSB0-all-small.png]: https://farm8.staticflickr.com/7886/33490726908_daebc213a8_o.png "rtx gpspace gpspark 定位結果與真值依時間在 E N h 三方向上的散布圖"
 [![LSB0-all-small.png]]: http://www.flickr.com/photos/144554087@N04/33490726908
+
+
+可以看出，gpspace 的成果明顯不如 rtx 與 gpspark。
+而 rtx 在收斂後，與 gpspark 的精度是相當的。
+
 
 ### rtx 與 gpspark 和真值的差異
 由於 rtx 在過濾前的誤差過大，沒有比較意義，
@@ -184,9 +189,13 @@ h | 121.6928 | 0.0282 | 602013
 rtx | E | -0.057857 | 0.059150
 rtx | N | 0.13009 | 0.13044
 rtx | h | -0.030842 | 0.047148
+rtx | 平面距 | 0.142376 | 0.1432247
+rtx | 斜距 | 0.145678 | 0.150785
 gpspark | E | 0.22562 | 0.22578
 gpspark | N | -0.031426 | 0.032426
 gpspark | h | -0.10545 | 0.10917
+gpspark | 平面距 | 0.2510213 | 0.252876
+gpspark | 斜距 | 0.227798 | 0.228097
 
 
 ### rtx 與 gpspark 的差異
@@ -194,9 +203,8 @@ gpspark | h | -0.10545 | 0.10917
 
 [![LSB0-rtx-gpspark.png]]
 
-[LSB0-rtx-gpspark.png]: http://farm8.staticflickr.com/7838/33490727288_bce7063bdf.jpg "將 rtx 減去 gpspark 的定位結果作圖"
+[LSB0-rtx-gpspark.png]: https://farm8.staticflickr.com/7838/33490727288_d2be19b298_o.png "將 rtx 減去 gpspark 的定位結果作圖"
 [![LSB0-rtx-gpspark.png]]: http://www.flickr.com/photos/144554087@N04/33490727288
-
 
 方向 | 平均 | 標準偏差 | 數據數
 -----|-----|---------|---------
@@ -242,6 +250,18 @@ rtx - gpspark | 否 | h |-0.2621 | 0.9957 | 446670
 rtx - gpspark | 是 | h |  -0.0739 |  0.04153 | 383035
 rtx - gpspark | 是 | E | 0.2823 |  0.01358 | 384496
 rtx - gpspark | 是 | N | -0.1626 |   0.01170 | 382166
+
+### 結論
+目前 rtx 收斂後的精準度在平面與高程上，
+與 csrs-ppp 的服務，也就是 gpspark 軟體，
+相比都只略遜一疇。
+二者無論是標準偏差或是與真值的誤差，
+rtx 都有可與 csrs-ppp 相當的水準。
+代表使用星基增益系統的即時精密單點定位，
+已可以有接近後處理後的精密單點定位結果的精度。
+
+只是 rtx 不穩定，過濾掉了 15% 的數據才有穩定的結果。
+在 rtx 動態定位時，應等待觀測收斂才能記錄數據。
 
 
 <script src="ext/paper.js?reference"></script>

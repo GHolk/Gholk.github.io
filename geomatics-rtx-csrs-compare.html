@@ -315,7 +315,9 @@ gpspark 的定位結果遠勝 gpspace，
 圖中是沒有過濾三倍標準差的數據，
 但也有部份極端值超過圖片邊界而沒有展示。
 其中黑線為座標真值，三種顏色分別為 rtx gpspace gpspark。</p>
-<p><a href="http://www.flickr.com/photos/144554087@N04/33490726908"><img src="http://farm8.staticflickr.com/7886/33490726908_fa9ea30069.jpg" alt="LSB0-all-small.png" title="rtx gpspace gpspark 定位結果與真值依時間在 E N h 三方向上的散布圖"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/33490726908"><img src="https://farm8.staticflickr.com/7886/33490726908_daebc213a8_o.png" alt="LSB0-all-small.png" title="rtx gpspace gpspark 定位結果與真值依時間在 E N h 三方向上的散布圖"></a></p>
+<p>可以看出，gpspace 的成果明顯不如 rtx 與 gpspark。
+而 rtx 在收斂後，與 gpspark 的精度是相當的。</p>
 <h3 id="rtx 與 gpspark 和真值的差異">rtx 與 gpspark 和真值的差異</h3>
 <p>由於 rtx 在過濾前的誤差過大，沒有比較意義，
 因此只取過濾三倍標準差後的數據。
@@ -349,6 +351,18 @@ gpspark 的定位結果遠勝 gpspace，
 <td>0.047148</td>
 </tr>
 <tr>
+<td>rtx</td>
+<td>平面距</td>
+<td>0.142376</td>
+<td>0.1432247</td>
+</tr>
+<tr>
+<td>rtx</td>
+<td>斜距</td>
+<td>0.145678</td>
+<td>0.150785</td>
+</tr>
+<tr>
 <td>gpspark</td>
 <td>E</td>
 <td>0.22562</td>
@@ -366,11 +380,23 @@ gpspark 的定位結果遠勝 gpspace，
 <td>-0.10545</td>
 <td>0.10917</td>
 </tr>
+<tr>
+<td>gpspark</td>
+<td>平面距</td>
+<td>0.2510213</td>
+<td>0.252876</td>
+</tr>
+<tr>
+<td>gpspark</td>
+<td>斜距</td>
+<td>0.227798</td>
+<td>0.228097</td>
+</tr>
 </tbody>
 </table>
 <h3 id="rtx 與 gpspark 的差異">rtx 與 gpspark 的差異</h3>
 <p>作為二種精度較佳的定位方法，單獨作圖比較。</p>
-<p><a href="http://www.flickr.com/photos/144554087@N04/33490727288"><img src="http://farm8.staticflickr.com/7838/33490727288_bce7063bdf.jpg" alt="LSB0-rtx-gpspark.png" title="將 rtx 減去 gpspark 的定位結果作圖"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/33490727288"><img src="https://farm8.staticflickr.com/7838/33490727288_d2be19b298_o.png" alt="LSB0-rtx-gpspark.png" title="將 rtx 減去 gpspark 的定位結果作圖"></a></p>
 <table>
 <thead>
 <tr>
@@ -640,6 +666,16 @@ gpspark 的定位結果遠勝 gpspace，
 </tr>
 </tbody>
 </table>
+<h3 id="結論">結論</h3>
+<p>目前 rtx 收斂後的精準度在平面與高程上，
+與 csrs-ppp 的服務，也就是 gpspark 軟體，
+相比都只略遜一疇。
+二者無論是標準偏差或是與真值的誤差，
+rtx 都有可與 csrs-ppp 相當的水準。
+代表使用星基增益系統的即時精密單點定位，
+已可以有接近後處理後的精密單點定位結果的精度。</p>
+<p>只是 rtx 不穩定，過濾掉了 15% 的數據才有穩定的結果。
+在 rtx 動態定位時，應等待觀測收斂才能記錄數據。</p>
 <script src="ext/paper.js?reference"></script>
 
 <link rel="stylesheet" href="ext/paper.css">

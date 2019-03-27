@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-03-20T10:31:02.122Z</updated>
+  <updated>2019-03-27T09:56:23.135Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,124 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/shell-pipe-speed-pv.html</id>
+<title>pv 控制 pipe 的速度</title>
+<published>2019-03-27T09:48:10.079Z</published>
+<updated>2019-03-27T09:56:23.121Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/shell-pipe-speed-pv.html"/>
+<summary type="html">因為想控制某些程式的傳輸速度，
+所以想找找看有沒有 linux 命令
+像節流閥那樣限制通過的速度，
+就找到一個叫 pv 的小工具，
+不只是節流閥，還可以做流量統計。
+隔天想想其實也可以自己用 shell script 寫一個土炮版本的。</summary>
+<category term="linux"/>
+<category term="shell"/>
+<category term="android"/>
+<category term="root"/>
+<category term="無線"/>
+<category term="wifi"/>
+<content type="html">&lt;h1 id=&quot;pv 控制 pipe 的速度&quot;&gt;pv 控制 pipe 的速度&lt;/h1&gt;
+&lt;p&gt;因為想控制某些程式的傳輸速度，
+所以想找找看有沒有 linux 命令
+像節流閥那樣限制通過的速度，
+就找到一個叫 pv 的小工具，
+不只是節流閥，還可以做流量統計。
+隔天想想其實也可以自己用 shell script 寫一個土炮版本的。&lt;/p&gt;
+&lt;h2 id=&quot;透過 wifi 傳檔案但手機和筆電不合&quot;&gt;透過 wifi 傳檔案但手機和筆電不合&lt;/h2&gt;
+&lt;p&gt;我習慣用筆電開熱點，把有線網路分享給手機無線上網。
+然後就能用 ftp 或 adb 傳檔案，省去 usb 線的麻煩。
+但我的筆電好像和手機不合，如果 wifi 流量太大手機會自動斷線。
+所以要嘛用 ftp 的斷點續傳，要嘛手動控制傳輸速度。&lt;/p&gt;
+&lt;h2 id=&quot;ftp 斷點續傳&quot;&gt;ftp 斷點續傳&lt;/h2&gt;
+&lt;p&gt;ftp 支援斷點續傳，所以可以無腦重傳，
+用 shell script 控制只要斷線就重傳的無窮迴圈就好了。
+其實我用的是 sftp，然後我習慣把手機寫到 &lt;code&gt;ssh_config&lt;/code&gt; 裡，
+就能用 alias 連線。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;while echo &amp;apos;reput -r my-file/&amp;apos; | sftp atom
+do
+    sleep 1s
+done
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;用 adb 傳送檔案的二種方法&quot;&gt;用 adb 傳送檔案的二種方法&lt;/h2&gt;
+&lt;p&gt;另一招就是用 adb，我的手機有 root，
+所以能 &lt;a href=&quot;adb-over-wifi.html&quot;&gt;用 app 設定透過 wifi 連結 adb。&lt;/a&gt;
+連上後可以用 adb push 傳檔案，或是用 shell 傳。
+adb push 我不會控制速度，以我的經驗就是速度會吃滿，
+然後手機就斷線了。
+&lt;a href=&quot;linux-easy-shell-send-file.html#adb%20也可以通&quot;&gt;shell 就是之前提過用 pipe 傳，&lt;/a&gt;
+我就想如果中間加個管道命令，像節流閥那樣就能控制速度了。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# 用 adb
+adb push my-file/ /sdcard/
+
+# 用 shell
+tar -zcf - my-file/ | adb shell tar -C /sdcard/ -zxf -
+
+# 如果有節流閥
+tar -zcf - my-file/ \
+    | pipe-speed-controll --max-per-second 200k \
+    | adb shell tar -C /sdcard/ -zxf -
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;管道哲學的好處就是，可以方便的內嵌各種工具。
+像如果要做壓縮，就在收發端各加個 gzip 命令，
+（不過上面的 tar 已經在打包時壓縮了。）
+要用 ascii 傳，就加個 base64。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# 手動用 gzip 壓縮
+tar -cf - my-file/ \
+    | gzip -c - \
+    | adb shell &amp;apos;zcat - | tar -C /sdcard/ -xf -&amp;apos;
+
+# base64
+tar -cf - my-file/ \
+    | base64 - \
+    | adb shell &amp;apos;base64 -d - | tar -C /sdcard/ -xf -&amp;apos;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;流量工具 pv&quot;&gt;流量工具 pv&lt;/h2&gt;
+&lt;p&gt;於是 google 後就找到一個叫 pv 的工具，
+全名是 pipe-view，不只有節流閥功能，還有流量統計。
+基本上和 cat 相同都是把輸入轉到輸出，
+但就是多了流量控制、統計的功能。&lt;/p&gt;
+&lt;p&gt;例如限制流量為 200k/s，
+同時 pv 會自動統計流量，輸出到 standard error：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;tar -zcf - my-file/ \
+    | pv --rate-limit 200k \
+    | adb shell tar -C /sdcard/ -xf -
+# 輸出
+# 2.05MiB 0:00:07 [ 301KiB/s] [      &amp;lt;=&amp;gt;  ]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;另外也可以改成控制 buffer 大小。
+總之是個實用的小工具，
+在 debian 可以直接用 &lt;code&gt;apt install pv&lt;/code&gt; 安裝。&lt;/p&gt;
+&lt;h2 id=&quot;用 shell script 徒手實現 pv&quot;&gt;用 shell script 徒手實現 pv&lt;/h2&gt;
+&lt;p&gt;隔天發白日夢時，忽然想到 pv 的功能其實可以用 shell script 實現，
+只要用 sleep 控制一秒讀一次，head 則控制讀多少資料。
+或說每 sleep 一秒，就用 head 讀固定量的資料。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;my_pv() {
+    local byte=$1
+    while sleep 1s
+    do
+        head -c $byte
+    done
+}
+yes | my_pv 8
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;但這樣在流量慢時會一直卡在 sleep 那邊，
+sleep 整整一秒後才開始讀資料。
+改善方式是可以把 sleep 丟到背景執行，
+就能馬上在一秒期間內 sleep 的同時執行 head，
+再用 wait 確保上一次 sleep 退出後再開始下一次讀取。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;my_pv() {
+    local byte=$1
+    while wait
+    do
+        head -c $byte
+        sleep 1s &amp;amp;
+    done
+}
+yes | my_pv 200
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/geomatics-rtx-csrs-compare.html#rtx-與-gpspark-和真值的差異</id>
 <title>A Preliminary Comparative Evaluation of Trimble RTX with CSRS-PPP</title>
 <published>2019-01-30T13:52:35.944Z</published>
@@ -3646,246 +3764,7 @@ csrs ppp 的精度較佳，而 rtx 的精度稍低，
 <category term="ssh"/>
 <category term="方便"/>
 <category term="funny"/>
-<content type="html">&lt;h1 id=&quot;透過 shell 傳送檔案&quot;&gt;透過 shell 傳送檔案&lt;/h1&gt;
-&lt;p&gt;現代 linux 主機幾乎必備 ssh 提供遠端登入功能，
-要傳送檔案的話，ssh 有提供 sftp 模組。
-但就算沒有 ftp，還是可以透過 shell 重導向
-直接傳送單一檔案，或用 base64 之類程式
-把二進位檔案編碼成純文字再傳送。
-如果要傳送多個資料夾，
-則可以用 tar 把資料夾和檔案的樹狀結構
-序列化成單一的 stream 來傳送。&lt;/p&gt;
-&lt;h2 id=&quot;遠端登入外再架一個檔案分享服務？&quot;&gt;遠端登入外再架一個檔案分享服務？&lt;/h2&gt;
-&lt;p&gt;基本上架好 linux，除非是當日常使用，
-不然當伺服器用的話，就會先裝好遠端登入的服務。
-最基礎就是 ssh，習慣圖形介面的可能裝 vnc rdp teamviewer。
-有些要和 windows 互通，就會裝 samba，
-可以共享檔案，或也可以裝 ftp。&lt;/p&gt;
-&lt;h3 id=&quot;sftp 與 scp&quot;&gt;sftp 與 scp&lt;/h3&gt;
-&lt;p&gt;但其實如果用 ssh，就有內建的 sftp 可以用，
-去改 &lt;code&gt;/etc/ssh/sshd.conf&lt;/code&gt; 打開就行了。
-有 sftp 就能像 ftp 傳送檔案，
-甚至用 gvfs-mount 可以掛載起來。
-只是 windows 原生不支援 sftp，
-要用 filezilla 或其它程式。&lt;/p&gt;
-&lt;p&gt;現在 windows 10 支援 ssh 後，也多了 sftp 的命令列工具，
-但 ftp 可以用 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E6%AA%94%E6%A1%88%E7%B8%BD%E7%AE%A1&quot;&gt;檔案總管&lt;/a&gt; 開，sftp 還是不行，
-而且 sftp 好像沒有處理編碼的問題，
-我複製回去 utf8 的檔名會變亂碼，
-windows 的檔案記得是 big5。&lt;/p&gt;
-&lt;p&gt;一般有 sftp 就有 scp，
-sftp 介面和 ftp 基本一樣，也可以寫成腳本。
-scp 則是簡化版，像 cp 一樣一個命令複製的。
-二個只要有存 ssh-key 都可以免密碼登入。&lt;/p&gt;
-&lt;h3 id=&quot;有關 samba&quot;&gt;有關 samba&lt;/h3&gt;
-&lt;p&gt;samba 就是 unix 下的 smb，
-但其實我一直不會用 smb，也不太知道 smb 能幹麻。
-家裡二台電腦好像有用 smb 連線過，高中電腦課也有用來交過作業。
-（照老師要求把作業檔案複製到網路上的芳鄰中某個資料夾中。）
-但我開始正式學電腦就是 linux，
-對 windows 下的 smb 也就沒接觸過。&lt;/p&gt;
-&lt;p&gt;感覺 smb 的功能就是簡單的分享檔案，
-無需另外設定，在同一區網下就能互連，
-還能直接用檔案總管開。
-我認為在 unix 下就該用 ftp，
-反正 gvfs 用 fuse 虛擬檔案系統把 ftp 掛載到本機下，
-就能像打開本機端檔案一樣，
-直接用檔案管理員或編輯器打開遠端 ftp 上的資料夾檔案讀寫。&lt;/p&gt;
-&lt;p&gt;只是對一間公司而言，大部份人都用 windows，
-那 linux 伺服器架個 samba，
-讓所有人直接存取是最簡單的作法。&lt;/p&gt;
-&lt;h2 id=&quot;在 shell 中傳送單一檔案&quot;&gt;在 shell 中傳送單一檔案&lt;/h2&gt;
-&lt;p&gt;最簡單的就是傳送單一文字檔，
-用 ssh 或其它遠端登入後，打開 vi 或 nano 進入編輯，
-然後把本地的檔案內容整個複製，在 ssh vi 中貼上就好了。
-進階一點會用 &lt;code&gt;cat &amp;gt; my.txt&lt;/code&gt; ，
-貼上後再 ctrl-d 就會把內容直接輸入到檔案裡。&lt;/p&gt;
-&lt;h3 id=&quot;二進位編碼為純文字&quot;&gt;二進位編碼為純文字&lt;/h3&gt;
-&lt;p&gt;但編輯器大多只能傳送純文字，
-就算用 cat 可以傳送二進位，剪貼簿也不一定能存二進位。
-這時候就能用 base64，用 base64 編碼把二進位資料轉成純文字，
-之後就能存到剪貼簿了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# 在本地的 shell 把圖片編碼成 base64
-base64 image.png &amp;gt; image.png.base64
-# 在遠端把 base64 還原成圖片
-base64 -d image.png.base64 &amp;gt; origin.png # 把 base64 轉回來
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;base64 會把編碼輸出到 stdout，
-如果不重導向就是直接顯示在終端機裡，
-可以直接選取複製。
-解碼就加 &lt;code&gt;-d&lt;/code&gt; 選項，預設也是從 stdin 讀，
-貼上後按 ctrl-d 就好了；
-注意記得把解碼結果重導向，
-不然二進位顯示在終端機會亂碼。&lt;/p&gt;
-&lt;p&gt;另外除了 base64，也可以用 xxd 來編碼。
-base64 會把三個 byte 編成四個字元，
-xxd 則是把一個 byte 編成二個字元。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;## 編碼與解碼
-xxd image.png | xxd -r &amp;gt; origin.png
-## 省去行數與明文
-xxd -p image.png | xxd -r -p &amp;gt; origin.png
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;直接 pipe 給遠端命令&quot;&gt;直接 pipe 給遠端命令&lt;/h2&gt;
-&lt;p&gt;上面的作法都是經由剪貼簿，直接在終端機把純文字送過去。
-但其實剪貼簿沒那麼大，要送太大的檔案不太方便。
-最好是可以直接 pipe 給遠端。
-這就要提到 ssh 其實是 security shell 的縮寫，
-也就是一種 shell，所以可以直接指定要執行的命令。&lt;/p&gt;
-&lt;p&gt;例如 &lt;code&gt;ssh user@host ls&lt;/code&gt; 就是登入後執行 ls 就退出。
-而這個執行結果，當然可以 pipe 給其它程式，
-甚至也可以把本機的程式 pipe 給 ssh 的遠端程式，
-像這樣：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;cat my.txt.gz | ssh user@host zcat &amp;gt;my.txt
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;要注意，遠端的 zcat 輸出是會送回本機，
-再被 shell 重導向到本機的檔案；
-如果要把檔案存到遠端，要把 &lt;code&gt;&amp;gt;&lt;/code&gt; 跳脫，
-才能把 &lt;code&gt;&amp;gt;&lt;/code&gt; 傳給遠端的 shell。&lt;/p&gt;
-&lt;h3 id=&quot;管道直接相連後可以安全傳送二進位資料&quot;&gt;管道直接相連後可以安全傳送二進位資料&lt;/h3&gt;
-&lt;p&gt;上面的 base64，其實可以直接放在 ssh 後面，
-只是之前用 base64 是要方便剪下貼上，
-現在雙方直接用管道連起來了，就不用再特地編碼成純文字，
-直接用 cat 就好了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;## 相比 cat，base64 多作一次編解碼，沒什麼意義。
-cat image.png | ssh user@host cat \&amp;gt; image.png
-base64 image.png | ssh user@host base64 -d \&amp;gt; image.png
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;然後如果是用 cat，就可以直接把輸出導向到檔案，
-類似複製的意思。
-這裡一定要用 cat 的原因是，從本機送過去是送到遠端的 stdin，
-但 shell 只能把 stdout 導到檔案，
-所以需要一支程式把 stdin 轉到 stdout，
-也就是 cat 了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;cat my.txt.gz | ssh user@host zcat \&amp;gt; my.txt
-cat my.txt | ssh user@host &amp;apos;cat &amp;gt;my.txt&amp;apos;
-ssh user@host cat \&amp;gt;my.txt &amp;lt;my.txt
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;scat&quot;&gt;scat&lt;/h3&gt;
-&lt;p&gt;早期的 scp，聽說就只是把 ssh cat 用 shell script 包裝一下，
-後來才改寫成完整的一支程式的。
-但 scp 有個問題，他不能把遠端的檔案輸出到 stdout，
-只能直接複製成檔案。
-有時候不想多複製一次檔案，但要 &lt;code&gt;ssh user@host cat file&lt;/code&gt; 又很麻煩，
-&lt;a href=&quot;https://github.com/GHolk/loco/tree/master/bin/scat.sh&quot;&gt;所以我就按照 scp 的格式，做了一個 scat。&lt;/a&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# 一樣意思的命令
-ssh user@host cat file | cksum
-scat user@host:file - | cksum # 輸出遠端的 file 到本機計算校檢合
-scat user@host:file | cksum # 第二個 `-` 可省
 
-# 一樣意思的命令
-cat file | ssh user@host cat \&amp;gt; file
-cat file | scat - user@host:file # 把 stdin 導向到遠端的 file
-scat - user@host:file &amp;lt;file # 與上面同義
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;偶爾會用到，然後 ssh 連線大部份都有預設用 gzip 壓縮，
-所以如果要傳送大檔案，可以不用考慮頻寬先壓縮，ssh 會幫你壓好。
-（主要看你的 &lt;code&gt;.ssh/config&lt;/code&gt; 或 &lt;code&gt;/etc/ssh/ssh_config&lt;/code&gt;
-有沒有 &lt;code&gt;Compression yes&lt;/code&gt; 。）&lt;/p&gt;
-&lt;h2 id=&quot;用 tar 傳送目錄樹狀結構&quot;&gt;用 tar 傳送目錄樹狀結構&lt;/h2&gt;
-&lt;p&gt;以上說到怎麼傳送一個 stream。
-但以目前的作法，都只能用 cat 傳送單一檔案，
-那要怎麼傳送多個檔案呢？
-只要把多個檔案、目錄結構變成單一檔案就能傳了。
-在 windows 下就是用 zip，
-在 linux 也有 zip，但因為 unix 下打包和壓縮是分離的二個工具，
-打包的工具是 tar，而上面提到 ssh 基本已經有壓縮功能，所以用 tar 就夠了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;tar -C $HOME -cf - . | ssh user@host tar -xf f # 把整個家目錄打包丟過去
-ssh user@host tar -cf - | tar -xf - # 丟回來
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;diff patch&quot;&gt;diff patch&lt;/h3&gt;
-&lt;p&gt;另外有一個有趣的東西叫 diff，
-用來比較二個文字檔、打 patch 的工具。
-diff 可以遞迴比較子目錄下所有檔案，產生一個大補丁，
-對不存在的檔案，如果選擇當作空檔案，就會把整個檔案記錄下來。
-一般是用來比較二個不同版本的原始碼目錄，
-產生一個補丁檔，之後就能用該補丁，
-把一個版本變成另一版本。&lt;/p&gt;
-&lt;p&gt;如果你把一個目錄和一個空目錄或不存在的目錄比較，
-就能把整個目錄打包成一個 diff 檔，
-patch 該 diff 就能憑空產生出原有的目錄。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# 把 .ssh 目錄打包成一個 diff，送到 host 上
-diff --new-file --unified --recursive --text not-exist .ssh \
-    | ssh user@host patch --strip=0
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;其中 diff 的行為有點怪，
-預設的行為不能遞迴 patch 整個資料夾，
-要 &lt;code&gt;--unifined&lt;/code&gt; 或 &lt;code&gt;--context&lt;/code&gt; 才可以。
-&lt;code&gt;--new-file&lt;/code&gt; 是將不存在的檔案視為空檔案，
-&lt;code&gt;--text&lt;/code&gt; 則是將所有檔案都視為文字檔，
-也就是對二進位檔也照樣 diff。&lt;/p&gt;
-&lt;h2 id=&quot;adb 也可以通&quot;&gt;adb 也可以通&lt;/h2&gt;
-&lt;p&gt;上面都是用 ssh 遠端登入傳送，
-其實像 android 的 adb 也可以用類似的功能。
-&lt;code&gt;adb shell&lt;/code&gt; 可以連線到 android 上開啟一個 shell，
-&lt;code&gt;adb shell ls&lt;/code&gt; 則是連進去執行 ls 就退出，
-所以只要用 tar 命令，就能簡單把資料夾整個送過去。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# 在 android 上開起 shell
-adb shell
-
-# 在 android 上執行 df 命令後退出
-adb shell df
-
-# 把 pictures 資料夾整個送過去
-tar -czf - pictures | adb shell tar -xzf -
-
-# 備份 sd 卡裡的所有資料
-adb shell tar -czf - /sdcard &amp;gt;sdcard.tgz
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;我記得 adb 的連線不像 ssh，是沒有壓縮的。
-所以建議手動壓縮，會快一點；
-除非你手機太爛 cpu 壓縮很慢。&lt;/p&gt;
-&lt;h2 id=&quot;只透過 stdin 傳送指令與檔案&quot;&gt;只透過 stdin 傳送指令與檔案&lt;/h2&gt;
-&lt;p&gt;以上的作法都是建立在 ssh 可以直接指定執行的程式，
-並把資料直接送到該程式的 stdin。
-但如果遠端無法指定執行的程式呢？
-像 telnet，只能登入進 shell，沒辦法指定命令，
-那就只能把檔案嵌在腳本裡，把整個腳本餵給 telnet 了。&lt;/p&gt;
-&lt;h3 id=&quot;用 here doc 嵌入檔案&quot;&gt;用 here doc 嵌入檔案&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;shell-script-skill-fifo.html#內嵌-base64&quot;&gt;之前也有提過這種作法，
-把檔案嵌入在腳本的 here doc 裡，&lt;/a&gt;
-如果是二進位檔案可能要先 base64 編碼。
-也就是產生一個腳本長這樣的：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;base64 -d &amp;gt;file &amp;lt;&amp;lt;EOF
-5aaC5p6c5piv5LqM6YCy5L2N5qqU5qGI5Y+v6IO96KaB5YWIYmFzZTY057eo56K844CCCuS5n+Ww
-seaYr+eUoueUn+S4gOWAi+iFs+acrOmVt+mAmeaoo+eahO+8mgo=
-EOF
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;然後把整個腳本 pipe 給 telnet，登入後執行。&lt;/p&gt;
-&lt;p&gt;結合上面那篇文章中的技巧，我們可以用命令群組產生腳本，
-而不用把腳本存成檔案後再 pipe 過去：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# 直接用命令產生
-{
-    echo &amp;quot;base64 -d &amp;gt;file &amp;lt;&amp;lt;EOF&amp;quot;
-    base64 file
-    echo &amp;quot;EOF&amp;quot;
-} | telnet host
-
-# 用 here doc 產生
-cat &amp;lt;&amp;lt;CAT | telnet host
-base64 -d &amp;gt;file &amp;lt;&amp;lt;BASE64
-$(base64 file)
-BASE64
-CAT
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;其中二種作法，我是較推薦第一種，
-第二種嵌套了二層 here doc，不好閱讀。
-而且把整個 base64 編碼的檔案用命令代換進 here doc，
-here doc 會變很長，對 shell 的負擔有點大。&lt;/p&gt;
-&lt;p&gt;但其實第一種作法也是把整個檔案送到遠端的 here doc 裡，
-shell 在處理 here doc 上
-必須全部 buffer 起來後才能送出， 一樣會造成很大負擔。
-只是第一種是只有遠端 buffer 一次，第二種是本機也要 buffer 一次。&lt;/p&gt;
-&lt;p&gt;當然，也可以一次傳送多個檔案，
-原本是直接 base64 編碼檔案，
-改成 tar 打包後再 pipe 給 base64 就好。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;{
-    echo &amp;quot;base64 -d | tar -xf - &amp;lt;&amp;lt;EOF&amp;quot;
-    tar -cf - . | base64
-    echo &amp;quot;EOF&amp;quot;
-} | telnet host
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;直接使用 stdin 不使用here doc&quot;&gt;直接使用 stdin 不使用here doc&lt;/h2&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/linux-easy-shell-send-file.html</id>
 <title>透過 shell 傳送檔案</title>

@@ -275,3 +275,4 @@ tmux-give-p.html
 android-gnss-height-report.html
 linux-easy-shell-send-file.html
 satellite-geodesy-homework-2.html
+shell-pipe-speed-pv.html

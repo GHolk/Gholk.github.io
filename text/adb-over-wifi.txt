@@ -23,10 +23,20 @@ adb 底層是透過 tcp/ip 實作，所以可以透過 wifi 也運作。
 
 ## 有 root
 去 google play 找 adb wifi 應該就用不少，
-我是用 f-droid 的 ADB Manager，
+我是用 f-droid 的 [ADB Manager] ，
 另一款有 bug 不能裝。
 開啟 app 點 Start Network ADB 後就能用了，
 PC 一樣要下 `adb connect $your_android_ip` 。
+
+[ADB Manager]: https://f-droid.org/en/packages/com.github.sryze.wirebug/
+
+## 換成 wirebug
+後來在新手機 atom 上不 adb manager 不能用，
+就又找到一款更老的 [wirebug] ，介面簡單好用，
+而且啟動後還會釘選在通知欄，
+通知上還有一顆按鈕可以直接關掉 adb。
+
+[wirebug]: https://f-droid.org/en/packages/com.github.sryze.wirebug/
 
 #刷機
 #android

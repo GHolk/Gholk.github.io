@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-03-28T03:50:20.258Z</updated>
+  <updated>2019-03-29T04:13:13.681Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,85 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/android-adb-4g-ssh-tunnel.html#用-ssh-轉發多種服務</id>
+<title>經由 ssh tunnel 連上行動網路裡的 adb</title>
+<published>2018-12-04T06:09:25.348Z</published>
+<updated>2019-03-29T04:13:13.672Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/android-adb-4g-ssh-tunnel.html#用-ssh-轉發多種服務"/>
+<summary type="html">&lt;pre class=&quot;diff&quot;&gt;+
++## 用 ssh 轉發多種服務
++除了 adb 外，我也有用幾種會需要讓外部連進來的服務，
++[像是 alpha vnc 和 primitive sftp][ip service] ，
++有時二端在不同的區網，就得用這招把內網 ip 轉到公網 ip。
++目前我是在 vx connect bot 開了一個項目是只用來轉發 port，
++不開啟 ssh shell 的。
++然後該項目就會把 adb 5555、vnc 5900、sftp 2222
++一口氣都轉過去，省得麻煩。
++但 sftp 不能綁 22，一方面是 app 不給設，
++一方面是 22 在公網 server 已經被 ssh 吃掉了。
+&lt;/pre&gt;</summary>
+<category term="android"/>
+<category term="ssh"/>
+<category term="無線"/>
+<category term="刷機"/>
+<content type="html">&lt;h1 id=&quot;經由 ssh tunnel 連上行動網路裡的 adb&quot;&gt;經由 ssh tunnel 連上行動網路裡的 adb&lt;/h1&gt;
+&lt;p&gt;adb 除了用 usb 線連接外，
+&lt;a href=&quot;adb-over-wifi.html&quot;&gt;也能走網路用 tcp 連接，最簡單是在區網中用 wifi 連結。&lt;/a&gt;
+但有時候電腦和 android 二者不在同一區網，
+那就得靠第三方有固定 ip 的 server 做中介，
+只要有網路就能經由 ssh port forward 遠端連上 adb，
+就算是行動網路浮動 ip 也能遠端做壞事了。&lt;/p&gt;
+&lt;p&gt;首先如果有 root 的話，有現成的 app 能控制 adb 走 tcp，
+不然就是用 &lt;a href=&quot;adb-over-wifi.html#無%20root&quot;&gt;前文所寫無 root 透過 wifi adb 的作法&lt;/a&gt; 。
+之前用的是 f-droid 的 &lt;a href=&quot;https://f-droid.org/en/packages/com.matoski.adbm/&quot;&gt;ADB Manager&lt;/a&gt; ，
+但他在我的新手機怪怪的，會一直跳出來要 root 權限，
+就換成 &lt;a href=&quot;https://f-droid.org/en/packages/com.github.sryze.wirebug/&quot;&gt;Wirebug&lt;/a&gt; 。
+反正都是很簡單的 app，就只有一個功能是切換透過 tcp adb。&lt;/p&gt;
+&lt;p&gt;然後 android 上的 ssh client 我是用 &lt;a href=&quot;http://connectbot.vx.sk/&quot;&gt;VX ConnectBot&lt;/a&gt; ，
+你也可以用其它能 ssh forward remote 的軟體。
+（也就是 &lt;code&gt;ssh -R&lt;/code&gt; 的功能。）
+設定過程就相當於在 android 上執行
+&lt;code&gt;ssh -R 55555:localhost:5555 my@static.sever.tw&lt;/code&gt; ，
+之後 static.server.tw 上的 38763 port
+就會被轉發到 android 上的 5555 port。&lt;/p&gt;
+&lt;p&gt;以 vx connect bot 來說，
+設定方法是登入過主機並加入清單後，
+長按該主機會有一個 &lt;em&gt;編輯端口轉發&lt;/em&gt; 的選項。
+按頂端的選單新建一個端口轉發，
+暱稱隨便取，我是取 adb， &lt;em&gt;轉發類型&lt;/em&gt; 選遠端，
+源端口看你要在 static.server.tw 上哪個 port 會連到 android，
+（例如上面是用 55555。）
+而目標端口則選 &lt;code&gt;localhost:5555&lt;/code&gt; 也就是 adb 的預設 port。&lt;/p&gt;
+&lt;p&gt;之後你用 vx connect bot 連上該主機時就會自動轉發，
+不管是走 wifi 還是 4g 網路；
+再用 wirebug 或 adb manager 或先前登入設定允許從網路連接 adb，
+就能登入 static.server.tw 後 &lt;code&gt;adb connect localhost:55555&lt;/code&gt; 
+連上 android。&lt;/p&gt;
+&lt;p&gt;如果你不想要再登入一次 static.server.tw 才能執行 adb，
+還能在 static.server.tw 上的 &lt;code&gt;/etc/ssh/sshd_config&lt;/code&gt; 裡
+設 &lt;code&gt;GatewayPorts yes&lt;/code&gt; ，
+就能讓 static.server.tw 的 55555 port 直接連到 android。
+預設因為安全起見，ssh server 是不允許綁到對外 ip 的；
+也就是只有在 static.server.tw 上看 localhost:55555
+才會連到 android 的 5555 port，
+但從外部連到 static.server.tw:55555 是連不上的。&lt;/p&gt;
+&lt;p&gt;另外 vx connect bot 的轉發類型有
+遠端、本地、動態套接字(socks) 三種可以選。
+其中遠端上面說明過了，也就是 ssh 的 &lt;code&gt;-R&lt;/code&gt; 選項，
+本地就是 &lt;code&gt;-L&lt;/code&gt; ，動態套接字則是 &lt;code&gt;-D&lt;/code&gt; 選項，
+用來當 http SOCKS 給瀏覽器用的。&lt;/p&gt;
+&lt;h2 id=&quot;用 ssh 轉發多種服務&quot;&gt;用 ssh 轉發多種服務&lt;/h2&gt;
+&lt;p&gt;除了 adb 外，我也有用幾種會需要讓外部連進來的服務，
+&lt;a href=&quot;android-atom-tip.html#alpha%20vnc%20%E9%81%A0%E7%AB%AF%E6%8E%A7%E5%88%B6%E6%89%8B%E6%A9%9F&quot;&gt;像是 alpha vnc 和 primitive sftp&lt;/a&gt; ，
+有時二端在不同的區網，就得用這招把內網 ip 轉到公網 ip。
+目前我是在 vx connect bot 開了一個項目是只用來轉發 port，
+不開啟 ssh shell 的。
+然後該項目就會把 adb 5555、vnc 5900、sftp 2222 
+一口氣都轉過去，省得麻煩。
+但 sftp 不能綁 22，一方面是 app 不給設，
+一方面是 22 在公網 server 已經被 ssh 吃掉了。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/adb-over-wifi.html#換成-wirebug</id>
 <title>透過 wifi 執行 adb</title>
 <published>2017-09-20T12:38:27.641Z</published>

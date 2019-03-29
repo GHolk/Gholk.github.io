@@ -38,6 +38,14 @@ PC 一樣要下 `adb connect $your_android_ip` 。
 
 [wirebug]: https://f-droid.org/en/packages/com.github.sryze.wirebug/
 
+## 在 4g 行動網路或內網 ip 中用 ssh 轉發
+如果手機在行動網路，或是 wifi 是在內網中，
+但想連上的電腦不在同一內網，這時如果有一台有公網 ip 的伺服器，
+就能 [用 vx connect bot 把手機上的 port 綁到伺服器上][ssh port forward] 。
+之後直接連該伺服器的 ip 就行了。
+
+[ssh port forward]: android-adb-4g-ssh-tunnel.html
+
 #刷機
 #android
 #wifi

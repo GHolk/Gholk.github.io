@@ -114,6 +114,12 @@ android o 開始鈴聲音量和通知音量被合在一起，實在有點智障�
 
 [file shortcut]: https://play.google.com/store/apps/details?id=com.nagopy.android.fileshortcut
 
+其實 android 一些 app 可以讓你把檔案連結到 launcher，不用用到單獨一個 widge。
+但在 atom 都失敗，後來才發現是我用的 [open launcher 不支援][shortcut issue] 。
+
+[shortcut issue]: https://github.com/OpenLauncherTeam/openlauncher/issues/355
+
+
 ## vanilla music
 預設的怪怪的，只會在開機時掃描一次，
 之後丟進去的都不會出現，要重新開機。
@@ -161,7 +167,7 @@ android o 開始鈴聲音量和通知音量被合在一起，實在有點智障�
 [android vpn server] 和 [fastdroid vnc] 都是執行檔，
 要在 root 下執行，而且也都很久沒更新了，現在的 android 版本不支援。
 
-[fast droid vnc]: https://code.google.com/archive/p/fastdroid-vnc/downloads
+[fastdroid vnc]: https://code.google.com/archive/p/fastdroid-vnc/downloads
 [android vpn server]: https://code.google.com/archive/p/android-vnc-server/downloads
 [droid vpn]: https://f-droid.org/forums/topic/droid-vnc-server/
 
@@ -181,6 +187,11 @@ android o 開始鈴聲音量和通知音量被合在一起，實在有點智障�
 [remote mouse]: https://play.google.com/store/apps/details?id=nine.controller
 [vnc slide pointer]: android-root-atom.html
 
+## ssh 轉發內網 port 到公網
+有時 android 上裝了像 ftp vnc adb 之類要讓外部連進來的服務，
+如果有一台有公網 ip 的伺服器，
+就能 [用 vx connect bot 把手機上的 port 綁到伺服器上][ssh port forward] 。
 
+[ssh port forward]: android-adb-4g-ssh-tunnel.html
 
 #android

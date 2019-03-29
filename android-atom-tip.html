@@ -111,6 +111,8 @@ android 使用上有些快捷鍵，各品牌會不太一樣，
 也要關心哪些檔案是捷徑指向的不能刪，有點麻煩；
 所以後來換成只有一個指向資料夾的捷徑，
 要快速存取的就複製到該資料夾。</p>
+<p>其實 android 一些 app 可以讓你把檔案連結到 launcher，不用用到單獨一個 widge。
+但在 atom 都失敗，後來才發現是我用的 <a href="https://github.com/OpenLauncherTeam/openlauncher/issues/355">open launcher 不支援</a> 。</p>
 <h2 id="vanilla music">vanilla music</h2>
 <p>預設的怪怪的，只會在開機時掃描一次，
 之後丟進去的都不會出現，要重新開機。
@@ -143,7 +145,7 @@ android 使用上有些快捷鍵，各品牌會不太一樣，
 <p>後來想到能不能在手機上開 vnc server，
 就能用任意客戶端遠端連進去了。
 搜尋了一下，有一個 <a href="https://f-droid.org/forums/topic/droid-vnc-server/">droid vpn</a> 是開源的， 但很久沒更新了。
-<a href="https://code.google.com/archive/p/android-vnc-server/downloads">android vpn server</a> 和 [fastdroid vnc] 都是執行檔，
+<a href="https://code.google.com/archive/p/android-vnc-server/downloads">android vpn server</a> 和 <a href="https://code.google.com/archive/p/fastdroid-vnc/downloads">fastdroid vnc</a> 都是執行檔，
 要在 root 下執行，而且也都很久沒更新了，現在的 android 版本不支援。</p>
 <p>最後能動的有一個 <a href="https://play.google.com/store/apps/details?id=de.abr.android.avnc">alpha vnc</a> 是可以免費用，其它是要付費的沒試。
 但好像只能試用 15 分鐘，本來以為是下載 app 只能用 15 分鐘，
@@ -154,6 +156,10 @@ android 使用上有些快捷鍵，各品牌會不太一樣，
 <p><a href="https://play.google.com/store/apps/details?id=nine.controller">remote mouse</a> 可以透過 vnc 把手機摸擬成滑鼠和幾個鍵盤鍵來操作電腦，
 但要先在電腦上開好 vnc server， 主要功能是把手機當成簡報筆用。
 <a href="android-root-atom.html">之前 root atom 的文章有提過這件事。</a></p>
+<h2 id="ssh 轉發內網 port 到公網">ssh 轉發內網 port 到公網</h2>
+<p>有時 android 上裝了像 ftp vnc adb 之類要讓外部連進來的服務，
+如果有一台有公網 ip 的伺服器，
+就能 <a href="android-adb-4g-ssh-tunnel.html">用 vx connect bot 把手機上的 port 綁到伺服器上</a> 。</p>
 </main>
 
 <script defer src="ext/meta-meta.js"></script>

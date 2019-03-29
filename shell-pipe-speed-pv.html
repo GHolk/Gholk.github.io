@@ -28,7 +28,7 @@
 <main><h1 id="pv 控制 pipe 的速度">pv 控制 pipe 的速度</h1>
 <p>因為想控制某些程式的傳輸速度，
 所以想找找看有沒有 linux 命令
-像節流閥那樣限制通過的速度，
+像節流閥那樣在管道中限制通過的流量，
 就找到一個叫 pv 的小工具，
 不只是節流閥，還可以做流量統計。
 隔天想想其實也可以自己用 shell script 寫一個土炮版本的。</p>
@@ -53,8 +53,9 @@ done
 連上後可以用 adb push 傳檔案，或是用 shell 傳。
 adb push 我不會控制速度，以我的經驗就是速度會吃滿，
 然後手機就斷線了。
-<a href="linux-easy-shell-send-file.html#adb%20也可以通">shell 就是之前提過用 pipe 傳，</a>
+[shell 就是之前提過用 pipe 傳，][shell send]
 我就想如果中間加個管道命令，像節流閥那樣就能控制速度了。</p>
+<p>[shell send]: linux-easy-shell-send-file.html#adb%20 也可以通</p>
 <pre><code class="lang-sh"># 用 adb
 adb push my-file/ /sdcard/
 

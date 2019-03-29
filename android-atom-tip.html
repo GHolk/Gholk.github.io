@@ -8,7 +8,7 @@
 
 <!-- 後設資料 -->
 <meta name="date" property="og:article:public_time" content="2018-12-11T13:06:30.635Z">
-<meta name="keywords" property="og:article:tag" content="android">
+<meta name="keywords" property="og:article:tag" content="android,root">
 <link rel="index" type="text/html" href="index.html" title="首頁">
 <link rel="start" type="text/html" href="index.html" title="首頁">
 <link rel="next" type="text/html" href="linux-x11vnc-server.html" title="x11vnc 圖形介面啟動">
@@ -112,7 +112,11 @@ android 使用上有些快捷鍵，各品牌會不太一樣，
 所以後來換成只有一個指向資料夾的捷徑，
 要快速存取的就複製到該資料夾。</p>
 <p>其實 android 一些 app 可以讓你把檔案連結到 launcher，不用用到單獨一個 widge。
-但在 atom 都失敗，後來才發現是我用的 <a href="https://github.com/OpenLauncherTeam/openlauncher/issues/355">open launcher 不支援</a> 。</p>
+但在 atom 都失敗，後來才發現是我用的 <a href="https://github.com/OpenLauncherTeam/openlauncher/issues/355">open launcher 不支援</a> 。
+像 ghost commander 就可以把資料夾或檔案加到桌面，
+firefox 也可以把網頁加到桌面，只是 open launcher 不支援。
+另外就算資料夾加了，好像也沒有 app 可以開資料夾？
+會顯示沒有支援開啟的 app。</p>
 <h2 id="vanilla music">vanilla music</h2>
 <p>預設的怪怪的，只會在開機時掃描一次，
 之後丟進去的都不會出現，要重新開機。
@@ -156,10 +160,66 @@ android 使用上有些快捷鍵，各品牌會不太一樣，
 <p><a href="https://play.google.com/store/apps/details?id=nine.controller">remote mouse</a> 可以透過 vnc 把手機摸擬成滑鼠和幾個鍵盤鍵來操作電腦，
 但要先在電腦上開好 vnc server， 主要功能是把手機當成簡報筆用。
 <a href="android-root-atom.html">之前 root atom 的文章有提過這件事。</a></p>
+<h2 id="透過 wifi 連線 adb">透過 wifi 連線 adb</h2>
+<p>如果沒有 root，要先用有線 adb 連線進手機，才能改成走網路；
+如果有 root，某些 app 可以直接改。
+見之前的文章 <a href="adb-over-wifi.html">透過 wifi 連線 adb</a> 。
+目前是用 <a href="https://f-droid.org/en/packages/com.github.sryze.wirebug/">wirebug</a> 這款 app。</p>
+<h2 id="和電腦互傳檔案">和電腦互傳檔案</h2>
+<p>傳檔案可以用 adb 或是用 ftp。
+如果電腦和手機的網路有互通，那可以透過 ftp 來傳。
+開 ftp server 的一方 ip 要讓另一方能連進來，
+一般我是在手機上開。</p>
+<p>play 商店有不少 ftp server app，
+我是用 f-droid 的 <a href="https://f-droid.org/packages/org.primftpd/">primitive ftpd</a> ，
+可以開 ftp 和 sftp，我是只開 sftp。
+然後把電腦的公鑰複製到手機上的 <code>/sdcard/.ssh/authorized_keys</code> ，
+就可以免密碼登入。</p>
 <h2 id="ssh 轉發內網 port 到公網">ssh 轉發內網 port 到公網</h2>
 <p>有時 android 上裝了像 ftp vnc adb 之類要讓外部連進來的服務，
 如果有一台有公網 ip 的伺服器，
-就能 <a href="android-adb-4g-ssh-tunnel.html">用 vx connect bot 把手機上的 port 綁到伺服器上</a> 。</p>
+就能 <a href="android-adb-4g-ssh-tunnel.html">用 vx connect bot 把手機上的 port 綁到伺服器上</a> 。
+這樣就算手機在 nat 後面或是行動網路的浮動 ip，
+也能讓外部連進來。</p>
+<h2 id="quick setting tile">quick setting tile</h2>
+<p>中文不知道翻什麼，就是 android 通知欄拉下來會有一些開關可以調，
+這些開關其實可以從 app 去控制，
+像上面的 primitive ftpd 就有提供一個快速開關 ftp 的，
+不過我使用頻率不高就沒用。
+我裝了一個就叫 <a href="https://play.google.com/store/apps/details?id=it.simonesestito.ntiles">Quick Settings</a> 的，提供蠻多功能的。</p>
+<h2 id="NFC 開關">NFC 開關</h2>
+<p>android 幾年前就有 nfc 支持，但我的手機開關 nfc 不太方便。
+nfc 只要開著就會顯示一個關不掉的提醒通知，所以不適合一直開著；
+但原廠又沒有提供 nfc 的快速開關，第三方的也都要 root；
+啊不就還好我有 root。
+總之我是用 quick setting 的，要用時就開關一下。
+雖然開的時候還是會有通知浮在通知欄。</p>
+<h2 id="關閉 directly share 直接分享">關閉 directly share 直接分享</h2>
+<p>這是另一個我覺得很蠢的功能。
+傳統 android 在分享時，會彈出一個可以分享的 app 列表，
+不可避免的，隨 android 生態完整，app 列表越來越長。
+於是為了方便快速分享，android 又加了一個叫直接分享的功能，
+允許 app <em>註冊</em> 分享按鈕，達到更細緻的操作。
+像原本要點 telegram 再選寄給誰，
+telegram 可以放一個按鈕，點下去就直接分享給你某個聯絡人。</p>
+<p>立意是不錯，但很多腦殘 app 就是直接註好註滿，
+android 也不給你移除的選項，
+所以分享列表就堆了一堆我根本不去點的分享按鈕。
+samsung LG 的手機好像可以移除，不然 root 的手機也可以移除。
+在 <code>/data/system/ifw/</code> 裡新增一個附檔名為 xml 的，
+名字可以隨便取，內容如下：</p>
+<pre><code class="lang-xml">&lt;rules&gt;
+  &lt;service block=&quot;true&quot; log=&quot;true&quot;&gt;
+    &lt;intent-filter&gt;
+      &lt;action name=&quot;android.service.chooser.ChooserTargetService&quot; /&gt;
+    &lt;/intent-filter&gt;
+  &lt;/service&gt;
+&lt;/rules&gt;
+</code></pre>
+<p>就能關閉直接分享的功能。
+ifw 好像是設計來讓使用者開關某些功能的，
+但一直沒有正式發布，只有一些 hack 私下使用。
+總之目前頂著用。</p>
 </main>
 
 <script defer src="ext/meta-meta.js"></script>

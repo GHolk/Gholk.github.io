@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-03-29T04:13:13.681Z</updated>
+  <updated>2019-03-29T12:25:26.475Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,213 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/android-atom-tip.html#透過-wifi-連線-adb</id>
+<title>atom 使用技巧</title>
+<published>2018-12-11T13:06:30.635Z</published>
+<updated>2019-03-29T12:25:26.465Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/android-atom-tip.html#透過-wifi-連線-adb"/>
+<summary type="html">
+加入 wifi adb 、 sftp 、 ssh 轉發 port 等網路 app ，
+還有計算機、 ifw 關閉直接分享、 quick setting tile 、 NFC 。</summary>
+<category term="android"/>
+<category term="root"/>
+<content type="html">&lt;h1 id=&quot;atom 使用技巧&quot;&gt;atom 使用技巧&lt;/h1&gt;
+&lt;p&gt;最近入手了中國的一台小手機 unhertz atom。
+android 使用上有些快捷鍵，各品牌會不太一樣，
+像 atom 的截圖是同時按電源鍵和音量下，
+所以記錄下來一些有趣的用法。&lt;/p&gt;
+&lt;h2 id=&quot;螢幕截圖&quot;&gt;螢幕截圖&lt;/h2&gt;
+&lt;p&gt;同時按下電源鍵與音量向下鍵。
+這功能我找超久，後來 google 才在 atom 的使用者論壇看到這個按法。
+他們的 &lt;a href=&quot;https://drive.google.com/open?id=1Fv3wEG633XK3fEKz-or8C4OvBEnf6yQD&quot;&gt;使用者手冊&lt;/a&gt; 裡也有。這好像沒地方設定。
+手冊可能會有一些我漏掉的事，但更多廢話，
+有空的話會看看吧。&lt;/p&gt;
+&lt;h2 id=&quot;快速開啟相機&quot;&gt;快速開啟相機&lt;/h2&gt;
+&lt;p&gt;連按二下電源鍵，在待機時也效。
+可以在 &lt;em&gt;設定 &amp;gt; 系統 &amp;gt; 手勢&lt;/em&gt; 裡設定要不要使用。&lt;/p&gt;
+&lt;h2 id=&quot;返回鍵與選單鍵&quot;&gt;返回鍵與選單鍵&lt;/h2&gt;
+&lt;p&gt;可以交換二者順序。
+預設是左邊返回右邊選單，
+在 &lt;em&gt;設定 &amp;gt; 智能輔助 &amp;gt; 物理按鍵交換&lt;/em&gt; 可以調，
+如果勾選，就會讓二者交換。&lt;/p&gt;
+&lt;h2 id=&quot;Push-To-Talk 鍵&quot;&gt;Push-To-Talk 鍵&lt;/h2&gt;
+&lt;p&gt;快速開啟鍵，可以綁定快速開啟一個 app。
+預設是綁到 zello，可以在 &lt;em&gt;設定 &amp;gt; 智能輔助 &amp;gt; 快捷鍵&lt;/em&gt;
+設定要綁定的 app。&lt;/p&gt;
+&lt;p&gt;綁 zello 的話在待機時按也能啟動，
+用法就長按螢幕會自動解鎖並跳到 zello 的發話畫面，
+看到時間開始跑就能開始講話了。&lt;/p&gt;
+&lt;p&gt;比較想綁到 discord 的按鍵發話，但好像不行。
+有找到一個 &lt;a href=&quot;https://play.google.com/store/apps/details?id=flar2.homebutton&quot;&gt;button mapper&lt;/a&gt; 的 app
+能把硬體綁定動作或 app 的，但也沒有特別吸引人的用法。&lt;/p&gt;
+&lt;p&gt;比較想綁成錄音程式，可以在待機時按就開始錄音之類的，
+但還沒找到 solution。&lt;/p&gt;
+&lt;h2 id=&quot;分割螢幕&quot;&gt;分割螢幕&lt;/h2&gt;
+&lt;p&gt;本來不知知道這個功能，
+在上面的 button mapper 的 app 裡看到這個功能，
+又去 google 才知道怎麼用。
+預設是選單鍵會跳出最近使用的 app，
+長按任一 app 視窗，拉到頂端即可分割畫面。
+之後下半會維持在最近使用的 app 的多個視窗，
+之後也可以挑一個，但不能讓另一半分割是主畫面。&lt;/p&gt;
+&lt;h2 id=&quot;語音搜尋&quot;&gt;語音搜尋&lt;/h2&gt;
+&lt;p&gt;長按 home 鍵會叫出 google 助手，
+主要用來語音搜尋，也可以用語音交辦事務，
+像幾分鐘後叫我之類的。
+主要是以前我用倉頡滑動鍵盤時，在網址列不能打中文，
+所以要搜尋有點麻煩，後來就用長按 home 鍵叫出的快速搜尋，
+可以打中文。&lt;/p&gt;
+&lt;h2 id=&quot;google now&quot;&gt;google now&lt;/h2&gt;
+&lt;p&gt;原本 android o 的桌面往左滑會有 google now，
+但我實在想不出那有什麼用，而且會讓桌面被鎖在第一頁，
+只能往右延伸。
+所以後來就換掉預設的 launcher，
+找了一個舊的可以往左或往右的 open launcher。&lt;/p&gt;
+&lt;h2 id=&quot;解鎖&quot;&gt;解鎖&lt;/h2&gt;
+&lt;p&gt;atom 支援指紋、人臉辨識和其它多種解鎖。
+我現在是用指紋和 pin 碼，平常就都用指紋比較方便，
+之後可能會改用一個很長的密碼。&lt;/p&gt;
+&lt;h2 id=&quot;recovery 與 fastboot&quot;&gt;recovery 與 fastboot&lt;/h2&gt;
+&lt;p&gt;如 &lt;a href=&quot;android-root-atom.html&quot;&gt;root atom&lt;/a&gt; 這篇文章提到的，
+要進入 recovery 按著音量向下鍵與電源鍵開機，
+然後在 recovery 裡有選項可以進 fastboot。&lt;/p&gt;
+&lt;h2 id=&quot;鈴聲音量與通知音量&quot;&gt;鈴聲音量與通知音量&lt;/h2&gt;
+&lt;p&gt;android o 開始鈴聲音量和通知音量被合在一起，實在有點智障。
+通知通常還好，自己聽得到就好，漏掉就算了，也沒關係。
+鈴聲則是比較要緊的事，一定要大聲，在騎車、走路時也要能聽到。
+但 android o 這二個被合在一起，就不能各自調。&lt;/p&gt;
+&lt;p&gt;後來搜了一下，找到一個 &lt;a href=&quot;https://play.google.com/store/apps/details?id=netroken.android.persistfree&quot;&gt;volume control&lt;/a&gt; app，
+能分離這二者，就裝來用了。
+他能讓來電鈴聲獨立調整，然後系統其它通知鈴聲就能調小了。&lt;/p&gt;
+&lt;h2 id=&quot;自訂鈴聲&quot;&gt;自訂鈴聲&lt;/h2&gt;
+&lt;p&gt;以前我在 android 自訂鈴聲，
+都是放在 &lt;code&gt;/sdcard/media/audio/ringtones&lt;/code&gt; 之類的資料夾，
+然後在選擇鈴聲的介面就會出現；但我在 atom 上試沒用。&lt;/p&gt;
+&lt;p&gt;電話鈴聲可以直接在 &lt;em&gt;設定 &amp;gt; 音效 &amp;gt; 電話鈴聲 &amp;gt; 新增鈴聲&lt;/em&gt;
+裡面直接新增其它鈴聲，之後就會出現在介面裡了。&lt;/p&gt;
+&lt;p&gt;鬧鐘鈴聲則是在內建的時鐘 app 裡，
+選擇鈴聲的地方，可以從檔案系統新增其它鈴聲。&lt;/p&gt;
+&lt;h2 id=&quot;捷徑&quot;&gt;捷徑&lt;/h2&gt;
+&lt;p&gt;有些檔案會常需要快速查閱，像公車時刻表、校園地圖之類的。
+通常就是拍照或截圖成圖片，但在手機相簿久了就會被擠到後面，
+而且還要開相簿或檔案系統找蠻不方便的。&lt;/p&gt;
+&lt;p&gt;後來就找了一款 app &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.nagopy.android.fileshortcut&quot;&gt;file shortcut&lt;/a&gt; 可以在桌面設定檔案捷徑的，
+點該捷徑相當於用檔案管理員開該檔案。
+但如果久了捷徑積很多，
+也要關心哪些檔案是捷徑指向的不能刪，有點麻煩；
+所以後來換成只有一個指向資料夾的捷徑，
+要快速存取的就複製到該資料夾。&lt;/p&gt;
+&lt;p&gt;其實 android 一些 app 可以讓你把檔案連結到 launcher，不用用到單獨一個 widge。
+但在 atom 都失敗，後來才發現是我用的 &lt;a href=&quot;https://github.com/OpenLauncherTeam/openlauncher/issues/355&quot;&gt;open launcher 不支援&lt;/a&gt; 。
+像 ghost commander 就可以把資料夾或檔案加到桌面，
+firefox 也可以把網頁加到桌面，只是 open launcher 不支援。
+另外就算資料夾加了，好像也沒有 app 可以開資料夾？
+會顯示沒有支援開啟的 app。&lt;/p&gt;
+&lt;h2 id=&quot;vanilla music&quot;&gt;vanilla music&lt;/h2&gt;
+&lt;p&gt;預設的怪怪的，只會在開機時掃描一次，
+之後丟進去的都不會出現，要重新開機。
+而且建播放清單時會 crash，沒辦法建。
+後來去 f-droid 上試了幾款，換成 &lt;a href=&quot;https://f-droid.org/packages/ch.blinkenlights.android.vanilla&quot;&gt;vanilla music&lt;/a&gt; 。&lt;/p&gt;
+&lt;h2 id=&quot;open camera&quot;&gt;open camera&lt;/h2&gt;
+&lt;p&gt;預設的相機 app 功能有點少，
+又無意間看到這款開源的相機 app &lt;a href=&quot;https://play.google.com/store/apps/details?id=net.sourceforge.opencamera&quot;&gt;open camera&lt;/a&gt; ，
+還不錯用，就把預設的相機 app 改成這款了；
+也就是上文提到的 &lt;a href=&quot;#快速開啟相機&quot;&gt;連按二下電源鍵快速開啟相機&lt;/a&gt; 。
+如果有多於一款相機 app，在連按二下電源鍵時會詢問你要用哪一款；
+如果已經有預設值，可以去 &lt;em&gt;設定 &amp;gt; 應用程式 &amp;gt; 已綁定的相機 app &amp;gt; 預設值&lt;/em&gt;
+清除預設值，下次再快速啟動時，就會再跳出詢問一次了。&lt;/p&gt;
+&lt;h2 id=&quot;facebook 圖片畫質&quot;&gt;facebook 圖片畫質&lt;/h2&gt;
+&lt;p&gt;我本來用 facebook 的官方 app，
+但他好像會根據手機螢幕尺寸載入不同畫質的圖片。
+我手機尺寸太小，所以圖片都很小，
+很多字都看不清楚，放大就糊掉，載下來也一樣不會變大。
+也換過官方的 facebook lite，也一樣糟，
+只好開始試第三方 app。
+目前是用 &lt;a href=&quot;https://f-droid.org/packages/it.rignanese.leo.slimfacebook/&quot;&gt;SlimSocial for Facebook&lt;/a&gt; ，
+介面和網頁版有點像，但分享的介面有點糟，字和按鈕會變很小。&lt;/p&gt;
+&lt;h2 id=&quot;alpha vnc 遠端控制手機&quot;&gt;alpha vnc 遠端控制手機&lt;/h2&gt;
+&lt;p&gt;有時候在用電腦，懶得又拿起手機用螢幕打字，
+就找了有沒有能用電腦控制手機的方法。
+一開始找了很久以前的 &lt;a href=&quot;./android-screen-monitor.html&quot;&gt;./android-screen-monitor.html&lt;/a&gt; ，
+版本太舊變得很慢，跳很多警告。
+後來找到 scrcpy，也 &lt;a href=&quot;linux-easy-debian-package.html#scrcpy&quot;&gt;自己編譯了&lt;/a&gt; ，
+但還是覺得有點麻煩，操作個手機這麼麻煩。&lt;/p&gt;
+&lt;p&gt;後來想到能不能在手機上開 vnc server，
+就能用任意客戶端遠端連進去了。
+搜尋了一下，有一個 &lt;a href=&quot;https://f-droid.org/forums/topic/droid-vnc-server/&quot;&gt;droid vpn&lt;/a&gt; 是開源的， 但很久沒更新了。
+&lt;a href=&quot;https://code.google.com/archive/p/android-vnc-server/downloads&quot;&gt;android vpn server&lt;/a&gt; 和 &lt;a href=&quot;https://code.google.com/archive/p/fastdroid-vnc/downloads&quot;&gt;fastdroid vnc&lt;/a&gt; 都是執行檔，
+要在 root 下執行，而且也都很久沒更新了，現在的 android 版本不支援。&lt;/p&gt;
+&lt;p&gt;最後能動的有一個 &lt;a href=&quot;https://play.google.com/store/apps/details?id=de.abr.android.avnc&quot;&gt;alpha vnc&lt;/a&gt; 是可以免費用，其它是要付費的沒試。
+但好像只能試用 15 分鐘，本來以為是下載 app 只能用 15 分鐘，
+後來才發現是一次 vnc 連接只能連 15 分鐘。
+其實我也沒用超過 15 分鐘過，
+主要是沒有真正需要的使用情境，所以也就和沒限制差不多。&lt;/p&gt;
+&lt;h2 id=&quot;vnc 當簡報筆&quot;&gt;vnc 當簡報筆&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://play.google.com/store/apps/details?id=nine.controller&quot;&gt;remote mouse&lt;/a&gt; 可以透過 vnc 把手機摸擬成滑鼠和幾個鍵盤鍵來操作電腦，
+但要先在電腦上開好 vnc server， 主要功能是把手機當成簡報筆用。
+&lt;a href=&quot;android-root-atom.html&quot;&gt;之前 root atom 的文章有提過這件事。&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;透過 wifi 連線 adb&quot;&gt;透過 wifi 連線 adb&lt;/h2&gt;
+&lt;p&gt;如果沒有 root，要先用有線 adb 連線進手機，才能改成走網路；
+如果有 root，某些 app 可以直接改。
+見之前的文章 &lt;a href=&quot;adb-over-wifi.html&quot;&gt;透過 wifi 連線 adb&lt;/a&gt; 。
+目前是用 &lt;a href=&quot;https://f-droid.org/en/packages/com.github.sryze.wirebug/&quot;&gt;wirebug&lt;/a&gt; 這款 app。&lt;/p&gt;
+&lt;h2 id=&quot;和電腦互傳檔案&quot;&gt;和電腦互傳檔案&lt;/h2&gt;
+&lt;p&gt;傳檔案可以用 adb 或是用 ftp。
+如果電腦和手機的網路有互通，那可以透過 ftp 來傳。
+開 ftp server 的一方 ip 要讓另一方能連進來，
+一般我是在手機上開。&lt;/p&gt;
+&lt;p&gt;play 商店有不少 ftp server app，
+我是用 f-droid 的 &lt;a href=&quot;https://f-droid.org/packages/org.primftpd/&quot;&gt;primitive ftpd&lt;/a&gt; ，
+可以開 ftp 和 sftp，我是只開 sftp。
+然後把電腦的公鑰複製到手機上的 &lt;code&gt;/sdcard/.ssh/authorized_keys&lt;/code&gt; ，
+就可以免密碼登入。&lt;/p&gt;
+&lt;h2 id=&quot;ssh 轉發內網 port 到公網&quot;&gt;ssh 轉發內網 port 到公網&lt;/h2&gt;
+&lt;p&gt;有時 android 上裝了像 ftp vnc adb 之類要讓外部連進來的服務，
+如果有一台有公網 ip 的伺服器，
+就能 &lt;a href=&quot;android-adb-4g-ssh-tunnel.html&quot;&gt;用 vx connect bot 把手機上的 port 綁到伺服器上&lt;/a&gt; 。
+這樣就算手機在 nat 後面或是行動網路的浮動 ip，
+也能讓外部連進來。&lt;/p&gt;
+&lt;h2 id=&quot;quick setting tile&quot;&gt;quick setting tile&lt;/h2&gt;
+&lt;p&gt;中文不知道翻什麼，就是 android 通知欄拉下來會有一些開關可以調，
+這些開關其實可以從 app 去控制，
+像上面的 primitive ftpd 就有提供一個快速開關 ftp 的，
+不過我使用頻率不高就沒用。
+我裝了一個就叫 &lt;a href=&quot;https://play.google.com/store/apps/details?id=it.simonesestito.ntiles&quot;&gt;Quick Settings&lt;/a&gt; 的，提供蠻多功能的。&lt;/p&gt;
+&lt;h2 id=&quot;NFC 開關&quot;&gt;NFC 開關&lt;/h2&gt;
+&lt;p&gt;android 幾年前就有 nfc 支持，但我的手機開關 nfc 不太方便。
+nfc 只要開著就會顯示一個關不掉的提醒通知，所以不適合一直開著；
+但原廠又沒有提供 nfc 的快速開關，第三方的也都要 root；
+啊不就還好我有 root。
+總之我是用 quick setting 的，要用時就開關一下。
+雖然開的時候還是會有通知浮在通知欄。&lt;/p&gt;
+&lt;h2 id=&quot;關閉 directly share 直接分享&quot;&gt;關閉 directly share 直接分享&lt;/h2&gt;
+&lt;p&gt;這是另一個我覺得很蠢的功能。
+傳統 android 在分享時，會彈出一個可以分享的 app 列表，
+不可避免的，隨 android 生態完整，app 列表越來越長。
+於是為了方便快速分享，android 又加了一個叫直接分享的功能，
+允許 app &lt;em&gt;註冊&lt;/em&gt; 分享按鈕，達到更細緻的操作。
+像原本要點 telegram 再選寄給誰，
+telegram 可以放一個按鈕，點下去就直接分享給你某個聯絡人。&lt;/p&gt;
+&lt;p&gt;立意是不錯，但很多腦殘 app 就是直接註好註滿，
+android 也不給你移除的選項，
+所以分享列表就堆了一堆我根本不去點的分享按鈕。
+samsung LG 的手機好像可以移除，不然 root 的手機也可以移除。
+在 &lt;code&gt;/data/system/ifw/&lt;/code&gt; 裡新增一個附檔名為 xml 的，
+名字可以隨便取，內容如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-xml&quot;&gt;&amp;lt;rules&amp;gt;
+  &amp;lt;service block=&amp;quot;true&amp;quot; log=&amp;quot;true&amp;quot;&amp;gt;
+    &amp;lt;intent-filter&amp;gt;
+      &amp;lt;action name=&amp;quot;android.service.chooser.ChooserTargetService&amp;quot; /&amp;gt;
+    &amp;lt;/intent-filter&amp;gt;
+  &amp;lt;/service&amp;gt;
+&amp;lt;/rules&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;就能關閉直接分享的功能。
+ifw 好像是設計來讓使用者開關某些功能的，
+但一直沒有正式發布，只有一些 hack 私下使用。
+總之目前頂著用。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/android-adb-4g-ssh-tunnel.html#用-ssh-轉發多種服務</id>
 <title>經由 ssh tunnel 連上行動網路裡的 adb</title>
 <published>2018-12-04T06:09:25.348Z</published>
@@ -153,12 +360,14 @@ PC 一樣要下 &lt;code&gt;adb connect $your_android_ip&lt;/code&gt; 。&lt;/p&
 <published>2019-03-27T09:48:10.079Z</published>
 <updated>2019-03-27T09:56:23.121Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/shell-pipe-speed-pv.html"/>
-<summary type="html">因為想控制某些程式的傳輸速度，
+<summary type="html">
+因為想控制某些程式的傳輸速度，
 所以想找找看有沒有 linux 命令
-像節流閥那樣限制通過的速度，
+能像節流閥那樣串在管道中就能限制通過的流量，
 就找到一個叫 pv 的小工具，
 不只是節流閥，還可以做流量統計。
-隔天想想其實也可以自己用 shell script 寫一個土炮版本的。</summary>
+隔天想想其實也可以自己用 shell script 寫一個土炮版本的。
+</summary>
 <category term="linux"/>
 <category term="shell"/>
 <category term="android"/>
@@ -2574,582 +2783,7 @@ zsh 好像也支援？&lt;/p&gt;
 <category term="geomatics"/>
 <category term="gnss"/>
 <category term="csrs"/>
-<content type="html">&lt;h1 id=&quot;A Preliminary Comparative Evaluation of Trimble RTX with CSRS-PPP&quot;&gt;A Preliminary Comparative Evaluation of Trimble RTX with CSRS-PPP&lt;/h1&gt;
-&lt;p&gt;Kinematic positioning has important applications in bathymetric mapping,
-vehicle navigation, and many others. This study comparatively evaluated
-the differences among the real time kinematic positioning with Trimble
-CenterPoint RTX service and the post-processing kinematic solution
-obtained from CSRS-PPP service. The comparison is based on the data
-collected on Dec. 16 to 22, 2017 on a CORS station, NSB0. From
-observations made on these days, the standard deviation of height
-differences between these two services is 0.057m, while the bias is
-0.080m. As compared with the official coordinates of this CORS, CSRS-PPP
-shows better agreement.&lt;/p&gt;
-&lt;h2 id=&quot;rtx 與 csrs-ppp&quot;&gt;rtx 與 csrs-ppp&lt;/h2&gt;
-&lt;p&gt;rtx 與 csrs-ppp 都是基於 GNSS 系統的絕對定位。
-rtx 是星基增益的即時動態定位，
-藉由地面站即時解算部份地區的精密星曆，
-並由網路或衛星廣播到使用者端，
-可以實現即時動態基於載波相位的絕對定位。&lt;/p&gt;
-&lt;h3 id=&quot;rtx 相對傳統 VBS-RTK 的優勢&quot;&gt;rtx 相對傳統 VBS-RTK 的優勢&lt;/h3&gt;
-&lt;p&gt;且相較於傳統的即時動態差分定位，
-星基增益系統不需要受限於基站與虛擬基站。
-傳統的差分定位，需要架站基站，
-或是以基站網內差出虛擬基站。
-虛擬基站雖然免除架站基站的困擾，
-但需要為每個使用者都內差計算出不同的虛擬基站。&lt;/p&gt;
-&lt;p&gt;而 rtx 等星基增益技術，只要有固定數量的靜態衛星接收站，
-即可即時解算出衛星的精密星曆，透過廣播服務所有使用者。
-由於所有使用者需要的是相同的星曆，
-不會像 vbs 因使用者增加而加重計算負擔，
-透過衛星廣播訊號的話，可以服務無上限人數的使用者。&lt;/p&gt;
-&lt;h3 id=&quot;csrs-ppp&quot;&gt;csrs-ppp&lt;/h3&gt;
-&lt;p&gt;csrs-ppp 是 &lt;strong&gt;加拿大自然資源局&lt;/strong&gt; 提供的線上解算精密單點定位服務，
-允許使用者在網頁介面上提交 rinex 格式的觀測資料，
-在伺服器端解算完畢後，會將成果 email 到使用者信箱。&lt;/p&gt;
-&lt;p&gt;csrs-ppp 為服務名稱，其內部使用的軟體有過變化，
-舊版軟體為 gpspace，現行的新版為 gpspark。
-&lt;a href=&quot;https://github.com/CGS-GIS/GPSPACE/&quot; title=&quot;csrs 開源 gpspace&quot;&gt;舊版 gpspace 已開源在 github 上，可以自行編譯取用；&lt;/a&gt;
-而新版 gpspark 仍在活躍開發中，沒有釋出原始碼，
-只有透過網頁介面提供服務，也就是現今的 csrs-ppp。&lt;/p&gt;
-&lt;h3 id=&quot;rtx 與 ppp 的異同&quot;&gt;rtx 與 ppp 的異同&lt;/h3&gt;
-&lt;p&gt;rtx 是即時動態定位，
-csrs-ppp 則要在觀測後輸出觀測檔案上傳，非即時定位。
-而 csrs-ppp 在解算時，可以解算移動中觀測的觀測檔，
-也就是動態定位；亦能假設接收儀是在固定座標，解算靜態定位。
-且 rtx 與 csrs-ppp 均是屬於基於載波相位的精密單點定位，
-rtx 使用的是即時解算的星曆，ppp 使用的則是事後解算的精密星曆。
-二者在理論上相似。&lt;/p&gt;
-&lt;h2 id=&quot;數據與解算&quot;&gt;數據與解算&lt;/h2&gt;
-&lt;p&gt;數據為 2017-12-16 到 2017-12-22 間觀測，
-測站位置為 TWD97 的固定衛星追蹤站 LSB0。
-rtx 數據為即時定位的座標，
-同時有使用傳統 gnss 接收儀，
-輸出 T02 格式並在事後轉換為 rinex 格式。
-csrs-ppp 再以 rinex 格式觀測檔進行精密單點定位。&lt;/p&gt;
-&lt;p&gt;總共會有四種定位方式的結果座標，
-分別為 rtx、gpspace、gpspark、座標真值。&lt;/p&gt;
-&lt;h3 id=&quot;座標真值&quot;&gt;座標真值&lt;/h3&gt;
-&lt;p&gt;測站位置為 TWD97 固定衛星追縱站，點號 LSB0，
-座標真值為：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;\begin{bmatrix}
-E \\ N \\ h
-\end{bmatrix}
-=
-\begin{bmatrix}
-212830.095483593 \\
-2672057.61548927 \\ 
-121.798217289174
-\end{bmatrix}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;rtx 資料&quot;&gt;rtx 資料&lt;/h3&gt;
-&lt;p&gt;rtx 資料有定位結果的經緯度座標與 twd97 平面座標，
-但用 &lt;a href=&quot;http://proj4.org&quot; title=&quot;地圖投影與大地線計算軟體&quot;&gt;proj4&lt;/a&gt; 將經緯度轉換成平面座標驗證後發現，
-二者不相符，在南北方向約誤差 1.7mm。
-最後決定使用 proj4 手動將經緯度座標轉成平面座標，
-原本的平面座標則忽略不使用。&lt;/p&gt;
-&lt;p&gt;整理後發現 rtx 定位座標在尚未收斂時，會有極大的誤差，
-原數據如下：&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.0887&lt;/td&gt;
-&lt;td&gt;0.3809&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.8082&lt;/td&gt;
-&lt;td&gt;0.4441&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.9551&lt;/td&gt;
-&lt;td&gt;0.9938&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;但經過作圖後發現，少量數據偏離平均值、真值極大，
-故決定以三倍標準差為基準籂選數據。
-將數據中離平均值超過三倍標準差的記錄剔除，
-再重新計算，再剔除三倍標準差以外的，
-重覆直到所有數據都在三倍標準差以內。
-過濾後整體標準偏差大幅下降，但也剔除了 14.73% 的數據。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.0376&lt;/td&gt;
-&lt;td&gt;0.01230&lt;/td&gt;
-&lt;td&gt;384425&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.7456&lt;/td&gt;
-&lt;td&gt;0.0096&lt;/td&gt;
-&lt;td&gt;380365&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.7674&lt;/td&gt;
-&lt;td&gt;0.0357&lt;/td&gt;
-&lt;td&gt;380894&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&quot;gpspace&quot;&gt;gpspace&lt;/h3&gt;
-&lt;p&gt;gpspace 是 csrs-ppp 使用的舊版 ppp 解算軟體，
-目前已在 github 上開源。
-gpspace 可以從 rinex 格式觀測資料與精密星曆，
-解算動態或靜態單點定位。
-因為 rtx 為動態定位，為了使二者在同一基準上比較，
-在 gpspace 也使用動態定位求解。&lt;/p&gt;
-&lt;p&gt;gpspace 的定位結果不是很穩定。
-相比 rtx 雖然在未收斂時會有極大誤差，
-但收斂後表現極佳。
-gpspace 則一直處在不穩定的狀態，
-雖然不像 rtx 有極端誤差， 但也不會收斂到穩定的值。
-整體不如 rtx。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3149&lt;/td&gt;
-&lt;td&gt;0.2005&lt;/td&gt;
-&lt;td&gt;585324&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5671&lt;/td&gt;
-&lt;td&gt;0.1460&lt;/td&gt;
-&lt;td&gt;585324&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.7856&lt;/td&gt;
-&lt;td&gt;0.3982&lt;/td&gt;
-&lt;td&gt;585324&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;嘗試也對 gpspace 的結果用三倍標準差過濾，
-結果雖有提升，但不很明顯。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3439&lt;/td&gt;
-&lt;td&gt;0.1355&lt;/td&gt;
-&lt;td&gt;560509&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5883&lt;/td&gt;
-&lt;td&gt;0.0771&lt;/td&gt;
-&lt;td&gt;559062&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.7457&lt;/td&gt;
-&lt;td&gt;0.2483&lt;/td&gt;
-&lt;td&gt;560993&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&quot;gpspark&quot;&gt;gpspark&lt;/h3&gt;
-&lt;p&gt;gpspark 與 gpspace 同為 csrs-ppp，
-使用上也類似，都是從 rinex 觀測資料解算精密單點定位，
-也一樣能解算動態與靜態，本次研究也同 gpspace 使用動態。
-gpspark 的定位結果遠勝 gpspace，
-收斂後能超過 rtx，並也沒有 rtx 誇張的極端值。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3209&lt;/td&gt;
-&lt;td&gt;0.0092&lt;/td&gt;
-&lt;td&gt;604800&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5840&lt;/td&gt;
-&lt;td&gt;0.0084&lt;/td&gt;
-&lt;td&gt;604800&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.6928&lt;/td&gt;
-&lt;td&gt;0.0293&lt;/td&gt;
-&lt;td&gt;604800&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;也同樣計算三倍標準差過濾，但結果並沒有顯著提升。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3211&lt;/td&gt;
-&lt;td&gt;0.0086&lt;/td&gt;
-&lt;td&gt;598610&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5841&lt;/td&gt;
-&lt;td&gt;0.0080&lt;/td&gt;
-&lt;td&gt;599439&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.6928&lt;/td&gt;
-&lt;td&gt;0.0282&lt;/td&gt;
-&lt;td&gt;602013&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2 id=&quot;比較&quot;&gt;比較&lt;/h2&gt;
-&lt;h3 id=&quot;四者作圖比較&quot;&gt;四者作圖比較&lt;/h3&gt;
-&lt;p&gt;將四者畫成散布圖如下。
-圖中是沒有過濾三倍標準差的數據，
-但也有部份極端值超過圖片邊界而沒有展示。
-其中黑線為座標真值，三種顏色分別為 rtx gpspace gpspark。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33490726908&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7886/33490726908_fa9ea30069.jpg&quot; alt=&quot;LSB0-all-small.png&quot; title=&quot;rtx gpspace gpspark 定位結果與真值依時間在 E N h 三方向上的散布圖&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;rtx 與 gpspark 的差異&quot;&gt;rtx 與 gpspark 的差異&lt;/h3&gt;
-&lt;p&gt;作為二種精度較佳的定位方法，單獨作圖比較。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33490727288&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7838/33490727288_bce7063bdf.jpg&quot; alt=&quot;LSB0-rtx-gpspark.png&quot; title=&quot;將 rtx 減去 gpspark 的定位結果作圖&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;0.2319&lt;/td&gt;
-&lt;td&gt;0.3802&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;-0.2241&lt;/td&gt;
-&lt;td&gt;0.4432&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;-0.2621&lt;/td&gt;
-&lt;td&gt;0.9957&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;由於 rtx 有較多的極端值，因此採用三倍標準差過濾數據，
-剔除三倍標準差後：&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;-0.0739&lt;/td&gt;
-&lt;td&gt;0.04153&lt;/td&gt;
-&lt;td&gt;383035&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;0.2823&lt;/td&gt;
-&lt;td&gt;0.01358&lt;/td&gt;
-&lt;td&gt;384496&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;-0.1626&lt;/td&gt;
-&lt;td&gt;0.01170&lt;/td&gt;
-&lt;td&gt;382166&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&quot;統計分析&quot;&gt;統計分析&lt;/h3&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;軟體&lt;/th&gt;
-&lt;th&gt;三倍標準差過濾&lt;/th&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;before&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.0887&lt;/td&gt;
-&lt;td&gt;0.3809&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;before&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.8082&lt;/td&gt;
-&lt;td&gt;0.4441&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;before&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.9551&lt;/td&gt;
-&lt;td&gt;0.9938&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;after&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.0376&lt;/td&gt;
-&lt;td&gt;0.01230&lt;/td&gt;
-&lt;td&gt;384425&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;after&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.7456&lt;/td&gt;
-&lt;td&gt;0.0096&lt;/td&gt;
-&lt;td&gt;380365&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;after&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.7674&lt;/td&gt;
-&lt;td&gt;0.0357&lt;/td&gt;
-&lt;td&gt;380894&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspace&lt;/td&gt;
-&lt;td&gt;before&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3149&lt;/td&gt;
-&lt;td&gt;0.2005&lt;/td&gt;
-&lt;td&gt;585324&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspace&lt;/td&gt;
-&lt;td&gt;before&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5671&lt;/td&gt;
-&lt;td&gt;0.1460&lt;/td&gt;
-&lt;td&gt;585324&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspace&lt;/td&gt;
-&lt;td&gt;before&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.7856&lt;/td&gt;
-&lt;td&gt;0.3982&lt;/td&gt;
-&lt;td&gt;585324&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspace&lt;/td&gt;
-&lt;td&gt;after&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3439&lt;/td&gt;
-&lt;td&gt;0.1355&lt;/td&gt;
-&lt;td&gt;560509&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspace&lt;/td&gt;
-&lt;td&gt;after&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5883&lt;/td&gt;
-&lt;td&gt;0.0771&lt;/td&gt;
-&lt;td&gt;559062&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspace&lt;/td&gt;
-&lt;td&gt;after&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.7457&lt;/td&gt;
-&lt;td&gt;0.2483&lt;/td&gt;
-&lt;td&gt;560993&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;before&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3209&lt;/td&gt;
-&lt;td&gt;0.0092&lt;/td&gt;
-&lt;td&gt;604800&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;before&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5840&lt;/td&gt;
-&lt;td&gt;0.0084&lt;/td&gt;
-&lt;td&gt;604800&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;before&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.6928&lt;/td&gt;
-&lt;td&gt;0.0293&lt;/td&gt;
-&lt;td&gt;604800&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;after&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3211&lt;/td&gt;
-&lt;td&gt;0.0086&lt;/td&gt;
-&lt;td&gt;598610&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;after&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5841&lt;/td&gt;
-&lt;td&gt;0.0080&lt;/td&gt;
-&lt;td&gt;599439&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;after&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.6928&lt;/td&gt;
-&lt;td&gt;0.0282&lt;/td&gt;
-&lt;td&gt;602013&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx - gpspark&lt;/td&gt;
-&lt;td&gt;before&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;0.2319&lt;/td&gt;
-&lt;td&gt;0.3802&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx - gpspark&lt;/td&gt;
-&lt;td&gt;before&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;-0.2241&lt;/td&gt;
-&lt;td&gt;0.4432&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx - gpspark&lt;/td&gt;
-&lt;td&gt;before&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;-0.2621&lt;/td&gt;
-&lt;td&gt;0.9957&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx - gpspark&lt;/td&gt;
-&lt;td&gt;after&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;-0.0739&lt;/td&gt;
-&lt;td&gt;0.04153&lt;/td&gt;
-&lt;td&gt;383035&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx - gpspark&lt;/td&gt;
-&lt;td&gt;after&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;0.2823&lt;/td&gt;
-&lt;td&gt;0.01358&lt;/td&gt;
-&lt;td&gt;384496&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx - gpspark&lt;/td&gt;
-&lt;td&gt;after&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;-0.1626&lt;/td&gt;
-&lt;td&gt;0.01170&lt;/td&gt;
-&lt;td&gt;382166&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;script src=&quot;ext/paper.js?reference&quot;&gt;&lt;/script&gt;
 
-&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
-
-&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
-
-&lt;script&gt;
-document.body.prepend(
-    document.querySelector(&apos;h1&apos;),
-    document.querySelector(&apos;header&apos;)
-)
-&lt;/script&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/geomatics-rtx-csrs-compare.html#數據與解算</id>
 <title>rtx csrs ppp 比較</title>

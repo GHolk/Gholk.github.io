@@ -1,7 +1,7 @@
 # pv 控制 pipe 的速度
 因為想控制某些程式的傳輸速度，
 所以想找找看有沒有 linux 命令
-像節流閥那樣限制通過的速度，
+能像節流閥那樣串在管道中就能限制通過的流量，
 就找到一個叫 pv 的小工具，
 不只是節流閥，還可以做流量統計。
 隔天想想其實也可以自己用 shell script 寫一個土炮版本的。
@@ -36,7 +36,7 @@ adb push 我不會控制速度，以我的經驗就是速度會吃滿，
 
 [wifi adb]: adb-over-wifi.html
 
-[shell send]: linux-easy-shell-send-file.html#adb%20也可以通
+[shell send]: linux-easy-shell-send-file.html#adb%20 也可以通
 
 ```sh
 # 用 adb

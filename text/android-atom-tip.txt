@@ -116,6 +116,10 @@ android o 開始鈴聲音量和通知音量被合在一起，實在有點智障�
 
 其實 android 一些 app 可以讓你把檔案連結到 launcher，不用用到單獨一個 widge。
 但在 atom 都失敗，後來才發現是我用的 [open launcher 不支援][shortcut issue] 。
+像 ghost commander 就可以把資料夾或檔案加到桌面，
+firefox 也可以把網頁加到桌面，只是 open launcher 不支援。
+另外就算資料夾加了，好像也沒有 app 可以開資料夾？
+會顯示沒有支援開啟的 app。
 
 [shortcut issue]: https://github.com/OpenLauncherTeam/openlauncher/issues/355
 
@@ -187,11 +191,102 @@ android o 開始鈴聲音量和通知音量被合在一起，實在有點智障�
 [remote mouse]: https://play.google.com/store/apps/details?id=nine.controller
 [vnc slide pointer]: android-root-atom.html
 
+## 透過 wifi 連線 adb
+如果沒有 root，要先用有線 adb 連線進手機，才能改成走網路；
+如果有 root，某些 app 可以直接改。
+見之前的文章 [透過 wifi 連線 adb] 。
+目前是用 [wirebug] 這款 app。
+
+[wirebug]: https://f-droid.org/en/packages/com.github.sryze.wirebug/
+[透過 wifi 連線 adb]: adb-over-wifi.html
+
+## 和電腦互傳檔案
+傳檔案可以用 adb 或是用 ftp。
+如果電腦和手機的網路有互通，那可以透過 ftp 來傳。
+開 ftp server 的一方 ip 要讓另一方能連進來，
+一般我是在手機上開。
+
+play 商店有不少 ftp server app，
+我是用 f-droid 的 [primitive ftpd] ，
+可以開 ftp 和 sftp，我是只開 sftp。
+然後把電腦的公鑰複製到手機上的 `/sdcard/.ssh/authorized_keys` ，
+就可以免密碼登入。
+
+[primitive ftpd]: https://f-droid.org/packages/org.primftpd/
+
 ## ssh 轉發內網 port 到公網
 有時 android 上裝了像 ftp vnc adb 之類要讓外部連進來的服務，
 如果有一台有公網 ip 的伺服器，
 就能 [用 vx connect bot 把手機上的 port 綁到伺服器上][ssh port forward] 。
+這樣就算手機在 nat 後面或是行動網路的浮動 ip，
+也能讓外部連進來。
 
 [ssh port forward]: android-adb-4g-ssh-tunnel.html
 
+## quick setting tile
+中文不知道翻什麼，就是 android 通知欄拉下來會有一些開關可以調，
+這些開關其實可以從 app 去控制，
+像上面的 primitive ftpd 就有提供一個快速開關 ftp 的，
+不過我使用頻率不高就沒用。
+我裝了一個就叫 [Quick Settings] 的，提供蠻多功能的。
+
+[Quick Settings]: https://play.google.com/store/apps/details?id=it.simonesestito.ntiles
+
+## NFC 開關
+android 幾年前就有 nfc 支持，但我的手機開關 nfc 不太方便。
+nfc 只要開著就會顯示一個關不掉的提醒通知，所以不適合一直開著；
+但原廠又沒有提供 nfc 的快速開關，第三方的也都要 root；
+啊不就還好我有 root。
+總之我是用 quick setting 的，要用時就開關一下。
+雖然開的時候還是會有通知浮在通知欄。
+
+## 關閉 directly share 直接分享
+這是另一個我覺得很蠢的功能。
+傳統 android 在分享時，會彈出一個可以分享的 app 列表，
+不可避免的，隨 android 生態完整，app 列表越來越長。
+於是為了方便快速分享，android 又加了一個叫直接分享的功能，
+允許 app *註冊* 分享按鈕，達到更細緻的操作。
+像原本要點 telegram 再選寄給誰，
+telegram 可以放一個按鈕，點下去就直接分享給你某個聯絡人。
+
+立意是不錯，但很多腦殘 app 就是直接註好註滿，
+android 也不給你移除的選項，
+所以分享列表就堆了一堆我根本不去點的分享按鈕。
+samsung LG 的手機好像可以移除，不然 root 的手機也可以移除。
+在 `/data/system/ifw/` 裡新增一個附檔名為 xml 的，
+名字可以隨便取，內容如下：
+
+```xml
+<rules>
+  <service block="true" log="true">
+    <intent-filter>
+      <action name="android.service.chooser.ChooserTargetService" />
+    </intent-filter>
+  </service>
+</rules>
+```
+
+就能關閉直接分享的功能。
+ifw 好像是設計來讓使用者開關某些功能的，
+但一直沒有正式發布，只有一些 hack 私下使用。
+總之目前頂著用。
+
+## 計算機
+現在是用 f-droid 的 [mather] ，底層是用 [math.js] ，
+所以可以存變數、定義函數、算向量和虛數。
+之前 [有寫過幾篇關於 math.js 的功能][mathjs tag] ，
+基本上我在 js 要做數學運算就會用他，
+不然就是直接用 octave 算。
+（現在多了符號微分會用 emacs 算。）
+
+[mathjs tag]: javascript-mathjs-tag-template.html
+[mather]: https://f-droid.org/en/packages/org.icasdri.mather/
+[math.js]: http://mathjs.org/
+
+mather 有提供簡單鍵盤，也可以用自己手機的鍵盤，才能輸入公式、符號。
+只是我手機太小，輸入不太方便。
+有試過用語音輸入，但 google 語音輸入不能輸入符號，
+會變成中文的 *加* *減* ，只有輸入一堆數字時比較方便。
+
 #android
+#root

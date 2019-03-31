@@ -1,0 +1,312 @@
+# BIM 建模以 revit 實作
+交通大學一門 BIM 的課程，是用 revit 軟體實作，
+要畫出一整棟完整的建築物。
+建築物是照乙級製圖的圖面畫的，所以還要懂看工程圖，
+對沒學過工程圖的我有點困難；
+不過老師說沒修過工程圖也沒關係。
+紀乃文教授的課，二年一開。
+
+## 作業範圍
+revit 實作是用 [台大的開放課程網站 ocw 上的 revit 教學範例][ocw revit] ，
+基本上照著作就可以，老師會自己錄影片補充細節。
+第一次作業是到 ocw 的第十單元為止。
+
+[ocw revit]: http://ocw.aca.ntu.edu.tw/ntu-ocw/index.php/ocw/cou/102S209
+
+一開始我有搞不清楚作業到底是什麼，
+老師在課堂上示範是用一個小房子，但那只是示範方便，
+作業應該是交 ocw 上的乙級製圖的圖面。
+
+## 作業一從到地基到地下一層為止
+
+### 結構平面
+ocw 上是用複製的，用一樓當來源，
+把所有樓層建出來。這裡有個錯誤，
+一樓的高程應該是 15cm，會比地面高 15cm。
+我一開始沒發現，就把 1F 建在 0，
+到後期算 B1 的牆高才發現怪怪的，
+才把 1F 移到 15cm，並多加一個地面層 GL。
+
+[![screen-shot-14.png]]
+
+### 網格線
+網格是特指柱的網格，網格線交點是柱心。
+橫向是 ABCD，縱向是 1234。
+後來再把網格線延伸到每層樓都看得到。
+
+[![screen-shot-15.png]]
+
+[![screen-shot-16.png]]
+
+### 地形
+不是所有 bim 軟體都有地形，但 revit 有所以就作了。
+主要是建築設計時有時會考慮和建築和周圍地物的關係，
+所以有的 bim 軟體可以建模地形。
+這是植栽的地形，我把表面上綠色，
+剖面我是上棕色，但不知道為什麼顯示是灰色。
+
+[![screen-shot-19.png]]
+
+### 開挖
+工程中不會直接把建築蓋在地上，
+會先開挖地基，有的還有地下室。
+revit 開挖後會自動加上 PC 打底。
+
+[![screen-shot-20.png]]
+
+### 鋼板樁錯誤樓層
+在開挖四周裝上鋼板樁，防止坍塌。
+我放鋼板樁時有點問題，一開始我放在 1F，
+但從立面圖看卻跑到 B1。
+我試著從性質視窗移動鋼板樁，可以正常移動到所有樓層，
+但就是不能移到 1F。
+下面的圖一些就無視問題繼續做，後面才修好。
+
+[![screen-shot-21.png]]
+
+[![screen-shot-22.png]]
+
+一開始鋼板樁掉到 B1，但四面有一面卻正常落在 1F。
+奇怪的 bug。
+
+[![screen-shot-23.png]]
+
+### 地基基礎柱
+就先不理鋼板樁的 bug，繼續作地基。
+這裡有個問題，我一開始弄錯 GL 的意思，
+把老師建議多建立的地基層取名成 GL。
+GL 應該是地表層，地基層應該是 base。
+
+[![screen-shot-24.png]]
+
+### 地樑
+這裡一開始做錯，少了一組小樑，
+就是圖中空最大的那區，後來才補上。
+
+[![screen-shot-25.png]]
+
+### 修正鋼板樁高程
+後來懷疑鋼板樁是 revit bug，就重開一次，
+重開後是連移都不能移了。
+後來直接把舊鋼板樁全部刪掉，重放就好了。
+最後還有一個 bug 是修正 1F 高度到 15cm 時，
+鋼板樁也跟著移到 15cm，只能重新對齊到 GL。
+
+[![screen-shot-26.png]]
+
+### 複製樓板成筏基板
+筏基板就是用老師的作法，複製樓板改屬性完成的。
+也有多畫一層 base，放筏基板比較好放。
+我是把所有樓板畫成同一個，
+在同一個編輯模式內畫出很多個不相連的方形，
+就完成一塊塊不相連但又是同一塊的樓板。
+不知道這樣後面會不會有問題？
+
+後面因為上面忘了畫小樑，所以樓板也要改。
+還有一個錯是基地回填土據圖面只要填最北面三塊，
+但我一開始全填了，後面才改正。
+
+[![screen-shot-27.png]]
+
+[![screen-shot-28.png]]
+
+關於樓板有個疑問，如果樓板下有樑柱，
+是樓板被樑柱截斷，還是樑退讓樓板鋪在樑柱上？
+我的畫法是樓板被截斷，只鋪在樑柱的間隙。
+
+### B1 柱
+和地基柱類似，但少了幾根，因為沒有蓋滿。
+柱的位置和方位有幾根要微調的，一開始好像放錯。
+
+[![screen-shot-29.png]]
+
+### B1 外圍牆
+
+[![screen-shot-30.png]]
+
+### B1 隔間牆
+隔間牆一開始找位置找很久，不知道補助平面線要對哪。
+後來也有發現對錯，主要是少了地基層的小樑中心線，才那麼難對。
+
+[![screen-shot-31.png]]
+
+[![screen-shot-32.png]]
+
+這裡我看圖以為車道出口是沒有牆，
+就把牆挖掉一段，後來發現應該是要用鐵捲門做開口。
+
+[![screen-shot-33.png]]
+
+### 電梯開口
+電梯開口就照著 ocw 畫的，
+但還是不太懂畫成元件的意義，也不知道怎麼重用。
+後來因為修隔間位置，開口就位移了，
+牆就變成沒有開口。
+
+還有就是因為電梯開口高度，才發現我 B1 的樓層高不對，
+才發現 1F 的高程設錯成 0，應該是 15cm。
+
+[![screen-shot-34.png]]
+
+也順便把門和窗放好了，沒有特別截圖。
+
+### 二層磚牆
+電梯旁的小空間要用二層磚牆來封，
+我在這裡發現我的空隙不對，
+找半天才找到隔間牆的位置錯在哪。
+
+[![screen-shot-35.png]]
+
+### 補上小地樑
+之前地樑少畫一區，這裡補上。
+再用地樑的中心線修正隔間位置，
+磚牆位置也就對了。
+
+[![screen-shot-36.png]]
+
+### B1 樓梯
+樓梯最難的部份是要先量好位置。
+很好奇一般建築是怎麼算樓梯的？
+圖面裡樓層高都剛好是樓梯階高的倍數，
+但現實應該沒這麼剛好吧？
+
+然後我樓梯平面的高程和 ocw 上的不一樣，
+但頂部有剛好對齊一樓，不知道哪裡的問題。
+
+[![screen-shot-37.png]]
+
+[![screen-shot-38.png]]
+
+室內梯有個錯是我二段梯中間沒有留間隙，
+我一開始看圖看不懂那段 95 4 95 的 4 是要哪裡的寬度，
+後來重看 ocw 好幾遍，看到他樓梯寬度和我設一樣，
+但中間卻還留有間隙，才想到 4cm 應該是中間要多的間隙。
+上面那張圖是錯的，我也沒有截對的圖。
+不過 rvt 檔裡的是修正過的了。
+
+### B1 樓梯的牆
+把樓梯周圍的牆修成和樓梯一樣的形狀。
+
+[![screen-shot-39.png]]
+
+[![screen-shot-40.png]]
+
+### B1 完成
+這是樓梯的 4cm 間隙還沒修正的截圖。
+
+[![screen-shot-41.png]]
+
+[screen-shot-14.png]: http://farm8.staticflickr.com/7833/46589022465_e4bb0981c1.jpg
+[![screen-shot-14.png]]: http://www.flickr.com/photos/144554087@N04/46589022465
+
+[screen-shot-15.png]: http://farm8.staticflickr.com/7893/32562290337_af77faf33f.jpg
+[![screen-shot-15.png]]: http://www.flickr.com/photos/144554087@N04/32562290337
+
+[screen-shot-16.png]: http://farm8.staticflickr.com/7927/32562292147_248b8d850c.jpg
+[![screen-shot-16.png]]: http://www.flickr.com/photos/144554087@N04/32562292147
+
+[screen-shot-17.png]: http://farm8.staticflickr.com/7870/40538476843_53b79af24f.jpg
+[![screen-shot-17.png]]: http://www.flickr.com/photos/144554087@N04/40538476843
+
+[screen-shot-18.png]: http://farm8.staticflickr.com/7801/47451658912_30e6f4ea1e.jpg
+[![screen-shot-18.png]]: http://www.flickr.com/photos/144554087@N04/47451658912
+
+[screen-shot-19.png]: http://farm8.staticflickr.com/7822/46780712584_14bda8b20d.jpg
+[![screen-shot-19.png]]: http://www.flickr.com/photos/144554087@N04/46780712584
+
+[screen-shot-20.png]: http://farm8.staticflickr.com/7845/32562292727_3686b58992.jpg
+[![screen-shot-20.png]]: http://www.flickr.com/photos/144554087@N04/32562292727
+
+[screen-shot-21.png]: http://farm8.staticflickr.com/7877/33627707798_509955670c.jpg
+[![screen-shot-21.png]]: http://www.flickr.com/photos/144554087@N04/33627707798
+
+[screen-shot-22.png]: http://farm8.staticflickr.com/7919/46589025365_8a2fd9781b.jpg
+[![screen-shot-22.png]]: http://www.flickr.com/photos/144554087@N04/46589025365
+
+[screen-shot-23.png]: http://farm8.staticflickr.com/7867/33627708248_2811057bca.jpg
+[![screen-shot-23.png]]: http://www.flickr.com/photos/144554087@N04/33627708248
+
+[screen-shot-24.png]: http://farm8.staticflickr.com/7904/33627708528_47b811d3ee.jpg
+[![screen-shot-24.png]]: http://www.flickr.com/photos/144554087@N04/33627708528
+
+[screen-shot-25.png]: http://farm8.staticflickr.com/7837/46780713874_009a53f54d.jpg
+[![screen-shot-25.png]]: http://www.flickr.com/photos/144554087@N04/46780713874
+
+[screen-shot-26.png]: http://farm8.staticflickr.com/7865/47451659712_cda2b88262.jpg
+[![screen-shot-26.png]]: http://www.flickr.com/photos/144554087@N04/47451659712
+
+[screen-shot-27.png]: http://farm8.staticflickr.com/7844/46780714204_16d814ab61.jpg
+[![screen-shot-27.png]]: http://www.flickr.com/photos/144554087@N04/46780714204
+
+[screen-shot-28.png]: http://farm8.staticflickr.com/7909/33627709328_15dbd2db09.jpg
+[![screen-shot-28.png]]: http://www.flickr.com/photos/144554087@N04/33627709328
+
+[screen-shot-29.png]: http://farm8.staticflickr.com/7864/40538479103_1150dcac2c.jpg
+[![screen-shot-29.png]]: http://www.flickr.com/photos/144554087@N04/40538479103
+
+[screen-shot-30.png]: http://farm8.staticflickr.com/7914/33627709868_ca05a9612f.jpg
+[![screen-shot-30.png]]: http://www.flickr.com/photos/144554087@N04/33627709868
+
+[screen-shot-31.png]: http://farm8.staticflickr.com/7808/47451660232_0ef80b0422.jpg
+[![screen-shot-31.png]]: http://www.flickr.com/photos/144554087@N04/47451660232
+
+[screen-shot-32.png]: http://farm8.staticflickr.com/7872/40538479723_68e3103a91.jpg
+[![screen-shot-32.png]]: http://www.flickr.com/photos/144554087@N04/40538479723
+
+[screen-shot-33.png]: http://farm8.staticflickr.com/7911/33627710348_d2af1e7773.jpg
+[![screen-shot-33.png]]: http://www.flickr.com/photos/144554087@N04/33627710348
+
+[screen-shot-34.png]: http://farm8.staticflickr.com/7866/46589027055_6a8bbe9349.jpg
+[![screen-shot-34.png]]: http://www.flickr.com/photos/144554087@N04/46589027055
+
+[screen-shot-35.png]: http://farm8.staticflickr.com/7856/47504448341_4e916782bb.jpg
+[![screen-shot-35.png]]: http://www.flickr.com/photos/144554087@N04/47504448341
+
+[screen-shot-36.png]: http://farm8.staticflickr.com/7910/32562294887_50e48fb979.jpg
+[![screen-shot-36.png]]: http://www.flickr.com/photos/144554087@N04/32562294887
+
+[screen-shot-37.png]: http://farm8.staticflickr.com/7898/33627711438_e7ddb2e540.jpg
+[![screen-shot-37.png]]: http://www.flickr.com/photos/144554087@N04/33627711438
+
+[screen-shot-38.png]: http://farm8.staticflickr.com/7894/47504448941_383152acb7.jpg
+[![screen-shot-38.png]]: http://www.flickr.com/photos/144554087@N04/47504448941
+
+[screen-shot-39.png]: http://farm8.staticflickr.com/7863/46780716564_8f71a14607.jpg
+[![screen-shot-39.png]]: http://www.flickr.com/photos/144554087@N04/46780716564
+
+[screen-shot-40.png]: http://farm8.staticflickr.com/7829/46780716714_301866dd8f.jpg
+[![screen-shot-40.png]]: http://www.flickr.com/photos/144554087@N04/46780716714
+
+[screen-shot-41.png]: http://farm8.staticflickr.com/7908/40538481303_f12ba97d51.jpg
+[![screen-shot-41.png]]: http://www.flickr.com/photos/144554087@N04/40538481303
+
+### 作業一感想
+做得時候沒感覺，事後打報告發現重做的東西蠻多的，
+很多圖看錯後來才修正；
+應該和我非土木出身，又沒學過工程圖有很大關係。
+
+## revit 的 bug
+revit 作為一個龐大複雜的 bim 軟體，有 bug 是難免的，
+老師說其實 revit 常常會 [[傲嬌]] 閙脾氣。
+後來想想，其實 revit 有點像 microsoft office，
+像 word 也是每次改版後相容就會有問題，
+也會有大大小小的 bug。
+
+<link rel="stylesheet" href="ext/paper.css">
+
+<script src="ext/paper.js?execute"></script>
+
+<script src="ext/header-nctu.js?execute&editable"></script>
+
+<style>
+img::after, a::after, a::before {
+  display: none !important;
+}
+figcaption {
+  display: none;
+}
+</style>
+
+#nctu
+#report
+#homework

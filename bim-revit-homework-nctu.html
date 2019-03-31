@@ -1,0 +1,198 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2019-03-31T08:03:27.100Z">
+<meta name="keywords" property="og:article:tag" content="nctu,report,homework">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="shell-pipe-speed-pv.html" title="pv 控制 pipe 的速度">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>BIM 建模以 revit 實作</title>
+</head>
+<body>
+<main><h1 id="BIM-建模以-revit-實作">BIM 建模以 revit 實作</h1>
+<p>交通大學一門 BIM 的課程，是用 revit 軟體實作，
+要畫出一整棟完整的建築物。
+建築物是照乙級製圖的圖面畫的，所以還要懂看工程圖，
+對沒學過工程圖的我有點困難；
+不過老師說沒修過工程圖也沒關係。
+紀乃文教授的課，二年一開。</p>
+<h2 id="作業範圍">作業範圍</h2>
+<p>revit 實作是用 <a href="http://ocw.aca.ntu.edu.tw/ntu-ocw/index.php/ocw/cou/102S209">台大的開放課程網站 ocw 上的 revit 教學範例</a> ，
+基本上照著作就可以，老師會自己錄影片補充細節。
+第一次作業是到 ocw 的第十單元為止。</p>
+<p>一開始我有搞不清楚作業到底是什麼，
+老師在課堂上示範是用一個小房子，但那只是示範方便，
+作業應該是交 ocw 上的乙級製圖的圖面。</p>
+<h2 id="作業一從到地基到地下一層為止">作業一從到地基到地下一層為止</h2>
+<h3 id="結構平面">結構平面</h3>
+<p>ocw 上是用複製的，用一樓當來源，
+把所有樓層建出來。這裡有個錯誤，
+一樓的高程應該是 15cm，會比地面高 15cm。
+我一開始沒發現，就把 1F 建在 0，
+到後期算 B1 的牆高才發現怪怪的，
+才把 1F 移到 15cm，並多加一個地面層 GL。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/46589022465"><img src="http://farm8.staticflickr.com/7833/46589022465_e4bb0981c1.jpg" alt="screen-shot-14.png"></a></p>
+<h3 id="網格線">網格線</h3>
+<p>網格是特指柱的網格，網格線交點是柱心。
+橫向是 ABCD，縱向是 1234。
+後來再把網格線延伸到每層樓都看得到。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/32562290337"><img src="http://farm8.staticflickr.com/7893/32562290337_af77faf33f.jpg" alt="screen-shot-15.png"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/32562292147"><img src="http://farm8.staticflickr.com/7927/32562292147_248b8d850c.jpg" alt="screen-shot-16.png"></a></p>
+<h3 id="地形">地形</h3>
+<p>不是所有 bim 軟體都有地形，但 revit 有所以就作了。
+主要是建築設計時有時會考慮和建築和周圍地物的關係，
+所以有的 bim 軟體可以建模地形。
+這是植栽的地形，我把表面上綠色，
+剖面我是上棕色，但不知道為什麼顯示是灰色。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/46780712584"><img src="http://farm8.staticflickr.com/7822/46780712584_14bda8b20d.jpg" alt="screen-shot-19.png"></a></p>
+<h3 id="開挖">開挖</h3>
+<p>工程中不會直接把建築蓋在地上，
+會先開挖地基，有的還有地下室。
+revit 開挖後會自動加上 PC 打底。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/32562292727"><img src="http://farm8.staticflickr.com/7845/32562292727_3686b58992.jpg" alt="screen-shot-20.png"></a></p>
+<h3 id="鋼板樁錯誤樓層">鋼板樁錯誤樓層</h3>
+<p>在開挖四周裝上鋼板樁，防止坍塌。
+我放鋼板樁時有點問題，一開始我放在 1F，
+但從立面圖看卻跑到 B1。
+我試著從性質視窗移動鋼板樁，可以正常移動到所有樓層，
+但就是不能移到 1F。
+下面的圖一些就無視問題繼續做，後面才修好。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/33627707798"><img src="http://farm8.staticflickr.com/7877/33627707798_509955670c.jpg" alt="screen-shot-21.png"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/46589025365"><img src="http://farm8.staticflickr.com/7919/46589025365_8a2fd9781b.jpg" alt="screen-shot-22.png"></a></p>
+<p>一開始鋼板樁掉到 B1，但四面有一面卻正常落在 1F。
+奇怪的 bug。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/33627708248"><img src="http://farm8.staticflickr.com/7867/33627708248_2811057bca.jpg" alt="screen-shot-23.png"></a></p>
+<h3 id="地基基礎柱">地基基礎柱</h3>
+<p>就先不理鋼板樁的 bug，繼續作地基。
+這裡有個問題，我一開始弄錯 GL 的意思，
+把老師建議多建立的地基層取名成 GL。
+GL 應該是地表層，地基層應該是 base。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/33627708528"><img src="http://farm8.staticflickr.com/7904/33627708528_47b811d3ee.jpg" alt="screen-shot-24.png"></a></p>
+<h3 id="地樑">地樑</h3>
+<p>這裡一開始做錯，少了一組小樑，
+就是圖中空最大的那區，後來才補上。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/46780713874"><img src="http://farm8.staticflickr.com/7837/46780713874_009a53f54d.jpg" alt="screen-shot-25.png"></a></p>
+<h3 id="修正鋼板樁高程">修正鋼板樁高程</h3>
+<p>後來懷疑鋼板樁是 revit bug，就重開一次，
+重開後是連移都不能移了。
+後來直接把舊鋼板樁全部刪掉，重放就好了。
+最後還有一個 bug 是修正 1F 高度到 15cm 時，
+鋼板樁也跟著移到 15cm，只能重新對齊到 GL。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/47451659712"><img src="http://farm8.staticflickr.com/7865/47451659712_cda2b88262.jpg" alt="screen-shot-26.png"></a></p>
+<h3 id="複製樓板成筏基板">複製樓板成筏基板</h3>
+<p>筏基板就是用老師的作法，複製樓板改屬性完成的。
+也有多畫一層 base，放筏基板比較好放。
+我是把所有樓板畫成同一個，
+在同一個編輯模式內畫出很多個不相連的方形，
+就完成一塊塊不相連但又是同一塊的樓板。
+不知道這樣後面會不會有問題？</p>
+<p>後面因為上面忘了畫小樑，所以樓板也要改。
+還有一個錯是基地回填土據圖面只要填最北面三塊，
+但我一開始全填了，後面才改正。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/46780714204"><img src="http://farm8.staticflickr.com/7844/46780714204_16d814ab61.jpg" alt="screen-shot-27.png"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/33627709328"><img src="http://farm8.staticflickr.com/7909/33627709328_15dbd2db09.jpg" alt="screen-shot-28.png"></a></p>
+<p>關於樓板有個疑問，如果樓板下有樑柱，
+是樓板被樑柱截斷，還是樑退讓樓板鋪在樑柱上？
+我的畫法是樓板被截斷，只鋪在樑柱的間隙。</p>
+<h3 id="B1-柱">B1 柱</h3>
+<p>和地基柱類似，但少了幾根，因為沒有蓋滿。
+柱的位置和方位有幾根要微調的，一開始好像放錯。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/40538479103"><img src="http://farm8.staticflickr.com/7864/40538479103_1150dcac2c.jpg" alt="screen-shot-29.png"></a></p>
+<h3 id="B1-外圍牆">B1 外圍牆</h3>
+<p><a href="http://www.flickr.com/photos/144554087@N04/33627709868"><img src="http://farm8.staticflickr.com/7914/33627709868_ca05a9612f.jpg" alt="screen-shot-30.png"></a></p>
+<h3 id="B1-隔間牆">B1 隔間牆</h3>
+<p>隔間牆一開始找位置找很久，不知道補助平面線要對哪。
+後來也有發現對錯，主要是少了地基層的小樑中心線，才那麼難對。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/47451660232"><img src="http://farm8.staticflickr.com/7808/47451660232_0ef80b0422.jpg" alt="screen-shot-31.png"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/40538479723"><img src="http://farm8.staticflickr.com/7872/40538479723_68e3103a91.jpg" alt="screen-shot-32.png"></a></p>
+<p>這裡我看圖以為車道出口是沒有牆，
+就把牆挖掉一段，後來發現應該是要用鐵捲門做開口。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/33627710348"><img src="http://farm8.staticflickr.com/7911/33627710348_d2af1e7773.jpg" alt="screen-shot-33.png"></a></p>
+<h3 id="電梯開口">電梯開口</h3>
+<p>電梯開口就照著 ocw 畫的，
+但還是不太懂畫成元件的意義，也不知道怎麼重用。
+後來因為修隔間位置，開口就位移了，
+牆就變成沒有開口。</p>
+<p>還有就是因為電梯開口高度，才發現我 B1 的樓層高不對，
+才發現 1F 的高程設錯成 0，應該是 15cm。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/46589027055"><img src="http://farm8.staticflickr.com/7866/46589027055_6a8bbe9349.jpg" alt="screen-shot-34.png"></a></p>
+<p>也順便把門和窗放好了，沒有特別截圖。</p>
+<h3 id="二層磚牆">二層磚牆</h3>
+<p>電梯旁的小空間要用二層磚牆來封，
+我在這裡發現我的空隙不對，
+找半天才找到隔間牆的位置錯在哪。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/47504448341"><img src="http://farm8.staticflickr.com/7856/47504448341_4e916782bb.jpg" alt="screen-shot-35.png"></a></p>
+<h3 id="補上小地樑">補上小地樑</h3>
+<p>之前地樑少畫一區，這裡補上。
+再用地樑的中心線修正隔間位置，
+磚牆位置也就對了。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/32562294887"><img src="http://farm8.staticflickr.com/7910/32562294887_50e48fb979.jpg" alt="screen-shot-36.png"></a></p>
+<h3 id="B1-樓梯">B1 樓梯</h3>
+<p>樓梯最難的部份是要先量好位置。
+很好奇一般建築是怎麼算樓梯的？
+圖面裡樓層高都剛好是樓梯階高的倍數，
+但現實應該沒這麼剛好吧？</p>
+<p>然後我樓梯平面的高程和 ocw 上的不一樣，
+但頂部有剛好對齊一樓，不知道哪裡的問題。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/33627711438"><img src="http://farm8.staticflickr.com/7898/33627711438_e7ddb2e540.jpg" alt="screen-shot-37.png"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/47504448941"><img src="http://farm8.staticflickr.com/7894/47504448941_383152acb7.jpg" alt="screen-shot-38.png"></a></p>
+<p>室內梯有個錯是我二段梯中間沒有留間隙，
+我一開始看圖看不懂那段 95 4 95 的 4 是要哪裡的寬度，
+後來重看 ocw 好幾遍，看到他樓梯寬度和我設一樣，
+但中間卻還留有間隙，才想到 4cm 應該是中間要多的間隙。
+上面那張圖是錯的，我也沒有截對的圖。
+不過 rvt 檔裡的是修正過的了。</p>
+<h3 id="B1-樓梯的牆">B1 樓梯的牆</h3>
+<p>把樓梯周圍的牆修成和樓梯一樣的形狀。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/46780716564"><img src="http://farm8.staticflickr.com/7863/46780716564_8f71a14607.jpg" alt="screen-shot-39.png"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/46780716714"><img src="http://farm8.staticflickr.com/7829/46780716714_301866dd8f.jpg" alt="screen-shot-40.png"></a></p>
+<h3 id="B1-完成">B1 完成</h3>
+<p>這是樓梯的 4cm 間隙還沒修正的截圖。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/40538481303"><img src="http://farm8.staticflickr.com/7908/40538481303_f12ba97d51.jpg" alt="screen-shot-41.png"></a></p>
+<h3 id="作業一感想">作業一感想</h3>
+<p>做得時候沒感覺，事後打報告發現重做的東西蠻多的，
+很多圖看錯後來才修正；
+應該和我非土木出身，又沒學過工程圖有很大關係。</p>
+<h2 id="revit-的-bug">revit 的 bug</h2>
+<p>revit 作為一個龐大複雜的 bim 軟體，有 bug 是難免的，
+老師說其實 revit 常常會 <a href="http://zh.wikipedia.org/wiki/%E5%82%B2%E5%AC%8C">傲嬌</a> 閙脾氣。
+後來想想，其實 revit 有點像 microsoft office，
+像 word 也是每次改版後相容就會有問題，
+也會有大大小小的 bug。</p>
+<link rel="stylesheet" href="ext/paper.css">
+
+<script src="ext/paper.js?execute"></script>
+
+<script src="ext/header-nctu.js?execute&amp;editable"></script>
+
+<style>
+img::after, a::after, a::before {
+  display: none !important;
+}
+figcaption {
+  display: none;
+}
+</style>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

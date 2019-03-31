@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-03-29T12:25:26.475Z</updated>
+  <updated>2019-03-31T08:16:56.793Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,186 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/bim-revit-homework-nctu.html</id>
+<title>BIM 建模以 revit 實作</title>
+<published>2019-03-31T08:03:27.100Z</published>
+<updated>2019-03-31T08:16:56.781Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/bim-revit-homework-nctu.html"/>
+<summary type="html">交通大學一門 BIM 的課程，是用 revit 軟體實作，
+要畫出一整棟完整的建築物。
+建築物是照乙級製圖的圖面畫的，所以還要懂看工程圖，
+對沒學過工程圖的我有點困難；
+不過老師說沒修過工程圖也沒關係。
+紀乃文教授的課，二年一開。</summary>
+<category term="nctu"/>
+<category term="report"/>
+<category term="homework"/>
+<content type="html">&lt;h1 id=&quot;BIM-建模以-revit-實作&quot;&gt;BIM 建模以 revit 實作&lt;/h1&gt;
+&lt;p&gt;交通大學一門 BIM 的課程，是用 revit 軟體實作，
+要畫出一整棟完整的建築物。
+建築物是照乙級製圖的圖面畫的，所以還要懂看工程圖，
+對沒學過工程圖的我有點困難；
+不過老師說沒修過工程圖也沒關係。
+紀乃文教授的課，二年一開。&lt;/p&gt;
+&lt;h2 id=&quot;作業範圍&quot;&gt;作業範圍&lt;/h2&gt;
+&lt;p&gt;revit 實作是用 &lt;a href=&quot;http://ocw.aca.ntu.edu.tw/ntu-ocw/index.php/ocw/cou/102S209&quot;&gt;台大的開放課程網站 ocw 上的 revit 教學範例&lt;/a&gt; ，
+基本上照著作就可以，老師會自己錄影片補充細節。
+第一次作業是到 ocw 的第十單元為止。&lt;/p&gt;
+&lt;p&gt;一開始我有搞不清楚作業到底是什麼，
+老師在課堂上示範是用一個小房子，但那只是示範方便，
+作業應該是交 ocw 上的乙級製圖的圖面。&lt;/p&gt;
+&lt;h2 id=&quot;作業一從到地基到地下一層為止&quot;&gt;作業一從到地基到地下一層為止&lt;/h2&gt;
+&lt;h3 id=&quot;結構平面&quot;&gt;結構平面&lt;/h3&gt;
+&lt;p&gt;ocw 上是用複製的，用一樓當來源，
+把所有樓層建出來。這裡有個錯誤，
+一樓的高程應該是 15cm，會比地面高 15cm。
+我一開始沒發現，就把 1F 建在 0，
+到後期算 B1 的牆高才發現怪怪的，
+才把 1F 移到 15cm，並多加一個地面層 GL。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46589022465&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7833/46589022465_e4bb0981c1.jpg&quot; alt=&quot;screen-shot-14.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;網格線&quot;&gt;網格線&lt;/h3&gt;
+&lt;p&gt;網格是特指柱的網格，網格線交點是柱心。
+橫向是 ABCD，縱向是 1234。
+後來再把網格線延伸到每層樓都看得到。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/32562290337&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7893/32562290337_af77faf33f.jpg&quot; alt=&quot;screen-shot-15.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/32562292147&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7927/32562292147_248b8d850c.jpg&quot; alt=&quot;screen-shot-16.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;地形&quot;&gt;地形&lt;/h3&gt;
+&lt;p&gt;不是所有 bim 軟體都有地形，但 revit 有所以就作了。
+主要是建築設計時有時會考慮和建築和周圍地物的關係，
+所以有的 bim 軟體可以建模地形。
+這是植栽的地形，我把表面上綠色，
+剖面我是上棕色，但不知道為什麼顯示是灰色。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46780712584&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7822/46780712584_14bda8b20d.jpg&quot; alt=&quot;screen-shot-19.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;開挖&quot;&gt;開挖&lt;/h3&gt;
+&lt;p&gt;工程中不會直接把建築蓋在地上，
+會先開挖地基，有的還有地下室。
+revit 開挖後會自動加上 PC 打底。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/32562292727&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7845/32562292727_3686b58992.jpg&quot; alt=&quot;screen-shot-20.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;鋼板樁錯誤樓層&quot;&gt;鋼板樁錯誤樓層&lt;/h3&gt;
+&lt;p&gt;在開挖四周裝上鋼板樁，防止坍塌。
+我放鋼板樁時有點問題，一開始我放在 1F，
+但從立面圖看卻跑到 B1。
+我試著從性質視窗移動鋼板樁，可以正常移動到所有樓層，
+但就是不能移到 1F。
+下面的圖一些就無視問題繼續做，後面才修好。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33627707798&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7877/33627707798_509955670c.jpg&quot; alt=&quot;screen-shot-21.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46589025365&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7919/46589025365_8a2fd9781b.jpg&quot; alt=&quot;screen-shot-22.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;一開始鋼板樁掉到 B1，但四面有一面卻正常落在 1F。
+奇怪的 bug。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33627708248&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7867/33627708248_2811057bca.jpg&quot; alt=&quot;screen-shot-23.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;地基基礎柱&quot;&gt;地基基礎柱&lt;/h3&gt;
+&lt;p&gt;就先不理鋼板樁的 bug，繼續作地基。
+這裡有個問題，我一開始弄錯 GL 的意思，
+把老師建議多建立的地基層取名成 GL。
+GL 應該是地表層，地基層應該是 base。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33627708528&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7904/33627708528_47b811d3ee.jpg&quot; alt=&quot;screen-shot-24.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;地樑&quot;&gt;地樑&lt;/h3&gt;
+&lt;p&gt;這裡一開始做錯，少了一組小樑，
+就是圖中空最大的那區，後來才補上。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46780713874&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7837/46780713874_009a53f54d.jpg&quot; alt=&quot;screen-shot-25.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;修正鋼板樁高程&quot;&gt;修正鋼板樁高程&lt;/h3&gt;
+&lt;p&gt;後來懷疑鋼板樁是 revit bug，就重開一次，
+重開後是連移都不能移了。
+後來直接把舊鋼板樁全部刪掉，重放就好了。
+最後還有一個 bug 是修正 1F 高度到 15cm 時，
+鋼板樁也跟著移到 15cm，只能重新對齊到 GL。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/47451659712&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7865/47451659712_cda2b88262.jpg&quot; alt=&quot;screen-shot-26.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;複製樓板成筏基板&quot;&gt;複製樓板成筏基板&lt;/h3&gt;
+&lt;p&gt;筏基板就是用老師的作法，複製樓板改屬性完成的。
+也有多畫一層 base，放筏基板比較好放。
+我是把所有樓板畫成同一個，
+在同一個編輯模式內畫出很多個不相連的方形，
+就完成一塊塊不相連但又是同一塊的樓板。
+不知道這樣後面會不會有問題？&lt;/p&gt;
+&lt;p&gt;後面因為上面忘了畫小樑，所以樓板也要改。
+還有一個錯是基地回填土據圖面只要填最北面三塊，
+但我一開始全填了，後面才改正。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46780714204&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7844/46780714204_16d814ab61.jpg&quot; alt=&quot;screen-shot-27.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33627709328&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7909/33627709328_15dbd2db09.jpg&quot; alt=&quot;screen-shot-28.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;關於樓板有個疑問，如果樓板下有樑柱，
+是樓板被樑柱截斷，還是樑退讓樓板鋪在樑柱上？
+我的畫法是樓板被截斷，只鋪在樑柱的間隙。&lt;/p&gt;
+&lt;h3 id=&quot;B1-柱&quot;&gt;B1 柱&lt;/h3&gt;
+&lt;p&gt;和地基柱類似，但少了幾根，因為沒有蓋滿。
+柱的位置和方位有幾根要微調的，一開始好像放錯。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/40538479103&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7864/40538479103_1150dcac2c.jpg&quot; alt=&quot;screen-shot-29.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;B1-外圍牆&quot;&gt;B1 外圍牆&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33627709868&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7914/33627709868_ca05a9612f.jpg&quot; alt=&quot;screen-shot-30.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;B1-隔間牆&quot;&gt;B1 隔間牆&lt;/h3&gt;
+&lt;p&gt;隔間牆一開始找位置找很久，不知道補助平面線要對哪。
+後來也有發現對錯，主要是少了地基層的小樑中心線，才那麼難對。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/47451660232&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7808/47451660232_0ef80b0422.jpg&quot; alt=&quot;screen-shot-31.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/40538479723&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7872/40538479723_68e3103a91.jpg&quot; alt=&quot;screen-shot-32.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;這裡我看圖以為車道出口是沒有牆，
+就把牆挖掉一段，後來發現應該是要用鐵捲門做開口。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33627710348&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7911/33627710348_d2af1e7773.jpg&quot; alt=&quot;screen-shot-33.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;電梯開口&quot;&gt;電梯開口&lt;/h3&gt;
+&lt;p&gt;電梯開口就照著 ocw 畫的，
+但還是不太懂畫成元件的意義，也不知道怎麼重用。
+後來因為修隔間位置，開口就位移了，
+牆就變成沒有開口。&lt;/p&gt;
+&lt;p&gt;還有就是因為電梯開口高度，才發現我 B1 的樓層高不對，
+才發現 1F 的高程設錯成 0，應該是 15cm。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46589027055&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7866/46589027055_6a8bbe9349.jpg&quot; alt=&quot;screen-shot-34.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;也順便把門和窗放好了，沒有特別截圖。&lt;/p&gt;
+&lt;h3 id=&quot;二層磚牆&quot;&gt;二層磚牆&lt;/h3&gt;
+&lt;p&gt;電梯旁的小空間要用二層磚牆來封，
+我在這裡發現我的空隙不對，
+找半天才找到隔間牆的位置錯在哪。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/47504448341&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7856/47504448341_4e916782bb.jpg&quot; alt=&quot;screen-shot-35.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;補上小地樑&quot;&gt;補上小地樑&lt;/h3&gt;
+&lt;p&gt;之前地樑少畫一區，這裡補上。
+再用地樑的中心線修正隔間位置，
+磚牆位置也就對了。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/32562294887&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7910/32562294887_50e48fb979.jpg&quot; alt=&quot;screen-shot-36.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;B1-樓梯&quot;&gt;B1 樓梯&lt;/h3&gt;
+&lt;p&gt;樓梯最難的部份是要先量好位置。
+很好奇一般建築是怎麼算樓梯的？
+圖面裡樓層高都剛好是樓梯階高的倍數，
+但現實應該沒這麼剛好吧？&lt;/p&gt;
+&lt;p&gt;然後我樓梯平面的高程和 ocw 上的不一樣，
+但頂部有剛好對齊一樓，不知道哪裡的問題。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33627711438&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7898/33627711438_e7ddb2e540.jpg&quot; alt=&quot;screen-shot-37.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/47504448941&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7894/47504448941_383152acb7.jpg&quot; alt=&quot;screen-shot-38.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;室內梯有個錯是我二段梯中間沒有留間隙，
+我一開始看圖看不懂那段 95 4 95 的 4 是要哪裡的寬度，
+後來重看 ocw 好幾遍，看到他樓梯寬度和我設一樣，
+但中間卻還留有間隙，才想到 4cm 應該是中間要多的間隙。
+上面那張圖是錯的，我也沒有截對的圖。
+不過 rvt 檔裡的是修正過的了。&lt;/p&gt;
+&lt;h3 id=&quot;B1-樓梯的牆&quot;&gt;B1 樓梯的牆&lt;/h3&gt;
+&lt;p&gt;把樓梯周圍的牆修成和樓梯一樣的形狀。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46780716564&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7863/46780716564_8f71a14607.jpg&quot; alt=&quot;screen-shot-39.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46780716714&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7829/46780716714_301866dd8f.jpg&quot; alt=&quot;screen-shot-40.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;B1-完成&quot;&gt;B1 完成&lt;/h3&gt;
+&lt;p&gt;這是樓梯的 4cm 間隙還沒修正的截圖。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/40538481303&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7908/40538481303_f12ba97d51.jpg&quot; alt=&quot;screen-shot-41.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;作業一感想&quot;&gt;作業一感想&lt;/h3&gt;
+&lt;p&gt;做得時候沒感覺，事後打報告發現重做的東西蠻多的，
+很多圖看錯後來才修正；
+應該和我非土木出身，又沒學過工程圖有很大關係。&lt;/p&gt;
+&lt;h2 id=&quot;revit-的-bug&quot;&gt;revit 的 bug&lt;/h2&gt;
+&lt;p&gt;revit 作為一個龐大複雜的 bim 軟體，有 bug 是難免的，
+老師說其實 revit 常常會 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E5%82%B2%E5%AC%8C&quot;&gt;傲嬌&lt;/a&gt; 閙脾氣。
+後來想想，其實 revit 有點像 microsoft office，
+像 word 也是每次改版後相容就會有問題，
+也會有大大小小的 bug。&lt;/p&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
+
+&lt;script src=&quot;ext/paper.js?execute&quot;&gt;&lt;/script&gt;
+
+&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
+
+&lt;style&gt;
+img::after, a::after, a::before {
+  display: none !important;
+}
+figcaption {
+  display: none;
+}
+&lt;/style&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/android-atom-tip.html#透過-wifi-連線-adb</id>
 <title>atom 使用技巧</title>
 <published>2018-12-11T13:06:30.635Z</published>
@@ -2488,289 +2668,7 @@ G M = 397778481800000 m³/s² 。&lt;/p&gt;
 <category term="ssh"/>
 <category term="方便"/>
 <category term="funny"/>
-<content type="html">&lt;h1 id=&quot;透過 shell 傳送檔案&quot;&gt;透過 shell 傳送檔案&lt;/h1&gt;
-&lt;p&gt;現代 linux 主機幾乎必備 ssh 提供遠端登入功能，
-要傳送檔案的話，ssh 有提供 sftp 模組。
-但就算沒有 ftp，還是可以透過 shell 重導向
-直接傳送單一檔案，或用 base64 之類程式
-把二進位檔案編碼成純文字再傳送。
-如果要傳送多個資料夾，
-則可以用 tar 把資料夾和檔案的樹狀結構
-序列化成單一的 stream 來傳送。&lt;/p&gt;
-&lt;h2 id=&quot;遠端登入外再架一個檔案分享服務？&quot;&gt;遠端登入外再架一個檔案分享服務？&lt;/h2&gt;
-&lt;p&gt;基本上架好 linux，除非是當日常使用，
-不然當伺服器用的話，就會先裝好遠端登入的服務。
-最基礎就是 ssh，習慣圖形介面的可能裝 vnc rdp teamviewer。
-有些要和 windows 互通，就會裝 samba，
-可以共享檔案，或也可以裝 ftp。&lt;/p&gt;
-&lt;h3 id=&quot;sftp 與 scp&quot;&gt;sftp 與 scp&lt;/h3&gt;
-&lt;p&gt;但其實如果用 ssh，就有內建的 sftp 可以用，
-去改 &lt;code&gt;/etc/ssh/sshd.conf&lt;/code&gt; 打開就行了。
-有 sftp 就能像 ftp 傳送檔案，
-甚至用 gvfs-mount 可以掛載起來。
-只是 windows 原生不支援 sftp，
-要用 filezilla 或其它程式。&lt;/p&gt;
-&lt;p&gt;現在 windows 10 支援 ssh 後，也多了 sftp 的命令列工具，
-但 ftp 可以用 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E6%AA%94%E6%A1%88%E7%B8%BD%E7%AE%A1&quot;&gt;檔案總管&lt;/a&gt; 開，sftp 還是不行，
-而且 sftp 好像沒有處理編碼的問題，
-我複製回去 utf8 的檔名會變亂碼，
-windows 的檔案記得是 big5。&lt;/p&gt;
-&lt;p&gt;一般有 sftp 就有 scp，
-sftp 介面和 ftp 基本一樣，也可以寫成腳本。
-scp 則是簡化版，像 cp 一樣一個命令複製的。
-二個只要有存 ssh-key 都可以免密碼登入。&lt;/p&gt;
-&lt;h3 id=&quot;有關 samba&quot;&gt;有關 samba&lt;/h3&gt;
-&lt;p&gt;samba 就是 unix 下的 smb，
-但其實我一直不會用 smb，也不太知道 smb 能幹麻。
-家裡二台電腦好像有用 smb 連線過，高中電腦課也有用來交過作業。
-（照老師要求把作業檔案複製到網路上的芳鄰中某個資料夾中。）
-但我開始正式學電腦就是 linux，
-對 windows 下的 smb 也就沒接觸過。&lt;/p&gt;
-&lt;p&gt;感覺 smb 的功能就是簡單的分享檔案，
-無需另外設定，在同一區網下就能互連，
-還能直接用檔案總管開。
-我認為在 unix 下就該用 ftp，
-反正 gvfs 用 fuse 虛擬檔案系統把 ftp 掛載到本機下，
-就能像打開本機端檔案一樣，
-直接用檔案管理員或編輯器打開遠端 ftp 上的資料夾檔案讀寫。&lt;/p&gt;
-&lt;p&gt;只是對一間公司而言，大部份人都用 windows，
-那 linux 伺服器架個 samba，
-讓所有人直接存取是最簡單的作法。&lt;/p&gt;
-&lt;h2 id=&quot;在 shell 中傳送單一檔案&quot;&gt;在 shell 中傳送單一檔案&lt;/h2&gt;
-&lt;p&gt;最簡單的就是傳送單一文字檔，
-用 ssh 或其它遠端登入後，打開 vi 或 nano 進入編輯，
-然後把本地的檔案內容整個複製，在 ssh vi 中貼上就好了。
-進階一點會用 &lt;code&gt;cat &amp;gt; my.txt&lt;/code&gt; ，
-貼上後再 ctrl-d 就會把內容直接輸入到檔案裡。&lt;/p&gt;
-&lt;h3 id=&quot;二進位編碼為純文字&quot;&gt;二進位編碼為純文字&lt;/h3&gt;
-&lt;p&gt;但編輯器大多只能傳送純文字，
-就算用 cat 可以傳送二進位，剪貼簿也不一定能存二進位。
-這時候就能用 base64，用 base64 編碼把二進位資料轉成純文字，
-之後就能存到剪貼簿了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# 在本地的 shell 把圖片編碼成 base64
-base64 image.png &amp;gt; image.png.base64
-# 在遠端把 base64 還原成圖片
-base64 -d image.png.base64 &amp;gt; origin.png # 把 base64 轉回來
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;base64 會把編碼輸出到 stdout，
-如果不重導向就是直接顯示在終端機裡，
-可以直接選取複製。
-解碼就加 &lt;code&gt;-d&lt;/code&gt; 選項，預設也是從 stdin 讀，
-貼上後按 ctrl-d 就好了；
-注意記得把解碼結果重導向，
-不然二進位顯示在終端機會亂碼。&lt;/p&gt;
-&lt;p&gt;另外除了 base64，也可以用 xxd 來編碼。
-base64 會把三個 byte 編成四個字元，
-xxd 則是把一個 byte 編成二個字元。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;## 編碼與解碼
-xxd image.png | xxd -r &amp;gt; origin.png
-## 省去行數與明文
-xxd -p image.png | xxd -r -p &amp;gt; origin.png
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;直接 pipe 給遠端命令&quot;&gt;直接 pipe 給遠端命令&lt;/h2&gt;
-&lt;p&gt;上面的作法都是經由剪貼簿，直接在終端機把純文字送過去。
-但其實剪貼簿沒那麼大，要送太大的檔案不太方便。
-最好是可以直接 pipe 給遠端。
-這就要提到 ssh 其實是 security shell 的縮寫，
-也就是一種 shell，所以可以直接指定要執行的命令。&lt;/p&gt;
-&lt;p&gt;例如 &lt;code&gt;ssh user@host ls&lt;/code&gt; 就是登入後執行 ls 就退出。
-而這個執行結果，當然可以 pipe 給其它程式，
-甚至也可以把本機的程式 pipe 給 ssh 的遠端程式，
-像這樣：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;cat my.txt.gz | ssh user@host zcat &amp;gt;my.txt
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;要注意，遠端的 zcat 輸出是會送回本機，
-再被 shell 重導向到本機的檔案；
-如果要把檔案存到遠端，要把 &lt;code&gt;&amp;gt;&lt;/code&gt; 跳脫，
-才能把 &lt;code&gt;&amp;gt;&lt;/code&gt; 傳給遠端的 shell。&lt;/p&gt;
-&lt;h3 id=&quot;管道直接相連後可以安全傳送二進位資料&quot;&gt;管道直接相連後可以安全傳送二進位資料&lt;/h3&gt;
-&lt;p&gt;上面的 base64，其實可以直接放在 ssh 後面，
-只是之前用 base64 是要方便剪下貼上，
-現在雙方直接用管道連起來了，就不用再特地編碼成純文字，
-直接用 cat 就好了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;## 相比 cat，base64 多作一次編解碼，沒什麼意義。
-cat image.png | ssh user@host cat \&amp;gt; image.png
-base64 image.png | ssh user@host base64 -d \&amp;gt; image.png
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;然後如果是用 cat，就可以直接把輸出導向到檔案，
-類似複製的意思。
-這裡一定要用 cat 的原因是，從本機送過去是送到遠端的 stdin，
-但 shell 只能把 stdout 導到檔案，
-所以需要一支程式把 stdin 轉到 stdout，
-也就是 cat 了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;cat my.txt.gz | ssh user@host zcat \&amp;gt; my.txt
-cat my.txt | ssh user@host &amp;apos;cat &amp;gt;my.txt&amp;apos;
-ssh user@host cat \&amp;gt;my.txt &amp;lt;my.txt
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;scat&quot;&gt;scat&lt;/h3&gt;
-&lt;p&gt;早期的 scp，聽說就只是把 ssh cat 用 shell script 包裝一下，
-後來才改寫成完整的一支程式的。
-但 scp 有個問題，他不能把遠端的檔案輸出到 stdout，
-只能直接複製成檔案。
-有時候不想多複製一次檔案，但要 &lt;code&gt;ssh user@host cat file&lt;/code&gt; 又很麻煩，
-&lt;a href=&quot;https://github.com/GHolk/loco/tree/master/bin/scat.sh&quot;&gt;所以我就按照 scp 的格式，做了一個 scat。&lt;/a&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# 一樣意思的命令
-ssh user@host cat file | cksum
-scat user@host:file - | cksum # 輸出遠端的 file 到本機計算校檢合
-scat user@host:file | cksum # 第二個 `-` 可省
 
-# 一樣意思的命令
-cat file | ssh user@host cat \&amp;gt; file
-cat file | scat - user@host:file # 把 stdin 導向到遠端的 file
-scat - user@host:file &amp;lt;file # 與上面同義
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;偶爾會用到，然後 ssh 連線大部份都有預設用 gzip 壓縮，
-所以如果要傳送大檔案，可以不用考慮頻寬先壓縮，ssh 會幫你壓好。
-（主要看你的 &lt;code&gt;.ssh/config&lt;/code&gt; 或 &lt;code&gt;/etc/ssh/ssh_config&lt;/code&gt;
-有沒有 &lt;code&gt;Compression yes&lt;/code&gt; 。）&lt;/p&gt;
-&lt;h2 id=&quot;用 tar 傳送目錄樹狀結構&quot;&gt;用 tar 傳送目錄樹狀結構&lt;/h2&gt;
-&lt;p&gt;以上說到怎麼傳送一個 stream。
-但以目前的作法，都只能用 cat 傳送單一檔案，
-那要怎麼傳送多個檔案呢？
-只要把多個檔案、目錄結構變成單一檔案就能傳了。
-在 windows 下就是用 zip，
-在 linux 也有 zip，但因為 unix 下打包和壓縮是分離的二個工具，
-打包的工具是 tar，而上面提到 ssh 基本已經有壓縮功能，所以用 tar 就夠了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;tar -C $HOME -cf - . | ssh user@host tar -xf f # 把整個家目錄打包丟過去
-ssh user@host tar -cf - | tar -xf - # 丟回來
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;diff patch&quot;&gt;diff patch&lt;/h3&gt;
-&lt;p&gt;另外有一個有趣的東西叫 diff，
-用來比較二個文字檔、打 patch 的工具。
-diff 可以遞迴比較子目錄下所有檔案，產生一個大補丁，
-對不存在的檔案，如果選擇當作空檔案，就會把整個檔案記錄下來。
-一般是用來比較二個不同版本的原始碼目錄，
-產生一個補丁檔，之後就能用該補丁，
-把一個版本變成另一版本。&lt;/p&gt;
-&lt;p&gt;如果你把一個目錄和一個空目錄或不存在的目錄比較，
-就能把整個目錄打包成一個 diff 檔，
-patch 該 diff 就能憑空產生出原有的目錄。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# 把 .ssh 目錄打包成一個 diff，送到 host 上
-diff --new-file --unified --recursive --text not-exist .ssh \
-    | ssh user@host patch --strip=0
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;其中 diff 的行為有點怪，
-預設的行為不能遞迴 patch 整個資料夾，
-要 &lt;code&gt;--unifined&lt;/code&gt; 或 &lt;code&gt;--context&lt;/code&gt; 才可以。
-&lt;code&gt;--new-file&lt;/code&gt; 是將不存在的檔案視為空檔案，
-&lt;code&gt;--text&lt;/code&gt; 則是將所有檔案都視為文字檔，
-也就是對二進位檔也照樣 diff。&lt;/p&gt;
-&lt;h2 id=&quot;adb 也可以通&quot;&gt;adb 也可以通&lt;/h2&gt;
-&lt;p&gt;上面都是用 ssh 遠端登入傳送，
-其實像 android 的 adb 也可以用類似的功能。
-&lt;code&gt;adb shell&lt;/code&gt; 可以連線到 android 上開啟一個 shell，
-&lt;code&gt;adb shell ls&lt;/code&gt; 則是連進去執行 ls 就退出，
-所以只要用 tar 命令，就能簡單把資料夾整個送過去。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# 在 android 上開起 shell
-adb shell
-
-# 在 android 上執行 df 命令後退出
-adb shell df
-
-# 把 pictures 資料夾整個送過去
-tar -czf - pictures | adb shell tar -xzf -
-
-# 備份 sd 卡裡的所有資料
-adb shell tar -czf - /sdcard &amp;gt;sdcard.tgz
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;我記得 adb 的連線不像 ssh，是沒有壓縮的。
-所以建議手動壓縮，會快一點；
-除非你手機太爛 cpu 壓縮和解壓縮很慢。&lt;/p&gt;
-&lt;h2 id=&quot;只透過 stdin 傳送指令與檔案&quot;&gt;只透過 stdin 傳送指令與檔案&lt;/h2&gt;
-&lt;p&gt;以上的作法都是建立在 ssh 可以直接指定執行的程式，
-並把資料直接送到該程式的 stdin。
-但如果遠端無法指定執行的程式呢？
-像 telnet，只能登入進 shell，沒辦法指定命令，
-那就只能把檔案嵌在腳本裡，把整個腳本餵給 telnet 了。&lt;/p&gt;
-&lt;h3 id=&quot;用 here doc 嵌入檔案&quot;&gt;用 here doc 嵌入檔案&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;shell-script-skill-fifo.html#內嵌-base64&quot;&gt;之前也有提過這種作法，
-把檔案嵌入在腳本的 here doc 裡，&lt;/a&gt;
-如果是二進位檔案可能要先 base64 編碼。
-也就是產生一個腳本長這樣的：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;base64 -d &amp;gt;file &amp;lt;&amp;lt;EOF
-5aaC5p6c5piv5LqM6YCy5L2N5qqU5qGI5Y+v6IO96KaB5YWIYmFzZTY057eo56K844CCCuS5n+Ww
-seaYr+eUoueUn+S4gOWAi+iFs+acrOmVt+mAmeaoo+eahO+8mgo=
-EOF
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;然後把整個腳本 pipe 給 telnet，登入後執行。&lt;/p&gt;
-&lt;p&gt;結合上面那篇文章中的技巧，我們可以用命令群組產生腳本，
-而不用把腳本存成檔案後再 pipe 過去：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# 直接用命令產生
-{
-    echo &amp;quot;base64 -d &amp;gt;file &amp;lt;&amp;lt;EOF&amp;quot;
-    base64 file
-    echo &amp;quot;EOF&amp;quot;
-} | telnet host
-
-# 用 here doc 產生
-cat &amp;lt;&amp;lt;CAT | telnet host
-base64 -d &amp;gt;file &amp;lt;&amp;lt;BASE64
-$(base64 file)
-BASE64
-CAT
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;其中二種作法，我是較推薦第一種，
-第二種嵌套了二層 here doc，不好閱讀。
-而且把整個 base64 編碼的檔案用命令代換進 here doc，
-here doc 會變很長，對 shell 的負擔有點大。&lt;/p&gt;
-&lt;p&gt;但其實第一種作法也是把整個檔案送到遠端的 here doc 裡，
-shell 在處理 here doc 上
-必須全部 buffer 起來後才能送出， 一樣會造成很大負擔。
-只是第一種是只有遠端 buffer 一次，第二種是本機也要 buffer 一次。&lt;/p&gt;
-&lt;p&gt;當然，也可以一次傳送多個檔案，
-原本是直接 base64 編碼檔案，
-改成 tar 打包後再 pipe 給 base64 就好。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;{
-    echo &amp;quot;base64 -d | tar -xf - &amp;lt;&amp;lt;EOF&amp;quot;
-    tar -cf - . | base64
-    echo &amp;quot;EOF&amp;quot;
-} | telnet host
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;直接使用 stdin 不使用 here doc&quot;&gt;直接使用 stdin 不使用 here doc&lt;/h2&gt;
-&lt;p&gt;最後再提一個我自己也不太清楚的用法。
-在 shell 中如果直接用 cat，會嘗試從標準輸入讀取，
-這時候就能直接從 shell 輸入，按 ctrl-d 可以退出。
-我記得以前也聽過一個建議， &lt;em&gt;盡量不要把腳本 pipe 給 shell，
-而是把腳本存成檔案，再用 &lt;code&gt;sh script.sh&lt;/code&gt; 的方式執行。&lt;/em&gt;
-因為像 cat 這種命令會需要讀取 stdin，
-但 pipe 給 shell 時 stdin 已經被腳本佔住了，
-那就不可能再從 stdin 讀取。&lt;/p&gt;
-&lt;p&gt;如果在 shell script 檔案中呼叫 cat，
-就會從執行時的 stdin 讀取，
-所以 pipe 給執行的 script 是可以的：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;cat file | sh script.sh
-cat file | perl script.pl
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;但如果 script 是在 stdin，那讀取時會發生什麼事？
-可能是接下來 stdin 都被當成該程式的輸入，
-或是該程式讀 stdin 時直接讀到 eof。
-我發現 dash 和 bash 的行為不同，
-bash 會把接下來的內容輸入給程式，dash 則直接 eof。
-可以用下列程式來驗證，如果 eof tr 則不會有輸出，
-ls 也會被執行。如果 ls 被當作 tr 的輸入，
-那就會輸出大寫的 &lt;code&gt;LS&lt;/code&gt; 。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;dash &amp;lt;&amp;lt;SHELL
-tr a-z A-Z
-ls
-SHELL
-
-bash &amp;lt;&amp;lt;SHELL
-tr a-z A-Z
-ls
-SHELL
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;總之，這也可以用來傳送檔案，
-只是要確定遠端的 shell 是 bash，
-zsh 好像也支援？&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;{
-    echo &amp;apos;tar -xf -&amp;apos;
-    tar -cf - ./
-} | ssh user@host
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;只是我對背後的原理還不是很確定。
-比 here doc 好是不需要 shell buffer 所有資料，
-也不需要 base64 編碼，可以直接用 shell 傳送二進位資料。&lt;/p&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/geomatics-rtx-csrs-compare.html#finish-and-remove-old-part</id>
 <title>A Preliminary Comparative Evaluation of Trimble RTX with CSRS-PPP</title>

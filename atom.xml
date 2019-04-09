@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-03-31T08:16:56.793Z</updated>
+  <updated>2019-04-09T14:44:18.160Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,132 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/satellite-geodesy-homework-4.html</id>
+<title>衛星大地測量作業四</title>
+<published>2019-04-09T14:18:47.971Z</published>
+<updated>2019-04-09T14:44:18.148Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/satellite-geodesy-homework-4.html"/>
+<summary type="html">用線性化的公式假設軌道為圓計算衛星軌道投影在地面的軌跡。</summary>
+<category term="geomatics"/>
+<category term="report"/>
+<category term="octave"/>
+<content type="html">&lt;h1 id=&quot;衛星大地測量作業四&quot;&gt;衛星大地測量作業四&lt;/h1&gt;
+&lt;p&gt;用線性化的公式假設軌道為圓計算衛星軌道投影在地面的軌跡。&lt;/p&gt;
+&lt;p&gt;根據黃金維老師講義中單元二附錄 C 的計算流程：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-matlab&quot;&gt;C20 = 108263E-8;
+GM = 397778481800000;
+earth_rotation_speed = 7.292115147*10^-5;
+
+
+if (!exist(&amp;apos;a&amp;apos;))
+  a = input(&amp;apos;major-axis of satellite orbit (m): &amp;apos;);
+end
+
+if (!exist(&amp;apos;i&amp;apos;) || iscomplex(i))
+  i = input(&amp;apos;inclination angle of satellite orbit (rad): &amp;apos;);
+end
+
+if (!exist(&amp;apos;lon0&amp;apos;))
+  lon0 = input(&amp;apos;longitude when satellite cross equator (rad): &amp;apos;);
+end
+
+mean_earth_radius = 6371000;
+ae = mean_earth_radius;
+we = earth_rotation_speed;
+n = @(a) GM^0.5/a^1.5;
+
+perigee_argument_speed = @(e, a, i) (
+                            3*n(a)*C20*ae^2 /
+                            (4*(1-e^2)^2*a^2) *
+                            (1 - 5*cos(i)^2)
+                          );
+
+ascending_node_speed = @(e, a, i) (
+                          3*n(a)*C20*ae^2 /
+                          (2*(1-e^2)^2*a^2) *
+                          cos(i)
+                        );
+
+mean_anomaly_speed = @(e, a, i) (
+                        n(a) - 3*n(a)*C20*ae^2 /
+                            (4*(1-e^2)^1.5*a^2) *
+                            (3*cos(i)^2-1)
+                      );
+
+function plot_xy_gradiant_color(x, y, color)
+  surface([x&amp;apos; x&amp;apos;], [y&amp;apos; y&amp;apos;], [color&amp;apos; color&amp;apos;],
+          &amp;apos;LineWidth&amp;apos;, 2,
+          &amp;apos;EdgeColor&amp;apos;, &amp;apos;flat&amp;apos;);
+end
+
+function plot_xy_time(x, y, time)
+  plot_xy_gradiant_color(x, y, time);
+  hx = colorbar();
+  title(hx, &amp;apos;second&amp;apos;);
+end
+
+
+u_dot = perigee_argument_speed(0, a, i) + mean_anomaly_speed(0, a, i);
+ome_dot = ascending_node_speed(0, a, i);
+
+sample_count = 360;
+time_tic = longitude = latitude = zeros(1, sample_count);
+count = 1;
+
+lt = longitude;
+wt = longitude;
+for t = 0:60:86400
+  u = mod(t*u_dot, pi*2);
+  time_tic(count) = t;
+  lat = asin(sin(i)*sin(u));
+  if (i&amp;lt;=pi/2)
+    latitude(count) = lat;
+  else
+    latitude(count) = -lat;
+  end
+
+  if (i&amp;lt;pi/2)
+    sign = 1;
+  else
+    sign = -1;
+  end
+
+  lambda_t = sign*atan(abs(cos(i)) * tan(u));
+  lt(count) = lambda_t;
+  wt(count) = t*(we-ome_dot);
+  if (u &amp;gt; pi/2 &amp;amp;&amp;amp; u &amp;lt; pi/2*3)
+    lambda_t += pi;
+  end
+
+  lon = lon0 + lambda_t - t*(we-ome_dot);
+  if (lon &amp;gt; pi*2 || lon &amp;lt; 0)
+    lon = mod(lon, pi*2);
+  end
+  longitude(count) = lon;
+  count+=1;
+end
+
+plot_xy_time(longitude*180/pi, latitude*180/pi, time_tic);
+if (exist(&amp;apos;output_image&amp;apos;))
+  print(&amp;apos;-dpng&amp;apos;, output_image);
+end
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;其中單位是用公尺、公斤、弧度，
+做圖時再轉換回角度。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33695269938&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7822/33695269938_5f550e6ff6.jpg&quot; alt=&quot;satellite-a-b-gray.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
+
+&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
+
+&lt;script src=&quot;ext/paper.js?execute&quot;&gt;&lt;/script&gt;
+
+&lt;style&gt;
+pre &gt; code {
+font-size: smaller;
+}
+&lt;/style&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/bim-revit-homework-nctu.html</id>
 <title>BIM 建模以 revit 實作</title>
 <published>2019-03-31T08:03:27.100Z</published>
@@ -2570,89 +2696,7 @@ document.body.prepend(
 <category term="nctu"/>
 <category term="geodesy"/>
 <category term="report"/>
-<content type="html">&lt;h1 id=&quot;衛星大地測量作業二&quot;&gt;衛星大地測量作業二&lt;/h1&gt;
-&lt;p&gt;計算衛星軌道及推導相關公式。&lt;/p&gt;
-&lt;h2 id=&quot;常見衛星周期&quot;&gt;常見衛星周期&lt;/h2&gt;
-&lt;p&gt;由萬有引力公式與圓周運動公式，
-假設衛星軌道為圓，在軌道半徑已知下，
-衛星繞地球的周期、速度是可以唯一確定的。&lt;/p&gt;
-&lt;p&gt;若衛星繞地球作圓周運動，需要的向心加速度為：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;a = \frac{V^2 } R
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;衛星的向心加速度來源為引力，
-引力加速度公式為： &lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;a = \frac{G M} {R^2}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;合併二式後，可以由軌道半徑推出衛星運動速度，
-有運動速度與半徑即可推出周期：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;\frac{V^2} R = \frac{G M} {R^2} \\
-V^2 = \frac {G M} R \\
-V = \sqrt \frac{G M}R \\
-t = \frac{2 \pi R }V = \frac {2 \pi R^{1.5}} { \sqrt{G M} }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;G 為萬有引力常數，M 為地球質量，
-以地表 R = 6371km 時 a = g = 9.8 m/s² ，
-G M = 397778481800000 m³/s² 。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;衛星&lt;/th&gt;
-&lt;th&gt;軌道半徑&lt;/th&gt;
-&lt;th&gt;來源網址&lt;/th&gt;
-&lt;th&gt;周期&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Jason-3&lt;/td&gt;
-&lt;td&gt;7714.43km&lt;/td&gt;
-&lt;td&gt;&lt;a href=&quot;https://podaac.jpl.nasa.gov/JASON3&quot;&gt;https://podaac.jpl.nasa.gov/JASON3&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;6750.17s&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;GRACE-follow-on&lt;/td&gt;
-&lt;td&gt;6861km&lt;/td&gt;
-&lt;td&gt;&lt;a href=&quot;https://gracefo.jpl.nasa.gov/resources/38/grace-fo-fact-sheet/&quot;&gt;https://gracefo.jpl.nasa.gov/resources/38/grace-fo-fact-sheet/&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;94.36s&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;GPS satellite&lt;/td&gt;
-&lt;td&gt;20200km&lt;/td&gt;
-&lt;td&gt;&lt;a href=&quot;https://www.nasa.gov/directorates/heo/scan/communications/policy/GPS.html&quot;&gt;https://www.nasa.gov/directorates/heo/scan/communications/policy/GPS.html&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;28601.33s&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;BDs3&lt;/td&gt;
-&lt;td&gt;21500km&lt;/td&gt;
-&lt;td&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/List_of_BeiDou_satellites#cite_note-gpsworld201501-3&quot;&gt;https://en.wikipedia.org/wiki/List_of_BeiDou_satellites#cite_note-gpsworld201501-3&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;31406.31s&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;sentinel-1A&lt;/td&gt;
-&lt;td&gt;7064km&lt;/td&gt;
-&lt;td&gt;&lt;a href=&quot;https://sentinel.esa.int/web/sentinel/missions/sentinel-1/satellite-description/orbit&quot;&gt;https://sentinel.esa.int/web/sentinel/missions/sentinel-1/satellite-description/orbit&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;5914.73s&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;LAGEOS-2&lt;/td&gt;
-&lt;td&gt;5740km&lt;/td&gt;
-&lt;td&gt;&lt;a href=&quot;https://lageos.cddis.eosdis.nasa.gov/&quot;&gt;https://lageos.cddis.eosdis.nasa.gov/&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;4332.39s&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;GOCE&lt;/td&gt;
-&lt;td&gt;6606km&lt;/td&gt;
-&lt;td&gt;&lt;a href=&quot;http://www.esa.int/Our_Activities/Observing_the_Earth/GOCE/Satellite&quot;&gt;http://www.esa.int/Our_Activities/Observing_the_Earth/GOCE/Satellite&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;5348.93s&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
 
-&lt;script src=&quot;ext/paper.js?reference&quot;&gt;&lt;/script&gt;
-
-&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/linux-easy-shell-send-file.html#直接使用-stdin-不使用-here-doc</id>
 <title>透過 shell 傳送檔案</title>

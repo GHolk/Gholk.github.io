@@ -1,0 +1,149 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2019-04-09T14:18:47.971Z">
+<meta name="keywords" property="og:article:tag" content="geomatics,report,octave">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="bim-revit-homework-nctu.html" title="BIM 建模以 revit 實作">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>衛星大地測量作業四</title>
+</head>
+<body>
+<main><h1 id="衛星大地測量作業四">衛星大地測量作業四</h1>
+<p>用線性化的公式假設軌道為圓計算衛星軌道投影在地面的軌跡。</p>
+<p>根據黃金維老師講義中單元二附錄 C 的計算流程：</p>
+<pre><code class="lang-matlab">C20 = 108263E-8;
+GM = 397778481800000;
+earth_rotation_speed = 7.292115147*10^-5;
+
+
+if (!exist(&apos;a&apos;))
+  a = input(&apos;major-axis of satellite orbit (m): &apos;);
+end
+
+if (!exist(&apos;i&apos;) || iscomplex(i))
+  i = input(&apos;inclination angle of satellite orbit (rad): &apos;);
+end
+
+if (!exist(&apos;lon0&apos;))
+  lon0 = input(&apos;longitude when satellite cross equator (rad): &apos;);
+end
+
+mean_earth_radius = 6371000;
+ae = mean_earth_radius;
+we = earth_rotation_speed;
+n = @(a) GM^0.5/a^1.5;
+
+perigee_argument_speed = @(e, a, i) (
+                            3*n(a)*C20*ae^2 /
+                            (4*(1-e^2)^2*a^2) *
+                            (1 - 5*cos(i)^2)
+                          );
+
+ascending_node_speed = @(e, a, i) (
+                          3*n(a)*C20*ae^2 /
+                          (2*(1-e^2)^2*a^2) *
+                          cos(i)
+                        );
+
+mean_anomaly_speed = @(e, a, i) (
+                        n(a) - 3*n(a)*C20*ae^2 /
+                            (4*(1-e^2)^1.5*a^2) *
+                            (3*cos(i)^2-1)
+                      );
+
+function plot_xy_gradiant_color(x, y, color)
+  surface([x&apos; x&apos;], [y&apos; y&apos;], [color&apos; color&apos;],
+          &apos;LineWidth&apos;, 2,
+          &apos;EdgeColor&apos;, &apos;flat&apos;);
+end
+
+function plot_xy_time(x, y, time)
+  plot_xy_gradiant_color(x, y, time);
+  hx = colorbar();
+  title(hx, &apos;second&apos;);
+end
+
+
+u_dot = perigee_argument_speed(0, a, i) + mean_anomaly_speed(0, a, i);
+ome_dot = ascending_node_speed(0, a, i);
+
+sample_count = 360;
+time_tic = longitude = latitude = zeros(1, sample_count);
+count = 1;
+
+lt = longitude;
+wt = longitude;
+for t = 0:60:86400
+  u = mod(t*u_dot, pi*2);
+  time_tic(count) = t;
+  lat = asin(sin(i)*sin(u));
+  if (i&lt;=pi/2)
+    latitude(count) = lat;
+  else
+    latitude(count) = -lat;
+  end
+
+  if (i&lt;pi/2)
+    sign = 1;
+  else
+    sign = -1;
+  end
+
+  lambda_t = sign*atan(abs(cos(i)) * tan(u));
+  lt(count) = lambda_t;
+  wt(count) = t*(we-ome_dot);
+  if (u &gt; pi/2 &amp;&amp; u &lt; pi/2*3)
+    lambda_t += pi;
+  end
+
+  lon = lon0 + lambda_t - t*(we-ome_dot);
+  if (lon &gt; pi*2 || lon &lt; 0)
+    lon = mod(lon, pi*2);
+  end
+  longitude(count) = lon;
+  count+=1;
+end
+
+plot_xy_time(longitude*180/pi, latitude*180/pi, time_tic);
+if (exist(&apos;output_image&apos;))
+  print(&apos;-dpng&apos;, output_image);
+end
+</code></pre>
+<p>其中單位是用公尺、公斤、弧度，
+做圖時再轉換回角度。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/33695269938"><img src="http://farm8.staticflickr.com/7822/33695269938_5f550e6ff6.jpg" alt="satellite-a-b-gray.png"></a></p>
+<script src="ext/header-nctu.js?execute&amp;editable"></script>
+
+<link rel="stylesheet" href="ext/paper.css">
+
+<script src="ext/paper.js?execute"></script>
+
+<style>
+pre > code {
+font-size: smaller;
+}
+</style>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

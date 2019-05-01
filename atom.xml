@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-04-09T14:44:18.160Z</updated>
+  <updated>2019-05-01T12:05:49.187Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,126 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/satellite-geodesy-homework-5.html</id>
+<title>使用 SLR 驗證 GNSS 衛星定軌的結果</title>
+<published>2019-04-30T14:42:33.667Z</published>
+<updated>2019-05-01T12:05:49.177Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/satellite-geodesy-homework-5.html"/>
+<summary type="html">現代的衛星，用 GNSS 系統定位衛星的精密軌道是十分常見的做法。
+在北斗、伽利略衛星都陸續上線服務後，開啟了多星系定位的可能。
+但因為 衛星引起的編碼偏差 與 頻率間偏差 ，
+基於載波相位的定位在北斗與 GLONASS 中較為複雜。
+最後的定軌結果，再由 SLR 驗證。</summary>
+<category term="gnss"/>
+<category term="report"/>
+<content type="html">&lt;h1 id=&quot;使用-SLR-驗證-GNSS-衛星定軌的結果&quot;&gt;使用 SLR 驗證 GNSS 衛星定軌的結果&lt;/h1&gt;
+&lt;p&gt;現代的衛星，用 GNSS 系統定位衛星的精密軌道是十分常見的做法。
+在北斗、伽利略衛星都陸續上線服務後，開啟了多星系定位的可能。
+但因為 衛星引起的編碼偏差 與 頻率間偏差 ，
+基於載波相位的定位在北斗與 GLONASS 中較為複雜。
+最後的定軌結果，再由 SLR 驗證。&lt;/p&gt;
+&lt;h2 id=&quot;載波相位定位&quot;&gt;載波相位定位&lt;/h2&gt;
+&lt;p&gt;基於載波相位的定位能達到公分級的精密定位需求。
+載波相位定位是透過觀測相位差來求解距離，
+衛星與接收儀的距離可以看成是數個整波長，
+再加上一個不完整的零波組成。
+零波部份的距離可以透過觀測接收儀的相位乘上波長得到，
+而整波的波數稱為周波未定值，
+求解周波未定值是載波相位定位的關鍵步驟。&lt;/p&gt;
+&lt;h2 id=&quot;[GLONASS-的頻率間偏差-(inter-frequency-bias)][glonass-bias]&quot;&gt;&lt;a href=&quot;http://doi.org/10.1007/s00190-011-0502-y&quot; title=&quot;Lambert Wanninger: Carrier-phase inter-frequency biases of GLONASS receivers&quot;&gt;GLONASS 的頻率間偏差 (inter-frequency bias)&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;glonass 系統使用載波相位定位的主要問題是，
+glonass 的訊號存在頻率間偏差。
+glonass 不同於 gps，使用的是 FDMA，
+以不同頻率區分不同衛星的訊號。
+對不同衛星的訊號 會存在一個與頻率成線性關係的相位差，
+且在不同品牌的接收儀上誤差也不同。
+而造成頻率間偏差的原因，
+可能是在接收儀在類比與數位訊號間轉換時，因頻率改變造成的。&lt;/p&gt;
+&lt;p&gt;由於是已知模式的線性誤差，可以在平差中改正。
+但也使 glonass 的載波相位定位較複雜，
+在過去沒有改正時，難以得到周波未定值的整數解。&lt;/p&gt;
+&lt;h2 id=&quot;FDMA-與-CDMA&quot;&gt;FDMA 與 CDMA&lt;/h2&gt;
+&lt;p&gt;fdma 與 cdma 都是在特定頻率範圍內，
+同時傳輸不同數據而不互相干擾的技術。
+fdma 簡單的將整個頻率範圍內分割為多個子範圍，
+各子範圍頻率不同，能同時運作不互相干擾。
+但因為頻率範圍已經硬性規定，
+所能容納的通道也是固定的。&lt;/p&gt;
+&lt;p&gt;cdma 則是現今行動電話網路中廣泛使用的技術。
+cdma 中不同的來源，對要傳輸的資訊，
+以互相正交的向量基底編碼。
+在解碼時，因不同來源的基底彼此正交，
+以不同的基底積分，
+即可從混雜的訊號中還原出以該組基底編碼的資訊。&lt;/p&gt;
+&lt;h2 id=&quot;[北斗衛星導致的偏差-(satellite-induced-code-bias)][compass-bias]&quot;&gt;&lt;a href=&quot;https://doi.org/10.1016/j.asr.2017.11.031&quot; title=&quot;Zhang, X., Li, X., Lu, C., Wu, M., Pan, L., A comprehensive analysis of satellite-induced code bias for BDS-3 satellites and signals, Advances in Space Research (2017)&quot;&gt;北斗衛星導致的偏差 (satellite-induced code bias)&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;北斗衛星有分中軌道與高軌道，
+而不同高度的衛星在接收儀上信號有不同的偏差。&lt;/p&gt;
+&lt;h2 id=&quot;SLR-驗證定位結果&quot;&gt;SLR 驗證定位結果&lt;/h2&gt;
+&lt;p&gt;slr 是以雷射測距測量地面站與衛星間距離的技術。
+由於 slr 實作較簡單，只要衛星上裝有反射稜鏡，
+就能從地面設置高功率雷射站，
+發射電射脈衝並觀測回波時間來測量地面站與衛星間的距離。&lt;/p&gt;
+&lt;p&gt;在 gnss 尚未普及的時代，slr 測距是衛星定軌的重要方式。
+對比 gnss 需要多顆衛星交會求出座標，
+slr 則需要多個地面站同時觀測同一顆衛星交會。
+但現今 gnss 系統已常駐有多顆衛星在高軌道不斷廣播信號，
+slr 仍需要多個天文台配合，較為不便。
+因此 slr 已較為少見。&lt;/p&gt;
+&lt;p&gt;現今 slr 的主要用途，是用做 gnss 定位外的第二或第三系統，
+作為 gnss 無法運作時的備案。
+實作上衛星只要在底部裝設反射稜鏡，需要時即可在地面站以 slr 觀測。
+&lt;a href=&quot;https://doi.org/10.1007/s10291-019-0834-2&quot; title=&quot;Bingbing Duan: Prediction versus real-time orbit determination for GNSS satellites&quot;&gt;另外 slr 也常作為 gnss 定軌的驗證工具&lt;/a&gt;，
+&lt;a href=&quot;https://doi.org/10.1007/s10291-019-0830-6&quot; title=&quot;Xiangdong An: Improving integrated precise orbit determination of GPS, GLONASS, BDS and Galileo through integer ambiguity resolution&quot;&gt;在定出衛星的軌道後，與 slr 的結果比較驗證
+gnss 定位的結果是否正確&lt;/a&gt; 。&lt;/p&gt;
+&lt;p&gt;實務上不一定每顆衛星都裝有反射稜鏡，
+如果單純是驗證定軌演算法的正確性，
+可能會在其它同時配有反射稜鏡與 gnss 系統的衛星上測試定軌演算法，
+再用 slr 驗證結果。
+若確認結果無誤，表示演算法正確，
+可以合理推測另顆衛星以同一演算法的定軌結果亦無誤。&lt;/p&gt;
+&lt;h2 id=&quot;slr-的測距與座標&quot;&gt;slr 的測距與座標&lt;/h2&gt;
+&lt;p&gt;slr 單純只是測距，在地面站座標已知的情況下，
+測距結果可以同 gnss 以交會法求出座標。
+或是反過來，在同一地面站觀測多個已定軌的衛星，
+交會出地面站座標。
+slr 也能應用在觀測座標系統框架，
+計算如地球質心、極移、地球自轉參數等重要參數。&lt;/p&gt;
+&lt;p&gt;在驗證衛星定軌結果上，較常用的是一維上的驗證。
+也就是不直接從 slr 中定出三維座標，
+而是只用單一地面站，定出衛星與地面站直線距離，
+再和定軌的衛星與地面三維座標算出的距離比較。
+但由於只在直線方向上比較，結果不全面。&lt;/p&gt;
+&lt;h2 id=&quot;slr-與-EDM&quot;&gt;slr 與 EDM&lt;/h2&gt;
+&lt;p&gt;slr 使用的是單一的雷射脈衝。
+相較之下，平面測量中全站儀使用的 edm 多是用相位測距，
+而不是單純觀測回波。
+單純觀測回波的情況，測距的準確受時鐘的精度、脈衝的寬度影響。
+以時間來說 1ns 的鐘差，換算成距離就是 30cm，
+在測距上一來一回造成 15cm 的誤差。
+而脈衝的寬度也就是持續時間，
+因為無法分辨時間上要取在脈衝持續時間內的何時，
+也會造成觀測的不精確。&lt;/p&gt;
+&lt;p&gt;以現今的 slr 系統，雷射的脈衝時間可以控制在 0.1ns，
+達到 1.5cm 的精度，以衛星軌道來說公分級的精度足夠了。
+gnss 精密定軌，也是接近公分級的精度。
+但在平面測量中，edm 的量測距離在數十公尺等級，
+如果只到公分級的精度是不夠的，
+所以必須靠相位觀測提升精度。&lt;/p&gt;
+&lt;p&gt;edm 的相位測距有多分倍頻測量與不同頻測量。
+多倍頻測量是用非線性光學，將波長加倍或滅半，
+提供不同解析度的觀測結果。
+例如波長 250m 的倍頻成 125m 62.5m 30.125m，
+就能提升解析度，同時超過 30.125m 的距離就靠 62.5m 的波長測量，
+再結合 30.125m 計算出高解析度的零波數。
+而不同頻率的 edm，則是內部使用了二種互不整除的波長，
+藉由觀測二波長回波的相位差，可以用餘數定理回推距離。&lt;/p&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
+
+&lt;script src=&quot;ext/paper.js?reference&quot;&gt;&lt;/script&gt;
+
+&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/satellite-geodesy-homework-4.html</id>
 <title>衛星大地測量作業四</title>
 <published>2019-04-09T14:18:47.971Z</published>
@@ -2058,634 +2178,7 @@ sqrt(GM) / a^1.5
 <category term="geomatics"/>
 <category term="gnss"/>
 <category term="csrs"/>
-<content type="html">&lt;h1 id=&quot;A Preliminary Comparative Evaluation of Trimble RTX with CSRS-PPP&quot;&gt;A Preliminary Comparative Evaluation of Trimble RTX with CSRS-PPP&lt;/h1&gt;
-&lt;p&gt;Kinematic positioning has important applications in bathymetric mapping,
-vehicle navigation, and many others. This study comparatively evaluated
-the differences among the real time kinematic positioning with Trimble
-CenterPoint RTX service and the post-processing kinematic solution
-obtained from CSRS-PPP service. The comparison is based on the data
-collected on Dec. 16 to 22, 2017 on a CORS station, NSB0. From
-observations made on these days, the standard deviation of height
-differences between these two services is 0.057m, while the bias is
-0.080m. As compared with the official coordinates of this CORS, CSRS-PPP
-shows better agreement.&lt;/p&gt;
-&lt;h2 id=&quot;rtx 與 csrs-ppp&quot;&gt;rtx 與 csrs-ppp&lt;/h2&gt;
-&lt;p&gt;rtx 與 csrs-ppp 都是基於 GNSS 系統的絕對定位。
-rtx 是星基增益的即時動態定位，
-藉由地面站即時解算部份地區的精密星曆，
-並由網路或衛星廣播到使用者端，
-可以實現即時動態基於載波相位的絕對定位。&lt;/p&gt;
-&lt;h3 id=&quot;rtx 相對傳統 VBS-RTK 的優勢&quot;&gt;rtx 相對傳統 VBS-RTK 的優勢&lt;/h3&gt;
-&lt;p&gt;且相較於傳統的即時動態差分定位，
-星基增益系統不需要受限於基站與虛擬基站。
-傳統的差分定位，需要架站基站，
-或是以基站網內差出虛擬基站。
-虛擬基站雖然免除架站基站的困擾，
-但需要為每個使用者都內差計算出不同的虛擬基站。&lt;/p&gt;
-&lt;p&gt;而 rtx 等星基增益技術，只要有固定數量的靜態衛星接收站，
-即可即時解算出衛星的精密星曆，透過廣播服務所有使用者。
-由於所有使用者需要的是相同的星曆，
-不會像 vbs 因使用者增加而加重計算負擔，
-透過衛星廣播訊號的話，可以服務無上限人數的使用者。&lt;/p&gt;
-&lt;h3 id=&quot;csrs-ppp&quot;&gt;csrs-ppp&lt;/h3&gt;
-&lt;p&gt;csrs-ppp 是 &lt;strong&gt;加拿大自然資源局&lt;/strong&gt; 提供的線上解算精密單點定位服務，
-允許使用者在網頁介面上提交 rinex 格式的觀測資料，
-在伺服器端解算完畢後，會將成果 email 到使用者信箱。&lt;/p&gt;
-&lt;p&gt;csrs-ppp 為服務名稱，其內部使用的軟體有過變化，
-舊版軟體為 gpspace，現行的新版為 gpspark。
-&lt;a href=&quot;https://github.com/CGS-GIS/GPSPACE/&quot; title=&quot;csrs 開源 gpspace&quot;&gt;舊版 gpspace 已開源在 github 上，可以自行編譯取用；&lt;/a&gt;
-而新版 gpspark 仍在活躍開發中，沒有釋出原始碼，
-只有透過網頁介面提供服務，也就是現今的 csrs-ppp。&lt;/p&gt;
-&lt;h3 id=&quot;rtx 與 ppp 的異同&quot;&gt;rtx 與 ppp 的異同&lt;/h3&gt;
-&lt;p&gt;rtx 是即時動態定位，
-csrs-ppp 則要在觀測後輸出觀測檔案上傳，非即時定位。
-而 csrs-ppp 在解算時，可以解算移動中觀測的觀測檔，
-也就是動態定位；亦能假設接收儀是在固定座標，解算靜態定位。
-且 rtx 與 csrs-ppp 均是屬於基於載波相位的精密單點定位，
-rtx 使用的是即時解算的星曆，ppp 使用的則是事後解算的精密星曆。
-二者在理論上相似。&lt;/p&gt;
-&lt;h2 id=&quot;數據與解算&quot;&gt;數據與解算&lt;/h2&gt;
-&lt;p&gt;數據為 2017-12-16 到 2017-12-22 間觀測，
-測站位置為 TWD97 的固定衛星追蹤站 LSB0。
-rtx 數據為即時定位的座標，
-同時有使用傳統 gnss 接收儀，
-輸出 T02 格式並在事後轉換為 rinex 格式。
-csrs-ppp 再以 rinex 格式觀測檔進行精密單點定位。&lt;/p&gt;
-&lt;p&gt;總共會有四種定位方式的結果座標，
-分別為 rtx、gpspace、gpspark、座標真值。&lt;/p&gt;
-&lt;h3 id=&quot;座標真值&quot;&gt;座標真值&lt;/h3&gt;
-&lt;p&gt;測站位置為 TWD97 固定衛星追縱站，點號 LSB0，
-座標真值為：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;\begin{bmatrix}
-E \\ N \\ h
-\end{bmatrix}
-=
-\begin{bmatrix}
-212830.095483593 \\
-2672057.61548927 \\ 
-121.798217289174
-\end{bmatrix}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;rtx 資料&quot;&gt;rtx 資料&lt;/h3&gt;
-&lt;p&gt;rtx 資料有定位結果的經緯度座標與 twd97 平面座標，
-但用 &lt;a href=&quot;http://proj4.org&quot; title=&quot;地圖投影與大地線計算軟體&quot;&gt;proj4&lt;/a&gt; 將經緯度轉換成平面座標驗證後發現，
-二者不相符，在南北方向約誤差 1.7mm。
-最後決定使用 proj4 手動將經緯度座標轉成平面座標，
-原本的平面座標則忽略不使用。&lt;/p&gt;
-&lt;p&gt;整理後發現 rtx 定位座標在尚未收斂時，會有極大的誤差，
-原數據如下：&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.0887&lt;/td&gt;
-&lt;td&gt;0.3809&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.8082&lt;/td&gt;
-&lt;td&gt;0.4441&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.9551&lt;/td&gt;
-&lt;td&gt;0.9938&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;但經過作圖後發現，少量數據偏離平均值、真值極大，
-故決定以三倍標準差為基準籂選數據。
-將數據中離平均值超過三倍標準差的記錄剔除，
-再重新計算，再剔除三倍標準差以外的，
-重覆直到所有數據都在三倍標準差以內。
-過濾後整體標準偏差大幅下降，但也剔除了 14.73% 的數據。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.0376&lt;/td&gt;
-&lt;td&gt;0.01230&lt;/td&gt;
-&lt;td&gt;384425&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.7456&lt;/td&gt;
-&lt;td&gt;0.0096&lt;/td&gt;
-&lt;td&gt;380365&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.7674&lt;/td&gt;
-&lt;td&gt;0.0357&lt;/td&gt;
-&lt;td&gt;380894&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&quot;gpspace&quot;&gt;gpspace&lt;/h3&gt;
-&lt;p&gt;gpspace 是 csrs-ppp 使用的舊版 ppp 解算軟體，
-目前已在 github 上開源。
-gpspace 可以從 rinex 格式觀測資料與精密星曆，
-解算動態或靜態單點定位。
-因為 rtx 為動態定位，為了使二者在同一基準上比較，
-在 gpspace 也使用動態定位求解。&lt;/p&gt;
-&lt;p&gt;gpspace 的定位結果不是很穩定。
-相比 rtx 雖然在未收斂時會有極大誤差，
-但收斂後表現極佳。
-gpspace 則一直處在不穩定的狀態，
-雖然不像 rtx 有極端誤差， 但也不會收斂到穩定的值。
-整體不如 rtx。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3149&lt;/td&gt;
-&lt;td&gt;0.2005&lt;/td&gt;
-&lt;td&gt;585324&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5671&lt;/td&gt;
-&lt;td&gt;0.1460&lt;/td&gt;
-&lt;td&gt;585324&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.7856&lt;/td&gt;
-&lt;td&gt;0.3982&lt;/td&gt;
-&lt;td&gt;585324&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;嘗試也對 gpspace 的結果用三倍標準差過濾，
-結果雖有提升，但不很明顯。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3439&lt;/td&gt;
-&lt;td&gt;0.1355&lt;/td&gt;
-&lt;td&gt;560509&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5883&lt;/td&gt;
-&lt;td&gt;0.0771&lt;/td&gt;
-&lt;td&gt;559062&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.7457&lt;/td&gt;
-&lt;td&gt;0.2483&lt;/td&gt;
-&lt;td&gt;560993&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&quot;gpspark&quot;&gt;gpspark&lt;/h3&gt;
-&lt;p&gt;gpspark 與 gpspace 同為 csrs-ppp，
-使用上也類似，都是從 rinex 觀測資料解算精密單點定位，
-也一樣能解算動態與靜態，本次研究也同 gpspace 使用動態。
-gpspark 的定位結果遠勝 gpspace，
-收斂後能超過 rtx，並也沒有 rtx 誇張的極端值。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3209&lt;/td&gt;
-&lt;td&gt;0.0092&lt;/td&gt;
-&lt;td&gt;604800&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5840&lt;/td&gt;
-&lt;td&gt;0.0084&lt;/td&gt;
-&lt;td&gt;604800&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.6928&lt;/td&gt;
-&lt;td&gt;0.0293&lt;/td&gt;
-&lt;td&gt;604800&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;也同樣計算三倍標準差過濾，但結果並沒有顯著提升。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3211&lt;/td&gt;
-&lt;td&gt;0.0086&lt;/td&gt;
-&lt;td&gt;598610&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5841&lt;/td&gt;
-&lt;td&gt;0.0080&lt;/td&gt;
-&lt;td&gt;599439&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.6928&lt;/td&gt;
-&lt;td&gt;0.0282&lt;/td&gt;
-&lt;td&gt;602013&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2 id=&quot;比較&quot;&gt;比較&lt;/h2&gt;
-&lt;h3 id=&quot;四者作圖比較&quot;&gt;四者作圖比較&lt;/h3&gt;
-&lt;p&gt;將四者畫成散布圖如下。
-圖中是沒有過濾三倍標準差的數據，
-但也有部份極端值超過圖片邊界而沒有展示。
-其中黑線為座標真值，三種顏色分別為 rtx gpspace gpspark。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33490726908&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7886/33490726908_fa9ea30069.jpg&quot; alt=&quot;LSB0-all-small.png&quot; title=&quot;rtx gpspace gpspark 定位結果與真值依時間在 E N h 三方向上的散布圖&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;rtx 與 gpspark 和真值的差異&quot;&gt;rtx 與 gpspark 和真值的差異&lt;/h3&gt;
-&lt;p&gt;由於 rtx 在過濾前的誤差過大，沒有比較意義，
-因此只取過濾三倍標準差後的數據。
-綜合來看是 rtx 的結果較接近真值。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;軟體&lt;/th&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;均誤差&lt;/th&gt;
-&lt;th&gt;方均誤差&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;-0.057857&lt;/td&gt;
-&lt;td&gt;0.059150&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;0.13009&lt;/td&gt;
-&lt;td&gt;0.13044&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;-0.030842&lt;/td&gt;
-&lt;td&gt;0.047148&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;0.22562&lt;/td&gt;
-&lt;td&gt;0.22578&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;-0.031426&lt;/td&gt;
-&lt;td&gt;0.032426&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;-0.10545&lt;/td&gt;
-&lt;td&gt;0.10917&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&quot;rtx 與 gpspark 的差異&quot;&gt;rtx 與 gpspark 的差異&lt;/h3&gt;
-&lt;p&gt;作為二種精度較佳的定位方法，單獨作圖比較。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33490727288&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7838/33490727288_bce7063bdf.jpg&quot; alt=&quot;LSB0-rtx-gpspark.png&quot; title=&quot;將 rtx 減去 gpspark 的定位結果作圖&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;0.2319&lt;/td&gt;
-&lt;td&gt;0.3802&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;-0.2241&lt;/td&gt;
-&lt;td&gt;0.4432&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;-0.2621&lt;/td&gt;
-&lt;td&gt;0.9957&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;由於 rtx 有較多的極端值，因此採用三倍標準差過濾數據，
-剔除三倍標準差後：&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;-0.0739&lt;/td&gt;
-&lt;td&gt;0.04153&lt;/td&gt;
-&lt;td&gt;383035&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;0.2823&lt;/td&gt;
-&lt;td&gt;0.01358&lt;/td&gt;
-&lt;td&gt;384496&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;-0.1626&lt;/td&gt;
-&lt;td&gt;0.01170&lt;/td&gt;
-&lt;td&gt;382166&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&quot;統計分析&quot;&gt;統計分析&lt;/h3&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;軟體&lt;/th&gt;
-&lt;th&gt;過濾&lt;/th&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.0887&lt;/td&gt;
-&lt;td&gt;0.3809&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.8082&lt;/td&gt;
-&lt;td&gt;0.4441&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.9551&lt;/td&gt;
-&lt;td&gt;0.9938&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.0376&lt;/td&gt;
-&lt;td&gt;0.01230&lt;/td&gt;
-&lt;td&gt;384425&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.7456&lt;/td&gt;
-&lt;td&gt;0.0096&lt;/td&gt;
-&lt;td&gt;380365&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.7674&lt;/td&gt;
-&lt;td&gt;0.0357&lt;/td&gt;
-&lt;td&gt;380894&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspace&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3149&lt;/td&gt;
-&lt;td&gt;0.2005&lt;/td&gt;
-&lt;td&gt;585324&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspace&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5671&lt;/td&gt;
-&lt;td&gt;0.1460&lt;/td&gt;
-&lt;td&gt;585324&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspace&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.7856&lt;/td&gt;
-&lt;td&gt;0.3982&lt;/td&gt;
-&lt;td&gt;585324&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspace&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3439&lt;/td&gt;
-&lt;td&gt;0.1355&lt;/td&gt;
-&lt;td&gt;560509&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspace&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5883&lt;/td&gt;
-&lt;td&gt;0.0771&lt;/td&gt;
-&lt;td&gt;559062&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspace&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.7457&lt;/td&gt;
-&lt;td&gt;0.2483&lt;/td&gt;
-&lt;td&gt;560993&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3209&lt;/td&gt;
-&lt;td&gt;0.0092&lt;/td&gt;
-&lt;td&gt;604800&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5840&lt;/td&gt;
-&lt;td&gt;0.0084&lt;/td&gt;
-&lt;td&gt;604800&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.6928&lt;/td&gt;
-&lt;td&gt;0.0293&lt;/td&gt;
-&lt;td&gt;604800&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3211&lt;/td&gt;
-&lt;td&gt;0.0086&lt;/td&gt;
-&lt;td&gt;598610&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5841&lt;/td&gt;
-&lt;td&gt;0.0080&lt;/td&gt;
-&lt;td&gt;599439&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.6928&lt;/td&gt;
-&lt;td&gt;0.0282&lt;/td&gt;
-&lt;td&gt;602013&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx - gpspark&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;0.2319&lt;/td&gt;
-&lt;td&gt;0.3802&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx - gpspark&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;-0.2241&lt;/td&gt;
-&lt;td&gt;0.4432&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx - gpspark&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;-0.2621&lt;/td&gt;
-&lt;td&gt;0.9957&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx - gpspark&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;-0.0739&lt;/td&gt;
-&lt;td&gt;0.04153&lt;/td&gt;
-&lt;td&gt;383035&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx - gpspark&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;0.2823&lt;/td&gt;
-&lt;td&gt;0.01358&lt;/td&gt;
-&lt;td&gt;384496&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx - gpspark&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;-0.1626&lt;/td&gt;
-&lt;td&gt;0.01170&lt;/td&gt;
-&lt;td&gt;382166&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;script src=&quot;ext/paper.js?reference&quot;&gt;&lt;/script&gt;
 
-&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
-
-&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
-
-&lt;script&gt;
-document.body.prepend(
-    document.querySelector(&apos;h1&apos;),
-    document.querySelector(&apos;header&apos;)
-)
-&lt;/script&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/satellite-geodesy-homework-2.html</id>
 <title>衛星大地測量作業二</title>

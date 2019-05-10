@@ -1,0 +1,135 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2019-05-10T11:24:28.605Z">
+<meta name="keywords" property="og:article:tag" content="linux,開機,windows,grub">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="satellite-geodesy-homework-5.html" title="使用 SLR 驗證 GNSS 衛星定軌的結果">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>grub 用時間控制重新開機到另一系統</title>
+</head>
+<body>
+<main><h1 id="grub-用時間控制重新開機到另一系統">grub 用時間控制重新開機到另一系統</h1>
+<p>許多 linux 電腦是做成多重開機，
+可以在 linux 和 windows 間切換。
+linux 的開機管理員 grub，
+可以透過 <code>grub-reboot</code> 來設定下次重新開機的作業系統。
+但 grub-reboot 不能在 lvm 上運作，
+所以我用偵測時間的方式，
+在 grub 中偵測在特定時間內開機到另一 os，
+時間超過後再重新開機，即會重到 linux 下。</p>
+<h2 id="原生的-grub-reboot">原生的 grub-reboot</h2>
+<p>grub-reboot 的運作原理，
+是在 grub 內讀寫 <code>/boot</code> 內的檔案，
+先把下一次要用的 os 寫在檔案裡，
+在進入 grub 後再改寫該檔案，再開機，
+即達到只開機到該作業系統一次的目的。</p>
+<pre><code class="lang-sh">grub-reboot 2 # 開機到選單中第二個作業系統
+              # 選單從零開始算
+reboot # 之後要手動 reboot
+</code></pre>
+<p>但 grub 畢竟不是完整的作業系統，能做的事有限，
+像是不能讀寫 lvm，所以如果 boot 是在 lvm 中，
+就沒辦在 grub 中還原原本的開機選項。</p>
+<h2 id="遠端在各作業系統中切換">遠端在各作業系統中切換</h2>
+<p>我之前在實驗室電腦的 windows 灌了幾個課業上要用的軟體，
+有時會需要重開到 windows，然後用 vnc 連線進去操作。
+所以希望可以在 linux 中用指令重開到 windows，
+同時在 windows 也能重開回 linux。</p>
+<p>有個辦法是在 windows 下掛載 linux，
+然後手動重寫 boot 中的開機選單。
+反正重開機就會回到 grub，
+只要能改開機選單，想去哪就去哪。
+但在 windows 中要讀寫 lvm 好像比較困難，
+以前只用過讀寫 ext2 的；
+目前沒有走這條路。</p>
+<h2 id="用時間判斷要開機的作業系統">用時間判斷要開機的作業系統</h2>
+<p>所以我就寫了個 grub 腳本，
+判斷現在的時間是否在環境變數中的時間內，
+如果在時間內，就開機到環境變數中指定的作業系統。
+之後只要在 linux 中設定一小時內，
+grub 會開機到 windows，馬上重新開機就會進到 windows 了。
+過一小時後，重開機就會回到 linux。</p>
+<p>腳本至少需要一個內嵌在 <code>/boot/grub/grub.cfg</code> 中判斷，
+另外傳時間和要開機的 os 可以從 <code>/boot/grub/grubenv</code> 中傳。
+但為了方便我也有寫成腳本。
+總共有二個檔案，但二個不好管理，所以我把第一個內嵌到第二個裡。
+<a href="http://github.com/gholk/loco/blob/master/bin/grub-reboot-timeout.sh">腳本叫 grub-reboot-timeout，放在 github 上。</a></p>
+<p>grub 好像還不能把命令的輸出存到變數內，
+所以有 time 命令也沒用，因為捕捉 time 的輸出來判斷。
+所以我判斷時間是用 datetime mod，
+載入後會把現在的時間存到變數，
+但 datetime 是把年月日時分開存，
+所以不能統一判斷時間差多少。
+我只簡單用是否是在同一小時判斷在時間內，
+同時用月中的日期判斷，避免過一天後同一時間誤判。</p>
+<h2 id="grub-的節構">grub 的節構</h2>
+<p>debian 系的 grub 腳本好像是用另一堆腳本產生的，
+所以要把那堆產生 grub 腳本的腳本放到 <code>/etc/grub.d/</code> 裡。
+我是放到 <code>42_reboot_env_timeout</code> 。</p>
+<pre><code class="lang-sh">#!/bin/sh
+tail -n +7 &quot;$0&quot;
+exit
+
+## following script will be output to grub.cfg
+
+if [ -n &quot;$gholk_reboot_entry&quot; ]
+then
+    insmod datehook
+    if [ &quot;$DAY&quot; -eq &quot;$gholk_reboot_date&quot; -a \
+         &quot;$HOUR&quot; -eq &quot;$gholk_reboot_hour&quot; ]
+    then set default=$gholk_reboot_entry
+    fi
+fi
+</code></pre>
+<p>然後在呼叫 <code>update-grub</code> 時，
+就會依序執行 /etc/grub.d/ 裡的所有腳本，
+因為是用 exec tail 自己，
+就會輸出該檔案第三行開始的所有內容，然後退出。</p>
+<p>其實有另一種做法是把 exec 的命令放在 hash bang：</p>
+<pre><code class="lang-sh">#!/bin/cat
+hello world
+</code></pre>
+<p>但問題是這樣的腳本不和 sh 相容，
+只有在直接用 <code>./script</code> 執行該檔案可用，
+如果用 <code>sh script</code> 就會忽略該行註解開頭，
+之後的內容 sh 看不懂就會報錯。</p>
+<p>所以較好的做法是用 <code>cat $0</code> 或 tail 輸出自身，
+就算 hash bang 不被解譯，
+仍是合法的 sh 腳本。</p>
+<h2 id="只用變數判斷">只用變數判斷</h2>
+<p>為了方便，所以我是透過傳入 grub 變數來重新開機。
+grub.cfg 在開機進 grub 後，
+會把 <code>/boot/grub/grubenv</code> 裡的內容讀進來。
+所以我在上面的腳本中判斷有沒有環境變數指定要開機到另一個系統，
+只要在 grubenv 中設了系統名和時限，
+就會在時限內重開機進該系統。</p>
+<p>而設 grub 變數最直接就是直接編輯 grubenv 這個文字檔，
+另外為了方便 grub 也有提供一個腳本 <code>grub-editenv</code>
+可以用命令編輯 grubenv，
+像 <code>grub-editenv /boot/grub/grubenv set boot_entry=2</code> 。
+所以我就在腳本內呼叫 grub-editenv 把重開機的選項傳進去，
+之後重開機就會進另一個系統了。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

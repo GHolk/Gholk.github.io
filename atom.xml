@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-05-01T12:05:49.187Z</updated>
+  <updated>2019-05-10T11:26:17.028Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,126 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/linux-grub-reboot-another-os.html</id>
+<title>grub 用時間控制重新開機到另一系統</title>
+<published>2019-05-10T11:24:28.605Z</published>
+<updated>2019-05-10T11:26:17.011Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/linux-grub-reboot-another-os.html"/>
+<summary type="html">許多 linux 電腦是做成多重開機，
+可以在 linux 和 windows 間切換。
+linux 的開機管理員 grub，
+可以透過 &lt;code&gt;grub-reboot&lt;/code&gt; 來設定下次重新開機的作業系統。
+但 grub-reboot 不能在 lvm 上運作，
+所以我用偵測時間的方式，
+在 grub 中偵測在特定時間內開機到另一 os，
+時間超過後再重新開機，即會重到 linux 下。</summary>
+<category term="linux"/>
+<category term="開機"/>
+<category term="windows"/>
+<category term="grub"/>
+<content type="html">&lt;h1 id=&quot;grub-用時間控制重新開機到另一系統&quot;&gt;grub 用時間控制重新開機到另一系統&lt;/h1&gt;
+&lt;p&gt;許多 linux 電腦是做成多重開機，
+可以在 linux 和 windows 間切換。
+linux 的開機管理員 grub，
+可以透過 &lt;code&gt;grub-reboot&lt;/code&gt; 來設定下次重新開機的作業系統。
+但 grub-reboot 不能在 lvm 上運作，
+所以我用偵測時間的方式，
+在 grub 中偵測在特定時間內開機到另一 os，
+時間超過後再重新開機，即會重到 linux 下。&lt;/p&gt;
+&lt;h2 id=&quot;原生的-grub-reboot&quot;&gt;原生的 grub-reboot&lt;/h2&gt;
+&lt;p&gt;grub-reboot 的運作原理，
+是在 grub 內讀寫 &lt;code&gt;/boot&lt;/code&gt; 內的檔案，
+先把下一次要用的 os 寫在檔案裡，
+在進入 grub 後再改寫該檔案，再開機，
+即達到只開機到該作業系統一次的目的。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;grub-reboot 2 # 開機到選單中第二個作業系統
+              # 選單從零開始算
+reboot # 之後要手動 reboot
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;但 grub 畢竟不是完整的作業系統，能做的事有限，
+像是不能讀寫 lvm，所以如果 boot 是在 lvm 中，
+就沒辦在 grub 中還原原本的開機選項。&lt;/p&gt;
+&lt;h2 id=&quot;遠端在各作業系統中切換&quot;&gt;遠端在各作業系統中切換&lt;/h2&gt;
+&lt;p&gt;我之前在實驗室電腦的 windows 灌了幾個課業上要用的軟體，
+有時會需要重開到 windows，然後用 vnc 連線進去操作。
+所以希望可以在 linux 中用指令重開到 windows，
+同時在 windows 也能重開回 linux。&lt;/p&gt;
+&lt;p&gt;有個辦法是在 windows 下掛載 linux，
+然後手動重寫 boot 中的開機選單。
+反正重開機就會回到 grub，
+只要能改開機選單，想去哪就去哪。
+但在 windows 中要讀寫 lvm 好像比較困難，
+以前只用過讀寫 ext2 的；
+目前沒有走這條路。&lt;/p&gt;
+&lt;h2 id=&quot;用時間判斷要開機的作業系統&quot;&gt;用時間判斷要開機的作業系統&lt;/h2&gt;
+&lt;p&gt;所以我就寫了個 grub 腳本，
+判斷現在的時間是否在環境變數中的時間內，
+如果在時間內，就開機到環境變數中指定的作業系統。
+之後只要在 linux 中設定一小時內，
+grub 會開機到 windows，馬上重新開機就會進到 windows 了。
+過一小時後，重開機就會回到 linux。&lt;/p&gt;
+&lt;p&gt;腳本至少需要一個內嵌在 &lt;code&gt;/boot/grub/grub.cfg&lt;/code&gt; 中判斷，
+另外傳時間和要開機的 os 可以從 &lt;code&gt;/boot/grub/grubenv&lt;/code&gt; 中傳。
+但為了方便我也有寫成腳本。
+總共有二個檔案，但二個不好管理，所以我把第一個內嵌到第二個裡。
+&lt;a href=&quot;http://github.com/gholk/loco/blob/master/bin/grub-reboot-timeout.sh&quot;&gt;腳本叫 grub-reboot-timeout，放在 github 上。&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;grub 好像還不能把命令的輸出存到變數內，
+所以有 time 命令也沒用，因為捕捉 time 的輸出來判斷。
+所以我判斷時間是用 datetime mod，
+載入後會把現在的時間存到變數，
+但 datetime 是把年月日時分開存，
+所以不能統一判斷時間差多少。
+我只簡單用是否是在同一小時判斷在時間內，
+同時用月中的日期判斷，避免過一天後同一時間誤判。&lt;/p&gt;
+&lt;h2 id=&quot;grub-的節構&quot;&gt;grub 的節構&lt;/h2&gt;
+&lt;p&gt;debian 系的 grub 腳本好像是用另一堆腳本產生的，
+所以要把那堆產生 grub 腳本的腳本放到 &lt;code&gt;/etc/grub.d/&lt;/code&gt; 裡。
+我是放到 &lt;code&gt;42_reboot_env_timeout&lt;/code&gt; 。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;#!/bin/sh
+tail -n +7 &amp;quot;$0&amp;quot;
+exit
+
+## following script will be output to grub.cfg
+
+if [ -n &amp;quot;$gholk_reboot_entry&amp;quot; ]
+then
+    insmod datehook
+    if [ &amp;quot;$DAY&amp;quot; -eq &amp;quot;$gholk_reboot_date&amp;quot; -a \
+         &amp;quot;$HOUR&amp;quot; -eq &amp;quot;$gholk_reboot_hour&amp;quot; ]
+    then set default=$gholk_reboot_entry
+    fi
+fi
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;然後在呼叫 &lt;code&gt;update-grub&lt;/code&gt; 時，
+就會依序執行 /etc/grub.d/ 裡的所有腳本，
+因為是用 exec tail 自己，
+就會輸出該檔案第三行開始的所有內容，然後退出。&lt;/p&gt;
+&lt;p&gt;其實有另一種做法是把 exec 的命令放在 hash bang：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;#!/bin/cat
+hello world
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;但問題是這樣的腳本不和 sh 相容，
+只有在直接用 &lt;code&gt;./script&lt;/code&gt; 執行該檔案可用，
+如果用 &lt;code&gt;sh script&lt;/code&gt; 就會忽略該行註解開頭，
+之後的內容 sh 看不懂就會報錯。&lt;/p&gt;
+&lt;p&gt;所以較好的做法是用 &lt;code&gt;cat $0&lt;/code&gt; 或 tail 輸出自身，
+就算 hash bang 不被解譯，
+仍是合法的 sh 腳本。&lt;/p&gt;
+&lt;h2 id=&quot;只用變數判斷&quot;&gt;只用變數判斷&lt;/h2&gt;
+&lt;p&gt;為了方便，所以我是透過傳入 grub 變數來重新開機。
+grub.cfg 在開機進 grub 後，
+會把 &lt;code&gt;/boot/grub/grubenv&lt;/code&gt; 裡的內容讀進來。
+所以我在上面的腳本中判斷有沒有環境變數指定要開機到另一個系統，
+只要在 grubenv 中設了系統名和時限，
+就會在時限內重開機進該系統。&lt;/p&gt;
+&lt;p&gt;而設 grub 變數最直接就是直接編輯 grubenv 這個文字檔，
+另外為了方便 grub 也有提供一個腳本 &lt;code&gt;grub-editenv&lt;/code&gt;
+可以用命令編輯 grubenv，
+像 &lt;code&gt;grub-editenv /boot/grub/grubenv set boot_entry=2&lt;/code&gt; 。
+所以我就在腳本內呼叫 grub-editenv 把重開機的選項傳進去，
+之後重開機就會進另一個系統了。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/satellite-geodesy-homework-5.html</id>
 <title>使用 SLR 驗證 GNSS 衛星定軌的結果</title>
 <published>2019-04-30T14:42:33.667Z</published>
@@ -1887,286 +2007,7 @@ sqrt(GM) / a^1.5
 <category term="nctu"/>
 <category term="geodesy"/>
 <category term="report"/>
-<content type="html">&lt;h1 id=&quot;衛星大地測量作業二&quot;&gt;衛星大地測量作業二&lt;/h1&gt;
-&lt;p&gt;計算衛星軌道及推導拉格朗日括號公式。&lt;/p&gt;
-&lt;h2 id=&quot;常見衛星周期&quot;&gt;常見衛星周期&lt;/h2&gt;
-&lt;p&gt;由萬有引力公式與圓周運動公式，
-假設衛星軌道為圓，在軌道半徑已知下，
-衛星繞地球的周期、速度是可以唯一確定的。&lt;/p&gt;
-&lt;p&gt;若衛星繞地球作圓周運動，需要的向心加速度為：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;a = \frac{V^2 } R
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;衛星的向心加速度來源為引力，
-引力加速度公式為： &lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;a = \frac{G M} {R^2}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;合併二式後，可以由軌道半徑推出衛星運動速度，
-有運動速度與半徑即可推出周期：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;\frac{V^2} R = \frac{G M} {R^2} \\
-V^2 = \frac {G M} R \\
-V = \sqrt \frac{G M}R \\
-t = \frac{2 \pi R }V = \frac {2 \pi R^{1.5}} { \sqrt{G M} }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;G 為萬有引力常數，M 為地球質量，
-以地表 R = 6371km 時 a = g = 9.8 m/s² ，
-G M = 397778481800000 m³/s² 。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;衛星&lt;/th&gt;
-&lt;th&gt;軌道半徑&lt;/th&gt;
-&lt;th&gt;來源網址&lt;/th&gt;
-&lt;th&gt;周期&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Jason-3&lt;/td&gt;
-&lt;td&gt;7714.43km&lt;/td&gt;
-&lt;td&gt;&lt;a href=&quot;https://podaac.jpl.nasa.gov/JASON3&quot;&gt;https://podaac.jpl.nasa.gov/JASON3&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;6750.17s&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;GRACE-follow-on&lt;/td&gt;
-&lt;td&gt;6861km&lt;/td&gt;
-&lt;td&gt;&lt;a href=&quot;https://gracefo.jpl.nasa.gov/resources/38/grace-fo-fact-sheet/&quot;&gt;https://gracefo.jpl.nasa.gov/resources/38/grace-fo-fact-sheet/&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;94.36s&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;GPS satellite&lt;/td&gt;
-&lt;td&gt;20200km&lt;/td&gt;
-&lt;td&gt;&lt;a href=&quot;https://www.nasa.gov/directorates/heo/scan/communications/policy/GPS.html&quot;&gt;https://www.nasa.gov/directorates/heo/scan/communications/policy/GPS.html&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;28601.33s&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;BDs3&lt;/td&gt;
-&lt;td&gt;21500km&lt;/td&gt;
-&lt;td&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/List_of_BeiDou_satellites#cite_note-gpsworld201501-3&quot;&gt;https://en.wikipedia.org/wiki/List_of_BeiDou_satellites#cite_note-gpsworld201501-3&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;31406.31s&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;sentinel-1A&lt;/td&gt;
-&lt;td&gt;7064km&lt;/td&gt;
-&lt;td&gt;&lt;a href=&quot;https://sentinel.esa.int/web/sentinel/missions/sentinel-1/satellite-description/orbit&quot;&gt;https://sentinel.esa.int/web/sentinel/missions/sentinel-1/satellite-description/orbit&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;5914.73s&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;LAGEOS-2&lt;/td&gt;
-&lt;td&gt;5740km&lt;/td&gt;
-&lt;td&gt;&lt;a href=&quot;https://lageos.cddis.eosdis.nasa.gov/&quot;&gt;https://lageos.cddis.eosdis.nasa.gov/&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;4332.39s&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;GOCE&lt;/td&gt;
-&lt;td&gt;6606km&lt;/td&gt;
-&lt;td&gt;&lt;a href=&quot;http://www.esa.int/Our_Activities/Observing_the_Earth/GOCE/Satellite&quot;&gt;http://www.esa.int/Our_Activities/Observing_the_Earth/GOCE/Satellite&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;5348.93s&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2 id=&quot;拉格朗日括號&quot;&gt;拉格朗日括號&lt;/h2&gt;
-&lt;p&gt;驗證下列公式：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;[ \Omega , e ] = - [ e , \Omega ] =
-- \frac { - n a^2 e cos(i) }
-        { \sqrt { 1 - e^2 } }
 
-\\
-
-[ \omega , a ] = - [ a , \omega ] =
-\frac { \sqrt {1 - e^2} n a } 2
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;使用 emacs-calc 進行符號微分，
-以下是變數定義：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;qq = [a * (cos(E) - ee);
-      a * sin(E) * sqrt(1 - ee^2);
-      0]
-vqq = [a * n * sin(E) / (ee * cos(E) - 1);
-       a * cos(E) * n * sqrt(1 - ee^2) / (1 - ee * cos(E));
-       0]
-
-r3o = [ [cos(o), -sin(o), 0],
-  [sin(o), cos(o), 0],
-  [0, 0, 1] ]
-r1i = [ [1, 0, 0],
-  [0, cos(ii), -sin(ii)],
-  [0, sin(ii), cos(ii)] ]
-r3w = [ [cos(o), -sin(o), 0],
-  [sin(o), cos(o), 0],
-  [0, 0, 1] ]
-roiw = r3o * r1i * r3w
-xyz = roiw * qq
-vxyz = roiw * vqq
-
-bracketoe = sum(
-    deriv(evalv(xyz_k_1), o) * deriv(evalv(vxyz_k_1), ee) -
-    deriv(evalv(vxyz_k_1), o) * deriv(evalv(xyz_k_1), ee),
-    k, 1, 3
-)
-bracketwa = sum(
-    deriv(evalv(xyz_k_1), w) * deriv(evalv(vxyz_k_1), a) -
-    deriv(evalv(vxyz_k_1), w) * deriv(evalv(xyz_k_1), a),
-    k, 1, 3
-)
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;其中 o 為 Ω ，w 為 ω ，ee 為 e，ii 為 i。
-微分的結果極長：&lt;/p&gt;
-&lt;style&gt;
-@media print {
-:this + pre code, :this + pre + pre code {
-    font-size: 70%;
-    line-height: 120%;
-    white-space: normal;
-}
-}
-&lt;/style&gt;
-
-&lt;pre&gt;&lt;code&gt;    bracketoe 
-      = ((a sin(E) sin(w) sqrt(1 - ee^2) 
-            - a*(cos(E) - ee) cos(w)) sin(o) 
-           - (a*(cos(E) - ee) sin(w) 
-      + a cos(w) sin(E) sqrt(1 - ee^2)) cos(ii) 
-      cos(o)) 
-          ((a ee cos(E) cos(w) n(a) 
-      / ((1 - ee cos(E)) sqrt(1 - ee^2)) 
-      + a cos(E) n(a) sin(E) sin(w) 
-          / (ee cos(E) - 1)^2 
-      - a cos(E)^2 cos(w) n(a) sqrt(1 - ee^2) 
-          / (1 - ee cos(E))^2) cos(ii) sin(o) 
-             - (a cos(E)^2 n(a) sin(w) 
-      sqrt(1 - ee^2) / (ee cos(E) - 1)^2 
-      + a ee cos(E) n(a) sin(w) 
-          / ((ee cos(E) - 1) sqrt(1 - ee^2)) 
-      + a cos(E) cos(w) n(a) sin(E) 
-          / (ee cos(E) - 1)^2) cos(o)) 
-          + ((a*(cos(E) - ee) cos(w) 
-      - a sin(E) sin(w) sqrt(1 - ee^2)) cos(o) 
-      - (a*(cos(E) - ee) sin(w) 
-           + a cos(w) sin(E) sqrt(1 - ee^2)) 
-          cos(ii) sin(o)) 
-      ((a cos(E)^2 cos(w) n(a) sqrt(1 - ee^2) 
-          / (1 - ee cos(E))^2 
-          - a cos(E) n(a) sin(E) sin(w) 
-      / (ee cos(E) - 1)^2 
-          - a ee cos(E) cos(w) n(a) 
-      / ((1 - ee cos(E)) sqrt(1 - ee^2))) 
-         cos(ii) cos(o) 
-         - (a cos(E)^2 n(a) sin(w) 
-      sqrt(1 - ee^2) / (ee cos(E) - 1)^2 
-      + a ee cos(E) n(a) sin(w) 
-          / ((ee cos(E) - 1) sqrt(1 - ee^2)) 
-      + a cos(E) cos(w) n(a) sin(E) 
-          / (ee cos(E) - 1)^2) sin(o)) 
-          + ((a ee cos(w) sin(E) 
-      / sqrt(1 - ee^2) + a sin(w)) cos(ii) 
-      sin(o) 
-      + (a ee sin(E) sin(w) / sqrt(1 - ee^2) 
-           - a cos(w)) cos(o)) 
-      ((a n(a) sin(E) sin(w) / (ee cos(E) - 1) 
-          + a cos(E) cos(w) n(a) sqrt(1 - ee^2) 
-      / (1 - ee cos(E))) cos(ii) cos(o) 
-         + (a cos(w) n(a) sin(E) 
-      / (ee cos(E) - 1) 
-      + a cos(E) n(a) sin(w) sqrt(1 - ee^2) 
-          / (ee cos(E) - 1)) sin(o)) 
-          + ((a n(a) sin(E) sin(w) 
-      / (ee cos(E) - 1) 
-      + a cos(E) cos(w) n(a) sqrt(1 - ee^2) 
-          / (1 - ee cos(E))) cos(ii) sin(o) 
-      - (a cos(w) n(a) sin(E) / (ee cos(E) - 1) 
-           + a cos(E) n(a) sin(w) sqrt(1 - ee^2) 
-      / (ee cos(E) - 1)) cos(o)) 
-      ((a ee sin(E) sin(w) / sqrt(1 - ee^2) 
-          - a cos(w)) sin(o) 
-         - (a ee cos(w) sin(E) / sqrt(1 - ee^2) 
-      + a sin(w)) cos(ii) cos(o))
-&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;    bracketwa 
-      = ((a*(ee - cos(E)) sin(w) 
-            - a cos(w) sin(E) sqrt(1 - ee^2)) 
-           cos(o) 
-           + (a sin(E) sin(w) sqrt(1 - ee^2) 
-      - a*(cos(E) - ee) cos(w)) cos(ii) sin(o)) 
-          (((cos(w) n(a) sin(E) 
-      + a cos(w) n&amp;apos;(a) sin(E)) / (ee cos(E) - 1) 
-      + (cos(E) n(a) sin(w) sqrt(1 - ee^2) 
-           + a cos(E) n&amp;apos;(a) sin(w) 
-      sqrt(1 - ee^2)) / (ee cos(E) - 1)) cos(o) 
-             - ((n(a) sin(E) sin(w) 
-      + a n&amp;apos;(a) sin(E) sin(w)) / (ee cos(E) - 1) 
-      + (cos(E) cos(w) n(a) sqrt(1 - ee^2) 
-           + a cos(E) cos(w) n&amp;apos;(a) 
-      sqrt(1 - ee^2)) / (1 - ee cos(E))) cos(ii) 
-      sin(o)) 
-          + (((cos(w) n(a) sin(E) 
-      + a cos(w) n&amp;apos;(a) sin(E)) / (ee cos(E) - 1) 
-      + (cos(E) n(a) sin(w) sqrt(1 - ee^2) 
-           + a cos(E) n&amp;apos;(a) sin(w) 
-      sqrt(1 - ee^2)) / (ee cos(E) - 1)) sin(o) 
-      + ((n(a) sin(E) sin(w) 
-            + a n&amp;apos;(a) sin(E) sin(w)) 
-           / (ee cos(E) - 1) 
-           + (cos(E) cos(w) n(a) sqrt(1 - ee^2) 
-      + a cos(E) cos(w) n&amp;apos;(a) sqrt(1 - ee^2)) 
-      / (1 - ee cos(E))) cos(ii) cos(o)) 
-      ((a*(ee - cos(E)) sin(w) 
-          - a cos(w) sin(E) sqrt(1 - ee^2)) 
-         sin(o) 
-         + (a*(cos(E) - ee) cos(w) 
-      - a sin(E) sin(w) sqrt(1 - ee^2)) cos(ii) 
-             cos(o)) 
-          + ((n(a) sin(E) sin(w) 
-      + a n&amp;apos;(a) sin(E) sin(w)) / (ee cos(E) - 1) 
-      + (cos(E) cos(w) n(a) sqrt(1 - ee^2) 
-           + a cos(E) cos(w) n&amp;apos;(a) 
-      sqrt(1 - ee^2)) / (1 - ee cos(E))) 
-          (a*(cos(E) - ee) cos(w) 
-         - a sin(E) sin(w) sqrt(1 - ee^2)) 
-      sin(ii)^2 
-          + ((a cos(w) n(a) sin(E) 
-      / (ee cos(E) - 1) 
-      + a cos(E) n(a) sin(w) sqrt(1 - ee^2) 
-          / (ee cos(E) - 1)) cos(ii) sin(o) 
-      - (a n(a) sin(E) sin(w) / (1 - ee cos(E)) 
-           + a cos(E) cos(w) n(a) sqrt(1 - ee^2) 
-      / (ee cos(E) - 1)) cos(o)) 
-      (((cos(E) - ee) cos(w) 
-          - sin(E) sin(w) sqrt(1 - ee^2)) cos(o) 
-         - ((cos(E) - ee) sin(w) 
-      + cos(w) sin(E) sqrt(1 - ee^2)) cos(ii) 
-             sin(o)) 
-          - ((a n(a) sin(E) sin(w) 
-      / (1 - ee cos(E)) 
-      + a cos(E) cos(w) n(a) sqrt(1 - ee^2) 
-          / (ee cos(E) - 1)) sin(o) 
-      + (a cos(w) n(a) sin(E) / (ee cos(E) - 1) 
-           + a cos(E) n(a) sin(w) sqrt(1 - ee^2) 
-      / (ee cos(E) - 1)) cos(ii) cos(o)) 
-      (((cos(E) - ee) cos(w) 
-          - sin(E) sin(w) sqrt(1 - ee^2)) sin(o) 
-         + ((cos(E) - ee) sin(w) 
-      + cos(w) sin(E) sqrt(1 - ee^2)) cos(ii) 
-             cos(o)) 
-          - ((cos(E) - ee) sin(w) 
-      + cos(w) sin(E) sqrt(1 - ee^2)) 
-      (a cos(w) n(a) sin(E) / (ee cos(E) - 1) 
-         + a cos(E) n(a) sin(w) sqrt(1 - ee^2) 
-             / (ee cos(E) - 1)) sin(ii)^2
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;之後代入數值驗證，
-E 也是事先算好代入：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;# 虛擬碼
-[w, o, a, M, E, ii, ee, GM] = 
-[0.9, 1.1, 12000000, 0.456413411439, 0.47, 0.3, 0.03, 397778481800000]
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;n 則是定義成 a 的函數。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;ZFn
-sqrt(GM) / a^1.5
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;最後與講義上的公式比較，二者大約相同，
-代表符號微分正確。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;[ω, a] = 2877.42825411
-[Ω, e] = -1980999688.28
-&lt;/code&gt;&lt;/pre&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
-
-&lt;script src=&quot;ext/paper.js?reference&quot;&gt;&lt;/script&gt;
-
-&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/geomatics-rtx-csrs-compare.html#rtx-與-gpspark-和真值的差異</id>
 <title>A Preliminary Comparative Evaluation of Trimble RTX with CSRS-PPP</title>

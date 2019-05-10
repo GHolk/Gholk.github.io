@@ -1,0 +1,128 @@
+# grub 用時間控制重新開機到另一系統
+許多 linux 電腦是做成多重開機，
+可以在 linux 和 windows 間切換。
+linux 的開機管理員 grub，
+可以透過 `grub-reboot` 來設定下次重新開機的作業系統。
+但 grub-reboot 不能在 lvm 上運作，
+所以我用偵測時間的方式，
+在 grub 中偵測在特定時間內開機到另一 os，
+時間超過後再重新開機，即會重到 linux 下。
+
+## 原生的 grub-reboot
+grub-reboot 的運作原理，
+是在 grub 內讀寫 `/boot` 內的檔案，
+先把下一次要用的 os 寫在檔案裡，
+在進入 grub 後再改寫該檔案，再開機，
+即達到只開機到該作業系統一次的目的。
+
+```sh
+grub-reboot 2 # 開機到選單中第二個作業系統
+              # 選單從零開始算
+reboot # 之後要手動 reboot
+```
+
+但 grub 畢竟不是完整的作業系統，能做的事有限，
+像是不能讀寫 lvm，所以如果 boot 是在 lvm 中，
+就沒辦在 grub 中還原原本的開機選項。
+
+## 遠端在各作業系統中切換
+我之前在實驗室電腦的 windows 灌了幾個課業上要用的軟體，
+有時會需要重開到 windows，然後用 vnc 連線進去操作。
+所以希望可以在 linux 中用指令重開到 windows，
+同時在 windows 也能重開回 linux。
+
+有個辦法是在 windows 下掛載 linux，
+然後手動重寫 boot 中的開機選單。
+反正重開機就會回到 grub，
+只要能改開機選單，想去哪就去哪。
+但在 windows 中要讀寫 lvm 好像比較困難，
+以前只用過讀寫 ext2 的；
+目前沒有走這條路。
+
+## 用時間判斷要開機的作業系統
+所以我就寫了個 grub 腳本，
+判斷現在的時間是否在環境變數中的時間內，
+如果在時間內，就開機到環境變數中指定的作業系統。
+之後只要在 linux 中設定一小時內，
+grub 會開機到 windows，馬上重新開機就會進到 windows 了。
+過一小時後，重開機就會回到 linux。
+
+腳本至少需要一個內嵌在 `/boot/grub/grub.cfg` 中判斷，
+另外傳時間和要開機的 os 可以從 `/boot/grub/grubenv` 中傳。
+但為了方便我也有寫成腳本。
+總共有二個檔案，但二個不好管理，所以我把第一個內嵌到第二個裡。
+[腳本叫 grub-reboot-timeout，放在 github 上。][grub reboot entry]
+
+[grub reboot entry]: http://github.com/gholk/loco/blob/master/bin/grub-reboot-timeout.sh
+
+grub 好像還不能把命令的輸出存到變數內，
+所以有 time 命令也沒用，因為捕捉 time 的輸出來判斷。
+所以我判斷時間是用 datetime mod，
+載入後會把現在的時間存到變數，
+但 datetime 是把年月日時分開存，
+所以不能統一判斷時間差多少。
+我只簡單用是否是在同一小時判斷在時間內，
+同時用月中的日期判斷，避免過一天後同一時間誤判。
+
+## grub 的節構
+debian 系的 grub 腳本好像是用另一堆腳本產生的，
+所以要把那堆產生 grub 腳本的腳本放到 `/etc/grub.d/` 裡。
+我是放到 `42_reboot_env_timeout` 。
+
+```sh
+#!/bin/sh
+tail -n +7 "$0"
+exit
+
+## following script will be output to grub.cfg
+
+if [ -n "$gholk_reboot_entry" ]
+then
+    insmod datehook
+    if [ "$DAY" -eq "$gholk_reboot_date" -a \
+         "$HOUR" -eq "$gholk_reboot_hour" ]
+    then set default=$gholk_reboot_entry
+    fi
+fi
+```
+
+然後在呼叫 `update-grub` 時，
+就會依序執行 /etc/grub.d/ 裡的所有腳本，
+因為是用 exec tail 自己，
+就會輸出該檔案第三行開始的所有內容，然後退出。
+
+其實有另一種做法是把 exec 的命令放在 hash bang：
+
+```sh
+#!/bin/cat
+hello world
+```
+
+但問題是這樣的腳本不和 sh 相容，
+只有在直接用 `./script` 執行該檔案可用，
+如果用 `sh script` 就會忽略該行註解開頭，
+之後的內容 sh 看不懂就會報錯。
+
+所以較好的做法是用 `cat $0` 或 tail 輸出自身，
+就算 hash bang 不被解譯，
+仍是合法的 sh 腳本。
+
+## 只用變數判斷
+為了方便，所以我是透過傳入 grub 變數來重新開機。
+grub.cfg 在開機進 grub 後，
+會把 `/boot/grub/grubenv` 裡的內容讀進來。
+所以我在上面的腳本中判斷有沒有環境變數指定要開機到另一個系統，
+只要在 grubenv 中設了系統名和時限，
+就會在時限內重開機進該系統。
+
+而設 grub 變數最直接就是直接編輯 grubenv 這個文字檔，
+另外為了方便 grub 也有提供一個腳本 `grub-editenv`
+可以用命令編輯 grubenv，
+像 `grub-editenv /boot/grub/grubenv set boot_entry=2` 。
+所以我就在腳本內呼叫 grub-editenv 把重開機的選項傳進去，
+之後重開機就會進另一個系統了。
+
+#linux
+#開機
+#windows
+#grub

@@ -1,0 +1,165 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2019-05-20T04:58:06.412Z">
+<meta name="keywords" property="og:article:tag" content="shell,linux,github,自製">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="linux-grub-reboot-another-os.html" title="grub 用時間控制重新開機到另一系統">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>在 shell 中編程</title>
+</head>
+<body>
+<main><h1 id="在-shell-中編程">在 shell 中編程</h1>
+<p>雖然 shell 中有基礎的 for while 等用來批次處理的語法，
+但在寫較大規模的腳本時，編輯器還是較方便，
+但編輯器就得存成獨立的腳本，寫完要執行或要再改就較不方便。
+其實結合 bash 中的 fc，
+readline 中的 edit-and-execute-command、
+reverse-search-history 就能在互動式的 shell 中很方便的編輯腳本。
+我為了方便持久保存腳本，依據現有 fc 的功能 <a href="https://github.com/GHolk/loco/blob/b683322637dc50181ee059da8659a956504b4db3/bash_function#L78">自製了一個 fx</a> ，
+可以改寫現有腳本後在目前 shell 中執行，
+並可以從 history 中呼叫。</p>
+<h2 id="簡單的重用腳本">簡單的重用腳本</h2>
+<p>現在在整理資料，會需要大量用到 shell，
+有時寫了一二個大的迴圈來批次處理，
+又串了好幾個 awk sed cut paste。
+如果存成腳本，因為每次處理的細節很多不一樣，
+要重用一定要大規模改寫；
+但改寫後存檔執行 debug 又很麻煩，
+不如直接用 C-r 從歷史抓出來，直接改寫細節直接執行。</p>
+<p>但歷史記錄久了還是會不見，而且在 shell 中的編輯，
+要改一二處還算方便，但腳本一長、要改的地方一多，
+在 shell 中編輯就很麻煩。
+而且迴圈或多行命令在歷史中都會被壓成一行用分號隔開，
+在 shell 中行數超過一行就會折成多行，
+就會很難閱讀、編輯。
+於是有了研究怎麼讓自己在 shell 中比較好過的想法。</p>
+<h2 id="基礎的-shell-功能">基礎的 shell 功能</h2>
+<p>先來講解一次快捷鍵。
+shell 中最簡單的功能就是上下，
+對應到 ctrl 就是 C-p C-n，可以一次看一個歷史命令。</p>
+<p>如果要快速搜尋 <code>reverse-search-history</code> 
+快捷鍵是 C-r，可以用字串直接搜尋類似的命令；
+其中 C-r 後打了字串，如果不對，
+可以繼續輸入更完整的，或是再按一次 C-r 跳下一個類似的。
+如果看到想要的，可以直接 Enter 執行；
+或是按 C-e C-b C-f 之類任何移動的命令，
+就會把該命令放到目前編輯區，並跟據命令移動游標。
+如果 C-r 按了一輪都沒有想要的，
+可以直接 C-c 跳出歷史搜尋介面。</p>
+<h2 id="在-shell-中叫出編輯器">在 shell 中叫出編輯器</h2>
+<p>fc 則是另一個少人知道的 bash 功能，
+最簡單就是你打了一個超長的迴圈腳本，
+按了 enter 發現不小心打錯開始噴 error，
+趕快按 C-c 跳出來。
+這時候不用按 C-p 叫回上一個命令，在命令列苦苦編輯；
+直接打 fc 就能叫出你的 editor，
+在其中編輯上一個命令， <code>:wq</code> 後執行。</p>
+<p>fc 還有一些進階功能，像直接指定取代上一行的某字串，
+或是用數字跳到指定的歷史、用字串搜尋。
+但我認為 fc 指定歷史的方式太反人類了，
+誰會記得錯的是前幾個？
+而且我做錯事後通常會 ls 看一下現在狀況，
+而且我的 PS1 在命令報錯後會顯示紅字，
+看來超礙眼我都會多按幾次 enter 讓他消失。
+所以歷史的數字常會比我估的多一或二。</p>
+<p>這時就要來介紹另一個 readline 的功能
+<code>edit-and-execute-command</code> ，
+快捷鍵是 C-x C-e，類似 fc 可以叫出編輯器，
+但是直接把目前編輯區的內容放到編輯器裡。
+所以就不用再用 fc 記那些麻煩的參數，
+直接 C-b 選到想編輯的，或 C-r 搜出對應的，
+然後 C-x C-e 進編輯器就好了。</p>
+<hr>
+<p>其實這篇文章到這裡就可以完了，
+C-r 加上 C-x C-e 已經夠好用了。
+但還有自幹的 fx 和組合多個命令的小技巧，
+再撐一小段吧。</p>
+<hr>
+<h2 id="組合多個命令">組合多個命令</h2>
+<p>有時打完很長一串指令，想要改輸入的檔案，
+對多個檔案都跑一次，並把結果統一 pipe 出來，
+看要是寫入檔案或丟到 less 看。
+如果 C-p 只能叫出上一條，改了名字也只能執行一次；
+這時就就要用到命令群組的功能。</p>
+<p>之前有提過 <a href="shell-script-skill-fifo.html#%E7%94%A8%20head%20truncat%20stream">命令群組</a> ，
+可以把幾個命令包起來，把他們的輸入或輸出合併。
+這裡就用類似的作法，同時利用 bash 的特性：
+在括號沒閉合時不會執行命令。</p>
+<ol>
+<li>先用 C-p 叫回要改的命令，再 C-a 移到行首加一個 <code>(</code> 後按 enter。</li>
+<li>這時因為括號沒閉合，shell 會跳出 PS2 等你繼續輸入。</li>
+<li>在 PS2 下仍可以和 readline 互動，按二次 C-p 就能叫回原始的命令來改。</li>
+<li>最後改好了閉合括號，看要 pipe 給 less 還是輸出都行。</li>
+</ol>
+<pre><code class="lang-term">~/Downloads/sbas:$ datamash mean 3 pstdev 3 &lt; PGMVS_333.enh
+92.59441828168  0.75874830879182
+~/Downloads/sbas:$ datamash mean 3 pstdev 3 &lt; arrowGOLD333_GGA.enh
+92.691800785004 0.49780662429745
+~/Downloads/sbas:$ datamash mean 1 pstdev 1 mean 2 pstdev 2 mean 3 pstdev 3 &lt; PGMVS_333.enh                                                                     
+339277.53154386 0.25192874487642        -4181376.9902047        0.4160031737548192.59441828168  0.75874830879182
+~/Downloads/sbas:$ ( datamash mean 1 pstdev 1 mean 2 pstdev 2 mean 3 pstdev 3 &lt; PGMVS_333.enh                                                                   
+&gt; datamash mean 1 pstdev 1 mean 2 pstdev 2 mean 3 pstdev 3 &lt; arrowGOLD333_GGA.enh
+&gt; ) | less
+339277.53154386 0.25192874487642        -4181376.9902047        0.41600317375481        92.59441828168  0.75874830879182
+339277.7144999  0.21652884473733        -4181376.9958047        0.32255802936327        92.691800785004 0.49780662429745
+</code></pre>
+<h2 id="fx-修改現有腳本後執行">fx 修改現有腳本後執行</h2>
+<p>最後就是這篇文章的重頭戲， <a href="https://github.com/GHolk/loco/blob/b683322637dc50181ee059da8659a956504b4db3/bash_function#L78">我自己寫的 fx 腳本</a> ，
+主要用途是擴展 fc 的使用範圍。
+fc 和本文上述的內容，都只適用在編輯現有的歷史上，
+如果是想要從存檔的腳本編輯，就只能走老路，
+開編輯器後改好存檔，再手動執行。</p>
+<p>所以我寫了一個腳本 <a href="https://github.com/GHolk/loco/blob/b683322637dc50181ee059da8659a956504b4db3/bash_function#L78">fx</a> ，能用類似 fc 的作法編輯現有腳本並執行，
+而且結果會存到歷史記錄，如果不小心打錯，
+只要 C-p 就能叫回來改，C-x C-e 就再回到編輯器大改。
+如果要存成新檔，在 fx 開啟的編輯器裡也可以方便的 <code>:w new-script</code> 。</p>
+<p>我的 fx 用法很簡單，就直接 <code>fx some-script.sh</code> 就可以了，
+腳本可以直接指定檔案路徑，或會從 PATH 中搜尋。
+之後會用 vipe 開啟編輯器，原本的檔案不會改變，
+編輯完後存檔離開，就會把該腳本內容在目前 shell 內執行。
+同時，因為在目前 shell 執行的話，
+腳本內宣告的變數會遺留到 shell 裡，
+所以我在 vipe 中載入腳本後，會自動在首尾加上 <code>()</code> ，
+把整個腳本包在子 shell 中就不會汙染到 shell 了。
+如果希望留下變數，就自己再把括號刪掉就好了。</p>
+<p>然後我還做了不只是腳本，如果 fx 指定的名稱是 bash function，
+那就會輸出該函數內容到編輯器，如果是 alias 也是。
+只是函數和別名就不會用括號包在子 shell，
+因為多數時候要改函數或別名，就是要直接覆寫舊函數；
+不然也能在子 shell 中把函數名改掉，定義成新的函數。</p>
+<p>另外 fx 需要 vipe，vipe 是 moreutils 裡的一個小工具，
+可以把管道內容丟到 vi 裡，編輯後再繼續輸出到管道。
+最後，fx 目前是 bash function，沒有寫成獨立的腳本。
+因為如果寫成獨立的腳本，那在編輯既有函數時，
+就會在另一個 shell 執行，也不會留在原本 shell 內。
+所以得要用 function 才能改變原本的 shell。</p>
+<p>本來想再擴充 fx，能依不同的 shebang 自動判斷要用哪個直譯器，
+但後來想想這就真得搶了 ide 的工作了。
+支援 shell script 是因為在 shell 中使用的就是 shell script，
+如果其它語言應該直接用編輯器開來改，
+也不會像 shell script 會有用完即丟的特性，
+能在 history 中叫出也沒什麼用。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

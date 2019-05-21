@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-05-21T14:57:44.195Z</updated>
+  <updated>2019-05-21T15:10:29.157Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,154 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/satellite-geodesy-homework-6.html#summary-cryosat-gravity-anomaly</id>
+<title>衛星大地作業六</title>
+<published>2019-05-21T14:54:49.304Z</published>
+<updated>2019-05-21T15:10:29.142Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/satellite-geodesy-homework-6.html#summary-cryosat-gravity-anomaly"/>
+<summary type="html">&lt;pre class=&quot;diff&quot;&gt;@@ -3,8 +3,9 @@
+ 就能製做全球尺度的 DEM。
+ 許多低解析度的衛星測高資料都已是開放資料，
+ 只要選對衛星，就能輕易利用現有的歷史資料，
+-觀查過去地表的大規模高程變化。
+-例如北極溶冰、地層下陷、造山運動等。
++觀察過去地表的大規模高程變化。
++本作業用 cryosat-2 測得的海面高，
++經 inverse vening meinesz formula 計算重力異常。
+ 
+ ## CryoSat-2
+ 本次作業的資料是 CryoSat-2 衛星，
+&lt;/pre&gt;</summary>
+<category term="report"/>
+<category term="geomatics"/>
+<content type="html">&lt;h1 id=&quot;衛星大地作業六&quot;&gt;衛星大地作業六&lt;/h1&gt;
+&lt;p&gt;人造衛星普及的今日，只要在衛星上搭載雷達測高系統，
+就能製做全球尺度的 DEM。
+許多低解析度的衛星測高資料都已是開放資料，
+只要選對衛星，就能輕易利用現有的歷史資料，
+觀察過去地表的大規模高程變化。
+本作業用 cryosat-2 測得的海面高，
+經 inverse vening meinesz formula 計算重力異常。&lt;/p&gt;
+&lt;h2 id=&quot;CryoSat-2&quot;&gt;CryoSat-2&lt;/h2&gt;
+&lt;p&gt;本次作業的資料是 CryoSat-2 衛星，
+是歐洲太空總署的研究用衛星，
+主要目的是觀測極區的冰層厚度變化，
+也就是觀查溶冰情形。
+其軌道傾角為 92.03° ，
+代表能觀測 87.97° 為止的大部份極區。&lt;/p&gt;
+&lt;h2 id=&quot;運用高程計算重力&quot;&gt;運用高程計算重力&lt;/h2&gt;
+&lt;p&gt;衛星測高在海面上測得的就直接是海水面，
+而大地基準面就是定義為接近平均海水面的等位面。
+所以觀測到的海面高，扣除潮汐影響、海水面地形後，
+就能得到 geoid。&lt;/p&gt;
+&lt;h3 id=&quot;計算殘餘大地水準面梯度&quot;&gt;計算殘餘大地水準面梯度&lt;/h3&gt;
+&lt;p&gt;在 cryosat-2 測得的海面高，
+扣掉海面地型後就是實際測得的 geoid。
+而依物理大地的理論，會將 geoid 以球諧系數分解成不同波長，
+將上述實際測得的 geoid，扣掉長波長的粗略的變化，
+就剩下短波長的局部的 geoid，稱為殘餘大地水準面。&lt;/p&gt;
+&lt;p&gt;這裡是直接扣掉 egm08 的大地起伏模型，就當作扣掉了長波長，
+剩的就當作剩餘大地起伏。
+另外程式中還會將過大的離群值挑出到 outlier 這個文字檔。
+最後再將殘餘大地水準面沿衛星軌跡微分求梯度，
+就能得到 geoid 在衛星移動方向上的梯度，
+而大地起伏的梯度也就是垂線偏差，
+所以微分出來的結果就是在衛星軌跡方向上的垂線偏差。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;egm08_2160n_1m_119_123_21_26.grd3&lt;/code&gt;: EGM08 大地起伏。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cry2list.txt&lt;/code&gt;: 所有測高資料的索引。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;grad_c2&lt;/code&gt;: 輸出的大地起伏梯度。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;rio_05_mdt.grd3&lt;/code&gt;: 海水面地形。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bat&quot;&gt;rem The first step is download Cryosat-2 data from RADS using Matlab code RADS_read4bat.m. This part is done
+
+rem Step1: Compute residual geoid gradients
+debug\resgeoid_cryosat -Megm08_2160n_1m_119_121_21_23.grd3 -Fcry2list.txt -Ggrad_c2 -T25 -Ooutlier -N8 -Irio_05_mdt.grd3
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;計算殘餘重力異常&quot;&gt;計算殘餘重力異常&lt;/h3&gt;
+&lt;p&gt;接下來是主要的計算：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;rem Compute residual gravity anomalies using the Inverse Vening Meinesz formula (IVM)
+
+rem Step 1: Compute north and east gradients
+debug\gridg grad_c2 -Ccov_egm08(2160).txt -R119/121/21/23 -I1/1 -W10 -Nnorth_grad_geo.grd3 -Eeast_grad_geo.grd3 &amp;gt;gridg.out
+
+rem Step 2: Compute residual gravity anomaly
+debug\gift -Nnorth_grad_geo.grd3 -Eeast_grad_geo.grd3 -Gtmp1_1012.grd3 -V
+
+rem Step 3: Compute innermost zone effect on gravity anomaly
+debug\inzone -Nnorth_grad_geo.grd3 -Eeast_grad_geo.grd3  -Gtmp2_1012.grd3
+
+rem Step 4: Restore the EGM08 gravity anomaly
+debug\gridadd -Atmp1_1012.grd3 -Begm08_2160g_1m_119_121_21_23.grd3 -Gtmp3_1012.grd3
+debug\gridadd -Atmp3_1012.grd3 -Btmp2_1012.grd3 -Givm_g_1012.grd3
+
+debug\grd3togrd ivm_g_1012.grd3 |xyz2grd -Z -R119/121/21/23 -I1m -Gtw_ga.grd
+&lt;/code&gt;&lt;/pre&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;將上述沿軌跡的垂線偏差化算成南北和東西方向分量，
+由特定方向上複原回二方向上時，
+需要用到共變異矩陣 &lt;code&gt;cov_egm08(2160).txt&lt;/code&gt; 。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;再依據 inverse Vening Meinesz formula 
+由東西與南北二方向上的垂線偏差，計算出重力異常。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;但由於在重力場的 stoke 積分，
+在接近待測點距離接近 0 時，
+會發散為奇異解，所以要另外處理。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;將 2 3 的結果相加，就是用殘餘大地起伏計算出來的殘餘重力異常；
+再把 egm08 的重力異常加回去，就得到完整的重力異常。&lt;/p&gt;
+&lt;p&gt;最後再將重力異常網格轉成 gmt 能讀取的格式，方便之後繪圖。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;gmt-繪圖&quot;&gt;gmt 繪圖&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;Rem Step3 is to plot gravity anomalies
+makecpt -Crainbow -T-250/250/25 -Z &amp;gt;aaa.cpt
+grdimage tw_ga.grd -R119/121/21/23 -B1 -Caaa.cpt -JM17c -K -Y2c -P &amp;gt;HW7_ex.ps
+pscoast -R -JM -Dh -W1 -G150 -O -K &amp;gt;&amp;gt;HW7_ex.ps
+psscale -D8.5c/-1c/17c/0.15ch -O -Caaa.cpt -B50 &amp;gt;&amp;gt;HW7_ex.ps
+&lt;/code&gt;&lt;/pre&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;設定彩色，範圍為 -250 到 250。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;用轉好的 grd 格式繪圖，範圍為 119/121/21/23。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;將圖加上海岸線。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;將圖加上顏色尺度。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/40931878223&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/40931878223_79926494a1.jpg&quot; alt=&quot;gravity-anomaly-cryosat-120-22.png&quot; title=&quot;GMT 畫出的 119-121E,21-23N 重力異常&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;inverse-vening-meinesz-formula&quot;&gt;inverse vening meinesz formula&lt;/h2&gt;
+&lt;p&gt;vening meinesz 公式是用重力異常計算垂線偏差的公式，
+而 inverse vening meinesz 公式則是試著逆推，
+由垂線偏差反推出重力異常。
+另外由於垂線偏差也就是大地起伏的梯度，
+只要對垂線偏差積分，就能得到大地起伏。&lt;/p&gt;
+&lt;p&gt;而作業中，是將衛星測高的海面高
+化算為大地基準面，取梯度得到垂線偏差，
+再用 inverse vening meinesz 公式的程式 gift，
+從垂線偏差計算重力異常。&lt;/p&gt;
+&lt;h2 id=&quot;重力異常與地質結構&quot;&gt;重力異常與地質結構&lt;/h2&gt;
+&lt;p&gt;上述的重力異常，與海底地型圖比較後，可以看出相關。
+例如琉球嶼以東的重力異常較低，約略是海底地型的枋寮峽谷；
+在較西側則有澎湖峽谷，中間的高屏峽谷則不太明顯。
+最南方的凹陷可能是福爾摩沙峽谷到馬尼拉海溝的凹陷。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://mynotes.org/earth/wp-content/uploads/2012/06/6441231253106.jpg&quot; alt=&quot;sea topography&quot; title=&quot;台灣周遭海底地型&quot;&gt;&lt;/p&gt;
+&lt;script src=&quot;ext/paper.js?reference&quot;&gt;&lt;/script&gt;
+
+&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
+
+&lt;style&gt;
+code {
+  border: none;
+}
+pre &gt; code {
+  white-space: pre-wrap !important;
+}
+&lt;/style&gt;
+
+&lt;script src=&quot;ext/header-nctu.js?editable&amp;amp;execute&quot;&gt;&lt;/script&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/satellite-geodesy-homework-6.html</id>
 <title>衛星大地作業六</title>
 <published>2019-05-21T14:54:49.304Z</published>
@@ -1211,106 +1359,7 @@ PC 一樣要下 &lt;code&gt;adb connect $your_android_ip&lt;/code&gt; 。&lt;/p&
 <category term="root"/>
 <category term="無線"/>
 <category term="wifi"/>
-<content type="html">&lt;h1 id=&quot;pv 控制 pipe 的速度&quot;&gt;pv 控制 pipe 的速度&lt;/h1&gt;
-&lt;p&gt;因為想控制某些程式的傳輸速度，
-所以想找找看有沒有 linux 命令
-像節流閥那樣限制通過的速度，
-就找到一個叫 pv 的小工具，
-不只是節流閥，還可以做流量統計。
-隔天想想其實也可以自己用 shell script 寫一個土炮版本的。&lt;/p&gt;
-&lt;h2 id=&quot;透過 wifi 傳檔案但手機和筆電不合&quot;&gt;透過 wifi 傳檔案但手機和筆電不合&lt;/h2&gt;
-&lt;p&gt;我習慣用筆電開熱點，把有線網路分享給手機無線上網。
-然後就能用 ftp 或 adb 傳檔案，省去 usb 線的麻煩。
-但我的筆電好像和手機不合，如果 wifi 流量太大手機會自動斷線。
-所以要嘛用 ftp 的斷點續傳，要嘛手動控制傳輸速度。&lt;/p&gt;
-&lt;h2 id=&quot;ftp 斷點續傳&quot;&gt;ftp 斷點續傳&lt;/h2&gt;
-&lt;p&gt;ftp 支援斷點續傳，所以可以無腦重傳，
-用 shell script 控制只要斷線就重傳的無窮迴圈就好了。
-其實我用的是 sftp，然後我習慣把手機寫到 &lt;code&gt;ssh_config&lt;/code&gt; 裡，
-就能用 alias 連線。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;while echo &amp;apos;reput -r my-file/&amp;apos; | sftp atom
-do
-    sleep 1s
-done
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;用 adb 傳送檔案的二種方法&quot;&gt;用 adb 傳送檔案的二種方法&lt;/h2&gt;
-&lt;p&gt;另一招就是用 adb，我的手機有 root，
-所以能 &lt;a href=&quot;adb-over-wifi.html&quot;&gt;用 app 設定透過 wifi 連結 adb。&lt;/a&gt;
-連上後可以用 adb push 傳檔案，或是用 shell 傳。
-adb push 我不會控制速度，以我的經驗就是速度會吃滿，
-然後手機就斷線了。
-&lt;a href=&quot;linux-easy-shell-send-file.html#adb%20也可以通&quot;&gt;shell 就是之前提過用 pipe 傳，&lt;/a&gt;
-我就想如果中間加個管道命令，像節流閥那樣就能控制速度了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# 用 adb
-adb push my-file/ /sdcard/
 
-# 用 shell
-tar -zcf - my-file/ | adb shell tar -C /sdcard/ -zxf -
-
-# 如果有節流閥
-tar -zcf - my-file/ \
-    | pipe-speed-controll --max-per-second 200k \
-    | adb shell tar -C /sdcard/ -zxf -
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;管道哲學的好處就是，可以方便的內嵌各種工具。
-像如果要做壓縮，就在收發端各加個 gzip 命令，
-（不過上面的 tar 已經在打包時壓縮了。）
-要用 ascii 傳，就加個 base64。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# 手動用 gzip 壓縮
-tar -cf - my-file/ \
-    | gzip -c - \
-    | adb shell &amp;apos;zcat - | tar -C /sdcard/ -xf -&amp;apos;
-
-# base64
-tar -cf - my-file/ \
-    | base64 - \
-    | adb shell &amp;apos;base64 -d - | tar -C /sdcard/ -xf -&amp;apos;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;流量工具 pv&quot;&gt;流量工具 pv&lt;/h2&gt;
-&lt;p&gt;於是 google 後就找到一個叫 pv 的工具，
-全名是 pipe-view，不只有節流閥功能，還有流量統計。
-基本上和 cat 相同都是把輸入轉到輸出，
-但就是多了流量控制、統計的功能。&lt;/p&gt;
-&lt;p&gt;例如限制流量為 200k/s，
-同時 pv 會自動統計流量，輸出到 standard error：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;tar -zcf - my-file/ \
-    | pv --rate-limit 200k \
-    | adb shell tar -C /sdcard/ -xf -
-# 輸出
-# 2.05MiB 0:00:07 [ 301KiB/s] [      &amp;lt;=&amp;gt;  ]
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;另外也可以改成控制 buffer 大小。
-總之是個實用的小工具，
-在 debian 可以直接用 &lt;code&gt;apt install pv&lt;/code&gt; 安裝。&lt;/p&gt;
-&lt;h2 id=&quot;用 shell script 徒手實現 pv&quot;&gt;用 shell script 徒手實現 pv&lt;/h2&gt;
-&lt;p&gt;隔天發白日夢時，忽然想到 pv 的功能其實可以用 shell script 實現，
-只要用 sleep 控制一秒讀一次，head 則控制讀多少資料。
-或說每 sleep 一秒，就用 head 讀固定量的資料。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;my_pv() {
-    local byte=$1
-    while sleep 1s
-    do
-        head -c $byte
-    done
-}
-yes | my_pv 8
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;但這樣在流量慢時會一直卡在 sleep 那邊，
-sleep 整整一秒後才開始讀資料。
-改善方式是可以把 sleep 丟到背景執行，
-就能馬上在一秒期間內 sleep 的同時執行 head，
-再用 wait 確保上一次 sleep 退出後再開始下一次讀取。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;my_pv() {
-    local byte=$1
-    while wait
-    do
-        head -c $byte
-        sleep 1s &amp;amp;
-    done
-}
-yes | my_pv 200
-&lt;/code&gt;&lt;/pre&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/geomatics-rtx-csrs-compare.html#rtx-與-gpspark-和真值的差異</id>
 <title>A Preliminary Comparative Evaluation of Trimble RTX with CSRS-PPP</title>

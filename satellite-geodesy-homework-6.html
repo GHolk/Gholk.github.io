@@ -1,0 +1,159 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2019-05-21T14:54:49.304Z">
+<meta name="keywords" property="og:article:tag" content="report,geomatics">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="shell-interact-dangle-program.html" title="在 shell 中編程">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>衛星大地作業六</title>
+</head>
+<body>
+<main><h1 id="衛星大地作業六">衛星大地作業六</h1>
+<p>人造衛星普及的今日，只要在衛星上搭載雷達測高系統，
+就能製做全球尺度的 DEM。
+許多低解析度的衛星測高資料都已是開放資料，
+只要選對衛星，就能輕易利用現有的歷史資料，
+觀查過去地表的大規模高程變化。
+例如北極溶冰、地層下陷、造山運動等。</p>
+<h2 id="CryoSat-2">CryoSat-2</h2>
+<p>本次作業的資料是 CryoSat-2 衛星，
+是歐洲太空總署的研究用衛星，
+主要目的是觀測極區的冰層厚度變化，
+也就是觀查溶冰情形。
+其軌道傾角為 92.03° ，
+代表能觀測 87.97° 為止的大部份極區。</p>
+<h2 id="運用高程計算重力">運用高程計算重力</h2>
+<p>衛星測高在海面上測得的就直接是海水面，
+而大地基準面就是定義為接近平均海水面的等位面。
+所以觀測到的海面高，扣除潮汐影響、海水面地形後，
+就能得到 geoid。</p>
+<h3 id="計算殘餘大地水準面梯度">計算殘餘大地水準面梯度</h3>
+<p>在 cryosat-2 測得的海面高，
+扣掉海面地型後就是實際測得的 geoid。
+而依物理大地的理論，會將 geoid 以球諧系數分解成不同波長，
+將上述實際測得的 geoid，扣掉長波長的粗略的變化，
+就剩下短波長的局部的 geoid，稱為殘餘大地水準面。</p>
+<p>這裡是直接扣掉 egm08 的大地起伏模型，就當作扣掉了長波長，
+剩的就當作剩餘大地起伏。
+另外程式中還會將過大的離群值挑出到 outlier 這個文字檔。
+最後再將殘餘大地水準面沿衛星軌跡微分求梯度，
+就能得到 geoid 在衛星移動方向上的梯度，
+而大地起伏的梯度也就是垂線偏差，
+所以微分出來的結果就是在衛星軌跡方向上的垂線偏差。</p>
+<ul>
+<li><code>egm08_2160n_1m_119_123_21_26.grd3</code>: EGM08 大地起伏。</li>
+<li><code>cry2list.txt</code>: 所有測高資料的索引。</li>
+<li><code>grad_c2</code>: 輸出的大地起伏梯度。</li>
+<li><code>rio_05_mdt.grd3</code>: 海水面地形。</li>
+</ul>
+<pre><code class="lang-bat">rem The first step is download Cryosat-2 data from RADS using Matlab code RADS_read4bat.m. This part is done
+
+rem Step1: Compute residual geoid gradients
+debug\resgeoid_cryosat -Megm08_2160n_1m_119_121_21_23.grd3 -Fcry2list.txt -Ggrad_c2 -T25 -Ooutlier -N8 -Irio_05_mdt.grd3
+</code></pre>
+<h3 id="計算殘餘重力異常">計算殘餘重力異常</h3>
+<p>接下來是主要的計算：</p>
+<pre><code>rem Compute residual gravity anomalies using the Inverse Vening Meinesz formula (IVM)
+
+rem Step 1: Compute north and east gradients
+debug\gridg grad_c2 -Ccov_egm08(2160).txt -R119/121/21/23 -I1/1 -W10 -Nnorth_grad_geo.grd3 -Eeast_grad_geo.grd3 &gt;gridg.out
+
+rem Step 2: Compute residual gravity anomaly
+debug\gift -Nnorth_grad_geo.grd3 -Eeast_grad_geo.grd3 -Gtmp1_1012.grd3 -V
+
+rem Step 3: Compute innermost zone effect on gravity anomaly
+debug\inzone -Nnorth_grad_geo.grd3 -Eeast_grad_geo.grd3  -Gtmp2_1012.grd3
+
+rem Step 4: Restore the EGM08 gravity anomaly
+debug\gridadd -Atmp1_1012.grd3 -Begm08_2160g_1m_119_121_21_23.grd3 -Gtmp3_1012.grd3
+debug\gridadd -Atmp3_1012.grd3 -Btmp2_1012.grd3 -Givm_g_1012.grd3
+
+debug\grd3togrd ivm_g_1012.grd3 |xyz2grd -Z -R119/121/21/23 -I1m -Gtw_ga.grd
+</code></pre><ol>
+<li><p>將上述沿軌跡的垂線偏差化算成南北和東西方向分量，
+由特定方向上複原回二方向上時，
+需要用到共變異矩陣 <code>cov_egm08(2160).txt</code> 。</p>
+</li>
+<li><p>再依據 inverse Vening Meinesz formula 
+由東西與南北二方向上的垂線偏差，計算出重力異常。</p>
+</li>
+<li><p>但由於在重力場的 stoke 積分，
+在接近待測點距離接近 0 時，
+會發散為奇異解，所以要另外處理。</p>
+</li>
+<li><p>將 2 3 的結果相加，就是用殘餘大地起伏計算出來的殘餘重力異常；
+再把 egm08 的重力異常加回去，就得到完整的重力異常。</p>
+<p>最後再將重力異常網格轉成 gmt 能讀取的格式，方便之後繪圖。</p>
+</li>
+</ol>
+<h3 id="gmt-繪圖">gmt 繪圖</h3>
+<pre><code>Rem Step3 is to plot gravity anomalies
+makecpt -Crainbow -T-250/250/25 -Z &gt;aaa.cpt
+grdimage tw_ga.grd -R119/121/21/23 -B1 -Caaa.cpt -JM17c -K -Y2c -P &gt;HW7_ex.ps
+pscoast -R -JM -Dh -W1 -G150 -O -K &gt;&gt;HW7_ex.ps
+psscale -D8.5c/-1c/17c/0.15ch -O -Caaa.cpt -B50 &gt;&gt;HW7_ex.ps
+</code></pre><ol>
+<li><p>設定彩色，範圍為 -250 到 250。</p>
+</li>
+<li><p>用轉好的 grd 格式繪圖，範圍為 119/121/21/23。</p>
+</li>
+<li><p>將圖加上海岸線。</p>
+</li>
+<li><p>將圖加上顏色尺度。</p>
+</li>
+</ol>
+<p><a href="http://www.flickr.com/photos/144554087@N04/40931878223"><img src="http://farm66.staticflickr.com/65535/40931878223_79926494a1.jpg" alt="gravity-anomaly-cryosat-120-22.png" title="GMT 畫出的 119-121E,21-23N 重力異常"></a></p>
+<h2 id="inverse-vening-meinesz-formula">inverse vening meinesz formula</h2>
+<p>vening meinesz 公式是用重力異常計算垂線偏差的公式，
+而 inverse vening meinesz 公式則是試著逆推，
+由垂線偏差反推出重力異常。
+另外由於垂線偏差也就是大地起伏的梯度，
+只要對垂線偏差積分，就能得到大地起伏。</p>
+<p>而作業中，是將衛星測高的海面高
+化算為大地基準面，取梯度得到垂線偏差，
+再用 inverse vening meinesz 公式的程式 gift，
+從垂線偏差計算重力異常。</p>
+<h2 id="重力異常與地質結構">重力異常與地質結構</h2>
+<p>上述的重力異常，與海底地型圖比較後，可以看出相關。
+例如琉球嶼以東的重力異常較低，約略是海底地型的枋寮峽谷；
+在較西側則有澎湖峽谷，中間的高屏峽谷則不太明顯。
+最南方的凹陷可能是福爾摩沙峽谷到馬尼拉海溝的凹陷。</p>
+<p><img src="http://mynotes.org/earth/wp-content/uploads/2012/06/6441231253106.jpg" alt="sea topography" title="台灣周遭海底地型"></p>
+<script src="ext/paper.js?reference"></script>
+
+<link rel="stylesheet" href="ext/paper.css">
+
+<style>
+code {
+  border: none;
+}
+pre > code {
+  white-space: pre-wrap !important;
+}
+</style>
+
+<script src="ext/header-nctu.js?editable&amp;execute"></script>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-05-20T05:18:53.897Z</updated>
+  <updated>2019-05-21T14:57:44.195Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,146 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/satellite-geodesy-homework-6.html</id>
+<title>衛星大地作業六</title>
+<published>2019-05-21T14:54:49.304Z</published>
+<updated>2019-05-21T14:57:44.183Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/satellite-geodesy-homework-6.html"/>
+<summary type="html">人造衛星普及的今日，只要在衛星上搭載雷達測高系統，
+就能製做全球尺度的 DEM。
+許多低解析度的衛星測高資料都已是開放資料，
+只要選對衛星，就能輕易利用現有的歷史資料，
+觀查過去地表的大規模高程變化。
+例如北極溶冰、地層下陷、造山運動等。</summary>
+<category term="report"/>
+<category term="geomatics"/>
+<content type="html">&lt;h1 id=&quot;衛星大地作業六&quot;&gt;衛星大地作業六&lt;/h1&gt;
+&lt;p&gt;人造衛星普及的今日，只要在衛星上搭載雷達測高系統，
+就能製做全球尺度的 DEM。
+許多低解析度的衛星測高資料都已是開放資料，
+只要選對衛星，就能輕易利用現有的歷史資料，
+觀查過去地表的大規模高程變化。
+例如北極溶冰、地層下陷、造山運動等。&lt;/p&gt;
+&lt;h2 id=&quot;CryoSat-2&quot;&gt;CryoSat-2&lt;/h2&gt;
+&lt;p&gt;本次作業的資料是 CryoSat-2 衛星，
+是歐洲太空總署的研究用衛星，
+主要目的是觀測極區的冰層厚度變化，
+也就是觀查溶冰情形。
+其軌道傾角為 92.03° ，
+代表能觀測 87.97° 為止的大部份極區。&lt;/p&gt;
+&lt;h2 id=&quot;運用高程計算重力&quot;&gt;運用高程計算重力&lt;/h2&gt;
+&lt;p&gt;衛星測高在海面上測得的就直接是海水面，
+而大地基準面就是定義為接近平均海水面的等位面。
+所以觀測到的海面高，扣除潮汐影響、海水面地形後，
+就能得到 geoid。&lt;/p&gt;
+&lt;h3 id=&quot;計算殘餘大地水準面梯度&quot;&gt;計算殘餘大地水準面梯度&lt;/h3&gt;
+&lt;p&gt;在 cryosat-2 測得的海面高，
+扣掉海面地型後就是實際測得的 geoid。
+而依物理大地的理論，會將 geoid 以球諧系數分解成不同波長，
+將上述實際測得的 geoid，扣掉長波長的粗略的變化，
+就剩下短波長的局部的 geoid，稱為殘餘大地水準面。&lt;/p&gt;
+&lt;p&gt;這裡是直接扣掉 egm08 的大地起伏模型，就當作扣掉了長波長，
+剩的就當作剩餘大地起伏。
+另外程式中還會將過大的離群值挑出到 outlier 這個文字檔。
+最後再將殘餘大地水準面沿衛星軌跡微分求梯度，
+就能得到 geoid 在衛星移動方向上的梯度，
+而大地起伏的梯度也就是垂線偏差，
+所以微分出來的結果就是在衛星軌跡方向上的垂線偏差。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;egm08_2160n_1m_119_123_21_26.grd3&lt;/code&gt;: EGM08 大地起伏。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cry2list.txt&lt;/code&gt;: 所有測高資料的索引。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;grad_c2&lt;/code&gt;: 輸出的大地起伏梯度。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;rio_05_mdt.grd3&lt;/code&gt;: 海水面地形。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bat&quot;&gt;rem The first step is download Cryosat-2 data from RADS using Matlab code RADS_read4bat.m. This part is done
+
+rem Step1: Compute residual geoid gradients
+debug\resgeoid_cryosat -Megm08_2160n_1m_119_121_21_23.grd3 -Fcry2list.txt -Ggrad_c2 -T25 -Ooutlier -N8 -Irio_05_mdt.grd3
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;計算殘餘重力異常&quot;&gt;計算殘餘重力異常&lt;/h3&gt;
+&lt;p&gt;接下來是主要的計算：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;rem Compute residual gravity anomalies using the Inverse Vening Meinesz formula (IVM)
+
+rem Step 1: Compute north and east gradients
+debug\gridg grad_c2 -Ccov_egm08(2160).txt -R119/121/21/23 -I1/1 -W10 -Nnorth_grad_geo.grd3 -Eeast_grad_geo.grd3 &amp;gt;gridg.out
+
+rem Step 2: Compute residual gravity anomaly
+debug\gift -Nnorth_grad_geo.grd3 -Eeast_grad_geo.grd3 -Gtmp1_1012.grd3 -V
+
+rem Step 3: Compute innermost zone effect on gravity anomaly
+debug\inzone -Nnorth_grad_geo.grd3 -Eeast_grad_geo.grd3  -Gtmp2_1012.grd3
+
+rem Step 4: Restore the EGM08 gravity anomaly
+debug\gridadd -Atmp1_1012.grd3 -Begm08_2160g_1m_119_121_21_23.grd3 -Gtmp3_1012.grd3
+debug\gridadd -Atmp3_1012.grd3 -Btmp2_1012.grd3 -Givm_g_1012.grd3
+
+debug\grd3togrd ivm_g_1012.grd3 |xyz2grd -Z -R119/121/21/23 -I1m -Gtw_ga.grd
+&lt;/code&gt;&lt;/pre&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;將上述沿軌跡的垂線偏差化算成南北和東西方向分量，
+由特定方向上複原回二方向上時，
+需要用到共變異矩陣 &lt;code&gt;cov_egm08(2160).txt&lt;/code&gt; 。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;再依據 inverse Vening Meinesz formula 
+由東西與南北二方向上的垂線偏差，計算出重力異常。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;但由於在重力場的 stoke 積分，
+在接近待測點距離接近 0 時，
+會發散為奇異解，所以要另外處理。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;將 2 3 的結果相加，就是用殘餘大地起伏計算出來的殘餘重力異常；
+再把 egm08 的重力異常加回去，就得到完整的重力異常。&lt;/p&gt;
+&lt;p&gt;最後再將重力異常網格轉成 gmt 能讀取的格式，方便之後繪圖。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;gmt-繪圖&quot;&gt;gmt 繪圖&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;Rem Step3 is to plot gravity anomalies
+makecpt -Crainbow -T-250/250/25 -Z &amp;gt;aaa.cpt
+grdimage tw_ga.grd -R119/121/21/23 -B1 -Caaa.cpt -JM17c -K -Y2c -P &amp;gt;HW7_ex.ps
+pscoast -R -JM -Dh -W1 -G150 -O -K &amp;gt;&amp;gt;HW7_ex.ps
+psscale -D8.5c/-1c/17c/0.15ch -O -Caaa.cpt -B50 &amp;gt;&amp;gt;HW7_ex.ps
+&lt;/code&gt;&lt;/pre&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;設定彩色，範圍為 -250 到 250。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;用轉好的 grd 格式繪圖，範圍為 119/121/21/23。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;將圖加上海岸線。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;將圖加上顏色尺度。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/40931878223&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/40931878223_79926494a1.jpg&quot; alt=&quot;gravity-anomaly-cryosat-120-22.png&quot; title=&quot;GMT 畫出的 119-121E,21-23N 重力異常&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;inverse-vening-meinesz-formula&quot;&gt;inverse vening meinesz formula&lt;/h2&gt;
+&lt;p&gt;vening meinesz 公式是用重力異常計算垂線偏差的公式，
+而 inverse vening meinesz 公式則是試著逆推，
+由垂線偏差反推出重力異常。
+另外由於垂線偏差也就是大地起伏的梯度，
+只要對垂線偏差積分，就能得到大地起伏。&lt;/p&gt;
+&lt;p&gt;而作業中，是將衛星測高的海面高
+化算為大地基準面，取梯度得到垂線偏差，
+再用 inverse vening meinesz 公式的程式 gift，
+從垂線偏差計算重力異常。&lt;/p&gt;
+&lt;h2 id=&quot;重力異常與地質結構&quot;&gt;重力異常與地質結構&lt;/h2&gt;
+&lt;p&gt;上述的重力異常，與海底地型圖比較後，可以看出相關。
+例如琉球嶼以東的重力異常較低，約略是海底地型的枋寮峽谷；
+在較西側則有澎湖峽谷，中間的高屏峽谷則不太明顯。
+最南方的凹陷可能是福爾摩沙峽谷到馬尼拉海溝的凹陷。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://mynotes.org/earth/wp-content/uploads/2012/06/6441231253106.jpg&quot; alt=&quot;sea topography&quot; title=&quot;台灣周遭海底地型&quot;&gt;&lt;/p&gt;
+&lt;script src=&quot;ext/paper.js?reference&quot;&gt;&lt;/script&gt;
+
+&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
+
+&lt;style&gt;
+code {
+  border: none;
+}
+pre &gt; code {
+  white-space: pre-wrap !important;
+}
+&lt;/style&gt;
+
+&lt;script src=&quot;ext/header-nctu.js?editable&amp;amp;execute&quot;&gt;&lt;/script&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/shell-interact-dangle-program.html</id>
 <title>在 shell 中編程</title>
 <published>2019-05-20T04:58:06.412Z</published>
@@ -1183,670 +1323,7 @@ yes | my_pv 200
 <category term="geomatics"/>
 <category term="gnss"/>
 <category term="csrs"/>
-<content type="html">&lt;h1 id=&quot;A Preliminary Comparative Evaluation of Trimble RTX with CSRS-PPP&quot;&gt;A Preliminary Comparative Evaluation of Trimble RTX with CSRS-PPP&lt;/h1&gt;
-&lt;p&gt;Kinematic positioning has important applications in bathymetric mapping,
-vehicle navigation, and many others. This study comparatively evaluated
-the differences among the real time kinematic positioning with Trimble
-CenterPoint RTX service and the post-processing kinematic solution
-obtained from CSRS-PPP service. The comparison is based on the data
-collected on Dec. 16 to 22, 2017 on a CORS station, NSB0. From
-observations made on these days, the standard deviation of height
-differences between these two services is 0.057m, while the bias is
-0.080m. As compared with the official coordinates of this CORS, CSRS-PPP
-shows better agreement.&lt;/p&gt;
-&lt;h2 id=&quot;rtx 與 csrs-ppp&quot;&gt;rtx 與 csrs-ppp&lt;/h2&gt;
-&lt;p&gt;rtx 與 csrs-ppp 都是基於 GNSS 系統的絕對定位。
-rtx 是星基增益的即時動態定位，
-藉由地面站即時解算部份地區的精密星曆，
-並由網路或衛星廣播到使用者端，
-可以實現即時動態基於載波相位的絕對定位。&lt;/p&gt;
-&lt;h3 id=&quot;rtx 相對傳統 VBS-RTK 的優勢&quot;&gt;rtx 相對傳統 VBS-RTK 的優勢&lt;/h3&gt;
-&lt;p&gt;且相較於傳統的即時動態差分定位，
-星基增益系統不需要受限於基站與虛擬基站。
-傳統的差分定位，需要架站基站，
-或是以基站網內差出虛擬基站。
-虛擬基站雖然免除架站基站的困擾，
-但需要為每個使用者都內差計算出不同的虛擬基站。&lt;/p&gt;
-&lt;p&gt;而 rtx 等星基增益技術，只要有固定數量的靜態衛星接收站，
-即可即時解算出衛星的精密星曆，透過廣播服務所有使用者。
-由於所有使用者需要的是相同的星曆，
-不會像 vbs 因使用者增加而加重計算負擔，
-透過衛星廣播訊號的話，可以服務無上限人數的使用者。&lt;/p&gt;
-&lt;h3 id=&quot;csrs-ppp&quot;&gt;csrs-ppp&lt;/h3&gt;
-&lt;p&gt;csrs-ppp 是 &lt;strong&gt;加拿大自然資源局&lt;/strong&gt; 提供的線上解算精密單點定位服務，
-允許使用者在網頁介面上提交 rinex 格式的觀測資料，
-在伺服器端解算完畢後，會將成果 email 到使用者信箱。&lt;/p&gt;
-&lt;p&gt;csrs-ppp 為服務名稱，其內部使用的軟體有過變化，
-舊版軟體為 gpspace，現行的新版為 gpspark。
-&lt;a href=&quot;https://github.com/CGS-GIS/GPSPACE/&quot; title=&quot;csrs 開源 gpspace&quot;&gt;舊版 gpspace 已開源在 github 上，可以自行編譯取用；&lt;/a&gt;
-而新版 gpspark 仍在活躍開發中，沒有釋出原始碼，
-只有透過網頁介面提供服務，也就是現今的 csrs-ppp。&lt;/p&gt;
-&lt;h3 id=&quot;rtx 與 ppp 的異同&quot;&gt;rtx 與 ppp 的異同&lt;/h3&gt;
-&lt;p&gt;rtx 是即時動態定位，
-csrs-ppp 則要在觀測後輸出觀測檔案上傳，非即時定位。
-而 csrs-ppp 在解算時，可以解算移動中觀測的觀測檔，
-也就是動態定位；亦能假設接收儀是在固定座標，解算靜態定位。
-且 rtx 與 csrs-ppp 均是屬於基於載波相位的精密單點定位，
-rtx 使用的是即時解算的星曆，ppp 使用的則是事後解算的精密星曆。
-二者在理論上相似。&lt;/p&gt;
-&lt;h2 id=&quot;數據與解算&quot;&gt;數據與解算&lt;/h2&gt;
-&lt;p&gt;數據為 2017-12-16 到 2017-12-22 間觀測，
-測站位置為 TWD97 的固定衛星追蹤站 LSB0。
-rtx 數據為即時定位的座標，
-同時有使用傳統 gnss 接收儀，
-輸出 T02 格式並在事後轉換為 rinex 格式。
-csrs-ppp 再以 rinex 格式觀測檔進行精密單點定位。&lt;/p&gt;
-&lt;p&gt;總共會有四種定位方式的結果座標，
-分別為 rtx、gpspace、gpspark、座標真值。&lt;/p&gt;
-&lt;h3 id=&quot;座標真值&quot;&gt;座標真值&lt;/h3&gt;
-&lt;p&gt;測站位置為 TWD97 固定衛星追縱站，點號 LSB0，
-座標真值為：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;\begin{bmatrix}
-E \\ N \\ h
-\end{bmatrix}
-=
-\begin{bmatrix}
-212830.095483593 \\
-2672057.61548927 \\ 
-121.798217289174
-\end{bmatrix}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;rtx 資料&quot;&gt;rtx 資料&lt;/h3&gt;
-&lt;p&gt;rtx 資料有定位結果的經緯度座標與 twd97 平面座標，
-但用 &lt;a href=&quot;http://proj4.org&quot; title=&quot;地圖投影與大地線計算軟體&quot;&gt;proj4&lt;/a&gt; 將經緯度轉換成平面座標驗證後發現，
-二者不相符，在南北方向約誤差 1.7mm。
-最後決定使用 proj4 手動將經緯度座標轉成平面座標，
-原本的平面座標則忽略不使用。&lt;/p&gt;
-&lt;p&gt;整理後發現 rtx 定位座標在尚未收斂時，會有極大的誤差，
-原數據如下：&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.0887&lt;/td&gt;
-&lt;td&gt;0.3809&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.8082&lt;/td&gt;
-&lt;td&gt;0.4441&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.9551&lt;/td&gt;
-&lt;td&gt;0.9938&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;但經過作圖後發現，少量數據偏離平均值、真值極大，
-故決定以三倍標準差為基準籂選數據。
-將數據中離平均值超過三倍標準差的記錄剔除，
-再重新計算，再剔除三倍標準差以外的，
-重覆直到所有數據都在三倍標準差以內。
-過濾後整體標準偏差大幅下降，但也剔除了 14.73% 的數據。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.0376&lt;/td&gt;
-&lt;td&gt;0.01230&lt;/td&gt;
-&lt;td&gt;384425&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.7456&lt;/td&gt;
-&lt;td&gt;0.0096&lt;/td&gt;
-&lt;td&gt;380365&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.7674&lt;/td&gt;
-&lt;td&gt;0.0357&lt;/td&gt;
-&lt;td&gt;380894&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&quot;gpspace&quot;&gt;gpspace&lt;/h3&gt;
-&lt;p&gt;gpspace 是 csrs-ppp 使用的舊版 ppp 解算軟體，
-目前已在 github 上開源。
-gpspace 可以從 rinex 格式觀測資料與精密星曆，
-解算動態或靜態單點定位。
-因為 rtx 為動態定位，為了使二者在同一基準上比較，
-在 gpspace 也使用動態定位求解。&lt;/p&gt;
-&lt;p&gt;gpspace 的定位結果不是很穩定。
-相比 rtx 雖然在未收斂時會有極大誤差，
-但收斂後表現極佳。
-gpspace 則一直處在不穩定的狀態，
-雖然不像 rtx 有極端誤差， 但也不會收斂到穩定的值。
-整體不如 rtx。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3149&lt;/td&gt;
-&lt;td&gt;0.2005&lt;/td&gt;
-&lt;td&gt;585324&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5671&lt;/td&gt;
-&lt;td&gt;0.1460&lt;/td&gt;
-&lt;td&gt;585324&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.7856&lt;/td&gt;
-&lt;td&gt;0.3982&lt;/td&gt;
-&lt;td&gt;585324&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;嘗試也對 gpspace 的結果用三倍標準差過濾，
-結果雖有提升，但不很明顯。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3439&lt;/td&gt;
-&lt;td&gt;0.1355&lt;/td&gt;
-&lt;td&gt;560509&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5883&lt;/td&gt;
-&lt;td&gt;0.0771&lt;/td&gt;
-&lt;td&gt;559062&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.7457&lt;/td&gt;
-&lt;td&gt;0.2483&lt;/td&gt;
-&lt;td&gt;560993&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&quot;gpspark&quot;&gt;gpspark&lt;/h3&gt;
-&lt;p&gt;gpspark 與 gpspace 同為 csrs-ppp，
-使用上也類似，都是從 rinex 觀測資料解算精密單點定位，
-也一樣能解算動態與靜態，本次研究也同 gpspace 使用動態。
-gpspark 的定位結果遠勝 gpspace，
-收斂後能超過 rtx，並也沒有 rtx 誇張的極端值。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3209&lt;/td&gt;
-&lt;td&gt;0.0092&lt;/td&gt;
-&lt;td&gt;604800&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5840&lt;/td&gt;
-&lt;td&gt;0.0084&lt;/td&gt;
-&lt;td&gt;604800&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.6928&lt;/td&gt;
-&lt;td&gt;0.0293&lt;/td&gt;
-&lt;td&gt;604800&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;也同樣計算三倍標準差過濾，但結果並沒有顯著提升。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3211&lt;/td&gt;
-&lt;td&gt;0.0086&lt;/td&gt;
-&lt;td&gt;598610&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5841&lt;/td&gt;
-&lt;td&gt;0.0080&lt;/td&gt;
-&lt;td&gt;599439&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.6928&lt;/td&gt;
-&lt;td&gt;0.0282&lt;/td&gt;
-&lt;td&gt;602013&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2 id=&quot;比較&quot;&gt;比較&lt;/h2&gt;
-&lt;h3 id=&quot;四者作圖比較&quot;&gt;四者作圖比較&lt;/h3&gt;
-&lt;p&gt;將四者畫成散布圖如下。
-圖中是沒有過濾三倍標準差的數據，
-但也有部份極端值超過圖片邊界而沒有展示。
-其中黑線為座標真值，三種顏色分別為 rtx gpspace gpspark。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33490726908&quot;&gt;&lt;img src=&quot;https://farm8.staticflickr.com/7886/33490726908_daebc213a8_o.png&quot; alt=&quot;LSB0-all-small.png&quot; title=&quot;rtx gpspace gpspark 定位結果與真值依時間在 E N h 三方向上的散布圖&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;可以看出，gpspace 的成果明顯不如 rtx 與 gpspark。
-而 rtx 在收斂後，與 gpspark 的精度是相當的。&lt;/p&gt;
-&lt;h3 id=&quot;rtx 與 gpspark 和真值的差異&quot;&gt;rtx 與 gpspark 和真值的差異&lt;/h3&gt;
-&lt;p&gt;由於 rtx 在過濾前的誤差過大，沒有比較意義，
-因此只取過濾三倍標準差後的數據。
-綜合來看是 rtx 的結果較接近真值。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;軟體&lt;/th&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;均誤差&lt;/th&gt;
-&lt;th&gt;方均誤差&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;-0.057857&lt;/td&gt;
-&lt;td&gt;0.059150&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;0.13009&lt;/td&gt;
-&lt;td&gt;0.13044&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;-0.030842&lt;/td&gt;
-&lt;td&gt;0.047148&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;平面距&lt;/td&gt;
-&lt;td&gt;0.142376&lt;/td&gt;
-&lt;td&gt;0.1432247&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;斜距&lt;/td&gt;
-&lt;td&gt;0.145678&lt;/td&gt;
-&lt;td&gt;0.150785&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;0.22562&lt;/td&gt;
-&lt;td&gt;0.22578&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;-0.031426&lt;/td&gt;
-&lt;td&gt;0.032426&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;-0.10545&lt;/td&gt;
-&lt;td&gt;0.10917&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;平面距&lt;/td&gt;
-&lt;td&gt;0.2510213&lt;/td&gt;
-&lt;td&gt;0.252876&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;斜距&lt;/td&gt;
-&lt;td&gt;0.227798&lt;/td&gt;
-&lt;td&gt;0.228097&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&quot;rtx 與 gpspark 的差異&quot;&gt;rtx 與 gpspark 的差異&lt;/h3&gt;
-&lt;p&gt;作為二種精度較佳的定位方法，單獨作圖比較。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33490727288&quot;&gt;&lt;img src=&quot;https://farm8.staticflickr.com/7838/33490727288_d2be19b298_o.png&quot; alt=&quot;LSB0-rtx-gpspark.png&quot; title=&quot;將 rtx 減去 gpspark 的定位結果作圖&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;0.2319&lt;/td&gt;
-&lt;td&gt;0.3802&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;-0.2241&lt;/td&gt;
-&lt;td&gt;0.4432&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;-0.2621&lt;/td&gt;
-&lt;td&gt;0.9957&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;由於 rtx 有較多的極端值，因此採用三倍標準差過濾數據，
-剔除三倍標準差後：&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;-0.0739&lt;/td&gt;
-&lt;td&gt;0.04153&lt;/td&gt;
-&lt;td&gt;383035&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;0.2823&lt;/td&gt;
-&lt;td&gt;0.01358&lt;/td&gt;
-&lt;td&gt;384496&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;-0.1626&lt;/td&gt;
-&lt;td&gt;0.01170&lt;/td&gt;
-&lt;td&gt;382166&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&quot;統計分析&quot;&gt;統計分析&lt;/h3&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;軟體&lt;/th&gt;
-&lt;th&gt;過濾&lt;/th&gt;
-&lt;th&gt;方向&lt;/th&gt;
-&lt;th&gt;平均&lt;/th&gt;
-&lt;th&gt;標準偏差&lt;/th&gt;
-&lt;th&gt;數據數&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.0887&lt;/td&gt;
-&lt;td&gt;0.3809&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.8082&lt;/td&gt;
-&lt;td&gt;0.4441&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.9551&lt;/td&gt;
-&lt;td&gt;0.9938&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.0376&lt;/td&gt;
-&lt;td&gt;0.01230&lt;/td&gt;
-&lt;td&gt;384425&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.7456&lt;/td&gt;
-&lt;td&gt;0.0096&lt;/td&gt;
-&lt;td&gt;380365&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.7674&lt;/td&gt;
-&lt;td&gt;0.0357&lt;/td&gt;
-&lt;td&gt;380894&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspace&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3149&lt;/td&gt;
-&lt;td&gt;0.2005&lt;/td&gt;
-&lt;td&gt;585324&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspace&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5671&lt;/td&gt;
-&lt;td&gt;0.1460&lt;/td&gt;
-&lt;td&gt;585324&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspace&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.7856&lt;/td&gt;
-&lt;td&gt;0.3982&lt;/td&gt;
-&lt;td&gt;585324&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspace&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3439&lt;/td&gt;
-&lt;td&gt;0.1355&lt;/td&gt;
-&lt;td&gt;560509&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspace&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5883&lt;/td&gt;
-&lt;td&gt;0.0771&lt;/td&gt;
-&lt;td&gt;559062&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspace&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.7457&lt;/td&gt;
-&lt;td&gt;0.2483&lt;/td&gt;
-&lt;td&gt;560993&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3209&lt;/td&gt;
-&lt;td&gt;0.0092&lt;/td&gt;
-&lt;td&gt;604800&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5840&lt;/td&gt;
-&lt;td&gt;0.0084&lt;/td&gt;
-&lt;td&gt;604800&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.6928&lt;/td&gt;
-&lt;td&gt;0.0293&lt;/td&gt;
-&lt;td&gt;604800&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;212830.3211&lt;/td&gt;
-&lt;td&gt;0.0086&lt;/td&gt;
-&lt;td&gt;598610&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;2672057.5841&lt;/td&gt;
-&lt;td&gt;0.0080&lt;/td&gt;
-&lt;td&gt;599439&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;gpspark&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;121.6928&lt;/td&gt;
-&lt;td&gt;0.0282&lt;/td&gt;
-&lt;td&gt;602013&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx - gpspark&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;0.2319&lt;/td&gt;
-&lt;td&gt;0.3802&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx - gpspark&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;-0.2241&lt;/td&gt;
-&lt;td&gt;0.4432&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx - gpspark&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;-0.2621&lt;/td&gt;
-&lt;td&gt;0.9957&lt;/td&gt;
-&lt;td&gt;446670&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx - gpspark&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;h&lt;/td&gt;
-&lt;td&gt;-0.0739&lt;/td&gt;
-&lt;td&gt;0.04153&lt;/td&gt;
-&lt;td&gt;383035&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx - gpspark&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;E&lt;/td&gt;
-&lt;td&gt;0.2823&lt;/td&gt;
-&lt;td&gt;0.01358&lt;/td&gt;
-&lt;td&gt;384496&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;rtx - gpspark&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;N&lt;/td&gt;
-&lt;td&gt;-0.1626&lt;/td&gt;
-&lt;td&gt;0.01170&lt;/td&gt;
-&lt;td&gt;382166&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&quot;結論&quot;&gt;結論&lt;/h3&gt;
-&lt;p&gt;目前 rtx 收斂後的精準度在平面與高程上，
-與 csrs-ppp 的服務，也就是 gpspark 軟體，
-相比都只略遜一疇。
-二者無論是標準偏差或是與真值的誤差，
-rtx 都有可與 csrs-ppp 相當的水準。
-代表使用星基增益系統的即時精密單點定位，
-已可以有接近後處理後的精密單點定位結果的精度。&lt;/p&gt;
-&lt;p&gt;只是 rtx 不穩定，過濾掉了 15% 的數據才有穩定的結果。
-在 rtx 動態定位時，應等待觀測收斂才能記錄數據。&lt;/p&gt;
-&lt;script src=&quot;ext/paper.js?reference&quot;&gt;&lt;/script&gt;
 
-&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
-
-&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
-
-&lt;script&gt;
-document.body.prepend(
-    document.querySelector(&apos;h1&apos;),
-    document.querySelector(&apos;header&apos;)
-)
-&lt;/script&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/satellite-geodesy-homework-2.html#disable-reference</id>
 <title>衛星大地測量作業二</title>

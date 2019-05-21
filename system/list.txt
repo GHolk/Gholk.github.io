@@ -281,3 +281,4 @@ satellite-geodesy-homework-4.html
 satellite-geodesy-homework-5.html
 linux-grub-reboot-another-os.html
 shell-interact-dangle-program.html
+satellite-geodesy-homework-6.html

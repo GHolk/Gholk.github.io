@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-05-21T15:10:29.157Z</updated>
+  <updated>2019-05-27T14:30:15.941Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,76 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/geomatics-australia-sbas-testbed.html</id>
+<title>澳洲 sbas testbed 定位介紹</title>
+<published>2019-05-27T14:26:19.695Z</published>
+<updated>2019-05-27T14:30:15.928Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/geomatics-australia-sbas-testbed.html"/>
+<summary type="html">澳洲與紐西蘭近年合作發展了一套星基的 gnss 增益系統，
+範圍含蓋了澳洲、紐西蘭等地。
+除了現有 sbas 的 L1 波段基本功能，
+也是全世界第一個實作 L5 雙頻多星的 sbas 系統；
+同時也嘗試透過 sbas 廣播精密星曆，
+試驗 real time ppp 的可行性。</summary>
+<category term="geomatics"/>
+<category term="report"/>
+<category term="gnss"/>
+<content type="html">&lt;h1 id=&quot;澳洲-sbas-testbed-定位介紹&quot;&gt;澳洲 sbas testbed 定位介紹&lt;/h1&gt;
+&lt;p&gt;澳洲與紐西蘭近年合作發展了一套星基的 gnss 增益系統，
+範圍含蓋了澳洲、紐西蘭等地。
+除了現有 sbas 的 L1 波段基本功能，
+也是全世界第一個實作 L5 雙頻多星的 sbas 系統；
+同時也嘗試透過 sbas 廣播精密星曆，
+試驗 real time ppp 的可行性。&lt;/p&gt;
+&lt;h2 id=&quot;星基增益系統-sbas&quot;&gt;星基增益系統 sbas&lt;/h2&gt;
+&lt;p&gt;sbas 是經由衛星廣播對局部地區的 gnss 信號修正量，
+增強 gnss 定位精度的技術。
+sbas 系統是由地面的連續衛星追縱站 cors，
+觀測 gnss 衛星訊號；由於 cors 的座標已知，
+可以由 gnss 定位反算衛星位置，
+並推出與衛星廣播訊號的誤差。
+再將誤差經其它通訊衛星廣播，
+在廣播範圍內即可減去部份 gnss 信號誤差，達到較好的定位精度。&lt;/p&gt;
+&lt;h2 id=&quot;相較於傳統-sbas-服務的改進&quot;&gt;相較於傳統 sbas 服務的改進&lt;/h2&gt;
+&lt;p&gt;testbed 採用的是雙頻多星系 (DFMC) ，
+相較於傳統的 sbas 如 waas 是採用單頻單星，
+能廣播的衛星顆數限制為 51 枚，也只限於修正 GPS 衛星。
+雙頻多星系統由於使用了二個頻段，
+將衛星顆數的限制提升至 92 枚，也不再限於單一星系，
+如 testbed 廣播內容有 GPS 與 galileo 的修正資料。&lt;/p&gt;
+&lt;p&gt;同時 testbed 也試驗 real time ppp 的可行性，
+在 L1 與 L5 波段上廣播精密的衛星軌道位置與時鐘。&lt;/p&gt;
+&lt;h2 id=&quot;testbed-服務內容&quot;&gt;testbed 服務內容&lt;/h2&gt;
+&lt;p&gt;testbed 經衛星廣播的內容可以分為三部份：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;與傳統 sbas 規範相容的單頻 gps 修正訊號。&lt;/li&gt;
+&lt;li&gt;雙頻含 gps 與 galileo 的修正訊號。&lt;/li&gt;
+&lt;li&gt;在 L1 與 L5 中傳送的精密軌道與時鐘。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;定位試驗與成果&quot;&gt;定位試驗與成果&lt;/h2&gt;
+&lt;p&gt;由於 testbed 是全球第一個雙頻多星的 sbas 系統，
+因此在雙頻定位上，目前仍沒有硬體廠商支援；
+目前澳洲政府的規劃是與 gvm 公司合作，
+使用 gvm 公司開發的軟體接收儀解碼。
+至於單頻的 sbas 訊號，現有的接收儀即可解碼使用。&lt;/p&gt;
+&lt;p&gt;由於單頻的 sbas 有統一的訊號格式規範，
+也已普及一段時間，多數接收儀已能直接處理 sbas 訊號，
+並即時輸出定位成果。
+同時多數接收儀也能同時記錄 gnss 訊號的觀測值，
+輸出 rinex 格式的觀測結果，供事後後處理定位。&lt;/p&gt;
+&lt;p&gt;目前我有取得以 nmea 格式記錄的 sbas 的即時定位結果，
+與 rinex 格式的原始觀測資料。
+若搭配 IGS 發布的最終版本精密星曆，
+以精密單點定位解算 rinex 格式的原始觀測資料，
+可以達到接近公分級的精度；
+據以比較 testbed sbas 的定位成果精度。&lt;/p&gt;
+&lt;script src=&quot;ext/paper.js&quot;&gt;&lt;/script&gt;
+
+&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
+
+&lt;script src=&quot;ext/header-nctu.js?editable&amp;amp;execute&quot;&gt;&lt;/script&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/satellite-geodesy-homework-6.html#summary-cryosat-gravity-anomaly</id>
 <title>衛星大地作業六</title>
 <published>2019-05-21T14:54:49.304Z</published>
@@ -1309,36 +1379,7 @@ ifw 好像是設計來讓使用者開關某些功能的，
 <category term="android"/>
 <category term="wifi"/>
 <category term="無線"/>
-<content type="html">&lt;h1 id=&quot;透過 wifi 執行 adb&quot;&gt;透過 wifi 執行 adb&lt;/h1&gt;
-&lt;p&gt;Android Debug Bridge 是刷 android 系統
-和做各種壞事的必要工具。
-其實雖然稱為線刷，但不透過線也是可以的。
-adb 底層是透過 tcp/ip 實作，所以可以透過 wifi 也運作。&lt;/p&gt;
-&lt;p&gt;身為一個 nerd，如果還要接 usb 就 low 掉了，
-電腦的 usb 孔容易鬆，
-現在也流行用雲端，沒人在用 usb 的。&lt;/p&gt;
-&lt;h2 id=&quot;無 root&quot;&gt;無 root&lt;/h2&gt;
-&lt;p&gt;無 root 也能用，
-確認 android 和 PC 在同一區網，
-接上線進入偵錯模式。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;adb devices # 看有沒有抓到 android
-adb tcpip 5555 # 設定用 tcpip 5555 port
-# 可以拔掉線了
-adb connect $your_android_ip # 在手機裡 wifi 裡看 android 的 ip
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;(這邊我沒實驗，以前用過但忘了，
-應該沒錯吧。)&lt;/p&gt;
-&lt;h2 id=&quot;有 root&quot;&gt;有 root&lt;/h2&gt;
-&lt;p&gt;去 google play 找 adb wifi 應該就用不少，
-我是用 f-droid 的 &lt;a href=&quot;https://f-droid.org/en/packages/com.github.sryze.wirebug/&quot;&gt;ADB Manager&lt;/a&gt; ，
-另一款有 bug 不能裝。
-開啟 app 點 Start Network ADB 後就能用了，
-PC 一樣要下 &lt;code&gt;adb connect $your_android_ip&lt;/code&gt; 。&lt;/p&gt;
-&lt;h2 id=&quot;換成 wirebug&quot;&gt;換成 wirebug&lt;/h2&gt;
-&lt;p&gt;後來在新手機 atom 上不 adb manager 不能用，
-就又找到一款更老的 &lt;a href=&quot;https://f-droid.org/en/packages/com.github.sryze.wirebug/&quot;&gt;wirebug&lt;/a&gt; ，介面簡單好用，
-而且啟動後還會釘選在通知欄，
-通知上還有一顆按鈕可以直接關掉 adb。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/shell-pipe-speed-pv.html</id>
 <title>pv 控制 pipe 的速度</title>

@@ -1,0 +1,65 @@
+# 澳洲 sbas testbed 定位介紹
+澳洲與紐西蘭近年合作發展了一套星基的 gnss 增益系統，
+範圍含蓋了澳洲、紐西蘭等地。
+除了現有 sbas 的 L1 波段基本功能，
+也是全世界第一個實作 L5 雙頻多星的 sbas 系統；
+同時也嘗試透過 sbas 廣播精密星曆，
+試驗 real time ppp 的可行性。
+
+## 星基增益系統 sbas
+sbas 是經由衛星廣播對局部地區的 gnss 信號修正量，
+增強 gnss 定位精度的技術。
+sbas 系統是由地面的連續衛星追縱站 cors，
+觀測 gnss 衛星訊號；由於 cors 的座標已知，
+可以由 gnss 定位反算衛星位置，
+並推出與衛星廣播訊號的誤差。
+再將誤差經其它通訊衛星廣播，
+在廣播範圍內即可減去部份 gnss 信號誤差，達到較好的定位精度。
+
+## 相較於傳統 sbas 服務的改進
+testbed 採用的是雙頻多星系 (DFMC) ，
+相較於傳統的 sbas 如 waas 是採用單頻單星，
+能廣播的衛星顆數限制為 51 枚，也只限於修正 GPS 衛星。
+雙頻多星系統由於使用了二個頻段，
+將衛星顆數的限制提升至 92 枚，也不再限於單一星系，
+如 testbed 廣播內容有 GPS 與 galileo 的修正資料。
+
+同時 testbed 也試驗 real time ppp 的可行性，
+在 L1 與 L5 波段上廣播精密的衛星軌道位置與時鐘。
+
+## testbed 服務內容
+testbed 經衛星廣播的內容可以分為三部份：
+
+ 1. 與傳統 sbas 規範相容的單頻 gps 修正訊號。
+ 2. 雙頻含 gps 與 galileo 的修正訊號。
+ 3. 在 L1 與 L5 中傳送的精密軌道與時鐘。
+
+## 定位試驗與成果
+由於 testbed 是全球第一個雙頻多星的 sbas 系統，
+因此在雙頻定位上，目前仍沒有硬體廠商支援；
+目前澳洲政府的規劃是與 gvm 公司合作，
+使用 gvm 公司開發的軟體接收儀解碼。
+至於單頻的 sbas 訊號，現有的接收儀即可解碼使用。
+
+由於單頻的 sbas 有統一的訊號格式規範，
+也已普及一段時間，多數接收儀已能直接處理 sbas 訊號，
+並即時輸出定位成果。
+同時多數接收儀也能同時記錄 gnss 訊號的觀測值，
+輸出 rinex 格式的觀測結果，供事後後處理定位。
+
+目前我有取得以 nmea 格式記錄的 sbas 的即時定位結果，
+與 rinex 格式的原始觀測資料。
+若搭配 IGS 發布的最終版本精密星曆，
+以精密單點定位解算 rinex 格式的原始觀測資料，
+可以達到接近公分級的精度；
+據以比較 testbed sbas 的定位成果精度。
+
+<script src="ext/paper.js"></script>
+
+<link rel="stylesheet" href="ext/paper.css">
+
+<script src="ext/header-nctu.js?editable&execute"></script>
+
+#geomatics
+#report
+#gnss

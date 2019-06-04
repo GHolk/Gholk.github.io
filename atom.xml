@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-05-27T14:30:15.941Z</updated>
+  <updated>2019-06-04T16:15:25.127Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,211 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/geomatics-tribal-map-and-spicial-panel-analysis.html</id>
+<title>從部落地圖到空間計量統計</title>
+<published>2019-06-04T16:15:08.995Z</published>
+<updated>2019-06-04T16:15:25.113Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/geomatics-tribal-map-and-spicial-panel-analysis.html"/>
+<summary type="html">劉子銘教授目前任職於中山大學海洋事務研究所，
+專長是空間計量統計，也承接過部落地圖等偏 gis 或地圖應用的專案。
+部落地圖是保存原住民傳統知識的一環，
+如何妥善記錄原住民文化與周遭生活環境的關係，是看成 gis 的課題。
+另外空間計量是結合統計學與空間資訊的學門，
+在台灣的統計學門中，空間資訊是被忽視的一塊，
+現有的空間資訊與統計二學科的整合是十分重要的。</summary>
+<category term="geomatics"/>
+<category term="nctu"/>
+<category term="report"/>
+<content type="html">&lt;h1 id=&quot;從部落地圖到空間計量統計&quot;&gt;從部落地圖到空間計量統計&lt;/h1&gt;
+&lt;p&gt;劉子銘教授目前任職於中山大學海洋事務研究所，
+專長是空間計量統計，也承接過部落地圖等偏 gis 或地圖應用的專案。
+部落地圖是保存原住民傳統知識的一環，
+如何妥善記錄原住民文化與周遭生活環境的關係，是看成 gis 的課題。
+另外空間計量是結合統計學與空間資訊的學門，
+在台灣的統計學門中，空間資訊是被忽視的一塊，
+現有的空間資訊與統計二學科的整合是十分重要的。&lt;/p&gt;
+&lt;h2 id=&quot;演講要點&quot;&gt;演講要點&lt;/h2&gt;
+&lt;p&gt;劉子銘教授這次演講主要有二大主題，
+分別是自己在參與原住民族委員會製做部落地圖時的經驗，
+與空間計量的入門介紹。&lt;/p&gt;
+&lt;h2 id=&quot;演講要點：部落地圖&quot;&gt;演講要點：部落地圖&lt;/h2&gt;
+&lt;p&gt;行政院原住民族委員會是台灣主管原住民族事務的最高機關，
+劉子銘教授參與了其中的部落地圖專案。
+近年來原住民的文化保存成為重要的議題，
+一些神話、歷史與可以由文字記錄，
+而傳統領域，在傳統上只有口述與在生活中實踐，
+在現代除了畫成地圖外，
+甚至能將資料記錄在 gis 系統中。&lt;/p&gt;
+&lt;h3 id=&quot;原住民傳統地圖&quot;&gt;原住民傳統地圖&lt;/h3&gt;
+&lt;p&gt;原住民族沒有文字，傳統文化多是靠口述流傳，
+在地圖上，也會因地區文化不同，
+用各式的自然產物做出地圖的意象。
+例如太平洋上小島的原住民，
+會以結繩的方式描述洋流、風象，製成特殊的海圖。
+北美的印地安人，也會用圖畫的方式，
+描述從一點到達另一點的路線。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/47991847513&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/47991847513_294874eeea.jpg&quot; alt=&quot;aborigines-maps.jpg&quot; title=&quot;由左至右：象形導航地圖、繩結海圖、木刻海圖&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;這些形式雖然原始，但確實都是地圖。
+雖有部份是注重在導航，描述由一點到另一點的路線，
+例如途中的地標、方位，該在哪裡轉彎，
+之類的導航用的資訊，而非通用、完整的地圖。&lt;/p&gt;
+&lt;h3 id=&quot;地圖與文化保存&quot;&gt;地圖與文化保存&lt;/h3&gt;
+&lt;p&gt;原民會的部落地圖，一方面是保存原住民的文化，
+一方面是劃定各原住民族的傳統領域。
+如同台灣各地地名各有由來與歷史意義，
+對原住民來說，他們文化中對生活周遭的環境命名，
+也具有特殊意義。
+部落地圖的製做，是記錄原住民的文化，
+或達到類似導覽展示的文化用途。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/47992219588&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/47992219588_664872f2f5.jpg&quot; alt=&quot;aborigines-map-degelesane.jpg&quot; title=&quot;好茶部落周遭地圖與魯凱族語地名&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Dagelesane :垂淚地之意。引申為不要隨便誇大自己的能力,否則很可能成為大家的笑柄。&lt;/p&gt;
+&lt;p&gt;lolwan 家的 langobau 到中央山脈東側打到很多大動物,帶一個朋友叫 gabwalane 家
+的 salengan 去幫忙。由於打到太多動物,有山豬、羊、鹿。太重了,背得很辛苦,
+salengan 爬到這裡時哭了。所以就取這樣的名子。這裡有很大的奇岩(地景)。&lt;/p&gt;
+&lt;p&gt;引用自 2019-03-05 劉子銘教授於交大土木演講&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;亡靈聚集的河階&quot;&gt;亡靈聚集的河階&lt;/h3&gt;
+&lt;p&gt;傳統文化中，常會有些習俗或禁忌，
+背後其實是隱含了先人的智慧，有一定的理由。
+例如上述的地名，其實背後可能帶有自然環境上意義，
+可能可以作為施政時的參考。&lt;/p&gt;
+&lt;p&gt;例如屏東縣的好茶部落，1980 年省政府以地型不適居住為由，
+將好茶部落遷到一處平坦與交通較方便的河階平台。
+但新好茶卻於 2007 年的莫拉克風災毀於土石流，
+雖然其中居民因事先預警，已預防性撤離，
+但卻表示政府的決策不一定正確。&lt;/p&gt;
+&lt;p&gt;事實上在 1980 年遷村時，
+便已有部落耆老以新好茶的河階為亡靈聚集之地為由，反對遷村；
+但省政府當時卻沒有考慮部落的意見。
+事實上，好茶將該地稱為亡靈聚集之地，
+便是因為該地為河階地型，在河水暴漲時，
+有多次氾濫掩埋的痕跡，
+而將此地視為亡靈聚集的不祥之地。&lt;/p&gt;
+&lt;p&gt;如果政府在遷村之前，有適當的和部落溝通，
+就會了解該地的問題甚至發現該地的危險。
+當然，如果政府在事先有先做好地質調查，
+應該也能在水土保持的知識下，
+看出該地潛在的危險性，而避免毀村的危機。
+但也突顯出，傳統文化並不是一無事處，&lt;/p&gt;
+&lt;h3 id=&quot;蘭嶼的空地與颱風&quot;&gt;蘭嶼的空地與颱風&lt;/h3&gt;
+&lt;p&gt;另一例子則是蘭嶼，當地有世居於此的原住民達悟族。
+部落在島上仍佔有重要地位，關於觀光、外來文化都持謹慎態度，
+例如 2014 年連鎖的 7-11 便利商店進入蘭嶼開店，
+就引起極大的爭議，無論在外人或達悟族人中。
+但這樣的入侵，早不是第一次，在更早之前，
+便已有政府機關、農會的進駐。
+便利商店的進駐，只是代表連鎖大型企業，
+如 7-11、星巴客、麥當勞等，
+其文化已經滲入到世界每一角落。&lt;/p&gt;
+&lt;p&gt;但這些 &lt;em&gt;後進&lt;/em&gt; ，
+常面臨主要聚落的精華地帶早被選走的土地取得問題。
+當台東縣政府打算在蘭嶼蓋一棟緊急避難中心，
+便選了一處看似平坦空曠，又接近海交通方便處。
+沒想到 2012 年的天秤颱風的大浪，
+卻將中心與周遭多座新建物沖毀。&lt;/p&gt;
+&lt;p&gt;事實上在達悟族人的語言中，該地 Do-Sanoson 的意義即是淹水，
+代表達悟族人很早就知道該地的情形，
+所以這些平坦土地之所以能空到現在，
+也是達悟族人知道其危險性，地處平坦且接近海邊，
+在大浪來襲時並不安全，才會一直保持空曠無人居的情形。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48000068003&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48000068003_9a84266228.jpg&quot; alt=&quot;aborigines-map-do-sanoson.jpg&quot; title=&quot;蘭嶼地圖與達悟族語地名&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;蘭嶼許多地名，命名的由來都是達悟族人長久以來累積的經驗。
+又如 Ji-Igang 的意思是大石頭，代表該處常有大型落石，
+更高處的山上的地質不穩定；而 Ji-Rako a Poas 是山崩的意思，
+很直接地表示該地可能有山崩了。&lt;/p&gt;
+&lt;h2 id=&quot;演講要點：空間計量統計&quot;&gt;演講要點：空間計量統計&lt;/h2&gt;
+&lt;p&gt;劉子銘教授的另一主題，是介紹結合空間資訊的統計學。
+傳統的統計學是與空間無關的，
+將統計中各區域視為獨立不相干的單元，
+將各區域都視為獨立變數，做統計分析。
+但事實上 &lt;strong&gt;地理學第一定律&lt;/strong&gt; 就言明，
+&lt;em&gt;越相近的事物，在性質上越相關&lt;/em&gt; 。
+真實世界中發生的事物，往往是具有連續性的，
+疾病的發生、人口的增長，都不可能憑空出現，
+必定是與周圍的地區相關。
+如果將空間關係納入統計參數中，就稱為空間計量。&lt;/p&gt;
+&lt;p&gt;空間計量是以 &lt;strong&gt;空間相關&lt;/strong&gt; 來恆量各地區的不同變數，
+簡單來說，空間相關就是描述事物的發生，
+是否與周遭區域有關，並以量化的指標來呈現。
+空間相關指標，有多種不同的計算方式，
+也各有不同的值域。
+例如 Moran&amp;apos;s 1，依據正相關、無相關、負相關，
+有 1 到 -1 的值域。
+其中正相關代表相近的事物間正向影響，在空間上表現為群聚；
+負相關則表示負向影響，在空間上則表現為棋盤格狀；
+而無相關則表示變數不受鄰近區域影響，
+在空間上表現為接近隨機分布。&lt;/p&gt;
+&lt;p&gt;要在傳統的統計學模型中加入空間資訊，也就是將
+&lt;abbr title=&quot;spacial weighting matrix&quot;&gt;空間權矩陣&lt;/abbr&gt;
+加入到統計模型中，用以表現各統計區間互相影響的權。
+一種簡單作法是使用空間鄰接矩陣，
+直接將統計區間彼此相鄰的填為 1，不相鄰的填為 0，
+一定程度上便足以代表空間上的相關性。&lt;/p&gt;
+&lt;h3 id=&quot;統計的謬誤&quot;&gt;統計的謬誤&lt;/h3&gt;
+&lt;p&gt;空間計量上常用的 LISA 分析，同時展示參數本身，
+與周遭統計區的參數，來分析可能潛在的原因。
+LISA 主要目的是看出所謂 high-high 與 low-low，
+也就是參數值高且周圍地區也高，
+與參數值低且周圍地區也低的區域。&lt;/p&gt;
+&lt;p&gt;經濟發展上，台灣東部地區較落後，
+居民普遍生活生活水平也低，就統計上，
+看出了心血管藥物使用量高的結果。
+曾經也懷疑是否與原住民的飲酒文化有關，
+但再加上空間計量的結果，
+可以看出高心血管藥物使用的同時，
+其中一二種舊型藥物的使用，在東部也是 high-high 的顯注區。
+該舊型的藥物，藥效較差，不只無法有效緩解症狀，
+也造成病人不斷回診，藥物使用增加的循環。&lt;/p&gt;
+&lt;p&gt;在得出這樣的結果後，台灣醫學會認為，
+主要原因是東部的醫師無法接觸新藥與醫學新知造成。
+決定提高醫學會在東部舉辦的頻率，
+以平衡城鄉差距。&lt;/p&gt;
+&lt;h2 id=&quot;心得與討論：部落地圖&quot;&gt;心得與討論：部落地圖&lt;/h2&gt;
+&lt;h3 id=&quot;地圖的近用權&quot;&gt;地圖的近用權&lt;/h3&gt;
+&lt;p&gt;以文化或學術研究的角度來說，
+文化研究的成果應該是一部民族誌大頭書，或一篇篇的論文集。
+以學術傳統而言，在資訊時代前，
+最好的資訊傳達方式就是著書立說；
+文章乃經國之大業，不朽之盛事。
+但這套邏輯到現代仍適用嗎？
+現代的文化工作者，不再自限於象牙塔，
+而能主動投身於社會，發起議題與運動。&lt;/p&gt;
+&lt;p&gt;回到地圖的問題，地圖最終的成品應該是什麼？
+是一張紙本地圖？還是一堆 shp 檔案？
+或者是可以在網頁上展示的互動式地圖？
+以台灣傳統的製圖角度而言，
+最後的成品理所當然就是一張紙本地圖。
+但紙本地圖有所侷限，例如空間有限，
+不可能呈現過多的資訊，需要抽象化或適度的簡化。&lt;/p&gt;
+&lt;p&gt;數位化的地圖，可以以互動的方式帶出更多的資訊，
+但卻又各帶有不同程度的門檻。
+以數位格式中最常見與近用門檻最低的網頁來說，
+還是需要電腦或行動裝置才能運行。
+而且網頁許多時候，是由背後的 gis 軟體所驅動，
+只在瀏覽器層提供了一個介面存取，
+看似減低近用的門檻，但反而使使用者無法接觸到背後的資料。&lt;/p&gt;
+&lt;p&gt;原始的 gis 資料能提供最完整的資訊，
+而且 gis 資料也有標準化的格式，是開放資料使用者偏好的作法。
+而互動式的網頁或介面，只提供有限、事先規範的互動操作，
+且缺少標準化，隔絕了使用者與原始資料的互動。
+基於網頁的技術，雖然網頁本身是開放的標準，
+但由於其複雜度，仍一定程度造成使用者擴充時的困難。
+但直接提供 gis 資料的話，使用門檻過高，
+需要 gis 軟體與專業技術才能獲取其中資訊。&lt;/p&gt;
+&lt;h2 id=&quot;討論與心得：空間計量&quot;&gt;討論與心得：空間計量&lt;/h2&gt;
+&lt;h3 id=&quot;統計與偽科學&quot;&gt;統計與偽科學&lt;/h3&gt;
+&lt;p&gt;統計常被攻擊為偽科學，因為統計只能看出現象的相關。
+但相關常不能代表什麼，相關不代表因果，也不一定有理由，
+有時候，就是瞎貓碰上死耗子。&lt;/p&gt;
+&lt;!-- ### 統計與 gis 的合做 --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
+
+&lt;script src=&quot;ext/paper.js?reference&quot;&gt;&lt;/script&gt;
+
+&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/geomatics-australia-sbas-testbed.html</id>
 <title>澳洲 sbas testbed 定位介紹</title>
 <published>2019-05-27T14:26:19.695Z</published>
@@ -1307,63 +1512,7 @@ ifw 好像是設計來讓使用者開關某些功能的，
 <category term="ssh"/>
 <category term="無線"/>
 <category term="刷機"/>
-<content type="html">&lt;h1 id=&quot;經由 ssh tunnel 連上行動網路裡的 adb&quot;&gt;經由 ssh tunnel 連上行動網路裡的 adb&lt;/h1&gt;
-&lt;p&gt;adb 除了用 usb 線連接外，
-&lt;a href=&quot;adb-over-wifi.html&quot;&gt;也能走網路用 tcp 連接，最簡單是在區網中用 wifi 連結。&lt;/a&gt;
-但有時候電腦和 android 二者不在同一區網，
-那就得靠第三方有固定 ip 的 server 做中介，
-只要有網路就能經由 ssh port forward 遠端連上 adb，
-就算是行動網路浮動 ip 也能遠端做壞事了。&lt;/p&gt;
-&lt;p&gt;首先如果有 root 的話，有現成的 app 能控制 adb 走 tcp，
-不然就是用 &lt;a href=&quot;adb-over-wifi.html#無%20root&quot;&gt;前文所寫無 root 透過 wifi adb 的作法&lt;/a&gt; 。
-之前用的是 f-droid 的 &lt;a href=&quot;https://f-droid.org/en/packages/com.matoski.adbm/&quot;&gt;ADB Manager&lt;/a&gt; ，
-但他在我的新手機怪怪的，會一直跳出來要 root 權限，
-就換成 &lt;a href=&quot;https://f-droid.org/en/packages/com.github.sryze.wirebug/&quot;&gt;Wirebug&lt;/a&gt; 。
-反正都是很簡單的 app，就只有一個功能是切換透過 tcp adb。&lt;/p&gt;
-&lt;p&gt;然後 android 上的 ssh client 我是用 &lt;a href=&quot;http://connectbot.vx.sk/&quot;&gt;VX ConnectBot&lt;/a&gt; ，
-你也可以用其它能 ssh forward remote 的軟體。
-（也就是 &lt;code&gt;ssh -R&lt;/code&gt; 的功能。）
-設定過程就相當於在 android 上執行
-&lt;code&gt;ssh -R 55555:localhost:5555 my@static.sever.tw&lt;/code&gt; ，
-之後 static.server.tw 上的 38763 port
-就會被轉發到 android 上的 5555 port。&lt;/p&gt;
-&lt;p&gt;以 vx connect bot 來說，
-設定方法是登入過主機並加入清單後，
-長按該主機會有一個 &lt;em&gt;編輯端口轉發&lt;/em&gt; 的選項。
-按頂端的選單新建一個端口轉發，
-暱稱隨便取，我是取 adb， &lt;em&gt;轉發類型&lt;/em&gt; 選遠端，
-源端口看你要在 static.server.tw 上哪個 port 會連到 android，
-（例如上面是用 55555。）
-而目標端口則選 &lt;code&gt;localhost:5555&lt;/code&gt; 也就是 adb 的預設 port。&lt;/p&gt;
-&lt;p&gt;之後你用 vx connect bot 連上該主機時就會自動轉發，
-不管是走 wifi 還是 4g 網路；
-再用 wirebug 或 adb manager 或先前登入設定允許從網路連接 adb，
-就能登入 static.server.tw 後 &lt;code&gt;adb connect localhost:55555&lt;/code&gt; 
-連上 android。&lt;/p&gt;
-&lt;p&gt;如果你不想要再登入一次 static.server.tw 才能執行 adb，
-還能在 static.server.tw 上的 &lt;code&gt;/etc/ssh/sshd_config&lt;/code&gt; 裡
-設 &lt;code&gt;GatewayPorts yes&lt;/code&gt; ，
-就能讓 static.server.tw 的 55555 port 直接連到 android。
-預設因為安全起見，ssh server 是不允許綁到對外 ip 的；
-也就是只有在 static.server.tw 上看 localhost:55555
-才會連到 android 的 5555 port，
-但從外部連到 static.server.tw:55555 是連不上的。&lt;/p&gt;
-&lt;p&gt;另外 vx connect bot 的轉發類型有
-遠端、本地、動態套接字(socks) 三種可以選。
-其中遠端上面說明過了，也就是 ssh 的 &lt;code&gt;-R&lt;/code&gt; 選項，
-本地就是 &lt;code&gt;-L&lt;/code&gt; ，動態套接字則是 &lt;code&gt;-D&lt;/code&gt; 選項，
-用來當 http SOCKS 給瀏覽器用的。&lt;/p&gt;
-&lt;h2 id=&quot;用 ssh 轉發多種服務&quot;&gt;用 ssh 轉發多種服務&lt;/h2&gt;
-&lt;p&gt;除了 adb 外，我也有用幾種會需要讓外部連進來的服務，
-&lt;a href=&quot;android-atom-tip.html#alpha%20vnc%20%E9%81%A0%E7%AB%AF%E6%8E%A7%E5%88%B6%E6%89%8B%E6%A9%9F&quot;&gt;像是 alpha vnc 和 primitive sftp&lt;/a&gt; ，
-有時二端在不同的區網，就得用這招把內網 ip 轉到公網 ip。
-目前我是在 vx connect bot 開了一個項目是只用來轉發 port，
-不開啟 ssh shell 的。
-然後該項目就會把 adb 5555、vnc 5900、sftp 2222 
-一口氣都轉過去，省得麻煩。
-但 sftp 不能綁 22，一方面是 app 不給設，
-一方面是 22 在公網 server 已經被 ssh 吃掉了。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/adb-over-wifi.html#換成-wirebug</id>
 <title>透過 wifi 執行 adb</title>

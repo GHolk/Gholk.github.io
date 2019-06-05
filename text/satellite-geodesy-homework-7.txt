@@ -1,0 +1,68 @@
+# 衛星大地作業七
+衛星大地作業七使用重力衛星的觀測資料。
+將重力的變化扣除大多數的已知效應後，
+殘餘的量多是由水體的變化造成。
+再將重力化算為等效的水體質量，即為等效水高，
+即可從等效水高推算出世界各地的短期水資源變化。
+
+## grace plotter
+[grace ploter 網站][grace plotter] 提供重力衛星 grace 衛星觀測資料的解算結果，
+有提供等效水高、大地水準面、球諧系數三種解，
+並有多個研究機構使用不同演算法的結果。
+
+[grace plotter]: http://www.thegraceplotter.com/ "grace 的提供簡單介面計算大地起伏與等效水高的網站"
+
+我選擇使用奧地利大學 TU GRAZ ITSG18 的解，
+繪製伊拉克地區 2012-2017 年其間的等效水高。
+由於需要繪製伊拉克地區，
+我是用多邊形工具大略在地圖上圈出伊拉克的形狀，
+之後點選 **Replot** 就能畫出
+圈選面積中的歷年等效水高曲線圖。
+
+[![grace-plotter-map-select-iraq.png]]
+
+[![grace-ewh-iraq.png]]
+
+
+[grace-plotter-map-select-iraq.png]: http://farm66.staticflickr.com/65535/48005435471_0ee314e901.jpg "在地圖上框選的伊拉克面積"
+[![grace-plotter-map-select-iraq.png]]: http://www.flickr.com/photos/144554087@N04/48005435471
+
+[grace-ewh-iraq.png]: http://farm66.staticflickr.com/65535/48005522587_88835b3070.jpg "伊拉克的等效水高曲線圖"
+[![grace-ewh-iraq.png]]: http://www.flickr.com/photos/144554087@N04/48005522587
+
+
+## 等效水高
+等效水高是用以描述月份等級的短期重力變化指標。
+一年內的短期間重力變化，主要來自於水體造成的質量分布變化，
+如果扣掉海潮、氣壓等明顯的量，剩下的殘餘變化，
+多是來自於陸地上的水資源變化。
+只要計算需要多少水，方足以造成殘餘的重力變化，
+所得的結果即為等效水高。
+
+## 地下水流失
+從等效水高的曲線圖中，可以看出從 2006 年開始，
+等效水高有下降的趨勢；
+[在永續水資源的研究中也發現，伊拉克的地下水抽取已超過補助的量。][sustain ground water]
+以重力觀測衛星，也能從大尺度中看到整體趨勢，
+從 2006 年的平均是 6.63 公分，
+到 2013 雖然資料有缺少，但大致只剩下 -2.09 公分，
+全國整體平均下降了 8.72 公分。
+
+若做粗略的計算，用多邊形框選的伊拉克面積，約是 450000 平方公里，
+再乘上 2006-2013 年間的等效水高的變化，
+可以計算出全國平均約略損失了 39240000 立方公尺的地下水。
+
+
+
+[sustain ground water]: http://dx.doi.org/10.1080/07900627.2016.1213705 "Groundwater use and policy options for sustainable management in Southern Iraq, 2017, Al-Azawi, AAO; Ward, FA"
+
+<script src="ext/paper.js?reference"></script>
+
+<link rel="stylesheet" href="ext/paper.css">
+
+<script src="ext/header-nctu.js?execute&editable"></script>
+
+#geomatics
+#gravity
+#report
+#nctu

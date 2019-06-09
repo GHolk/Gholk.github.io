@@ -1,0 +1,269 @@
+# teqc 蠻力處理 gnss 數據技巧
+最近在幫教授做計劃，要用軟體解算 gnss 數據，我是用 gipsyx。
+主要問題是送來的數據很亂，檔名亂跳，資料夾結構也不統一，
+本來以為要手動一一整理，但後來發現 teqc 可以自動合併分割，
+就用蠻幹的方式全部合併再自動分割出每一天的數據。
+另外一個問題是 gipsyx 我裝在另一台電腦，
+所以就用 ssh 遠端連線進去計算，
+但批次處理時太多連線 ubuntu 會切斷連線，
+後來用 ssh controlmaster 的用法解決。
+
+## 檔名亂跳的 gnss 數據
+計劃送來的數據是原始觀測檔，
+看來就是 gnss 接收儀直接記錄的原始格式，
+但檔名和資料夾都亂七八糟的，
+雖然有時有照年、月分資料夾，
+但隔了幾個月分類的方法又換了。
+
+要從 gnss 觀測數據中解算出座標，
+一般要先把依各廠牌不同的接收儀格式，
+轉成一個標準的 rinex 格式。
+且一般 gnss 解算軟體是依日解算，
+因為精密星曆是按日切割的，
+批次處理上 **日** 也是比較適合的單位。
+但這堆數據的目錄結構變來變去，
+根本無法用程式批次處理。
+
+### 亂七八糟路徑
+有時按周分割，有時按月分割，
+換來換去，而且記了幾周還會斷掉，
+從 7 月跳到 11 月。
+檔名也不統一，有時有加四字測站名，
+但有時又沒有，只有日期，日期又會民國西元換來換去，
+不然就是四字站名後面還會加不知道哪來的序號。
+
+例如 2008 年下可能有 3 4 5 月，
+但後來就跳到 Oct Nov Dec 的英文代號。
+且每個月下面有的是直接擺觀測檔，
+有時又會再依日切子資料夾，還有併存的！
+檔名多數照慣例是用 abcd 在結尾排序，
+但有時又會出現 (0) (1) 之類像是 windows 重新命名的神奇結尾。
+這些格式雖然人都看得懂，但要批次處理根本不可能。
+
+大部份接收儀多半會提供切割檔案的功能，
+有時一天切成好幾十個檔案，
+因為以前檔案不能太大，會超過檔案系統限制，
+或是因為要存到軟碟所以切小。
+但這裡完全看不出來為什麼要切這麼多，
+有時一天切到幾十個檔案，結尾 a-z 不夠用，
+還用到 aa ab az zz aaa 二位三位。
+合理懷疑是設定設錯，把上限設太小；
+或是一直重新開機觀測斷斷續續之類的。
+（一些切超多超小的檔案，還常常用 teqc 根本轉不出東西，
+可能只有檔頭，才會那麼小。）
+
+### teqc 整理過程
+本來以為沒救了，只能靠人工判讀，
+在 shell 中人工一個個資料夾處理。
+雖然我 shell 算熟練，
+看出規則後就能用轉檔程式一口氣按日轉好。
+但每個資料夾的規則都不同，
+又有幾十個資料夾，根本不是人做的。
+但計劃一定要做，只好咬牙當作練英打練 shell 做下去。
+
+這組數據的格式比較老，可以用 teqc 轉。
+像 trimble 的 t02 格式就不行，
+要用 trimble 提供的超爛轉檔程式轉，
+跑得超慢又只提供 windows 下的版本。
+而 teqc 是用 c 寫的一個已經不小了的小工具程式，
+可以在 linux 下跑，能合併、分割、品質檢查 gnss 數據，
+堪稱 gnss 界的瑞士刀。
+雖然近年來 rinex 格式進化到 rinex3 了，
+但 teqc 還停在 rinex2，稍微有點過時落漆，
+但用在這批也有些年代了的數據倒是剛好。
+
+我本來依慣例是整理成日為單位的檔案，
+如果一天的觀測檔被切成很多個，就要用 teqc 合併。
+teqc 用法很直覺，直接輸入檔名就讀取後以 rinex2 的標準格式輸出，
+如果要輸出統計觀測時間、過濾衛星就是加選項達成。
+同時 teqc 也支援多格式，會輸入時自動判斷，
+輸出則統一用 rinex2 輸出，
+所以可以簡單的轉檔並合併數據：
+`teqc 1010607a.dat 1010607b.dat 1010607c.dat > 1010607.rnx` ，
+就會把三個原生格式都轉成 rinex。
+
+後來又發現，有些檔案會超過一天，
+就得切割成一天一個，就研究了切割的參數。
+切割的參數是 `teqc -tbin 1d NCTU single.rnx` ，
+可以把 single.rnx 以天為單位切割，
+並把切出來的檔案用 NCTU 當前綴，
+依 rinex 的慣例用日期命名，變成 NCTU0010.19o 之類的。
+
+後來突發奇想，可不可以將所有檔案，
+不管連續不連續，全部合成一個大的，然後再從大的切割？
+就用巢狀的 glob 參數或 find 可以遞迴出所有檔案，
+再用 teqc 讀取，後輸出成一個超大的 rinex，
+最後再用 tbin 自動依日期切割：
+
+```sh
+# ** 可以遞迴任意層子目錄下的所有檔案
+teqc **/*.dat > all.rnx
+
+# 或是用 xargs
+find -type f -name '*.dat' | xargs teqc > all.rnx
+
+# 進階的 find 用法， `+` 代表把所有找到的檔案附加在後面執行
+find -type f -name '*.dat' -exec teqc '{}' +
+
+# 自動依日期切割，命名為 NCTU
+teqc -tbin 1d NCTU all.rnx
+# 產生 NCTU0010.19o NCTU0020.19o ...
+```
+
+之後發現果然可以！
+teqc 真是神器，要不是這個功能，
+我可能得花二三天整理，teqc 讓過程短到一小時內處理完。
+只是我還是會分年處理，有時分月，不會把好幾年的全部合併，
+最大一次處理到幾百個檔案共 80MB，也沒有崩潰，
+至於合併結果有沒有錯，我不可能一一檢查，
+就要等算完才知道。（目前沒有什麼大問題。）
+
+## 修改天線與觀測站名
+我轉完的檔案，或一些舊的檔案，
+rinex header 裡的天線有時會變 unknown，
+站名則是有時會加上後綴序號。
+我是就簡單用 sed 改；
+但 rinex 是固定寬度的格式，
+所以要注意改完後有沒有對齊。
+
+```
+sed -i '
+1,40 {
+    s!-Unknown- *-Unknown- *ANT # / TYPE!NCTU00-0000A        TRM41249.00     NONE                    ANT # / TYPE!
+    s/-Unknown- *MARKER NAME/NCTU                                                        MARKER NAME/
+}' *.??o
+```
+
+後來發現天線和站名，其實可以在 teqc 轉檔時設定輸出的站名和天線名。
+但我沒設，可能原生格式沒有，就也沒有。
+我是看有些有天線名的，
+就直接假設沒有的也是同一個天線，
+如果不是就會差很多。
+
+## 目錄結構
+其實我也是不太會整理檔案的人，而且又有 linux shell 可以靠，
+需要時再用後綴區分， `*.19o` 之類就好。
+我就習慣全部把轉好的 rinex
+堆在同一個資料夾，方便直接 `for file in *` 。
+反正只要格式統一，電腦沒在跟你計較目錄裡太多檔案的。
+
+另外有些 rinex 檔案我不確定要不要留。
+有些是 <abbr title="compact rinex">crx</abbr>，
+用 rnx2crx crx2rnx 轉的，
+crx 檔案大小大概可以到 rinex 的十分之一。
+原本我是在批次處理的時候即時轉，算完就刪：
+
+```sh
+for crx in *.19d.Z
+do
+    rinex=$(basename $crx .19d.Z).19o
+
+    # compress 不一定要用 uncompress，gzip 也能處理。
+    zcat $crx | crx2rnx > $rinex
+
+    sh compute-gipsyx.sh $rinex
+    rm $rinex
+done
+```
+
+但像原始資料超亂的那種，我整理好後就就一定會留著，
+所以 crx 好像也可以不刪；如果儲存策略是一律存 rinex 的話。
+    
+## ssh master control
+最後談談 ssh master control。
+由於我的 gipsyx 是裝在另台主機，
+是用 ssh 連線到別台電腦去算，大概類似這樣：
+
+```sh
+cat NCTU0010.19o | ssh server.with.gipsy compute-gipsyx.sh -
+```
+
+### 加速計算
+之前我直接在裝 gipsyx 的電腦算，
+試過滿載，也就是一次算很多個，
+但因為精密星曆是到 nasa 去載的，
+算一次就會載一次，如果同時太多連線，
+下載就會被中斷，所以後來都乖乖一次算一天。
+（其實也可以把整個星曆 mirror 下來，
+就可以不受限制滿載算到爽了。）
+
+```sh
+## 同時在背景算多個檔案，會把 cpu 吃滿，
+## 但會因為下載星曆的連線數太多而無法下載。
+for rinex in *.19o
+do compute-gipsyx.sh $rinex &
+done
+
+## 後來都乖乖一次算一個，
+## 一個算完才開始下一個。
+for rinex in *.19o
+do compute-gipsyx.sh $rinex
+done
+```
+
+有時有時間壓力，我會想要一次算多個，
+就會把列表拆二半，用二個迴圈去跑；
+時間約略是減半，因為算 gipsyx 一般只會吃到一顆 cpu。
+（可以開多核，但感覺沒什麼幫助。）
+只是開太多要小心同時太多個連線下載星曆會被 ban。
+
+```sh
+for rinex in *[13579]0.19o
+do
+    compute-gipsyx.sh $rinex
+    # 用 `&` 讓迴圈到背景執行，才能同時執行下一個迴圈。
+    # 並把 stdout 與 stderr 導向到檔案。
+done >odd.log 2>&1 &
+
+for rinex in *[24680]0.19o
+do 
+    compute-gipsyx.sh $rinex
+done >even.log 2>&1 &
+```
+
+### 多連線計算
+如果在遠端計算想要加速，直接用上面的寫法，
+把 `compute-gipsyx.sh` 改成 `ssh compute-gipsyx.sh` 的話，
+我的 ubuntu 主機會因為同一個來源開太多 ssh 連接，
+把連線切斷，就不能算了。
+會收到如下的錯誤訊息，然後 ssh 短時間內登不進入。
+
+```term
+ssh_exchange_identification: read: Connection reset by peer multiple connection
+```
+
+因為時間緊迫，差一二倍就差了一天，很需要加速計算，
+就 google 了一下，怎麼一次開多個連線，
+後來是找到一篇 stack exchange 的解法，
+是 [用 ssh control master multiplex ssh 連線][ssh multiplex] 。
+比較好的做法是 [寫到 `~/.ssh/config` ，
+就會在開連線時自動復用。][ssh control master config]
+
+```ssh_config
+Host *
+    ControlMaster auto
+    ControlPath /tmp/ssh-%r@%h:%p
+    ControlPersist 600
+```
+
+control master auto 是如果是第一個連線就會開 socket，
+否則就複用現有的連線。
+當然 control path 可以換到其它位置，
+注重隱私的話可以放 `~/.ssh/` 。
+也不一定每個 ssh 都用 control master，
+如果只有某個主機想用，就掛在該 Host 下面就可以了。
+
+[ssh multiplex]: https://serverfault.com/questions/465637/ssh-connection-reset-when-attempting-multiple-simultaneous-outbound-connection
+[ssh control master config]: https://myapollo.com.tw/2018/05/01/ssh-controlmaster/
+
+control master 的效果就是，只開一個 tcp 連線，
+所有 ssh 連線都在同一個 tcp 上走，
+所以自然不會因為建立太多連線被歌。
+（但 sshd 還是可以設置同一個
+control master 最多能掛幾個子連線。）
+
+#gnss
+#linux
+#shell
+
+

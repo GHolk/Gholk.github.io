@@ -280,17 +280,531 @@ GL 應該是地表層，地基層應該是 base。
 [screen-shot-41.png]: http://farm8.staticflickr.com/7908/40538481303_f12ba97d51.jpg
 [![screen-shot-41.png]]: http://www.flickr.com/photos/144554087@N04/40538481303
 
-### 作業一感想
-做得時候沒感覺，事後打報告發現重做的東西蠻多的，
-很多圖看錯後來才修正；
-應該和我非土木出身，又沒學過工程圖有很大關係。
-
-## revit 的 bug
+### revit 的 bug
 revit 作為一個龐大複雜的 bim 軟體，有 bug 是難免的，
 老師說其實 revit 常常會 [[傲嬌]] 閙脾氣。
 後來想想，其實 revit 有點像 microsoft office，
 像 word 也是每次改版後相容就會有問題，
 也會有大大小小的 bug。
+
+### 作業一感想
+做得時候沒感覺，事後打報告發現重做的東西蠻多的，
+很多圖看錯後來才修正；
+應該和我非土木出身，又沒學過工程圖有很大關係。
+
+## 作業二到所有樓層結構完成
+作業二做得比較趕，到最後一個周末才開始趕進度，
+做得沒日沒夜，最後在周一上課前趕完。
+發現建模報告不是必要，就沒懶得再打了。
+這部份的報告是期末作業三做完後補上的，
+所以有些地方沒什麼印象了，也不確定結果怎樣。
+
+### B1 樓梯與 1F 樑的相切處
+當時好像覺得怪怪的，樓梯和樑與影片中的高程不同，
+但也忘了這是最後修正後的截圖，
+還是修了還是怪怪的所以截圖。
+
+[![screen-shot-42.png]]
+
+[![screen-shot-43.png]]
+
+### 1F 樑
+[![screen-shot-44.png]]
+
+[![screen-shot-45.png]]
+
+### 1F 樓板
+[![screen-shot-46.png]]
+
+[![screen-shot-47.png]]
+
+### 1F 室內牆
+第一次畫牆蠻辛苦的，很多距離都不知道怎麼抓，
+之後還有改很多次。
+
+[![screen-shot-48.png]]
+
+這裡調了好久才把牆的產色調出來，
+一直搞不太懂材質和 `V/G 取代模型` 要調哪個。
+
+[![screen-shot-49.png]]
+
+[![screen-shot-50.png]]
+
+[![screen-shot-51.png]]
+
+[![screen-shot-52.png]]
+
+[![screen-shot-53.png]]
+
+[![screen-shot-54.png]]
+
+### 1F 門窗
+[![screen-shot-55.png]]
+
+[![screen-shot-56.png]]
+
+### 2F 快速建立
+把 1F 複製上來再微調就好了，做起來很快。
+
+[![screen-shot-57.png]]
+
+[![screen-shot-58.png]]
+
+
+[![screen-shot-59.png]]
+
+第一次作業樓梯卡很久，之後都很怕樓梯做錯。
+
+[![screen-shot-60.png]]
+
+[![screen-shot-61.png]]
+
+[![screen-shot-62.png]]
+
+### 3-6F 複製貼上
+3-6 樓是最有成就感的部份，
+直接複製 2 樓就蓋完了。
+
+[![screen-shot-63.png]]
+
+著色的結構圖面不確定是什麼時候折騰出來的。
+
+[![screen-shot-64.png]]
+
+[![screen-shot-65.png]]
+
+### 簡單的屋頂突出物
+[![screen-shot-66.png]]
+
+因為在趕作業，樓梯直接用 ocw 上的簡單修改版。
+
+[![screen-shot-67.png]]
+
+### 角窗
+這是這次作業的大魔王。
+一開始覺得沒時間，就先跳過不做，
+做完 3-6F 和屋頂突出物後，才開始研究。
+
+我覺得角窗應該做為一個獨立的元件，不應該解除群組。
+先做一樓的一個，群組化時因為相連的牆好像也要修改，
+所以我是把相連的牆的修改部份一起包進群組。
+
+二樓以上的角窗，是另一種高度，所以先複製後再修改，
+然後再一口氣複製到所有樓層。
+但因為我是最後才做，各樓層的角窗位置已有牆面，
+所以我得一一把角窗周遭的牆重畫。
+
+[![screen-shot-68.png]]
+
+### 角窗與建模概念的反思
+revit 內部限制 *一扇窗只能屬於一面牆* ，
+讓實作角窗時遇到不少麻煩，
+老師在課堂上也花了不少時間教學，
+如何模擬出一面看起來還 ok 的角窗。
+
+但我認為做這種做法已經超過合理的應用。
+早期網頁設計 html 在沒有 css 輔助時，
+由於欠缺排版的功能，不少網頁為了美觀，
+會用隱藏框線表格來定位出多欄的版面，
+然後用空白的 gif 來微調文字的對齊。
+
+後來的事大家都知道了，w3c 推出了 css，
+架構與樣式分離的基本原則確立，
+從此 html 只專注於結構，而由 css 妝點細部的表現。
+html 不關心顯示，只關心更基礎的 **這是什麼** 。
+例如我們需要一個跨頁的分隔符號，
+只要標上 `<hr class="cross-page">` ，
+在顯示時 css 會自動依類別，顯示出不同的結果。
+
+我的意思是，實際上就標個角窗，
+在概念上知道他是角窗就好了，不用太過執著於表現；
+如果現有的功能做不到表現的完美，
+就算了好了。
+
+### 元件接合與重複操作
+作業二每完成一層的樓板後，
+需要將上面一層的樓板、樑與下面一層的牆接合，
+避免混凝土量計算與結構錯誤。
+但以 revit 目前的設計，
+畫出一道牆和樓板就要接合一次，
+而且複製出來的每層樓中原本接合的元素會取消接合；
+所以雖然 3-6F 是以複製的方式完成，
+但仍要一層層一一接合。
+
+由於我在趕作業，所以我稍微練習過接合後，
+就直接跳過其它樓層的接合。
+接合說穿了並沒有什麼技術可言，
+而 3-6F 的接合又是不斷重複的機械式工作，
+我認為在電腦中進行這種工作是無意義的。
+電腦創造的目的，就是處理這類型的工作，
+cad 軟體中，如果還必需重複手動機械式的作業，
+就代表這個 cad 軟體是有缺陷的。
+
+在作業一中，我記得某部份作業老師建議我們先手動練習，
+好熟練基本操作；之後才教了進階的功能批次完成。
+我認為所謂多練習基本操作是沒意義的，
+在 cad 中畫圖，不是用紙筆畫圖，
+不需要滾鉛筆、徒手畫直線等神乎奇技，
+在電腦上練習到滑鼠按的很快，也沒多大意義。
+
+
+## 作業三裝潢與出圖
+作業三主要是裝潢和出圖，
+結構方面只有地下室一個車道要做。
+
+### 屋頂突出物上漆
+上漆是十分煩瑣的工作，又容易遺漏。
+課堂上提過一個技巧，把漆色調成明顯的顏色，
+就比較容易分辨哪裡上了哪裡沒上。
+
+[![screen-shot-69.png]]
+
+[![screen-shot-70.png]]
+
+[![screen-shot-71.png]]
+
+### 外牆上漆
+外牆也還算簡單，東西南北四個面分別上不會出錯。
+只是有些突出的陽台要注意三面和底面都要上面漆。
+
+[![screen-shot-72.png]]
+
+### 內部上漆
+內部上漆就很有挑戰性了。
+ocw 的課程上是一層層上，由左到右由上到下。
+而老師在課堂上則教了用剖面上漆的作法，
+在每面牆之間都切一個剖面，在東西方向、南北方向都切，
+之後在每個剖面的正面和背面視角上漆，理論上就上完了。
+由於可以一次上多層樓，我猜應該會比較快，所以就這樣做了。
+
+我一開始不確定要切哪一種剖面，
+所以東西方向是用 3D 視圖中的剖面框切，
+切一個位置就複製一次視圖。
+但後來覺得這樣太亂，就換個方法。
+
+[![screen-shot-73.png]]
+
+後來南北方向改成在 2D 圖面上畫剖面框，有稍微好整理一點。
+但剖面框好像不能只顯示在某一視圖？
+所以後來每個視圖都會看到一堆剖面框，
+還好結構都做完了，不然眼睛會看到花掉。
+
+[![screen-shot-74.png]]
+
+結果我全部上完色後，從垂方向切剖面框看，
+還是有幾處不知道為什麼漏掉了。
+所以之後又修修補補了一段時間。
+
+[![screen-shot-75.png]]
+
+
+[![screen-shot-76.png]]
+
+### 板上貼板與牆上貼牆
+這二者是用來模擬地磚與牆上的磁磚，
+另外一個功能就是用來包在柱的室內側，
+讓柱的室內側與室外側可以上不同的漆。
+我有照課程稍微做一點，但後面覺得做起來有點蹩扭，
+一方面是不太清楚哪些地方要貼什麼，
+一方面還覺得會很花時間，當時在趕作業，
+就沒有做下去了，連一層都沒有貼滿。
+
+另外老師在課堂上有提到，
+如果牆上有開門，貼磁磚後會把門遮住。
+可以用接合把磁磚和牆接合，
+或是用編輯輪廓在磁磚上切出一個洞。
+但接合的話，複製到別層後需要重新接合，編輯輪廓則不用。
+我是選擇用接合，因為覺得在概念上用接合比較正確。
+（雖然其實只做了一間廁所。）
+
+### 地下室車道
+地下室車道只要圓心、半徑抓出來，其實蠻簡單的。
+我車道面有照課堂上的教法用斜面做，
+但斜面被能被 **貼附頂底** ，
+所以要在斜面下再加一面樓板，實在是很蠢。
+
+[![screen-shot-77.png]]
+
+但不知道為什麼，我一直無法貼附頂底。
+本來我以為是車道太窄，
+所以把車道下的樓板加寬到超出車道，
+但還是不行，我就放棄了。
+
+[![screen-shot-78.png]]
+
+最後加上敷地建板，把車道位置的敷地挖空。
+
+[![screen-shot-79.png]]
+
+### 修正樓梯扶手支撐的 bug
+不知道為什麼我樓梯扶手支撐的欄杆不見了，
+明明在預覽圖裡是有的。
+而且只有方管的扶手支撐消失，圓管的還在；
+所以陽台的牆頂扶手我用圓管的做。
+
+作業二時就有發現，但不知道怎麼修，
+就直接交，結果被扣分了。
+後來發現是在欄杆放置的編輯頁面裡，
+有一個選項是 *在每級階梯都放置扶手* ，
+不知道為什麼有勾選，取消勾選後扶手就出現了。
+
+[![screen-shot-80.png]]
+
+### 誤操作
+可能是之前亂玩不小心勾到吧；
+我其實蠻常出現這種操作不精準的意外。
+有時用中鍵拖拉畫面時， 會變成直接拖拉點擊處的元件，
+就移動到柱或樑的位置，圖畫到後來太複雜，
+根本看不出來有沒有動到什麼。
+
+### 出圖視圖樣版
+出圖時我也不太知道一般的平面圖是什麼樣式，
+就想做出 ocw 影片的樣式，但關於樓板和樑的接合處，
+線條樣式一直不對，不知道怎麼調。
+後來重看了老師的講義才發現，線型和接合有關；
+我都偷懶不做接合了，那關心線形也沒什麼意思。
+
+[![screen-shot-81.png]]
+
+### 結構平面
+ocw 中的標籤是產生問號的標籤，
+但我產生的標籤就自帶了樑的型號；
+既然樑的型號也有了，
+那也不用特地模仿成乙級圖面的範例，
+只標代號再用表格記錄代號對應的型號。
+
+[![screen-shot-82.png]]
+
+[![screen-shot-83.png]]
+
+最後的出圖，不知道為什麼 revit 的紙圖
+有附加一些背景可以用，標題和表格都事先畫好了。
+不過我不確定要填什麼，所以就沒填了。
+
+[![screen-shot-84.png]]
+
+### 建築平面
+建築平面比較麻煩是要畫標註線。
+ocw 上有個規定是標註線不能拉進建築物內，
+但我覺得根本是自找麻煩；
+revit 標註線畫好本來就會指到建物內，
+既然 revit 這樣設計，應該也有他的理由，
+我也不想很蠢的手動把個標註線從建物內拉出來，
+所以就不管他，讓線留在建物內了。
+
+[![screen-shot-85.png]]
+
+[![screen-shot-86.png]]
+
+[![screen-shot-87.png]]
+
+[![screen-shot-88.png]]
+
+### 立面圖
+立面圖在 ocw 的課程中，因為 revit 內的樓層線不美觀，
+所以是隱藏再重畫一條線，手動標上樓層。
+我覺得太蠢就沒做，直接用原本的。
+
+[![screen-shot-89.png]]
+
+### 手動標示圖例
+這次出圖過程中，有一點我很訝意，
+竟然需要使用者要手動在圖面上標出標籤與輸入圖例的文字！
+我本身是 gis 使用者，在 gis 軟體中，
+自動依所有圖層產生圖例是出圖時很基礎的功能，
+也是絕大多數製圖軟體如 GMT 的主要功能。
+（不然為什麼要用製圖軟體。）
+
+在 gis 軟體中，還有一個出圖時很常用的功能是標籤，
+也就是在圖面上自動為某個圖層中的每個元素，
+依元素的屬性，標上標籤。
+例如縣市的圖層中，每個縣市元素有人口的屬性，也有縣市名的屬性；
+我們可以用標籤自動把縣市名標在圖中的縣市上，
+再依人口為縣市漸層著色，並產生不同顏色對應人口數的圖例。
+
+### gis 看世界
+我身為土木所測量組的學生，以前也是測量系畢業的，
+但說來慚愧，我卻沒用過 cad 製圖軟體。
+曾經想學 freecad，但也沒有上手。
+我自己只用過 gis 軟體，對很多 cad 的概念是不太能接受的。
+很多 gis 使用者會批評 cad 使用者，
+認為他們所謂的圖只是看起來是那麼回事，
+但內部的線條雜亂，拓撲關係錯誤，
+根本不是能用的資料，只能說是一張向量圖。
+cad 使用者不應該將 cad 的使用習慣帶進 gis，
+否則只會做出 *外觀上正確* 的圖。
+gis 中注重的是資料內涵，各圖層中元素的屬性，
+各元素的拓撲關係；出圖只是 gis 的終端功能之一。
+
+我認為這堂課中使用 bim 的觀念還留在 cad 的時代，
+例如很注重外觀，對出圖的格式要求也很嚴格，
+同時帶來的就是大量的手動微調與修改，但看不出有什麼意義。
+像 ocw 的示範中，在出圖時就花了大量的時間在調整格式。
+也許部份原因是 bim 軟體發展還未成熟，
+所以很多功能不完全，得要自己手動編輯，
+用特殊的方法來繞過軟體限制。
+像是出圖時的圖例與標籤得自己手動打；
+或是元件接合這種很煩瑣的事，可能算是設計錯誤。
+
+但也許 cad 界有他們自己的想法，
+bim 也是從 cad 演化而來，也許也有自己的看法；
+畢竟我不是土木實際看圖的人，可能不懂他們的邏輯。
+我不確定 bim 的發展方向，未來會不會和 gis 走向相同的方向，
+但 gis 的專業性沒有 bim 這麼高，存在很多業餘的使用者，
+而且混雜了很多程式色彩，像是資料視覺化就是 gis 很重要的一部份。
+而 bim 基本上沒有業餘使用的價值。
+gis 也存在很多開放原始碼的社群，
+如 osgeo 的 qgis，讓 gis 軟體能快速發展。
+cad 軟體還有 maker 之類的業餘使用者，
+而 bim 就只有工程上的應用，所以只有幾間大公司佔據市場，
+發展路線不同也是很正常的。
+
+
+[screen-shot-42.png]: http://farm66.staticflickr.com/65535/48042850808_1669d67174.jpg
+[![screen-shot-42.png]]: http://www.flickr.com/photos/144554087@N04/48042850808
+
+[screen-shot-43.png]: http://farm66.staticflickr.com/65535/48042914522_4e3d5bfe77.jpg
+[![screen-shot-43.png]]: http://www.flickr.com/photos/144554087@N04/48042914522
+
+[screen-shot-44.png]: http://farm66.staticflickr.com/65535/48042820516_e720ce33c6.jpg
+[![screen-shot-44.png]]: http://www.flickr.com/photos/144554087@N04/48042820516
+
+[screen-shot-45.png]: http://farm66.staticflickr.com/65535/48042851273_b8d791cf23.jpg
+[![screen-shot-45.png]]: http://www.flickr.com/photos/144554087@N04/48042851273
+
+[screen-shot-46.png]: http://farm66.staticflickr.com/65535/48042851533_0f31857af0.jpg
+[![screen-shot-46.png]]: http://www.flickr.com/photos/144554087@N04/48042851533
+
+[screen-shot-47.png]: http://farm66.staticflickr.com/65535/48042915202_017f5d2b62.jpg
+[![screen-shot-47.png]]: http://www.flickr.com/photos/144554087@N04/48042915202
+
+[screen-shot-48.png]: http://farm66.staticflickr.com/65535/48042851898_3f8121bd5a.jpg
+[![screen-shot-48.png]]: http://www.flickr.com/photos/144554087@N04/48042851898
+
+[screen-shot-49.png]: http://farm66.staticflickr.com/65535/48042821386_10c3e1e100.jpg
+[![screen-shot-49.png]]: http://www.flickr.com/photos/144554087@N04/48042821386
+
+[screen-shot-50.png]: http://farm66.staticflickr.com/65535/48042821516_2eec208abe.jpg
+[![screen-shot-50.png]]: http://www.flickr.com/photos/144554087@N04/48042821516
+
+[screen-shot-51.png]: http://farm66.staticflickr.com/65535/48042852343_755a181556.jpg
+[![screen-shot-51.png]]: http://www.flickr.com/photos/144554087@N04/48042852343
+
+[screen-shot-52.png]: http://farm66.staticflickr.com/65535/48042821941_51901f6fd0.jpg
+[![screen-shot-52.png]]: http://www.flickr.com/photos/144554087@N04/48042821941
+
+[screen-shot-53.png]: http://farm66.staticflickr.com/65535/48042852803_783e7211f2.jpg
+[![screen-shot-53.png]]: http://www.flickr.com/photos/144554087@N04/48042852803
+
+[screen-shot-54.png]: http://farm66.staticflickr.com/65535/48042822266_1d89fda236.jpg
+[![screen-shot-54.png]]: http://www.flickr.com/photos/144554087@N04/48042822266
+
+[screen-shot-55.png]: http://farm66.staticflickr.com/65535/48042853143_a7199ba156.jpg
+[![screen-shot-55.png]]: http://www.flickr.com/photos/144554087@N04/48042853143
+
+[screen-shot-56.png]: http://farm66.staticflickr.com/65535/48042916872_2ee739a614.jpg
+[![screen-shot-56.png]]: http://www.flickr.com/photos/144554087@N04/48042916872
+
+[screen-shot-57.png]: http://farm66.staticflickr.com/65535/48042917092_1cbfee6683.jpg
+[![screen-shot-57.png]]: http://www.flickr.com/photos/144554087@N04/48042917092
+
+[screen-shot-58.png]: http://farm66.staticflickr.com/65535/48042853778_f575b027f5.jpg
+[![screen-shot-58.png]]: http://www.flickr.com/photos/144554087@N04/48042853778
+
+[screen-shot-59.png]: http://farm66.staticflickr.com/65535/48042917487_de11cf8039.jpg
+[![screen-shot-59.png]]: http://www.flickr.com/photos/144554087@N04/48042917487
+
+[screen-shot-60.png]: http://farm66.staticflickr.com/65535/48042917677_cd8a46a54e.jpg
+[![screen-shot-60.png]]: http://www.flickr.com/photos/144554087@N04/48042917677
+
+[screen-shot-61.png]: http://farm66.staticflickr.com/65535/48042823676_a2cf97cd71.jpg
+[![screen-shot-61.png]]: http://www.flickr.com/photos/144554087@N04/48042823676
+
+[screen-shot-62.png]: http://farm66.staticflickr.com/65535/48042918052_86e32dbab6.jpg
+[![screen-shot-62.png]]: http://www.flickr.com/photos/144554087@N04/48042918052
+
+[screen-shot-63.png]: http://farm66.staticflickr.com/65535/48042824116_b22a54f856.jpg
+[![screen-shot-63.png]]: http://www.flickr.com/photos/144554087@N04/48042824116
+
+[screen-shot-64.png]: http://farm66.staticflickr.com/65535/48042824301_6ec7dc2391.jpg
+[![screen-shot-64.png]]: http://www.flickr.com/photos/144554087@N04/48042824301
+
+[screen-shot-65.png]: http://farm66.staticflickr.com/65535/48042824546_5b86529635.jpg
+[![screen-shot-65.png]]: http://www.flickr.com/photos/144554087@N04/48042824546
+
+[screen-shot-66.png]: http://farm66.staticflickr.com/65535/48042855378_258902da4a.jpg
+[![screen-shot-66.png]]: http://www.flickr.com/photos/144554087@N04/48042855378
+
+[screen-shot-67.png]: http://farm66.staticflickr.com/65535/48042855568_8df0c2a4db.jpg
+[![screen-shot-67.png]]: http://www.flickr.com/photos/144554087@N04/48042855568
+
+[screen-shot-68.png]: http://farm66.staticflickr.com/65535/48042825041_3e6a2a3723.jpg
+[![screen-shot-68.png]]: http://www.flickr.com/photos/144554087@N04/48042825041
+
+[screen-shot-69.png]: http://farm66.staticflickr.com/65535/48042919247_88f59ab989.jpg
+[![screen-shot-69.png]]: http://www.flickr.com/photos/144554087@N04/48042919247
+
+[screen-shot-70.png]: http://farm66.staticflickr.com/65535/48042919457_2ebf524f99.jpg
+[![screen-shot-70.png]]: http://www.flickr.com/photos/144554087@N04/48042919457
+
+[screen-shot-71.png]: http://farm66.staticflickr.com/65535/48042919712_fd995c9d83.jpg
+[![screen-shot-71.png]]: http://www.flickr.com/photos/144554087@N04/48042919712
+
+[screen-shot-72.png]: http://farm66.staticflickr.com/65535/48042856578_c84dd84844.jpg
+[![screen-shot-72.png]]: http://www.flickr.com/photos/144554087@N04/48042856578
+
+[screen-shot-73.png]: http://farm66.staticflickr.com/65535/48042920122_efd4e1b84a.jpg
+[![screen-shot-73.png]]: http://www.flickr.com/photos/144554087@N04/48042920122
+
+[screen-shot-74.png]: http://farm66.staticflickr.com/65535/48042920362_c77b2151f0.jpg
+[![screen-shot-74.png]]: http://www.flickr.com/photos/144554087@N04/48042920362
+
+[screen-shot-75.png]: http://farm66.staticflickr.com/65535/48042857108_4532c8931d.jpg
+[![screen-shot-75.png]]: http://www.flickr.com/photos/144554087@N04/48042857108
+
+[screen-shot-76.png]: http://farm66.staticflickr.com/65535/48042826656_d1882ccbe7.jpg
+[![screen-shot-76.png]]: http://www.flickr.com/photos/144554087@N04/48042826656
+
+[screen-shot-77.png]: http://farm66.staticflickr.com/65535/48042826936_4cf9acbb7d.jpg
+[![screen-shot-77.png]]: http://www.flickr.com/photos/144554087@N04/48042826936
+
+[screen-shot-78.png]: http://farm66.staticflickr.com/65535/48042921277_924e83f03a.jpg
+[![screen-shot-78.png]]: http://www.flickr.com/photos/144554087@N04/48042921277
+
+[screen-shot-79.png]: http://farm66.staticflickr.com/65535/48042857978_0601f8514b.jpg
+[![screen-shot-79.png]]: http://www.flickr.com/photos/144554087@N04/48042857978
+
+[screen-shot-80.png]: http://farm66.staticflickr.com/65535/48042921607_d09851c41d.jpg
+[![screen-shot-80.png]]: http://www.flickr.com/photos/144554087@N04/48042921607
+
+[screen-shot-81.png]: http://farm66.staticflickr.com/65535/48042827706_b94d8c1eae.jpg
+[![screen-shot-81.png]]: http://www.flickr.com/photos/144554087@N04/48042827706
+
+[screen-shot-82.png]: http://farm66.staticflickr.com/65535/48042827896_d3c674b869.jpg
+[![screen-shot-82.png]]: http://www.flickr.com/photos/144554087@N04/48042827896
+
+[screen-shot-83.png]: http://farm66.staticflickr.com/65535/48042922107_8ee5d15091.jpg
+[![screen-shot-83.png]]: http://www.flickr.com/photos/144554087@N04/48042922107
+
+[screen-shot-84.png]: http://farm66.staticflickr.com/65535/48042828186_7c1e53b3d1.jpg
+[![screen-shot-84.png]]: http://www.flickr.com/photos/144554087@N04/48042828186
+
+[screen-shot-85.png]: http://farm66.staticflickr.com/65535/48042858868_c0267cca64.jpg
+[![screen-shot-85.png]]: http://www.flickr.com/photos/144554087@N04/48042858868
+
+[screen-shot-86.png]: http://farm66.staticflickr.com/65535/48042859023_bc88e53200.jpg
+[![screen-shot-86.png]]: http://www.flickr.com/photos/144554087@N04/48042859023
+
+[screen-shot-87.png]: http://farm66.staticflickr.com/65535/48042828626_b916338411.jpg
+[![screen-shot-87.png]]: http://www.flickr.com/photos/144554087@N04/48042828626
+
+[screen-shot-88.png]: http://farm66.staticflickr.com/65535/48042922967_bfee5dc1eb.jpg
+[![screen-shot-88.png]]: http://www.flickr.com/photos/144554087@N04/48042922967
+
+[screen-shot-89.png]: http://farm66.staticflickr.com/65535/48042923287_23c43efe55.jpg
+[![screen-shot-89.png]]: http://www.flickr.com/photos/144554087@N04/48042923287
+
 
 <link rel="stylesheet" href="ext/paper.css">
 

@@ -1,10 +1,12 @@
-# 澳洲 sbas testbed 定位介紹
-澳洲與紐西蘭近年合作發展了一套星基的 gnss 增益系統，
-範圍含蓋了澳洲、紐西蘭等地。
-除了現有 sbas 的 L1 波段基本功能，
-也是全世界第一個實作 L5 雙頻多星的 sbas 系統；
-同時也嘗試透過 sbas 廣播精密星曆，
-試驗 real time ppp 的可行性。
+# 澳洲 testbed sbas 定位精度分析
+澳洲近年來發展了全球第一的 GNSS 雙頻多星星基增益系統 testbed，
+testbed 中的廣播修正量
+能至少提升動態、靜態 gnss 定位精度到次公尺等級；
+同時也在 sbas 服務上廣播即時精密星曆，
+預計即時精密星曆的 rt-ppp 可以達到 10 公分的精度。
+本研究以定點觀測的 sbas testbed rt-ppp 結果，
+與基於 IGS 發布最終版精密星曆的後處理 ppp 結果比較；
+其中後處理的 ppp 使用了 csrs-ppp 與 gipsyx 二種軟體。
 
 ## 星基增益系統 sbas
 sbas 是經由衛星廣播對局部地區的 gnss 信號修正量，

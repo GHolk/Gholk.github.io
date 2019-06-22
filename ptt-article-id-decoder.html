@@ -1,0 +1,145 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2019-06-22T02:08:30.169Z">
+<meta name="keywords" property="og:article:tag" content="javascript,ptt,tool">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="gnss-teqc-data-bulk-process.html" title="teqc 蠻力處理 gnss 數據技巧">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>ptt 文章代碼解碼</title>
+</head>
+<body>
+<main><h1 id="ptt-文章代碼解碼">ptt 文章代碼解碼</h1>
+<p>幫鄉民百科寫了個語法高亮，
+後來也順便把文章代碼處理了，
+可以把 ptt 的文章代碼轉換成 ptt 網頁版的超連結。
+之前一直想寫類似的轉換器，可以直接把文章代碼轉成網址，
+就直接引用那部份的程式，包出了這個轉換器。</p>
+<p>文章代碼和 ptt 的文章檔名是有透明的轉換機制的；
+其實只是把檔名換個方式寫，本來是時間整數，
+編碼成 2 進位的 base64hex 格式。
+<a href="https://github.com/ptt/pttbbs/blob/master/docs/aids.txt">轉換的規格在 ptt 的文件可以找到</a> 。</p>
+<h2 id="表單使用說明">表單使用說明</h2>
+<p>此轉換器可以在下面的表單裡輸入文章代碼轉出檔名，
+其中文章代碼一欄開頭有沒有 <code>#</code> 都沒差，
+可以只輸入代碼部份 <code>#1S_yeLne</code> 
+或連看板一起輸入 <code>#1S_yeLne (Gossiping)</code> ，
+看板也可以在下面的欄位另外輸入。
+其中連看板的格式中二者間的空白可以省略。
+輸入後會自動轉換，不用手動按轉換鈕。</p>
+<p>但由於文章代碼只代表檔名，還需要有看板才能得出完整的網址。
+所以如果沒有看板，只能轉換出檔名部份，
+網址會因會看板未知而不顯示。</p>
+<h2 id="網址使用說明">網址使用說明</h2>
+<p>或是直接從網址給值，就會跳到該 ptt 文章。
+本網頁網址是 <code>http://gholk.github.io/ptt-article-id-decoder.html</code> ，
+在尾端加上 querystring <code>?aid=1P_5tT7_ (PttHistory)</code> ，
+變成 <a href="http://gholk.github.io/ptt-article-id-decoder.html?aid=1P_5tT7_(PttHistory)">http://gholk.github.io/ptt-article-id-decoder.html?aid=1P_5tT7_(PttHistory)</a>，
+或是用 hash id <code>#1P_5tT7_ (PttHistory)</code> ，
+變成 <a href="http://gholk.github.io/ptt-article-id-decoder.html#1P_5tT7_(PttHistory)">http://gholk.github.io/ptt-article-id-decoder.html#1P_5tT7_(PttHistory)</a>
+就會直接跳轉到該篇文章的頁面，達到類似轉址的功能。
+在網址中的空白一樣可省；畢竟慣例上網址不含空白，
+雖然含了也是可以。</p>
+<p>雖然很像轉址，但其實是在前端用 javascript 解碼再轉址，
+所以只在瀏覽器中有效。
+不像 wikia 的重定向是在後端處理，
+這個轉址實際上不管你傳什麼網址進去，
+都是回覆一樣的網頁，網頁中的 js 再去解析網址中的參數轉址。</p>
+<form>
+<label>文章代碼 <input name="article-id" placeholder="#1S_yeLne (Gossiping)"></label>
+<label>看板 <input name="board" placeholder="Gossiping"></label>
+<label>檔名 <input name="filename"></label>
+<label>網址 <input name="url"></label>
+</form>
+
+<style>
+label {
+  display: block;
+}
+input[name=url] {
+  display: block;
+  width: 100%;
+}
+</style>
+
+<script src="https://pttpedia.fandom.com/zh/index.php?title=MediaWiki:PttHighlightArticle.js&amp;action=raw&amp;ctype=text/javascript&amp;reviewed=1561141829"></script>
+
+
+<script>
+const formArticleId = {
+  __proto__: pttHighlightArticle.pttArticleId,
+  toUrl(fileName, board) {
+    const url = `https://www.ptt.cc/bbs/${board}/${fileName}.html`
+    return url
+  },
+  form: document.querySelector('form'),
+  scanAid(string) {
+    return string.match(/#?(.{8})(?:\s*\(([\w\d_-]+)\))?/)
+  },
+  convertForm() {
+    this.outputForm(
+      this.form.elements['article-id'].value,
+      this.form.elements['board'].value
+    )
+  },
+  outputForm(string, board) {
+    const scan = this.scanAid(string)
+    const aid = scan[1]
+    if (scan[2]) board = scan[2]
+    const filename = this.toFileName(aid)
+    this.form.elements['filename'].value = filename
+    if (board) {
+      this.form.elements['url'].value = this.toUrl(filename, board)
+    }
+  },
+  convertHash() {
+    this.outputForm(decodeURIComponent(window.location.hash))
+  },
+  convertSearch() {
+    const search = new URLSearchParams(window.location.search)
+    this.outputForm(
+      search.get('article-id') || search.get('aid'),
+      search.get('board')
+    )
+  },
+  autoConvert() {
+    let convert = false
+    if (window.location.hash) {
+      this.convertHash()
+      convert = true
+    }
+    else if (window.location.search) {
+      this.convertSearch()
+      convert = true
+    }
+    if (convert) window.location = this.form.elements['url'].value
+  }
+}
+formArticleId.form.elements['article-id'].oninput = 
+    formArticleId.form.elements['board'].oninput = 
+    () => formArticleId.convertForm()
+formArticleId.autoConvert()
+</script>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

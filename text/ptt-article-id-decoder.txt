@@ -1,0 +1,123 @@
+# ptt 文章代碼解碼
+幫鄉民百科寫了個語法高亮，
+後來也順便把文章代碼處理了，
+可以把 ptt 的文章代碼轉換成 ptt 網頁版的超連結。
+之前一直想寫類似的轉換器，可以直接把文章代碼轉成網址，
+就直接引用那部份的程式，包出了這個轉換器。
+
+文章代碼和 ptt 的文章檔名是有透明的轉換機制的；
+其實只是把檔名換個方式寫，本來是時間整數，
+編碼成 2 進位的 base64hex 格式。
+[轉換的規格在 ptt 的文件可以找到][ptt article id] 。
+
+[ptt article id]: https://github.com/ptt/pttbbs/blob/master/docs/aids.txt
+
+## 表單使用說明
+此轉換器可以在下面的表單裡輸入文章代碼轉出檔名，
+其中文章代碼一欄開頭有沒有 `#` 都沒差，
+可以只輸入代碼部份 `#1S_yeLne` 
+或連看板一起輸入 `#1S_yeLne (Gossiping)` ，
+看板也可以在下面的欄位另外輸入。
+其中連看板的格式中二者間的空白可以省略。
+輸入後會自動轉換，不用手動按轉換鈕。
+
+但由於文章代碼只代表檔名，還需要有看板才能得出完整的網址。
+所以如果沒有看板，只能轉換出檔名部份，
+網址會因會看板未知而不顯示。
+
+## 網址使用說明
+或是直接從網址給值，就會跳到該 ptt 文章。
+本網頁網址是 `http://gholk.github.io/ptt-article-id-decoder.html` ，
+在尾端加上 querystring `?aid=1P_5tT7_ (PttHistory)` ，
+變成 <http://gholk.github.io/ptt-article-id-decoder.html?aid=1P_5tT7_(PttHistory)>，
+或是用 hash id `#1P_5tT7_ (PttHistory)` ，
+變成 <http://gholk.github.io/ptt-article-id-decoder.html#1P_5tT7_(PttHistory)>
+就會直接跳轉到該篇文章的頁面，達到類似轉址的功能。
+在網址中的空白一樣可省；畢竟慣例上網址不含空白，
+雖然含了也是可以。
+
+雖然很像轉址，但其實是在前端用 javascript 解碼再轉址，
+所以只在瀏覽器中有效。
+不像 wikia 的重定向是在後端處理，
+這個轉址實際上不管你傳什麼網址進去，
+都是回覆一樣的網頁，網頁中的 js 再去解析網址中的參數轉址。
+
+<form>
+<label>文章代碼 <input name="article-id" placeholder="#1S_yeLne (Gossiping)"></label>
+<label>看板 <input name="board" placeholder="Gossiping"></label>
+<label>檔名 <input name="filename"></label>
+<label>網址 <input name="url"></label>
+</form>
+
+<style>
+label {
+  display: block;
+}
+input[name=url] {
+  display: block;
+  width: 100%;
+}
+</style>
+
+<script src="https://pttpedia.fandom.com/zh/index.php?title=MediaWiki:PttHighlightArticle.js&action=raw&ctype=text/javascript&reviewed=1561141829"></script>
+
+
+<script>
+const formArticleId = {
+  __proto__: pttHighlightArticle.pttArticleId,
+  toUrl(fileName, board) {
+    const url = `https://www.ptt.cc/bbs/${board}/${fileName}.html`
+    return url
+  },
+  form: document.querySelector('form'),
+  scanAid(string) {
+    return string.match(/#?(.{8})(?:\s*\(([\w\d_-]+)\))?/)
+  },
+  convertForm() {
+    this.outputForm(
+      this.form.elements['article-id'].value,
+      this.form.elements['board'].value
+    )
+  },
+  outputForm(string, board) {
+    const scan = this.scanAid(string)
+    const aid = scan[1]
+    if (scan[2]) board = scan[2]
+    const filename = this.toFileName(aid)
+    this.form.elements['filename'].value = filename
+    if (board) {
+      this.form.elements['url'].value = this.toUrl(filename, board)
+    }
+  },
+  convertHash() {
+    this.outputForm(decodeURIComponent(window.location.hash))
+  },
+  convertSearch() {
+    const search = new URLSearchParams(window.location.search)
+    this.outputForm(
+      search.get('article-id') || search.get('aid'),
+      search.get('board')
+    )
+  },
+  autoConvert() {
+    let convert = false
+    if (window.location.hash) {
+      this.convertHash()
+      convert = true
+    }
+    else if (window.location.search) {
+      this.convertSearch()
+      convert = true
+    }
+    if (convert) window.location = this.form.elements['url'].value
+  }
+}
+formArticleId.form.elements['article-id'].oninput = 
+    formArticleId.form.elements['board'].oninput = 
+    () => formArticleId.convertForm()
+formArticleId.autoConvert()
+</script>
+
+#javascript
+#ptt
+#tool

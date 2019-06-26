@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-06-22T05:04:47.138Z</updated>
+  <updated>2019-06-26T04:59:14.591Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,97 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/satellite-geodesy-homework-8.html</id>
+<title>使用 snap DInSAR 觀察地震後地表變型</title>
+<published>2019-06-26T04:51:04.423Z</published>
+<updated>2019-06-26T04:59:14.579Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/satellite-geodesy-homework-8.html"/>
+<summary type="html">這次是衛星大地測量作業八，
+要使用 snap 做 DInSAR，可以用來看地表變型。
+老師指派了幾個地震或山崩地區，
+我是被分配到 2018 年印尼蘇拉威西島的地震，
+可惜 DInSAR 結果不理想，在 unwrap 前只看得出雜訊。</summary>
+<category term="sar"/>
+<category term="geomatics"/>
+<category term="report"/>
+<category term="地震"/>
+<content type="html">&lt;h1 id=&quot;使用-snap-DInSAR-觀察地震後地表變型&quot;&gt;使用 snap DInSAR 觀察地震後地表變型&lt;/h1&gt;
+&lt;p&gt;這次是衛星大地測量作業八，
+要使用 snap 做 DInSAR，可以用來看地表變型。
+老師指派了幾個地震或山崩地區，
+我是被分配到 2018 年印尼蘇拉威西島的地震，
+可惜 DInSAR 結果不理想，在 unwrap 前只看得出雜訊。&lt;/p&gt;
+&lt;h2 id=&quot;DInSAR&quot;&gt;DInSAR&lt;/h2&gt;
+&lt;p&gt;DInSAR 是 SAR 技術的一種。
+SAR 是合成孔徑雷達，解析度較傳統雷達高；
+而 InSAR 是干涉雷達影像，保存有相位差，可以用來測距；
+DInSAR 就是干涉雷達影像的差分，
+也就是將二張干涉雷達相減，
+計算出每一點在視線方向的距離變化，看地表變型情形。&lt;/p&gt;
+&lt;h2 id=&quot;sentinel-1&quot;&gt;sentinel-1&lt;/h2&gt;
+&lt;p&gt;sentinel 是歐盟發射的一系列地表監測衛星，
+其中 sentinel-1 是 SAR 影像的衛星，
+&lt;a href=&quot;https://scihub.copernicus.eu/dhus/#/home&quot; title=&quot;提供 sentinel-1 影像的 esa 網站&quot;&gt;其拍攝的 SAR 影像公開在網路上供自由使用。&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;本次作業我的主題是 2018-09-28 發生在印尼蘇拉威西的地震，
+地震之後引發了海嘯，也造成了不少的傷亡。
+sentinel-1 在 10 月初有數張影像，
+但震前最近一張是在 06-07 的降軌；所以配合震前，
+震後最近一張我選擇了 10-05 的降軌影像。
+但震前的影像和地震差了將近四個月，
+所以結果可能不會太好。&lt;/p&gt;
+&lt;p&gt;而且 10-05 與 06-07 的影像範圍稍有不同，
+10-05 的影像範圍是整個地峽，
+但 06-06 的影像把地峽分為上下二張，
+所以我總共下載了三張影像，做了二次的 DInSAR。&lt;/p&gt;
+&lt;h2 id=&quot;snap&quot;&gt;snap&lt;/h2&gt;
+&lt;p&gt;snap 是 esa 出品的以 sentinel 系列
+衛星影像為目標的遙測影像分析軟體。
+在本次作業中，我們使用 snap 來做 DInSAR。&lt;/p&gt;
+&lt;p&gt;我的 DInSAR 成果如下：&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48130070253&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48130070253_6642572230.jpg&quot; alt=&quot;Pictures/bad-dinsar.png&quot; title=&quot;作業中震源地峽南北二部份的 dinsar 結果&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;結果極差，完全看不出紋理，只看得出雜訊。&lt;/p&gt;
+&lt;h2 id=&quot;文獻回顧&quot;&gt;文獻回顧&lt;/h2&gt;
+&lt;p&gt;有找到二篇有關 sentinel 與蘇拉威西地震的文章。
+&lt;a href=&quot;https://doi.org/10.3390/rs11070886&quot; title=&quot;Multi-Source Data Fusion Based on Ensemble Learning for Rapid Building Damage Mapping during the 2018 Sulawesi Earthquake and Tsunami in Palu, Indonesia, 2019, Bruno Adriano; Junshi Xia ; Gerald Baier; Naoto Yokoya; Shunichi Koshimura&quot;&gt;一篇是影像融合搭配影像分類建立災損地圖的學術文章&lt;/a&gt; ，
+&lt;a href=&quot;https://emergency.copernicus.eu/mapping/ems/copernicus-ems-risk-and-recovery-mapping-ground-deformation-analyses-sulawesi-indonesia&quot; title=&quot;EMSN 061 - Ground deformation analyses, Sulawesi, Indonesia&quot;&gt;另一篇是用 DInSAR 分析蘇拉威西地震&lt;/a&gt; ，
+來源是歐盟的 copernicus emergency management service mapping。&lt;/p&gt;
+&lt;h3 id=&quot;Multi-Source-Data-Fusion-Based-on-Ensemble-Learning-for-Rapid-Building-Damage-Mapping-during-the-2018-Sulawesi-Earthquake-and-Tsunami-in-Palu,-Indonesia&quot;&gt;Multi-Source Data Fusion Based on Ensemble Learning for Rapid Building Damage Mapping during the 2018 Sulawesi Earthquake and Tsunami in Palu, Indonesia&lt;/h3&gt;
+&lt;p&gt;這篇文章是影像分類的，但是唯一一篇 sci-index 的文章。
+主要就是用地震前後災害造成的地表變遷
+造成的影像差異，自動判斷各地的災損情形；
+特別的是其中使用了多波段、多種影像來源，
+其中就包含了 sentinel-1 的 SAR 影像。
+但其中使用的 SAR 影像只使用了強度，
+並沒有用到相位或做干涉處理。&lt;/p&gt;
+&lt;h3 id=&quot;EMSN-061---Ground-deformation-analyses,-Sulawesi,-Indonesia&quot;&gt;EMSN 061 - Ground deformation analyses, Sulawesi, Indonesia&lt;/h3&gt;
+&lt;p&gt;這篇文章就和我的作業比較接近，雖然來源不太像一般的學術文章，
+但也是用 sentinel 和 snap 處理，
+使用了 DInSAR 與 PSInSAR 二種技術。&lt;/p&gt;
+&lt;p&gt;DInSAR 文章中使用了升軌與降軌二種，
+降軌與我的相同，是使用 06-07 10-05 的影像；
+但他還有使用升軌的 04-10 10-10 影像。
+二對的結果都與我的接近，幾乎看不出規則的變化，只有雜訊。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48130276378&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48130276378_7823c4f974.jpg&quot; alt=&quot;dinsar-ascending.png&quot; title=&quot;升軌的 dinsar&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48130251801&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48130251801_72e63f4e81.jpg&quot; alt=&quot;dinsar-descending.png&quot; title=&quot;降軌的 dinsar&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;文章中在 2.3.1 節推論原因是地震前後島中的基礎建設改變極大，
+造成大量的地表變化，使得震前震後的影像相關性低，
+無法 unwrap 解出地震造成的地表變型。
+並額外做了地震後短期間內的二張 sar 影像干涉，
+可以看出在同為震後的影像中，相關性就較高，
+驗證影像相關性低是由於地震前後基礎建設改變造成。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48130251921&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48130251921_196672455d.jpg&quot; alt=&quot;dinsar-post-post.png&quot; title=&quot;二張同為震後的 dinsar&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;文章後段 3.2.2 節使用了 PSInSAR 分析地表變形，
+原理是從不同角度的影像中辨識出同一地物，
+就能從一個以上的視線方向，還原出三維方向上的移動。
+效果較 DInSAR 好，也有能看出此地震的移動方向主要是南北方向的平移。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48130252096&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48130252096_4cd47382b7.jpg&quot; alt=&quot;psinsar-north-motion.png&quot; title=&quot;psinsar 的南北方向位移結果&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
+
+&lt;script src=&quot;ext/paper.js?reference&quot;&gt;&lt;/script&gt;
+
+&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/ptt-article-id-decoder.html</id>
 <title>ptt 文章代碼解碼</title>
 <published>2019-06-22T02:08:30.169Z</published>
@@ -1867,132 +1958,7 @@ pre &gt; code {
 例如北極溶冰、地層下陷、造山運動等。</summary>
 <category term="report"/>
 <category term="geomatics"/>
-<content type="html">&lt;h1 id=&quot;衛星大地作業六&quot;&gt;衛星大地作業六&lt;/h1&gt;
-&lt;p&gt;人造衛星普及的今日，只要在衛星上搭載雷達測高系統，
-就能製做全球尺度的 DEM。
-許多低解析度的衛星測高資料都已是開放資料，
-只要選對衛星，就能輕易利用現有的歷史資料，
-觀查過去地表的大規模高程變化。
-例如北極溶冰、地層下陷、造山運動等。&lt;/p&gt;
-&lt;h2 id=&quot;CryoSat-2&quot;&gt;CryoSat-2&lt;/h2&gt;
-&lt;p&gt;本次作業的資料是 CryoSat-2 衛星，
-是歐洲太空總署的研究用衛星，
-主要目的是觀測極區的冰層厚度變化，
-也就是觀查溶冰情形。
-其軌道傾角為 92.03° ，
-代表能觀測 87.97° 為止的大部份極區。&lt;/p&gt;
-&lt;h2 id=&quot;運用高程計算重力&quot;&gt;運用高程計算重力&lt;/h2&gt;
-&lt;p&gt;衛星測高在海面上測得的就直接是海水面，
-而大地基準面就是定義為接近平均海水面的等位面。
-所以觀測到的海面高，扣除潮汐影響、海水面地形後，
-就能得到 geoid。&lt;/p&gt;
-&lt;h3 id=&quot;計算殘餘大地水準面梯度&quot;&gt;計算殘餘大地水準面梯度&lt;/h3&gt;
-&lt;p&gt;在 cryosat-2 測得的海面高，
-扣掉海面地型後就是實際測得的 geoid。
-而依物理大地的理論，會將 geoid 以球諧系數分解成不同波長，
-將上述實際測得的 geoid，扣掉長波長的粗略的變化，
-就剩下短波長的局部的 geoid，稱為殘餘大地水準面。&lt;/p&gt;
-&lt;p&gt;這裡是直接扣掉 egm08 的大地起伏模型，就當作扣掉了長波長，
-剩的就當作剩餘大地起伏。
-另外程式中還會將過大的離群值挑出到 outlier 這個文字檔。
-最後再將殘餘大地水準面沿衛星軌跡微分求梯度，
-就能得到 geoid 在衛星移動方向上的梯度，
-而大地起伏的梯度也就是垂線偏差，
-所以微分出來的結果就是在衛星軌跡方向上的垂線偏差。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;egm08_2160n_1m_119_123_21_26.grd3&lt;/code&gt;: EGM08 大地起伏。&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;cry2list.txt&lt;/code&gt;: 所有測高資料的索引。&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;grad_c2&lt;/code&gt;: 輸出的大地起伏梯度。&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;rio_05_mdt.grd3&lt;/code&gt;: 海水面地形。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-bat&quot;&gt;rem The first step is download Cryosat-2 data from RADS using Matlab code RADS_read4bat.m. This part is done
 
-rem Step1: Compute residual geoid gradients
-debug\resgeoid_cryosat -Megm08_2160n_1m_119_121_21_23.grd3 -Fcry2list.txt -Ggrad_c2 -T25 -Ooutlier -N8 -Irio_05_mdt.grd3
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;計算殘餘重力異常&quot;&gt;計算殘餘重力異常&lt;/h3&gt;
-&lt;p&gt;接下來是主要的計算：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;rem Compute residual gravity anomalies using the Inverse Vening Meinesz formula (IVM)
-
-rem Step 1: Compute north and east gradients
-debug\gridg grad_c2 -Ccov_egm08(2160).txt -R119/121/21/23 -I1/1 -W10 -Nnorth_grad_geo.grd3 -Eeast_grad_geo.grd3 &amp;gt;gridg.out
-
-rem Step 2: Compute residual gravity anomaly
-debug\gift -Nnorth_grad_geo.grd3 -Eeast_grad_geo.grd3 -Gtmp1_1012.grd3 -V
-
-rem Step 3: Compute innermost zone effect on gravity anomaly
-debug\inzone -Nnorth_grad_geo.grd3 -Eeast_grad_geo.grd3  -Gtmp2_1012.grd3
-
-rem Step 4: Restore the EGM08 gravity anomaly
-debug\gridadd -Atmp1_1012.grd3 -Begm08_2160g_1m_119_121_21_23.grd3 -Gtmp3_1012.grd3
-debug\gridadd -Atmp3_1012.grd3 -Btmp2_1012.grd3 -Givm_g_1012.grd3
-
-debug\grd3togrd ivm_g_1012.grd3 |xyz2grd -Z -R119/121/21/23 -I1m -Gtw_ga.grd
-&lt;/code&gt;&lt;/pre&gt;&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;將上述沿軌跡的垂線偏差化算成南北和東西方向分量，
-由特定方向上複原回二方向上時，
-需要用到共變異矩陣 &lt;code&gt;cov_egm08(2160).txt&lt;/code&gt; 。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;再依據 inverse Vening Meinesz formula 
-由東西與南北二方向上的垂線偏差，計算出重力異常。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;但由於在重力場的 stoke 積分，
-在接近待測點距離接近 0 時，
-會發散為奇異解，所以要另外處理。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;將 2 3 的結果相加，就是用殘餘大地起伏計算出來的殘餘重力異常；
-再把 egm08 的重力異常加回去，就得到完整的重力異常。&lt;/p&gt;
-&lt;p&gt;最後再將重力異常網格轉成 gmt 能讀取的格式，方便之後繪圖。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&quot;gmt-繪圖&quot;&gt;gmt 繪圖&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;Rem Step3 is to plot gravity anomalies
-makecpt -Crainbow -T-250/250/25 -Z &amp;gt;aaa.cpt
-grdimage tw_ga.grd -R119/121/21/23 -B1 -Caaa.cpt -JM17c -K -Y2c -P &amp;gt;HW7_ex.ps
-pscoast -R -JM -Dh -W1 -G150 -O -K &amp;gt;&amp;gt;HW7_ex.ps
-psscale -D8.5c/-1c/17c/0.15ch -O -Caaa.cpt -B50 &amp;gt;&amp;gt;HW7_ex.ps
-&lt;/code&gt;&lt;/pre&gt;&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;設定彩色，範圍為 -250 到 250。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;用轉好的 grd 格式繪圖，範圍為 119/121/21/23。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;將圖加上海岸線。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;將圖加上顏色尺度。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/40931878223&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/40931878223_79926494a1.jpg&quot; alt=&quot;gravity-anomaly-cryosat-120-22.png&quot; title=&quot;GMT 畫出的 119-121E,21-23N 重力異常&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;inverse-vening-meinesz-formula&quot;&gt;inverse vening meinesz formula&lt;/h2&gt;
-&lt;p&gt;vening meinesz 公式是用重力異常計算垂線偏差的公式，
-而 inverse vening meinesz 公式則是試著逆推，
-由垂線偏差反推出重力異常。
-另外由於垂線偏差也就是大地起伏的梯度，
-只要對垂線偏差積分，就能得到大地起伏。&lt;/p&gt;
-&lt;p&gt;而作業中，是將衛星測高的海面高
-化算為大地基準面，取梯度得到垂線偏差，
-再用 inverse vening meinesz 公式的程式 gift，
-從垂線偏差計算重力異常。&lt;/p&gt;
-&lt;h2 id=&quot;重力異常與地質結構&quot;&gt;重力異常與地質結構&lt;/h2&gt;
-&lt;p&gt;上述的重力異常，與海底地型圖比較後，可以看出相關。
-例如琉球嶼以東的重力異常較低，約略是海底地型的枋寮峽谷；
-在較西側則有澎湖峽谷，中間的高屏峽谷則不太明顯。
-最南方的凹陷可能是福爾摩沙峽谷到馬尼拉海溝的凹陷。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://mynotes.org/earth/wp-content/uploads/2012/06/6441231253106.jpg&quot; alt=&quot;sea topography&quot; title=&quot;台灣周遭海底地型&quot;&gt;&lt;/p&gt;
-&lt;script src=&quot;ext/paper.js?reference&quot;&gt;&lt;/script&gt;
-
-&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
-
-&lt;style&gt;
-code {
-  border: none;
-}
-pre &gt; code {
-  white-space: pre-wrap !important;
-}
-&lt;/style&gt;
-
-&lt;script src=&quot;ext/header-nctu.js?editable&amp;amp;execute&quot;&gt;&lt;/script&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/shell-interact-dangle-program.html</id>
 <title>在 shell 中編程</title>

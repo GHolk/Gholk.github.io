@@ -287,3 +287,4 @@ geomatics-tribal-map-and-spicial-panel-analysis.html
 satellite-geodesy-homework-7.html
 gnss-teqc-data-bulk-process.html
 ptt-article-id-decoder.html
+satellite-geodesy-homework-8.html

@@ -1,0 +1,109 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2019-06-26T04:51:04.423Z">
+<meta name="keywords" property="og:article:tag" content="sar,geomatics,report,地震">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="ptt-article-id-decoder.html" title="ptt 文章代碼解碼">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>使用 snap DInSAR 觀察地震後地表變型</title>
+</head>
+<body>
+<main><h1 id="使用-snap-DInSAR-觀察地震後地表變型">使用 snap DInSAR 觀察地震後地表變型</h1>
+<p>這次是衛星大地測量作業八，
+要使用 snap 做 DInSAR，可以用來看地表變型。
+老師指派了幾個地震或山崩地區，
+我是被分配到 2018 年印尼蘇拉威西島的地震，
+可惜 DInSAR 結果不理想，在 unwrap 前只看得出雜訊。</p>
+<h2 id="DInSAR">DInSAR</h2>
+<p>DInSAR 是 SAR 技術的一種。
+SAR 是合成孔徑雷達，解析度較傳統雷達高；
+而 InSAR 是干涉雷達影像，保存有相位差，可以用來測距；
+DInSAR 就是干涉雷達影像的差分，
+也就是將二張干涉雷達相減，
+計算出每一點在視線方向的距離變化，看地表變型情形。</p>
+<h2 id="sentinel-1">sentinel-1</h2>
+<p>sentinel 是歐盟發射的一系列地表監測衛星，
+其中 sentinel-1 是 SAR 影像的衛星，
+<a href="https://scihub.copernicus.eu/dhus/#/home" title="提供 sentinel-1 影像的 esa 網站">其拍攝的 SAR 影像公開在網路上供自由使用。</a></p>
+<p>本次作業我的主題是 2018-09-28 發生在印尼蘇拉威西的地震，
+地震之後引發了海嘯，也造成了不少的傷亡。
+sentinel-1 在 10 月初有數張影像，
+但震前最近一張是在 06-07 的降軌；所以配合震前，
+震後最近一張我選擇了 10-05 的降軌影像。
+但震前的影像和地震差了將近四個月，
+所以結果可能不會太好。</p>
+<p>而且 10-05 與 06-07 的影像範圍稍有不同，
+10-05 的影像範圍是整個地峽，
+但 06-06 的影像把地峽分為上下二張，
+所以我總共下載了三張影像，做了二次的 DInSAR。</p>
+<h2 id="snap">snap</h2>
+<p>snap 是 esa 出品的以 sentinel 系列
+衛星影像為目標的遙測影像分析軟體。
+在本次作業中，我們使用 snap 來做 DInSAR。</p>
+<p>我的 DInSAR 成果如下：</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/48130070253"><img src="http://farm66.staticflickr.com/65535/48130070253_6642572230.jpg" alt="Pictures/bad-dinsar.png" title="作業中震源地峽南北二部份的 dinsar 結果"></a></p>
+<p>結果極差，完全看不出紋理，只看得出雜訊。</p>
+<h2 id="文獻回顧">文獻回顧</h2>
+<p>有找到二篇有關 sentinel 與蘇拉威西地震的文章。
+<a href="https://doi.org/10.3390/rs11070886" title="Multi-Source Data Fusion Based on Ensemble Learning for Rapid Building Damage Mapping during the 2018 Sulawesi Earthquake and Tsunami in Palu, Indonesia, 2019, Bruno Adriano; Junshi Xia ; Gerald Baier; Naoto Yokoya; Shunichi Koshimura">一篇是影像融合搭配影像分類建立災損地圖的學術文章</a> ，
+<a href="https://emergency.copernicus.eu/mapping/ems/copernicus-ems-risk-and-recovery-mapping-ground-deformation-analyses-sulawesi-indonesia" title="EMSN 061 - Ground deformation analyses, Sulawesi, Indonesia">另一篇是用 DInSAR 分析蘇拉威西地震</a> ，
+來源是歐盟的 copernicus emergency management service mapping。</p>
+<h3 id="Multi-Source-Data-Fusion-Based-on-Ensemble-Learning-for-Rapid-Building-Damage-Mapping-during-the-2018-Sulawesi-Earthquake-and-Tsunami-in-Palu,-Indonesia">Multi-Source Data Fusion Based on Ensemble Learning for Rapid Building Damage Mapping during the 2018 Sulawesi Earthquake and Tsunami in Palu, Indonesia</h3>
+<p>這篇文章是影像分類的，但是唯一一篇 sci-index 的文章。
+主要就是用地震前後災害造成的地表變遷
+造成的影像差異，自動判斷各地的災損情形；
+特別的是其中使用了多波段、多種影像來源，
+其中就包含了 sentinel-1 的 SAR 影像。
+但其中使用的 SAR 影像只使用了強度，
+並沒有用到相位或做干涉處理。</p>
+<h3 id="EMSN-061---Ground-deformation-analyses,-Sulawesi,-Indonesia">EMSN 061 - Ground deformation analyses, Sulawesi, Indonesia</h3>
+<p>這篇文章就和我的作業比較接近，雖然來源不太像一般的學術文章，
+但也是用 sentinel 和 snap 處理，
+使用了 DInSAR 與 PSInSAR 二種技術。</p>
+<p>DInSAR 文章中使用了升軌與降軌二種，
+降軌與我的相同，是使用 06-07 10-05 的影像；
+但他還有使用升軌的 04-10 10-10 影像。
+二對的結果都與我的接近，幾乎看不出規則的變化，只有雜訊。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/48130276378"><img src="http://farm66.staticflickr.com/65535/48130276378_7823c4f974.jpg" alt="dinsar-ascending.png" title="升軌的 dinsar"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/48130251801"><img src="http://farm66.staticflickr.com/65535/48130251801_72e63f4e81.jpg" alt="dinsar-descending.png" title="降軌的 dinsar"></a></p>
+<p>文章中在 2.3.1 節推論原因是地震前後島中的基礎建設改變極大，
+造成大量的地表變化，使得震前震後的影像相關性低，
+無法 unwrap 解出地震造成的地表變型。
+並額外做了地震後短期間內的二張 sar 影像干涉，
+可以看出在同為震後的影像中，相關性就較高，
+驗證影像相關性低是由於地震前後基礎建設改變造成。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/48130251921"><img src="http://farm66.staticflickr.com/65535/48130251921_196672455d.jpg" alt="dinsar-post-post.png" title="二張同為震後的 dinsar"></a></p>
+<p>文章後段 3.2.2 節使用了 PSInSAR 分析地表變形，
+原理是從不同角度的影像中辨識出同一地物，
+就能從一個以上的視線方向，還原出三維方向上的移動。
+效果較 DInSAR 好，也有能看出此地震的移動方向主要是南北方向的平移。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/48130252096"><img src="http://farm66.staticflickr.com/65535/48130252096_4cd47382b7.jpg" alt="psinsar-north-motion.png" title="psinsar 的南北方向位移結果"></a></p>
+<link rel="stylesheet" href="ext/paper.css">
+
+<script src="ext/paper.js?reference"></script>
+
+<script src="ext/header-nctu.js?execute&amp;editable"></script>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

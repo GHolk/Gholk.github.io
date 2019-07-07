@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-06-26T04:59:14.591Z</updated>
+  <updated>2019-07-07T12:13:11.947Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,163 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/moderate-symbol-abstraction-make-sence.html</id>
+<title>程式語言中適量的符號有助於閱讀</title>
+<published>2019-07-07T12:12:24.291Z</published>
+<updated>2019-07-07T12:13:11.935Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/moderate-symbol-abstraction-make-sence.html"/>
+<summary type="html">這標題可能有點怪。我想談談對一些語言對語法中符號的選擇。
+一些語言號稱使用 &lt;em&gt;口語風格的語法&lt;/em&gt; ，更適合閱讀與理解，
+像是 basic 使用 begin end 標註範圍。
+但不應走火入魔，適度的使用符號才是明策，
+例如 latex 提供 &lt;code&gt;^&lt;/code&gt; 與 &lt;code&gt;_&lt;/code&gt; 用做上標與下標。
+當然過度使用符號也不行，因為過多的符號會造成記憶困難，
+例如 APL 與 J 幾乎全依懶於符號。</summary>
+<category term="語法"/>
+<category term="javascript"/>
+<category term="lisp"/>
+<content type="html">&lt;h1 id=&quot;程式語言中適量的符號有助於閱讀&quot;&gt;程式語言中適量的符號有助於閱讀&lt;/h1&gt;
+&lt;p&gt;這標題可能有點怪。我想談談對一些語言對語法中符號的選擇。
+一些語言號稱使用 &lt;em&gt;口語風格的語法&lt;/em&gt; ，更適合閱讀與理解，
+像是 basic 使用 begin end 標註範圍。
+但不應走火入魔，適度的使用符號才是明策，
+例如 latex 提供 &lt;code&gt;^&lt;/code&gt; 與 &lt;code&gt;_&lt;/code&gt; 用做上標與下標。
+當然過度使用符號也不行，因為過多的符號會造成記憶困難，
+例如 APL 與 J 幾乎全依懶於符號。&lt;/p&gt;
+&lt;h2 id=&quot;程式語言&quot;&gt;程式語言&lt;/h2&gt;
+&lt;p&gt;一些程式語言使用口語風格的關鍵字，號稱能因此降低學習門檻；
+例子有 basic、python、ruby。
+basic 使用 end if end loop 之類的語法來關閉語句塊，
+而 ruby 則以 begin 與 end 來標註語句塊的開始與結束，
+而我對 python 的印像則是有一個神奇的 &lt;code&gt;is&lt;/code&gt; 算符，
+類似於 &lt;code&gt;==&lt;/code&gt; 的作用。&lt;/p&gt;
+&lt;p&gt;當然其中最甚者為 basic，幾乎都是關鍵字，
+少有符號，全由英文的單字組成。
+對比之下則是 c，使用大括號標註語句塊，
+使用小括號包裹判斷式。
+c 的宣告除了用等號初始化外，
+還加了以 &lt;code&gt;*&lt;/code&gt; 抽象化指標意含的語法。&lt;/p&gt;
+&lt;p&gt;而 python 在宣告上雖然省去了類型的單字，
+但有某些時候卻多了一個 &lt;code&gt;as&lt;/code&gt; 語法用來命名。
+例如補捉錯誤 &lt;code&gt;except Error as err&lt;/code&gt; ，
+引用函式庫 &lt;code&gt;import numpy as np&lt;/code&gt; 。
+這點後來還被 js 的 es6 module 抄去了。&lt;/p&gt;
+&lt;p&gt;bash 則是另一種極端，雖然可以用大括號或小括號定義語句塊，
+但用法卻與 if else 的不合。
+bash 似乎反映了彼時代對 if 語句的想像，
+if 後還需要一個 then 開始區塊，
+while 後也要一個 do 開始迴圈內容。
+而結束也需要一個特殊的符號，bash 很天才幫條件判斷的 if 選了 fi，
+理所當然 case 就是 esca。
+但對於迴圈，又是另一套作法，
+一律使用 do 與 done 包住迴圈內文。&lt;/p&gt;
+&lt;h2 id=&quot;數學式在-latex-與-eqn-的差別&quot;&gt;數學式在 latex 與 eqn 的差別&lt;/h2&gt;
+&lt;p&gt;另一個主要激起我反思的是在撰寫數學算式時的語言。
+流行的 LaTeX 或說 TeX，使用了 &lt;code&gt;^&lt;/code&gt; &lt;code&gt;_&lt;/code&gt; 來標註上下標，
+使用 &lt;code&gt;{}&lt;/code&gt; 標註語句塊，其它特殊符號則是以反斜線跳脫來表示。
+我接解過的另一語言 eqn，屬於 troff 的排版系統，
+則是以口語化的方式表達公式，
+例如 &lt;code&gt;sum from { k = 0 } to n { k sup 2 }&lt;/code&gt; ，
+雖然仍使用了花括號，但最明顯的是使用 
+from to sup sub 等單字來表示排版。&lt;/p&gt;
+&lt;p&gt;這看來雖然只是個選擇問題，
+但後果很明顯造成 eqn 在原始碼的閱讀上很沒效率。
+稍長的公式，eqn 的長度就會極速成長，
+很快變得難以閱讀。例如一條距陣算式：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;( A^T ( A P^{-1} A^T ) ^{-1} A P^{-1} ) ^2
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;寫成 latex：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;( A^T ( A P^{-1} A^T ) ^{-1} A P^{-1} ) ^2
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;寫成 eqn：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;( A sup T ( A P sup -1 A sup T ) sup -1 A P sup -1 ) sup 2
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;但這裡 latex 看起來其實也沒多好，
+主要是那個 -1 的語法需要用大括號包起來，
+不然會變成單純上標一個符號。
+而 eqn 就完全看不出來在寫什麼鬼；
+也許因為我不是英語母語，平常不會用英文唸數學式。
+而對 latex 的語法，用 &lt;code&gt;^&lt;/code&gt; 也在 excel 中接觸過一段時間。&lt;/p&gt;
+&lt;h2 id=&quot;數學式以函數樹狀語法表示&quot;&gt;數學式以函數樹狀語法表示&lt;/h2&gt;
+&lt;p&gt;數學式的另一個問題是我在 lisp 中遇到的，
+後來在 javascript 的數學函式庫 mathjs 也碰到過。
+我初學 lisp 時就被其簡潔的語法驚豔，
+而且我認為其中一件特點就是移除了算符這個概念。
+傳統上程式語言都會有算符，
+而數學上的算符多半會牽扯到優先問題，
+就必須規定各算符的優先順序，
+我認為這是語言中很醜陋的一面。&lt;/p&gt;
+&lt;p&gt;而 lisp 把算符也用函數的語法撰寫，
+f(x) 寫成 &lt;code&gt;(f x)&lt;/code&gt; ， &lt;code&gt;a + b&lt;/code&gt;就寫成 &lt;code&gt;(+ a b)&lt;/code&gt; 。
+真正的算符，只剩下 &lt;code&gt;&amp;apos;&lt;/code&gt; 或說其實也只是 &lt;code&gt;(quote )&lt;/code&gt; 的簡寫。
+雖然在語法上看來很棒，簡潔乾淨，但碰到複雜的數學式就會很麻煩；
+因為把所有算符都必須看作函式呼叫，就得寫成樹狀結構，
+例如上面示範 eqn 的式子，在 lisp 就得寫成：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-lisp&quot;&gt;(^ (* (^ A T) 
+      (^ (* A (^ P -1) (^ A T))
+         -1)
+      A
+      (^ P -1))
+   -1)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;由於樹狀的語法太難閱讀，lisp 語言的中級教材，
+就是寫一個解譯器把數學上的中綴語法轉成 lisp 的語法。
+於是呼，就能寫出類似巨集的語法：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-lisp&quot;&gt;(math &amp;apos;((A ^ T * (A * P ^ -1 * A ^ T) ^ -1 * A * P ^ -1) ^ 2))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;mathjs-缺少運算子重載&quot;&gt;mathjs 缺少運算子重載&lt;/h3&gt;
+&lt;p&gt;mathjs 是一個 javascript 的函式庫，
+提供各類數學運算，像可以把矩陣和數字相乘的函數。
+但因為 js 沒有運算子重載的功能，
+所以得直呼叫 mathjs 提供的 multiply 函數：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;mathjs.multiply(3, [1,2,3])
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果式子長了，就會陷入和 lisp 一樣的狀況：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;mathjs.power(mathjs.multiply(
+  mathjs.power(A, T),
+  mathjs.power(
+    mathjs.multiply(A, mathjs.power(P, -1), mathjs.power(A, T)),
+    -1
+  ),
+  A,
+  mathjs.power(P, -1)),
+-1)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;所以 mathjs 也提供了一個 eval，
+可以直接計算 mathjs 的函式庫。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;mathjs.eval(&amp;apos;(A ^ T * (A * P ^ -1 * A ^ T) ^ -1 * A * P ^ -1) ^ 2&amp;apos;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;過度符號的語言&quot;&gt;過度符號的語言&lt;/h2&gt;
+&lt;p&gt;apl 或是 j 則是另一種極端，使用了太大量的符號，
+使得使用者必須記憶大量的算符，學習門檻過高。
+雖然不少學成的人都讚不絕口的好用，
+但更多絕對是學不來而放棄的。
+像我曾嘗試過 J，但也放棄了。&lt;/p&gt;
+&lt;p&gt;而 perl 也是算符極多的一個例子，行為也很複雜，
+對比之下我認為 c 的語法和行為算很簡單了。
+只是有時候你必須做很底層的事，所以很麻煩而已。&lt;/p&gt;
+&lt;h2 id=&quot;口語化或抽象化&quot;&gt;口語化或抽象化&lt;/h2&gt;
+&lt;p&gt;我一直不覺得口語化一個語言能幫助閱讀，
+整個原始碼都是英文單字看起來反而更難一眼判斷，
+像 c 適當的使用特殊符號，就能一眼看到大括號、小括號；
+當然也有如 python 的縮排派。
+雖然有人主張標註語句塊讓開始結束變得明顯是 IDE 的工作，
+但 IDE 標註出 begin end 位置的作法，
+不就是上色或用線段等特殊符號，不也是符號化、抽象化的一種嗎？&lt;/p&gt;
+&lt;p&gt;當然，也許和母語有關，也許母語是英文的人
+真得覺得 basic 或 ruby 很好閱讀，
+畢竟我的母語是中文不是英文。
+但我看過某些號稱中文的程式語言，也不太習慣，
+也許是因為我習慣英文了吧。&lt;/p&gt;
+&lt;p&gt;至於數學，把 &lt;code&gt;+&lt;/code&gt; &lt;code&gt;-&lt;/code&gt; &lt;code&gt;*&lt;/code&gt; &lt;code&gt;/&lt;/code&gt; 都換成單字
+add minus multiply divide 也不會比較好。
+雖然算符有複雜的優先權問題，但閱讀上反而比較好理解。
+但我認為很可能是因為我們現行的數學系統，
+已經使用這套邏輯太久，我們也是學這套邏輯長大的，
+所以閱讀起來比較自然。&lt;/p&gt;
+&lt;p&gt;總之，在程式語言的語法中，使用單純的口語有助於入門；
+但適量的抽象化和符號化，更有助於熟練的使用者閱讀。
+當然過度使用符號也是不好的，會讓入門變得困難。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/satellite-geodesy-homework-8.html</id>
 <title>使用 snap DInSAR 觀察地震後地表變型</title>
 <published>2019-06-26T04:51:04.423Z</published>
@@ -1817,133 +1974,7 @@ sbas 系統是由地面的連續衛星追縱站 cors，
 &lt;/pre&gt;</summary>
 <category term="report"/>
 <category term="geomatics"/>
-<content type="html">&lt;h1 id=&quot;衛星大地作業六&quot;&gt;衛星大地作業六&lt;/h1&gt;
-&lt;p&gt;人造衛星普及的今日，只要在衛星上搭載雷達測高系統，
-就能製做全球尺度的 DEM。
-許多低解析度的衛星測高資料都已是開放資料，
-只要選對衛星，就能輕易利用現有的歷史資料，
-觀察過去地表的大規模高程變化。
-本作業用 cryosat-2 測得的海面高，
-經 inverse vening meinesz formula 計算重力異常。&lt;/p&gt;
-&lt;h2 id=&quot;CryoSat-2&quot;&gt;CryoSat-2&lt;/h2&gt;
-&lt;p&gt;本次作業的資料是 CryoSat-2 衛星，
-是歐洲太空總署的研究用衛星，
-主要目的是觀測極區的冰層厚度變化，
-也就是觀查溶冰情形。
-其軌道傾角為 92.03° ，
-代表能觀測 87.97° 為止的大部份極區。&lt;/p&gt;
-&lt;h2 id=&quot;運用高程計算重力&quot;&gt;運用高程計算重力&lt;/h2&gt;
-&lt;p&gt;衛星測高在海面上測得的就直接是海水面，
-而大地基準面就是定義為接近平均海水面的等位面。
-所以觀測到的海面高，扣除潮汐影響、海水面地形後，
-就能得到 geoid。&lt;/p&gt;
-&lt;h3 id=&quot;計算殘餘大地水準面梯度&quot;&gt;計算殘餘大地水準面梯度&lt;/h3&gt;
-&lt;p&gt;在 cryosat-2 測得的海面高，
-扣掉海面地型後就是實際測得的 geoid。
-而依物理大地的理論，會將 geoid 以球諧系數分解成不同波長，
-將上述實際測得的 geoid，扣掉長波長的粗略的變化，
-就剩下短波長的局部的 geoid，稱為殘餘大地水準面。&lt;/p&gt;
-&lt;p&gt;這裡是直接扣掉 egm08 的大地起伏模型，就當作扣掉了長波長，
-剩的就當作剩餘大地起伏。
-另外程式中還會將過大的離群值挑出到 outlier 這個文字檔。
-最後再將殘餘大地水準面沿衛星軌跡微分求梯度，
-就能得到 geoid 在衛星移動方向上的梯度，
-而大地起伏的梯度也就是垂線偏差，
-所以微分出來的結果就是在衛星軌跡方向上的垂線偏差。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;egm08_2160n_1m_119_123_21_26.grd3&lt;/code&gt;: EGM08 大地起伏。&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;cry2list.txt&lt;/code&gt;: 所有測高資料的索引。&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;grad_c2&lt;/code&gt;: 輸出的大地起伏梯度。&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;rio_05_mdt.grd3&lt;/code&gt;: 海水面地形。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-bat&quot;&gt;rem The first step is download Cryosat-2 data from RADS using Matlab code RADS_read4bat.m. This part is done
 
-rem Step1: Compute residual geoid gradients
-debug\resgeoid_cryosat -Megm08_2160n_1m_119_121_21_23.grd3 -Fcry2list.txt -Ggrad_c2 -T25 -Ooutlier -N8 -Irio_05_mdt.grd3
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;計算殘餘重力異常&quot;&gt;計算殘餘重力異常&lt;/h3&gt;
-&lt;p&gt;接下來是主要的計算：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;rem Compute residual gravity anomalies using the Inverse Vening Meinesz formula (IVM)
-
-rem Step 1: Compute north and east gradients
-debug\gridg grad_c2 -Ccov_egm08(2160).txt -R119/121/21/23 -I1/1 -W10 -Nnorth_grad_geo.grd3 -Eeast_grad_geo.grd3 &amp;gt;gridg.out
-
-rem Step 2: Compute residual gravity anomaly
-debug\gift -Nnorth_grad_geo.grd3 -Eeast_grad_geo.grd3 -Gtmp1_1012.grd3 -V
-
-rem Step 3: Compute innermost zone effect on gravity anomaly
-debug\inzone -Nnorth_grad_geo.grd3 -Eeast_grad_geo.grd3  -Gtmp2_1012.grd3
-
-rem Step 4: Restore the EGM08 gravity anomaly
-debug\gridadd -Atmp1_1012.grd3 -Begm08_2160g_1m_119_121_21_23.grd3 -Gtmp3_1012.grd3
-debug\gridadd -Atmp3_1012.grd3 -Btmp2_1012.grd3 -Givm_g_1012.grd3
-
-debug\grd3togrd ivm_g_1012.grd3 |xyz2grd -Z -R119/121/21/23 -I1m -Gtw_ga.grd
-&lt;/code&gt;&lt;/pre&gt;&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;將上述沿軌跡的垂線偏差化算成南北和東西方向分量，
-由特定方向上複原回二方向上時，
-需要用到共變異矩陣 &lt;code&gt;cov_egm08(2160).txt&lt;/code&gt; 。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;再依據 inverse Vening Meinesz formula 
-由東西與南北二方向上的垂線偏差，計算出重力異常。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;但由於在重力場的 stoke 積分，
-在接近待測點距離接近 0 時，
-會發散為奇異解，所以要另外處理。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;將 2 3 的結果相加，就是用殘餘大地起伏計算出來的殘餘重力異常；
-再把 egm08 的重力異常加回去，就得到完整的重力異常。&lt;/p&gt;
-&lt;p&gt;最後再將重力異常網格轉成 gmt 能讀取的格式，方便之後繪圖。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&quot;gmt-繪圖&quot;&gt;gmt 繪圖&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;Rem Step3 is to plot gravity anomalies
-makecpt -Crainbow -T-250/250/25 -Z &amp;gt;aaa.cpt
-grdimage tw_ga.grd -R119/121/21/23 -B1 -Caaa.cpt -JM17c -K -Y2c -P &amp;gt;HW7_ex.ps
-pscoast -R -JM -Dh -W1 -G150 -O -K &amp;gt;&amp;gt;HW7_ex.ps
-psscale -D8.5c/-1c/17c/0.15ch -O -Caaa.cpt -B50 &amp;gt;&amp;gt;HW7_ex.ps
-&lt;/code&gt;&lt;/pre&gt;&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;設定彩色，範圍為 -250 到 250。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;用轉好的 grd 格式繪圖，範圍為 119/121/21/23。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;將圖加上海岸線。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;將圖加上顏色尺度。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/40931878223&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/40931878223_79926494a1.jpg&quot; alt=&quot;gravity-anomaly-cryosat-120-22.png&quot; title=&quot;GMT 畫出的 119-121E,21-23N 重力異常&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;inverse-vening-meinesz-formula&quot;&gt;inverse vening meinesz formula&lt;/h2&gt;
-&lt;p&gt;vening meinesz 公式是用重力異常計算垂線偏差的公式，
-而 inverse vening meinesz 公式則是試著逆推，
-由垂線偏差反推出重力異常。
-另外由於垂線偏差也就是大地起伏的梯度，
-只要對垂線偏差積分，就能得到大地起伏。&lt;/p&gt;
-&lt;p&gt;而作業中，是將衛星測高的海面高
-化算為大地基準面，取梯度得到垂線偏差，
-再用 inverse vening meinesz 公式的程式 gift，
-從垂線偏差計算重力異常。&lt;/p&gt;
-&lt;h2 id=&quot;重力異常與地質結構&quot;&gt;重力異常與地質結構&lt;/h2&gt;
-&lt;p&gt;上述的重力異常，與海底地型圖比較後，可以看出相關。
-例如琉球嶼以東的重力異常較低，約略是海底地型的枋寮峽谷；
-在較西側則有澎湖峽谷，中間的高屏峽谷則不太明顯。
-最南方的凹陷可能是福爾摩沙峽谷到馬尼拉海溝的凹陷。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;http://mynotes.org/earth/wp-content/uploads/2012/06/6441231253106.jpg&quot; alt=&quot;sea topography&quot; title=&quot;台灣周遭海底地型&quot;&gt;&lt;/p&gt;
-&lt;script src=&quot;ext/paper.js?reference&quot;&gt;&lt;/script&gt;
-
-&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
-
-&lt;style&gt;
-code {
-  border: none;
-}
-pre &gt; code {
-  white-space: pre-wrap !important;
-}
-&lt;/style&gt;
-
-&lt;script src=&quot;ext/header-nctu.js?editable&amp;amp;execute&quot;&gt;&lt;/script&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/satellite-geodesy-homework-6.html</id>
 <title>衛星大地作業六</title>

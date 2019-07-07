@@ -1,0 +1,174 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2019-07-07T12:12:24.291Z">
+<meta name="keywords" property="og:article:tag" content="語法,javascript,lisp">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="satellite-geodesy-homework-8.html" title="使用 snap DInSAR 觀察地震後地表變型">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>程式語言中適量的符號有助於閱讀</title>
+</head>
+<body>
+<main><h1 id="程式語言中適量的符號有助於閱讀">程式語言中適量的符號有助於閱讀</h1>
+<p>這標題可能有點怪。我想談談對一些語言對語法中符號的選擇。
+一些語言號稱使用 <em>口語風格的語法</em> ，更適合閱讀與理解，
+像是 basic 使用 begin end 標註範圍。
+但不應走火入魔，適度的使用符號才是明策，
+例如 latex 提供 <code>^</code> 與 <code>_</code> 用做上標與下標。
+當然過度使用符號也不行，因為過多的符號會造成記憶困難，
+例如 APL 與 J 幾乎全依懶於符號。</p>
+<h2 id="程式語言">程式語言</h2>
+<p>一些程式語言使用口語風格的關鍵字，號稱能因此降低學習門檻；
+例子有 basic、python、ruby。
+basic 使用 end if end loop 之類的語法來關閉語句塊，
+而 ruby 則以 begin 與 end 來標註語句塊的開始與結束，
+而我對 python 的印像則是有一個神奇的 <code>is</code> 算符，
+類似於 <code>==</code> 的作用。</p>
+<p>當然其中最甚者為 basic，幾乎都是關鍵字，
+少有符號，全由英文的單字組成。
+對比之下則是 c，使用大括號標註語句塊，
+使用小括號包裹判斷式。
+c 的宣告除了用等號初始化外，
+還加了以 <code>*</code> 抽象化指標意含的語法。</p>
+<p>而 python 在宣告上雖然省去了類型的單字，
+但有某些時候卻多了一個 <code>as</code> 語法用來命名。
+例如補捉錯誤 <code>except Error as err</code> ，
+引用函式庫 <code>import numpy as np</code> 。
+這點後來還被 js 的 es6 module 抄去了。</p>
+<p>bash 則是另一種極端，雖然可以用大括號或小括號定義語句塊，
+但用法卻與 if else 的不合。
+bash 似乎反映了彼時代對 if 語句的想像，
+if 後還需要一個 then 開始區塊，
+while 後也要一個 do 開始迴圈內容。
+而結束也需要一個特殊的符號，bash 很天才幫條件判斷的 if 選了 fi，
+理所當然 case 就是 esca。
+但對於迴圈，又是另一套作法，
+一律使用 do 與 done 包住迴圈內文。</p>
+<h2 id="數學式在-latex-與-eqn-的差別">數學式在 latex 與 eqn 的差別</h2>
+<p>另一個主要激起我反思的是在撰寫數學算式時的語言。
+流行的 LaTeX 或說 TeX，使用了 <code>^</code> <code>_</code> 來標註上下標，
+使用 <code>{}</code> 標註語句塊，其它特殊符號則是以反斜線跳脫來表示。
+我接解過的另一語言 eqn，屬於 troff 的排版系統，
+則是以口語化的方式表達公式，
+例如 <code>sum from { k = 0 } to n { k sup 2 }</code> ，
+雖然仍使用了花括號，但最明顯的是使用 
+from to sup sub 等單字來表示排版。</p>
+<p>這看來雖然只是個選擇問題，
+但後果很明顯造成 eqn 在原始碼的閱讀上很沒效率。
+稍長的公式，eqn 的長度就會極速成長，
+很快變得難以閱讀。例如一條距陣算式：</p>
+<pre><code class="lang-math">( A^T ( A P^{-1} A^T ) ^{-1} A P^{-1} ) ^2
+</code></pre>
+<p>寫成 latex：</p>
+<pre><code>( A^T ( A P^{-1} A^T ) ^{-1} A P^{-1} ) ^2
+</code></pre><p>寫成 eqn：</p>
+<pre><code>( A sup T ( A P sup -1 A sup T ) sup -1 A P sup -1 ) sup 2
+</code></pre><p>但這裡 latex 看起來其實也沒多好，
+主要是那個 -1 的語法需要用大括號包起來，
+不然會變成單純上標一個符號。
+而 eqn 就完全看不出來在寫什麼鬼；
+也許因為我不是英語母語，平常不會用英文唸數學式。
+而對 latex 的語法，用 <code>^</code> 也在 excel 中接觸過一段時間。</p>
+<h2 id="數學式以函數樹狀語法表示">數學式以函數樹狀語法表示</h2>
+<p>數學式的另一個問題是我在 lisp 中遇到的，
+後來在 javascript 的數學函式庫 mathjs 也碰到過。
+我初學 lisp 時就被其簡潔的語法驚豔，
+而且我認為其中一件特點就是移除了算符這個概念。
+傳統上程式語言都會有算符，
+而數學上的算符多半會牽扯到優先問題，
+就必須規定各算符的優先順序，
+我認為這是語言中很醜陋的一面。</p>
+<p>而 lisp 把算符也用函數的語法撰寫，
+f(x) 寫成 <code>(f x)</code> ， <code>a + b</code>就寫成 <code>(+ a b)</code> 。
+真正的算符，只剩下 <code>&apos;</code> 或說其實也只是 <code>(quote )</code> 的簡寫。
+雖然在語法上看來很棒，簡潔乾淨，但碰到複雜的數學式就會很麻煩；
+因為把所有算符都必須看作函式呼叫，就得寫成樹狀結構，
+例如上面示範 eqn 的式子，在 lisp 就得寫成：</p>
+<pre><code class="lang-lisp">(^ (* (^ A T) 
+      (^ (* A (^ P -1) (^ A T))
+         -1)
+      A
+      (^ P -1))
+   -1)
+</code></pre>
+<p>由於樹狀的語法太難閱讀，lisp 語言的中級教材，
+就是寫一個解譯器把數學上的中綴語法轉成 lisp 的語法。
+於是呼，就能寫出類似巨集的語法：</p>
+<pre><code class="lang-lisp">(math &apos;((A ^ T * (A * P ^ -1 * A ^ T) ^ -1 * A * P ^ -1) ^ 2))
+</code></pre>
+<h3 id="mathjs-缺少運算子重載">mathjs 缺少運算子重載</h3>
+<p>mathjs 是一個 javascript 的函式庫，
+提供各類數學運算，像可以把矩陣和數字相乘的函數。
+但因為 js 沒有運算子重載的功能，
+所以得直呼叫 mathjs 提供的 multiply 函數：</p>
+<pre><code class="lang-js">mathjs.multiply(3, [1,2,3])
+</code></pre>
+<p>如果式子長了，就會陷入和 lisp 一樣的狀況：</p>
+<pre><code class="lang-js">mathjs.power(mathjs.multiply(
+  mathjs.power(A, T),
+  mathjs.power(
+    mathjs.multiply(A, mathjs.power(P, -1), mathjs.power(A, T)),
+    -1
+  ),
+  A,
+  mathjs.power(P, -1)),
+-1)
+</code></pre>
+<p>所以 mathjs 也提供了一個 eval，
+可以直接計算 mathjs 的函式庫。</p>
+<pre><code class="lang-js">mathjs.eval(&apos;(A ^ T * (A * P ^ -1 * A ^ T) ^ -1 * A * P ^ -1) ^ 2&apos;)
+</code></pre>
+<h2 id="過度符號的語言">過度符號的語言</h2>
+<p>apl 或是 j 則是另一種極端，使用了太大量的符號，
+使得使用者必須記憶大量的算符，學習門檻過高。
+雖然不少學成的人都讚不絕口的好用，
+但更多絕對是學不來而放棄的。
+像我曾嘗試過 J，但也放棄了。</p>
+<p>而 perl 也是算符極多的一個例子，行為也很複雜，
+對比之下我認為 c 的語法和行為算很簡單了。
+只是有時候你必須做很底層的事，所以很麻煩而已。</p>
+<h2 id="口語化或抽象化">口語化或抽象化</h2>
+<p>我一直不覺得口語化一個語言能幫助閱讀，
+整個原始碼都是英文單字看起來反而更難一眼判斷，
+像 c 適當的使用特殊符號，就能一眼看到大括號、小括號；
+當然也有如 python 的縮排派。
+雖然有人主張標註語句塊讓開始結束變得明顯是 IDE 的工作，
+但 IDE 標註出 begin end 位置的作法，
+不就是上色或用線段等特殊符號，不也是符號化、抽象化的一種嗎？</p>
+<p>當然，也許和母語有關，也許母語是英文的人
+真得覺得 basic 或 ruby 很好閱讀，
+畢竟我的母語是中文不是英文。
+但我看過某些號稱中文的程式語言，也不太習慣，
+也許是因為我習慣英文了吧。</p>
+<p>至於數學，把 <code>+</code> <code>-</code> <code>*</code> <code>/</code> 都換成單字
+add minus multiply divide 也不會比較好。
+雖然算符有複雜的優先權問題，但閱讀上反而比較好理解。
+但我認為很可能是因為我們現行的數學系統，
+已經使用這套邏輯太久，我們也是學這套邏輯長大的，
+所以閱讀起來比較自然。</p>
+<p>總之，在程式語言的語法中，使用單純的口語有助於入門；
+但適量的抽象化和符號化，更有助於熟練的使用者閱讀。
+當然過度使用符號也是不好的，會讓入門變得困難。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

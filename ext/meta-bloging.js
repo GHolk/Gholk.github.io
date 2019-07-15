@@ -165,6 +165,11 @@ autoLoader.addCase(
     () => autoLoader.addScript('ext/mathjax-block.js')
 )
 
+autoLoader.addCase(
+    () => document.querySelector('.lang-ptt'),
+    () => autoLoader.addScript('ext/ptt-highlight-block.js')
+)
+
 const goption = parseQueryOption(location.search.slice(1))
 
 function getParameter(name, currentScript = document.currentScript) {

@@ -4,8 +4,44 @@ class DailySentence {
         this.sourceList = node.dataset.sourceList.split(/ /g)
         this.startDate = new Date(node.dataset.startDate)
     }
-    async loadAndShow(blockquote) {
-        this.loadFromDataAttribute(blockquote)
+    loadFromAtom(atom) {
+        const dailyList = Array.from(
+            atom.querySelectorAll('category[term=daily]')
+        ).map(category => category.parentNode)
+        const funnyList = Array.from(
+            atom.querySelectorAll('category[term=funny]')
+        ).map(category => category.parentNode)
+
+        const linkSelector = 'link[rel=alternate][type="text/html"]'
+        const urlList = []
+        for (const daily of dailyList) {
+            if (~funnyList.indexOf(daily)) {
+                const link = daily.querySelector(linkSelector)
+                const url = new URL(link.getAttribute('href'))
+                url.hash = ''
+                const urlString = url.pathname.slice(1)
+                if (! ~urlList.indexOf(urlString)) urlList.unshift(urlString)
+            }
+        }
+        this.sourceList = urlList
+    }
+    loadFromAtomXpath(atom) {
+        const root = atom.documentElement
+        const nsResolver = atom.createNSResolver(root)
+        const result = atom.evaluate(
+            `/feed/entry[category[@term="funny"] and
+                         category[@term="daily"]]
+                        /link[@rel="alternate" and 
+                              @type="text/html"]
+                             /@href`, 
+            root, nsResolver,
+            XPathResult.STRING_TYPE, null
+        )
+        
+    }
+    async loadAndShow(atom, blockquote) {
+        this.loadFromAtom(atom)
+        this.startDate = new Date(blockquote.dataset.startDate)
         const dayCount = this.countDay()
         const sentence = await this.getSentence(dayCount)
         const sourceCount = dayCount % this.sourceList.length

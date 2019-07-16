@@ -35,18 +35,10 @@
     </nav>
     
     <blockquote id="daily-sentence"
-                data-start-date="2018-04-14"
-                data-source-list="taiwoman.html key-and-lock.html short-life-expensive-price.html taiwan-consensus-stolen-base.html">
+                data-start-date="2018-04-14">
       <h3><a>每日一句</a></h3>
     </blockquote>
-    <script type="module">
-      import {DailySentence} from './ext/daily-sentence.js'
-      const dailySentence = new DailySentence()
-      const container = document.getElementById('daily-sentence')
-      dailySentence.loadAndShow(container)
-    </script>
 
-      
     <main data-init-count="10"></main>
     <template id="article-template">
       <article>
@@ -60,7 +52,14 @@
     <script type="module">
       import {AtomIndex} from './ext/atom-render.js'
       const atomIndex = new AtomIndex()
-      atomIndex.autoGenerateBlog(document)
+      const blogLoad = atomIndex.autoGenerateBlog(document)
+
+      import {DailySentence} from './ext/daily-sentence.js'
+      blogLoad.then(() => {
+        const dailySentence = new DailySentence()
+        const container = document.getElementById('daily-sentence')
+        dailySentence.loadAndShow(atomIndex.atom, container)
+      })
     </script>
   </body>
 </html>

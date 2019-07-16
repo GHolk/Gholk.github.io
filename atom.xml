@@ -5804,12 +5804,7 @@ for (let i in array) ；
 大概是在換 thinkpad13 後開始的。
 之後想做個簡單的每日一句，
 可以簡單在部落格首頁顯示句子。</summary>
-<category term="轉中國"/>
-<category term="服務業日常"/>
-<category term="關於晚上的麵包店"/>
-<category term="轉"/>
-<category term="要有禮貌"/>
-<category term="禮貌是美德"/>
+<category term="daily"/>
 <category term="funny"/>
 <category term="meme"/>
 <category term="dairy"/>
@@ -8663,6 +8658,7 @@ nodejs 成熟，firefoxOS 又來參一腳。
 台女溫柔婉約，聲音好聽，（外國口音實在是很不喜歡。）
 相處起來很舒服，長相也都很可愛。
 </summary>
+<category term="daily"/>
 <category term="funny"/>
 <category term="ptt"/>
 <category term="手打 html"/>

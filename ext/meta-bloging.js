@@ -170,6 +170,16 @@ autoLoader.addCase(
     () => autoLoader.addScript('ext/ptt-highlight-block.js')
 )
 
+autoLoader.addCase(
+    () => goption.hasOwnProperty('scroll-to-selector'),
+    () => setTimeout(() => {
+        const selector = goption['scroll-to-selector']
+        const element = document.querySelector(selector)
+        const y = element.offsetTop
+        window.scrollTo(0, y)
+    }, 1000)
+)
+
 const goption = parseQueryOption(location.search.slice(1))
 
 function getParameter(name, currentScript = document.currentScript) {

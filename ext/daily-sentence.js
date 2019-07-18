@@ -43,10 +43,11 @@ class DailySentence {
         this.loadFromAtom(atom)
         this.startDate = new Date(blockquote.dataset.startDate)
         const dayCount = this.countDay()
-        const sentence = await this.getSentence(dayCount)
-        const sourceCount = dayCount % this.sourceList.length
-        blockquote.querySelector('a').href = this.sourceList[sourceCount]
-        blockquote.append(sentence)
+        const result = await this.getSentence(dayCount)
+        blockquote.querySelector('a').href =
+            result.source +
+            `?scroll-to-selector=hr:nth-of-type(${result.index+1})`
+        blockquote.append(result.sentence)
     }
     countDay(date = new Date()) {
         const msDiff = Number(date) - Number(this.startDate)
@@ -54,16 +55,16 @@ class DailySentence {
         return dayDiff
     }
     async getSentence(dayCount = this.countDay()) {
-        const document = await this.fetchDocument(dayCount)
-        const sentence = this.extractSentence(document, dayCount)
-        return sentence
+        const {source, document} = await this.fetchDocument(dayCount)
+        const {index, sentence} = this.extractSentence(document, dayCount)
+        return {source, index, sentence}
     }
     async fetchDocument(dayCount) {
         const source = this.sourceList[dayCount % this.sourceList.length]
         const response = await fetch(source)
         const html = await response.text()
         const domParser = new DOMParser()
-        return domParser.parseFromString(html, 'text/html')
+        return {source, document: domParser.parseFromString(html, 'text/html')}
     }
     extractSentence(document, dayCount) {
         const main = document.querySelector('main')
@@ -78,7 +79,7 @@ class DailySentence {
         }
         const fragment = document.createDocumentFragment()
         for (const node of nodeList) fragment.appendChild(node)
-        return fragment
+        return {index, sentence:fragment}
     }
 }
 

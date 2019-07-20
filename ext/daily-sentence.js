@@ -14,13 +14,14 @@ class DailySentence {
 
         const linkSelector = 'link[rel=alternate][type="text/html"]'
         const urlList = []
+        dailyList.reverse()
         for (const daily of dailyList) {
             if (~funnyList.indexOf(daily)) {
                 const link = daily.querySelector(linkSelector)
                 const url = new URL(link.getAttribute('href'))
                 url.hash = ''
                 const urlString = url.pathname.slice(1)
-                if (! ~urlList.indexOf(urlString)) urlList.unshift(urlString)
+                if (! ~urlList.indexOf(urlString)) urlList.push(urlString)
             }
         }
         this.sourceList = urlList

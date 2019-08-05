@@ -62,7 +62,7 @@
 檔名多數照慣例是用 abcd 在結尾排序，
 但有時又會出現 (0) (1) 之類像是 windows 重新命名的神奇結尾。
 這些格式雖然人都看得懂，但要批次處理根本不可能。</p>
-<p>有接收儀多半會提供切割檔案的功能，
+<p>大部份接收儀多半會提供切割檔案的功能，
 有時一天切成好幾十個檔案，
 因為以前檔案不能太大，會超過檔案系統限制，
 或是因為要存到軟碟所以切小。
@@ -242,9 +242,20 @@ done &gt;even.log 2&gt;&amp;1 &amp;
 如果只有某個主機想用，就掛在該 Host 下面就可以了。</p>
 <p>control master 的效果就是，只開一個 tcp 連線，
 所有 ssh 連線都在同一個 tcp 上走，
-所以自然不會因為建立太多連線被歌。
+所以自然不會因為建立太多連線被砍。
 （但 sshd 還是可以設置同一個
 control master 最多能掛幾個子連線。）</p>
+<h3 id="只在需要時手動啟用-contorl-master">只在需要時手動啟用 contorl master</h3>
+<p>ssh control master 的邏輯看來是，
+如果有 ControlMaster no，就不是會建立 socket 的主連線。
+而就算 ControlMaster no，只要 ControlPath 有設置，
+就會檢查是否存在，存在的話就會使用該 socket 連線。</p>
+<p>所以我是設置 ControlMaster no 並設置 ControlPath，
+一般 ssh 就都是獨立連線，因為 control path 不存在。
+如果有要用大量連線，就手動執行一次 <code>ssh -o ControlMaster=yes host</code> ，
+就會依 control path 建立 socket，再用 Ctrl-z 丟到背景。
+之後建立的 ssh 因為 control path 已建立了 socket，就會走該 socket。
+執行完畢後再用 <code>kill %%</code> 將之前丟到背景的 control master 關閉即可。</p>
 </main>
 
 <script defer src="ext/meta-meta.js"></script>

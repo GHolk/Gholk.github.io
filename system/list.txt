@@ -291,3 +291,4 @@ satellite-geodesy-homework-8.html
 moderate-symbol-abstraction-make-sence.html
 taiwoman.html
 javascript-async-debounce-atomic.html
+shell-script-concept-from-program.html

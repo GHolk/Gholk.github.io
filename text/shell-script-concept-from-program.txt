@@ -1,0 +1,825 @@
+# shell 概念教學
+shell 的設計理念以 unix 環境中的程序為中心，
+發展出參數、管道等觀念。
+並且最重要的，是一門可以應用在電腦日常使用上的實際的程式語言。
+對簡單學習過 c 語言的人，
+配合 c 從 shell 認識電腦是一條十分有意義的道路。
+本簡報從使用電腦的角度，帶領有 c 語言基礎的人認識 shell。
+
+---
+
+<script>
+function toggleSlideMode() {
+  document.documentElement.classList.toggle('white-black-slide')
+}
+function scrollToNextHr() {
+  const allHr = document.querySelectorAll('hr')
+  const windowTop = scrollY
+  for (const hr of allHr) {
+    if (hr.offsetTop > scrollY) {
+      scrollTo(0, hr.offsetTop + 1)
+      break
+    }
+  }
+}
+</script>
+
+<style contenteditable="true">
+.white-black-slide {
+  font-size: 250%;
+  color: white;
+  background: black;
+}
+.white-black-slide a {
+  color: cyan;
+}
+:not(pre) code {
+  border: solid 1px;
+  padding: 0 0.1em;
+}
+.white-black-slide ::selection { color: initial; background-color: yellow; }
+.white-black-slide ::-moz-selection { color: initial; background-color: yellow; }
+
+.white-black-slide {
+  cursor: url('data:image/cur;base64,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') 12.5 12.5, auto;
+}
+
+:this + button {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 1em;
+}
+</style>
+
+<button onclick="scrollToNextHr()">下一頁</button>
+
+<button onclick="toggleSlideMode()">切換簡報模式</button>
+
+---
+
+## 可以實際應用的程式設計
+高中電腦多半從 c 這種基本的，或其它 *簡單的* 程式語言教起，
+但這些語言有個很大的問題，
+他們都無法讓學生應用在日常的電腦操作上。
+
+----
+
+### c 可以寫什麼
+* scanf printf
+* fopen
+
+----
+
+### 問題的關鍵
+* 日常使用電腦的操作，無法輕易用 c 達成。
+* 學校的教學偏重在理論，而不是實務應用。
+
+----
+
+### 日常的操作
+* 複製檔案
+* 打開網頁
+* 壓縮檔案
+
+----
+
+### 什麼是 shell
+* 日常使用的稱為 <abbr title="Graphic User Interface">圖形介面</abbr> 。
+* 在圖形介面發明以前，人機之間以文字指令溝通。
+* 作業系統內部是一支執行中的程式，
+  而 shell 用來稱呼人與作業系統溝通的介面。
+
+----
+
+### 指令的特性
+* 學習門檻較高。
+* 由於指令只是一連串文字，可以把要執行的指令存成檔案，方便執行。
+* 本實是一種特化的程式語言。
+
+----
+
+### 指令與圖形介面等價
+* 在沒有圖形介面以前，人們還是使用電腦。
+* 絕大多數在圖形介面能做到的事，指令也都能做到。
+* 雖然無法做到 *開啟視窗然後按下某個按鈕* 之類的圖形介面操作。
+
+---
+
+## shell 入門
+指令是不含空白的一連串字元，一般包含底線與連字號。
+
+```shell
+pwd
+ls
+```
+
+----
+
+### 帶有參數的指令
+參數以空白分隔
+
+```shell
+mv config.txt config_backup.txt
+cp config_origin.txt config.txt
+rm log.txt
+```
+
+----
+
+### 移動到不同資料夾
+
+```shell
+cd my-dir
+cd ..
+cd /home
+cd ../usr/bin
+```
+
+----
+
+### 何謂開啟檔案？
+* 用 fopen 打開讀取或寫入
+* 更改檔案內容
+* 開啟檔案對應的圖形程式
+* 用滑鼠點二下
+
+----
+
+### 開啟圖形程式
+```
+gedit
+lowriter
+firefox
+```
+
+----
+
+### 用圖形程式開啟檔案
+```
+gedit file.txt
+lowriter document.odt
+firefox print.pdf
+```
+
+----
+
+### 統一的指令
+```
+# linux
+xdg-open file.odt
+```
+
+```
+REM windows
+start file.doc
+
+REM or directly type filename
+file.doc
+```
+
+---
+
+## 快捷鍵
+* 指令到很複雜的話，敲鍵盤很累的。
+* 所以 shell 多半有快捷鍵可以用，
+  處理這些快捷鍵的程式稱為 readline。
+
+----
+
+### 自動補全
+* tab 鍵可以自動補全打到一半的單字
+* 基本的命令可以自動補全，例如打 pyt 之後按 tab 就會補全成 python。
+* 檔名也可以自動補全，例如 `xdg-open file.o` 
+  之後按 tab 會依存在的檔案補全。
+
+----
+
+### 上一個指令
+* 方向鍵上下可以在歷史記錄中瀏覽
+* 或是用 ctrl-p ctrl-n
+
+----
+
+### 在歷史中搜尋
+* ctrl-r 可以在歷史中搜尋
+* 如果找到的不是你要的，可以再按一次 ctrl-r 再往前找
+* 或是把搜尋字串打完整一點
+
+---
+
+## 用指令直接更改檔案
+上面都是用指令 *打開* 一個圖形介面。
+那能不能不透過圖形介面，
+直接用指令完成對檔案的操作呢？
+
+----
+
+### 處理壓縮檔
+```
+# create zip homework.zip,
+# which contain code.c report.odt Makefile
+zip homework.zip code.c report.odt Makefile
+```
+
+----
+
+### 更改內容
+
+```
+# delete file in zip
+zip -d homework.zip Makefile
+
+# update file in zip
+zip -u homework.zip code.c
+```
+
+---
+
+## 選項
+* 在 unix 下，多數程式會把以 `-` 開頭的參數當作 *選項* 。
+* 選項用來改變程式的行為。
+
+----
+
+### 短選項與連寫
+* 最早選項都只有一個字 `-h` `-a` `-t` 。
+* 工程師都很懶，所以慣例上短選項可以寫在一起 `-hat` 。
+
+----
+
+### bsd 的長選項
+* 後來程式越來越複雜，26 個選項不夠用。
+* bsd 發明長選項，選項從字元改成單字 `-help` `-all` 。
+* 因此連寫不能用了。
+
+----
+
+### gnu 的長選項
+* gnu 覺得這樣不向下相容，不優。
+* 規定為了與短選項區隔，長選項應該要用二個 `-` 開頭， `--help` `--all` 。
+* 程式可以同時有短選項與長選項，短選項仍可以連寫。
+
+----
+
+### 但選項的格式只是慣例
+* 程式看到的只是一連串的字串格式參數，只是某些參數用 `-` 開頭。
+* 程式作者可以把程式設計成用 `/` 當選項開頭，用 `\` 當路徑分隔符。
+  （windows: 誰叫我？）
+* `dd` 就是一支不同風格的常用程式。
+
+----
+
+### 選項查詢
+要怎麼知道命令怎麼下？有哪些選項？
+
+* -google-
+* 求助選項： `zip --help` 或 `zip -h`
+* 線上手冊： `man zip`
+* 搜尋手冊： `apropos zip`
+
+----
+
+### 求助選項
+多數程式會有一個求助選項，
+看到 `--help` 或 `-h` 就會直接輸出簡短的說明。
+當然也不是所有程式都有，還是那句話，看作者。
+
+----
+
+### 手冊
+* unix 系統中自帶有說明書，說明書可以用一支叫 `man` 的程式閱讀。
+* man 會開啟一個介面，可以用方向鍵翻閱，用 `q` 可以離開。
+
+----
+
+### 搜尋合適的指令
+* apropos 可以用關鍵字搜尋手冊。
+* 一般有手冊也就代表有指令可以用。
+
+---
+
+
+## 第一支腳本
+```
+# pack homework files into zip
+zip homework.zip report.odt code.c
+```
+
+----
+
+### 執行腳本
+```
+sh script.sh
+```
+
+----
+
+### 加入提示
+```
+echo start packing file
+zip homework.zip report.odt code.c
+echo finish packing file
+```
+
+----
+
+### echo
+* 寫在腳本裡的指令是直接執行，而執行時不會顯示現在在執行什麼。
+  （dos 會，可以用 `echo on` `echo off` 控制。）
+* 所以要用 echo 把想顯示的文字 *回音* 出來。
+
+----
+
+### 輸出字串
+* echo 就是單純輸出字串，對特殊字元和格式化的支援有限。
+* printf 可以做到接近 c printf 的五花八門功能。
+
+----
+
+### printf
+```
+printf "file-%03d.txt\n" 12 # file-012.txt
+```
+
+---
+
+## 輸出太長怎麼辦
+剛剛說的 apropos
+
+```
+~:$ apropos zip
+CPAN::Tarzip (3pm)   - internal handling of tar archives for CPAN.pm
+Archive::Zip (3pm)   - Provide an interface to ZIP archive files.
+Archive::Zip::FAQ (3pm) - Answers to a few frequently asked questions about A...
+Archive::Zip::MemberRead (3pm) - A wrapper that lets you read Zip archive mem...
+Archive::Zip::Tree (3pm) - (DEPRECATED) methods for adding/extracting trees u...
+bunzip2 (1)          - a block-sorting file compressor, v1.0.6
+bzcmp (1)            - compare bzip2 compressed files
+bzdiff (1)           - compare bzip2 compressed files
+bzegrep (1)          - search possibly bzip2 compressed files for a regular e...
+bzfgrep (1)          - search possibly bzip2 compressed files for a regular e...
+bzgrep (1)           - search possibly bzip2 compressed files for a regular e...
+bzip2 (1)            - a block-sorting file compressor, v1.0.6
+bzip2recover (1)     - recovers data from damaged bzip2 files
+bzless (1)           - file perusal filter for crt viewing of bzip2 compresse...
+bzmore (1)           - file perusal filter for crt viewing of bzip2 compresse...
+Compress::Raw::Bzip2 (3perl) - Low-Level Interface to bzip2 compression library
+CPAN::Tarzip (3perl) - internal handling of tar archives for CPAN.pm
+docker-context-import (1) - Import a context from a tar or zip file
+fcrackzip (1)        - a Free/Fast Zip Password Cracker
+fcrackzipinfo (1)    - display zip information
+funzip (1)           - filter for extracting from a ZIP archive in a pipe
+gpg-zip (1)          - encrypt or sign files into an archive
+gunzip (1)           - compress or expand files
+gzip (1)             - compress or expand files
+IO::Compress::Bzip2 (3perl) - Write bzip2 files/buffers
+IO::Compress::Gzip (3perl) - Write RFC 1952 files/buffers
+IO::Compress::Zip (3perl) - Write zip files/buffers
+IO::Uncompress::AnyInflate (3perl) - Uncompress zlib-based (zip, gzip) file/b...
+IO::Uncompress::AnyUncompress (3perl) - Uncompress gzip, zip, bzip2 or lzop f...
+IO::Uncompress::Bunzip2 (3perl) - Read bzip2 files/buffers
+IO::Uncompress::Gunzip (3perl) - Read RFC 1952 files/buffers
+IO::Uncompress::Unzip (3perl) - Read zip files/buffers
+MIME::Decoder::Gzip64 (3pm) - decode a "base64" gzip stream
+p7zip (1)            - Wrapper on 7-Zip file archiver with high compression r...
+pbzip2 (1)           - parallel bzip2 file compressor, v1.1.9
+PerlIO::gzip (3pm)   - Perl extension to provide a PerlIO layer to gzip/gunzip
+preunzip (1)         - prefix delta compressor for Aspell
+prezip (1)           - prefix delta compressor for Aspell
+prezip-bin (1)       - prefix zip delta word list compressor/decompressor
+unzip (1)            - list, test and extract compressed files in a ZIP archive
+unzipsfx (1)         - self-extracting stub for prepending to ZIP archives
+zforce (1)           - force a '.gz' extension on all gzip files
+zip (1)              - package and compress (archive) files
+zipcloak (1)         - encrypt entries in a zipfile
+zipdetails (1)       - display the internal structure of zip files
+zipgrep (1)          - search files in a ZIP archive for lines matching a pat...
+zipinfo (1)          - list detailed information about a ZIP archive
+zipnote (1)          - write the comments in zipfile to stdout, edit comments...
+zipsplit (1)         - split a zipfile into smaller zipfiles
+```
+
+----
+
+### 用 less 接起來
+* 那條直線叫管道符號，可以把前面程式的輸出，丟給後面程式。
+* less 的功能就是把過多的輸出接起來，可以上下翻頁慢慢看。
+
+```
+apropos zip | less
+```
+
+----
+
+### 其它用來接輸出的程式
+```
+apropos zip | head
+apropos zip | tail
+```
+
+----
+
+### 或是輸入到檔案
+```
+apropos zip > apropos-zip.txt
+head < apropos-zip.txt
+```
+
+----
+
+### 重導向或是直接指定檔名？
+```
+head < apropos-zip.txt
+head apropos-zip.txt
+```
+
+----
+
+### 有關 man
+* man 是一支很聰明的程式，會判斷輸出的裝置決定行為。
+* 直接呼叫時，man 因為輸出對向是終端機，所以呼叫 less 把內容接起來。
+* 如果對向是檔案，man 就會直接輸出文字檔。
+
+```
+man zip # 開啟 less 讓使用者翻閱手冊
+man zip > zip.txt # 把手冊存成文字檔
+```
+
+----
+
+### 更改檔案內容
+上面提過 echo printf，輸出也能重導向到檔案。
+
+```
+echo hey > hey
+printf "hello world!" > hey
+```
+
+----
+
+### 覆寫與附加
+* 一個 `>` 會寫入，如果檔案已經存在會被清空後寫入新內容。
+* 二個 `>>` 會附加，如果檔案已經存在會附加在檔案結尾。
+
+```
+echo bye >> hey
+printf "byby!" >> hey
+```
+
+---
+
+## shell 批次處理
+先前也提過，shell 最大的好處是可以寫成腳本執行，
+可以省去用滑鼠點來點去的時間。
+
+----
+
+### 命令代換
+被 `$()` 包起來的命令，執行後的結果會被置換到命令中。
+
+用 wc 計算 ls 命令列出的第一個檔案大小。
+
+```
+wc -c $(ls | head -n 1)
+```
+
+----
+
+### 變數賦值
+sh 中，所有變數內容都是字串。
+
+```
+a=file.txt
+b=$(ls | head -n 1)
+```
+
+----
+
+### 變數取值
+* 要展開變數需要用 `$` 標記，不然只會被當成單純字串而不是變數名。
+* 但賦值時不能有 `$` 號！
+
+```
+wc -c a # 計算檔名為 a 的大小
+wc -c $a # 計算檔名為變數 a 的內容的大小
+```
+
+----
+
+### 管道的力量
+串連多個小程式，就能快速達到各種功能。
+
+```
+sed 's/[^[:alnum:]]/\n/g' | sort | uniq -c
+```
+
+---
+
+## 程式
+* stdin 標準輸入、stdout 標準輸出
+* argv 參數
+
+----
+
+### 簡單的 c
+
+```c
+// substr.c
+int main(int argc, char **argv) {
+
+  // argv
+  int start;
+  sscanf(argv[1], "%d", &start);
+  int end;
+  sscanf(argv[2], "%d", &end);
+
+  char string[80];
+  fgets(string, sizeof(string), stdin);
+  scanf("%s", string); // stdin
+  for (int i=start; i<end; i++) putchar(string[i]); // stdout
+  putchar('\n');
+  return 0;
+}
+```
+
+----
+
+### 編譯執行
+
+```term
+~/code:$ gcc -o substrc substr.c
+~/code:$ echo hello world | ./substrc 3 8
+lo wo
+```
+
+----
+
+### 如何讓程式變成命令
+* shell 內有變數 `PATH` ，輸入的命令會在 PATH 中的目錄中搜尋執行檔。
+* 所以，把執行檔丟到 PATH 的任一目錄，
+* 或者，把執行檔所在目錄加入 PATH。
+
+----
+
+### 萬變不離宗
+* 絕大多數的命令都是程式
+* 從參數與標準輸入讀取，執行對應的行為。
+
+----
+
+### 組合的力量
+shell 本質即是組合大量行為單純的程式，從而達到複雜的功能。
+
+---
+
+## shell 編程
+shell 是一門完整的程式語言，當然帶有流程控制、迴圈等功能。
+
+----
+
+### 流程控制
+
+```
+if pwd | grep "^/home/$USER"
+then echo inside home directory
+else echo outside home directory
+fi
+```
+
+----
+
+### 控制原理
+* shell 中 if 後接的命令會被執行，並依命令的返回值判斷分支。
+* 若回傳 0 即為 true，以外為 false。
+
+----
+
+### c 語言的返回值
+```c
+int main(int argc, char **argv) {
+  /* some code */
+  if (true) return 0;
+  else return error_code;
+}
+```
+
+----
+
+### 判斷迴圈
+
+```shell
+while pgrep wget
+do
+    echo wget is downloading
+    sleep 1m
+done
+
+echo wget finish
+```
+
+----
+
+```shell
+while true
+do
+    if pgrep wget
+    then
+        echo wget is downloading
+        sleep 1m
+    else
+        echo wget finish
+        break
+    fi
+done
+```
+
+----
+
+### 遍歷迴圈
+```shell
+for number in `seq 10`
+do
+    file=$(printf "file-%02d.txt" $number)
+    cat $file >> all.txt
+done
+```
+
+----
+
+### 判斷的命令
+```
+string=abc
+test $string = abc # return 0
+[ $string = abc ] # as same as test
+if [ $n = 0 ]
+```
+
+----
+
+### c 實作
+```
+int main(int argc, char **argv) {
+  return !strcmp(argv[1], argv[3]);
+}
+```
+
+```
+gcc -o test test.c
+cp test [
+```
+
+---
+
+## 執行檔
+* 上面的執行檔都是用 c 語言示範
+* 因為大家應該都會 c 語言
+* 但實務上沒有人會想用 c 語言
+
+----
+
+### hashbang 變身執行檔
+* 多數直譯語言執行： `python script.py` `sh script.sh`
+* 如果在文字檔第一行加上 `#!` 與直譯器的絕對路徑，
+  就能讓文字檔能被執行： `./script.py` `./script.sh`
+* 並且要賦與該檔案可執行權限： `chmod +x script.sh`
+
+----
+
+```
+#!/usr/bin/python
+print "hello world!"
+```
+
+```
+#!/bin/sh
+echo hello world!
+```
+
+----
+
+### 選項的解析
+另外，一開始有提過長短選項；
+不管是哪一種風格選項，解析選項都不是一件容易的事。
+有興趣可以自己試試看。
+[我之前寫的用 sh 解析選項的範例程式。](http://github.com/GHolk/loco/blob/bin/parse-option-example.sh)
+
+---
+
+## shell 與通用語言
+shell 本身的功能很少，多數都是靠其它程式實現的。
+例如上述示範的，字串比較這種基礎功能也可以靠外部實現。
+
+----
+
+### shell 的特性
+* 不適合寫複雜的邏輯、數字、字串。
+* 缺乏資料結構。
+* 但呼叫其它程式很方便。
+  * 有人吐嘈 shell 做點屁大的事都要 fork 一堆進程。
+  * 如果用管道或命令代換，更會開到子 shell。
+
+----
+
+### 在一般程式語言中呼叫其它命令
+* 開一個 shell 來執行傳入的字串。
+* 跳過 shell，直接執行該程式，參數要自己分割好傳入。
+
+```c
+system("zip -u homework.zip code.c");
+execlp("zip", "-u", "homework.zip", "code.c");
+```
+
+----
+
+### 一般程式語言特性
+* 內建功能完整。
+* 呼叫其它程式不方便。
+
+----
+
+### 建議
+* 精通 shell，和一門 **通用的程式語言** 。
+* shell 像 bash、fish、power shell
+* 雖然 shell 能做很多事，但一些比較龐大的軟體會有自己內部語言。
+  * microsoft office visual basic for applications
+  * 瀏覽器的 javascript
+  * 但有時仍可以用通用程式語言溝通
+
+---
+
+## GUI 程式
+* 現代很多人只把 gui 程式認為是 *真正的* 程式。
+* 那我們就用 shell 來寫 gui 吧！
+
+----
+
+### 彈出視窗的命令
+* 瀏覽器有 `alert()` `confirm()` `prompt()` 可以 *彈出對話框* ，
+* shell 有沒有類似的東西呢？
+
+----
+
+### zenity
+
+```sh
+zenity --info --text 'hello zenity!'
+if zenity --question --text 'do you want to give me your name?'
+then
+    name=$(zenity --entry --text 'what is your name?')
+    zenity --info --text "hello $name"
+fi
+```
+
+---
+
+## 結論
+* 社課很短，能講的東西有限。
+* 希望大家有接收到我想傳達的訊息。
+* shell 是一門 **實際** 且 *能與所學結合* 的語言。
+
+----
+
+### 指令示範
+
+----
+
+把系統大檔案移到另一個硬碟
+
+```
+find -size +1G | while read path
+do
+    mv $path /mnt/backup/
+    ln -s /mnt/backup/$(basename $path) $path
+done
+```
+
+----
+
+每 30 分鐘提醒一次眼睛休息
+
+```
+(
+    while sleep 30m
+    do zenity --info --text "30 分鐘了，眼睛休息一下吧！"
+    done
+) &
+```
+
+----
+
+### 延伸閱讀
+* [命令列讀本](https://www.cyut.edu.tw/~ckhung/b/clr/) ，
+  用輕鬆、務實的角度入門 shell 使用。
+* [高級 Bash 脚本编程指南](http://book.ashan.org/Advanced-Bash-Scripting-Guide-in-Chinese/) ，
+  讓讀者清楚理解 bash 的功能，不會不清楚類似的功能差別。
+
+---
+
+## zenity
+
+#linux
+#slide
+#shell
+#ccca
+#nctu

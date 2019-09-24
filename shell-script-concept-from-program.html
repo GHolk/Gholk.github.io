@@ -1,0 +1,672 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2019-09-21T14:52:27.734Z">
+<meta name="keywords" property="og:article:tag" content="linux,slide,shell,ccca,nctu">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="javascript-async-debounce-atomic.html" title="用 async 實作 debounce atomic 及其它使用技巧">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>shell 概念教學</title>
+</head>
+<body>
+<main><h1 id="shell-概念教學">shell 概念教學</h1>
+<p>shell 的設計理念以 unix 環境中的程序為中心，
+發展出參數、管道等觀念。
+並且最重要的，是一門可以應用在電腦日常使用上的實際的程式語言。
+對簡單學習過 c 語言的人，
+配合 c 從 shell 認識電腦是一條十分有意義的道路。
+本簡報從使用電腦的角度，帶領有 c 語言基礎的人認識 shell。</p>
+<hr>
+<script>
+function toggleSlideMode() {
+  document.documentElement.classList.toggle('white-black-slide')
+}
+function scrollToNextHr() {
+  const allHr = document.querySelectorAll('hr')
+  const windowTop = scrollY
+  for (const hr of allHr) {
+    if (hr.offsetTop > scrollY) {
+      scrollTo(0, hr.offsetTop + 1)
+      break
+    }
+  }
+}
+</script>
+
+<style contenteditable="true">
+.white-black-slide {
+  font-size: 250%;
+  color: white;
+  background: black;
+}
+.white-black-slide a {
+  color: cyan;
+}
+:not(pre) code {
+  border: solid 1px;
+  padding: 0 0.1em;
+}
+.white-black-slide ::selection { color: initial; background-color: yellow; }
+.white-black-slide ::-moz-selection { color: initial; background-color: yellow; }
+
+.white-black-slide {
+  cursor: url('data:image/cur;base64,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') 12.5 12.5, auto;
+}
+
+:this + button {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 1em;
+}
+</style>
+
+<button onclick="scrollToNextHr()">下一頁</button>
+
+<button onclick="toggleSlideMode()">切換簡報模式</button>
+
+<hr>
+<h2 id="可以實際應用的程式設計">可以實際應用的程式設計</h2>
+<p>高中電腦多半從 c 這種基本的，或其它 <em>簡單的</em> 程式語言教起，
+但這些語言有個很大的問題，
+他們都無法讓學生應用在日常的電腦操作上。</p>
+<hr>
+<h3 id="c-可以寫什麼">c 可以寫什麼</h3>
+<ul>
+<li>scanf printf</li>
+<li>fopen</li>
+</ul>
+<hr>
+<h3 id="問題的關鍵">問題的關鍵</h3>
+<ul>
+<li>日常使用電腦的操作，無法輕易用 c 達成。</li>
+<li>學校的教學偏重在理論，而不是實務應用。</li>
+</ul>
+<hr>
+<h3 id="日常的操作">日常的操作</h3>
+<ul>
+<li>複製檔案</li>
+<li>打開網頁</li>
+<li>壓縮檔案</li>
+</ul>
+<hr>
+<h3 id="什麼是-shell">什麼是 shell</h3>
+<ul>
+<li>日常使用的稱為 <abbr title="Graphic User Interface">圖形介面</abbr> 。</li>
+<li>在圖形介面發明以前，人機之間以文字指令溝通。</li>
+<li>作業系統內部是一支執行中的程式，
+而 shell 用來稱呼人與作業系統溝通的介面。</li>
+</ul>
+<hr>
+<h3 id="指令的特性">指令的特性</h3>
+<ul>
+<li>學習門檻較高。</li>
+<li>由於指令只是一連串文字，可以把要執行的指令存成檔案，方便執行。</li>
+<li>本實是一種特化的程式語言。</li>
+</ul>
+<hr>
+<h3 id="指令與圖形介面等價">指令與圖形介面等價</h3>
+<ul>
+<li>在沒有圖形介面以前，人們還是使用電腦。</li>
+<li>絕大多數在圖形介面能做到的事，指令也都能做到。</li>
+<li>雖然無法做到 <em>開啟視窗然後按下某個按鈕</em> 之類的圖形介面操作。</li>
+</ul>
+<hr>
+<h2 id="shell-入門">shell 入門</h2>
+<p>指令是不含空白的一連串字元，一般包含底線與連字號。</p>
+<pre><code class="lang-shell">pwd
+ls
+</code></pre>
+<hr>
+<h3 id="帶有參數的指令">帶有參數的指令</h3>
+<p>參數以空白分隔</p>
+<pre><code class="lang-shell">mv config.txt config_backup.txt
+cp config_origin.txt config.txt
+rm log.txt
+</code></pre>
+<hr>
+<h3 id="移動到不同資料夾">移動到不同資料夾</h3>
+<pre><code class="lang-shell">cd my-dir
+cd ..
+cd /home
+cd ../usr/bin
+</code></pre>
+<hr>
+<h3 id="何謂開啟檔案？">何謂開啟檔案？</h3>
+<ul>
+<li>用 fopen 打開讀取或寫入</li>
+<li>更改檔案內容</li>
+<li>開啟檔案對應的圖形程式</li>
+<li>用滑鼠點二下</li>
+</ul>
+<hr>
+<h3 id="開啟圖形程式">開啟圖形程式</h3>
+<pre><code>gedit
+lowriter
+firefox
+</code></pre><hr>
+<h3 id="用圖形程式開啟檔案">用圖形程式開啟檔案</h3>
+<pre><code>gedit file.txt
+lowriter document.odt
+firefox print.pdf
+</code></pre><hr>
+<h3 id="統一的指令">統一的指令</h3>
+<pre><code># linux
+xdg-open file.odt
+</code></pre><pre><code>REM windows
+start file.doc
+
+REM or directly type filename
+file.doc
+</code></pre><hr>
+<h2 id="快捷鍵">快捷鍵</h2>
+<ul>
+<li>指令到很複雜的話，敲鍵盤很累的。</li>
+<li>所以 shell 多半有快捷鍵可以用，
+處理這些快捷鍵的程式稱為 readline。</li>
+</ul>
+<hr>
+<h3 id="自動補全">自動補全</h3>
+<ul>
+<li>tab 鍵可以自動補全打到一半的單字</li>
+<li>基本的命令可以自動補全，例如打 pyt 之後按 tab 就會補全成 python。</li>
+<li>檔名也可以自動補全，例如 <code>xdg-open file.o</code> 
+之後按 tab 會依存在的檔案補全。</li>
+</ul>
+<hr>
+<h3 id="上一個指令">上一個指令</h3>
+<ul>
+<li>方向鍵上下可以在歷史記錄中瀏覽</li>
+<li>或是用 ctrl-p ctrl-n</li>
+</ul>
+<hr>
+<h3 id="在歷史中搜尋">在歷史中搜尋</h3>
+<ul>
+<li>ctrl-r 可以在歷史中搜尋</li>
+<li>如果找到的不是你要的，可以再按一次 ctrl-r 再往前找</li>
+<li>或是把搜尋字串打完整一點</li>
+</ul>
+<hr>
+<h2 id="用指令直接更改檔案">用指令直接更改檔案</h2>
+<p>上面都是用指令 <em>打開</em> 一個圖形介面。
+那能不能不透過圖形介面，
+直接用指令完成對檔案的操作呢？</p>
+<hr>
+<h3 id="處理壓縮檔">處理壓縮檔</h3>
+<pre><code># create zip homework.zip,
+# which contain code.c report.odt Makefile
+zip homework.zip code.c report.odt Makefile
+</code></pre><hr>
+<h3 id="更改內容">更改內容</h3>
+<pre><code># delete file in zip
+zip -d homework.zip Makefile
+
+# update file in zip
+zip -u homework.zip code.c
+</code></pre><hr>
+<h2 id="選項">選項</h2>
+<ul>
+<li>在 unix 下，多數程式會把以 <code>-</code> 開頭的參數當作 <em>選項</em> 。</li>
+<li>選項用來改變程式的行為。</li>
+</ul>
+<hr>
+<h3 id="短選項與連寫">短選項與連寫</h3>
+<ul>
+<li>最早選項都只有一個字 <code>-h</code> <code>-a</code> <code>-t</code> 。</li>
+<li>工程師都很懶，所以慣例上短選項可以寫在一起 <code>-hat</code> 。</li>
+</ul>
+<hr>
+<h3 id="bsd-的長選項">bsd 的長選項</h3>
+<ul>
+<li>後來程式越來越複雜，26 個選項不夠用。</li>
+<li>bsd 發明長選項，選項從字元改成單字 <code>-help</code> <code>-all</code> 。</li>
+<li>因此連寫不能用了。</li>
+</ul>
+<hr>
+<h3 id="gnu-的長選項">gnu 的長選項</h3>
+<ul>
+<li>gnu 覺得這樣不向下相容，不優。</li>
+<li>規定為了與短選項區隔，長選項應該要用二個 <code>-</code> 開頭， <code>--help</code> <code>--all</code> 。</li>
+<li>程式可以同時有短選項與長選項，短選項仍可以連寫。</li>
+</ul>
+<hr>
+<h3 id="但選項的格式只是慣例">但選項的格式只是慣例</h3>
+<ul>
+<li>程式看到的只是一連串的字串格式參數，只是某些參數用 <code>-</code> 開頭。</li>
+<li>程式作者可以把程式設計成用 <code>/</code> 當選項開頭，用 <code>\</code> 當路徑分隔符。
+（windows: 誰叫我？）</li>
+<li><code>dd</code> 就是一支不同風格的常用程式。</li>
+</ul>
+<hr>
+<h3 id="選項查詢">選項查詢</h3>
+<p>要怎麼知道命令怎麼下？有哪些選項？</p>
+<ul>
+<li><s>google</s></li>
+<li>求助選項： <code>zip --help</code> 或 <code>zip -h</code></li>
+<li>線上手冊： <code>man zip</code></li>
+<li>搜尋手冊： <code>apropos zip</code></li>
+</ul>
+<hr>
+<h3 id="求助選項">求助選項</h3>
+<p>多數程式會有一個求助選項，
+看到 <code>--help</code> 或 <code>-h</code> 就會直接輸出簡短的說明。
+當然也不是所有程式都有，還是那句話，看作者。</p>
+<hr>
+<h3 id="手冊">手冊</h3>
+<ul>
+<li>unix 系統中自帶有說明書，說明書可以用一支叫 <code>man</code> 的程式閱讀。</li>
+<li>man 會開啟一個介面，可以用方向鍵翻閱，用 <code>q</code> 可以離開。</li>
+</ul>
+<hr>
+<h3 id="搜尋合適的指令">搜尋合適的指令</h3>
+<ul>
+<li>apropos 可以用關鍵字搜尋手冊。</li>
+<li>一般有手冊也就代表有指令可以用。</li>
+</ul>
+<hr>
+<h2 id="第一支腳本">第一支腳本</h2>
+<pre><code># pack homework files into zip
+zip homework.zip report.odt code.c
+</code></pre><hr>
+<h3 id="執行腳本">執行腳本</h3>
+<pre><code>sh script.sh
+</code></pre><hr>
+<h3 id="加入提示">加入提示</h3>
+<pre><code>echo start packing file
+zip homework.zip report.odt code.c
+echo finish packing file
+</code></pre><hr>
+<h3 id="echo">echo</h3>
+<ul>
+<li>寫在腳本裡的指令是直接執行，而執行時不會顯示現在在執行什麼。
+（dos 會，可以用 <code>echo on</code> <code>echo off</code> 控制。）</li>
+<li>所以要用 echo 把想顯示的文字 <em>回音</em> 出來。</li>
+</ul>
+<hr>
+<h3 id="輸出字串">輸出字串</h3>
+<ul>
+<li>echo 就是單純輸出字串，對特殊字元和格式化的支援有限。</li>
+<li>printf 可以做到接近 c printf 的五花八門功能。</li>
+</ul>
+<hr>
+<h3 id="printf">printf</h3>
+<pre><code>printf &quot;file-%03d.txt\n&quot; 12 # file-012.txt
+</code></pre><hr>
+<h2 id="輸出太長怎麼辦">輸出太長怎麼辦</h2>
+<p>剛剛說的 apropos</p>
+<pre><code>~:$ apropos zip
+CPAN::Tarzip (3pm)   - internal handling of tar archives for CPAN.pm
+Archive::Zip (3pm)   - Provide an interface to ZIP archive files.
+Archive::Zip::FAQ (3pm) - Answers to a few frequently asked questions about A...
+Archive::Zip::MemberRead (3pm) - A wrapper that lets you read Zip archive mem...
+Archive::Zip::Tree (3pm) - (DEPRECATED) methods for adding/extracting trees u...
+bunzip2 (1)          - a block-sorting file compressor, v1.0.6
+bzcmp (1)            - compare bzip2 compressed files
+bzdiff (1)           - compare bzip2 compressed files
+bzegrep (1)          - search possibly bzip2 compressed files for a regular e...
+bzfgrep (1)          - search possibly bzip2 compressed files for a regular e...
+bzgrep (1)           - search possibly bzip2 compressed files for a regular e...
+bzip2 (1)            - a block-sorting file compressor, v1.0.6
+bzip2recover (1)     - recovers data from damaged bzip2 files
+bzless (1)           - file perusal filter for crt viewing of bzip2 compresse...
+bzmore (1)           - file perusal filter for crt viewing of bzip2 compresse...
+Compress::Raw::Bzip2 (3perl) - Low-Level Interface to bzip2 compression library
+CPAN::Tarzip (3perl) - internal handling of tar archives for CPAN.pm
+docker-context-import (1) - Import a context from a tar or zip file
+fcrackzip (1)        - a Free/Fast Zip Password Cracker
+fcrackzipinfo (1)    - display zip information
+funzip (1)           - filter for extracting from a ZIP archive in a pipe
+gpg-zip (1)          - encrypt or sign files into an archive
+gunzip (1)           - compress or expand files
+gzip (1)             - compress or expand files
+IO::Compress::Bzip2 (3perl) - Write bzip2 files/buffers
+IO::Compress::Gzip (3perl) - Write RFC 1952 files/buffers
+IO::Compress::Zip (3perl) - Write zip files/buffers
+IO::Uncompress::AnyInflate (3perl) - Uncompress zlib-based (zip, gzip) file/b...
+IO::Uncompress::AnyUncompress (3perl) - Uncompress gzip, zip, bzip2 or lzop f...
+IO::Uncompress::Bunzip2 (3perl) - Read bzip2 files/buffers
+IO::Uncompress::Gunzip (3perl) - Read RFC 1952 files/buffers
+IO::Uncompress::Unzip (3perl) - Read zip files/buffers
+MIME::Decoder::Gzip64 (3pm) - decode a &quot;base64&quot; gzip stream
+p7zip (1)            - Wrapper on 7-Zip file archiver with high compression r...
+pbzip2 (1)           - parallel bzip2 file compressor, v1.1.9
+PerlIO::gzip (3pm)   - Perl extension to provide a PerlIO layer to gzip/gunzip
+preunzip (1)         - prefix delta compressor for Aspell
+prezip (1)           - prefix delta compressor for Aspell
+prezip-bin (1)       - prefix zip delta word list compressor/decompressor
+unzip (1)            - list, test and extract compressed files in a ZIP archive
+unzipsfx (1)         - self-extracting stub for prepending to ZIP archives
+zforce (1)           - force a &apos;.gz&apos; extension on all gzip files
+zip (1)              - package and compress (archive) files
+zipcloak (1)         - encrypt entries in a zipfile
+zipdetails (1)       - display the internal structure of zip files
+zipgrep (1)          - search files in a ZIP archive for lines matching a pat...
+zipinfo (1)          - list detailed information about a ZIP archive
+zipnote (1)          - write the comments in zipfile to stdout, edit comments...
+zipsplit (1)         - split a zipfile into smaller zipfiles
+</code></pre><hr>
+<h3 id="用-less-接起來">用 less 接起來</h3>
+<ul>
+<li>那條直線叫管道符號，可以把前面程式的輸出，丟給後面程式。</li>
+<li>less 的功能就是把過多的輸出接起來，可以上下翻頁慢慢看。</li>
+</ul>
+<pre><code>apropos zip | less
+</code></pre><hr>
+<h3 id="其它用來接輸出的程式">其它用來接輸出的程式</h3>
+<pre><code>apropos zip | head
+apropos zip | tail
+</code></pre><hr>
+<h3 id="或是輸入到檔案">或是輸入到檔案</h3>
+<pre><code>apropos zip &gt; apropos-zip.txt
+head &lt; apropos-zip.txt
+</code></pre><hr>
+<h3 id="重導向或是直接指定檔名？">重導向或是直接指定檔名？</h3>
+<pre><code>head &lt; apropos-zip.txt
+head apropos-zip.txt
+</code></pre><hr>
+<h3 id="有關-man">有關 man</h3>
+<ul>
+<li>man 是一支很聰明的程式，會判斷輸出的裝置決定行為。</li>
+<li>直接呼叫時，man 因為輸出對向是終端機，所以呼叫 less 把內容接起來。</li>
+<li>如果對向是檔案，man 就會直接輸出文字檔。</li>
+</ul>
+<pre><code>man zip # 開啟 less 讓使用者翻閱手冊
+man zip &gt; zip.txt # 把手冊存成文字檔
+</code></pre><hr>
+<h3 id="更改檔案內容">更改檔案內容</h3>
+<p>上面提過 echo printf，輸出也能重導向到檔案。</p>
+<pre><code>echo hey &gt; hey
+printf &quot;hello world!&quot; &gt; hey
+</code></pre><hr>
+<h3 id="覆寫與附加">覆寫與附加</h3>
+<ul>
+<li>一個 <code>&gt;</code> 會寫入，如果檔案已經存在會被清空後寫入新內容。</li>
+<li>二個 <code>&gt;&gt;</code> 會附加，如果檔案已經存在會附加在檔案結尾。</li>
+</ul>
+<pre><code>echo bye &gt;&gt; hey
+printf &quot;byby!&quot; &gt;&gt; hey
+</code></pre><hr>
+<h2 id="shell-批次處理">shell 批次處理</h2>
+<p>先前也提過，shell 最大的好處是可以寫成腳本執行，
+可以省去用滑鼠點來點去的時間。</p>
+<hr>
+<h3 id="命令代換">命令代換</h3>
+<p>被 <code>$()</code> 包起來的命令，執行後的結果會被置換到命令中。</p>
+<p>用 wc 計算 ls 命令列出的第一個檔案大小。</p>
+<pre><code>wc -c $(ls | head -n 1)
+</code></pre><hr>
+<h3 id="變數賦值">變數賦值</h3>
+<p>sh 中，所有變數內容都是字串。</p>
+<pre><code>a=file.txt
+b=$(ls | head -n 1)
+</code></pre><hr>
+<h3 id="變數取值">變數取值</h3>
+<ul>
+<li>要展開變數需要用 <code>$</code> 標記，不然只會被當成單純字串而不是變數名。</li>
+<li>但賦值時不能有 <code>$</code> 號！</li>
+</ul>
+<pre><code>wc -c a # 計算檔名為 a 的大小
+wc -c $a # 計算檔名為變數 a 的內容的大小
+</code></pre><hr>
+<h3 id="管道的力量">管道的力量</h3>
+<p>串連多個小程式，就能快速達到各種功能。</p>
+<pre><code>sed &apos;s/[^[:alnum:]]/\n/g&apos; | sort | uniq -c
+</code></pre><hr>
+<h2 id="程式">程式</h2>
+<ul>
+<li>stdin 標準輸入、stdout 標準輸出</li>
+<li>argv 參數</li>
+</ul>
+<hr>
+<h3 id="簡單的-c">簡單的 c</h3>
+<pre><code class="lang-c">// substr.c
+int main(int argc, char **argv) {
+
+  // argv
+  int start;
+  sscanf(argv[1], &quot;%d&quot;, &amp;start);
+  int end;
+  sscanf(argv[2], &quot;%d&quot;, &amp;end);
+
+  char string[80];
+  fgets(string, sizeof(string), stdin);
+  scanf(&quot;%s&quot;, string); // stdin
+  for (int i=start; i&lt;end; i++) putchar(string[i]); // stdout
+  putchar(&apos;\n&apos;);
+  return 0;
+}
+</code></pre>
+<hr>
+<h3 id="編譯執行">編譯執行</h3>
+<pre><code class="lang-term">~/code:$ gcc -o substrc substr.c
+~/code:$ echo hello world | ./substrc 3 8
+lo wo
+</code></pre>
+<hr>
+<h3 id="如何讓程式變成命令">如何讓程式變成命令</h3>
+<ul>
+<li>shell 內有變數 <code>PATH</code> ，輸入的命令會在 PATH 中的目錄中搜尋執行檔。</li>
+<li>所以，把執行檔丟到 PATH 的任一目錄，</li>
+<li>或者，把執行檔所在目錄加入 PATH。</li>
+</ul>
+<hr>
+<h3 id="萬變不離宗">萬變不離宗</h3>
+<ul>
+<li>絕大多數的命令都是程式</li>
+<li>從參數與標準輸入讀取，執行對應的行為。</li>
+</ul>
+<hr>
+<h3 id="組合的力量">組合的力量</h3>
+<p>shell 本質即是組合大量行為單純的程式，從而達到複雜的功能。</p>
+<hr>
+<h2 id="shell-編程">shell 編程</h2>
+<p>shell 是一門完整的程式語言，當然帶有流程控制、迴圈等功能。</p>
+<hr>
+<h3 id="流程控制">流程控制</h3>
+<pre><code>if pwd | grep &quot;^/home/$USER&quot;
+then echo inside home directory
+else echo outside home directory
+fi
+</code></pre><hr>
+<h3 id="控制原理">控制原理</h3>
+<ul>
+<li>shell 中 if 後接的命令會被執行，並依命令的返回值判斷分支。</li>
+<li>若回傳 0 即為 true，以外為 false。</li>
+</ul>
+<hr>
+<h3 id="c-語言的返回值">c 語言的返回值</h3>
+<pre><code class="lang-c">int main(int argc, char **argv) {
+  /* some code */
+  if (true) return 0;
+  else return error_code;
+}
+</code></pre>
+<hr>
+<h3 id="判斷迴圈">判斷迴圈</h3>
+<pre><code class="lang-shell">while pgrep wget
+do
+    echo wget is downloading
+    sleep 1m
+done
+
+echo wget finish
+</code></pre>
+<hr>
+<pre><code class="lang-shell">while true
+do
+    if pgrep wget
+    then
+        echo wget is downloading
+        sleep 1m
+    else
+        echo wget finish
+        break
+    fi
+done
+</code></pre>
+<hr>
+<h3 id="遍歷迴圈">遍歷迴圈</h3>
+<pre><code class="lang-shell">for number in `seq 10`
+do
+    file=$(printf &quot;file-%02d.txt&quot; $number)
+    cat $file &gt;&gt; all.txt
+done
+</code></pre>
+<hr>
+<h3 id="判斷的命令">判斷的命令</h3>
+<pre><code>string=abc
+test $string = abc # return 0
+[ $string = abc ] # as same as test
+if [ $n = 0 ]
+</code></pre><hr>
+<h3 id="c-實作">c 實作</h3>
+<pre><code>int main(int argc, char **argv) {
+  return !strcmp(argv[1], argv[3]);
+}
+</code></pre><pre><code>gcc -o test test.c
+cp test [
+</code></pre><hr>
+<h2 id="執行檔">執行檔</h2>
+<ul>
+<li>上面的執行檔都是用 c 語言示範</li>
+<li>因為大家應該都會 c 語言</li>
+<li>但實務上沒有人會想用 c 語言</li>
+</ul>
+<hr>
+<h3 id="hashbang-變身執行檔">hashbang 變身執行檔</h3>
+<ul>
+<li>多數直譯語言執行： <code>python script.py</code> <code>sh script.sh</code></li>
+<li>如果在文字檔第一行加上 <code>#!</code> 與直譯器的絕對路徑，
+就能讓文字檔能被執行： <code>./script.py</code> <code>./script.sh</code></li>
+<li>並且要賦與該檔案可執行權限： <code>chmod +x script.sh</code></li>
+</ul>
+<hr>
+<pre><code>#!/usr/bin/python
+print &quot;hello world!&quot;
+</code></pre><pre><code>#!/bin/sh
+echo hello world!
+</code></pre><hr>
+<h3 id="選項的解析">選項的解析</h3>
+<p>另外，一開始有提過長短選項；
+不管是哪一種風格選項，解析選項都不是一件容易的事。
+有興趣可以自己試試看。
+<a href="http://github.com/GHolk/loco/blob/bin/parse-option-example.sh">我之前寫的用 sh 解析選項的範例程式。</a></p>
+<hr>
+<h2 id="shell-與通用語言">shell 與通用語言</h2>
+<p>shell 本身的功能很少，多數都是靠其它程式實現的。
+例如上述示範的，字串比較這種基礎功能也可以靠外部實現。</p>
+<hr>
+<h3 id="shell-的特性">shell 的特性</h3>
+<ul>
+<li>不適合寫複雜的邏輯、數字、字串。</li>
+<li>缺乏資料結構。</li>
+<li>但呼叫其它程式很方便。<ul>
+<li>有人吐嘈 shell 做點屁大的事都要 fork 一堆進程。</li>
+<li>如果用管道或命令代換，更會開到子 shell。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="在一般程式語言中呼叫其它命令">在一般程式語言中呼叫其它命令</h3>
+<ul>
+<li>開一個 shell 來執行傳入的字串。</li>
+<li>跳過 shell，直接執行該程式，參數要自己分割好傳入。</li>
+</ul>
+<pre><code class="lang-c">system(&quot;zip -u homework.zip code.c&quot;);
+execlp(&quot;zip&quot;, &quot;-u&quot;, &quot;homework.zip&quot;, &quot;code.c&quot;);
+</code></pre>
+<hr>
+<h3 id="一般程式語言特性">一般程式語言特性</h3>
+<ul>
+<li>內建功能完整。</li>
+<li>呼叫其它程式不方便。</li>
+</ul>
+<hr>
+<h3 id="建議">建議</h3>
+<ul>
+<li>精通 shell，和一門 <strong>通用的程式語言</strong> 。</li>
+<li>shell 像 bash、fish、power shell</li>
+<li>雖然 shell 能做很多事，但一些比較龐大的軟體會有自己內部語言。<ul>
+<li>microsoft office visual basic for applications</li>
+<li>瀏覽器的 javascript</li>
+<li>但有時仍可以用通用程式語言溝通</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="GUI-程式">GUI 程式</h2>
+<ul>
+<li>現代很多人只把 gui 程式認為是 <em>真正的</em> 程式。</li>
+<li>那我們就用 shell 來寫 gui 吧！</li>
+</ul>
+<hr>
+<h3 id="彈出視窗的命令">彈出視窗的命令</h3>
+<ul>
+<li>瀏覽器有 <code>alert()</code> <code>confirm()</code> <code>prompt()</code> 可以 <em>彈出對話框</em> ，</li>
+<li>shell 有沒有類似的東西呢？</li>
+</ul>
+<hr>
+<h3 id="zenity">zenity</h3>
+<pre><code class="lang-sh">zenity --info --text &apos;hello zenity!&apos;
+if zenity --question --text &apos;do you want to give me your name?&apos;
+then
+    name=$(zenity --entry --text &apos;what is your name?&apos;)
+    zenity --info --text &quot;hello $name&quot;
+fi
+</code></pre>
+<hr>
+<h2 id="結論">結論</h2>
+<ul>
+<li>社課很短，能講的東西有限。</li>
+<li>希望大家有接收到我想傳達的訊息。</li>
+<li>shell 是一門 <strong>實際</strong> 且 <em>能與所學結合</em> 的語言。</li>
+</ul>
+<hr>
+<h3 id="指令示範">指令示範</h3>
+<hr>
+<p>把系統大檔案移到另一個硬碟</p>
+<pre><code>find -size +1G | while read path
+do
+    mv $path /mnt/backup/
+    ln -s /mnt/backup/$(basename $path) $path
+done
+</code></pre><hr>
+<p>每 30 分鐘提醒一次眼睛休息</p>
+<pre><code>(
+    while sleep 30m
+    do zenity --info --text &quot;30 分鐘了，眼睛休息一下吧！&quot;
+    done
+) &amp;
+</code></pre><hr>
+<h3 id="延伸閱讀">延伸閱讀</h3>
+<ul>
+<li><a href="https://www.cyut.edu.tw/~ckhung/b/clr/">命令列讀本</a> ，
+用輕鬆、務實的角度入門 shell 使用。</li>
+<li><a href="http://book.ashan.org/Advanced-Bash-Scripting-Guide-in-Chinese/">高級 Bash 脚本编程指南</a> ，
+讓讀者清楚理解 bash 的功能，不會不清楚類似的功能差別。</li>
+</ul>
+<hr>
+<h2 id="zenity">zenity</h2>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

@@ -33,18 +33,39 @@
 配合 c 從 shell 認識電腦是一條十分有意義的道路。
 本簡報從使用電腦的角度，帶領有 c 語言基礎的人認識 shell。</p>
 <hr>
+<h2 id="社課前言">社課前言</h2>
+<p>linux 強大的 shell 指令介面是許多人對 linux 愛不釋手的原因；
+但對新手而言，過度依靠 shell 也是讓 linux 難以入門的因素。
+shell 的學習門檻高，使用上需要熟悉大量的指令。
+本次社課將從日常使用講起，
+介紹 shell 如何是一門貼近使用者與務實的語言，
+並穿插 shell 運作的基本邏輯，
+使聽眾能將課堂所學的程式設計，實際運用到電腦的日常使用中。</p>
+<hr>
 <script>
 function toggleSlideMode() {
-  document.documentElement.classList.toggle('white-black-slide')
+  const slideClass = 'white-black-slide'
+  const root = document.documentElement
+  if (root.classList.contains(slideClass)) {
+    root.classList.remove(slideClass)
+    window.removeEventListener('wheel', flipOnWheel)
+  }
+  else {
+    root.classList.add(slideClass)
+    window.addEventListener('wheel', flipOnWheel)
+  }
 }
-function scrollToNextHr() {
-  const allHr = document.querySelectorAll('hr')
-  const windowTop = scrollY
-  for (const hr of allHr) {
-    if (hr.offsetTop > scrollY) {
-      scrollTo(0, hr.offsetTop + 1)
-      break
-    }
+function scrollToRelativeHr(relative = 1) {
+  const allHr = Array.from(document.querySelectorAll('hr'))
+  const windowTop = window.scrollY
+  const seenHrIndex = allHr.findIndex(hr => hr.offsetTop > windowTop)
+  const targetHrIndex = seenHrIndex - 1 + relative
+  window.scrollTo(0, allHr[targetHrIndex].offsetTop + 1)
+}
+function flipOnWheel(wheel) {
+  if (wheel.target.nodeName != 'HTML' && wheel.buttons == 0) {
+    const scrollDirection = wheel.deltaY / Math.abs(wheel.deltaY)
+    scrollToRelativeHr(scrollDirection)
   }
 }
 </script>
@@ -77,7 +98,7 @@ function scrollToNextHr() {
 }
 </style>
 
-<button onclick="scrollToNextHr()">下一頁</button>
+<button onclick="scrollToRelativeHr()">下一頁</button>
 
 <button onclick="toggleSlideMode()">切換簡報模式</button>
 
@@ -118,7 +139,7 @@ function scrollToNextHr() {
 <ul>
 <li>學習門檻較高。</li>
 <li>由於指令只是一連串文字，可以把要執行的指令存成檔案，方便執行。</li>
-<li>本實是一種特化的程式語言。</li>
+<li>本質是一種特化的程式語言。</li>
 </ul>
 <hr>
 <h3 id="指令與圖形介面等價">指令與圖形介面等價</h3>
@@ -212,6 +233,10 @@ file.doc
 <pre><code># create zip homework.zip,
 # which contain code.c report.odt Makefile
 zip homework.zip code.c report.odt Makefile
+</code></pre><hr>
+<h3 id="看壓縮檔的內容">看壓縮檔的內容</h3>
+<pre><code>unzip homework.zip # directly unzip
+unzip -l homework.zip # list content of zip
 </code></pre><hr>
 <h3 id="更改內容">更改內容</h3>
 <pre><code># delete file in zip
@@ -440,13 +465,12 @@ int main(int argc, char **argv) {
 
   // argv
   int start;
-  sscanf(argv[1], &quot;%d&quot;, &amp;start);
+  sscanf(argv[1], &quot;%d&quot;, &amp;start); // atoi()
   int end;
   sscanf(argv[2], &quot;%d&quot;, &amp;end);
 
   char string[80];
-  fgets(string, sizeof(string), stdin);
-  scanf(&quot;%s&quot;, string); // stdin
+  fgets(string, sizeof(string), stdin); // scanf(&quot;%s&quot;, string)
   for (int i=start; i&lt;end; i++) putchar(string[i]); // stdout
   putchar(&apos;\n&apos;);
   return 0;
@@ -522,7 +546,7 @@ done
 </code></pre>
 <hr>
 <h3 id="遍歷迴圈">遍歷迴圈</h3>
-<pre><code class="lang-shell">for number in `seq 10`
+<pre><code class="lang-shell">for number in $(seq 10)
 do
     file=$(printf &quot;file-%02d.txt&quot; $number)
     cat $file &gt;&gt; all.txt
@@ -577,6 +601,7 @@ echo hello world!
 <li>不適合寫複雜的邏輯、數字、字串。</li>
 <li>缺乏資料結構。</li>
 <li>但呼叫其它程式很方便。<ul>
+<li>只要可以成為執行檔，都是 shell 指令。</li>
 <li>有人吐嘈 shell 做點屁大的事都要 fork 一堆進程。</li>
 <li>如果用管道或命令代換，更會開到子 shell。</li>
 </ul>
@@ -598,11 +623,19 @@ execlp(&quot;zip&quot;, &quot;-u&quot;, &quot;homework.zip&quot;, &quot;code.c&q
 <li>呼叫其它程式不方便。</li>
 </ul>
 <hr>
+<h3 id="shell-是-linux-的統一介面">shell 是 linux 的統一介面</h3>
+<ul>
+<li>不同程式語言內部有自己互相呼叫的介面。</li>
+<li>可執行檔是 linux 的統一介面，呼叫要傳入參數、環境變數，處理輸入輸出。</li>
+<li>shell 是執行檔呼叫的最簡單介面。</li>
+</ul>
+<hr>
 <h3 id="建議">建議</h3>
 <ul>
 <li>精通 shell，和一門 <strong>通用的程式語言</strong> 。</li>
 <li>shell 像 bash、fish、power shell</li>
-<li>雖然 shell 能做很多事，但一些比較龐大的軟體會有自己內部語言。<ul>
+<li>雖然 shell 能做很多事，但受限於的執行檔所提供的功能。</li>
+<li>一些比較龐大的軟體會有自己內部語言。<ul>
 <li>microsoft office visual basic for applications</li>
 <li>瀏覽器的 javascript</li>
 <li>但有時仍可以用通用程式語言溝通</li>
@@ -659,10 +692,65 @@ done
 <li><a href="https://www.cyut.edu.tw/~ckhung/b/clr/">命令列讀本</a> ，
 用輕鬆、務實的角度入門 shell 使用。</li>
 <li><a href="http://book.ashan.org/Advanced-Bash-Scripting-Guide-in-Chinese/">高級 Bash 脚本编程指南</a> ，
-讓讀者清楚理解 bash 的功能，不會不清楚類似的功能差別。</li>
+完全理解 bash 的功能，了解不同語法間的細微差異。</li>
+<li><a href="http://cmdchallanges.com">考驗對 shell 常指令的理解</a> 。</li>
 </ul>
 <hr>
-<h2 id="zenity">zenity</h2>
+<h2 id="以下待加入草稿">以下待加入草稿</h2>
+<hr>
+<h2 id="xpath-三兄弟">xpath 三兄弟</h2>
+<pre><code>curl $url | tidy -asxml -q | xpath -e &apos;//img&apos; -
+</code></pre><hr>
+<h2 id="改檔名">改檔名</h2>
+<ul>
+<li>看似簡單的操作</li>
+<li>但現成的批次重命名工具功能有限</li>
+<li>直接用程式語言實作太複雜</li>
+<li>用 shell 是最有效的方法</li>
+</ul>
+<hr>
+<h3 id="批次工具">批次工具</h3>
+<ul>
+<li>有 regexp 就很了不起了</li>
+<li>但很多時候還需要改大小寫、條件判斷、數字運算</li>
+</ul>
+<hr>
+<h3 id="寫一個-python">寫一個 python</h3>
+<ul>
+<li>要 import 套件</li>
+<li>如何讀取檔名？<ul>
+<li>最快 <code>system(&apos;ls&apos;)</code> </li>
+<li><code>fs.readDir()</code></li>
+</ul>
+</li>
+<li>要處理文字、數字轉換</li>
+<li>每轉換一個資料夾，就寫一次腳本？還不能重用？</li>
+</ul>
+<hr>
+<h3 id="直接用-python-輸出-shell-指令">直接用 python 輸出 shell 指令</h3>
+<ul>
+<li>不用想怎麼在 python 中執行指令。</li>
+<li>直接 print 出指令，用貼上的或 pipe 給 shell。</li>
+</ul>
+<hr>
+<h3 id="剪下貼上-shell-輸出">剪下貼上 shell 輸出</h3>
+<p>有時候，直接把 ls 的輸出複製到檔案，
+再用 regexp 改成一堆 mv 還比較快。</p>
+<hr>
+<h3 id="直接用-shell-解決">直接用 shell 解決</h3>
+<pre><code class="lang-sh"># rename Trim201904010000.rnx to NCTU0910.19o
+for file in *
+do
+    old_format=$(date -d $(echo $file | substr 4 12) +&quot;NCTU%03j0.%02y&quot;)
+    mv $file $old_format
+done
+</code></pre>
+<hr>
+<h3 id="輸出到標準輸出">輸出到標準輸出</h3>
+<p><code>wget -O - $url</code></p>
+<hr>
+<h3 id="萬用字元">萬用字元</h3>
+<p><code>mv * ../backup/</code></p>
 </main>
 
 <script defer src="ext/meta-meta.js"></script>

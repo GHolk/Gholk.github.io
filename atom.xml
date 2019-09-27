@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-09-24T12:26:11.726Z</updated>
+  <updated>2019-09-27T15:25:08.335Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,748 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/shell-script-concept-from-program.html#flip-slide-while-scroll</id>
+<title>shell 概念教學</title>
+<published>2019-09-21T14:52:27.734Z</published>
+<updated>2019-09-27T15:25:08.322Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/shell-script-concept-from-program.html#flip-slide-while-scroll"/>
+<summary type="html">
+add feature that flip slide page while scroll on page.
+allow normal scroll when scroll on the leftest scroll bar
+or scroll with left key press.</summary>
+<category term="linux"/>
+<category term="slide"/>
+<category term="shell"/>
+<category term="ccca"/>
+<category term="nctu"/>
+<content type="html">&lt;h1 id=&quot;shell-概念教學&quot;&gt;shell 概念教學&lt;/h1&gt;
+&lt;p&gt;shell 的設計理念以 unix 環境中的程序為中心，
+發展出參數、管道等觀念。
+並且最重要的，是一門可以應用在電腦日常使用上的實際的程式語言。
+對簡單學習過 c 語言的人，
+配合 c 從 shell 認識電腦是一條十分有意義的道路。
+本簡報從使用電腦的角度，帶領有 c 語言基礎的人認識 shell。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;社課前言&quot;&gt;社課前言&lt;/h2&gt;
+&lt;p&gt;linux 強大的 shell 指令介面是許多人對 linux 愛不釋手的原因；
+但對新手而言，過度依靠 shell 也是讓 linux 難以入門的因素。
+shell 的學習門檻高，使用上需要熟悉大量的指令。
+本次社課將從日常使用講起，
+介紹 shell 如何是一門貼近使用者與務實的語言，
+並穿插 shell 運作的基本邏輯，
+使聽眾能將課堂所學的程式設計，實際運用到電腦的日常使用中。&lt;/p&gt;
+&lt;hr&gt;
+&lt;script&gt;
+function toggleSlideMode() {
+  const slideClass = &apos;white-black-slide&apos;
+  const root = document.documentElement
+  if (root.classList.contains(slideClass)) {
+    root.classList.remove(slideClass)
+    window.removeEventListener(&apos;wheel&apos;, flipOnWheel)
+  }
+  else {
+    root.classList.add(slideClass)
+    window.addEventListener(&apos;wheel&apos;, flipOnWheel)
+  }
+}
+function scrollToRelativeHr(relative = 1) {
+  const allHr = Array.from(document.querySelectorAll(&apos;hr&apos;))
+  const windowTop = window.scrollY
+  const seenHrIndex = allHr.findIndex(hr =&gt; hr.offsetTop &gt; windowTop)
+  const targetHrIndex = seenHrIndex - 1 + relative
+  window.scrollTo(0, allHr[targetHrIndex].offsetTop + 1)
+}
+function flipOnWheel(wheel) {
+  if (wheel.target.nodeName != &apos;HTML&apos; &amp;&amp; wheel.buttons == 0) {
+    const scrollDirection = wheel.deltaY / Math.abs(wheel.deltaY)
+    scrollToRelativeHr(scrollDirection)
+  }
+}
+&lt;/script&gt;
+
+&lt;style contenteditable=&quot;true&quot;&gt;
+.white-black-slide {
+  font-size: 250%;
+  color: white;
+  background: black;
+}
+.white-black-slide a {
+  color: cyan;
+}
+:not(pre) code {
+  border: solid 1px;
+  padding: 0 0.1em;
+}
+.white-black-slide ::selection { color: initial; background-color: yellow; }
+.white-black-slide ::-moz-selection { color: initial; background-color: yellow; }
+
+.white-black-slide {
+  cursor: url(&apos;data:image/cur;base64,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&apos;) 12.5 12.5, auto;
+}
+
+:this + button {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 1em;
+}
+&lt;/style&gt;
+
+&lt;button onclick=&quot;scrollToRelativeHr()&quot;&gt;下一頁&lt;/button&gt;
+
+&lt;button onclick=&quot;toggleSlideMode()&quot;&gt;切換簡報模式&lt;/button&gt;
+
+&lt;hr&gt;
+&lt;h2 id=&quot;可以實際應用的程式設計&quot;&gt;可以實際應用的程式設計&lt;/h2&gt;
+&lt;p&gt;高中電腦多半從 c 這種基本的，或其它 &lt;em&gt;簡單的&lt;/em&gt; 程式語言教起，
+但這些語言有個很大的問題，
+他們都無法讓學生應用在日常的電腦操作上。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;c-可以寫什麼&quot;&gt;c 可以寫什麼&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;scanf printf&lt;/li&gt;
+&lt;li&gt;fopen&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;問題的關鍵&quot;&gt;問題的關鍵&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;日常使用電腦的操作，無法輕易用 c 達成。&lt;/li&gt;
+&lt;li&gt;學校的教學偏重在理論，而不是實務應用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;日常的操作&quot;&gt;日常的操作&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;複製檔案&lt;/li&gt;
+&lt;li&gt;打開網頁&lt;/li&gt;
+&lt;li&gt;壓縮檔案&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;什麼是-shell&quot;&gt;什麼是 shell&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;日常使用的稱為 &lt;abbr title=&quot;Graphic User Interface&quot;&gt;圖形介面&lt;/abbr&gt; 。&lt;/li&gt;
+&lt;li&gt;在圖形介面發明以前，人機之間以文字指令溝通。&lt;/li&gt;
+&lt;li&gt;作業系統內部是一支執行中的程式，
+而 shell 用來稱呼人與作業系統溝通的介面。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;指令的特性&quot;&gt;指令的特性&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;學習門檻較高。&lt;/li&gt;
+&lt;li&gt;由於指令只是一連串文字，可以把要執行的指令存成檔案，方便執行。&lt;/li&gt;
+&lt;li&gt;本質是一種特化的程式語言。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;指令與圖形介面等價&quot;&gt;指令與圖形介面等價&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;在沒有圖形介面以前，人們還是使用電腦。&lt;/li&gt;
+&lt;li&gt;絕大多數在圖形介面能做到的事，指令也都能做到。&lt;/li&gt;
+&lt;li&gt;雖然無法做到 &lt;em&gt;開啟視窗然後按下某個按鈕&lt;/em&gt; 之類的圖形介面操作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;shell-入門&quot;&gt;shell 入門&lt;/h2&gt;
+&lt;p&gt;指令是不含空白的一連串字元，一般包含底線與連字號。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;pwd
+ls
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;帶有參數的指令&quot;&gt;帶有參數的指令&lt;/h3&gt;
+&lt;p&gt;參數以空白分隔&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;mv config.txt config_backup.txt
+cp config_origin.txt config.txt
+rm log.txt
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;移動到不同資料夾&quot;&gt;移動到不同資料夾&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;cd my-dir
+cd ..
+cd /home
+cd ../usr/bin
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;何謂開啟檔案？&quot;&gt;何謂開啟檔案？&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用 fopen 打開讀取或寫入&lt;/li&gt;
+&lt;li&gt;更改檔案內容&lt;/li&gt;
+&lt;li&gt;開啟檔案對應的圖形程式&lt;/li&gt;
+&lt;li&gt;用滑鼠點二下&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;開啟圖形程式&quot;&gt;開啟圖形程式&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;gedit
+lowriter
+firefox
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;用圖形程式開啟檔案&quot;&gt;用圖形程式開啟檔案&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;gedit file.txt
+lowriter document.odt
+firefox print.pdf
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;統一的指令&quot;&gt;統一的指令&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;# linux
+xdg-open file.odt
+&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;REM windows
+start file.doc
+
+REM or directly type filename
+file.doc
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id=&quot;快捷鍵&quot;&gt;快捷鍵&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;指令到很複雜的話，敲鍵盤很累的。&lt;/li&gt;
+&lt;li&gt;所以 shell 多半有快捷鍵可以用，
+處理這些快捷鍵的程式稱為 readline。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;自動補全&quot;&gt;自動補全&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;tab 鍵可以自動補全打到一半的單字&lt;/li&gt;
+&lt;li&gt;基本的命令可以自動補全，例如打 pyt 之後按 tab 就會補全成 python。&lt;/li&gt;
+&lt;li&gt;檔名也可以自動補全，例如 &lt;code&gt;xdg-open file.o&lt;/code&gt; 
+之後按 tab 會依存在的檔案補全。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;上一個指令&quot;&gt;上一個指令&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;方向鍵上下可以在歷史記錄中瀏覽&lt;/li&gt;
+&lt;li&gt;或是用 ctrl-p ctrl-n&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;在歷史中搜尋&quot;&gt;在歷史中搜尋&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;ctrl-r 可以在歷史中搜尋&lt;/li&gt;
+&lt;li&gt;如果找到的不是你要的，可以再按一次 ctrl-r 再往前找&lt;/li&gt;
+&lt;li&gt;或是把搜尋字串打完整一點&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;用指令直接更改檔案&quot;&gt;用指令直接更改檔案&lt;/h2&gt;
+&lt;p&gt;上面都是用指令 &lt;em&gt;打開&lt;/em&gt; 一個圖形介面。
+那能不能不透過圖形介面，
+直接用指令完成對檔案的操作呢？&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;處理壓縮檔&quot;&gt;處理壓縮檔&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;# create zip homework.zip,
+# which contain code.c report.odt Makefile
+zip homework.zip code.c report.odt Makefile
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;看壓縮檔的內容&quot;&gt;看壓縮檔的內容&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;unzip homework.zip # directly unzip
+unzip -l homework.zip # list content of zip
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;更改內容&quot;&gt;更改內容&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;# delete file in zip
+zip -d homework.zip Makefile
+
+# update file in zip
+zip -u homework.zip code.c
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id=&quot;選項&quot;&gt;選項&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;在 unix 下，多數程式會把以 &lt;code&gt;-&lt;/code&gt; 開頭的參數當作 &lt;em&gt;選項&lt;/em&gt; 。&lt;/li&gt;
+&lt;li&gt;選項用來改變程式的行為。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;短選項與連寫&quot;&gt;短選項與連寫&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;最早選項都只有一個字 &lt;code&gt;-h&lt;/code&gt; &lt;code&gt;-a&lt;/code&gt; &lt;code&gt;-t&lt;/code&gt; 。&lt;/li&gt;
+&lt;li&gt;工程師都很懶，所以慣例上短選項可以寫在一起 &lt;code&gt;-hat&lt;/code&gt; 。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;bsd-的長選項&quot;&gt;bsd 的長選項&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;後來程式越來越複雜，26 個選項不夠用。&lt;/li&gt;
+&lt;li&gt;bsd 發明長選項，選項從字元改成單字 &lt;code&gt;-help&lt;/code&gt; &lt;code&gt;-all&lt;/code&gt; 。&lt;/li&gt;
+&lt;li&gt;因此連寫不能用了。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;gnu-的長選項&quot;&gt;gnu 的長選項&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;gnu 覺得這樣不向下相容，不優。&lt;/li&gt;
+&lt;li&gt;規定為了與短選項區隔，長選項應該要用二個 &lt;code&gt;-&lt;/code&gt; 開頭， &lt;code&gt;--help&lt;/code&gt; &lt;code&gt;--all&lt;/code&gt; 。&lt;/li&gt;
+&lt;li&gt;程式可以同時有短選項與長選項，短選項仍可以連寫。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;但選項的格式只是慣例&quot;&gt;但選項的格式只是慣例&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;程式看到的只是一連串的字串格式參數，只是某些參數用 &lt;code&gt;-&lt;/code&gt; 開頭。&lt;/li&gt;
+&lt;li&gt;程式作者可以把程式設計成用 &lt;code&gt;/&lt;/code&gt; 當選項開頭，用 &lt;code&gt;\&lt;/code&gt; 當路徑分隔符。
+（windows: 誰叫我？）&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;dd&lt;/code&gt; 就是一支不同風格的常用程式。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;選項查詢&quot;&gt;選項查詢&lt;/h3&gt;
+&lt;p&gt;要怎麼知道命令怎麼下？有哪些選項？&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;s&gt;google&lt;/s&gt;&lt;/li&gt;
+&lt;li&gt;求助選項： &lt;code&gt;zip --help&lt;/code&gt; 或 &lt;code&gt;zip -h&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;線上手冊： &lt;code&gt;man zip&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;搜尋手冊： &lt;code&gt;apropos zip&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;求助選項&quot;&gt;求助選項&lt;/h3&gt;
+&lt;p&gt;多數程式會有一個求助選項，
+看到 &lt;code&gt;--help&lt;/code&gt; 或 &lt;code&gt;-h&lt;/code&gt; 就會直接輸出簡短的說明。
+當然也不是所有程式都有，還是那句話，看作者。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;手冊&quot;&gt;手冊&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;unix 系統中自帶有說明書，說明書可以用一支叫 &lt;code&gt;man&lt;/code&gt; 的程式閱讀。&lt;/li&gt;
+&lt;li&gt;man 會開啟一個介面，可以用方向鍵翻閱，用 &lt;code&gt;q&lt;/code&gt; 可以離開。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;搜尋合適的指令&quot;&gt;搜尋合適的指令&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;apropos 可以用關鍵字搜尋手冊。&lt;/li&gt;
+&lt;li&gt;一般有手冊也就代表有指令可以用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;第一支腳本&quot;&gt;第一支腳本&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;# pack homework files into zip
+zip homework.zip report.odt code.c
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;執行腳本&quot;&gt;執行腳本&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;sh script.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;加入提示&quot;&gt;加入提示&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;echo start packing file
+zip homework.zip report.odt code.c
+echo finish packing file
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;echo&quot;&gt;echo&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;寫在腳本裡的指令是直接執行，而執行時不會顯示現在在執行什麼。
+（dos 會，可以用 &lt;code&gt;echo on&lt;/code&gt; &lt;code&gt;echo off&lt;/code&gt; 控制。）&lt;/li&gt;
+&lt;li&gt;所以要用 echo 把想顯示的文字 &lt;em&gt;回音&lt;/em&gt; 出來。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;輸出字串&quot;&gt;輸出字串&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;echo 就是單純輸出字串，對特殊字元和格式化的支援有限。&lt;/li&gt;
+&lt;li&gt;printf 可以做到接近 c printf 的五花八門功能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;printf&quot;&gt;printf&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;printf &amp;quot;file-%03d.txt\n&amp;quot; 12 # file-012.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id=&quot;輸出太長怎麼辦&quot;&gt;輸出太長怎麼辦&lt;/h2&gt;
+&lt;p&gt;剛剛說的 apropos&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;~:$ apropos zip
+CPAN::Tarzip (3pm)   - internal handling of tar archives for CPAN.pm
+Archive::Zip (3pm)   - Provide an interface to ZIP archive files.
+Archive::Zip::FAQ (3pm) - Answers to a few frequently asked questions about A...
+Archive::Zip::MemberRead (3pm) - A wrapper that lets you read Zip archive mem...
+Archive::Zip::Tree (3pm) - (DEPRECATED) methods for adding/extracting trees u...
+bunzip2 (1)          - a block-sorting file compressor, v1.0.6
+bzcmp (1)            - compare bzip2 compressed files
+bzdiff (1)           - compare bzip2 compressed files
+bzegrep (1)          - search possibly bzip2 compressed files for a regular e...
+bzfgrep (1)          - search possibly bzip2 compressed files for a regular e...
+bzgrep (1)           - search possibly bzip2 compressed files for a regular e...
+bzip2 (1)            - a block-sorting file compressor, v1.0.6
+bzip2recover (1)     - recovers data from damaged bzip2 files
+bzless (1)           - file perusal filter for crt viewing of bzip2 compresse...
+bzmore (1)           - file perusal filter for crt viewing of bzip2 compresse...
+Compress::Raw::Bzip2 (3perl) - Low-Level Interface to bzip2 compression library
+CPAN::Tarzip (3perl) - internal handling of tar archives for CPAN.pm
+docker-context-import (1) - Import a context from a tar or zip file
+fcrackzip (1)        - a Free/Fast Zip Password Cracker
+fcrackzipinfo (1)    - display zip information
+funzip (1)           - filter for extracting from a ZIP archive in a pipe
+gpg-zip (1)          - encrypt or sign files into an archive
+gunzip (1)           - compress or expand files
+gzip (1)             - compress or expand files
+IO::Compress::Bzip2 (3perl) - Write bzip2 files/buffers
+IO::Compress::Gzip (3perl) - Write RFC 1952 files/buffers
+IO::Compress::Zip (3perl) - Write zip files/buffers
+IO::Uncompress::AnyInflate (3perl) - Uncompress zlib-based (zip, gzip) file/b...
+IO::Uncompress::AnyUncompress (3perl) - Uncompress gzip, zip, bzip2 or lzop f...
+IO::Uncompress::Bunzip2 (3perl) - Read bzip2 files/buffers
+IO::Uncompress::Gunzip (3perl) - Read RFC 1952 files/buffers
+IO::Uncompress::Unzip (3perl) - Read zip files/buffers
+MIME::Decoder::Gzip64 (3pm) - decode a &amp;quot;base64&amp;quot; gzip stream
+p7zip (1)            - Wrapper on 7-Zip file archiver with high compression r...
+pbzip2 (1)           - parallel bzip2 file compressor, v1.1.9
+PerlIO::gzip (3pm)   - Perl extension to provide a PerlIO layer to gzip/gunzip
+preunzip (1)         - prefix delta compressor for Aspell
+prezip (1)           - prefix delta compressor for Aspell
+prezip-bin (1)       - prefix zip delta word list compressor/decompressor
+unzip (1)            - list, test and extract compressed files in a ZIP archive
+unzipsfx (1)         - self-extracting stub for prepending to ZIP archives
+zforce (1)           - force a &amp;apos;.gz&amp;apos; extension on all gzip files
+zip (1)              - package and compress (archive) files
+zipcloak (1)         - encrypt entries in a zipfile
+zipdetails (1)       - display the internal structure of zip files
+zipgrep (1)          - search files in a ZIP archive for lines matching a pat...
+zipinfo (1)          - list detailed information about a ZIP archive
+zipnote (1)          - write the comments in zipfile to stdout, edit comments...
+zipsplit (1)         - split a zipfile into smaller zipfiles
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;用-less-接起來&quot;&gt;用 less 接起來&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;那條直線叫管道符號，可以把前面程式的輸出，丟給後面程式。&lt;/li&gt;
+&lt;li&gt;less 的功能就是把過多的輸出接起來，可以上下翻頁慢慢看。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;apropos zip | less
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;其它用來接輸出的程式&quot;&gt;其它用來接輸出的程式&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;apropos zip | head
+apropos zip | tail
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;或是輸入到檔案&quot;&gt;或是輸入到檔案&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;apropos zip &amp;gt; apropos-zip.txt
+head &amp;lt; apropos-zip.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;重導向或是直接指定檔名？&quot;&gt;重導向或是直接指定檔名？&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;head &amp;lt; apropos-zip.txt
+head apropos-zip.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;有關-man&quot;&gt;有關 man&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;man 是一支很聰明的程式，會判斷輸出的裝置決定行為。&lt;/li&gt;
+&lt;li&gt;直接呼叫時，man 因為輸出對向是終端機，所以呼叫 less 把內容接起來。&lt;/li&gt;
+&lt;li&gt;如果對向是檔案，man 就會直接輸出文字檔。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;man zip # 開啟 less 讓使用者翻閱手冊
+man zip &amp;gt; zip.txt # 把手冊存成文字檔
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;更改檔案內容&quot;&gt;更改檔案內容&lt;/h3&gt;
+&lt;p&gt;上面提過 echo printf，輸出也能重導向到檔案。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;echo hey &amp;gt; hey
+printf &amp;quot;hello world!&amp;quot; &amp;gt; hey
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;覆寫與附加&quot;&gt;覆寫與附加&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;一個 &lt;code&gt;&amp;gt;&lt;/code&gt; 會寫入，如果檔案已經存在會被清空後寫入新內容。&lt;/li&gt;
+&lt;li&gt;二個 &lt;code&gt;&amp;gt;&amp;gt;&lt;/code&gt; 會附加，如果檔案已經存在會附加在檔案結尾。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;echo bye &amp;gt;&amp;gt; hey
+printf &amp;quot;byby!&amp;quot; &amp;gt;&amp;gt; hey
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id=&quot;shell-批次處理&quot;&gt;shell 批次處理&lt;/h2&gt;
+&lt;p&gt;先前也提過，shell 最大的好處是可以寫成腳本執行，
+可以省去用滑鼠點來點去的時間。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;命令代換&quot;&gt;命令代換&lt;/h3&gt;
+&lt;p&gt;被 &lt;code&gt;$()&lt;/code&gt; 包起來的命令，執行後的結果會被置換到命令中。&lt;/p&gt;
+&lt;p&gt;用 wc 計算 ls 命令列出的第一個檔案大小。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;wc -c $(ls | head -n 1)
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;變數賦值&quot;&gt;變數賦值&lt;/h3&gt;
+&lt;p&gt;sh 中，所有變數內容都是字串。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;a=file.txt
+b=$(ls | head -n 1)
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;變數取值&quot;&gt;變數取值&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;要展開變數需要用 &lt;code&gt;$&lt;/code&gt; 標記，不然只會被當成單純字串而不是變數名。&lt;/li&gt;
+&lt;li&gt;但賦值時不能有 &lt;code&gt;$&lt;/code&gt; 號！&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;wc -c a # 計算檔名為 a 的大小
+wc -c $a # 計算檔名為變數 a 的內容的大小
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;管道的力量&quot;&gt;管道的力量&lt;/h3&gt;
+&lt;p&gt;串連多個小程式，就能快速達到各種功能。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sed &amp;apos;s/[^[:alnum:]]/\n/g&amp;apos; | sort | uniq -c
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id=&quot;程式&quot;&gt;程式&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;stdin 標準輸入、stdout 標準輸出&lt;/li&gt;
+&lt;li&gt;argv 參數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;簡單的-c&quot;&gt;簡單的 c&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-c&quot;&gt;// substr.c
+int main(int argc, char **argv) {
+
+  // argv
+  int start;
+  sscanf(argv[1], &amp;quot;%d&amp;quot;, &amp;amp;start); // atoi()
+  int end;
+  sscanf(argv[2], &amp;quot;%d&amp;quot;, &amp;amp;end);
+
+  char string[80];
+  fgets(string, sizeof(string), stdin); // scanf(&amp;quot;%s&amp;quot;, string)
+  for (int i=start; i&amp;lt;end; i++) putchar(string[i]); // stdout
+  putchar(&amp;apos;\n&amp;apos;);
+  return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;編譯執行&quot;&gt;編譯執行&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~/code:$ gcc -o substrc substr.c
+~/code:$ echo hello world | ./substrc 3 8
+lo wo
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;如何讓程式變成命令&quot;&gt;如何讓程式變成命令&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;shell 內有變數 &lt;code&gt;PATH&lt;/code&gt; ，輸入的命令會在 PATH 中的目錄中搜尋執行檔。&lt;/li&gt;
+&lt;li&gt;所以，把執行檔丟到 PATH 的任一目錄，&lt;/li&gt;
+&lt;li&gt;或者，把執行檔所在目錄加入 PATH。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;萬變不離宗&quot;&gt;萬變不離宗&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;絕大多數的命令都是程式&lt;/li&gt;
+&lt;li&gt;從參數與標準輸入讀取，執行對應的行為。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;組合的力量&quot;&gt;組合的力量&lt;/h3&gt;
+&lt;p&gt;shell 本質即是組合大量行為單純的程式，從而達到複雜的功能。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;shell-編程&quot;&gt;shell 編程&lt;/h2&gt;
+&lt;p&gt;shell 是一門完整的程式語言，當然帶有流程控制、迴圈等功能。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;流程控制&quot;&gt;流程控制&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;if pwd | grep &amp;quot;^/home/$USER&amp;quot;
+then echo inside home directory
+else echo outside home directory
+fi
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;控制原理&quot;&gt;控制原理&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;shell 中 if 後接的命令會被執行，並依命令的返回值判斷分支。&lt;/li&gt;
+&lt;li&gt;若回傳 0 即為 true，以外為 false。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;c-語言的返回值&quot;&gt;c 語言的返回值&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-c&quot;&gt;int main(int argc, char **argv) {
+  /* some code */
+  if (true) return 0;
+  else return error_code;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;判斷迴圈&quot;&gt;判斷迴圈&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;while pgrep wget
+do
+    echo wget is downloading
+    sleep 1m
+done
+
+echo wget finish
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;while true
+do
+    if pgrep wget
+    then
+        echo wget is downloading
+        sleep 1m
+    else
+        echo wget finish
+        break
+    fi
+done
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;遍歷迴圈&quot;&gt;遍歷迴圈&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;for number in $(seq 10)
+do
+    file=$(printf &amp;quot;file-%02d.txt&amp;quot; $number)
+    cat $file &amp;gt;&amp;gt; all.txt
+done
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;判斷的命令&quot;&gt;判斷的命令&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;string=abc
+test $string = abc # return 0
+[ $string = abc ] # as same as test
+if [ $n = 0 ]
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;c-實作&quot;&gt;c 實作&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;int main(int argc, char **argv) {
+  return !strcmp(argv[1], argv[3]);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;gcc -o test test.c
+cp test [
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id=&quot;執行檔&quot;&gt;執行檔&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;上面的執行檔都是用 c 語言示範&lt;/li&gt;
+&lt;li&gt;因為大家應該都會 c 語言&lt;/li&gt;
+&lt;li&gt;但實務上沒有人會想用 c 語言&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;hashbang-變身執行檔&quot;&gt;hashbang 變身執行檔&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;多數直譯語言執行： &lt;code&gt;python script.py&lt;/code&gt; &lt;code&gt;sh script.sh&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;如果在文字檔第一行加上 &lt;code&gt;#!&lt;/code&gt; 與直譯器的絕對路徑，
+就能讓文字檔能被執行： &lt;code&gt;./script.py&lt;/code&gt; &lt;code&gt;./script.sh&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;並且要賦與該檔案可執行權限： &lt;code&gt;chmod +x script.sh&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;pre&gt;&lt;code&gt;#!/usr/bin/python
+print &amp;quot;hello world!&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;#!/bin/sh
+echo hello world!
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;選項的解析&quot;&gt;選項的解析&lt;/h3&gt;
+&lt;p&gt;另外，一開始有提過長短選項；
+不管是哪一種風格選項，解析選項都不是一件容易的事。
+有興趣可以自己試試看。
+&lt;a href=&quot;http://github.com/GHolk/loco/blob/bin/parse-option-example.sh&quot;&gt;我之前寫的用 sh 解析選項的範例程式。&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;shell-與通用語言&quot;&gt;shell 與通用語言&lt;/h2&gt;
+&lt;p&gt;shell 本身的功能很少，多數都是靠其它程式實現的。
+例如上述示範的，字串比較這種基礎功能也可以靠外部實現。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;shell-的特性&quot;&gt;shell 的特性&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;不適合寫複雜的邏輯、數字、字串。&lt;/li&gt;
+&lt;li&gt;缺乏資料結構。&lt;/li&gt;
+&lt;li&gt;但呼叫其它程式很方便。&lt;ul&gt;
+&lt;li&gt;只要可以成為執行檔，都是 shell 指令。&lt;/li&gt;
+&lt;li&gt;有人吐嘈 shell 做點屁大的事都要 fork 一堆進程。&lt;/li&gt;
+&lt;li&gt;如果用管道或命令代換，更會開到子 shell。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;在一般程式語言中呼叫其它命令&quot;&gt;在一般程式語言中呼叫其它命令&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;開一個 shell 來執行傳入的字串。&lt;/li&gt;
+&lt;li&gt;跳過 shell，直接執行該程式，參數要自己分割好傳入。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-c&quot;&gt;system(&amp;quot;zip -u homework.zip code.c&amp;quot;);
+execlp(&amp;quot;zip&amp;quot;, &amp;quot;-u&amp;quot;, &amp;quot;homework.zip&amp;quot;, &amp;quot;code.c&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;一般程式語言特性&quot;&gt;一般程式語言特性&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;內建功能完整。&lt;/li&gt;
+&lt;li&gt;呼叫其它程式不方便。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;shell-是-linux-的統一介面&quot;&gt;shell 是 linux 的統一介面&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;不同程式語言內部有自己互相呼叫的介面。&lt;/li&gt;
+&lt;li&gt;可執行檔是 linux 的統一介面，呼叫要傳入參數、環境變數，處理輸入輸出。&lt;/li&gt;
+&lt;li&gt;shell 是執行檔呼叫的最簡單介面。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;建議&quot;&gt;建議&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;精通 shell，和一門 &lt;strong&gt;通用的程式語言&lt;/strong&gt; 。&lt;/li&gt;
+&lt;li&gt;shell 像 bash、fish、power shell&lt;/li&gt;
+&lt;li&gt;雖然 shell 能做很多事，但受限於的執行檔所提供的功能。&lt;/li&gt;
+&lt;li&gt;一些比較龐大的軟體會有自己內部語言。&lt;ul&gt;
+&lt;li&gt;microsoft office visual basic for applications&lt;/li&gt;
+&lt;li&gt;瀏覽器的 javascript&lt;/li&gt;
+&lt;li&gt;但有時仍可以用通用程式語言溝通&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;GUI-程式&quot;&gt;GUI 程式&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;現代很多人只把 gui 程式認為是 &lt;em&gt;真正的&lt;/em&gt; 程式。&lt;/li&gt;
+&lt;li&gt;那我們就用 shell 來寫 gui 吧！&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;彈出視窗的命令&quot;&gt;彈出視窗的命令&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;瀏覽器有 &lt;code&gt;alert()&lt;/code&gt; &lt;code&gt;confirm()&lt;/code&gt; &lt;code&gt;prompt()&lt;/code&gt; 可以 &lt;em&gt;彈出對話框&lt;/em&gt; ，&lt;/li&gt;
+&lt;li&gt;shell 有沒有類似的東西呢？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;zenity&quot;&gt;zenity&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;zenity --info --text &amp;apos;hello zenity!&amp;apos;
+if zenity --question --text &amp;apos;do you want to give me your name?&amp;apos;
+then
+    name=$(zenity --entry --text &amp;apos;what is your name?&amp;apos;)
+    zenity --info --text &amp;quot;hello $name&amp;quot;
+fi
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;結論&quot;&gt;結論&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;社課很短，能講的東西有限。&lt;/li&gt;
+&lt;li&gt;希望大家有接收到我想傳達的訊息。&lt;/li&gt;
+&lt;li&gt;shell 是一門 &lt;strong&gt;實際&lt;/strong&gt; 且 &lt;em&gt;能與所學結合&lt;/em&gt; 的語言。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;指令示範&quot;&gt;指令示範&lt;/h3&gt;
+&lt;hr&gt;
+&lt;p&gt;把系統大檔案移到另一個硬碟&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;find -size +1G | while read path
+do
+    mv $path /mnt/backup/
+    ln -s /mnt/backup/$(basename $path) $path
+done
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;p&gt;每 30 分鐘提醒一次眼睛休息&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;(
+    while sleep 30m
+    do zenity --info --text &amp;quot;30 分鐘了，眼睛休息一下吧！&amp;quot;
+    done
+) &amp;amp;
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;延伸閱讀&quot;&gt;延伸閱讀&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.cyut.edu.tw/~ckhung/b/clr/&quot;&gt;命令列讀本&lt;/a&gt; ，
+用輕鬆、務實的角度入門 shell 使用。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://book.ashan.org/Advanced-Bash-Scripting-Guide-in-Chinese/&quot;&gt;高級 Bash 脚本编程指南&lt;/a&gt; ，
+完全理解 bash 的功能，了解不同語法間的細微差異。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://cmdchallanges.com&quot;&gt;考驗對 shell 常指令的理解&lt;/a&gt; 。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;以下待加入草稿&quot;&gt;以下待加入草稿&lt;/h2&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;xpath-三兄弟&quot;&gt;xpath 三兄弟&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;curl $url | tidy -asxml -q | xpath -e &amp;apos;//img&amp;apos; -
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id=&quot;改檔名&quot;&gt;改檔名&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;看似簡單的操作&lt;/li&gt;
+&lt;li&gt;但現成的批次重命名工具功能有限&lt;/li&gt;
+&lt;li&gt;直接用程式語言實作太複雜&lt;/li&gt;
+&lt;li&gt;用 shell 是最有效的方法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;批次工具&quot;&gt;批次工具&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;有 regexp 就很了不起了&lt;/li&gt;
+&lt;li&gt;但很多時候還需要改大小寫、條件判斷、數字運算&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;寫一個-python&quot;&gt;寫一個 python&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;要 import 套件&lt;/li&gt;
+&lt;li&gt;如何讀取檔名？&lt;ul&gt;
+&lt;li&gt;最快 &lt;code&gt;system(&amp;apos;ls&amp;apos;)&lt;/code&gt; &lt;/li&gt;
+&lt;li&gt;&lt;code&gt;fs.readDir()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;要處理文字、數字轉換&lt;/li&gt;
+&lt;li&gt;每轉換一個資料夾，就寫一次腳本？還不能重用？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;直接用-python-輸出-shell-指令&quot;&gt;直接用 python 輸出 shell 指令&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;不用想怎麼在 python 中執行指令。&lt;/li&gt;
+&lt;li&gt;直接 print 出指令，用貼上的或 pipe 給 shell。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;剪下貼上-shell-輸出&quot;&gt;剪下貼上 shell 輸出&lt;/h3&gt;
+&lt;p&gt;有時候，直接把 ls 的輸出複製到檔案，
+再用 regexp 改成一堆 mv 還比較快。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;直接用-shell-解決&quot;&gt;直接用 shell 解決&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# rename Trim201904010000.rnx to NCTU0910.19o
+for file in *
+do
+    old_format=$(date -d $(echo $file | substr 4 12) +&amp;quot;NCTU%03j0.%02y&amp;quot;)
+    mv $file $old_format
+done
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;輸出到標準輸出&quot;&gt;輸出到標準輸出&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;wget -O - $url&lt;/code&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;萬用字元&quot;&gt;萬用字元&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;mv * ../backup/&lt;/code&gt;&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/shell-script-concept-from-program.html</id>
 <title>shell 概念教學</title>
 <published>2019-09-21T14:52:27.734Z</published>
@@ -3050,444 +3792,7 @@ figcaption {
 <category term="nctu"/>
 <category term="report"/>
 <category term="homework"/>
-<content type="html">&lt;h1 id=&quot;BIM-建模以-revit-實作&quot;&gt;BIM 建模以 revit 實作&lt;/h1&gt;
-&lt;p&gt;交通大學一門 BIM 的課程，是用 revit 軟體實作，
-要畫出一整棟完整的建築物。
-建築物是照乙級製圖的圖面畫的，所以還要懂看工程圖，
-對沒學過工程圖的我有點困難；
-不過老師說沒修過工程圖也沒關係。
-紀乃文教授的課，二年一開。&lt;/p&gt;
-&lt;h2 id=&quot;作業範圍&quot;&gt;作業範圍&lt;/h2&gt;
-&lt;p&gt;revit 實作是用 &lt;a href=&quot;http://ocw.aca.ntu.edu.tw/ntu-ocw/index.php/ocw/cou/102S209&quot;&gt;台大的開放課程網站 ocw 上的 revit 教學範例&lt;/a&gt; ，
-基本上照著作就可以，老師會自己錄影片補充細節。
-第一次作業是到 ocw 的第十單元為止。&lt;/p&gt;
-&lt;p&gt;一開始我有搞不清楚作業到底是什麼，
-老師在課堂上示範是用一個小房子，但那只是示範方便，
-作業應該是交 ocw 上的乙級製圖的圖面。&lt;/p&gt;
-&lt;h2 id=&quot;作業一從到地基到地下一層為止&quot;&gt;作業一從到地基到地下一層為止&lt;/h2&gt;
-&lt;h3 id=&quot;結構平面&quot;&gt;結構平面&lt;/h3&gt;
-&lt;p&gt;ocw 上是用複製的，用一樓當來源，
-把所有樓層建出來。這裡有個錯誤，
-一樓的高程應該是 15cm，會比地面高 15cm。
-我一開始沒發現，就把 1F 建在 0，
-到後期算 B1 的牆高才發現怪怪的，
-才把 1F 移到 15cm，並多加一個地面層 GL。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46589022465&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7833/46589022465_e4bb0981c1.jpg&quot; alt=&quot;screen-shot-14.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;網格線&quot;&gt;網格線&lt;/h3&gt;
-&lt;p&gt;網格是特指柱的網格，網格線交點是柱心。
-橫向是 ABCD，縱向是 1234。
-後來再把網格線延伸到每層樓都看得到。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/32562290337&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7893/32562290337_af77faf33f.jpg&quot; alt=&quot;screen-shot-15.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/32562292147&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7927/32562292147_248b8d850c.jpg&quot; alt=&quot;screen-shot-16.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;地形&quot;&gt;地形&lt;/h3&gt;
-&lt;p&gt;不是所有 bim 軟體都有地形，但 revit 有所以就作了。
-主要是建築設計時有時會考慮和建築和周圍地物的關係，
-所以有的 bim 軟體可以建模地形。
-這是植栽的地形，我把表面上綠色，
-剖面我是上棕色，但不知道為什麼顯示是灰色。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46780712584&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7822/46780712584_14bda8b20d.jpg&quot; alt=&quot;screen-shot-19.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;開挖&quot;&gt;開挖&lt;/h3&gt;
-&lt;p&gt;工程中不會直接把建築蓋在地上，
-會先開挖地基，有的還有地下室。
-revit 開挖後會自動加上 PC 打底。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/32562292727&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7845/32562292727_3686b58992.jpg&quot; alt=&quot;screen-shot-20.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;鋼板樁錯誤樓層&quot;&gt;鋼板樁錯誤樓層&lt;/h3&gt;
-&lt;p&gt;在開挖四周裝上鋼板樁，防止坍塌。
-我放鋼板樁時有點問題，一開始我放在 1F，
-但從立面圖看卻跑到 B1。
-我試著從性質視窗移動鋼板樁，可以正常移動到所有樓層，
-但就是不能移到 1F。
-下面的圖一些就無視問題繼續做，後面才修好。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33627707798&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7877/33627707798_509955670c.jpg&quot; alt=&quot;screen-shot-21.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46589025365&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7919/46589025365_8a2fd9781b.jpg&quot; alt=&quot;screen-shot-22.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;一開始鋼板樁掉到 B1，但四面有一面卻正常落在 1F。
-奇怪的 bug。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33627708248&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7867/33627708248_2811057bca.jpg&quot; alt=&quot;screen-shot-23.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;地基基礎柱&quot;&gt;地基基礎柱&lt;/h3&gt;
-&lt;p&gt;就先不理鋼板樁的 bug，繼續作地基。
-這裡有個問題，我一開始弄錯 GL 的意思，
-把老師建議多建立的地基層取名成 GL。
-GL 應該是地表層，地基層應該是 base。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33627708528&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7904/33627708528_47b811d3ee.jpg&quot; alt=&quot;screen-shot-24.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;地樑&quot;&gt;地樑&lt;/h3&gt;
-&lt;p&gt;這裡一開始做錯，少了一組小樑，
-就是圖中空最大的那區，後來才補上。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46780713874&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7837/46780713874_009a53f54d.jpg&quot; alt=&quot;screen-shot-25.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;修正鋼板樁高程&quot;&gt;修正鋼板樁高程&lt;/h3&gt;
-&lt;p&gt;後來懷疑鋼板樁是 revit bug，就重開一次，
-重開後是連移都不能移了。
-後來直接把舊鋼板樁全部刪掉，重放就好了。
-最後還有一個 bug 是修正 1F 高度到 15cm 時，
-鋼板樁也跟著移到 15cm，只能重新對齊到 GL。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/47451659712&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7865/47451659712_cda2b88262.jpg&quot; alt=&quot;screen-shot-26.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;複製樓板成筏基板&quot;&gt;複製樓板成筏基板&lt;/h3&gt;
-&lt;p&gt;筏基板就是用老師的作法，複製樓板改屬性完成的。
-也有多畫一層 base，放筏基板比較好放。
-我是把所有樓板畫成同一個，
-在同一個編輯模式內畫出很多個不相連的方形，
-就完成一塊塊不相連但又是同一塊的樓板。
-不知道這樣後面會不會有問題？&lt;/p&gt;
-&lt;p&gt;後面因為上面忘了畫小樑，所以樓板也要改。
-還有一個錯是基地回填土據圖面只要填最北面三塊，
-但我一開始全填了，後面才改正。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46780714204&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7844/46780714204_16d814ab61.jpg&quot; alt=&quot;screen-shot-27.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33627709328&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7909/33627709328_15dbd2db09.jpg&quot; alt=&quot;screen-shot-28.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;關於樓板有個疑問，如果樓板下有樑柱，
-是樓板被樑柱截斷，還是樑退讓樓板鋪在樑柱上？
-我的畫法是樓板被截斷，只鋪在樑柱的間隙。&lt;/p&gt;
-&lt;h3 id=&quot;B1-柱&quot;&gt;B1 柱&lt;/h3&gt;
-&lt;p&gt;和地基柱類似，但少了幾根，因為沒有蓋滿。
-柱的位置和方位有幾根要微調的，一開始好像放錯。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/40538479103&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7864/40538479103_1150dcac2c.jpg&quot; alt=&quot;screen-shot-29.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;B1-外圍牆&quot;&gt;B1 外圍牆&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33627709868&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7914/33627709868_ca05a9612f.jpg&quot; alt=&quot;screen-shot-30.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;B1-隔間牆&quot;&gt;B1 隔間牆&lt;/h3&gt;
-&lt;p&gt;隔間牆一開始找位置找很久，不知道補助平面線要對哪。
-後來也有發現對錯，主要是少了地基層的小樑中心線，才那麼難對。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/47451660232&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7808/47451660232_0ef80b0422.jpg&quot; alt=&quot;screen-shot-31.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/40538479723&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7872/40538479723_68e3103a91.jpg&quot; alt=&quot;screen-shot-32.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;這裡我看圖以為車道出口是沒有牆，
-就把牆挖掉一段，後來發現應該是要用鐵捲門做開口。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33627710348&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7911/33627710348_d2af1e7773.jpg&quot; alt=&quot;screen-shot-33.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;電梯開口&quot;&gt;電梯開口&lt;/h3&gt;
-&lt;p&gt;電梯開口就照著 ocw 畫的，
-但還是不太懂畫成元件的意義，也不知道怎麼重用。
-後來因為修隔間位置，開口就位移了，
-牆就變成沒有開口。&lt;/p&gt;
-&lt;p&gt;還有就是因為電梯開口高度，才發現我 B1 的樓層高不對，
-才發現 1F 的高程設錯成 0，應該是 15cm。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46589027055&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7866/46589027055_6a8bbe9349.jpg&quot; alt=&quot;screen-shot-34.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;也順便把門和窗放好了，沒有特別截圖。&lt;/p&gt;
-&lt;h3 id=&quot;二層磚牆&quot;&gt;二層磚牆&lt;/h3&gt;
-&lt;p&gt;電梯旁的小空間要用二層磚牆來封，
-我在這裡發現我的空隙不對，
-找半天才找到隔間牆的位置錯在哪。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/47504448341&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7856/47504448341_4e916782bb.jpg&quot; alt=&quot;screen-shot-35.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;補上小地樑&quot;&gt;補上小地樑&lt;/h3&gt;
-&lt;p&gt;之前地樑少畫一區，這裡補上。
-再用地樑的中心線修正隔間位置，
-磚牆位置也就對了。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/32562294887&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7910/32562294887_50e48fb979.jpg&quot; alt=&quot;screen-shot-36.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;B1-樓梯&quot;&gt;B1 樓梯&lt;/h3&gt;
-&lt;p&gt;樓梯最難的部份是要先量好位置。
-很好奇一般建築是怎麼算樓梯的？
-圖面裡樓層高都剛好是樓梯階高的倍數，
-但現實應該沒這麼剛好吧？&lt;/p&gt;
-&lt;p&gt;然後我樓梯平面的高程和 ocw 上的不一樣，
-但頂部有剛好對齊一樓，不知道哪裡的問題。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/33627711438&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7898/33627711438_e7ddb2e540.jpg&quot; alt=&quot;screen-shot-37.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/47504448941&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7894/47504448941_383152acb7.jpg&quot; alt=&quot;screen-shot-38.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;室內梯有個錯是我二段梯中間沒有留間隙，
-我一開始看圖看不懂那段 95 4 95 的 4 是要哪裡的寬度，
-後來重看 ocw 好幾遍，看到他樓梯寬度和我設一樣，
-但中間卻還留有間隙，才想到 4cm 應該是中間要多的間隙。
-上面那張圖是錯的，我也沒有截對的圖。
-不過 rvt 檔裡的是修正過的了。&lt;/p&gt;
-&lt;h3 id=&quot;B1-樓梯的牆&quot;&gt;B1 樓梯的牆&lt;/h3&gt;
-&lt;p&gt;把樓梯周圍的牆修成和樓梯一樣的形狀。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46780716564&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7863/46780716564_8f71a14607.jpg&quot; alt=&quot;screen-shot-39.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/46780716714&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7829/46780716714_301866dd8f.jpg&quot; alt=&quot;screen-shot-40.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;B1-完成&quot;&gt;B1 完成&lt;/h3&gt;
-&lt;p&gt;這是樓梯的 4cm 間隙還沒修正的截圖。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/40538481303&quot;&gt;&lt;img src=&quot;http://farm8.staticflickr.com/7908/40538481303_f12ba97d51.jpg&quot; alt=&quot;screen-shot-41.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;revit-的-bug&quot;&gt;revit 的 bug&lt;/h3&gt;
-&lt;p&gt;revit 作為一個龐大複雜的 bim 軟體，有 bug 是難免的，
-老師說其實 revit 常常會 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E5%82%B2%E5%AC%8C&quot;&gt;傲嬌&lt;/a&gt; 閙脾氣。
-後來想想，其實 revit 有點像 microsoft office，
-像 word 也是每次改版後相容就會有問題，
-也會有大大小小的 bug。&lt;/p&gt;
-&lt;h3 id=&quot;作業一感想&quot;&gt;作業一感想&lt;/h3&gt;
-&lt;p&gt;做得時候沒感覺，事後打報告發現重做的東西蠻多的，
-很多圖看錯後來才修正；
-應該和我非土木出身，又沒學過工程圖有很大關係。&lt;/p&gt;
-&lt;h2 id=&quot;作業二到所有樓層結構完成&quot;&gt;作業二到所有樓層結構完成&lt;/h2&gt;
-&lt;p&gt;作業二做得比較趕，到最後一個周末才開始趕進度，
-做得沒日沒夜，最後在周一上課前趕完。
-發現建模報告不是必要，就沒懶得再打了。
-這部份的報告是期末作業三做完後補上的，
-所以有些地方沒什麼印象了，也不確定結果怎樣。&lt;/p&gt;
-&lt;h3 id=&quot;B1-樓梯與-1F-樑的相切處&quot;&gt;B1 樓梯與 1F 樑的相切處&lt;/h3&gt;
-&lt;p&gt;當時好像覺得怪怪的，樓梯和樑與影片中的高程不同，
-但也忘了這是最後修正後的截圖，
-還是修了還是怪怪的所以截圖。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042850808&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042850808_1669d67174.jpg&quot; alt=&quot;screen-shot-42.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042914522&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042914522_4e3d5bfe77.jpg&quot; alt=&quot;screen-shot-43.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;1F-樑&quot;&gt;1F 樑&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042820516&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042820516_e720ce33c6.jpg&quot; alt=&quot;screen-shot-44.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042851273&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042851273_b8d791cf23.jpg&quot; alt=&quot;screen-shot-45.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;1F-樓板&quot;&gt;1F 樓板&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042851533&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042851533_0f31857af0.jpg&quot; alt=&quot;screen-shot-46.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042915202&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042915202_017f5d2b62.jpg&quot; alt=&quot;screen-shot-47.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;1F-室內牆&quot;&gt;1F 室內牆&lt;/h3&gt;
-&lt;p&gt;第一次畫牆蠻辛苦的，很多距離都不知道怎麼抓，
-之後還有改很多次。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042851898&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042851898_3f8121bd5a.jpg&quot; alt=&quot;screen-shot-48.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;這裡調了好久才把牆的產色調出來，
-一直搞不太懂材質和 &lt;code&gt;V/G 取代模型&lt;/code&gt; 要調哪個。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042821386&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042821386_10c3e1e100.jpg&quot; alt=&quot;screen-shot-49.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042821516&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042821516_2eec208abe.jpg&quot; alt=&quot;screen-shot-50.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042852343&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042852343_755a181556.jpg&quot; alt=&quot;screen-shot-51.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042821941&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042821941_51901f6fd0.jpg&quot; alt=&quot;screen-shot-52.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042852803&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042852803_783e7211f2.jpg&quot; alt=&quot;screen-shot-53.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042822266&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042822266_1d89fda236.jpg&quot; alt=&quot;screen-shot-54.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;1F-門窗&quot;&gt;1F 門窗&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042853143&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042853143_a7199ba156.jpg&quot; alt=&quot;screen-shot-55.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042916872&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042916872_2ee739a614.jpg&quot; alt=&quot;screen-shot-56.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;2F-快速建立&quot;&gt;2F 快速建立&lt;/h3&gt;
-&lt;p&gt;把 1F 複製上來再微調就好了，做起來很快。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042917092&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042917092_1cbfee6683.jpg&quot; alt=&quot;screen-shot-57.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042853778&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042853778_f575b027f5.jpg&quot; alt=&quot;screen-shot-58.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042917487&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042917487_de11cf8039.jpg&quot; alt=&quot;screen-shot-59.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;第一次作業樓梯卡很久，之後都很怕樓梯做錯。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042917677&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042917677_cd8a46a54e.jpg&quot; alt=&quot;screen-shot-60.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042823676&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042823676_a2cf97cd71.jpg&quot; alt=&quot;screen-shot-61.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042918052&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042918052_86e32dbab6.jpg&quot; alt=&quot;screen-shot-62.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;3-6F-複製貼上&quot;&gt;3-6F 複製貼上&lt;/h3&gt;
-&lt;p&gt;3-6 樓是最有成就感的部份，
-直接複製 2 樓就蓋完了。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042824116&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042824116_b22a54f856.jpg&quot; alt=&quot;screen-shot-63.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;著色的結構圖面不確定是什麼時候折騰出來的。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042824301&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042824301_6ec7dc2391.jpg&quot; alt=&quot;screen-shot-64.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042824546&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042824546_5b86529635.jpg&quot; alt=&quot;screen-shot-65.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;簡單的屋頂突出物&quot;&gt;簡單的屋頂突出物&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042855378&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042855378_258902da4a.jpg&quot; alt=&quot;screen-shot-66.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;因為在趕作業，樓梯直接用 ocw 上的簡單修改版。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042855568&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042855568_8df0c2a4db.jpg&quot; alt=&quot;screen-shot-67.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;角窗&quot;&gt;角窗&lt;/h3&gt;
-&lt;p&gt;這是這次作業的大魔王。
-一開始覺得沒時間，就先跳過不做，
-做完 3-6F 和屋頂突出物後，才開始研究。&lt;/p&gt;
-&lt;p&gt;我覺得角窗應該做為一個獨立的元件，不應該解除群組。
-先做一樓的一個，群組化時因為相連的牆好像也要修改，
-所以我是把相連的牆的修改部份一起包進群組。&lt;/p&gt;
-&lt;p&gt;二樓以上的角窗，是另一種高度，所以先複製後再修改，
-然後再一口氣複製到所有樓層。
-但因為我是最後才做，各樓層的角窗位置已有牆面，
-所以我得一一把角窗周遭的牆重畫。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042825041&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042825041_3e6a2a3723.jpg&quot; alt=&quot;screen-shot-68.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;角窗與建模概念的反思&quot;&gt;角窗與建模概念的反思&lt;/h3&gt;
-&lt;p&gt;revit 內部限制 &lt;em&gt;一扇窗只能屬於一面牆&lt;/em&gt; ，
-讓實作角窗時遇到不少麻煩，
-老師在課堂上也花了不少時間教學，
-如何模擬出一面看起來還 ok 的角窗。&lt;/p&gt;
-&lt;p&gt;但我認為做這種做法已經超過合理的應用。
-早期網頁設計 html 在沒有 css 輔助時，
-由於欠缺排版的功能，不少網頁為了美觀，
-會用隱藏框線表格來定位出多欄的版面，
-然後用空白的 gif 來微調文字的對齊。&lt;/p&gt;
-&lt;p&gt;後來的事大家都知道了，w3c 推出了 css，
-架構與樣式分離的基本原則確立，
-從此 html 只專注於結構，而由 css 妝點細部的表現。
-html 不關心顯示，只關心更基礎的 &lt;strong&gt;這是什麼&lt;/strong&gt; 。
-例如我們需要一個跨頁的分隔符號，
-只要標上 &lt;code&gt;&amp;lt;hr class=&amp;quot;cross-page&amp;quot;&amp;gt;&lt;/code&gt; ，
-在顯示時 css 會自動依類別，顯示出不同的結果。&lt;/p&gt;
-&lt;p&gt;我的意思是，實際上就標個角窗，
-在概念上知道他是角窗就好了，不用太過執著於表現；
-如果現有的功能做不到表現的完美，
-就算了好了。&lt;/p&gt;
-&lt;h3 id=&quot;元件接合與重複操作&quot;&gt;元件接合與重複操作&lt;/h3&gt;
-&lt;p&gt;作業二每完成一層的樓板後，
-需要將上面一層的樓板、樑與下面一層的牆接合，
-避免混凝土量計算與結構錯誤。
-但以 revit 目前的設計，
-畫出一道牆和樓板就要接合一次，
-而且複製出來的每層樓中原本接合的元素會取消接合；
-所以雖然 3-6F 是以複製的方式完成，
-但仍要一層層一一接合。&lt;/p&gt;
-&lt;p&gt;由於我在趕作業，所以我稍微練習過接合後，
-就直接跳過其它樓層的接合。
-接合說穿了並沒有什麼技術可言，
-而 3-6F 的接合又是不斷重複的機械式工作，
-我認為在電腦中進行這種工作是無意義的。
-電腦創造的目的，就是處理這類型的工作，
-cad 軟體中，如果還必需重複手動機械式的作業，
-就代表這個 cad 軟體是有缺陷的。&lt;/p&gt;
-&lt;p&gt;在作業一中，我記得某部份作業老師建議我們先手動練習，
-好熟練基本操作；之後才教了進階的功能批次完成。
-我認為所謂多練習基本操作是沒意義的，
-在 cad 中畫圖，不是用紙筆畫圖，
-不需要滾鉛筆、徒手畫直線等神乎奇技，
-在電腦上練習到滑鼠按的很快，也沒多大意義。&lt;/p&gt;
-&lt;h2 id=&quot;作業三裝潢與出圖&quot;&gt;作業三裝潢與出圖&lt;/h2&gt;
-&lt;p&gt;作業三主要是裝潢和出圖，
-結構方面只有地下室一個車道要做。&lt;/p&gt;
-&lt;h3 id=&quot;屋頂突出物上漆&quot;&gt;屋頂突出物上漆&lt;/h3&gt;
-&lt;p&gt;上漆是十分煩瑣的工作，又容易遺漏。
-課堂上提過一個技巧，把漆色調成明顯的顏色，
-就比較容易分辨哪裡上了哪裡沒上。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042919247&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042919247_88f59ab989.jpg&quot; alt=&quot;screen-shot-69.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042919457&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042919457_2ebf524f99.jpg&quot; alt=&quot;screen-shot-70.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042919712&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042919712_fd995c9d83.jpg&quot; alt=&quot;screen-shot-71.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;外牆上漆&quot;&gt;外牆上漆&lt;/h3&gt;
-&lt;p&gt;外牆也還算簡單，東西南北四個面分別上不會出錯。
-只是有些突出的陽台要注意三面和底面都要上面漆。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042856578&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042856578_c84dd84844.jpg&quot; alt=&quot;screen-shot-72.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;內部上漆&quot;&gt;內部上漆&lt;/h3&gt;
-&lt;p&gt;內部上漆就很有挑戰性了。
-ocw 的課程上是一層層上，由左到右由上到下。
-而老師在課堂上則教了用剖面上漆的作法，
-在每面牆之間都切一個剖面，在東西方向、南北方向都切，
-之後在每個剖面的正面和背面視角上漆，理論上就上完了。
-由於可以一次上多層樓，我猜應該會比較快，所以就這樣做了。&lt;/p&gt;
-&lt;p&gt;我一開始不確定要切哪一種剖面，
-所以東西方向是用 3D 視圖中的剖面框切，
-切一個位置就複製一次視圖。
-但後來覺得這樣太亂，就換個方法。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042920122&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042920122_efd4e1b84a.jpg&quot; alt=&quot;screen-shot-73.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;後來南北方向改成在 2D 圖面上畫剖面框，有稍微好整理一點。
-但剖面框好像不能只顯示在某一視圖？
-所以後來每個視圖都會看到一堆剖面框，
-還好結構都做完了，不然眼睛會看到花掉。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042920362&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042920362_c77b2151f0.jpg&quot; alt=&quot;screen-shot-74.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;結果我全部上完色後，從垂方向切剖面框看，
-還是有幾處不知道為什麼漏掉了。
-所以之後又修修補補了一段時間。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042857108&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042857108_4532c8931d.jpg&quot; alt=&quot;screen-shot-75.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042826656&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042826656_d1882ccbe7.jpg&quot; alt=&quot;screen-shot-76.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;板上貼板與牆上貼牆&quot;&gt;板上貼板與牆上貼牆&lt;/h3&gt;
-&lt;p&gt;這二者是用來模擬地磚與牆上的磁磚，
-另外一個功能就是用來包在柱的室內側，
-讓柱的室內側與室外側可以上不同的漆。
-我有照課程稍微做一點，但後面覺得做起來有點蹩扭，
-一方面是不太清楚哪些地方要貼什麼，
-一方面還覺得會很花時間，當時在趕作業，
-就沒有做下去了，連一層都沒有貼滿。&lt;/p&gt;
-&lt;p&gt;另外老師在課堂上有提到，
-如果牆上有開門，貼磁磚後會把門遮住。
-可以用接合把磁磚和牆接合，
-或是用編輯輪廓在磁磚上切出一個洞。
-但接合的話，複製到別層後需要重新接合，編輯輪廓則不用。
-我是選擇用接合，因為覺得在概念上用接合比較正確。
-（雖然其實只做了一間廁所。）&lt;/p&gt;
-&lt;h3 id=&quot;地下室車道&quot;&gt;地下室車道&lt;/h3&gt;
-&lt;p&gt;地下室車道只要圓心、半徑抓出來，其實蠻簡單的。
-我車道面有照課堂上的教法用斜面做，
-但斜面被能被 &lt;strong&gt;貼附頂底&lt;/strong&gt; ，
-所以要在斜面下再加一面樓板，實在是很蠢。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042826936&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042826936_4cf9acbb7d.jpg&quot; alt=&quot;screen-shot-77.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;但不知道為什麼，我一直無法貼附頂底。
-本來我以為是車道太窄，
-所以把車道下的樓板加寬到超出車道，
-但還是不行，我就放棄了。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042921277&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042921277_924e83f03a.jpg&quot; alt=&quot;screen-shot-78.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;最後加上敷地建板，把車道位置的敷地挖空。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042857978&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042857978_0601f8514b.jpg&quot; alt=&quot;screen-shot-79.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;修正樓梯扶手支撐的-bug&quot;&gt;修正樓梯扶手支撐的 bug&lt;/h3&gt;
-&lt;p&gt;不知道為什麼我樓梯扶手支撐的欄杆不見了，
-明明在預覽圖裡是有的。
-而且只有方管的扶手支撐消失，圓管的還在；
-所以陽台的牆頂扶手我用圓管的做。&lt;/p&gt;
-&lt;p&gt;作業二時就有發現，但不知道怎麼修，
-就直接交，結果被扣分了。
-後來發現是在欄杆放置的編輯頁面裡，
-有一個選項是 &lt;em&gt;在每級階梯都放置扶手&lt;/em&gt; ，
-不知道為什麼有勾選，取消勾選後扶手就出現了。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042921607&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042921607_d09851c41d.jpg&quot; alt=&quot;screen-shot-80.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;誤操作&quot;&gt;誤操作&lt;/h3&gt;
-&lt;p&gt;可能是之前亂玩不小心勾到吧；
-我其實蠻常出現這種操作不精準的意外。
-有時用中鍵拖拉畫面時， 會變成直接拖拉點擊處的元件，
-就移動到柱或樑的位置，圖畫到後來太複雜，
-根本看不出來有沒有動到什麼。&lt;/p&gt;
-&lt;h3 id=&quot;出圖視圖樣版&quot;&gt;出圖視圖樣版&lt;/h3&gt;
-&lt;p&gt;出圖時我也不太知道一般的平面圖是什麼樣式，
-就想做出 ocw 影片的樣式，但關於樓板和樑的接合處，
-線條樣式一直不對，不知道怎麼調。
-後來重看了老師的講義才發現，線型和接合有關；
-我都偷懶不做接合了，那關心線形也沒什麼意思。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042827706&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042827706_b94d8c1eae.jpg&quot; alt=&quot;screen-shot-81.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;結構平面&quot;&gt;結構平面&lt;/h3&gt;
-&lt;p&gt;ocw 中的標籤是產生問號的標籤，
-但我產生的標籤就自帶了樑的型號；
-既然樑的型號也有了，
-那也不用特地模仿成乙級圖面的範例，
-只標代號再用表格記錄代號對應的型號。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042827896&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042827896_d3c674b869.jpg&quot; alt=&quot;screen-shot-82.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042922107&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042922107_8ee5d15091.jpg&quot; alt=&quot;screen-shot-83.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;最後的出圖，不知道為什麼 revit 的紙圖
-有附加一些背景可以用，標題和表格都事先畫好了。
-不過我不確定要填什麼，所以就沒填了。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042828186&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042828186_7c1e53b3d1.jpg&quot; alt=&quot;screen-shot-84.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;建築平面&quot;&gt;建築平面&lt;/h3&gt;
-&lt;p&gt;建築平面比較麻煩是要畫標註線。
-ocw 上有個規定是標註線不能拉進建築物內，
-但我覺得根本是自找麻煩；
-revit 標註線畫好本來就會指到建物內，
-既然 revit 這樣設計，應該也有他的理由，
-我也不想很蠢的手動把個標註線從建物內拉出來，
-所以就不管他，讓線留在建物內了。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042858868&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042858868_c0267cca64.jpg&quot; alt=&quot;screen-shot-85.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042859023&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042859023_bc88e53200.jpg&quot; alt=&quot;screen-shot-86.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042828626&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042828626_b916338411.jpg&quot; alt=&quot;screen-shot-87.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042922967&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042922967_bfee5dc1eb.jpg&quot; alt=&quot;screen-shot-88.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;立面圖&quot;&gt;立面圖&lt;/h3&gt;
-&lt;p&gt;立面圖在 ocw 的課程中，因為 revit 內的樓層線不美觀，
-所以是隱藏再重畫一條線，手動標上樓層。
-我覺得太蠢就沒做，直接用原本的。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48042923287&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48042923287_23c43efe55.jpg&quot; alt=&quot;screen-shot-89.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;手動標示圖例&quot;&gt;手動標示圖例&lt;/h3&gt;
-&lt;p&gt;這次出圖過程中，有一點我很訝意，
-竟然需要使用者要手動在圖面上標出標籤與輸入圖例的文字！
-我本身是 gis 使用者，在 gis 軟體中，
-自動依所有圖層產生圖例是出圖時很基礎的功能，
-也是絕大多數製圖軟體如 GMT 的主要功能。
-（不然為什麼要用製圖軟體。）&lt;/p&gt;
-&lt;p&gt;在 gis 軟體中，還有一個出圖時很常用的功能是標籤，
-也就是在圖面上自動為某個圖層中的每個元素，
-依元素的屬性，標上標籤。
-例如縣市的圖層中，每個縣市元素有人口的屬性，也有縣市名的屬性；
-我們可以用標籤自動把縣市名標在圖中的縣市上，
-再依人口為縣市漸層著色，並產生不同顏色對應人口數的圖例。&lt;/p&gt;
-&lt;h3 id=&quot;gis-看世界&quot;&gt;gis 看世界&lt;/h3&gt;
-&lt;p&gt;我身為土木所測量組的學生，以前也是測量系畢業的，
-但說來慚愧，我卻沒用過 cad 製圖軟體。
-曾經想學 freecad，但也沒有上手。
-我自己只用過 gis 軟體，對很多 cad 的概念是不太能接受的。
-很多 gis 使用者會批評 cad 使用者，
-認為他們所謂的圖只是看起來是那麼回事，
-但內部的線條雜亂，拓撲關係錯誤，
-根本不是能用的資料，只能說是一張向量圖。
-cad 使用者不應該將 cad 的使用習慣帶進 gis，
-否則只會做出 &lt;em&gt;外觀上正確&lt;/em&gt; 的圖。
-gis 中注重的是資料內涵，各圖層中元素的屬性，
-各元素的拓撲關係；出圖只是 gis 的終端功能之一。&lt;/p&gt;
-&lt;p&gt;我認為這堂課中使用 bim 的觀念還留在 cad 的時代，
-例如很注重外觀，對出圖的格式要求也很嚴格，
-同時帶來的就是大量的手動微調與修改，但看不出有什麼意義。
-像 ocw 的示範中，在出圖時就花了大量的時間在調整格式。
-也許部份原因是 bim 軟體發展還未成熟，
-所以很多功能不完全，得要自己手動編輯，
-用特殊的方法來繞過軟體限制。
-像是出圖時的圖例與標籤得自己手動打；
-或是元件接合這種很煩瑣的事，可能算是設計錯誤。&lt;/p&gt;
-&lt;p&gt;但也許 cad 界有他們自己的想法，
-bim 也是從 cad 演化而來，也許也有自己的看法；
-畢竟我不是土木實際看圖的人，可能不懂他們的邏輯。
-我不確定 bim 的發展方向，未來會不會和 gis 走向相同的方向，
-但 gis 的專業性沒有 bim 這麼高，存在很多業餘的使用者，
-而且混雜了很多程式色彩，像是資料視覺化就是 gis 很重要的一部份。
-而 bim 基本上沒有業餘使用的價值。
-gis 也存在很多開放原始碼的社群，
-如 osgeo 的 qgis，讓 gis 軟體能快速發展。
-cad 軟體還有 maker 之類的業餘使用者，
-而 bim 就只有工程上的應用，所以只有幾間大公司佔據市場，
-發展路線不同也是很正常的。&lt;/p&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
 
-&lt;script src=&quot;ext/paper.js?execute&quot;&gt;&lt;/script&gt;
-
-&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
-
-&lt;style&gt;
-img::after, a::after, a::before {
-  display: none !important;
-}
-figcaption {
-  display: none;
-}
-&lt;/style&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/gnss-teqc-data-bulk-process.html</id>
 <title>teqc 蠻力處理 gnss 數據技巧</title>

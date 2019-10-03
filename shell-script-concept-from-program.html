@@ -22,10 +22,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="ext/meta-bloging.js"></script>
 
-<title>shell 概念教學</title>
+<title>在程式語言基礎上的 linux shell 指令教學</title>
 </head>
 <body>
-<main><h1 id="shell-概念教學">shell 概念教學</h1>
+<main><h1 id="在程式語言基礎上的-linux-shell-指令教學">在程式語言基礎上的 linux shell 指令教學</h1>
 <p>shell 的設計理念以 unix 環境中的程序為中心，
 發展出參數、管道等觀念。
 並且最重要的，是一門可以應用在電腦日常使用上的實際的程式語言。
@@ -33,17 +33,17 @@
 配合 c 從 shell 認識電腦是一條十分有意義的道路。
 本簡報從使用電腦的角度，帶領有 c 語言基礎的人認識 shell。</p>
 <hr>
-<h2 id="前言">前言</h2>
+<h2 id="[facebook-個人心得]"><a href="https://www.facebook.com/gold740767/posts/2461787337240070">facebook 個人心得</a></h2>
 <p>這算我玩 linux 以來的小小願望吧。</p>
 <p>一直覺得學校的資訊教育打不到點。雖然高中學過 C 語言，但那時的演算法競賽完全無法挑起我的興趣。直到大學接觸到 linux 和 shell 後才感受到什麼叫 <em>學會使用電腦</em> 。所以有人問怎麼學程式設計，我都直接回灌 linux，過程會用到指令，指令就是電腦運作最真實的模樣。最終，指令也會引導你走向程式語言，任何一種程式語言都可以；你才算是學會電腦。</p>
 <p>現在單純學程式語言的很多，但會有個門檻是要能跨出 IDE，要知道可以怎麼應用。至少這是現在我回想高中時的心得。所以我比較推 shell。</p>
 <p>希望這堂課能引起共鳴，至少讓其它人聽懂我在說什麼。</p>
 <hr>
-<h2 id="社課說明">社課說明</h2>
+<h2 id="[facebook-社課說明]"><a href="https://www.facebook.com/NCTUCCCA/posts/768329356934169">facebook 社課說明</a></h2>
 <h3 id="在程式語言基礎上的-linux-shell-指令教學">在程式語言基礎上的 linux shell 指令教學</h3>
 <ul>
-<li>時間：2019-10-05 19:00-21:20 (五)</li>
-<li>地點：交通大學資訊服務中心 電腦教室四</li>
+<li>時間：2019-10-04 19:00-21:20 (五)</li>
+<li>地點：交通大學資訊服務中心 電腦教室三</li>
 <li>預期聽眾：<ul>
 <li>學過基本程式語言，卻覺得還是什麼都做不了的人。</li>
 <li>對指令介面嚮往的新手到老手。</li>
@@ -66,7 +66,7 @@ shell 的學習門檻高，使用上需要熟悉大量的指令，較圖形介�
 使聽眾能將課堂所學的程式設計，實際運用到電腦的日常使用中，
 自力成為 linux 大師。</p>
 <hr>
-<h2 id="靠北板發文">靠北板發文</h2>
+<h2 id="[靠北板發文]"><a href="https://www.facebook.com/CowBeiNCTU/posts/2397023147085285">靠北板發文</a></h2>
 <p>為什麼同學上完一學期 python 還是電腦白痴啊？
 不過就簡單的檔案處理，寫個 one-liner 去跑很難嗎？
 抱怨函數沒看過，也不會翻文件，
@@ -635,10 +635,20 @@ cp test [
 </ul>
 <hr>
 <pre><code>#!/usr/bin/python
-print &quot;hello world!&quot;
+print(&quot;hello world!&quot;)
 </code></pre><pre><code>#!/bin/sh
 echo hello world!
 </code></pre><hr>
+<h3 id="以-test-為例">以 test 為例</h3>
+<pre><code class="lang-js">#!/usr/bin/node
+# test.js
+if (process.argv[2] == process.argv[4]) process.exit(0)
+else process.exit(1)
+</code></pre>
+<pre><code class="lang-sh">chmod +x test.js
+cp test.js [
+</code></pre>
+<hr>
 <h3 id="選項的解析">選項的解析</h3>
 <p>另外，一開始有提過長短選項；
 不管是哪一種風格選項，解析選項都不是一件容易的事。
@@ -730,6 +740,8 @@ execlp(&quot;zip&quot;, &quot;-u&quot;, &quot;homework.zip&quot;, &quot;code.c&q
 <ul>
 <li>不用想怎麼在 python 中執行指令。</li>
 <li>直接 print 出指令，用貼上的或 pipe 給 shell。</li>
+<li>尤其是一些複雜的指令，不用想怎麼在 python 中建立壓縮檔，
+直接呼叫 zip 指令就好。</li>
 </ul>
 <pre><code class="lang-python">print(&apos;mv&apos;, oldname, newname)
 </code></pre>
@@ -747,7 +759,7 @@ execlp(&quot;zip&quot;, &quot;-u&quot;, &quot;homework.zip&quot;, &quot;code.c&q
 <pre><code class="lang-sh"># rename Trim201904010000.rnx to NCTU0910.19o
 for file in *
 do
-    old_format=$(date -d $(echo $file | substr 4 12) +&quot;NCTU%03j0.%02y&quot;)
+    old_format=$(date -d $(echo $file | substr 4 12) +&quot;NCTU%03j0.%02yo&quot;)
     echo mv $file $old_format
     mv $file $old_format
 done
@@ -766,7 +778,8 @@ done
 <li>每次寫這種東西都要先匯入類似的函式庫、寫一堆類似的 code。</li>
 <li>但又很難抽象化成可以重用的程式。</li>
 <li>留下一大堆不知道該不該刪的程式。</li>
-<li>擅常 one-liner 的語言：perl awk。</li>
+<li>擅長 one-liner 的語言：perl awk。
+<code>seq 10 | perl -ne &apos;print if $_ % 2&apos;</code></li>
 </ul>
 <hr>
 <h2 id="glob-萬用字元">glob 萬用字元</h2>
@@ -778,12 +791,18 @@ done
 </ul>
 <hr>
 <h3 id="萬用字元用例">萬用字元用例</h3>
-<pre><code>mv * ../backup/
+<pre><code class="lang-sh">mv * ../backup/
 rename &apos;s/.tar.gz$/.tgz/&apos; *.tar.gz
-
-# match filename longer then n word
+</code></pre>
+<hr>
+<pre><code class="lang-sh"># match filename longer then n word
 for zip in ??????????????????????????*.zip
-</code></pre><hr>
+do
+    basename=$(basename $(unzip -l $zip | grep -o &apos;........\.csv&apos;) .pdf)
+    mv $zip $basename.zip
+done
+</code></pre>
+<hr>
 <h2 id="GUI-程式">GUI 程式</h2>
 <ul>
 <li>現代很多人只把 gui 程式認為是 <em>真正的</em> 程式。</li>
@@ -847,7 +866,7 @@ done
 用輕鬆、務實的角度入門 shell 使用。</li>
 <li><a href="http://book.ashan.org/Advanced-Bash-Scripting-Guide-in-Chinese/">高級 Bash 脚本编程指南</a> ，
 完全理解 bash 的功能，了解不同語法間的細微差異。</li>
-<li><a href="http://cmdchallanges.com">考驗對 shell 常指令的理解</a> 。</li>
+<li><a href="http://cmdchallenge.com">考驗對 shell 常指令的理解</a> 。</li>
 </ul>
 </main>
 

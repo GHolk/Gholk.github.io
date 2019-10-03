@@ -1,4 +1,4 @@
-# shell 概念教學
+# 在程式語言基礎上的 linux shell 指令教學
 shell 的設計理念以 unix 環境中的程序為中心，
 發展出參數、管道等觀念。
 並且最重要的，是一門可以應用在電腦日常使用上的實際的程式語言。
@@ -8,7 +8,7 @@ shell 的設計理念以 unix 環境中的程序為中心，
 
 ---
 
-## 前言
+## [facebook 個人心得]
 這算我玩 linux 以來的小小願望吧。
 
 一直覺得學校的資訊教育打不到點。雖然高中學過 C 語言，但那時的演算法競賽完全無法挑起我的興趣。直到大學接觸到 linux 和 shell 後才感受到什麼叫 *學會使用電腦* 。所以有人問怎麼學程式設計，我都直接回灌 linux，過程會用到指令，指令就是電腦運作最真實的模樣。最終，指令也會引導你走向程式語言，任何一種程式語言都可以；你才算是學會電腦。
@@ -17,13 +17,15 @@ shell 的設計理念以 unix 環境中的程序為中心，
 
 希望這堂課能引起共鳴，至少讓其它人聽懂我在說什麼。
 
+[facebook 個人心得]: https://www.facebook.com/gold740767/posts/2461787337240070
+
 ----
 
-## 社課說明
+## [facebook 社課說明]
 ### 在程式語言基礎上的 linux shell 指令教學
 
-  - 時間：2019-10-05 19:00-21:20 (五)
-  - 地點：交通大學資訊服務中心 電腦教室四
+  - 時間：2019-10-04 19:00-21:20 (五)
+  - 地點：交通大學資訊服務中心 電腦教室三
   - 預期聽眾：
       - 學過基本程式語言，卻覺得還是什麼都做不了的人。
       - 對指令介面嚮往的新手到老手。
@@ -46,9 +48,11 @@ shell 的學習門檻高，使用上需要熟悉大量的指令，較圖形介�
 使聽眾能將課堂所學的程式設計，實際運用到電腦的日常使用中，
 自力成為 linux 大師。
 
+[facebook 社課說明]: https://www.facebook.com/NCTUCCCA/posts/768329356934169
+
 ----
 
-## 靠北板發文
+## [靠北板發文]
 為什麼同學上完一學期 python 還是電腦白痴啊？
 不過就簡單的檔案處理，寫個 one-liner 去跑很難嗎？
 抱怨函數沒看過，也不會翻文件，
@@ -62,6 +66,8 @@ shell 的學習門檻高，使用上需要熟悉大量的指令，較圖形介�
 https://www.facebook.com/NCTUCCCA/posts/768329356934169
 
 但主要還是要先有勇氣跨進 linux，至少裝個 cygwin 或 wsl。
+
+[靠北板發文]: https://www.facebook.com/CowBeiNCTU/posts/2397023147085285
 
 
 ----
@@ -785,12 +791,27 @@ cp test [
 
 ```
 #!/usr/bin/python
-print "hello world!"
+print("hello world!")
 ```
 
 ```
 #!/bin/sh
 echo hello world!
+```
+
+----
+
+### 以 test 為例
+```js
+#!/usr/bin/node
+# test.js
+if (process.argv[2] == process.argv[4]) process.exit(0)
+else process.exit(1)
+```
+
+```sh
+chmod +x test.js
+cp test.js [
 ```
 
 ----
@@ -887,6 +908,8 @@ execlp("zip", "-u", "homework.zip", "code.c");
 ### 直接用 python 輸出 shell 指令
 * 不用想怎麼在 python 中執行指令。
 * 直接 print 出指令，用貼上的或 pipe 給 shell。
+* 尤其是一些複雜的指令，不用想怎麼在 python 中建立壓縮檔，
+  直接呼叫 zip 指令就好。
 
 ```python
 print('mv', oldname, newname)
@@ -913,7 +936,7 @@ ls | vi -
 # rename Trim201904010000.rnx to NCTU0910.19o
 for file in *
 do
-    old_format=$(date -d $(echo $file | substr 4 12) +"NCTU%03j0.%02y")
+    old_format=$(date -d $(echo $file | substr 4 12) +"NCTU%03j0.%02yo")
     echo mv $file $old_format
     mv $file $old_format
 done
@@ -933,7 +956,8 @@ done
 * 每次寫這種東西都要先匯入類似的函式庫、寫一堆類似的 code。
 * 但又很難抽象化成可以重用的程式。
 * 留下一大堆不知道該不該刪的程式。
-* 擅常 one-liner 的語言：perl awk。
+* 擅長 one-liner 的語言：perl awk。
+  `seq 10 | perl -ne 'print if $_ % 2'`
 
 ---
 
@@ -947,12 +971,20 @@ done
 
 ### 萬用字元用例
 
-```
+```sh
 mv * ../backup/
 rename 's/.tar.gz$/.tgz/' *.tar.gz
+```
 
+----
+
+```sh
 # match filename longer then n word
 for zip in ??????????????????????????*.zip
+do
+    basename=$(basename $(unzip -l $zip | grep -o '........\.csv') .pdf)
+    mv $zip $basename.zip
+done
 ```
 
 ---
@@ -1038,7 +1070,7 @@ done
   用輕鬆、務實的角度入門 shell 使用。
 * [高級 Bash 脚本编程指南](http://book.ashan.org/Advanced-Bash-Scripting-Guide-in-Chinese/) ，
   完全理解 bash 的功能，了解不同語法間的細微差異。
-* [考驗對 shell 常指令的理解](http://cmdchallanges.com) 。
+* [考驗對 shell 常指令的理解](http://cmdchallenge.com) 。
 
 
 

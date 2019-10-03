@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-10-03T08:19:56.191Z</updated>
+  <updated>2019-10-03T15:43:27.625Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,864 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/shell-script-concept-from-program.html#fix-some-small-errors</id>
+<title>在程式語言基礎上的 linux shell 指令教學</title>
+<published>2019-09-21T14:52:27.734Z</published>
+<updated>2019-10-03T15:43:27.610Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/shell-script-concept-from-program.html#fix-some-small-errors"/>
+<summary type="html">
+幫 facebook 貼文內容加上連結，修正一些小錯誤，
+補上 perl 的 one-liner 示範。</summary>
+<category term="linux"/>
+<category term="slide"/>
+<category term="shell"/>
+<category term="ccca"/>
+<category term="nctu"/>
+<content type="html">&lt;h1 id=&quot;在程式語言基礎上的-linux-shell-指令教學&quot;&gt;在程式語言基礎上的 linux shell 指令教學&lt;/h1&gt;
+&lt;p&gt;shell 的設計理念以 unix 環境中的程序為中心，
+發展出參數、管道等觀念。
+並且最重要的，是一門可以應用在電腦日常使用上的實際的程式語言。
+對簡單學習過 c 語言的人，
+配合 c 從 shell 認識電腦是一條十分有意義的道路。
+本簡報從使用電腦的角度，帶領有 c 語言基礎的人認識 shell。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;[facebook-個人心得]&quot;&gt;&lt;a href=&quot;https://www.facebook.com/gold740767/posts/2461787337240070&quot;&gt;facebook 個人心得&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;這算我玩 linux 以來的小小願望吧。&lt;/p&gt;
+&lt;p&gt;一直覺得學校的資訊教育打不到點。雖然高中學過 C 語言，但那時的演算法競賽完全無法挑起我的興趣。直到大學接觸到 linux 和 shell 後才感受到什麼叫 &lt;em&gt;學會使用電腦&lt;/em&gt; 。所以有人問怎麼學程式設計，我都直接回灌 linux，過程會用到指令，指令就是電腦運作最真實的模樣。最終，指令也會引導你走向程式語言，任何一種程式語言都可以；你才算是學會電腦。&lt;/p&gt;
+&lt;p&gt;現在單純學程式語言的很多，但會有個門檻是要能跨出 IDE，要知道可以怎麼應用。至少這是現在我回想高中時的心得。所以我比較推 shell。&lt;/p&gt;
+&lt;p&gt;希望這堂課能引起共鳴，至少讓其它人聽懂我在說什麼。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;[facebook-社課說明]&quot;&gt;&lt;a href=&quot;https://www.facebook.com/NCTUCCCA/posts/768329356934169&quot;&gt;facebook 社課說明&lt;/a&gt;&lt;/h2&gt;
+&lt;h3 id=&quot;在程式語言基礎上的-linux-shell-指令教學&quot;&gt;在程式語言基礎上的 linux shell 指令教學&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;時間：2019-10-04 19:00-21:20 (五)&lt;/li&gt;
+&lt;li&gt;地點：交通大學資訊服務中心 電腦教室三&lt;/li&gt;
+&lt;li&gt;預期聽眾：&lt;ul&gt;
+&lt;li&gt;學過基本程式語言，卻覺得還是什麼都做不了的人。&lt;/li&gt;
+&lt;li&gt;對指令介面嚮往的新手到老手。&lt;/li&gt;
+&lt;li&gt;不懂程式語言，想要實用地學電腦的人。&lt;/li&gt;
+&lt;li&gt;要學 git 的人；因為 git 要靠指令操作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;是否有經驗看著 linux 大神兩眼映照在漆黑的終端機中，
+雙手運指如飛，指令在螢幕上傾洩而下的的模樣？
+又或是否懷疑過，為什麼有一群人放著好好的 windows 不用，
+而要特別在電腦上安裝另一種作業系統 linux？
+linux 的 shell，就是其中一個常見的答案。&lt;/p&gt;
+&lt;p&gt;linux 強大的 shell 指令介面是許多人對 linux 愛不釋手的原因；
+但對新手而言，過度依靠 shell 也是讓 linux 難以入門的因素。
+shell 的學習門檻高，使用上需要熟悉大量的指令，較圖形介面難以上手。&lt;/p&gt;
+&lt;p&gt;本次社課將從日常使用講起，
+介紹 shell 如何是一門貼近使用者與務實的語言，
+並穿插 shell 運作的基本邏輯，
+使聽眾能將課堂所學的程式設計，實際運用到電腦的日常使用中，
+自力成為 linux 大師。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;[靠北板發文]&quot;&gt;&lt;a href=&quot;https://www.facebook.com/CowBeiNCTU/posts/2397023147085285&quot;&gt;靠北板發文&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;為什麼同學上完一學期 python 還是電腦白痴啊？
+不過就簡單的檔案處理，寫個 one-liner 去跑很難嗎？
+抱怨函數沒看過，也不會翻文件，
+沒寫過如我不翻文件都看得懂大半了。
+深深覺得台灣資訊教育真的缺了某個很重要的部份。&lt;/p&gt;
+&lt;p&gt;真想推薦他們 CCCA 這周五 10/4 19:00 在資訊中心電腦教室四的社課：
+《在程式語言基礎上的 linux shell 指令教學》
+聽說會從日常使用講起，介紹 shell 如何是一門貼近使用者與務實的語言，
+讓聽眾能將課堂所學的程式設計，實際運用到電腦的日常使用中。
+&lt;a href=&quot;https://www.facebook.com/NCTUCCCA/posts/768329356934169&quot;&gt;https://www.facebook.com/NCTUCCCA/posts/768329356934169&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;但主要還是要先有勇氣跨進 linux，至少裝個 cygwin 或 wsl。&lt;/p&gt;
+&lt;hr&gt;
+&lt;script&gt;
+function toggleSlideMode() {
+  const slideClass = &apos;white-black-slide&apos;
+  const root = document.documentElement
+  root.classList.toggle(slideClass)
+}
+function scrollToRelativeHr(relative = 1) {
+  const allHr = Array.from(document.querySelectorAll(&apos;hr&apos;))
+  const windowTop = window.scrollY
+  const seenHrIndex = allHr.findIndex(hr =&gt; hr.offsetTop &gt; windowTop)
+  const targetHrIndex = seenHrIndex - 1 + relative
+  window.scrollTo(0, allHr[targetHrIndex].offsetTop + 1)
+}
+function flipOnWheel(wheel) {
+  /* two case do not match
+   * 1. wheel on scroll bar, then target become &lt;html&gt; it self, not child.
+   * 2. not in slide mode.
+   */
+  if (wheel.target.matches(&apos;.white-black-slide *&apos;) &amp;&amp; wheel.buttons == 0) {
+    const scrollDirection = wheel.deltaY &gt; 0 ? 1 : -1
+    scrollToRelativeHr(scrollDirection)
+  }
+}
+window.addEventListener(&apos;wheel&apos;, flipOnWheel, {passive: true})
+&lt;/script&gt;
+
+&lt;style contenteditable=&quot;true&quot;&gt;
+.white-black-slide {
+  font-size: 250%;
+  color: white;
+  background: black;
+}
+.white-black-slide a {
+  color: cyan;
+}
+:not(pre) code {
+  border: solid 1px;
+  padding: 0 0.1em;
+}
+.white-black-slide ::selection { color: initial; background-color: yellow; }
+.white-black-slide ::-moz-selection { color: initial; background-color: yellow; }
+
+.white-black-slide {
+  cursor: url(&apos;data:image/cur;base64,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&apos;) 12.5 12.5, auto;
+}
+
+:this + button {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 1em;
+}
+&lt;/style&gt;
+
+&lt;button onclick=&quot;scrollToRelativeHr()&quot;&gt;下一頁&lt;/button&gt;
+
+&lt;button onclick=&quot;toggleSlideMode()&quot;&gt;切換簡報模式&lt;/button&gt;
+
+&lt;hr&gt;
+&lt;h2 id=&quot;大綱&quot;&gt;大綱&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;可以實際應用的程式設計&lt;/li&gt;
+&lt;li&gt;shell 入門&lt;/li&gt;
+&lt;li&gt;程式與命令&lt;/li&gt;
+&lt;li&gt;shell 編程&lt;/li&gt;
+&lt;li&gt;改檔名的啟示&lt;/li&gt;
+&lt;li&gt;圖形介面&lt;/li&gt;
+&lt;li&gt;結論&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;可以實際應用的程式設計&quot;&gt;可以實際應用的程式設計&lt;/h2&gt;
+&lt;p&gt;高中電腦多半從 c 這種基本的，或其它 &lt;em&gt;簡單的&lt;/em&gt; 程式語言教起，
+但這些語言有個很大的問題，
+他們都無法讓學生應用在日常的電腦操作上。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;c-可以寫什麼&quot;&gt;c 可以寫什麼&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;scanf printf&lt;/li&gt;
+&lt;li&gt;fopen&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;問題的關鍵&quot;&gt;問題的關鍵&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;日常使用電腦的操作，無法輕易用 c 達成。&lt;/li&gt;
+&lt;li&gt;學校的教學偏重在理論，而不是實務應用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;日常的操作&quot;&gt;日常的操作&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;複製檔案&lt;/li&gt;
+&lt;li&gt;打開網頁&lt;/li&gt;
+&lt;li&gt;壓縮檔案&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;什麼是-shell&quot;&gt;什麼是 shell&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;日常使用的稱為 &lt;abbr title=&quot;Graphic User Interface&quot;&gt;圖形介面&lt;/abbr&gt; 。&lt;/li&gt;
+&lt;li&gt;在圖形介面發明以前，人機之間以文字指令溝通。&lt;/li&gt;
+&lt;li&gt;作業系統內部是一支執行中的程式，
+而 shell 用來稱呼人與作業系統溝通的介面。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;指令的特性&quot;&gt;指令的特性&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;學習門檻較高。&lt;/li&gt;
+&lt;li&gt;由於指令只是一連串文字，可以把要執行的指令存成檔案，方便執行。&lt;/li&gt;
+&lt;li&gt;本質是一種特化的程式語言。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;指令與圖形介面等價&quot;&gt;指令與圖形介面等價&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;在沒有圖形介面以前，人們還是使用電腦。&lt;/li&gt;
+&lt;li&gt;絕大多數在圖形介面能做到的事，指令也都能做到。&lt;/li&gt;
+&lt;li&gt;雖然無法做到 &lt;em&gt;開啟視窗然後按下某個按鈕&lt;/em&gt; 之類的圖形介面操作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;shell-入門&quot;&gt;shell 入門&lt;/h2&gt;
+&lt;p&gt;指令是不含空白的一連串字元，一般包含底線與連字號。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;pwd
+ls
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;帶有參數的指令&quot;&gt;帶有參數的指令&lt;/h3&gt;
+&lt;p&gt;參數以空白分隔&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;mv config.txt config_backup.txt
+cp config_origin.txt config.txt
+rm log.txt
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;移動到不同資料夾&quot;&gt;移動到不同資料夾&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;cd my-dir
+cd ..
+cd /home
+cd ../usr/bin
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;何謂開啟檔案？&quot;&gt;何謂開啟檔案？&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;用 fopen 打開讀取或寫入&lt;/li&gt;
+&lt;li&gt;更改檔案內容&lt;/li&gt;
+&lt;li&gt;開啟檔案對應的圖形程式&lt;/li&gt;
+&lt;li&gt;用滑鼠點二下&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;開啟圖形程式&quot;&gt;開啟圖形程式&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;gedit
+lowriter
+firefox
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;用圖形程式開啟檔案&quot;&gt;用圖形程式開啟檔案&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;gedit file.txt
+lowriter document.odt
+firefox print.pdf
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;統一的指令&quot;&gt;統一的指令&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;# linux
+xdg-open file.odt
+&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;REM windows
+start file.doc
+
+REM or directly type filename
+file.doc
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id=&quot;快捷鍵&quot;&gt;快捷鍵&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;指令到很複雜的話，敲鍵盤很累的。&lt;/li&gt;
+&lt;li&gt;所以 shell 多半有快捷鍵可以用，
+bash 中處理這些快捷鍵的程式稱為 readline。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;自動補全&quot;&gt;自動補全&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;tab 鍵可以自動補全打到一半的單字&lt;/li&gt;
+&lt;li&gt;基本的命令可以自動補全，例如打 pyt 之後按 tab 就會補全成 python。&lt;/li&gt;
+&lt;li&gt;檔名也可以自動補全，例如 &lt;code&gt;xdg-open file.o&lt;/code&gt; 
+之後按 tab 會依存在的檔案補全。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;上一個指令&quot;&gt;上一個指令&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;方向鍵上下可以在歷史記錄中瀏覽&lt;/li&gt;
+&lt;li&gt;或是用 ctrl-p ctrl-n&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;在歷史中搜尋&quot;&gt;在歷史中搜尋&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;ctrl-r 可以在歷史中搜尋&lt;/li&gt;
+&lt;li&gt;如果找到的不是你要的，可以再按一次 ctrl-r 再往前找&lt;/li&gt;
+&lt;li&gt;或是把搜尋字串打完整一點&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;用指令直接更改檔案&quot;&gt;用指令直接更改檔案&lt;/h2&gt;
+&lt;p&gt;上面都是用指令 &lt;em&gt;打開&lt;/em&gt; 一個圖形介面。
+那能不能不透過圖形介面，
+直接用指令完成對檔案的操作呢？&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;處理壓縮檔&quot;&gt;處理壓縮檔&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;# create zip homework.zip,
+# which contain code.c report.odt Makefile
+zip homework.zip code.c report.odt Makefile
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;看壓縮檔的內容&quot;&gt;看壓縮檔的內容&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;unzip homework.zip # directly unzip
+unzip -l homework.zip # list content of zip
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;更改內容&quot;&gt;更改內容&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;# delete file in zip
+zip -d homework.zip Makefile
+
+# update file in zip
+zip -u homework.zip code.c
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id=&quot;選項&quot;&gt;選項&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;在 unix 下，多數程式會把以 &lt;code&gt;-&lt;/code&gt; 開頭的參數當作 &lt;em&gt;選項&lt;/em&gt; 。&lt;/li&gt;
+&lt;li&gt;選項用來改變程式的行為。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;短選項與連寫&quot;&gt;短選項與連寫&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;最早選項都只有一個字 &lt;code&gt;-h&lt;/code&gt; &lt;code&gt;-a&lt;/code&gt; &lt;code&gt;-t&lt;/code&gt; 。&lt;/li&gt;
+&lt;li&gt;工程師都很懶，所以慣例上短選項可以寫在一起 &lt;code&gt;-hat&lt;/code&gt; 。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;bsd-的長選項&quot;&gt;bsd 的長選項&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;後來程式越來越複雜，26 個選項不夠用。&lt;/li&gt;
+&lt;li&gt;bsd 發明長選項，選項從字元改成單字 &lt;code&gt;-help&lt;/code&gt; &lt;code&gt;-all&lt;/code&gt; 。&lt;/li&gt;
+&lt;li&gt;因此連寫不能用了。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;gnu-的長選項&quot;&gt;gnu 的長選項&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;gnu 覺得這樣不向下相容，不優。&lt;/li&gt;
+&lt;li&gt;規定為了與短選項區隔，長選項應該要用二個 &lt;code&gt;-&lt;/code&gt; 開頭， &lt;code&gt;--help&lt;/code&gt; &lt;code&gt;--all&lt;/code&gt; 。&lt;/li&gt;
+&lt;li&gt;程式可以同時有短選項與長選項，短選項仍可以連寫。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;但選項的格式只是慣例&quot;&gt;但選項的格式只是慣例&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;程式看到的只是一連串的字串格式參數，只是某些參數用 &lt;code&gt;-&lt;/code&gt; 開頭。&lt;/li&gt;
+&lt;li&gt;程式作者可以把程式設計成用 &lt;code&gt;/&lt;/code&gt; 當選項開頭，用 &lt;code&gt;\&lt;/code&gt; 當路徑分隔符。
+（windows: 誰叫我？）&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;dd&lt;/code&gt; 就是一支不同風格的常用程式。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;選項查詢&quot;&gt;選項查詢&lt;/h3&gt;
+&lt;p&gt;要怎麼知道命令怎麼下？有哪些選項？&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;s&gt;google&lt;/s&gt;&lt;/li&gt;
+&lt;li&gt;求助選項： &lt;code&gt;zip --help&lt;/code&gt; 或 &lt;code&gt;zip -h&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;線上手冊： &lt;code&gt;man zip&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;搜尋手冊： &lt;code&gt;apropos zip&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;求助選項&quot;&gt;求助選項&lt;/h3&gt;
+&lt;p&gt;多數程式會有一個求助選項，
+看到 &lt;code&gt;--help&lt;/code&gt; 或 &lt;code&gt;-h&lt;/code&gt; 就會直接輸出簡短的說明。
+當然也不是所有程式都有，還是那句話，看作者。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;手冊&quot;&gt;手冊&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;unix 系統中自帶有說明書，說明書可以用一支叫 &lt;code&gt;man&lt;/code&gt; 的程式閱讀。&lt;/li&gt;
+&lt;li&gt;man 會開啟一個介面，可以用方向鍵翻閱，用 &lt;code&gt;q&lt;/code&gt; 可以離開。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;搜尋合適的指令&quot;&gt;搜尋合適的指令&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;apropos 可以用關鍵字搜尋手冊。&lt;/li&gt;
+&lt;li&gt;一般有手冊也就代表有指令可以用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;第一支腳本&quot;&gt;第一支腳本&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;# pack homework files into zip
+zip homework.zip report.odt code.c
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;執行腳本&quot;&gt;執行腳本&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;sh script.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;加入提示&quot;&gt;加入提示&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;echo start packing file
+zip homework.zip report.odt code.c
+echo finish packing file
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;echo&quot;&gt;echo&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;寫在腳本裡的指令是直接執行，而執行時不會顯示現在在執行什麼。
+（dos 會，可以用 &lt;code&gt;echo on&lt;/code&gt; &lt;code&gt;echo off&lt;/code&gt; 控制。）&lt;/li&gt;
+&lt;li&gt;所以要用 echo 把想顯示的文字 &lt;em&gt;回音&lt;/em&gt; 出來。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;輸出字串&quot;&gt;輸出字串&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;echo 就是單純輸出字串，對特殊字元和格式化的支援有限。&lt;/li&gt;
+&lt;li&gt;printf 可以做到接近 c printf 的五花八門功能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;printf&quot;&gt;printf&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;printf &amp;quot;file-%03d.txt\n&amp;quot; 12 # file-012.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id=&quot;輸出太長怎麼辦&quot;&gt;輸出太長怎麼辦&lt;/h2&gt;
+&lt;p&gt;剛剛說的 apropos&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;~:$ apropos zip
+CPAN::Tarzip (3pm)   - internal handling of tar archives for CPAN.pm
+Archive::Zip (3pm)   - Provide an interface to ZIP archive files.
+Archive::Zip::FAQ (3pm) - Answers to a few frequently asked questions about A...
+Archive::Zip::MemberRead (3pm) - A wrapper that lets you read Zip archive mem...
+Archive::Zip::Tree (3pm) - (DEPRECATED) methods for adding/extracting trees u...
+bunzip2 (1)          - a block-sorting file compressor, v1.0.6
+bzcmp (1)            - compare bzip2 compressed files
+bzdiff (1)           - compare bzip2 compressed files
+bzegrep (1)          - search possibly bzip2 compressed files for a regular e...
+bzfgrep (1)          - search possibly bzip2 compressed files for a regular e...
+bzgrep (1)           - search possibly bzip2 compressed files for a regular e...
+bzip2 (1)            - a block-sorting file compressor, v1.0.6
+bzip2recover (1)     - recovers data from damaged bzip2 files
+bzless (1)           - file perusal filter for crt viewing of bzip2 compresse...
+bzmore (1)           - file perusal filter for crt viewing of bzip2 compresse...
+Compress::Raw::Bzip2 (3perl) - Low-Level Interface to bzip2 compression library
+CPAN::Tarzip (3perl) - internal handling of tar archives for CPAN.pm
+docker-context-import (1) - Import a context from a tar or zip file
+fcrackzip (1)        - a Free/Fast Zip Password Cracker
+fcrackzipinfo (1)    - display zip information
+funzip (1)           - filter for extracting from a ZIP archive in a pipe
+gpg-zip (1)          - encrypt or sign files into an archive
+gunzip (1)           - compress or expand files
+gzip (1)             - compress or expand files
+IO::Compress::Bzip2 (3perl) - Write bzip2 files/buffers
+IO::Compress::Gzip (3perl) - Write RFC 1952 files/buffers
+IO::Compress::Zip (3perl) - Write zip files/buffers
+IO::Uncompress::AnyInflate (3perl) - Uncompress zlib-based (zip, gzip) file/b...
+IO::Uncompress::AnyUncompress (3perl) - Uncompress gzip, zip, bzip2 or lzop f...
+IO::Uncompress::Bunzip2 (3perl) - Read bzip2 files/buffers
+IO::Uncompress::Gunzip (3perl) - Read RFC 1952 files/buffers
+IO::Uncompress::Unzip (3perl) - Read zip files/buffers
+MIME::Decoder::Gzip64 (3pm) - decode a &amp;quot;base64&amp;quot; gzip stream
+p7zip (1)            - Wrapper on 7-Zip file archiver with high compression r...
+pbzip2 (1)           - parallel bzip2 file compressor, v1.1.9
+PerlIO::gzip (3pm)   - Perl extension to provide a PerlIO layer to gzip/gunzip
+preunzip (1)         - prefix delta compressor for Aspell
+prezip (1)           - prefix delta compressor for Aspell
+prezip-bin (1)       - prefix zip delta word list compressor/decompressor
+unzip (1)            - list, test and extract compressed files in a ZIP archive
+unzipsfx (1)         - self-extracting stub for prepending to ZIP archives
+zforce (1)           - force a &amp;apos;.gz&amp;apos; extension on all gzip files
+zip (1)              - package and compress (archive) files
+zipcloak (1)         - encrypt entries in a zipfile
+zipdetails (1)       - display the internal structure of zip files
+zipgrep (1)          - search files in a ZIP archive for lines matching a pat...
+zipinfo (1)          - list detailed information about a ZIP archive
+zipnote (1)          - write the comments in zipfile to stdout, edit comments...
+zipsplit (1)         - split a zipfile into smaller zipfiles
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;用-less-接起來&quot;&gt;用 less 接起來&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;那條直線叫管道符號，可以把前面程式的輸出，丟給後面程式。&lt;/li&gt;
+&lt;li&gt;less 的功能就是把過多的輸出接起來，可以上下翻頁慢慢看。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;apropos zip | less
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;其它用來接輸出的程式&quot;&gt;其它用來接輸出的程式&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;apropos zip | head
+apropos zip | tail
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;或是輸入到檔案&quot;&gt;或是輸入到檔案&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;apropos zip &amp;gt; apropos-zip.txt
+head &amp;lt; apropos-zip.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;重導向或是直接指定檔名？&quot;&gt;重導向或是直接指定檔名？&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;head &amp;lt; apropos-zip.txt
+head apropos-zip.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;有關-man&quot;&gt;有關 man&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;man 是一支很聰明的程式，會判斷輸出的裝置決定行為。&lt;/li&gt;
+&lt;li&gt;直接呼叫時，man 因為輸出對向是終端機，所以呼叫 less 把內容接起來。&lt;/li&gt;
+&lt;li&gt;如果對向是檔案，man 就會直接輸出文字檔。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;man zip # 開啟 less 讓使用者翻閱手冊
+man zip &amp;gt; zip.txt # 把手冊存成文字檔
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;更改檔案內容&quot;&gt;更改檔案內容&lt;/h3&gt;
+&lt;p&gt;上面提過 echo printf，輸出也能重導向到檔案。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;echo hey &amp;gt; hey
+printf &amp;quot;hello world!&amp;quot; &amp;gt; hey
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;覆寫與附加&quot;&gt;覆寫與附加&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;一個 &lt;code&gt;&amp;gt;&lt;/code&gt; 會寫入，如果檔案已經存在會被清空後寫入新內容。&lt;/li&gt;
+&lt;li&gt;二個 &lt;code&gt;&amp;gt;&amp;gt;&lt;/code&gt; 會附加，如果檔案已經存在會附加在檔案結尾。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;echo bye &amp;gt;&amp;gt; hey
+printf &amp;quot;byby!&amp;quot; &amp;gt;&amp;gt; hey
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id=&quot;組合-shell-命令&quot;&gt;組合 shell 命令&lt;/h2&gt;
+&lt;p&gt;先前也提過，shell 最大的好處是可以寫成腳本執行，
+可以省去用滑鼠點來點去的時間。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;命令代換&quot;&gt;命令代換&lt;/h3&gt;
+&lt;p&gt;被 &lt;code&gt;$()&lt;/code&gt; 包起來的命令，執行後的結果會被置換到命令中。&lt;/p&gt;
+&lt;p&gt;用 wc 計算 ls 命令列出的第一個檔案大小。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;wc -c $(ls | head -n 1)
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;變數賦值&quot;&gt;變數賦值&lt;/h3&gt;
+&lt;p&gt;sh 中，所有變數內容都是字串。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;a=file.txt
+b=$(ls | head -n 1)
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;變數取值&quot;&gt;變數取值&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;要展開變數需要用 &lt;code&gt;$&lt;/code&gt; 標記，不然只會被當成單純字串而不是變數名。&lt;/li&gt;
+&lt;li&gt;但賦值時不能有 &lt;code&gt;$&lt;/code&gt; 號！&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;wc -c a # 計算檔名為 a 的大小
+wc -c $a # 計算檔名為變數 a 的內容的大小
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;管道的力量&quot;&gt;管道的力量&lt;/h3&gt;
+&lt;p&gt;串連多個小程式，就能快速達到各種功能。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sed &amp;apos;s/[^[:alnum:]]/\n/g&amp;apos; | sort | uniq -c
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;網頁爬取&quot;&gt;網頁爬取&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;url=&amp;apos;http://jamesiscurly.pixnet.net/blog/post/295281136-%e6%98%af%e6%97%a5%e6%a2%97%e5%9c%960621&amp;apos;
+curl $url | grep -o &amp;apos;&amp;lt;img.*?&amp;gt;&amp;apos;
+curl $url | tidy -asxml -q &amp;gt;meme.xml
+xpath -e &amp;apos;//img&amp;apos; meme.xml
+# or curl $url | tidy -asxml -q | xpath -e &amp;apos;//img&amp;apos;
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id=&quot;程式&quot;&gt;程式&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;stdin 標準輸入、stdout 標準輸出&lt;/li&gt;
+&lt;li&gt;argv 參數&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;簡單的-c&quot;&gt;簡單的 c&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-c&quot;&gt;// substr.c
+int main(int argc, char **argv) {
+
+  // argv
+  int start;
+  sscanf(argv[1], &amp;quot;%d&amp;quot;, &amp;amp;start); // atoi()
+  int end;
+  sscanf(argv[2], &amp;quot;%d&amp;quot;, &amp;amp;end);
+
+  char string[80];
+  fgets(string, sizeof(string), stdin); // scanf(&amp;quot;%s&amp;quot;, string)
+  for (int i=start; i&amp;lt;end; i++) putchar(string[i]); // stdout
+  putchar(&amp;apos;\n&amp;apos;);
+  return 0;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;編譯執行&quot;&gt;編譯執行&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~/code:$ gcc -o substrc substr.c
+~/code:$ echo hello world | ./substrc 3 8
+lo wo
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;如何讓程式變成命令&quot;&gt;如何讓程式變成命令&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;shell 內有變數 &lt;code&gt;PATH&lt;/code&gt; ，輸入的命令會在 PATH 中的目錄中搜尋執行檔。&lt;/li&gt;
+&lt;li&gt;所以，把執行檔丟到 PATH 的任一目錄，&lt;/li&gt;
+&lt;li&gt;或者，把執行檔所在目錄加入 PATH。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;萬變不離宗&quot;&gt;萬變不離宗&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;絕大多數的命令都是程式&lt;/li&gt;
+&lt;li&gt;從參數與標準輸入讀取，執行對應的行為。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;組合的力量&quot;&gt;組合的力量&lt;/h3&gt;
+&lt;p&gt;shell 本質即是組合大量行為單純的程式，從而達到複雜的功能。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;shell-編程&quot;&gt;shell 編程&lt;/h2&gt;
+&lt;p&gt;shell 是一門完整的程式語言，當然帶有流程控制、迴圈等功能。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;流程控制&quot;&gt;流程控制&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;if pwd | grep &amp;quot;^/home/$USER&amp;quot;
+then echo inside home directory
+else echo outside home directory
+fi
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;控制原理&quot;&gt;控制原理&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;shell 中 if 後接的命令會被執行，並依命令的返回值判斷分支。&lt;/li&gt;
+&lt;li&gt;若回傳 0 即為 true，以外為 false。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;c-語言的返回值&quot;&gt;c 語言的返回值&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-c&quot;&gt;int main(int argc, char **argv) {
+  /* some code */
+  if (true) return 0;
+  else return error_code;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;判斷迴圈&quot;&gt;判斷迴圈&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;while pgrep wget
+do
+    echo wget is downloading
+    sleep 1m
+done
+
+echo wget finish
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;while true
+do
+    if pgrep wget
+    then
+        echo wget is downloading
+        sleep 1m
+    else
+        echo wget finish
+        break
+    fi
+done
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;遍歷迴圈&quot;&gt;遍歷迴圈&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;for number in $(seq 10)
+do
+    file=$(printf &amp;quot;file-%02d.txt&amp;quot; $number)
+    cat $file &amp;gt;&amp;gt; all.txt
+done
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;判斷的命令&quot;&gt;判斷的命令&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;string=abc
+test $string = abc # return 0
+[ $string = abc ] # as same as test
+if [ $n = 0 ]
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;c-實作&quot;&gt;c 實作&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;int main(int argc, char **argv) {
+  return !strcmp(argv[1], argv[3]);
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;gcc -o test test.c
+cp test [
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h2 id=&quot;執行檔&quot;&gt;執行檔&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;上面的執行檔都是用 c 語言示範&lt;/li&gt;
+&lt;li&gt;因為大家應該都會 c 語言&lt;/li&gt;
+&lt;li&gt;但實務上沒有人會想用 c 語言&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;hashbang-變身執行檔&quot;&gt;hashbang 變身執行檔&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;多數直譯語言執行： &lt;code&gt;python script.py&lt;/code&gt; &lt;code&gt;sh script.sh&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;如果在文字檔第一行加上 &lt;code&gt;#!&lt;/code&gt; 與直譯器的絕對路徑，
+就能讓文字檔能被執行： &lt;code&gt;./script.py&lt;/code&gt; &lt;code&gt;./script.sh&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;並且要賦與該檔案可執行權限： &lt;code&gt;chmod +x script.sh&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;pre&gt;&lt;code&gt;#!/usr/bin/python
+print(&amp;quot;hello world!&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;#!/bin/sh
+echo hello world!
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;以-test-為例&quot;&gt;以 test 為例&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;#!/usr/bin/node
+# test.js
+if (process.argv[2] == process.argv[4]) process.exit(0)
+else process.exit(1)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;chmod +x test.js
+cp test.js [
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;選項的解析&quot;&gt;選項的解析&lt;/h3&gt;
+&lt;p&gt;另外，一開始有提過長短選項；
+不管是哪一種風格選項，解析選項都不是一件容易的事。
+有興趣可以自己試試看。
+&lt;a href=&quot;http://github.com/GHolk/loco/blob/bin/parse-option-example.sh&quot;&gt;我之前寫的用 sh 解析選項的範例程式。&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;shell-與通用語言&quot;&gt;shell 與通用語言&lt;/h2&gt;
+&lt;p&gt;shell 本身的功能很少，多數都是靠其它程式實現的。
+例如上述示範的，字串比較這種基礎功能也可以靠外部實現。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;shell-的特性&quot;&gt;shell 的特性&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;不適合寫複雜的邏輯、數字、字串。&lt;/li&gt;
+&lt;li&gt;缺乏資料結構。&lt;/li&gt;
+&lt;li&gt;但呼叫其它程式很方便。&lt;ul&gt;
+&lt;li&gt;只要可以成為執行檔，都是 shell 指令。&lt;/li&gt;
+&lt;li&gt;有人吐嘈 shell 做點屁大的事都要 fork 一堆進程。&lt;/li&gt;
+&lt;li&gt;如果用管道或命令代換，更會開到子 shell。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;在一般程式語言中呼叫其它命令&quot;&gt;在一般程式語言中呼叫其它命令&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;開一個 shell 來執行傳入的字串。&lt;/li&gt;
+&lt;li&gt;跳過 shell，直接執行該程式，參數要自己分割好傳入。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-c&quot;&gt;system(&amp;quot;zip -u homework.zip code.c&amp;quot;);
+execlp(&amp;quot;zip&amp;quot;, &amp;quot;-u&amp;quot;, &amp;quot;homework.zip&amp;quot;, &amp;quot;code.c&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;一般程式語言特性&quot;&gt;一般程式語言特性&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;內建功能完整。&lt;/li&gt;
+&lt;li&gt;呼叫其它程式不方便。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;shell-是-linux-的統一介面&quot;&gt;shell 是 linux 的統一介面&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;不同程式語言內部有自己互相呼叫的介面。&lt;/li&gt;
+&lt;li&gt;可執行檔是 linux 的統一介面，呼叫要傳入參數、環境變數，處理輸入輸出。&lt;/li&gt;
+&lt;li&gt;shell 是執行檔呼叫的最簡單介面。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;建議&quot;&gt;建議&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;精通 shell，和一門 &lt;strong&gt;通用的程式語言&lt;/strong&gt; 。&lt;/li&gt;
+&lt;li&gt;shell 也有很多種，像 bash、fish、power shell。&lt;/li&gt;
+&lt;li&gt;shell 受限於系統執行檔所提供的功能。&lt;/li&gt;
+&lt;li&gt;一些比較龐大的軟體會有自己內部語言。&lt;ul&gt;
+&lt;li&gt;microsoft office visual basic for applications&lt;/li&gt;
+&lt;li&gt;瀏覽器的 javascript&lt;/li&gt;
+&lt;li&gt;但有時仍可以用通用程式語言溝通，如 libre office libuno&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;以改檔名為例&quot;&gt;以改檔名為例&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;看似簡單的操作&lt;/li&gt;
+&lt;li&gt;但現成的批次重命名工具功能有限&lt;/li&gt;
+&lt;li&gt;直接用程式語言實作太麻煩&lt;/li&gt;
+&lt;li&gt;用 shell 是最有效的方法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;gnss-觀測數據命名格式&quot;&gt;gnss 觀測數據命名格式&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;NCTU0100.19o：站名、一年中的日數、0、西元年、o&lt;/li&gt;
+&lt;li&gt;NCTU201901100.rnx：站名、年月日、0、rnx&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;批次工具&quot;&gt;批次工具&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;有完整 regexp 就很了不起了&lt;/li&gt;
+&lt;li&gt;但很多時候還需要改大小寫、條件判斷、數字運算，不是單純字串代換能處理的。&lt;/li&gt;
+&lt;li&gt;&lt;cite&gt;excel&lt;/cite&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;寫一個-python&quot;&gt;寫一個 python&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;要 import 套件&lt;/li&gt;
+&lt;li&gt;如何讀取檔名？ &lt;code&gt;os.listdir()&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;如何改檔名？&lt;/li&gt;
+&lt;li&gt;要處理文字、數字轉換&lt;/li&gt;
+&lt;li&gt;每轉換一個資料夾，就寫一次腳本？還不能重用？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;直接用-python-輸出-shell-指令&quot;&gt;直接用 python 輸出 shell 指令&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;不用想怎麼在 python 中執行指令。&lt;/li&gt;
+&lt;li&gt;直接 print 出指令，用貼上的或 pipe 給 shell。&lt;/li&gt;
+&lt;li&gt;尤其是一些複雜的指令，不用想怎麼在 python 中建立壓縮檔，
+直接呼叫 zip 指令就好。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;print(&amp;apos;mv&amp;apos;, oldname, newname)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;剪下貼上-shell-輸出&quot;&gt;剪下貼上 shell 輸出&lt;/h3&gt;
+&lt;p&gt;有時候，直接把 ls 的輸出複製到檔案，
+再用 regexp 改成一堆 mv 還比較快。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;ls | vi -
+# in vi
+# :%s/\(.*\).html/mv \1.html \1.htm/
+# :%!sh
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;直接用-shell-解決&quot;&gt;直接用 shell 解決&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# rename Trim201904010000.rnx to NCTU0910.19o
+for file in *
+do
+    old_format=$(date -d $(echo $file | substr 4 12) +&amp;quot;NCTU%03j0.%02yo&amp;quot;)
+    echo mv $file $old_format
+    mv $file $old_format
+done
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;shell-的優勢&quot;&gt;shell 的優勢&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;自動補全、萬用字元、REPL 可以即時看到結果。&lt;/li&gt;
+&lt;li&gt;加個 echo 先確認會跑出什麼東西。&lt;/li&gt;
+&lt;li&gt;極適合寫這種一次性用完即丟的程式。&lt;/li&gt;
+&lt;li&gt;bash 的歷史記錄可以讓你翻出不久前打過的命令，稍作修改就能重用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;其它程式語言&quot;&gt;其它程式語言&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;每次寫這種東西都要先匯入類似的函式庫、寫一堆類似的 code。&lt;/li&gt;
+&lt;li&gt;但又很難抽象化成可以重用的程式。&lt;/li&gt;
+&lt;li&gt;留下一大堆不知道該不該刪的程式。&lt;/li&gt;
+&lt;li&gt;擅長 one-liner 的語言：perl awk。
+&lt;code&gt;seq 10 | perl -ne &amp;apos;print if $_ % 2&amp;apos;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;glob-萬用字元&quot;&gt;glob 萬用字元&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;shell 會依據檔名展開某些特殊字元&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;*&lt;/code&gt;: 任意個任意字元&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;?&lt;/code&gt;: 一個任意字元&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;[a-ez0-9]&lt;/code&gt;: 一個範圍內的字元&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;萬用字元用例&quot;&gt;萬用字元用例&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;mv * ../backup/
+rename &amp;apos;s/.tar.gz$/.tgz/&amp;apos; *.tar.gz
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# match filename longer then n word
+for zip in ??????????????????????????*.zip
+do
+    basename=$(basename $(unzip -l $zip | grep -o &amp;apos;........\.csv&amp;apos;) .pdf)
+    mv $zip $basename.zip
+done
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;GUI-程式&quot;&gt;GUI 程式&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;現代很多人只把 gui 程式認為是 &lt;em&gt;真正的&lt;/em&gt; 程式。&lt;/li&gt;
+&lt;li&gt;那我們就用 shell 來寫 gui 吧！&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;彈出視窗的命令&quot;&gt;彈出視窗的命令&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;瀏覽器有 &lt;code&gt;alert()&lt;/code&gt; &lt;code&gt;confirm()&lt;/code&gt; &lt;code&gt;prompt()&lt;/code&gt; 可以 &lt;em&gt;彈出對話框&lt;/em&gt; ，&lt;/li&gt;
+&lt;li&gt;shell 有沒有類似的東西呢？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;xmessage&quot;&gt;xmessage&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;if xmessage -buttons yes:0,no:2 &amp;apos;do you want to clean trash can?&amp;apos;
+then gio trash --empty
+fi
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;zenity&quot;&gt;zenity&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;zenity --info --text &amp;apos;hello zenity!&amp;apos;
+if zenity --question --text &amp;apos;do you want to give me your name?&amp;apos;
+then
+    name=$(zenity --entry --text &amp;apos;what is your name?&amp;apos;)
+    zenity --info --text &amp;quot;hello $name&amp;quot;
+fi
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;其它-x-window-好用工具&quot;&gt;其它 x window 好用工具&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;xdotool: 用來摸擬滑鼠點擊、鍵盤事件的命令。&lt;/li&gt;
+&lt;li&gt;wmctrl: 用來控制視窗放大縮小。&lt;/li&gt;
+&lt;li&gt;xprop: 比較底層，用來查詢各視窗的屬性、控制的程序。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;結論&quot;&gt;結論&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;shell 是一門 &lt;strong&gt;實際&lt;/strong&gt; 且 &lt;em&gt;能與所學結合&lt;/em&gt; 的語言。&lt;/li&gt;
+&lt;li&gt;社課很短，能講的東西有限。&lt;/li&gt;
+&lt;li&gt;希望我的表達能力正常無礙。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;指令示範&quot;&gt;指令示範&lt;/h3&gt;
+&lt;hr&gt;
+&lt;p&gt;把系統大檔案移到另一個硬碟&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;find -size +1G | while read path
+do
+    mv $path /mnt/backup/
+    ln -s /mnt/backup/$(basename $path) $path
+done
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;p&gt;每 30 分鐘提醒一次眼睛休息&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;(
+    while sleep 30m
+    do zenity --info --text &amp;quot;30 分鐘了，眼睛休息一下吧！&amp;quot;
+    done
+) &amp;amp;
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;h3 id=&quot;延伸閱讀&quot;&gt;延伸閱讀&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.cyut.edu.tw/~ckhung/b/clr/&quot;&gt;命令列讀本&lt;/a&gt; ，
+用輕鬆、務實的角度入門 shell 使用。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://book.ashan.org/Advanced-Bash-Scripting-Guide-in-Chinese/&quot;&gt;高級 Bash 脚本编程指南&lt;/a&gt; ，
+完全理解 bash 的功能，了解不同語法間的細微差異。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://cmdchallenge.com&quot;&gt;考驗對 shell 常指令的理解&lt;/a&gt; 。&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/shell-script-concept-from-program.html#以改檔名為例</id>
 <title>shell 概念教學</title>
 <published>2019-09-21T14:52:27.734Z</published>
@@ -4035,118 +4893,7 @@ sentinel-1 在 10 月初有數張影像，
 <category term="javascript"/>
 <category term="ptt"/>
 <category term="tool"/>
-<content type="html">&lt;h1 id=&quot;ptt-文章代碼解碼&quot;&gt;ptt 文章代碼解碼&lt;/h1&gt;
-&lt;p&gt;幫鄉民百科寫了個語法高亮，
-後來也順便把文章代碼處理了，
-可以把 ptt 的文章代碼轉換成 ptt 網頁版的超連結。
-之前一直想寫類似的轉換器，可以直接把文章代碼轉成網址，
-就直接引用那部份的程式，包出了這個轉換器。&lt;/p&gt;
-&lt;p&gt;文章代碼和 ptt 的文章檔名是有透明的轉換機制的；
-其實只是把檔名換個方式寫，本來是時間整數，
-編碼成 2 進位的 base64hex 格式。
-&lt;a href=&quot;https://github.com/ptt/pttbbs/blob/master/docs/aids.txt&quot;&gt;轉換的規格在 ptt 的文件可以找到&lt;/a&gt; 。&lt;/p&gt;
-&lt;h2 id=&quot;表單使用說明&quot;&gt;表單使用說明&lt;/h2&gt;
-&lt;p&gt;此轉換器可以在下面的表單裡輸入文章代碼轉出檔名，
-其中文章代碼一欄開頭有沒有 &lt;code&gt;#&lt;/code&gt; 都沒差，
-可以只輸入代碼部份 &lt;code&gt;#1S_yeLne&lt;/code&gt; 
-或連看板一起輸入 &lt;code&gt;#1S_yeLne (Gossiping)&lt;/code&gt; ，
-看板也可以在下面的欄位另外輸入。
-其中連看板的格式中二者間的空白可以省略。
-輸入後會自動轉換，不用手動按轉換鈕。&lt;/p&gt;
-&lt;p&gt;但由於文章代碼只代表檔名，還需要有看板才能得出完整的網址。
-所以如果沒有看板，只能轉換出檔名部份，
-網址會因會看板未知而不顯示。&lt;/p&gt;
-&lt;h2 id=&quot;網址使用說明&quot;&gt;網址使用說明&lt;/h2&gt;
-&lt;p&gt;或是直接從網址給值，就會跳到該 ptt 文章。
-本網頁網址是 &lt;code&gt;http://gholk.github.io/ptt-article-id-decoder.html&lt;/code&gt; ，
-在尾端加上 querystring &lt;code&gt;?aid=1P_5tT7_ (PttHistory)&lt;/code&gt; ，
-變成 &lt;a href=&quot;http://gholk.github.io/ptt-article-id-decoder.html?aid=1P_5tT7_(PttHistory)&quot;&gt;http://gholk.github.io/ptt-article-id-decoder.html?aid=1P_5tT7_(PttHistory)&lt;/a&gt;，
-或是用 hash id &lt;code&gt;#1P_5tT7_ (PttHistory)&lt;/code&gt; ，
-變成 &lt;a href=&quot;http://gholk.github.io/ptt-article-id-decoder.html#1P_5tT7_(PttHistory)&quot;&gt;http://gholk.github.io/ptt-article-id-decoder.html#1P_5tT7_(PttHistory)&lt;/a&gt;
-就會直接跳轉到該篇文章的頁面，達到類似轉址的功能。
-在網址中的空白一樣可省；畢竟慣例上網址不含空白，
-雖然含了也是可以。&lt;/p&gt;
-&lt;p&gt;雖然很像轉址，但其實是在前端用 javascript 解碼再轉址，
-所以只在瀏覽器中有效。
-不像 wikia 的重定向是在後端處理，
-這個轉址實際上不管你傳什麼網址進去，
-都是回覆一樣的網頁，網頁中的 js 再去解析網址中的參數轉址。&lt;/p&gt;
-&lt;form&gt;
-&lt;label&gt;文章代碼 &lt;input name=&quot;article-id&quot; placeholder=&quot;#1S_yeLne (Gossiping)&quot;&gt;&lt;/label&gt;
-&lt;label&gt;看板 &lt;input name=&quot;board&quot; placeholder=&quot;Gossiping&quot;&gt;&lt;/label&gt;
-&lt;label&gt;檔名 &lt;input name=&quot;filename&quot;&gt;&lt;/label&gt;
-&lt;label&gt;網址 &lt;input name=&quot;url&quot;&gt;&lt;/label&gt;
-&lt;/form&gt;
 
-&lt;style&gt;
-label {
-  display: block;
-}
-input[name=url] {
-  display: block;
-  width: 100%;
-}
-&lt;/style&gt;
-
-&lt;script src=&quot;https://pttpedia.fandom.com/zh/index.php?title=MediaWiki:PttHighlightArticle.js&amp;amp;action=raw&amp;amp;ctype=text/javascript&amp;amp;reviewed=1561141829&quot;&gt;&lt;/script&gt;
-
-
-&lt;script&gt;
-const formArticleId = {
-  __proto__: pttHighlightArticle.pttArticleId,
-  toUrl(fileName, board) {
-    const url = `https://www.ptt.cc/bbs/${board}/${fileName}.html`
-    return url
-  },
-  form: document.querySelector(&apos;form&apos;),
-  scanAid(string) {
-    return string.match(/#?(.{8})(?:\s*\(([\w\d_-]+)\))?/)
-  },
-  convertForm() {
-    this.outputForm(
-      this.form.elements[&apos;article-id&apos;].value,
-      this.form.elements[&apos;board&apos;].value
-    )
-  },
-  outputForm(string, board) {
-    const scan = this.scanAid(string)
-    const aid = scan[1]
-    if (scan[2]) board = scan[2]
-    const filename = this.toFileName(aid)
-    this.form.elements[&apos;filename&apos;].value = filename
-    if (board) {
-      this.form.elements[&apos;url&apos;].value = this.toUrl(filename, board)
-    }
-  },
-  convertHash() {
-    this.outputForm(decodeURIComponent(window.location.hash))
-  },
-  convertSearch() {
-    const search = new URLSearchParams(window.location.search)
-    this.outputForm(
-      search.get(&apos;article-id&apos;) || search.get(&apos;aid&apos;),
-      search.get(&apos;board&apos;)
-    )
-  },
-  autoConvert() {
-    let convert = false
-    if (window.location.hash) {
-      this.convertHash()
-      convert = true
-    }
-    else if (window.location.search) {
-      this.convertSearch()
-      convert = true
-    }
-    if (convert) window.location = this.form.elements[&apos;url&apos;].value
-  }
-}
-formArticleId.form.elements[&apos;article-id&apos;].oninput = 
-    formArticleId.form.elements[&apos;board&apos;].oninput = 
-    () =&gt; formArticleId.convertForm()
-formArticleId.autoConvert()
-&lt;/script&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/bim-revit-homework-nctu.html#bim-parameter-execellent</id>
 <title>BIM 建模以 revit 實作</title>

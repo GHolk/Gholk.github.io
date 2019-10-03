@@ -33,27 +33,57 @@
 配合 c 從 shell 認識電腦是一條十分有意義的道路。
 本簡報從使用電腦的角度，帶領有 c 語言基礎的人認識 shell。</p>
 <hr>
-<h2 id="社課前言">社課前言</h2>
+<h2 id="前言">前言</h2>
+<p>這算我玩 linux 以來的小小願望吧。</p>
+<p>一直覺得學校的資訊教育打不到點。雖然高中學過 C 語言，但那時的演算法競賽完全無法挑起我的興趣。直到大學接觸到 linux 和 shell 後才感受到什麼叫 <em>學會使用電腦</em> 。所以有人問怎麼學程式設計，我都直接回灌 linux，過程會用到指令，指令就是電腦運作最真實的模樣。最終，指令也會引導你走向程式語言，任何一種程式語言都可以；你才算是學會電腦。</p>
+<p>現在單純學程式語言的很多，但會有個門檻是要能跨出 IDE，要知道可以怎麼應用。至少這是現在我回想高中時的心得。所以我比較推 shell。</p>
+<p>希望這堂課能引起共鳴，至少讓其它人聽懂我在說什麼。</p>
+<hr>
+<h2 id="社課說明">社課說明</h2>
+<h3 id="在程式語言基礎上的-linux-shell-指令教學">在程式語言基礎上的 linux shell 指令教學</h3>
+<ul>
+<li>時間：2019-10-05 19:00-21:20 (五)</li>
+<li>地點：交通大學資訊服務中心 電腦教室四</li>
+<li>預期聽眾：<ul>
+<li>學過基本程式語言，卻覺得還是什麼都做不了的人。</li>
+<li>對指令介面嚮往的新手到老手。</li>
+<li>不懂程式語言，想要實用地學電腦的人。</li>
+<li>要學 git 的人；因為 git 要靠指令操作。</li>
+</ul>
+</li>
+</ul>
+<p>是否有經驗看著 linux 大神兩眼映照在漆黑的終端機中，
+雙手運指如飛，指令在螢幕上傾洩而下的的模樣？
+又或是否懷疑過，為什麼有一群人放著好好的 windows 不用，
+而要特別在電腦上安裝另一種作業系統 linux？
+linux 的 shell，就是其中一個常見的答案。</p>
 <p>linux 強大的 shell 指令介面是許多人對 linux 愛不釋手的原因；
 但對新手而言，過度依靠 shell 也是讓 linux 難以入門的因素。
-shell 的學習門檻高，使用上需要熟悉大量的指令。
-本次社課將從日常使用講起，
+shell 的學習門檻高，使用上需要熟悉大量的指令，較圖形介面難以上手。</p>
+<p>本次社課將從日常使用講起，
 介紹 shell 如何是一門貼近使用者與務實的語言，
 並穿插 shell 運作的基本邏輯，
-使聽眾能將課堂所學的程式設計，實際運用到電腦的日常使用中。</p>
+使聽眾能將課堂所學的程式設計，實際運用到電腦的日常使用中，
+自力成為 linux 大師。</p>
+<hr>
+<h2 id="靠北板發文">靠北板發文</h2>
+<p>為什麼同學上完一學期 python 還是電腦白痴啊？
+不過就簡單的檔案處理，寫個 one-liner 去跑很難嗎？
+抱怨函數沒看過，也不會翻文件，
+沒寫過如我不翻文件都看得懂大半了。
+深深覺得台灣資訊教育真的缺了某個很重要的部份。</p>
+<p>真想推薦他們 CCCA 這周五 10/4 19:00 在資訊中心電腦教室四的社課：
+《在程式語言基礎上的 linux shell 指令教學》
+聽說會從日常使用講起，介紹 shell 如何是一門貼近使用者與務實的語言，
+讓聽眾能將課堂所學的程式設計，實際運用到電腦的日常使用中。
+<a href="https://www.facebook.com/NCTUCCCA/posts/768329356934169">https://www.facebook.com/NCTUCCCA/posts/768329356934169</a></p>
+<p>但主要還是要先有勇氣跨進 linux，至少裝個 cygwin 或 wsl。</p>
 <hr>
 <script>
 function toggleSlideMode() {
   const slideClass = 'white-black-slide'
   const root = document.documentElement
-  if (root.classList.contains(slideClass)) {
-    root.classList.remove(slideClass)
-    window.removeEventListener('wheel', flipOnWheel)
-  }
-  else {
-    root.classList.add(slideClass)
-    window.addEventListener('wheel', flipOnWheel)
-  }
+  root.classList.toggle(slideClass)
 }
 function scrollToRelativeHr(relative = 1) {
   const allHr = Array.from(document.querySelectorAll('hr'))
@@ -63,11 +93,16 @@ function scrollToRelativeHr(relative = 1) {
   window.scrollTo(0, allHr[targetHrIndex].offsetTop + 1)
 }
 function flipOnWheel(wheel) {
-  if (wheel.target.nodeName != 'HTML' && wheel.buttons == 0) {
-    const scrollDirection = wheel.deltaY / Math.abs(wheel.deltaY)
+  /* two case do not match
+   * 1. wheel on scroll bar, then target become <html> it self, not child.
+   * 2. not in slide mode.
+   */
+  if (wheel.target.matches('.white-black-slide *') && wheel.buttons == 0) {
+    const scrollDirection = wheel.deltaY > 0 ? 1 : -1
     scrollToRelativeHr(scrollDirection)
   }
 }
+window.addEventListener('wheel', flipOnWheel, {passive: true})
 </script>
 
 <style contenteditable="true">
@@ -102,6 +137,17 @@ function flipOnWheel(wheel) {
 
 <button onclick="toggleSlideMode()">切換簡報模式</button>
 
+<hr>
+<h2 id="大綱">大綱</h2>
+<ul>
+<li>可以實際應用的程式設計</li>
+<li>shell 入門</li>
+<li>程式與命令</li>
+<li>shell 編程</li>
+<li>改檔名的啟示</li>
+<li>圖形介面</li>
+<li>結論</li>
+</ul>
 <hr>
 <h2 id="可以實際應用的程式設計">可以實際應用的程式設計</h2>
 <p>高中電腦多半從 c 這種基本的，或其它 <em>簡單的</em> 程式語言教起，
@@ -200,7 +246,7 @@ file.doc
 <ul>
 <li>指令到很複雜的話，敲鍵盤很累的。</li>
 <li>所以 shell 多半有快捷鍵可以用，
-處理這些快捷鍵的程式稱為 readline。</li>
+bash 中處理這些快捷鍵的程式稱為 readline。</li>
 </ul>
 <hr>
 <h3 id="自動補全">自動補全</h3>
@@ -427,7 +473,7 @@ printf &quot;hello world!&quot; &gt; hey
 <pre><code>echo bye &gt;&gt; hey
 printf &quot;byby!&quot; &gt;&gt; hey
 </code></pre><hr>
-<h2 id="shell-批次處理">shell 批次處理</h2>
+<h2 id="組合-shell-命令">組合 shell 命令</h2>
 <p>先前也提過，shell 最大的好處是可以寫成腳本執行，
 可以省去用滑鼠點來點去的時間。</p>
 <hr>
@@ -452,6 +498,13 @@ wc -c $a # 計算檔名為變數 a 的內容的大小
 <h3 id="管道的力量">管道的力量</h3>
 <p>串連多個小程式，就能快速達到各種功能。</p>
 <pre><code>sed &apos;s/[^[:alnum:]]/\n/g&apos; | sort | uniq -c
+</code></pre><hr>
+<h3 id="網頁爬取">網頁爬取</h3>
+<pre><code>url=&apos;http://jamesiscurly.pixnet.net/blog/post/295281136-%e6%98%af%e6%97%a5%e6%a2%97%e5%9c%960621&apos;
+curl $url | grep -o &apos;&lt;img.*?&gt;&apos;
+curl $url | tidy -asxml -q &gt;meme.xml
+xpath -e &apos;//img&apos; meme.xml
+# or curl $url | tidy -asxml -q | xpath -e &apos;//img&apos;
 </code></pre><hr>
 <h2 id="程式">程式</h2>
 <ul>
@@ -633,16 +686,104 @@ execlp(&quot;zip&quot;, &quot;-u&quot;, &quot;homework.zip&quot;, &quot;code.c&q
 <h3 id="建議">建議</h3>
 <ul>
 <li>精通 shell，和一門 <strong>通用的程式語言</strong> 。</li>
-<li>shell 像 bash、fish、power shell</li>
-<li>雖然 shell 能做很多事，但受限於的執行檔所提供的功能。</li>
+<li>shell 也有很多種，像 bash、fish、power shell。</li>
+<li>shell 受限於系統執行檔所提供的功能。</li>
 <li>一些比較龐大的軟體會有自己內部語言。<ul>
 <li>microsoft office visual basic for applications</li>
 <li>瀏覽器的 javascript</li>
-<li>但有時仍可以用通用程式語言溝通</li>
+<li>但有時仍可以用通用程式語言溝通，如 libre office libuno</li>
 </ul>
 </li>
 </ul>
 <hr>
+<h2 id="以改檔名為例">以改檔名為例</h2>
+<ul>
+<li>看似簡單的操作</li>
+<li>但現成的批次重命名工具功能有限</li>
+<li>直接用程式語言實作太麻煩</li>
+<li>用 shell 是最有效的方法</li>
+</ul>
+<hr>
+<h3 id="gnss-觀測數據命名格式">gnss 觀測數據命名格式</h3>
+<ul>
+<li>NCTU0100.19o：站名、一年中的日數、0、西元年、o</li>
+<li>NCTU201901100.rnx：站名、年月日、0、rnx</li>
+</ul>
+<hr>
+<h3 id="批次工具">批次工具</h3>
+<ul>
+<li>有完整 regexp 就很了不起了</li>
+<li>但很多時候還需要改大小寫、條件判斷、數字運算，不是單純字串代換能處理的。</li>
+<li><cite>excel</cite></li>
+</ul>
+<hr>
+<h3 id="寫一個-python">寫一個 python</h3>
+<ul>
+<li>要 import 套件</li>
+<li>如何讀取檔名？ <code>os.listdir()</code></li>
+<li>如何改檔名？</li>
+<li>要處理文字、數字轉換</li>
+<li>每轉換一個資料夾，就寫一次腳本？還不能重用？</li>
+</ul>
+<hr>
+<h3 id="直接用-python-輸出-shell-指令">直接用 python 輸出 shell 指令</h3>
+<ul>
+<li>不用想怎麼在 python 中執行指令。</li>
+<li>直接 print 出指令，用貼上的或 pipe 給 shell。</li>
+</ul>
+<pre><code class="lang-python">print(&apos;mv&apos;, oldname, newname)
+</code></pre>
+<hr>
+<h3 id="剪下貼上-shell-輸出">剪下貼上 shell 輸出</h3>
+<p>有時候，直接把 ls 的輸出複製到檔案，
+再用 regexp 改成一堆 mv 還比較快。</p>
+<pre><code class="lang-sh">ls | vi -
+# in vi
+# :%s/\(.*\).html/mv \1.html \1.htm/
+# :%!sh
+</code></pre>
+<hr>
+<h3 id="直接用-shell-解決">直接用 shell 解決</h3>
+<pre><code class="lang-sh"># rename Trim201904010000.rnx to NCTU0910.19o
+for file in *
+do
+    old_format=$(date -d $(echo $file | substr 4 12) +&quot;NCTU%03j0.%02y&quot;)
+    echo mv $file $old_format
+    mv $file $old_format
+done
+</code></pre>
+<hr>
+<h3 id="shell-的優勢">shell 的優勢</h3>
+<ul>
+<li>自動補全、萬用字元、REPL 可以即時看到結果。</li>
+<li>加個 echo 先確認會跑出什麼東西。</li>
+<li>極適合寫這種一次性用完即丟的程式。</li>
+<li>bash 的歷史記錄可以讓你翻出不久前打過的命令，稍作修改就能重用。</li>
+</ul>
+<hr>
+<h3 id="其它程式語言">其它程式語言</h3>
+<ul>
+<li>每次寫這種東西都要先匯入類似的函式庫、寫一堆類似的 code。</li>
+<li>但又很難抽象化成可以重用的程式。</li>
+<li>留下一大堆不知道該不該刪的程式。</li>
+<li>擅常 one-liner 的語言：perl awk。</li>
+</ul>
+<hr>
+<h2 id="glob-萬用字元">glob 萬用字元</h2>
+<ul>
+<li>shell 會依據檔名展開某些特殊字元</li>
+<li><code>*</code>: 任意個任意字元</li>
+<li><code>?</code>: 一個任意字元</li>
+<li><code>[a-ez0-9]</code>: 一個範圍內的字元</li>
+</ul>
+<hr>
+<h3 id="萬用字元用例">萬用字元用例</h3>
+<pre><code>mv * ../backup/
+rename &apos;s/.tar.gz$/.tgz/&apos; *.tar.gz
+
+# match filename longer then n word
+for zip in ??????????????????????????*.zip
+</code></pre><hr>
 <h2 id="GUI-程式">GUI 程式</h2>
 <ul>
 <li>現代很多人只把 gui 程式認為是 <em>真正的</em> 程式。</li>
@@ -655,6 +796,12 @@ execlp(&quot;zip&quot;, &quot;-u&quot;, &quot;homework.zip&quot;, &quot;code.c&q
 <li>shell 有沒有類似的東西呢？</li>
 </ul>
 <hr>
+<h3 id="xmessage">xmessage</h3>
+<pre><code class="lang-sh">if xmessage -buttons yes:0,no:2 &apos;do you want to clean trash can?&apos;
+then gio trash --empty
+fi
+</code></pre>
+<hr>
 <h3 id="zenity">zenity</h3>
 <pre><code class="lang-sh">zenity --info --text &apos;hello zenity!&apos;
 if zenity --question --text &apos;do you want to give me your name?&apos;
@@ -664,11 +811,18 @@ then
 fi
 </code></pre>
 <hr>
+<h2 id="其它-x-window-好用工具">其它 x window 好用工具</h2>
+<ul>
+<li>xdotool: 用來摸擬滑鼠點擊、鍵盤事件的命令。</li>
+<li>wmctrl: 用來控制視窗放大縮小。</li>
+<li>xprop: 比較底層，用來查詢各視窗的屬性、控制的程序。</li>
+</ul>
+<hr>
 <h2 id="結論">結論</h2>
 <ul>
-<li>社課很短，能講的東西有限。</li>
-<li>希望大家有接收到我想傳達的訊息。</li>
 <li>shell 是一門 <strong>實際</strong> 且 <em>能與所學結合</em> 的語言。</li>
+<li>社課很短，能講的東西有限。</li>
+<li>希望我的表達能力正常無礙。</li>
 </ul>
 <hr>
 <h3 id="指令示範">指令示範</h3>
@@ -695,62 +849,6 @@ done
 完全理解 bash 的功能，了解不同語法間的細微差異。</li>
 <li><a href="http://cmdchallanges.com">考驗對 shell 常指令的理解</a> 。</li>
 </ul>
-<hr>
-<h2 id="以下待加入草稿">以下待加入草稿</h2>
-<hr>
-<h2 id="xpath-三兄弟">xpath 三兄弟</h2>
-<pre><code>curl $url | tidy -asxml -q | xpath -e &apos;//img&apos; -
-</code></pre><hr>
-<h2 id="改檔名">改檔名</h2>
-<ul>
-<li>看似簡單的操作</li>
-<li>但現成的批次重命名工具功能有限</li>
-<li>直接用程式語言實作太複雜</li>
-<li>用 shell 是最有效的方法</li>
-</ul>
-<hr>
-<h3 id="批次工具">批次工具</h3>
-<ul>
-<li>有 regexp 就很了不起了</li>
-<li>但很多時候還需要改大小寫、條件判斷、數字運算</li>
-</ul>
-<hr>
-<h3 id="寫一個-python">寫一個 python</h3>
-<ul>
-<li>要 import 套件</li>
-<li>如何讀取檔名？<ul>
-<li>最快 <code>system(&apos;ls&apos;)</code> </li>
-<li><code>fs.readDir()</code></li>
-</ul>
-</li>
-<li>要處理文字、數字轉換</li>
-<li>每轉換一個資料夾，就寫一次腳本？還不能重用？</li>
-</ul>
-<hr>
-<h3 id="直接用-python-輸出-shell-指令">直接用 python 輸出 shell 指令</h3>
-<ul>
-<li>不用想怎麼在 python 中執行指令。</li>
-<li>直接 print 出指令，用貼上的或 pipe 給 shell。</li>
-</ul>
-<hr>
-<h3 id="剪下貼上-shell-輸出">剪下貼上 shell 輸出</h3>
-<p>有時候，直接把 ls 的輸出複製到檔案，
-再用 regexp 改成一堆 mv 還比較快。</p>
-<hr>
-<h3 id="直接用-shell-解決">直接用 shell 解決</h3>
-<pre><code class="lang-sh"># rename Trim201904010000.rnx to NCTU0910.19o
-for file in *
-do
-    old_format=$(date -d $(echo $file | substr 4 12) +&quot;NCTU%03j0.%02y&quot;)
-    mv $file $old_format
-done
-</code></pre>
-<hr>
-<h3 id="輸出到標準輸出">輸出到標準輸出</h3>
-<p><code>wget -O - $url</code></p>
-<hr>
-<h3 id="萬用字元">萬用字元</h3>
-<p><code>mv * ../backup/</code></p>
 </main>
 
 <script defer src="ext/meta-meta.js"></script>

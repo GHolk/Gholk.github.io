@@ -8,14 +8,61 @@ shell 的設計理念以 unix 環境中的程序為中心，
 
 ---
 
-## 社課前言
+## 前言
+這算我玩 linux 以來的小小願望吧。
+
+一直覺得學校的資訊教育打不到點。雖然高中學過 C 語言，但那時的演算法競賽完全無法挑起我的興趣。直到大學接觸到 linux 和 shell 後才感受到什麼叫 *學會使用電腦* 。所以有人問怎麼學程式設計，我都直接回灌 linux，過程會用到指令，指令就是電腦運作最真實的模樣。最終，指令也會引導你走向程式語言，任何一種程式語言都可以；你才算是學會電腦。
+
+現在單純學程式語言的很多，但會有個門檻是要能跨出 IDE，要知道可以怎麼應用。至少這是現在我回想高中時的心得。所以我比較推 shell。
+
+希望這堂課能引起共鳴，至少讓其它人聽懂我在說什麼。
+
+----
+
+## 社課說明
+### 在程式語言基礎上的 linux shell 指令教學
+
+  - 時間：2019-10-05 19:00-21:20 (五)
+  - 地點：交通大學資訊服務中心 電腦教室四
+  - 預期聽眾：
+      - 學過基本程式語言，卻覺得還是什麼都做不了的人。
+      - 對指令介面嚮往的新手到老手。
+      - 不懂程式語言，想要實用地學電腦的人。
+      - 要學 git 的人；因為 git 要靠指令操作。
+
+是否有經驗看著 linux 大神兩眼映照在漆黑的終端機中，
+雙手運指如飛，指令在螢幕上傾洩而下的的模樣？
+又或是否懷疑過，為什麼有一群人放著好好的 windows 不用，
+而要特別在電腦上安裝另一種作業系統 linux？
+linux 的 shell，就是其中一個常見的答案。
+
 linux 強大的 shell 指令介面是許多人對 linux 愛不釋手的原因；
 但對新手而言，過度依靠 shell 也是讓 linux 難以入門的因素。
-shell 的學習門檻高，使用上需要熟悉大量的指令。
+shell 的學習門檻高，使用上需要熟悉大量的指令，較圖形介面難以上手。
+
 本次社課將從日常使用講起，
 介紹 shell 如何是一門貼近使用者與務實的語言，
 並穿插 shell 運作的基本邏輯，
-使聽眾能將課堂所學的程式設計，實際運用到電腦的日常使用中。
+使聽眾能將課堂所學的程式設計，實際運用到電腦的日常使用中，
+自力成為 linux 大師。
+
+----
+
+## 靠北板發文
+為什麼同學上完一學期 python 還是電腦白痴啊？
+不過就簡單的檔案處理，寫個 one-liner 去跑很難嗎？
+抱怨函數沒看過，也不會翻文件，
+沒寫過如我不翻文件都看得懂大半了。
+深深覺得台灣資訊教育真的缺了某個很重要的部份。
+
+真想推薦他們 CCCA 這周五 10/4 19:00 在資訊中心電腦教室四的社課：
+《在程式語言基礎上的 linux shell 指令教學》
+聽說會從日常使用講起，介紹 shell 如何是一門貼近使用者與務實的語言，
+讓聽眾能將課堂所學的程式設計，實際運用到電腦的日常使用中。
+https://www.facebook.com/NCTUCCCA/posts/768329356934169
+
+但主要還是要先有勇氣跨進 linux，至少裝個 cygwin 或 wsl。
+
 
 ----
 
@@ -23,14 +70,7 @@ shell 的學習門檻高，使用上需要熟悉大量的指令。
 function toggleSlideMode() {
   const slideClass = 'white-black-slide'
   const root = document.documentElement
-  if (root.classList.contains(slideClass)) {
-    root.classList.remove(slideClass)
-    window.removeEventListener('wheel', flipOnWheel)
-  }
-  else {
-    root.classList.add(slideClass)
-    window.addEventListener('wheel', flipOnWheel)
-  }
+  root.classList.toggle(slideClass)
 }
 function scrollToRelativeHr(relative = 1) {
   const allHr = Array.from(document.querySelectorAll('hr'))
@@ -40,11 +80,16 @@ function scrollToRelativeHr(relative = 1) {
   window.scrollTo(0, allHr[targetHrIndex].offsetTop + 1)
 }
 function flipOnWheel(wheel) {
-  if (wheel.target.nodeName != 'HTML' && wheel.buttons == 0) {
-    const scrollDirection = wheel.deltaY / Math.abs(wheel.deltaY)
+  /* two case do not match
+   * 1. wheel on scroll bar, then target become <html> it self, not child.
+   * 2. not in slide mode.
+   */
+  if (wheel.target.matches('.white-black-slide *') && wheel.buttons == 0) {
+    const scrollDirection = wheel.deltaY > 0 ? 1 : -1
     scrollToRelativeHr(scrollDirection)
   }
 }
+window.addEventListener('wheel', flipOnWheel, {passive: true})
 </script>
 
 <style contenteditable="true">
@@ -78,6 +123,17 @@ function flipOnWheel(wheel) {
 <button onclick="scrollToRelativeHr()">下一頁</button>
 
 <button onclick="toggleSlideMode()">切換簡報模式</button>
+
+---
+
+## 大綱
+* 可以實際應用的程式設計
+* shell 入門
+* 程式與命令
+* shell 編程
+* 改檔名的啟示
+* 圖形介面
+* 結論
 
 ---
 
@@ -206,7 +262,7 @@ file.doc
 ## 快捷鍵
 * 指令到很複雜的話，敲鍵盤很累的。
 * 所以 shell 多半有快捷鍵可以用，
-  處理這些快捷鍵的程式稱為 readline。
+  bash 中處理這些快捷鍵的程式稱為 readline。
 
 ----
 
@@ -500,7 +556,7 @@ printf "byby!" >> hey
 
 ---
 
-## shell 批次處理
+## 組合 shell 命令
 先前也提過，shell 最大的好處是可以寫成腳本執行，
 可以省去用滑鼠點來點去的時間。
 
@@ -543,6 +599,17 @@ wc -c $a # 計算檔名為變數 a 的內容的大小
 
 ```
 sed 's/[^[:alnum:]]/\n/g' | sort | uniq -c
+```
+
+----
+
+### 網頁爬取
+```
+url='http://jamesiscurly.pixnet.net/blog/post/295281136-%e6%98%af%e6%97%a5%e6%a2%97%e5%9c%960621'
+curl $url | grep -o '<img.*?>'
+curl $url | tidy -asxml -q >meme.xml
+xpath -e '//img' meme.xml
+# or curl $url | tidy -asxml -q | xpath -e '//img'
 ```
 
 ---
@@ -778,12 +845,115 @@ execlp("zip", "-u", "homework.zip", "code.c");
 
 ### 建議
 * 精通 shell，和一門 **通用的程式語言** 。
-* shell 像 bash、fish、power shell
-* 雖然 shell 能做很多事，但受限於的執行檔所提供的功能。
+* shell 也有很多種，像 bash、fish、power shell。
+* shell 受限於系統執行檔所提供的功能。
 * 一些比較龐大的軟體會有自己內部語言。
   * microsoft office visual basic for applications
   * 瀏覽器的 javascript
-  * 但有時仍可以用通用程式語言溝通
+  * 但有時仍可以用通用程式語言溝通，如 libre office libuno
+
+---
+
+## 以改檔名為例
+* 看似簡單的操作
+* 但現成的批次重命名工具功能有限
+* 直接用程式語言實作太麻煩
+* 用 shell 是最有效的方法
+
+----
+
+### gnss 觀測數據命名格式
+* NCTU0100.19o：站名、一年中的日數、0、西元年、o
+* NCTU201901100.rnx：站名、年月日、0、rnx
+
+----
+
+### 批次工具
+* 有完整 regexp 就很了不起了
+* 但很多時候還需要改大小寫、條件判斷、數字運算，不是單純字串代換能處理的。
+* ~excel~
+
+----
+
+### 寫一個 python
+* 要 import 套件
+* 如何讀取檔名？ `os.listdir()`
+* 如何改檔名？
+* 要處理文字、數字轉換
+* 每轉換一個資料夾，就寫一次腳本？還不能重用？
+
+----
+
+### 直接用 python 輸出 shell 指令
+* 不用想怎麼在 python 中執行指令。
+* 直接 print 出指令，用貼上的或 pipe 給 shell。
+
+```python
+print('mv', oldname, newname)
+```
+
+----
+
+### 剪下貼上 shell 輸出
+有時候，直接把 ls 的輸出複製到檔案，
+再用 regexp 改成一堆 mv 還比較快。
+
+```sh
+ls | vi -
+# in vi
+# :%s/\(.*\).html/mv \1.html \1.htm/
+# :%!sh
+```
+
+----
+
+### 直接用 shell 解決
+
+```sh
+# rename Trim201904010000.rnx to NCTU0910.19o
+for file in *
+do
+    old_format=$(date -d $(echo $file | substr 4 12) +"NCTU%03j0.%02y")
+    echo mv $file $old_format
+    mv $file $old_format
+done
+```
+
+----
+
+### shell 的優勢
+* 自動補全、萬用字元、REPL 可以即時看到結果。
+* 加個 echo 先確認會跑出什麼東西。
+* 極適合寫這種一次性用完即丟的程式。
+* bash 的歷史記錄可以讓你翻出不久前打過的命令，稍作修改就能重用。
+
+----
+
+### 其它程式語言
+* 每次寫這種東西都要先匯入類似的函式庫、寫一堆類似的 code。
+* 但又很難抽象化成可以重用的程式。
+* 留下一大堆不知道該不該刪的程式。
+* 擅常 one-liner 的語言：perl awk。
+
+---
+
+## glob 萬用字元
+* shell 會依據檔名展開某些特殊字元
+* `*`: 任意個任意字元
+* `?`: 一個任意字元
+* `[a-ez0-9]`: 一個範圍內的字元
+
+----
+
+### 萬用字元用例
+
+```
+mv * ../backup/
+rename 's/.tar.gz$/.tgz/' *.tar.gz
+
+# match filename longer then n word
+for zip in ??????????????????????????*.zip
+```
 
 ---
 
@@ -799,6 +969,15 @@ execlp("zip", "-u", "homework.zip", "code.c");
 
 ----
 
+### xmessage
+```sh
+if xmessage -buttons yes:0,no:2 'do you want to clean trash can?'
+then gio trash --empty
+fi
+```
+
+----
+
 ### zenity
 
 ```sh
@@ -810,12 +989,19 @@ then
 fi
 ```
 
+----
+
+## 其它 x window 好用工具
+* xdotool: 用來摸擬滑鼠點擊、鍵盤事件的命令。
+* wmctrl: 用來控制視窗放大縮小。
+* xprop: 比較底層，用來查詢各視窗的屬性、控制的程序。
+
 ---
 
 ## 結論
-* 社課很短，能講的東西有限。
-* 希望大家有接收到我想傳達的訊息。
 * shell 是一門 **實際** 且 *能與所學結合* 的語言。
+* 社課很短，能講的東西有限。
+* 希望我的表達能力正常無礙。
 
 ----
 
@@ -854,76 +1040,7 @@ done
   完全理解 bash 的功能，了解不同語法間的細微差異。
 * [考驗對 shell 常指令的理解](http://cmdchallanges.com) 。
 
----
 
-## 以下待加入草稿
-
----
-
-## xpath 三兄弟
-
-```
-curl $url | tidy -asxml -q | xpath -e '//img' -
-```
-
----
-
-## 改檔名
-* 看似簡單的操作
-* 但現成的批次重命名工具功能有限
-* 直接用程式語言實作太複雜
-* 用 shell 是最有效的方法
-
-----
-
-### 批次工具
-* 有 regexp 就很了不起了
-* 但很多時候還需要改大小寫、條件判斷、數字運算
-
-----
-
-### 寫一個 python
-* 要 import 套件
-* 如何讀取檔名？
-  * 最快 `system('ls')` 
-  * `fs.readDir()`
-* 要處理文字、數字轉換
-* 每轉換一個資料夾，就寫一次腳本？還不能重用？
-
-----
-
-### 直接用 python 輸出 shell 指令
-* 不用想怎麼在 python 中執行指令。
-* 直接 print 出指令，用貼上的或 pipe 給 shell。
-
-----
-
-### 剪下貼上 shell 輸出
-有時候，直接把 ls 的輸出複製到檔案，
-再用 regexp 改成一堆 mv 還比較快。
-
-----
-
-### 直接用 shell 解決
-
-```sh
-# rename Trim201904010000.rnx to NCTU0910.19o
-for file in *
-do
-    old_format=$(date -d $(echo $file | substr 4 12) +"NCTU%03j0.%02y")
-    mv $file $old_format
-done
-```
-
----
-
-### 輸出到標準輸出
-`wget -O - $url`
-
-----
-
-### 萬用字元
-`mv * ../backup/`
 
 #linux
 #slide

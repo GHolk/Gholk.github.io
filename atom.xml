@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-10-03T15:43:27.625Z</updated>
+  <updated>2019-10-27T06:30:10.559Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,595 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/image-processing-6-free-style.html</id>
+<title>影像處理作業一：自由影像最佳化</title>
+<published>2019-10-26T14:44:28.683Z</published>
+<updated>2019-10-27T06:30:10.537Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/image-processing-6-free-style.html"/>
+<summary type="html">影像處理作業一，以指定的程式語言，
+自行實作處理影像的演算法，讓影像在視覺上觀感較佳。
+作業提供六張影像，視覺上各有不同的缺陷，
+例如過亮、過暗、對比過大等。
+經不同處理後，成為視覺上較佳的影像。</summary>
+<category term="nctu"/>
+<category term="report"/>
+<category term="study"/>
+<category term="python"/>
+<category term="computer"/>
+<content type="html">&lt;h1 id=&quot;影像處理作業一：自由影像最佳化&quot;&gt;影像處理作業一：自由影像最佳化&lt;/h1&gt;
+&lt;p&gt;影像處理作業一，以指定的程式語言，
+自行實作處理影像的演算法，讓影像在視覺上觀感較佳。
+作業提供六張影像，視覺上各有不同的缺陷，
+例如過亮、過暗、對比過大等。
+經不同處理後，成為視覺上較佳的影像。&lt;/p&gt;
+&lt;h2 id=&quot;程式&quot;&gt;程式&lt;/h2&gt;
+&lt;p&gt;程式語言課程提供 c matlab python 三種選項，
+我擅長的語言為 javascript，
+故使用較接近 javascript 語法的 python。&lt;/p&gt;
+&lt;h3 id=&quot;程式風格&quot;&gt;程式風格&lt;/h3&gt;
+&lt;p&gt;在影像格式的讀取與寫入，我使用
+&lt;abbr title=&quot;python image library&quot;&gt;PIL&lt;/abbr&gt; ，
+根據作業規定，只能使用基礎的讀取對應位置像素的函數；
+我主要使用到根據二維 x y 座標
+讀取對應位置像素的 &lt;code&gt;self.getpixel((x,y))&lt;/code&gt; ，
+與更改像素的 &lt;code&gt;self.putpixel((x,y), (r,g,b))&lt;/code&gt; ，
+並在更改影像前會使用到 &lt;code&gt;self.copy()&lt;/code&gt; 複製。
+此外還在這些函數上包裝了一些函數，
+達成 for each 或 map 的功能。&lt;/p&gt;
+&lt;p&gt;在程式撰寫上，因為我不想花太多時間，所以有前後不致的情況。
+有時會直接複製一大段函數；
+有時覺得這樣太噁心，就把重復的邏輯抽取出來，
+但既有的程式就懶得用抽取後的邏輯重寫了。
+到後面覺得每次都要處理 rgb 很煩，就引用 numpy 處理；
+但前面既有的程式也懶得用 numpy 重寫。&lt;/p&gt;
+&lt;h3 id=&quot;效率&quot;&gt;效率&lt;/h3&gt;
+&lt;p&gt;我程式的執行效率也很差，
+因為我不打算在這次作業的效率上作功夫。
+畢竟課程也還沒教到如何加速處理的演算法細節。
+各種處理中，最快可能是 gamma 或 linear 之類的單純修正。
+最慢的是 filter 系列的，因為每個 pixel 都要先遍歷四周的 pixel，
+如果把 window 放大到 5x5 好像要跑到二分鐘左右。&lt;/p&gt;
+&lt;h3 id=&quot;直方圖均化&quot;&gt;直方圖均化&lt;/h3&gt;
+&lt;p&gt;&lt;abbr title=&quot;histogram equalization&quot;&gt;直方圖均化&lt;/abbr&gt;
+是可以全自動化平均分配整張影像亮度的演算法。
+優點是全自動化，不需要調整參數。
+多數情況下，直方圖均化的結果可以最大化徵顯影像亮度，
+但其調整結果不一定適合人眼判讀。&lt;/p&gt;
+&lt;p&gt;在本次作業中，我對彩色影像實作的直方圖均化，
+是自可見光三個波段合併計算一個亮度，
+而不是三個波段分別進行直方圖均化。
+再依亮度的統計結果，計算預期亮度與現在亮度的比率，
+將三個波段都乘上這個比率，得到改正後的彩色影像。&lt;/p&gt;
+&lt;h3 id=&quot;gamma-correction&quot;&gt;gamma correction&lt;/h3&gt;
+&lt;p&gt;gamma correction 是用指數函數調整亮度的演算法。
+我一開始認為彩色影像裡，一個 pixel 應該要視為一個整體，
+調整亮度時應該要三個波段一起調整；
+所以最初實作的 &lt;code&gt;gammac&lt;/code&gt; 是把三個波段合併計算一個亮度，
+再依計算的亮度調整 r g b 三個波段的強度。&lt;/p&gt;
+&lt;p&gt;但後來和同學討論後，發現三個波段分開進行 gamma correction 的效果較好。
+我後來了解到 gamma correction 就算分開做，
+在不同波段的修正也會一致。
+不像直方圖均化，不同波段的統計結果不同的話，
+不同波段會套用不同的修正，使顏色改變。
+所以實作了 &lt;code&gt;gamma&lt;/code&gt; 分開修正的版本。&lt;/p&gt;
+&lt;h3 id=&quot;不模糊的-filter&quot;&gt;不模糊的 filter&lt;/h3&gt;
+&lt;p&gt;簡單的 filter 很好做，median 或 mean filter 我很快就寫出來了，
+在像 unsharpenning 時也必須用到這種 &lt;em&gt;會造成模糊&lt;/em&gt; 的 filter。
+但在要單純去雜訊時，這種 filter 會把整張影像變模糊。
+因此才有 adaptive filter 或 bilateral 的做法。&lt;/p&gt;
+&lt;p&gt;我有做出 bilateral，但沒有做 adaptive filter。
+bilateral 我是直接用整張影像的標準差當權的基準，
+但 adaptive filter，我不確定怎麼選取門檻較佳，
+好像不能直接拿整張影像的標準差。&lt;/p&gt;
+&lt;h3 id=&quot;bilateral-filter&quot;&gt;bilateral filter&lt;/h3&gt;
+&lt;p&gt;我實作 bilateral filter 時，發現用距離當權沒什麼用，
+單純用像素的差異當權效果就很好了，
+所以後來我把距離當權的部份刪掉了。&lt;/p&gt;
+&lt;p&gt;另外因為除了電腦斷層是黑白影像，其它都是彩色影像，
+在決定彩像影像如何決定二個像素的差異上，我實作了二種策略。
+一種是 &lt;code&gt;lweight&lt;/code&gt; ，把彩色計算出亮度，用亮度差異當權；
+另一種是 &lt;code&gt;cweight&lt;/code&gt; ，把 rgb 當作三維向量，
+計算二個向量相減後的向量的長度。&lt;/p&gt;
+&lt;p&gt;因為使用上我覺得 cweight 基於向量的作法較正確，
+所以基本上都是用 cweight，
+但也沒有詳細比較二者的差異。&lt;/p&gt;
+&lt;h3 id=&quot;結合不同的處理手法&quot;&gt;結合不同的處理手法&lt;/h3&gt;
+&lt;p&gt;我一開始不太想引入 python module，
+因為不太想花時間多學一種模組系統。
+（雖然現在學會了，才發現超簡單，根本不用學。）
+所以我是把程式對外的介面放在命令列介面，
+傳入不同的參數，就執行不同處理。
+如果要一個處理後再接另一個，就執行二次就好。
+（因為我蠻習慣使用 linux 的 shell 的，
+所以就把控制邏輯做在參數介面。
+至於要重新啟動一次 python 直譯器的問題，
+反正我程式跑很慢，重復解析程式的時間相對微不足道。）&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;python3 prog1.py histogram 1.0 p1im1.bmp p1im1_histogram.bmp
+python3 prog1.py gamma 0.6 p1im1_histogram.bmp p1im1_histogram_gamma.bmp
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;後來因為嘗試多種不同組合，跑得很煩，
+就加一個功能是可以把多個濾鏡串在參數結尾一起，
+變成都一行解決。
+但這樣參數變得很醜，語法上不統一。
+本來想寫好看一點，但後來想想算了，
+反正影像都處理完了，實際也沒用到這功能幾次，
+之後也不會再用這支程式。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;python3 prog1.py histogram 1.0 p1im1.bmp p1im1_histogram_gamma.bmp gamma 0.6
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;而且我沒有處理什麼時候要釋放記憶體的問題，
+如果串太多個可能會消耗很多記憶體。&lt;/p&gt;
+&lt;h2 id=&quot;各張影像的處理&quot;&gt;各張影像的處理&lt;/h2&gt;
+&lt;p&gt;作業共有六張影像，可以使用任意方式作增強，
+除了最後一張電腦斷層影像不可以更改亮度對比，
+只能做過濾或去雜訊處理。&lt;/p&gt;
+&lt;h3 id=&quot;過暗的樹林&quot;&gt;過暗的樹林&lt;/h3&gt;
+&lt;p&gt;這張影像明顯的問題是大部份區域過暗，
+但又有小部份亮度還算正常，調亮時不注意就會過亮。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48928708222&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48928708222_1bc00d9543.jpg&quot; alt=&quot;p1im1.bmp&quot; title=&quot;題目影像：過暗的樹林&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;我一開始直覺使用 直方圖均化平均分配亮度，
+結果雖然大部份區域的亮度尚可，但有不少較亮的區域過亮。
+且如同上課介紹的，histogram equalization 的處理
+雖然全自動化且有一定水準，但結果並不適合人眼直接判讀。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48928708452&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48928708452_cc79fb9e10.jpg&quot; alt=&quot;p1im1_hist.bmp&quot; title=&quot;使用直方圖均化過暗的樹林結果&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;後來實作了 gamma correction 後，
+發現效果在亮處還可以，但在暗處有些不自然。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48928515846&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48928515846_22ba0555b1.jpg&quot; alt=&quot;p1im1_gamma.bmp&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;最後我認為，單用 gamma correction 不佳，
+是因為用單一一條曲線套用到整張影像，
+應該要在多種不同亮度區間套用不同對比，
+所以要有複雜一點的曲線，
+於是加了 piecewise linear 的曲線功能。
+實作完功能後，還需要曲線的詳細參數，
+於是使用修圖軟體 gimp 的亮度映射曲線功能，
+互動式的調整出一條顯示效果最佳的曲線，
+再將曲線的線性近似參數輸入進程式裡。&lt;/p&gt;
+&lt;p&gt;piecewise linear 的曲線參數為數個點，
+使用上是從執行參數將離散點的座標傳入。
+如由 gimp 調整出來的曲線，近似成六個離散點，
+呼叫時參數寫成如下指令：
+&lt;code&gt;python3 prog1_test.py linear &amp;apos;0,0;0.255,0.69;0.286,0.749;0.322,0.796;0.373,0.827;1,0.92&amp;apos; p1im1.bmp p1im1_linear.png&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48933684781&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48933684781_6e6039acd2.jpg&quot; alt=&quot;piecewise_linear_line.png&quot; title=&quot;piecewise linear 的亮度映射曲線&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48928708582&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48928708582_e9647c832c.jpg&quot; alt=&quot;p1im1_linear.bmp&quot; title=&quot;以 piecewise linear 近似修圖軟體調整出的曲線的結果&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;後來發現是我實作 gamma correction 的方式錯誤，
+一開始我的 gamma correction 是把 rbg 三個波段算一個亮度，
+再以指數函數計算出調整後的亮度後，
+依比例調整三個波段，來修正亮度。
+但後來和同學討論後，發現直接三個波段分別修正的結果較佳，
+所以也改成分開的做法。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48941265301&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48941265301_9b3a441fc8.jpg&quot; alt=&quot;p1im1_gamma_s.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;我調整的 gamma 是 0.64： &lt;code&gt;python3 p1im1_test.py gamma 0.67 p1im1.bmp p1im1_gamma_s.png&lt;/code&gt; ，
+調整的結果雖然不如 piecewise linear，
+色調上較單調，但已經可以接受&lt;/p&gt;
+&lt;h3 id=&quot;過亮的岩壁&quot;&gt;過亮的岩壁&lt;/h3&gt;
+&lt;p&gt;這張影像則是整體過亮，像是過曝。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48928516491&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48928516491_440e135889.jpg&quot; alt=&quot;p1im2.bmp&quot; title=&quot;過亮的岩壁&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;我試了直方圖均化和 gamma correction。
+直方圖均化後整張影像過暗，
+我猜是因為拍攝物體本來就整體偏亮。
+gamma correction 效果尚可，但沒有很好，
+但也沒有試更好做法了。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48928709117&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48928709117_a6f6a535a2.jpg&quot; alt=&quot;p1im2_gamma.bmp&quot; title=&quot;gamma correction 後的岩壁&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;後來改成分離波段做 gamma correction 後，
+圖像的品質好很多了，不會讓綠色的植物一調整就變成黑色，
+岩石的顏色也變明顯。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48940753348&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48940753348_15e59a7f74.jpg&quot; alt=&quot;p1im2_gamma_s.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;天黑後的街景與路燈&quot;&gt;天黑後的街景與路燈&lt;/h3&gt;
+&lt;p&gt;這張照片就是普通手機夜拍時的典型結果，
+雖然照片是天還沒全黑時拍的，但結果差不多。
+整體因為燈光不足，在暗處的景物都很不明顯，
+而路燈等光源又過亮形成光芒，遮蓋住周圍的景物。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48962068153&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48962068153_6af93c17df.jpg&quot; alt=&quot;p1im3.bmp&quot; title=&quot;天黑後的街景與路燈&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;直方圖均化的結果，雖然景物清楚了，
+但由於在低光源下拍攝，整體雜訊很重。
+在直方圖均化後，整體會變得不像夜景，完全不自然。&lt;/p&gt;
+&lt;p&gt;使用 gamma 調整亮度的效果較好，
+只是暗處不明顯的雜訊仍會被放大，
+出現彩色的花紋；天空也出現明顯的雜訊。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48962800897&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48962800897_2b63c941c3.jpg&quot; alt=&quot;p1im3_gamma_s.png&quot; title=&quot;gamma 0.67 的高度調整&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;我嘗試使用 filter，但我實作的 filter
+都無法很好的保留邊緣，所以都會變模糊，後來決定不採用。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48962621086&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48962621086_e6d4e9567c.jpg&quot; alt=&quot;p1im3_gcweight1.png&quot; title=&quot;使用 bilateral filter 仍會稍微模糊&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;模糊的告示牌&quot;&gt;模糊的告示牌&lt;/h3&gt;
+&lt;p&gt;我實做了 unsharpenning 和 laplacian sharpenning，
+我認為 laplacian sharpening 的效果較好。
+（也許 unsharpenning 把倍數調高就會好一點？）
+本來想再用 filter 把 sharpening 後多出的雜訊濾掉，
+但濾了 sharpen 的效果幾乎都被消掉了。
+主因是我沒做 adaptive filter，
+而 bilateral 雖然用權控制了，但多少還是會變模糊。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48962220848&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48962220848_894a329428.jpg&quot; alt=&quot;p1im4_lsharpen.bmp&quot; title=&quot;用 laplacian sharpenning 銳化的告示牌&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;霧霾中的城市&quot;&gt;霧霾中的城市&lt;/h3&gt;
+&lt;p&gt;這是一張灰灰的城市照片，像是在霾害的天氣拍的，
+較不像霧，一般霧會更重一點，這比較像空氣不好或霾。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48966080126&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48966080126_5c78b10367.jpg&quot; alt=&quot;p1im5.bmp&quot; title=&quot;霧霾中的城市&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;一開始不知道怎麼消除霧，
+google 後查到可以用直方圖均化，蠻意外還真得有效。
+但消除霧後，整張影像的彩度變得很低，也大半變的太暗，
+就再用 gamma 調整一次。&lt;/p&gt;
+&lt;p&gt;但用 gamma 調整時，若是 rgb 三個波段分開做，彩度還是很低；
+但如果是基於整體的亮度調整，彩度就會變高一點，也比較好看，
+雖然影像整體會有點藍藍的，但還是比灰灰的好。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48965534298&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48965534298_997163858c.jpg&quot; alt=&quot;p1im5_hgs.png&quot; title=&quot;直方圖均化後，各波段分開做 gamma 改正&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48965534463&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48965534463_e493527e3a.jpg&quot; alt=&quot;p1im5_hg.png&quot; title=&quot;直方圖均化後，全波段在亮度上一起做 gamma 改正&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;用 histogram 調整後，天空會出現很多顆粒狀的雜訊，
+有試著用 filter 修掉，但我 filter 寫得太爛，
+效果不太好，就不修正了。&lt;/p&gt;
+&lt;h3 id=&quot;電腦斷層影像&quot;&gt;電腦斷層影像&lt;/h3&gt;
+&lt;p&gt;這張作業限定只能做去雜訊，不能調整強度，
+因為電腦斷層的影像中，強度是有物理意義的。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48965582613&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48965582613_240ab71626.jpg&quot; alt=&quot;p1im6.bmp&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;我用 bilateral filter 處理，效果還可以。
+但因為多少會變模糊，我還是不喜歡把雜訊濾掉。
+（也可能是單純我濾鏡寫太爛。）&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48966308882&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48966308882_314b47a3f5.jpg&quot; alt=&quot;p1im6_cweight.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;hr class=&quot;break-page-symbol&quot;&gt;
+
+&lt;h2 id=&quot;程式原始碼&quot;&gt;程式原始碼&lt;/h2&gt;
+&lt;style&gt;
+.break-page-symbol {
+  visibility: hidden;
+  page-break-after: always;
+  margin: 0;
+  padding: 0;
+}
+:this + pre &gt; code {
+  font-size: 80%;
+  line-height: normal;
+}
+&lt;/style&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;#!/usr/bin/env python3
+import sys
+help_text = &amp;apos;&amp;apos;&amp;apos;\
+## intensity
+# histogram equalization with scale, 1 mean fully adapt equalization correction
+{main} histogram 0.8 from.bmp to.bmp
+{main} gamma 0.5 from.bmp to.bmp # gamma correction band separately
+{main} gammac 0.5 from.bmp to.bmp # gamma correction base on light
+{main} linear &amp;apos;0,0;0.3,0.7;0.6,0.8;1,0.9&amp;apos; from.bmp to.bmp # arbitrary segment 
+{main} lambda &amp;apos;x: 1.5*x^0.2&amp;apos; from.bmp to.bmp # python lambda expression
+
+## filter
+# number is the radius of filter
+{main} mean 1 from.bmp to.bmp # median filter
+{main} median 2 from.bmp to.bmp # median filter
+{main} lweight 3 from.bmp to.bmp # filter weight with intensity difference
+{main} cweight 3 from.bmp to.bmp # filter weight with color difference
+
+## sharpen
+{main} lsharpen from.bmp to.bmp # laplacian sharpening
+{main} unsharpen 1.2 mean 2 from.bmp to.bmp
+{main} unsharpen 2.1 median 2 from.bmp to.bmp
+
+## help
+{main} help # show this help
+&amp;apos;&amp;apos;&amp;apos;.format(main = sys.argv[0])
+
+import PIL.Image
+import numpy
+
+def rgb_to_light(rgb):
+    (r,g,b) = rgb
+    return (r+g+b) / 3
+
+def rgb_multiply(rgb, ratio):
+    rgb_list = [round(x * ratio) for x in rgb]
+    return tuple(rgb_list)
+
+
+def for_each_pixel(f, image):
+    (width, height) = image.size
+    for y in range(0, height):
+        for x in range(0, width):
+            index = (x,y)
+            rgb = image.getpixel(index)
+            f(rgb, index, image)
+
+def map_image(f, image):
+    copy = image.copy()
+    for_each_pixel(
+        lambda rgb, xy, image: copy.putpixel(xy, f(rgb,xy,image)),
+        image
+    )
+    return copy
+
+def compute_histogram_from_image(image):
+    (width, height) = image.size
+    histogram = [0] * 256
+    for y in range(0, height):
+        for x in range(0, width):
+            rgb = image.getpixel((x,y))
+            light = rgb_to_light(rgb)
+            histogram[round(light)] += 1
+    return histogram
+
+def compute_position_in_histogram(light, histogram, sum):
+    darker_count = 0
+    light_int = round(light)
+    for i in range(0, light_int):
+        darker_count += histogram[i]
+    darker_count += histogram[light_int] / 2
+    return darker_count / sum
+
+def histogram_equalize(image, scale=1):
+    histogram = compute_histogram_from_image(image)
+    size = sum(histogram)
+    copy = image.copy()
+
+    def set_new_light_ratio(rgb, index, image):
+        light = rgb_to_light(rgb)
+        position = compute_position_in_histogram(light, histogram, size)
+        # ratio = position / (light / 255)
+        # new_rgb = tuple(round(x * ratio) for x in rgb)
+        change_ratio = (position - light / 255) / (light / 255) * scale
+        new_rgb = tuple(round(x * (1+change_ratio)) for x in rgb)
+        copy.putpixel(index, new_rgb)
+
+    for_each_pixel(set_new_light_ratio, image)
+    return copy
+
+def gamma_correction(image, gamma, combine=False):
+    def gamma_function(x):
+        return x**gamma
+    def power_rgb(rgb, index, image): # correct separately
+        return tuple(round(gamma_function(x/255)*255) for x in rgb)
+
+    def scale_rgb(rgb, index, image): # correct base on light
+        light_ratio = rgb_to_light(rgb) / 255
+        if light_ratio == 0:
+            scale = 0
+        else:
+            scale = gamma_function(light_ratio) / light_ratio
+        return rgb_multiply(rgb, scale)
+
+    if combine:
+        return map_image(scale_rgb, image)
+    else:
+        return map_image(power_rgb, image)
+
+def linear_correction(image, points):
+    def linear_function(source):
+        for p in points:
+            if source &amp;gt;= p[0]:
+                segment_start = p
+            else:
+                segment_end = p
+                break
+        dx = (segment_start[0] - segment_end[0])
+        dy = (segment_start[1] - segment_end[1])
+        return segment_start[1] + (source - segment_start[0]) * (dy/dx)
+    def scale_rgb(rgb, index, image):
+        light_ratio = rgb_to_light(rgb) / 255
+        if light_ratio == 0:
+            scale = 1
+        else:
+            scale = linear_function(light_ratio) / light_ratio
+        return rgb_multiply(rgb, scale)
+
+    return map_image(scale_rgb, image)
+
+def lambda_correction(image, f):
+    def scale_rgb(rgb, index, image):
+        light_ratio = rgb_to_light(rgb) / 255
+        if light_ratio == 0:
+            scale = 1
+        else:
+            scale = f(light_ratio) / light_ratio
+        return rgb_multiply(rgb, scale)
+    return map_image(scale_rgb, image)
+
+def getpixel_safe(image, index):
+    &amp;apos;&amp;apos;&amp;apos;
+    get pixel at index (x,y).
+    if index out of image size,
+    image will reflect on boundary,
+    and the pixel on reflection will be return.
+    &amp;apos;&amp;apos;&amp;apos;
+    (x, y) = index
+    (width, height) = image.size
+
+    # repeat border then reflect
+    if (x &amp;lt; 0): x = -x - 1
+    elif (x &amp;gt;= width): x = width - (x-width) - 1
+
+    if (y &amp;lt; 0): y = -y - 1
+    elif (y &amp;gt;= height): y = height - (y-height) - 1
+
+    try:
+        return image.getpixel((x,y))
+    except IndexError:
+        print(&amp;apos;cannot get pixel&amp;apos;, index, &amp;apos;as&amp;apos;, (x,y), &amp;apos;in size&amp;apos;, image.size)
+        raise IndexError
+
+def list_around(image, index, radius):
+    l = []
+    for offset_x in range(-radius, radius+1):
+        for offset_y in range(-radius, radius+1):
+            around_index = (offset_x + index[0], offset_y + index[1])
+            l.append((getpixel_safe(image, around_index), (offset_x, offset_y)))
+    return l
+
+def median_filter(center, index, image, radius):
+    all_rgb = [[], [], []]
+    for (around_rgb, xy) in list_around(image, index, radius):
+        for i in range(3):
+            all_rgb[i].append(around_rgb[i])
+    for i in range(3):
+        all_rgb[i].sort()
+
+    count = (radius*2 + 1) ** 2
+    half = int(count / 2)
+    return tuple(gl[half] for gl in all_rgb)
+
+def mean_filter(center, index, image, radius):
+    all_rgb = [0] * 3
+    for (around_rgb, xy) in list_around(image, index, radius):
+        for i in range(3):
+            all_rgb[i] += around_rgb[i]
+
+    count = (radius*2 + 1) ** 2
+    return tuple(g / count for g in all_rgb)
+
+def lweight_filter(center, index, image, radius, stdev):
+    all_rgb = [0] * 3
+    e = 2
+    weight_sum = 0
+    for (around_rgb, xy) in list_around(image, index, radius):
+        light_diff = rgb_to_light(around_rgb) - rgb_to_light(center)
+        weight = e ** -((light_diff / stdev) ** 2)
+        weight_sum += weight
+        for i in range(3):
+            all_rgb[i] += weight * around_rgb[i]
+
+    return tuple(round(g / weight_sum) for g in all_rgb)
+
+def color_diff(a, b):
+    square_sum = 0
+    for i in range(3):
+        square_sum += (a[i] - b[i]) ** 2
+    return (square_sum / 2) ** 0.5
+
+def cweight_filter(center, index, image, radius, stdev):
+    all_rgb = [0] * 3
+    e = 2
+    weight_sum = 0
+    for (around_rgb, xy) in list_around(image, index, radius):
+        diff = color_diff(around_rgb, center)
+        weight = e ** -((diff / stdev) ** 2)
+        # light_ratio = diff / stdev
+        # distance_ratio = numpy.linalg.norm(xy) / 0.42666038
+        # weight = e ** -(light_ratio ** 2 + distance_ratio ** 2)
+        weight_sum += weight
+        for i in range(3):
+            all_rgb[i] += weight * around_rgb[i]
+
+    return tuple(round(g / weight_sum) for g in all_rgb)
+
+
+def filter_correction(image, f, **keyword):
+    copy = image.copy()
+    def average_from_round(rgb, index, image):
+        copy.putpixel(index, f(rgb, index, image, **keyword))
+
+    for_each_pixel(average_from_round, image)
+    return copy
+
+def compute_stdev(image):
+    light_list = []
+    def collect_light(rgb, index, image):
+        light_list.append(rgb_to_light(rgb))
+    for_each_pixel(collect_light, image)
+    mean = float(numpy.mean(light_list))
+    stdev = float(numpy.std(light_list))
+    return (mean, stdev)
+
+def getpixel_vector_safe(image, index):
+    return numpy.array(getpixel_safe(image, index))
+
+def laplacian_filter(rgb, index, image):
+    (x,y) = index
+    pixel = lambda x,y: getpixel_vector_safe(image, (x,y))
+    ddx = (pixel(x+1,y) - pixel(x,y)) - (pixel(x,y) - pixel(x-1,y))
+    ddy = (pixel(x,y+1) - pixel(x,y)) - (pixel(x,y) - pixel(x,y-1))
+    return -(ddx + ddy)
+
+def unsharpen_filter(rgb, index, image, radius, scale, blur_function):
+    filter_correction = blur_function(rgb, index, image, radius)
+    unsharp_correction = (-scale * (numpy.array(filter_correction) - rgb))
+    return unsharp_correction.astype(int)
+
+def sharpen_correction(image, f, **keyword):
+    copy = image.copy()
+    def apply_filter(rgb, index, image):
+        result = rgb + f(rgb, index, image, **keyword)
+        # return value should be int iteratable
+        copy.putpixel(index, tuple(result))
+    for_each_pixel(apply_filter, image)
+    return copy
+
+def execute_argv(argv, image=None, output_file=None):
+    if len(argv) &amp;gt;= 1:
+        action = argv[0]
+        argv = argv[1:]
+    else:
+        action = None
+
+    if action == &amp;apos;histogram&amp;apos;:
+        scale = float(argv[0])
+        argv = argv[1:]
+        main_function = lambda image: histogram_equalize(image, scale)
+    elif action[:5] == &amp;apos;gamma&amp;apos;:
+        gamma = float(argv[0])
+        argv = argv[1:]
+        if action == &amp;apos;gamma&amp;apos;:
+            main_function = lambda image: gamma_correction(image, gamma)
+        else: # gammac
+            def main_function(image):
+                return gamma_correction(image, gamma, combine=True)
+    elif action == &amp;apos;linear&amp;apos;:
+        line_string = argv[0]
+        argv = argv[1:]
+        line = []
+        for point_string in line_string.split(&amp;apos;;&amp;apos;):
+            point = [float(x) for x in point_string.split(&amp;apos;,&amp;apos;)]
+            line.append(tuple(point))
+        main_function = lambda image: linear_correction(image, line)
+    elif action == &amp;apos;lambda&amp;apos;:
+        f = eval(&amp;apos;lambda &amp;apos; + argv[0])
+        argv = argv[1:]
+        main_function = lambda image: lambda_correction(image, f)
+    elif action == &amp;apos;laplacian&amp;apos;:
+        f = laplacian_filter
+        main_function = lambda image: filter_correction(image, f)
+    elif action in &amp;apos;lsharpen unsharpen&amp;apos;.split():
+        option = {}
+        if action == &amp;apos;unsharpen&amp;apos;:
+            f = unsharpen_filter
+            option[&amp;apos;scale&amp;apos;] = float(argv[0])
+            option[&amp;apos;blur_function&amp;apos;] = eval(argv[1] + &amp;apos;_filter&amp;apos;)
+            option[&amp;apos;radius&amp;apos;] = int(argv[2])
+            argv = argv[3:]
+        else:
+            f = laplacian_filter
+        main_function = lambda image: sharpen_correction(image, f, **option)
+    elif action in &amp;apos;mean median lweight cweight&amp;apos;.split():
+        radius = int(argv[0])
+        argv = argv[1:]
+        f = eval(action + &amp;apos;_filter&amp;apos;)
+        if action[1:] == &amp;apos;weight&amp;apos;:
+            def main_function(image):
+                (mean, stdev) = compute_stdev(image)
+                return filter_correction(image, f, radius=radius, stdev=stdev)
+        else:
+            def main_function(image):
+                return filter_correction(image, f, radius=radius)
+    elif action == &amp;apos;help&amp;apos;:
+        print(help_text)
+        exit(0)
+    else:
+        print(&amp;apos;unknown option:&amp;apos;, argv, &amp;apos;\n&amp;apos;)
+        print(help_text)
+        exit(1)
+
+    if not image:
+        file = argv[0]
+        image = PIL.Image.open(file)
+        output_file = argv[1]
+        argv = argv[2:]
+
+    output_image = main_function(image)
+    if len(argv) &amp;gt; 0:
+        execute_argv(argv, image=output_image, output_file=output_file)
+    else:
+        output_image.save(output_file)
+
+if __name__ == &amp;apos;__main__&amp;apos;: execute_argv(sys.argv[1:])
+&lt;/code&gt;&lt;/pre&gt;
+&lt;script src=&quot;ext/paper.js?execute&quot;&gt;&lt;/script&gt;
+
+&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/shell-script-concept-from-program.html#fix-some-small-errors</id>
 <title>在程式語言基礎上的 linux shell 指令教學</title>
 <published>2019-09-21T14:52:27.734Z</published>
@@ -4803,82 +5392,7 @@ add minus multiply divide 也不會比較好。
 <category term="geomatics"/>
 <category term="report"/>
 <category term="地震"/>
-<content type="html">&lt;h1 id=&quot;使用-snap-DInSAR-觀察地震後地表變型&quot;&gt;使用 snap DInSAR 觀察地震後地表變型&lt;/h1&gt;
-&lt;p&gt;這次是衛星大地測量作業八，
-要使用 snap 做 DInSAR，可以用來看地表變型。
-老師指派了幾個地震或山崩地區，
-我是被分配到 2018 年印尼蘇拉威西島的地震，
-可惜 DInSAR 結果不理想，在 unwrap 前只看得出雜訊。&lt;/p&gt;
-&lt;h2 id=&quot;DInSAR&quot;&gt;DInSAR&lt;/h2&gt;
-&lt;p&gt;DInSAR 是 SAR 技術的一種。
-SAR 是合成孔徑雷達，解析度較傳統雷達高；
-而 InSAR 是干涉雷達影像，保存有相位差，可以用來測距；
-DInSAR 就是干涉雷達影像的差分，
-也就是將二張干涉雷達相減，
-計算出每一點在視線方向的距離變化，看地表變型情形。&lt;/p&gt;
-&lt;h2 id=&quot;sentinel-1&quot;&gt;sentinel-1&lt;/h2&gt;
-&lt;p&gt;sentinel 是歐盟發射的一系列地表監測衛星，
-其中 sentinel-1 是 SAR 影像的衛星，
-&lt;a href=&quot;https://scihub.copernicus.eu/dhus/#/home&quot; title=&quot;提供 sentinel-1 影像的 esa 網站&quot;&gt;其拍攝的 SAR 影像公開在網路上供自由使用。&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;本次作業我的主題是 2018-09-28 發生在印尼蘇拉威西的地震，
-地震之後引發了海嘯，也造成了不少的傷亡。
-sentinel-1 在 10 月初有數張影像，
-但震前最近一張是在 06-07 的降軌；所以配合震前，
-震後最近一張我選擇了 10-05 的降軌影像。
-但震前的影像和地震差了將近四個月，
-所以結果可能不會太好。&lt;/p&gt;
-&lt;p&gt;而且 10-05 與 06-07 的影像範圍稍有不同，
-10-05 的影像範圍是整個地峽，
-但 06-06 的影像把地峽分為上下二張，
-所以我總共下載了三張影像，做了二次的 DInSAR。&lt;/p&gt;
-&lt;h2 id=&quot;snap&quot;&gt;snap&lt;/h2&gt;
-&lt;p&gt;snap 是 esa 出品的以 sentinel 系列
-衛星影像為目標的遙測影像分析軟體。
-在本次作業中，我們使用 snap 來做 DInSAR。&lt;/p&gt;
-&lt;p&gt;我的 DInSAR 成果如下：&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48130070253&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48130070253_6642572230.jpg&quot; alt=&quot;Pictures/bad-dinsar.png&quot; title=&quot;作業中震源地峽南北二部份的 dinsar 結果&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;結果極差，完全看不出紋理，只看得出雜訊。&lt;/p&gt;
-&lt;h2 id=&quot;文獻回顧&quot;&gt;文獻回顧&lt;/h2&gt;
-&lt;p&gt;有找到二篇有關 sentinel 與蘇拉威西地震的文章。
-&lt;a href=&quot;https://doi.org/10.3390/rs11070886&quot; title=&quot;Multi-Source Data Fusion Based on Ensemble Learning for Rapid Building Damage Mapping during the 2018 Sulawesi Earthquake and Tsunami in Palu, Indonesia, 2019, Bruno Adriano; Junshi Xia ; Gerald Baier; Naoto Yokoya; Shunichi Koshimura&quot;&gt;一篇是影像融合搭配影像分類建立災損地圖的學術文章&lt;/a&gt; ，
-&lt;a href=&quot;https://emergency.copernicus.eu/mapping/ems/copernicus-ems-risk-and-recovery-mapping-ground-deformation-analyses-sulawesi-indonesia&quot; title=&quot;EMSN 061 - Ground deformation analyses, Sulawesi, Indonesia&quot;&gt;另一篇是用 DInSAR 分析蘇拉威西地震&lt;/a&gt; ，
-來源是歐盟的 copernicus emergency management service mapping。&lt;/p&gt;
-&lt;h3 id=&quot;Multi-Source-Data-Fusion-Based-on-Ensemble-Learning-for-Rapid-Building-Damage-Mapping-during-the-2018-Sulawesi-Earthquake-and-Tsunami-in-Palu,-Indonesia&quot;&gt;Multi-Source Data Fusion Based on Ensemble Learning for Rapid Building Damage Mapping during the 2018 Sulawesi Earthquake and Tsunami in Palu, Indonesia&lt;/h3&gt;
-&lt;p&gt;這篇文章是影像分類的，但是唯一一篇 sci-index 的文章。
-主要就是用地震前後災害造成的地表變遷
-造成的影像差異，自動判斷各地的災損情形；
-特別的是其中使用了多波段、多種影像來源，
-其中就包含了 sentinel-1 的 SAR 影像。
-但其中使用的 SAR 影像只使用了強度，
-並沒有用到相位或做干涉處理。&lt;/p&gt;
-&lt;h3 id=&quot;EMSN-061---Ground-deformation-analyses,-Sulawesi,-Indonesia&quot;&gt;EMSN 061 - Ground deformation analyses, Sulawesi, Indonesia&lt;/h3&gt;
-&lt;p&gt;這篇文章就和我的作業比較接近，雖然來源不太像一般的學術文章，
-但也是用 sentinel 和 snap 處理，
-使用了 DInSAR 與 PSInSAR 二種技術。&lt;/p&gt;
-&lt;p&gt;DInSAR 文章中使用了升軌與降軌二種，
-降軌與我的相同，是使用 06-07 10-05 的影像；
-但他還有使用升軌的 04-10 10-10 影像。
-二對的結果都與我的接近，幾乎看不出規則的變化，只有雜訊。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48130276378&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48130276378_7823c4f974.jpg&quot; alt=&quot;dinsar-ascending.png&quot; title=&quot;升軌的 dinsar&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48130251801&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48130251801_72e63f4e81.jpg&quot; alt=&quot;dinsar-descending.png&quot; title=&quot;降軌的 dinsar&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;文章中在 2.3.1 節推論原因是地震前後島中的基礎建設改變極大，
-造成大量的地表變化，使得震前震後的影像相關性低，
-無法 unwrap 解出地震造成的地表變型。
-並額外做了地震後短期間內的二張 sar 影像干涉，
-可以看出在同為震後的影像中，相關性就較高，
-驗證影像相關性低是由於地震前後基礎建設改變造成。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48130251921&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48130251921_196672455d.jpg&quot; alt=&quot;dinsar-post-post.png&quot; title=&quot;二張同為震後的 dinsar&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;文章後段 3.2.2 節使用了 PSInSAR 分析地表變形，
-原理是從不同角度的影像中辨識出同一地物，
-就能從一個以上的視線方向，還原出三維方向上的移動。
-效果較 DInSAR 好，也有能看出此地震的移動方向主要是南北方向的平移。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/48130252096&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/48130252096_4cd47382b7.jpg&quot; alt=&quot;psinsar-north-motion.png&quot; title=&quot;psinsar 的南北方向位移結果&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
 
-&lt;script src=&quot;ext/paper.js?reference&quot;&gt;&lt;/script&gt;
-
-&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/ptt-article-id-decoder.html</id>
 <title>ptt 文章代碼解碼</title>

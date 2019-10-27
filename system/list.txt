@@ -292,3 +292,4 @@ moderate-symbol-abstraction-make-sence.html
 taiwoman.html
 javascript-async-debounce-atomic.html
 shell-script-concept-from-program.html
+image-processing-6-free-style.html

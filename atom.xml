@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-10-27T06:30:10.559Z</updated>
+  <updated>2019-10-30T16:12:37.181Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,161 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/linux-shell-script-for-windows-ssh.html</id>
+<title>以 linux shell 為基礎在 windows 中批次處理</title>
+<published>2019-10-30T16:04:16.086Z</published>
+<updated>2019-10-30T16:12:37.167Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/linux-shell-script-for-windows-ssh.html"/>
+<summary type="html">trimble 的 gnss 接收儀預設是記錄 trimble 的 T02 格式，
+要用 trimble 的 windows 程式 convertToRINEX 轉成 rinex 格式，
+只能開虛擬機或在另一台 windows 電腦上轉換。
+但檔案很多，於是研究了一下 convert to rinex 的命令列介面，
+運用 windows 10 開始內建的 ssh 功能傳檔案，
+再在 linux 上產生 bat 批次檔，完成一次跨系統合作演出。</summary>
+<category term="linux"/>
+<category term="windows"/>
+<category term="study"/>
+<category term="gnss"/>
+<category term="shell"/>
+<content type="html">&lt;h1 id=&quot;以-linux-shell-為基礎在-windows-中批次處理&quot;&gt;以 linux shell 為基礎在 windows 中批次處理&lt;/h1&gt;
+&lt;p&gt;trimble 的 gnss 接收儀預設是記錄 trimble 的 T02 格式，
+要用 trimble 的 windows 程式 convertToRINEX 轉成 rinex 格式，
+只能開虛擬機或在另一台 windows 電腦上轉換。
+但檔案很多，於是研究了一下 convert to rinex 的命令列介面，
+運用 windows 10 開始內建的 ssh 功能傳檔案，
+再在 linux 上產生 bat 批次檔，完成一次跨系統合作演出。&lt;/p&gt;
+&lt;p&gt;現在在管系館的 gnss 站，是 trimble 的接收儀，
+預設是記錄 trimble 的 t02 格式，
+要用 trimble 提供的程式 convertToRINEX
+才能轉換成通用的 rinex 格式。&lt;/p&gt;
+&lt;h2 id=&quot;convert-to-rinex&quot;&gt;convert to rinex&lt;/h2&gt;
+&lt;p&gt;convert to rinex 執行時可以有圖形介面，
+同時也可以用參數傳入檔名，單純在命令列處理。
+雖然圖形介面中，可以一次選取多個檔案，
+提供基本的批次處理功能。&lt;/p&gt;
+&lt;p&gt;但 convert to rinex 的處理速度實在太慢，
+一天長度周期一秒的 T02 檔案，要轉五分鐘。
+而且 convert to rinex 的圖形介面設計，
+是會先掃描完整個檔案，才能點下轉換鈕轉換；
+一個檔案大概掃 4 分鐘，轉換 1 分鐘。&lt;/p&gt;
+&lt;p&gt;選取多個檔案批次處理時，則是全部掃描完才會開始轉換。
+我不確定記憶體用量會不會隨檔案數增加，
+所以不敢一口氣轉全部。
+最後決定用命令列的介面，轉一次呼叫一次程式，
+也避免要一次把所有檔案傳到 windows 上，怕硬碟空間不足。&lt;/p&gt;
+&lt;h2 id=&quot;使用-sftp-在虛擬機與本機間傳送檔案&quot;&gt;使用 sftp 在虛擬機與本機間傳送檔案&lt;/h2&gt;
+&lt;p&gt;trimble 的程式 convertToRINEX 只提供 exe 格式，
+我試了在 wine 下執行，也裝了.NET 框架，
+但執行時還是會報錯。最後就放棄在 wine 下執行了。&lt;/p&gt;
+&lt;p&gt;但還是計劃要做，就決定開 qemu 虛擬機來轉。
+本來想弄個 9p 來共享虛擬機和本機的檔案，
+後來發現 9p 開起來只是虛擬機裡可以連上去，
+但虛擬機裡還是要有 9p 的客戶端才有用；
+windows 還是放棄吧。&lt;/p&gt;
+&lt;p&gt;本來在考慮 smb，但忽然想到 windows 10 內建 ssh 了，
+於是可以用 sftp 來傳。
+於是 batch 程式寫起來就像這樣：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bat&quot;&gt;scp user@10.0.2.2:data/2019-01-01.T02 .
+&amp;quot;C:\Program Files (x86)\Trimble\convertToRINEX\convertToRinex.exe&amp;quot; 2019-01-01.T02 -mo GHLK -v 2.11
+scp 2019-01-01.19o user@10.0.2.2:data
+del 2019-01-01.*
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;但有個問題，我不會寫 batch 迴圈。
+而且我不想一次下載全部的 t02 檔案，
+所以我想要下載一個，轉檔完傳回去，刪掉後再換下一個。
+可是這樣我得要從 sftp 的 ls 輸出中，
+取得檔案列表，然後遍歷。
+聽說 batch 的編程能力是有限制的，
+不像 bash 是一門完整的程式語言，
+我想這已經超出 batch 的能力範圍。&lt;/p&gt;
+&lt;h2 id=&quot;在-linux-上產生腳本&quot;&gt;在 linux 上產生腳本&lt;/h2&gt;
+&lt;p&gt;反正 shell 腳本的本質只是一連串依序執行的命令，
+可編程只是用來降低複雜度的附加功能。
+若是缺少編程功能，只能以更複雜的方式完成程式，
+像是由 &lt;em&gt;另一種程式&lt;/em&gt; ，來產生目標腳本；
+甚至直接在程式中呼叫 &lt;code&gt;system()&lt;/code&gt; 達到編程需求。
+總之我就跑了個 bash 迴圈，
+生出了要在 windows 上執行的 batch 檔：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;host=user@10.0.2.2
+convert=&amp;apos;&amp;quot;C:\Program Files (x86)\Trimble\convertToRINEX\convertToRinex.exe&amp;quot;&amp;apos;
+
+for t02 in data/*.T02
+do
+    filename=$(basename $t02)
+    basename=$(basename $filename .T02)
+    cat &amp;lt;&amp;lt;BATCH
+
+scp $host:$t02 .
+$convert $filename -mo GHLK -v 2.11
+scp $(printf &amp;quot;$basename.19%s &amp;quot; o g n q b c) $host:data
+del $basename.*
+
+BATCH
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;首先最重要的，ssh 要開免密碼登入，
+否則執行一次 scp 就要輸入一次登入密碼，
+根本不可能批次作業。
+在 windows 的 ssh 除了基本的 ssh，
+傳送檔案的 sftp 外，連 ssh-keygen 也內建了。
+執行一次產生金鑰後，丟到 linux 的 &lt;code&gt;.ssh/authorized_keys&lt;/code&gt; 即可。
+如果不信任 windows 的話，
+可以跑完腳本就把公鑰從 authorized_keys 裡刪除。&lt;/p&gt;
+&lt;p&gt;windows 的 glob 萬用字元，
+似乎不會由 shell 展開，而是命令得自己展開。
+cmd 的內建命令 del dir 之類的，多支援 glob，
+但 ssh 就不支援，直接回找不到檔案。
+（但 scp 複製遠端 linux 上的檔案時是支援 glob 的。）&lt;/p&gt;
+&lt;h2 id=&quot;傳到-linux-上並壓縮&quot;&gt;傳到 linux 上並壓縮&lt;/h2&gt;
+&lt;p&gt;由於本人收納習慣極差，server 的硬碟也快滿了。
+而轉換出來的 rinex 檔是 ascii 格式很佔空間，
+尤其我是轉出周期一秒的檔案。
+所以我希望可以在上傳後自動壓縮。&lt;/p&gt;
+&lt;p&gt;rinex 壓縮有二步：rnxcmp 軟體提出了一種格式
+&lt;abbr title=&quot;compress rinex&quot;&gt;crx&lt;/abbr&gt;，
+可以最小化 rinex 中文字所記錄的資訊，
+並提供了 rnx2crx crx2rnx 二個轉換程式。
+rnx2crx 的輸出仍為文字檔，
+所以可以再用 gzip 或其它壓縮工具壓縮一次。&lt;/p&gt;
+&lt;p&gt;在 server 上監視檔案上傳我還沒試過，
+而且感覺就很麻煩，還要處理檔案複製到一半的情況。
+所以我決定直接在 windows 中處理，
+直接把傳送最大的 rinex 檔案 &lt;code&gt;*.??o&lt;/code&gt; 的 scp，
+換成以下的 ssh 命令：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-cmd&quot;&gt;ssh user@10.0.2.2 &amp;quot;rnx2crx - | gzip - &amp;gt; 2019-01-01.19d.gz&amp;quot; &amp;lt;2019-01-01.19o
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;但發現這樣重導向不知道為什麼會卡住，會卡在 gzip 那邊，
+或是其它在 linux 上讀取標準輸入的程式，
+可能 windows 沒有送出 eof 之類的？
+後來試了管道不會卡住，
+就 google 到 cmd 裡類似 &lt;code&gt;cat&lt;/code&gt; 的命令 &lt;code&gt;type&lt;/code&gt; ，
+最後就這樣用了。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-cmd&quot;&gt;type 2019-01-01.19o | ssh user@10.0.2.2 &amp;quot;rnx2crx - | gzip - &amp;gt; 2019-01-01.19d.gz&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;另外還有試了在傳送文字檔時壓縮會不會好一點，但幾乎沒有差別。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-cmd&quot;&gt;type 2019-01-01.19o ^
+| ssh -o Compression=yes ^
+  user@10.0.2.2 &amp;quot;rnx2crx - | gzip - &amp;gt; 2019-01-01.19d.gz&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;推測原因：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;虛擬機裡壓縮有性能銷耗，且 linux 端還要解壓一次，都吃同一台機器的 cpu。&lt;/li&gt;
+&lt;li&gt;虛擬機的網路是假的網路，和本機間的網路速度遠超實體網路。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;用-runpkr00-直接在-linux-上轉檔&quot;&gt;用 runpkr00 直接在 linux 上轉檔&lt;/h2&gt;
+&lt;p&gt;後來與 &lt;a href=&quot;https://github.com/holishing&quot;&gt;r2&lt;/a&gt; 討論後，才知道另一支程式 runpkr00，
+是古早時期 trimble 提供用來轉換 t02 格式的。
+最大的優勢是提供了 linux 甚至 solaris 版本的執行檔，
+雖然主要支援對向是 t02 之前的 t00 t01，
+但如今仍可以運作在 t02 格式上。&lt;/p&gt;
+&lt;p&gt;我是在 &lt;a href=&quot;https://kb.unavco.org/kb/article/trimble-runpkr00-v5-40-latest-version-mac-osx-10-7-windows-xp-7-linux-solaris-744.html&quot;&gt;unavco 的網站上找到 runpkr00 的執行檔的&lt;/a&gt; ，
+但總之為了防止死檔，還是
+&lt;a href=&quot;drive&quot;&gt;自己再備份一次 unavco 提供的 rpm 包&lt;/a&gt; 。&lt;/p&gt;
+&lt;h2 id=&quot;技術總結&quot;&gt;技術總結&lt;/h2&gt;
+&lt;p&gt;在 linux 上產生 batch 腳本， 並且在產生的 batch 腳本中，
+再使用 windows 10 中的 ssh 登入回 linux 執行 linux shell 指令。&lt;/p&gt;
+&lt;h2 id=&quot;powershell-與-windows-舒適圈&quot;&gt;powershell 與 windows 舒適圈&lt;/h2&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/image-processing-6-free-style.html</id>
 <title>影像處理作業一：自由影像最佳化</title>
 <published>2019-10-26T14:44:28.683Z</published>
@@ -5236,147 +5391,7 @@ L：妳的胸部已經大到好笑了
 <category term="語法"/>
 <category term="javascript"/>
 <category term="lisp"/>
-<content type="html">&lt;h1 id=&quot;程式語言中適量的符號有助於閱讀&quot;&gt;程式語言中適量的符號有助於閱讀&lt;/h1&gt;
-&lt;p&gt;這標題可能有點怪。我想談談對一些語言對語法中符號的選擇。
-一些語言號稱使用 &lt;em&gt;口語風格的語法&lt;/em&gt; ，更適合閱讀與理解，
-像是 basic 使用 begin end 標註範圍。
-但不應走火入魔，適度的使用符號才是明策，
-例如 latex 提供 &lt;code&gt;^&lt;/code&gt; 與 &lt;code&gt;_&lt;/code&gt; 用做上標與下標。
-當然過度使用符號也不行，因為過多的符號會造成記憶困難，
-例如 APL 與 J 幾乎全依懶於符號。&lt;/p&gt;
-&lt;h2 id=&quot;程式語言&quot;&gt;程式語言&lt;/h2&gt;
-&lt;p&gt;一些程式語言使用口語風格的關鍵字，號稱能因此降低學習門檻；
-例子有 basic、python、ruby。
-basic 使用 end if end loop 之類的語法來關閉語句塊，
-而 ruby 則以 begin 與 end 來標註語句塊的開始與結束，
-而我對 python 的印像則是有一個神奇的 &lt;code&gt;is&lt;/code&gt; 算符，
-類似於 &lt;code&gt;==&lt;/code&gt; 的作用。&lt;/p&gt;
-&lt;p&gt;當然其中最甚者為 basic，幾乎都是關鍵字，
-少有符號，全由英文的單字組成。
-對比之下則是 c，使用大括號標註語句塊，
-使用小括號包裹判斷式。
-c 的宣告除了用等號初始化外，
-還加了以 &lt;code&gt;*&lt;/code&gt; 抽象化指標意含的語法。&lt;/p&gt;
-&lt;p&gt;而 python 在宣告上雖然省去了類型的單字，
-但有某些時候卻多了一個 &lt;code&gt;as&lt;/code&gt; 語法用來命名。
-例如補捉錯誤 &lt;code&gt;except Error as err&lt;/code&gt; ，
-引用函式庫 &lt;code&gt;import numpy as np&lt;/code&gt; 。
-這點後來還被 js 的 es6 module 抄去了。&lt;/p&gt;
-&lt;p&gt;bash 則是另一種極端，雖然可以用大括號或小括號定義語句塊，
-但用法卻與 if else 的不合。
-bash 似乎反映了彼時代對 if 語句的想像，
-if 後還需要一個 then 開始區塊，
-while 後也要一個 do 開始迴圈內容。
-而結束也需要一個特殊的符號，bash 很天才幫條件判斷的 if 選了 fi，
-理所當然 case 就是 esca。
-但對於迴圈，又是另一套作法，
-一律使用 do 與 done 包住迴圈內文。&lt;/p&gt;
-&lt;h2 id=&quot;數學式在-latex-與-eqn-的差別&quot;&gt;數學式在 latex 與 eqn 的差別&lt;/h2&gt;
-&lt;p&gt;另一個主要激起我反思的是在撰寫數學算式時的語言。
-流行的 LaTeX 或說 TeX，使用了 &lt;code&gt;^&lt;/code&gt; &lt;code&gt;_&lt;/code&gt; 來標註上下標，
-使用 &lt;code&gt;{}&lt;/code&gt; 標註語句塊，其它特殊符號則是以反斜線跳脫來表示。
-我接解過的另一語言 eqn，屬於 troff 的排版系統，
-則是以口語化的方式表達公式，
-例如 &lt;code&gt;sum from { k = 0 } to n { k sup 2 }&lt;/code&gt; ，
-雖然仍使用了花括號，但最明顯的是使用 
-from to sup sub 等單字來表示排版。&lt;/p&gt;
-&lt;p&gt;這看來雖然只是個選擇問題，
-但後果很明顯造成 eqn 在原始碼的閱讀上很沒效率。
-稍長的公式，eqn 的長度就會極速成長，
-很快變得難以閱讀。例如一條距陣算式：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;( A^T ( A P^{-1} A^T ) ^{-1} A P^{-1} ) ^2
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;寫成 latex：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;( A^T ( A P^{-1} A^T ) ^{-1} A P^{-1} ) ^2
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;寫成 eqn：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;( A sup T ( A P sup -1 A sup T ) sup -1 A P sup -1 ) sup 2
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;但這裡 latex 看起來其實也沒多好，
-主要是那個 -1 的語法需要用大括號包起來，
-不然會變成單純上標一個符號。
-而 eqn 就完全看不出來在寫什麼鬼；
-也許因為我不是英語母語，平常不會用英文唸數學式。
-而對 latex 的語法，用 &lt;code&gt;^&lt;/code&gt; 也在 excel 中接觸過一段時間。&lt;/p&gt;
-&lt;h2 id=&quot;數學式以函數樹狀語法表示&quot;&gt;數學式以函數樹狀語法表示&lt;/h2&gt;
-&lt;p&gt;數學式的另一個問題是我在 lisp 中遇到的，
-後來在 javascript 的數學函式庫 mathjs 也碰到過。
-我初學 lisp 時就被其簡潔的語法驚豔，
-而且我認為其中一件特點就是移除了算符這個概念。
-傳統上程式語言都會有算符，
-而數學上的算符多半會牽扯到優先問題，
-就必須規定各算符的優先順序，
-我認為這是語言中很醜陋的一面。&lt;/p&gt;
-&lt;p&gt;而 lisp 把算符也用函數的語法撰寫，
-f(x) 寫成 &lt;code&gt;(f x)&lt;/code&gt; ， &lt;code&gt;a + b&lt;/code&gt;就寫成 &lt;code&gt;(+ a b)&lt;/code&gt; 。
-真正的算符，只剩下 &lt;code&gt;&amp;apos;&lt;/code&gt; 或說其實也只是 &lt;code&gt;(quote )&lt;/code&gt; 的簡寫。
-雖然在語法上看來很棒，簡潔乾淨，但碰到複雜的數學式就會很麻煩；
-因為把所有算符都必須看作函式呼叫，就得寫成樹狀結構，
-例如上面示範 eqn 的式子，在 lisp 就得寫成：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-lisp&quot;&gt;(^ (* (^ A T) 
-      (^ (* A (^ P -1) (^ A T))
-         -1)
-      A
-      (^ P -1))
-   -1)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;由於樹狀的語法太難閱讀，lisp 語言的中級教材，
-就是寫一個解譯器把數學上的中綴語法轉成 lisp 的語法。
-於是呼，就能寫出類似巨集的語法：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-lisp&quot;&gt;(math &amp;apos;((A ^ T * (A * P ^ -1 * A ^ T) ^ -1 * A * P ^ -1) ^ 2))
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;mathjs-缺少運算子重載&quot;&gt;mathjs 缺少運算子重載&lt;/h3&gt;
-&lt;p&gt;mathjs 是一個 javascript 的函式庫，
-提供各類數學運算，像可以把矩陣和數字相乘的函數。
-但因為 js 沒有運算子重載的功能，
-所以得直呼叫 mathjs 提供的 multiply 函數：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;mathjs.multiply(3, [1,2,3])
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;如果式子長了，就會陷入和 lisp 一樣的狀況：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;mathjs.power(mathjs.multiply(
-  mathjs.power(A, T),
-  mathjs.power(
-    mathjs.multiply(A, mathjs.power(P, -1), mathjs.power(A, T)),
-    -1
-  ),
-  A,
-  mathjs.power(P, -1)),
--1)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;所以 mathjs 也提供了一個 eval，
-可以直接計算 mathjs 的函式庫。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;mathjs.eval(&amp;apos;(A ^ T * (A * P ^ -1 * A ^ T) ^ -1 * A * P ^ -1) ^ 2&amp;apos;)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;過度符號的語言&quot;&gt;過度符號的語言&lt;/h2&gt;
-&lt;p&gt;apl 或是 j 則是另一種極端，使用了太大量的符號，
-使得使用者必須記憶大量的算符，學習門檻過高。
-雖然不少學成的人都讚不絕口的好用，
-但更多絕對是學不來而放棄的。
-像我曾嘗試過 J，但也放棄了。&lt;/p&gt;
-&lt;p&gt;而 perl 也是算符極多的一個例子，行為也很複雜，
-對比之下我認為 c 的語法和行為算很簡單了。
-只是有時候你必須做很底層的事，所以很麻煩而已。&lt;/p&gt;
-&lt;h2 id=&quot;口語化或抽象化&quot;&gt;口語化或抽象化&lt;/h2&gt;
-&lt;p&gt;我一直不覺得口語化一個語言能幫助閱讀，
-整個原始碼都是英文單字看起來反而更難一眼判斷，
-像 c 適當的使用特殊符號，就能一眼看到大括號、小括號；
-當然也有如 python 的縮排派。
-雖然有人主張標註語句塊讓開始結束變得明顯是 IDE 的工作，
-但 IDE 標註出 begin end 位置的作法，
-不就是上色或用線段等特殊符號，不也是符號化、抽象化的一種嗎？&lt;/p&gt;
-&lt;p&gt;當然，也許和母語有關，也許母語是英文的人
-真得覺得 basic 或 ruby 很好閱讀，
-畢竟我的母語是中文不是英文。
-但我看過某些號稱中文的程式語言，也不太習慣，
-也許是因為我習慣英文了吧。&lt;/p&gt;
-&lt;p&gt;至於數學，把 &lt;code&gt;+&lt;/code&gt; &lt;code&gt;-&lt;/code&gt; &lt;code&gt;*&lt;/code&gt; &lt;code&gt;/&lt;/code&gt; 都換成單字
-add minus multiply divide 也不會比較好。
-雖然算符有複雜的優先權問題，但閱讀上反而比較好理解。
-但我認為很可能是因為我們現行的數學系統，
-已經使用這套邏輯太久，我們也是學這套邏輯長大的，
-所以閱讀起來比較自然。&lt;/p&gt;
-&lt;p&gt;總之，在程式語言的語法中，使用單純的口語有助於入門；
-但適量的抽象化和符號化，更有助於熟練的使用者閱讀。
-當然過度使用符號也是不好的，會讓入門變得困難。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/satellite-geodesy-homework-8.html</id>
 <title>使用 snap DInSAR 觀察地震後地表變型</title>

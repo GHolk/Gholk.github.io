@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-10-30T16:12:37.181Z</updated>
+  <updated>2019-10-31T07:21:04.117Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,237 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/linux-shell-script-for-windows-ssh.html#powershell-與-windows-舒適圈</id>
+<title>以 linux shell 為基礎在 windows 中批次處理</title>
+<published>2019-10-30T16:04:16.086Z</published>
+<updated>2019-10-31T07:21:04.099Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/linux-shell-script-for-windows-ssh.html#powershell-與-windows-舒適圈"/>
+<summary type="html">
+點評我的整體處理流程，和 windows 與 linux 的綜合比較。</summary>
+<category term="linux"/>
+<category term="windows"/>
+<category term="study"/>
+<category term="gnss"/>
+<category term="shell"/>
+<content type="html">&lt;h1 id=&quot;以-linux-shell-為基礎在-windows-中批次處理&quot;&gt;以 linux shell 為基礎在 windows 中批次處理&lt;/h1&gt;
+&lt;p&gt;trimble 的 gnss 接收儀預設是記錄 trimble 的 T02 格式，
+要用 trimble 的 windows 程式 convertToRINEX 轉成 rinex 格式，
+只能開虛擬機或在另一台 windows 電腦上轉換。
+但檔案很多，於是研究了一下 convert to rinex 的命令列介面，
+運用 windows 10 開始內建的 ssh 功能傳檔案，
+再在 linux 上產生 bat 批次檔，完成一次跨系統合作演出。&lt;/p&gt;
+&lt;p&gt;現在在管系館的 gnss 站，是 trimble 的接收儀，
+預設是記錄 trimble 的 t02 格式，
+要用 trimble 提供的程式 convertToRINEX
+才能轉換成通用的 rinex 格式。&lt;/p&gt;
+&lt;h2 id=&quot;convert-to-rinex&quot;&gt;convert to rinex&lt;/h2&gt;
+&lt;p&gt;convert to rinex 執行時可以有圖形介面，
+同時也可以用參數傳入檔名，單純在命令列處理。
+雖然圖形介面中，可以一次選取多個檔案，
+提供基本的批次處理功能。&lt;/p&gt;
+&lt;p&gt;但 convert to rinex 的處理速度實在太慢，
+一天長度周期一秒的 T02 檔案，要轉五分鐘。
+而且 convert to rinex 的圖形介面設計，
+是會先掃描完整個檔案，才能點下轉換鈕轉換；
+一個檔案大概掃 4 分鐘，轉換 1 分鐘。&lt;/p&gt;
+&lt;p&gt;選取多個檔案批次處理時，則是全部掃描完才會開始轉換。
+我不確定記憶體用量會不會隨檔案數增加，
+所以不敢一口氣轉全部。
+最後決定用命令列的介面，轉一次呼叫一次程式，
+也避免要一次把所有檔案傳到 windows 上，怕硬碟空間不足。&lt;/p&gt;
+&lt;h2 id=&quot;使用-sftp-在虛擬機與本機間傳送檔案&quot;&gt;使用 sftp 在虛擬機與本機間傳送檔案&lt;/h2&gt;
+&lt;p&gt;trimble 的程式 convertToRINEX 只提供 exe 格式，
+我試了在 wine 下執行，也裝了.NET 框架，
+但執行時還是會報錯。最後就放棄在 wine 下執行了。&lt;/p&gt;
+&lt;p&gt;但還是計劃要做，就決定開 qemu 虛擬機來轉。
+本來想弄個 9p 來共享虛擬機和本機的檔案，
+後來發現 9p 開起來只是虛擬機裡可以連上去，
+但虛擬機裡還是要有 9p 的客戶端才有用；
+windows 還是放棄吧。&lt;/p&gt;
+&lt;p&gt;本來在考慮 smb，但忽然想到 windows 10 內建 ssh 了，
+於是可以用 sftp 來傳。
+於是 batch 程式寫起來就像這樣：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bat&quot;&gt;scp user@10.0.2.2:data/2019-01-01.T02 .
+&amp;quot;C:\Program Files (x86)\Trimble\convertToRINEX\convertToRinex.exe&amp;quot; 2019-01-01.T02 -mo GHLK -v 2.11
+scp 2019-01-01.19o user@10.0.2.2:data
+del 2019-01-01.*
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;但有個問題，我不會寫 batch 迴圈。
+而且我不想一次下載全部的 t02 檔案，
+所以我想要下載一個，轉檔完傳回去，刪掉後再換下一個。
+可是這樣我得要從 sftp 的 ls 輸出中，
+取得檔案列表，然後遍歷。
+聽說 batch 的編程能力是有限制的，
+不像 bash 是一門完整的程式語言，
+我想這已經超出 batch 的能力範圍。&lt;/p&gt;
+&lt;h2 id=&quot;在-linux-上產生腳本&quot;&gt;在 linux 上產生腳本&lt;/h2&gt;
+&lt;p&gt;反正 shell 腳本的本質只是一連串依序執行的命令，
+可編程只是用來降低複雜度的附加功能。
+若是缺少編程功能，只能以更複雜的方式完成程式，
+像是由 &lt;em&gt;另一種程式&lt;/em&gt; ，來產生目標腳本；
+甚至直接在程式中呼叫 &lt;code&gt;system()&lt;/code&gt; 達到編程需求。
+總之我就跑了個 bash 迴圈，
+生出了要在 windows 上執行的 batch 檔：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;host=user@10.0.2.2
+convert=&amp;apos;&amp;quot;C:\Program Files (x86)\Trimble\convertToRINEX\convertToRinex.exe&amp;quot;&amp;apos;
+
+for t02 in data/*.T02
+do
+    filename=$(basename $t02)
+    basename=$(basename $filename .T02)
+    cat &amp;lt;&amp;lt;BATCH
+
+scp $host:$t02 .
+$convert $filename -mo GHLK -v 2.11
+scp $(printf &amp;quot;$basename.19%s &amp;quot; o g n q b c) $host:data
+del $basename.*
+
+BATCH
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;首先最重要的，ssh 要開免密碼登入，
+否則執行一次 scp 就要輸入一次登入密碼，
+根本不可能批次作業。
+在 windows 的 ssh 除了基本的 ssh，
+傳送檔案的 sftp 外，連 ssh-keygen 也內建了。
+執行一次產生金鑰後，丟到 linux 的 &lt;code&gt;.ssh/authorized_keys&lt;/code&gt; 即可。
+如果不信任 windows 的話，
+可以跑完腳本就把公鑰從 authorized_keys 裡刪除。&lt;/p&gt;
+&lt;p&gt;windows 的 glob 萬用字元，
+似乎不會由 shell 展開，而是命令得自己展開。
+cmd 的內建命令 del dir 之類的，多支援 glob，
+但 ssh 就不支援，直接回找不到檔案。
+（但 scp 複製遠端 linux 上的檔案時是支援 glob 的。）&lt;/p&gt;
+&lt;h2 id=&quot;傳到-linux-上並壓縮&quot;&gt;傳到 linux 上並壓縮&lt;/h2&gt;
+&lt;p&gt;由於本人收納習慣極差，server 的硬碟也快滿了。
+而轉換出來的 rinex 檔是 ascii 格式很佔空間，
+尤其我是轉出周期一秒的檔案。
+所以我希望可以在上傳後自動壓縮。&lt;/p&gt;
+&lt;p&gt;rinex 壓縮有二步：rnxcmp 軟體提出了一種格式
+&lt;abbr title=&quot;compress rinex&quot;&gt;crx&lt;/abbr&gt;，
+可以最小化 rinex 中文字所記錄的資訊，
+並提供了 rnx2crx crx2rnx 二個轉換程式。
+rnx2crx 的輸出仍為文字檔，
+所以可以再用 gzip 或其它壓縮工具壓縮一次。&lt;/p&gt;
+&lt;p&gt;在 server 上監視檔案上傳我還沒試過，
+而且感覺就很麻煩，還要處理檔案複製到一半的情況。
+所以我決定直接在 windows 中處理，
+直接把傳送最大的 rinex 檔案 &lt;code&gt;*.??o&lt;/code&gt; 的 scp，
+換成以下的 ssh 命令：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-cmd&quot;&gt;ssh user@10.0.2.2 &amp;quot;rnx2crx - | gzip - &amp;gt; 2019-01-01.19d.gz&amp;quot; &amp;lt;2019-01-01.19o
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;但發現這樣重導向不知道為什麼會卡住，會卡在 gzip 那邊，
+或是其它在 linux 上讀取標準輸入的程式，
+可能 windows 沒有送出 eof 之類的？
+後來試了管道不會卡住，
+就 google 到 cmd 裡類似 &lt;code&gt;cat&lt;/code&gt; 的命令 &lt;code&gt;type&lt;/code&gt; ，
+最後就這樣用了。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-cmd&quot;&gt;type 2019-01-01.19o | ssh user@10.0.2.2 &amp;quot;rnx2crx - | gzip - &amp;gt; 2019-01-01.19d.gz&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;另外還有試了在傳送文字檔時壓縮會不會好一點，但幾乎沒有差別。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-cmd&quot;&gt;type 2019-01-01.19o ^
+| ssh -o Compression=yes ^
+  user@10.0.2.2 &amp;quot;rnx2crx - | gzip - &amp;gt; 2019-01-01.19d.gz&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;推測原因：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;虛擬機裡壓縮有性能銷耗，且 linux 端還要解壓一次，都吃同一台機器的 cpu。&lt;/li&gt;
+&lt;li&gt;虛擬機的網路是假的網路，和本機間的網路速度遠超實體網路。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;用-runpkr00-直接在-linux-上轉檔&quot;&gt;用 runpkr00 直接在 linux 上轉檔&lt;/h2&gt;
+&lt;p&gt;後來與 &lt;a href=&quot;https://github.com/holishing&quot;&gt;r2&lt;/a&gt; 討論後，才知道另一支程式 runpkr00，
+是古早時期 trimble 提供用來轉換 t02 格式的。
+最大的優勢是提供了 linux 甚至 solaris 版本的執行檔，
+雖然主要支援對向是 t02 之前的 t00 t01，
+但如今仍可以運作在 t02 格式上。&lt;/p&gt;
+&lt;p&gt;我是在 &lt;a href=&quot;https://kb.unavco.org/kb/article/trimble-runpkr00-v5-40-latest-version-mac-osx-10-7-windows-xp-7-linux-solaris-744.html&quot;&gt;unavco 的網站上找到 runpkr00 的執行檔的&lt;/a&gt; ，
+但總之為了防止死檔，還是
+&lt;a href=&quot;https://drive.google.com/drive/folders/1-WSCp14Yt3g8DMmNo1qsknaAHM_wCA3f?usp=sharing&quot;&gt;自己再備份一次 unavco 提供的 rpm 包&lt;/a&gt; 。&lt;/p&gt;
+&lt;p&gt;下載 rpm 包後，可能會因為作業系統太新，
+不符合 rpm 包的要求無法安裝。
+但總之裝就對了，看要強制裝，
+或是用其它工具解壓縮 rpm 包，
+再手動複製到作業系統內。
+我是用 debian，所以用 alien 把 rpm 轉成 tgz 後手動解壓縮。
+裡面的執行檔是 static link，
+雖然是古董了，但還是可以正常執行。
+還有附手冊，雖然內容有夠少，雖然選項都有介紹，
+但 unavco 網站提的眉角都沒記錄。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;alien --to-tgz runpkr00*.rpm
+tar -xvf runpkr00*.tgz
+install ./usr/bin/runpkr00 /usr/local/bin
+install --mode 644 ./usr/share/man/man1/runpkr00.1.gz \
+                   /usr/local/share/man/man1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;runpkr00 如同 unavco 的網站建議的，
+runpkr00 在轉換 t02 格式時，最好加上 &lt;code&gt;-g&lt;/code&gt; 選項，
+若是記錄檔包含 &lt;abbr title=&quot;record type 27&quot;&gt;rt27&lt;/abbr&gt; 
+時會一併轉換，（手冊寫 type 27。）副檔名會從 dat 變成 tgd。
+teqc 能處理 trimble 的 dat 及 tgd 格式，
+直接 &lt;code&gt;teqc 2019-01-01.tgd &amp;gt; 2019-01-01.19o&lt;/code&gt; 即可。
+另外 runpkr00 在選項解析上設計不良，
+（也可能是因為在現在的環境執行很老的執行檔。）
+參數順序或連寫都可能造成錯誤，最好照 unavco 或手冊上的建議用法。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;runpkr00 -g -d 2019-01-01.T02
+teqc 2019-01-01.tgd &amp;gt; 2019-01-01.19o
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;runpkr00 轉出來的 rinex 檔案，
+相比新版程式 convert to rinex 少了一些觀測量。
+我的 runpkr00 轉出來有 L1 L2 C1 P1 P2 S1 S2，
+而 convert to rinex 有 C1 C2 C5 C7 C8 L1 L2 L5 L7 L8 P1 P2。
+就 gipsy 和 csrs-ppp 的解算結果來看，
+convert to rinex 稍好，但沒有很明顯。
+考慮 convert to rinex 的執行門檻，
+使用 runpkr00 是可接受的。
+但就後處理而言，執行速度好像不是重點；
+花個 10 幾分鐘處理一整天的數據，應該不是不可接受。&lt;/p&gt;
+&lt;p&gt;另外 runpkr00 轉出來的 rinex 檔案，
+會缺少記錄天線位移的 &lt;code&gt;ANTENNA: DELTA H/E/N&lt;/code&gt; 欄位，
+如果需要，記得在 teqc 時手動加上去。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;eastd=1 northd=2 heightd=3
+teqc -O.pehEN,m $eastd $northd $heightd 2019-01-01.tgd &amp;gt; 2019-01-01.19o
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;powershell-與-windows-舒適圈&quot;&gt;powershell 與 windows 舒適圈&lt;/h2&gt;
+&lt;p&gt;這篇文章中，我繞了很大一圈，在 linux 上產生 windows 的 batch 腳本，
+並且在產生的 batch 腳本中，再使用 windows 10 中的 ssh
+登入回 linux 執行 linux shell 指令。
+最主要的原因是我無法把 trimble 的 convert to rinex
+整合進現有的 linux shell 工具鏈中。
+我所需要的是，在 linux 上執行一條命令後，就幫我轉好檔。&lt;/p&gt;
+&lt;p&gt;如果是不同 unix like 作業系統中，
+最最基礎也可以用 ssh 簡單連結，
+把另一台電腦上的程式當自己家用。
+（也許我可以試試在 linux 上以 shell 介面登入 windows？）&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;ssh user@another.os &amp;apos;
+    cat &amp;gt; 2019-01-01.t02
+    convert 2019-01-01.t02
+    cat 2019-01-01.19o
+    rm 2019-01-01.*
+&amp;apos; &amp;lt; 2019-01-01.t02 &amp;gt; 2019-01-01.19o
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;或是如果可以讓 convert to rinex 在 linux 的 wine 中運作，
+也可以有更好的效果。
+但都不行，只好想辦法在 windows 中處理了。&lt;/p&gt;
+&lt;p&gt;對於一直生活在 windows 中的人，則根本沒這個問題。
+由於檔案也本來就存在本機，
+可以直接寫個 batch 遍歷所有檔案一一轉換；
+就算 batch 的功能有限，這樣基本的功能還是做的到的。
+而且 crx2rnx teqc 或其它這類 gnss 數據，
+多也會提供 windows 版本，所以完全在 windows 處理，
+雖然 batch 沒有 bash 那麼好用，還是足夠了。&lt;/p&gt;
+&lt;p&gt;何況現在還有 powershell，先天體質就比 bash 好，
+只差在完整的生態和配合的工具。
+以批次處理來說，要活在 windows 中完成這些工作，
+windows 和 linux 的差距已經不像以前那樣巨大了。&lt;/p&gt;
+&lt;p&gt;但 windows user 的主要問題，
+是系統的設計哲學，不鼓勵使用者動手的文化。
+要一個慣用 windows 圖形介面的人，
+去學習命令列操作是很困難的。&lt;/p&gt;
+&lt;p&gt;另一個門檻就是 windows 上寫程式太麻煩，windows 有很多自己的鍋。
+visual stdio 太肥，雖然也是有各種 ide，如 code block dev c++。
+但 linux 對腳本語言的支持還是最好的，
+一個 shebang 直接把所有直譯語言當執行檔用。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/linux-shell-script-for-windows-ssh.html</id>
 <title>以 linux shell 為基礎在 windows 中批次處理</title>
 <published>2019-10-30T16:04:16.086Z</published>
@@ -4962,419 +5193,7 @@ async function postJson(json) {
 ptt-highlight.js 就會幫文章裡的 ptt 文字上色。</summary>
 <category term="funny"/>
 <category term="daily"/>
-<content type="html">&lt;h1 id=&quot;台灣共識就是贏球不能盜壘&quot;&gt;台灣共識就是贏球不能盜壘&lt;/h1&gt;
-&lt;p&gt;明明記得有聽過這句話，但一直找不到來源，
-只有找到幾篇 &lt;a href=&quot;https://www.ptt.cc/man/Elephants/D3D2/D7D0/D46E/D4B3/M.1307776582.A.092.html&quot;&gt;兄弟象故意砸觸身球的新聞&lt;/a&gt; ，
-沒有找到台灣共識。
-之前的 &lt;a href=&quot;short-life-expensive-price.html&quot;&gt;逢人短命&lt;/a&gt; 也很長了，該換篇了。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.ptt.cc/man/Elephants/D3D2/D7D0/D46E/D4B3/M.1307776582.A.092.html&quot;&gt;台灣共識就是贏球不能盜壘！&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt; 標題  [新聞] 就愛 488 公分　女與飛機模型做愛超興奮
-蜜雪兒說，她曾經嘗試與人類做愛，但怎麼做就是無法讓她興奮，但她與飛機模型做愛之
-後，幾乎每架飛機模型都可以讓她得到高潮。
-→  Leeng: 打飛機(物理)                                             04/20 09:10
-推 PiZ1129: 操飛機 操飛機，來到青草地                              04/20 09:54
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt; 作者  billjason (billjason)                                  看板  Gossiping 
- 標題  [問卦] line 到底為什麼ㄧ堆人用？                                        
- 時間  Sun Dec  9 19:16:30 2018                                               
-※  文章網址: https://www.ptt.cc/bbs/Gossiping/M.1544354192.A.9D0.html
-→  wadeabc: 就一開始女森先用，馬子狗跟上，結果最後大家都在用       12/09 19:19
-→  wadeabc: 你要知道這世界是跟著女森尿尿的地方前進的               12/09 19:19
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;p&gt;這些理工科宅男們一說起妹子來總是很激動的樣子，但你真讓他們去和妹子組織個聯誼卻
-反而沒有什麼行動力。大多數情況下他們會想一想要做的準備以及到時候搞些什麼活動，
-然後會開始頭疼，然後該啃書的啃書、運動的運動、遊戲的遊戲，聯誼的事再無下文。哎
-，所以說性格決定命運，不是因為他們讀了理工科才成為宅男才沒有妹子，而是因為他們
-這個性格讓他們選了理科並成了個宅男，才沒有妹子！&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;魔鬼又帶他上了一座最高的山，將世上的御姊，與萬國的蘿莉，都指給他看。&lt;/p&gt;
-&lt;p&gt;對他說：「你若俯伏拜我，我就把這一切都賜給你。」&lt;/p&gt;
-&lt;p&gt;他說：「魔鬼退去吧！因為本本上記著說，當拜主你的偽娘，單要侍奉他。」&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt; Life is dear, love is dearer. Both can be given up for freedom.
-匈牙利人，裴多菲．山陀爾 (Shandor Petefi, 1823—1849) 於 1847 年 1 月寫下的著名詩篇《自由與愛情》。
-那學習自由軟體？&lt;/p&gt;
-&lt;p&gt;千羽純一如是說：Windows 誠可貴，Apple 價更高；若為 Linux 故，兩者皆可拋。&lt;/p&gt;
-&lt;p&gt;李士傑：自由不是離開某套軟體、某種系統，而是找到自由。&lt;/p&gt;
-&lt;p&gt;Rex：geek by nature linux by choice&lt;/p&gt;
-&lt;p&gt;Tetralet：我們極力抗拒我們所不認同的事物，然後變成我們所認同的事物的奴隸。&lt;/p&gt;
-&lt;p&gt;kenduest：如果真的愛一個作業系統 怎能不害怕不再能使用它 而我們必須接受現實
-於是長大了  寂寞就是沒有了機會再用它  比沒有電腦還要寂寞
-而那些點亮我們生命的作業系統  就彷彿電影中發生在暹邏的愛情故事
-即使短暫使用也會刻骨銘心
-To all the Linux that bring us to kernel.&lt;/p&gt;
-&lt;p&gt;LGJ：①公平的選擇權利②開放的檔案格式&lt;/p&gt;
-&lt;p&gt;RMS：FS 對教育：①最簡單的就是省錢②利於發掘、教育天生的軟體工程師。&lt;/p&gt;
-&lt;p&gt;eliu：free software 是用一種有建設性&amp;amp;免錢的電玩，不要想太多了。&lt;/p&gt;
-&lt;p&gt;caleb 常見誤解：①用自由軟體就要推廣自由軟體 ← 莫名其妙，難道我開 Toyota 的車就得推廣 Toyota 的車？
-             ②要 寫程式/debug 才是對自由軟體有貢獻 ← 其實 下載/安裝/使用/討論/回報問題/提出 wishlist/改善美工/... 很多都是對自由軟體有貢獻&lt;/p&gt;
-&lt;p&gt;↑當然還很多敝人沒有記下來的
-但敝人感受到那麼多前輩們默默的付出和努力
-敝人更該心存感激啊
-敝人有機會分享給別人就多說
-現在不說話
-以後誰為敝人的小 p 說話&lt;/p&gt;
-&lt;p&gt;jserv：「想做就去作」，我天真的認為
-             想寫作業系統，就去寫啊
-             想寫編譯器，就去寫啊
-             想寫電動遊戲，就去寫啊
-             想進行社會主義運動，要花幾百年的時間，但最起碼可以協助讓世界變得更美好，作多少算多少&lt;/p&gt;
-&lt;p&gt;引用自 &lt;a href=&quot;https://hyperrate.com/thread.php?tid=12773&quot;&gt;https://hyperrate.com/thread.php?tid=12773&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;在菜场看到的，神一般的大爷！ 那大爷买西红柿来着的，挑了三个放到秤盘里，摊主秤了下说：“一斤半，三块七。” 大爷说：“我就做个汤，用不着那么多。”说完就去掉了个儿最大的那个西红柿。 摊主迅速又瞧一眼秤子，“一斤二两，三块。” 正当我看不过去想提醒大爷注意摊主的秤子时，大爷从容的掏出了七毛钱，拿起刚刚去掉的那个大的西红柿，扭头就走了…… 摊主当场就凌乱了，我憋成内伤，把头扭向一边……&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;人口普查员： “请问您家里是几口人？” “是一口人” “十一口？” “不是十一口，而是一口人。” “二十一口？” “ 不是二十一口，其实一口人。” “七十一口？不会吧？” “ 不是七十一口，就是一口人！” “ 九十一口？” “ 对了，就是一口人&amp;quot;&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;男孩喜歡上了一個女孩。
 
-男孩是全校最後一名進來的，
-
-可是那個女孩很優秀。
-
-男孩費盡一切努力來引起女孩的注意。
-
-開學一星期後，
-
-他頂著染黃做了造型的頭發大搖大擺進了教室，
-
-看著禿頭班導張大了嘴巴看他。
-
-全班同學都哄堂大笑，看著禿頭班導的反應，
-
-可是男孩卻只是望著女孩。
-
-女孩頭也沒抬，靜靜的坐在座位上做題。
-
-後來，男孩在課上總是怪聲怪氣的接老師的話，
-
-課間在座位上放大音量講昨天他和誰又打了一架，
-
-因為在廁所抽煙點名被黑面校長在升旗儀式上大罵。
-
-他每次都會一臉無所謂，
-
-只是會偷偷地，很快地瞄一眼女孩。
-
-可是女孩的臉上總是驚不起一絲波瀾。
-
-終於他再也忍不住內心的情感，
-
-在一個放學的晚上，
-
-召集一群兄弟在教學樓下，
-
-當女孩安靜的走出樓梯口時，
-
-他用近乎嘶啞的聲音向她表白。
-
-人群一陣沸騰，高呼在一起。
-
-她愣了，白皙修長的手抓緊了書包背帶。
-
-過一會，她只是安靜的走到男孩面前，
-
-仰頭說，我的夢想是台大，我想在那裡等你。
-
-人群一陣哄笑，男孩紅了臉。
-
-以他的成績，專科也上不了。
-
-他一把把花塞到了旁邊的人懷裡，
-
-扭頭頭也不回擠出人群。
-
-第二天，傳來了男孩轉學的消息。
-
-後來的女孩，總是在課堂上看著那個空座位，發愣。
-
-3 年后，台大門口，
-
-她安靜地站著，
-
-比起 3 年前消瘦了許多，帶著行李，只是站著，像是在等誰。
-
-可是她也不知道她究竟在等著什麼，
-
-嘆了一口氣，走進校門。
-
-突然，身後一個明朗的聲音響起，你不是要等我嗎？
-
-怎麼不等了？
-
-女孩的眼淚流了下來，
-
-轉身。 男孩把頭發染回了黑色，
-
-一身簡單的白體恤牛仔褲，像是周遭泛著陽光。
-
-他帥氣地拉起了她的手，走進台大。
-
-後來，成為男孩女朋友多年的她偶然問道，
-
-你那年轉學去哪裡了，能考得這麼好？
-
-男孩說：我休學了，我爸叫我去公司上班，花個幾十萬動用一下関係就推甄上這間學校了。
-
-女孩也説：我早知道你家有錢，要不然我怎麼會跟你這笨小子在一起。
-
-你爸有錢，成就你的夢想
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;p&gt;如果中國發生戰爭，印度和俄羅斯會幹麻？&lt;/p&gt;
-&lt;p&gt;締結印俄互不侵犯條約。&lt;/p&gt;
-&lt;p&gt;俄羅斯：協助維穩內蒙古。&lt;/p&gt;
-&lt;p&gt;印度：人道救援西藏。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;Anonymous-Tue-04-Dec-2018-07:11:13-No.786494451-Report&quot;&gt;Anonymous Tue 04 Dec 2018 07:11:13 No.786494451 Report&lt;/h2&gt;
-&lt;p&gt;&lt;em&gt;Quoted By: &amp;gt;&amp;gt;786497658 &amp;gt;&amp;gt;786504320 &amp;gt;&amp;gt;786506142 &amp;gt;&amp;gt;786506466 &amp;gt;&amp;gt;786515797 &amp;gt;&amp;gt;786520996 &amp;gt;&amp;gt;786521222 &amp;gt;&amp;gt;786526300 &amp;gt;&amp;gt;786528420 &amp;gt;&amp;gt;786530340 &amp;gt;&amp;gt;786532790 &amp;gt;&amp;gt;786533003&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;I met a trap at an anime convention who I expected to be a typical sissy cockfiend type.&lt;/p&gt;
-&lt;p&gt;Turns out he was a top who liked to dominate guys like me.&lt;/p&gt;
-&lt;p&gt;So instead of having him moan and beg for me to fuck him I spent the night with him cumming inside me as much as he wanted. I had never been bottom before, (though, to be fair, I had had sex like three times before then) so I figured why not? The only bad part was he basically only had three lines of dirty talk, which were along the lines of &amp;quot;You thought you were gonna be fucking a cute girl, didn&amp;apos;t you? So why don&amp;apos;t you beg for more of this cute girl&amp;apos;s dick?&amp;quot; etc.&lt;/p&gt;
-&lt;p&gt;I figured out that he probably just gets a lot of ass at these cons, and didn&amp;apos;t ever expect to go five times with the same guy, so he only has one set of material. I&amp;apos;m guessing he liked me, because afterwards, when I was cleaning his cum out for the fifth time, he asked me to spend the night with him and cuddle, and I asked him &amp;quot;Do I look gay to you?&amp;quot; &lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;把黑色的心臟
-
-          藏在腐爛的身體裡
-
-                        裹著這無趣的世界
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt;  17856 +爆 8/11 織田信長     □  [認真] 最近眼皮一直在跳
-● 17857 +X7 8/14 明智光秀     □  [大喝] 敵人就在本能寺
-  17858 + 1 8/14 武田勝賴     □  [思考] 我是不是應該要切腹
-  17859  11 8/16 鄉民         □  [豪洨] 光秀你他媽雜碎
-  17860 +X6 8/16 德川家康     □  [認真] 再不快跑會被光秀幹掉
-  17861 +   8/16 織田秀忠     □  爹   我要跟你走了
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;p&gt;算命的:「你的命格不能吃牛，會衰」&lt;/p&gt;
-&lt;p&gt;員慶：「好，不用吃的就行了吧」&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;1985/10/30 出生的某位心律不整男子的傳奇事蹟
-華人幼稚園→ 中埔國小→ 慈文國中→ 桃園高中→ 宜大電機→ 中正通訊所
-支持學運 在 PTT 痛罵對岸 經常開分身大戰自己幻想中的中國人 認為大陸沒有前途
-去紐西蘭失敗 居然在對岸支身當台勞 長期幫共匪貢獻 GDP 存了好幾桶金 功在黨國
-與政黑某位被大陸女友甩的花癡齊名，可說是 PTT 上的兩大活寶
-預知詳情，可用站內信詢問原 po 或自行餵狗
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt;推 gundam0613: 真金不怕火煉 甲屌不怕大便    01/22 11:01
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;Raken Chen
-13 小時 ·
-
-越來越多的誤會，使我身敗名裂
-為了讓謠言不再猖獗，讓傷口不再擴大
-這一次我決定要捍衛我的清白，挽救我的名聲
-再次挺身而出，來澄清所有的誤會！
-
-「讓我上她」
-有一次有串正妹文，大家都在私她的臉書
-我也很有興趣，我就留言 讓我上她的臉書看看
-沒想到截圖的人很惡劣，把後面的字拿掉
-變成 讓我上她 ，使我蒙受不白之冤
-
-「我整個硬你知道嗎」
-有一次大家在討論肩膀酸痛的問題
-每個人在說自己肩膀的僵硬程度
-我一摸我自己，發現整個是硬的
-所以我才會有這樣的留言
-
-「好想從後面進去喔」
-有一次搭公車，前門已經一堆人排隊
-後面的門卻遲遲不開，我才很生氣的說
-好想從後面進去，難道這樣也不行嗎?
-
-「好想跟她狠狠的做愛」
-有一次我看到一個公益團體
-正妹主持人號召大家一起來送溫暖 做愛心
-我覺得這活動很有意義
-於是立刻義不容辭留言說：好想跟她狠狠的做愛心
-但打字打太快，打到愛，心還沒出來，就送出去了
-這的確是我的疏失，但我本意是純潔的
-
-「好想跳起來插下去喔」
-有一次在廟裡拜拜完要插香，但那香爐做得太高
-我根本沒辦法去插，所以我才說好想跳起來插下去
-後來卻被人惡意截圖，我覺得很莫名其妙
-
-「好想去弄髒她的身體」
-有一次去參加海邊的玩泥巴活動
-看到有一個女生，從頭到尾不敢碰泥巴
-身體都乾淨的，我知道這時需要有一個人
-為她開一扇窗，帶她走出第一步
-所以我才留言好想去弄髒她的身體
-這也是出自善意不是嗎?
-
-「好想把奶揉到噴出汁來」
-有一次我去農場，看到很多乳牛在吃草
-農場主人邀我去參加擠牛奶的活動
-因為我技術不好，怎麼擠 牛都不給奶
-所以我才留言好想把奶揉到噴出汁來
-
-「好想填滿她身上的每個洞」
-有一次在路上看到一個女生，身上穿的衣服與牛仔褲，
-上面很多破洞，我最討厭這種穿著風格，
-我覺得很破壞道德風俗，所以才說想把她身上的每個洞
-用一針一線給填起來，沒想到這樣你們也能想歪
-
-「如果沒有法律，我一定讓她懷孕」
-大家都知道，台灣不少婦女都患有不孕症
-但礙於法律，很多民俗藥物，都無法讓這些婦女來使用
-所以我在想，如果沒有法律的規範，我真的很想把這些民俗偏方
-來提供給這些不孕症婦女，讓她們可以如願懷孕
-難道這樣也錯了嗎?
-5454
-23 則留言 9 次分享
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt;[請神] 弒父姦母的本
-
-推 max0616: [ややかか]今でも法の外に悠悠としている(683P)           08/28 22:22
-推 SonyXperiaZ3: [72 年次板橋人個人漢化] [ややかか] エディプスコ    08/29 00:37
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;John Wang‎ 
-發文到
- 異端審問會
-39 分鐘 ·
-
-高中的時候
-總是會有那麼一群某個社團的人
-覺得自己辦成發就是神、
-以不回家為驕傲、
-當了社團幹部比畢業後直接上班還要跩、上課瘋狂弄成發的東西老師一干涉就大聲崩潰「這是我的青春你不懂」、
-創了超級多無意義名詞 for example「大成小成北成馬眼北茶馬眼小茶馬眼新茶小活小迎」、
-然後跑了各種高校舞會覺得自己是社交活躍其他同學都是鄉巴佬我們才是校園頂層王、
-自稱老人但其實才高三、
-（然後高一高二的學弟妹都要自稱小孩然後咪比咪比的巴著學長姐）ㄏ 小小腦麻兒
-
-上課會闖入別的班級大喊「打公關囉」然後大聲尖叫、
-在新生臉書群組發一張自拍大聲說「學弟妹不會的問題都可以問我」但自己被當爆，
-然後再集體考上私立學店，或是最後社團內情侶分手而鳥獸散。
-（然後高中的時候不穿制服大學再狂穿制服回去自己的高中耍威風訓學弟妹）
-
-)段考前夕他們在圖書館底下大聲「練活」的時候我都很認真的期望他們全都在跑去別校舞會跳他們半生不熟的表演的時候集體暴斃
-147 你和其他 146 人
-55 則留言
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;p&gt;有一條路，名曰黃泉；有一條河，名曰忘川。
-河邊一石，名曰三生；河上有橋，名曰奈何。
-奈何橋上，有座土台，名曰望鄉。
-望鄉台上，有一老婦，名曰孟婆。
-無論生前種種，飲下孟婆湯，便忘三生事。&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;仰望著讓人目眩神迷的東西只是錫箔
-飛鷹的背後只是一片灰
-可愛妝容只是粉末
-塗亮的指甲也有黑邊
-而一條骯髒的手帕仍然骯髒...即使它散發著香水的氣味!
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;業者看板介紹各個罩杯：
-A：幾乎算是胸部
-B：勉強算胸部
-C：不能抱怨
-D：美味
-DD：雙重美味
-E：巨大
-F：假奶
-G：該去縮胸了
-H：救命，我跌倒爬不起來
-J：「嫉妒我的豪乳嗎？」英國波神喬丹
-K：小心變態
-L：妳的胸部已經大到好笑了
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt;推 orz65535: 689 * 92 =  63388                                     06/03 12:40
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;你比較喜歡哪一個?
-當年不是黨國大老但是被江浙財團捧紅的中國帥哥
-跟同樣擁兵一方的諸侯約會裁軍結果半途諸侯們爽約，平常有在寫日記的莊嚴男人開始發飆
-在旁邊讀著荒漠甘泉冷眼旁觀看著薔薇戰爭的人，為了中國的事情爭吵
-別國調侃是不是中國總統，義正詞嚴的說著我是民族的燈塔的威嚴老先生
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;      將月亮置入他的雙眼，她的潔白會將欺騙者放置的虛妄景象吞噬。
-      將蜜蜂置入他的雙耳，熱愛真理的蜜蜂會將欺騙者的謊言摧毀。
-      將鹽置入他的口中，以免欺騙者以蜂蜜的滋味討其歡心，以灰塵的味道使其作嘔。
-      以鐵釘釘住他的手，讓他無法執行欺騙者的命令。
-      將其心放置於隱密的所在，使他能隨心所欲，不受欺騙者的掌控。
-                                -- 《英倫魔法師》 歐姆斯格的驅除幻覺處方
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;貴族之子受到詛咒化作獸頭人身，孤身流浪尋求解咒。他拯救國王，要求報酬乃是
-國王已有、但國王不知道，這便是他解咒之法。國王返回皇宮，見女王誕下公主，
-知乃獸人要求之報酬。公主成年，與獸人夜會，國王已死，女王尋得狩魔獵人欲殺
-獸人。狩魔獵人救下獸人之命，助其解咒，女王允婚，獸人欣喜，問狩魔獵人欲求
-何物？狩魔獵人冷笑，他要的獸人已有、但獸人不知道：便是公主胎中所懷之子！
-                                                              －－獵魔士
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;新娘霍地住手不攻說道：「風君，你受這妖女迷惑，竟然離我而去。」
-風太郎道：「二乃，請你諒解我的苦衷。咱倆婚姻之約，風太郎絕無反悔，只是稍遲數日
-—  — 」
-新娘冷冷的道：「你去了便休再回來，只盼你日後不要反悔。」 五月咬牙站起，一言不
-發的向外便走，肩頭鮮血，流得滿地都是。
-禮堂眾人雖然見過江湖上不少異事，但今日親見姐妹爭夫，血濺禮堂，新娘子頭披白紗而
-毀傷情敵，無不神眩心驚，誰也說不出話來。 風太郎一頓足，說道：「中野父於我恩重
-如山，情深似海。二乃，二乃，盼你體諒。」說著隨了五月出去。武田、糕點掌櫃、前田
-、江端等不明其中原因，誰也不敢攔阻。
- 新娘霍地伸手扯下頭上白紗，朗聲說道：「各位親眼所見，是他負我，非我負他，自今
-而後。我和姓上杉的恩斷義絕。」
-說著揭下頭頂三朵玫瑰，伸手握緊，忽然另一手中隔空抓了一把不明粉末，雙手一合一搓
- ，三朵玫瑰盡數化為齏粉，簌簌而落，說道；「我中野二乃不雪今日之辱，有如此花。
-」
-糕點掌櫃、武田、江端等待欲善言相慰，要她候風太郎歸來，問明再說，卻見二乃雙手一
-扯 ，嗤的一響，一件紡織華美的白色婚服撕成兩片，拋在地下。她飛身而起，美妙無比
-約在 半空中一個轉折，上了屋頂。
- ----節錄自春場庸&amp;lt;五姝追愛記.第 34 回 新娘素手裂白紗&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;p&gt;文縱人_ 諭使鬼_ 書通五行.. 言知命&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt;推 buzzy0306: 身為碩班研究颱風的，我覺得某幾顆的颱風眼看起來真是   03/14 07:14
-→  buzzy0306: 緊緻且圓潤飽滿，在演變過程中還會不規則的收縮蠕動甚   03/14 07:14
-→  buzzy0306: 至變形。而且就熱力學的觀點，眼牆本身是又熱又濕的，   03/14 07:14
-→  buzzy0306: 應該也很不錯。更何況，眼的中心是很強的下沉氣流，所   03/14 07:14
-→  buzzy0306: 以那個吸吮的力道應該也是不容小覷                     03/14 07:14
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;蘿莉銘&quot;&gt;蘿莉銘&lt;/h2&gt;
-&lt;p&gt;身不在高，米四就行，胸不在大，有型則靈，斯是蘿莉，為吾是侵。
-洋裝貓耳朵，小嘴大眼睛。短髮很俏麗，長髮也飄逸。可以給糖果，玩親親。
-無八卦之亂耳，無血拼之勞行。學校游泳室，公園小涼亭。吾自云：能萌就行&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt; 標題  [新聞] 深海活細菌 8600 萬年未進食
-推 angelplume:真好 不用買第二個便當                                05/24 11:30
-推 asstitle:8600 萬年不吃不喝 可以買下整棟帝寶了                    05/24 11:31
-推 hikon:[新聞]細菌不吃不喝 8600 萬年 買不起台北房                   05/24 11:40
-→  nixon:這細菌怎麼不從 8600 萬年前就存一筆定存, 到現在應該很可觀    05/24 11:50
-推 tokyoto:餓這麼久 跑出來會大吃特吃嗎？                           05/24 11:58
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;p&gt;我們都知道啊，這個問題，大家都非常的關切。
-本人，也非常的關切。
-我們已經聯絡，會同了所有的專家、學者
-一定要研究、擬定出一個，非常妥善合適的，辦法和措施出來。
-相信大家都會得到一個非常圓滿而完美的結果和結局。&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt;推 bitlife:第一步要先取得濃縮柚,這要等到中秋,寒假沒辦法            01/03 07:16
-推 yibeen:要放到寒假才夠濃縮吧 中秋鈾才剛挖出來 含水量還太多       01/03 14:43
-推 Entropy1988:你可以把中指插進柚裡面看看，會有東西噴出來喔!       01/03 16:52
-推 bitlife:樓上的做法會產生黏手反應                                01/03 17:28
-推 hank780420:                     最後柚會爆炸                    01/03 23:21
-           引用自《白痴也會的核子武器 DIY 手冊》(民明書房, 2011).
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;余與汝 遇於雨 汝語余 於雨餘
-於汝寓 汝娛余 汝予乳 予余娛
-余預羽 羽娛乳 娛乳餘 汝如雨
-余御汝 如魚愉 御汝餘 愈譽余
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt;→ weakan: 君不見很多窒息式性愛失誤致死案件                        10/06 20:12
-推 aaron97: 君不見機會不屬於我                                     10/06 20:38
-推 asssstang: 君不見大家只志在幻想                                 10/06 20:43
-推 aposky: 君不見脖子上的手                                        10/06 20:53
-→ weakan: 君不見手是掐在自己丁丁的脖子上                          10/06 21:04
-&lt;/code&gt;&lt;/pre&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/moderate-symbol-abstraction-make-sence.html</id>
 <title>程式語言中適量的符號有助於閱讀</title>

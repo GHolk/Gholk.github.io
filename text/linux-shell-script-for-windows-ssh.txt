@@ -164,13 +164,111 @@ type 2019-01-01.19o ^
 [自己再備份一次 unavco 提供的 rpm 包][runpkr00 home] 。
 
 [runpkr00 unavco]: https://kb.unavco.org/kb/article/trimble-runpkr00-v5-40-latest-version-mac-osx-10-7-windows-xp-7-linux-solaris-744.html
-[runpkr00 home]: drive
+[runpkr00 home]: https://drive.google.com/drive/folders/1-WSCp14Yt3g8DMmNo1qsknaAHM_wCA3f?usp=sharing
 
-## 技術總結
-在 linux 上產生 batch 腳本， 並且在產生的 batch 腳本中，
-再使用 windows 10 中的 ssh 登入回 linux 執行 linux shell 指令。
+下載 rpm 包後，可能會因為作業系統太新，
+不符合 rpm 包的要求無法安裝。
+但總之裝就對了，看要強制裝，
+或是用其它工具解壓縮 rpm 包，
+再手動複製到作業系統內。
+我是用 debian，所以用 alien 把 rpm 轉成 tgz 後手動解壓縮。
+裡面的執行檔是 static link，
+雖然是古董了，但還是可以正常執行。
+還有附手冊，雖然內容有夠少，雖然選項都有介紹，
+但 unavco 網站提的眉角都沒記錄。
+
+```sh
+alien --to-tgz runpkr00*.rpm
+tar -xvf runpkr00*.tgz
+install ./usr/bin/runpkr00 /usr/local/bin
+install --mode 644 ./usr/share/man/man1/runpkr00.1.gz \
+                   /usr/local/share/man/man1
+```
+
+runpkr00 如同 unavco 的網站建議的，
+runpkr00 在轉換 t02 格式時，最好加上 `-g` 選項，
+若是記錄檔包含 <abbr title="record type 27">rt27</abbr> 
+時會一併轉換，（手冊寫 type 27。）副檔名會從 dat 變成 tgd。
+teqc 能處理 trimble 的 dat 及 tgd 格式，
+直接 `teqc 2019-01-01.tgd > 2019-01-01.19o` 即可。
+另外 runpkr00 在選項解析上設計不良，
+（也可能是因為在現在的環境執行很老的執行檔。）
+參數順序或連寫都可能造成錯誤，最好照 unavco 或手冊上的建議用法。
+
+```sh
+runpkr00 -g -d 2019-01-01.T02
+teqc 2019-01-01.tgd > 2019-01-01.19o
+```
+
+runpkr00 轉出來的 rinex 檔案，
+相比新版程式 convert to rinex 少了一些觀測量。
+我的 runpkr00 轉出來有 L1 L2 C1 P1 P2 S1 S2，
+而 convert to rinex 有 C1 C2 C5 C7 C8 L1 L2 L5 L7 L8 P1 P2。
+就 gipsy 和 csrs-ppp 的解算結果來看，
+convert to rinex 稍好，但沒有很明顯。
+考慮 convert to rinex 的執行門檻，
+使用 runpkr00 是可接受的。
+但就後處理而言，執行速度好像不是重點；
+花個 10 幾分鐘處理一整天的數據，應該不是不可接受。
+
+另外 runpkr00 轉出來的 rinex 檔案，
+會缺少記錄天線位移的 `ANTENNA: DELTA H/E/N` 欄位，
+如果需要，記得在 teqc 時手動加上去。
+
+```sh
+eastd=1 northd=2 heightd=3
+teqc -O.pehEN,m $eastd $northd $heightd 2019-01-01.tgd > 2019-01-01.19o
+```
 
 ## powershell 與 windows 舒適圈
+這篇文章中，我繞了很大一圈，在 linux 上產生 windows 的 batch 腳本，
+並且在產生的 batch 腳本中，再使用 windows 10 中的 ssh
+登入回 linux 執行 linux shell 指令。
+最主要的原因是我無法把 trimble 的 convert to rinex
+整合進現有的 linux shell 工具鏈中。
+我所需要的是，在 linux 上執行一條命令後，就幫我轉好檔。
+
+如果是不同 unix like 作業系統中，
+最最基礎也可以用 ssh 簡單連結，
+把另一台電腦上的程式當自己家用。
+（也許我可以試試在 linux 上以 shell 介面登入 windows？）
+
+```sh
+ssh user@another.os '
+    cat > 2019-01-01.t02
+    convert 2019-01-01.t02
+    cat 2019-01-01.19o
+    rm 2019-01-01.*
+' < 2019-01-01.t02 > 2019-01-01.19o
+```
+
+或是如果可以讓 convert to rinex 在 linux 的 wine 中運作，
+也可以有更好的效果。
+但都不行，只好想辦法在 windows 中處理了。
+
+對於一直生活在 windows 中的人，則根本沒這個問題。
+由於檔案也本來就存在本機，
+可以直接寫個 batch 遍歷所有檔案一一轉換；
+就算 batch 的功能有限，這樣基本的功能還是做的到的。
+而且 crx2rnx teqc 或其它這類 gnss 數據，
+多也會提供 windows 版本，所以完全在 windows 處理，
+雖然 batch 沒有 bash 那麼好用，還是足夠了。
+
+何況現在還有 powershell，先天體質就比 bash 好，
+只差在完整的生態和配合的工具。
+以批次處理來說，要活在 windows 中完成這些工作，
+windows 和 linux 的差距已經不像以前那樣巨大了。
+
+但 windows user 的主要問題，
+是系統的設計哲學，不鼓勵使用者動手的文化。
+要一個慣用 windows 圖形介面的人，
+去學習命令列操作是很困難的。
+
+另一個門檻就是 windows 上寫程式太麻煩，windows 有很多自己的鍋。
+visual stdio 太肥，雖然也是有各種 ide，如 code block dev c++。
+但 linux 對腳本語言的支持還是最好的，
+一個 shebang 直接把所有直譯語言當執行檔用。
+
 
 #linux
 #windows

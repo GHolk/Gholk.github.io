@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-10-31T07:21:04.117Z</updated>
+  <updated>2019-10-31T10:34:20.681Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,245 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/linux-shell-script-for-windows-ssh.html#fix-for-loop-close-done</id>
+<title>以 linux shell 為基礎在 windows 中批次處理</title>
+<published>2019-10-30T16:04:16.086Z</published>
+<updated>2019-10-31T10:34:20.662Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/linux-shell-script-for-windows-ssh.html#fix-for-loop-close-done"/>
+<summary type="html">&lt;pre class=&quot;diff&quot;&gt;@@ -85,6 +85,7 @@ scp $(printf &amp;quot;$basename.19%s &amp;quot; o g n q b c) $host:data
+ del $basename.*
+ 
+ BATCH
++done
+ ```
+ 
+ 首先最重要的，ssh 要開免密碼登入，
+&lt;/pre&gt;</summary>
+<category term="linux"/>
+<category term="windows"/>
+<category term="study"/>
+<category term="gnss"/>
+<category term="shell"/>
+<content type="html">&lt;h1 id=&quot;以-linux-shell-為基礎在-windows-中批次處理&quot;&gt;以 linux shell 為基礎在 windows 中批次處理&lt;/h1&gt;
+&lt;p&gt;trimble 的 gnss 接收儀預設是記錄 trimble 的 T02 格式，
+要用 trimble 的 windows 程式 convertToRINEX 轉成 rinex 格式，
+只能開虛擬機或在另一台 windows 電腦上轉換。
+但檔案很多，於是研究了一下 convert to rinex 的命令列介面，
+運用 windows 10 開始內建的 ssh 功能傳檔案，
+再在 linux 上產生 bat 批次檔，完成一次跨系統合作演出。&lt;/p&gt;
+&lt;p&gt;現在在管系館的 gnss 站，是 trimble 的接收儀，
+預設是記錄 trimble 的 t02 格式，
+要用 trimble 提供的程式 convertToRINEX
+才能轉換成通用的 rinex 格式。&lt;/p&gt;
+&lt;h2 id=&quot;convert-to-rinex&quot;&gt;convert to rinex&lt;/h2&gt;
+&lt;p&gt;convert to rinex 執行時可以有圖形介面，
+同時也可以用參數傳入檔名，單純在命令列處理。
+雖然圖形介面中，可以一次選取多個檔案，
+提供基本的批次處理功能。&lt;/p&gt;
+&lt;p&gt;但 convert to rinex 的處理速度實在太慢，
+一天長度周期一秒的 T02 檔案，要轉五分鐘。
+而且 convert to rinex 的圖形介面設計，
+是會先掃描完整個檔案，才能點下轉換鈕轉換；
+一個檔案大概掃 4 分鐘，轉換 1 分鐘。&lt;/p&gt;
+&lt;p&gt;選取多個檔案批次處理時，則是全部掃描完才會開始轉換。
+我不確定記憶體用量會不會隨檔案數增加，
+所以不敢一口氣轉全部。
+最後決定用命令列的介面，轉一次呼叫一次程式，
+也避免要一次把所有檔案傳到 windows 上，怕硬碟空間不足。&lt;/p&gt;
+&lt;h2 id=&quot;使用-sftp-在虛擬機與本機間傳送檔案&quot;&gt;使用 sftp 在虛擬機與本機間傳送檔案&lt;/h2&gt;
+&lt;p&gt;trimble 的程式 convertToRINEX 只提供 exe 格式，
+我試了在 wine 下執行，也裝了.NET 框架，
+但執行時還是會報錯。最後就放棄在 wine 下執行了。&lt;/p&gt;
+&lt;p&gt;但還是計劃要做，就決定開 qemu 虛擬機來轉。
+本來想弄個 9p 來共享虛擬機和本機的檔案，
+後來發現 9p 開起來只是虛擬機裡可以連上去，
+但虛擬機裡還是要有 9p 的客戶端才有用；
+windows 還是放棄吧。&lt;/p&gt;
+&lt;p&gt;本來在考慮 smb，但忽然想到 windows 10 內建 ssh 了，
+於是可以用 sftp 來傳。
+於是 batch 程式寫起來就像這樣：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bat&quot;&gt;scp user@10.0.2.2:data/2019-01-01.T02 .
+&amp;quot;C:\Program Files (x86)\Trimble\convertToRINEX\convertToRinex.exe&amp;quot; 2019-01-01.T02 -mo GHLK -v 2.11
+scp 2019-01-01.19o user@10.0.2.2:data
+del 2019-01-01.*
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;但有個問題，我不會寫 batch 迴圈。
+而且我不想一次下載全部的 t02 檔案，
+所以我想要下載一個，轉檔完傳回去，刪掉後再換下一個。
+可是這樣我得要從 sftp 的 ls 輸出中，
+取得檔案列表，然後遍歷。
+聽說 batch 的編程能力是有限制的，
+不像 bash 是一門完整的程式語言，
+我想這已經超出 batch 的能力範圍。&lt;/p&gt;
+&lt;h2 id=&quot;在-linux-上產生腳本&quot;&gt;在 linux 上產生腳本&lt;/h2&gt;
+&lt;p&gt;反正 shell 腳本的本質只是一連串依序執行的命令，
+可編程只是用來降低複雜度的附加功能。
+若是缺少編程功能，只能以更複雜的方式完成程式，
+像是由 &lt;em&gt;另一種程式&lt;/em&gt; ，來產生目標腳本；
+甚至直接在程式中呼叫 &lt;code&gt;system()&lt;/code&gt; 達到編程需求。
+總之我就跑了個 bash 迴圈，
+生出了要在 windows 上執行的 batch 檔：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;host=user@10.0.2.2
+convert=&amp;apos;&amp;quot;C:\Program Files (x86)\Trimble\convertToRINEX\convertToRinex.exe&amp;quot;&amp;apos;
+
+for t02 in data/*.T02
+do
+    filename=$(basename $t02)
+    basename=$(basename $filename .T02)
+    cat &amp;lt;&amp;lt;BATCH
+
+scp $host:$t02 .
+$convert $filename -mo GHLK -v 2.11
+scp $(printf &amp;quot;$basename.19%s &amp;quot; o g n q b c) $host:data
+del $basename.*
+
+BATCH
+done
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;首先最重要的，ssh 要開免密碼登入，
+否則執行一次 scp 就要輸入一次登入密碼，
+根本不可能批次作業。
+在 windows 的 ssh 除了基本的 ssh，
+傳送檔案的 sftp 外，連 ssh-keygen 也內建了。
+執行一次產生金鑰後，丟到 linux 的 &lt;code&gt;.ssh/authorized_keys&lt;/code&gt; 即可。
+如果不信任 windows 的話，
+可以跑完腳本就把公鑰從 authorized_keys 裡刪除。&lt;/p&gt;
+&lt;p&gt;windows 的 glob 萬用字元，
+似乎不會由 shell 展開，而是命令得自己展開。
+cmd 的內建命令 del dir 之類的，多支援 glob，
+但 ssh 就不支援，直接回找不到檔案。
+（但 scp 複製遠端 linux 上的檔案時是支援 glob 的。）&lt;/p&gt;
+&lt;h2 id=&quot;傳到-linux-上並壓縮&quot;&gt;傳到 linux 上並壓縮&lt;/h2&gt;
+&lt;p&gt;由於本人收納習慣極差，server 的硬碟也快滿了。
+而轉換出來的 rinex 檔是 ascii 格式很佔空間，
+尤其我是轉出周期一秒的檔案。
+所以我希望可以在上傳後自動壓縮。&lt;/p&gt;
+&lt;p&gt;rinex 壓縮有二步：rnxcmp 軟體提出了一種格式
+&lt;abbr title=&quot;compress rinex&quot;&gt;crx&lt;/abbr&gt;，
+可以最小化 rinex 中文字所記錄的資訊，
+並提供了 rnx2crx crx2rnx 二個轉換程式。
+rnx2crx 的輸出仍為文字檔，
+所以可以再用 gzip 或其它壓縮工具壓縮一次。&lt;/p&gt;
+&lt;p&gt;在 server 上監視檔案上傳我還沒試過，
+而且感覺就很麻煩，還要處理檔案複製到一半的情況。
+所以我決定直接在 windows 中處理，
+直接把傳送最大的 rinex 檔案 &lt;code&gt;*.??o&lt;/code&gt; 的 scp，
+換成以下的 ssh 命令：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-cmd&quot;&gt;ssh user@10.0.2.2 &amp;quot;rnx2crx - | gzip - &amp;gt; 2019-01-01.19d.gz&amp;quot; &amp;lt;2019-01-01.19o
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;但發現這樣重導向不知道為什麼會卡住，會卡在 gzip 那邊，
+或是其它在 linux 上讀取標準輸入的程式，
+可能 windows 沒有送出 eof 之類的？
+後來試了管道不會卡住，
+就 google 到 cmd 裡類似 &lt;code&gt;cat&lt;/code&gt; 的命令 &lt;code&gt;type&lt;/code&gt; ，
+最後就這樣用了。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-cmd&quot;&gt;type 2019-01-01.19o | ssh user@10.0.2.2 &amp;quot;rnx2crx - | gzip - &amp;gt; 2019-01-01.19d.gz&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;另外還有試了在傳送文字檔時壓縮會不會好一點，但幾乎沒有差別。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-cmd&quot;&gt;type 2019-01-01.19o ^
+| ssh -o Compression=yes ^
+  user@10.0.2.2 &amp;quot;rnx2crx - | gzip - &amp;gt; 2019-01-01.19d.gz&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;推測原因：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;虛擬機裡壓縮有性能銷耗，且 linux 端還要解壓一次，都吃同一台機器的 cpu。&lt;/li&gt;
+&lt;li&gt;虛擬機的網路是假的網路，和本機間的網路速度遠超實體網路。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;用-runpkr00-直接在-linux-上轉檔&quot;&gt;用 runpkr00 直接在 linux 上轉檔&lt;/h2&gt;
+&lt;p&gt;後來與 &lt;a href=&quot;https://github.com/holishing&quot;&gt;r2&lt;/a&gt; 討論後，才知道另一支程式 runpkr00，
+是古早時期 trimble 提供用來轉換 t02 格式的。
+最大的優勢是提供了 linux 甚至 solaris 版本的執行檔，
+雖然主要支援對向是 t02 之前的 t00 t01，
+但如今仍可以運作在 t02 格式上。&lt;/p&gt;
+&lt;p&gt;我是在 &lt;a href=&quot;https://kb.unavco.org/kb/article/trimble-runpkr00-v5-40-latest-version-mac-osx-10-7-windows-xp-7-linux-solaris-744.html&quot;&gt;unavco 的網站上找到 runpkr00 的執行檔的&lt;/a&gt; ，
+但總之為了防止死檔，還是
+&lt;a href=&quot;https://drive.google.com/drive/folders/1-WSCp14Yt3g8DMmNo1qsknaAHM_wCA3f?usp=sharing&quot;&gt;自己再備份一次 unavco 提供的 rpm 包&lt;/a&gt; 。&lt;/p&gt;
+&lt;p&gt;下載 rpm 包後，可能會因為作業系統太新，
+不符合 rpm 包的要求無法安裝。
+但總之裝就對了，看要強制裝，
+或是用其它工具解壓縮 rpm 包，
+再手動複製到作業系統內。
+我是用 debian，所以用 alien 把 rpm 轉成 tgz 後手動解壓縮。
+裡面的執行檔是 static link，
+雖然是古董了，但還是可以正常執行。
+還有附手冊，雖然內容有夠少，雖然選項都有介紹，
+但 unavco 網站提的眉角都沒記錄。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;alien --to-tgz runpkr00*.rpm
+tar -xvf runpkr00*.tgz
+install ./usr/bin/runpkr00 /usr/local/bin
+install --mode 644 ./usr/share/man/man1/runpkr00.1.gz \
+                   /usr/local/share/man/man1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;runpkr00 如同 unavco 的網站建議的，
+runpkr00 在轉換 t02 格式時，最好加上 &lt;code&gt;-g&lt;/code&gt; 選項，
+若是記錄檔包含 &lt;abbr title=&quot;record type 27&quot;&gt;rt27&lt;/abbr&gt; 
+時會一併轉換，（手冊寫 type 27。）副檔名會從 dat 變成 tgd。
+teqc 能處理 trimble 的 dat 及 tgd 格式，
+直接 &lt;code&gt;teqc 2019-01-01.tgd &amp;gt; 2019-01-01.19o&lt;/code&gt; 即可。
+另外 runpkr00 在選項解析上設計不良，
+（也可能是因為在現在的環境執行很老的執行檔。）
+參數順序或連寫都可能造成錯誤，最好照 unavco 或手冊上的建議用法。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;runpkr00 -g -d 2019-01-01.T02
+teqc 2019-01-01.tgd &amp;gt; 2019-01-01.19o
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;runpkr00 轉出來的 rinex 檔案，
+相比新版程式 convert to rinex 少了一些觀測量。
+我的 runpkr00 轉出來有 L1 L2 C1 P1 P2 S1 S2，
+而 convert to rinex 有 C1 C2 C5 C7 C8 L1 L2 L5 L7 L8 P1 P2。
+就 gipsy 和 csrs-ppp 的解算結果來看，
+convert to rinex 稍好，但沒有很明顯。
+考慮 convert to rinex 的執行門檻，
+使用 runpkr00 是可接受的。
+但就後處理而言，執行速度好像不是重點；
+花個 10 幾分鐘處理一整天的數據，應該不是不可接受。&lt;/p&gt;
+&lt;p&gt;另外 runpkr00 轉出來的 rinex 檔案，
+會缺少記錄天線位移的 &lt;code&gt;ANTENNA: DELTA H/E/N&lt;/code&gt; 欄位，
+如果需要，記得在 teqc 時手動加上去。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;eastd=1 northd=2 heightd=3
+teqc -O.pehEN,m $eastd $northd $heightd 2019-01-01.tgd &amp;gt; 2019-01-01.19o
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;powershell-與-windows-舒適圈&quot;&gt;powershell 與 windows 舒適圈&lt;/h2&gt;
+&lt;p&gt;這篇文章中，我繞了很大一圈，在 linux 上產生 windows 的 batch 腳本，
+並且在產生的 batch 腳本中，再使用 windows 10 中的 ssh
+登入回 linux 執行 linux shell 指令。
+最主要的原因是我無法把 trimble 的 convert to rinex
+整合進現有的 linux shell 工具鏈中。
+我所需要的是，在 linux 上執行一條命令後，就幫我轉好檔。&lt;/p&gt;
+&lt;p&gt;如果是不同 unix like 作業系統中，
+最最基礎也可以用 ssh 簡單連結，
+把另一台電腦上的程式當自己家用。
+（也許我可以試試在 linux 上以 shell 介面登入 windows？）&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;ssh user@another.os &amp;apos;
+    cat &amp;gt; 2019-01-01.t02
+    convert 2019-01-01.t02
+    cat 2019-01-01.19o
+    rm 2019-01-01.*
+&amp;apos; &amp;lt; 2019-01-01.t02 &amp;gt; 2019-01-01.19o
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;或是如果可以讓 convert to rinex 在 linux 的 wine 中運作，
+也可以有更好的效果。
+但都不行，只好想辦法在 windows 中處理了。&lt;/p&gt;
+&lt;p&gt;對於一直生活在 windows 中的人，則根本沒這個問題。
+由於檔案也本來就存在本機，
+可以直接寫個 batch 遍歷所有檔案一一轉換；
+就算 batch 的功能有限，這樣基本的功能還是做的到的。
+而且 crx2rnx teqc 或其它這類 gnss 數據，
+多也會提供 windows 版本，所以完全在 windows 處理，
+雖然 batch 沒有 bash 那麼好用，還是足夠了。&lt;/p&gt;
+&lt;p&gt;何況現在還有 powershell，先天體質就比 bash 好，
+只差在完整的生態和配合的工具。
+以批次處理來說，要活在 windows 中完成這些工作，
+windows 和 linux 的差距已經不像以前那樣巨大了。&lt;/p&gt;
+&lt;p&gt;但 windows user 的主要問題，
+是系統的設計哲學，不鼓勵使用者動手的文化。
+要一個慣用 windows 圖形介面的人，
+去學習命令列操作是很困難的。&lt;/p&gt;
+&lt;p&gt;另一個門檻就是 windows 上寫程式太麻煩，windows 有很多自己的鍋。
+visual stdio 太肥，雖然也是有各種 ide，如 code block dev c++。
+但 linux 對腳本語言的支持還是最好的，
+一個 shebang 直接把所有直譯語言當執行檔用。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/linux-shell-script-for-windows-ssh.html#powershell-與-windows-舒適圈</id>
 <title>以 linux shell 為基礎在 windows 中批次處理</title>
 <published>2019-10-30T16:04:16.086Z</published>
@@ -4978,210 +5217,7 @@ http://news.ltn.com.tw/news/life/paper/267028
 只是 async 讀寫都清楚、簡單很多。</summary>
 <category term="javascript"/>
 <category term="browser"/>
-<content type="html">&lt;h1 id=&quot;用-async-實作-debounce-atomic-及其它使用技巧&quot;&gt;用 async 實作 debounce atomic 及其它使用技巧&lt;/h1&gt;
-&lt;p&gt;最近碰了 indexed database，所以寫了很多非同步的函數。
-在程式中因為 ui 和底層 api 的要求，
-以非同步函數實作出了防彈跳、節流閥、原子操作，
-也摸索了一些對非同步函數的使用技巧。
-其實 async 和傳統的回呼函數的能力幾乎是相同的，
-只是 async 讀寫都清楚、簡單很多。&lt;/p&gt;
-&lt;h2 id=&quot;從-sleep-開始的-async-生活&quot;&gt;從 sleep 開始的 async 生活&lt;/h2&gt;
-&lt;p&gt;在 js 裡要將一個函數非同步執行，一切的起點就是 setTimeout 函數，
-可以在時間到後，觸發回呼函數。
-在 promise 和 async 的世界中，則可以實現一個類似的 sleep 函數，
-會等待一定時間後再繼續。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;function sleep(second) {
-  return new Promise(wake =&amp;gt; setTimeout(wake, second*1000))
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;sleep 就是簡單的把 setTimemout 包裝，
-變成返回一個 promise 的函數。
-我是習慣用秒記時，如果你比較喜歡原本的毫秒，也可以改回去。&lt;/p&gt;
-&lt;h2 id=&quot;debounce-防彈跳&quot;&gt;debounce 防彈跳&lt;/h2&gt;
-&lt;p&gt;debounce 是防彈跳，意思是如果有多個連續的小事件，
-會等最後一個再一起送出。
-像是使用者很急的時候，可能一個按鈕會按很多次，
-如果沒做防彈跳的話，就會送出很多個事件，
-防彈跳就是等到不再有連續事件後，再送出最後一個。
-所以實作上防彈跳會設定一段延遲，
-在延遲時間內不再有新事件後才送出。&lt;/p&gt;
-&lt;p&gt;例如做一個打字後即時搜尋的功能，
-如果每打一個字就送出搜尋，會很浪費伺服器資源，
-所以會等一段延時，確定你打完了才送出搜尋。&lt;/p&gt;
-&lt;p&gt;我的防彈跳函數，是在連續多次呼叫時，
-只在最後一次實際執行。
-用 async 實作的話，就是要保存一個時間戳記，
-每次被呼叫時更新時間戳，並等待設定的延遲時間。
-延遲時間過後，再比較儲存的時間戳和被呼叫時的時間戳是否一致，
-不一致就代表在延遲等待的時間中，函數又被呼叫過了，
-所以就不執行真正的操作。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;let lastInputTime
-const timeOut = 0.1 // second
-async function handleInputDebounce() {
-  const current = Date.now()
-  lastInputTime = current
-  await sleep(timeOut)
-  if (lastInputTime != current) return
-  search()
-}
 
-document.querySelector(&amp;apos;#search&amp;apos;).oninput = handleInputDebounce
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;throttle-節流閥&quot;&gt;throttle 節流閥&lt;/h2&gt;
-&lt;p&gt;節流閥則是和防彈跳相反，只取第一個，
-之後一段時間內的事件都阻擋掉。
-像是一個按鈕按下去後，一定時間內重複按都無效。
-像是一些表單為了防止重複提交，
-在送出後會把按鈕設為 disabled。
-這個函數其實可以不用 async，直接設一定時間後再把按鈕複原就好。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;let isThrottle = false
-function handleThrottleClick() {
-  if (isThrottle) return
-  isThrottle = true
-  submit()
-  setTimeout(() =&amp;gt; isThrottle = false, timeOut)
-  // or in async function
-  // await sleep(timeOut); isThrottle = false
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;atomic-lock&quot;&gt;atomic lock&lt;/h2&gt;
-&lt;p&gt;原本是要防止同時有二個函數對 indexdb 操作，
-當時以為叫 atomic，後來想想這個作法應該叫 lock 才對。&lt;/p&gt;
-&lt;p&gt;由於 javascript 是單線程的，
-應該不會有同時讀寫的問題，所以應該也不需要 lock。
-但因為 callback 和 async 的存在，
-所以可能一個函數托管了 callback 還沒被呼叫，
-但另一個函數又開始執行了。
-雖然 js 一次只能執行一側的程式，
-但一側的 callback 還沒執行，另一側就開始執行時，
-概念上就發生了重疊。&lt;/p&gt;
-&lt;p&gt;當時叫 atomic 是取同一個非同步函數要嘛還沒開始執行，
-要嘛執行完了，不會有執行到一半，
-另一個 async 函數也開始操作的情形。
-因為保證沒有一半的狀態，所以叫 atomic。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;let writeLock = false
-async function handleWriteLock() {
-  while (writeLock) {
-    await sleep(0.1)
-  }
-  writeLock = true
-  await write()
-  writeLock = false
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;而且後來也發現，indexdb 內部對 write transaction 就有實現鎖了，
-如果二個 write transaction 的範圍有重疊，
-就只能照順序依序執行，二個 transaction 不會同時執行。
-所以其實也不用擔心同時執行的問題。&lt;/p&gt;
-&lt;h2 id=&quot;while-sleep-的無窮迴圈&quot;&gt;while sleep 的無窮迴圈&lt;/h2&gt;
-&lt;p&gt;上面的 lock 用到了一個不斷嘗試、等待的迴圈，
-來在不同次呼叫間存取鎖。
-其實這算是一個很原始的作法，
-用在沒有事件傳遞或回呼函數時，監視狀態改變的作法。&lt;/p&gt;
-&lt;p&gt;雖然看起來是 while true 的迴圈，
-會把單線程的 javascript 卡死，
-但因為其中有一個 sleep，保證會用 setTimeout 交出控制權。
-就算 timeout 設成 0，其實也不會馬上執行，
-而是要等到下一個執行隊列。
-造成一種不斷重複，卻又時時容許插入新任務的奇特情形，
-猶如有理數的處處存在，卻又處處不連續。&lt;/p&gt;
-&lt;p&gt;除非你是用 &lt;code&gt;Promise.resolve().then()&lt;/code&gt; ，
-因為 promise 的 then 規範是用 micro task 而不是 macro task，
-就會被排在現在的執行隊列裡，造成執行隊列無法清空，無法結束迴圈。&lt;/p&gt;
-&lt;h2 id=&quot;async-函數與傳統回呼函數&quot;&gt;async 函數與傳統回呼函數&lt;/h2&gt;
-&lt;p&gt;上面雖然秀了很多花式的 async 函數寫法，
-其它他們也都可以以傳統函數的方式達成，
-只是一些 async 可以用迴圈判斷的部份，
-在傳統函數就得改寫成遞迴。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;var stop = false
-async function loop() {
-  while (!stop) {
-    await sleep(0)
-  }
-  console.log(&amp;apos;stop = true&amp;apos;)
-}
-
-function recursion() {
-  if (!stop) {
-    setTimeout(recursion, 0)
-  }
-  else console.log(&amp;apos;stop = true&amp;apos;)
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;用遞迴的缺點，就是每碰到一個迴圈部份，
-就得包成一個遞迴，所以程式的巢狀會越來越深。
-也類似舊有的 callback hell。
-而 async 就很好的消除了這點，
-把 callback 壓平成單一的 statement。&lt;/p&gt;
-&lt;p&gt;而且不斷呼叫函數會造成 call stack 越來越長，
-可能會 stack overflow，
-雖然現在可以用 arrow function 保障消除尾端遞迴。&lt;/p&gt;
-&lt;h2 id=&quot;直接返回-promise-或顯式宣告為-async&quot;&gt;直接返回 promise 或顯式宣告為 async&lt;/h2&gt;
-&lt;p&gt;就 javascript 的實作來說，
-async 函數就是返回一個 promise 的一般函數，
-而 await 一個 async 函數也就是 await 該函數返回的 promise。
-所以如果函數中要等待的 promise 只有一個，
-那直接返回該 promise 即可，還可以少一層包裝，
-至少我以前是這樣認為。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;function fetchRoot() {
-  return fetch(&amp;apos;/&amp;apos;)
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;但後來我有點改變想法，認為只要是返回 promise 的函數，
-都應該顯示宣告為 async 函數。
-因為這樣就能一眼看出一個函數是非同步的，
-不然函數一多，很難看出哪些是一般函數，
-但其實是返回 promise，需要 await。
-就算是沒有返回值的 async 函數，也一樣 await。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;async function fetchRoot() {
-  return await fetch(&amp;apos;/&amp;apos;)
-}
-
-async function postJson(json) {
-  await fetch(&amp;apos;/api&amp;apos;, {
-    method: &amp;apos;POST&amp;apos;,
-    body: json
-  })
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;在-async-函數中非同步執行程式&quot;&gt;在 async 函數中非同步執行程式&lt;/h2&gt;
-&lt;p&gt;有時候在 async 函數裡，因為執行順序，
-不會想 await 每個 promise，
-還是可以不用 await，而直接呼叫 promise 的 then 方法。
-甚至把呼叫 then 後回傳的 promise 存起來，
-在幾個控制結構後再 await。&lt;/p&gt;
-&lt;p&gt;而如果想在 then 裡的函數也使用 async await 語法，
-可以直接把傳入 then 的函數也宣告成 async 函數，
-這樣就能在 then 裡使用 async 語法了。
-雖然這和 promise 在沒有 async 時的鏈式調用的寫法有點衝突，
-但用起來是沒問題的。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;async function handleMessage(message) {
-  switch (message.type) {
-  case &amp;apos;save&amp;apos;:
-    const filename = message.filename || &amp;apos;new-file.txt&amp;apos;
-    const write = controller.read().then(async content =&amp;gt; {
-      if (await controller.check(content)) {
-        await controller.post(content)
-      }
-    })
-    return {filename, write}
-  default:
-    throw new Error(&amp;apos;unknown message type: &amp;apos; + message.type)
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;另外，有時需要呼叫某個回呼形式的 api，
-但只會用一次，另外包成一個非同步函數嫌麻煩，
-當然可以直接在調用時宣告一個新的 promise，
-然後直接 await 該結果。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;async function communicatePort(port) {
-  port.on(&amp;apos;data&amp;apos;, handleMessage)
-  await new Promise(resolve =&amp;gt; {
-    port.on(&amp;apos;close&amp;apos;, resolve)
-  })
-}
-&lt;/code&gt;&lt;/pre&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/taiwan-consensus-stolen-base.html#ptt-highlight</id>
 <title>台灣共識就是贏球不能盜壘</title>

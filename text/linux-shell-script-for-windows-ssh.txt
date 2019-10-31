@@ -85,6 +85,7 @@ scp $(printf "$basename.19%s " o g n q b c) $host:data
 del $basename.*
 
 BATCH
+done
 ```
 
 首先最重要的，ssh 要開免密碼登入，

@@ -8,7 +8,7 @@
 
 <!-- 後設資料 -->
 <meta name="date" property="og:article:public_time" content="2018-05-05T11:55:20.441Z">
-<meta name="keywords" property="og:article:tag" content="ccns,javascript,html,bookmarklet">
+<meta name="keywords" property="og:article:tag" content="ccns,ccca,javascript,html,bookmarklet">
 <link rel="index" type="text/html" href="index.html" title="首頁">
 <link rel="start" type="text/html" href="index.html" title="首頁">
 <link rel="next" type="text/html" href="china-root-journal.html" title="跟著藥材去旅行">
@@ -42,6 +42,20 @@
 讓 javascript 開發者再也不用在 F12 開發者工具裡瞎忙半天，
 也不需要寫超爆幹複雜的瀏覽器外掛，
 就能輕鬆惡搞網站。</p>
+<hr>
+<h2 id="[ccca-活動介紹](https://www.facebook.com/NCTUCCCA/posts/810305212736583)"><a href="https://www.facebook.com/NCTUCCCA/posts/810305212736583">ccca 活動介紹</a></h2>
+<p>【社課 / Activity】</p>
+<p>學過網頁設計的你，是否曾對設計不良的網頁感到不滿？ 除了按 F12 使用瀏覽器的開發者工具，手動鍵入 js 來修改網頁外， 你還知道有小書籤 (bookmarklet) 、油猴 (greasemonkey) 腳本 (*.user.js) ， 可以用來達成各式各樣的功能嗎？</p>
+<p>當然，附加元件（瀏覽器外掛）問世後， 很快以更多的功能、更全面的權限管理，站上了這一系列工具的頂端。 但無論如何，如果你常常在開發者工具對第三方網頁敲敲打打， 那你絕對會喜歡小書籤與油猴腳本的。</p>
+<p>&lt;不用寫外掛也能惡搞網頁 - 小書籤與油猴腳本簡介&gt;</p>
+<p>社課中會介紹開發者工具、小書籤、油猴腳本， 與開發、發布程式上的技巧。</p>
+<ul>
+<li>對象：會寫 javascript 的人</li>
+<li>講者：gholk</li>
+<li>時間：2019-11-28 19:00-21:00</li>
+<li>地點：網路資訊服務中心 訓練教室（請由小木屋鬆餅側自動門出入）</li>
+<li>聊天室：<a href="https://t.me/ccca_chat">https://t.me/ccca_chat</a></li>
+</ul>
 <hr>
 <h2 id="簡報模式">簡報模式</h2>
 <h3 id="切換樣式">切換樣式</h3>
@@ -119,23 +133,114 @@ function scrollToNextHr() {
 </script>
 
 <hr>
+<h2 id="生活駭客">生活駭客</h2>
+<ul>
+<li>誰說軟體工程師不會是電腦白痴？</li>
+<li>做個聰明的使用者，以程式取代重複、無意義的工作。
+（例如在二個試算表中，用人眼找出相同的類別，手動複製到第三個表中。）</li>
+<li><a href="https://www.bnext.com.tw/ext_rss/view/id/1099271">什麼是駭客：自動化所有超過 90 秒的工作</a></li>
+<li>使用電腦，而不要被電腦使用；使用程式，不要使用 <em>工人智慧</em> 。</li>
+</ul>
+<hr>
+<h3 id="伸手可及的距離">伸手可及的距離</h3>
+<ul>
+<li>取用程式的門檻有多高？啟動、匯入、編寫程式、匯出，會比剪下貼上十次久嗎？</li>
+<li>對多數 windows 使用者，確實很久；需要打開 ide。
+（所以 linux user 都習慣平常就開著一個終端機。）</li>
+<li>很幸運的，一些軟體有 <em>內建 ide</em> 。</li>
+</ul>
+<hr>
+<h3 id="軟體與他們內建的語言">軟體與他們內建的語言</h3>
+<ul>
+<li>要自動化 excel 或其它 ms office，你需要學 vba。</li>
+<li>自動化 google 試算表或其它，要學 google app script。</li>
+<li>學 javascript，你可以自動化所有網站。</li>
+</ul>
+<hr>
+<h3 id="開發者友好的瀏覽器">開發者友好的瀏覽器</h3>
+<ul>
+<li>多數瀏覽器都內建了開發者工具。</li>
+<li>來自良好的駭客傳統；
+最早的瀏覽器同時也是編輯器，www 是互相的，鼓勵使用者建立自己的網頁。</li>
+</ul>
+<hr>
 <h2 id="開發者工具">開發者工具</h2>
 <p>瀏覽器 F12 開啟或右鍵檢查，
 各種意義上都很好用。</p>
 <hr>
+<h3 id="快速選擇元素">快速選擇元素</h3>
+<p>使用開發者工具的 <em>挑選頁面中的元素</em> ，
+把畫面上的元素在 <em>檢測器</em> 中的文件樹中顯示，
+可以用來快速查看 html 文件結構。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/49131541478"><img src="http://farm66.staticflickr.com/65535/49131541478_e0b210d1f7.jpg" alt="dev-tool-select.png"></a></p>
+<hr>
+<h3 id="在主控台中存取元素">在主控台中存取元素</h3>
+<p>在檢測器中的選取的元素，
+可以在 <em>主控台</em> 中使用變數 <code>$0</code> 存取。</p>
+<hr>
 <h3 id="鎖右鍵圖片時">鎖右鍵圖片時</h3>
 <p><a href="https://dq.yam.com/post.php?id=9229">https://dq.yam.com/post.php?id=9229</a></p>
+<pre><code class="lang-javascript">document.querySelectorAll(&apos;*[oncontextmenu]&apos;).forEach(node =&gt; {
+    node.removeAttribute(&apos;oncontextmenu&apos;)
+})
+</code></pre>
+<hr>
+<h3 id="批次輸入多個輸入框">批次輸入多個輸入框</h3>
+<p><a href="http://www.flickr.com/photos/144554087@N04/49132066496"><img src="http://farm66.staticflickr.com/65535/49132066496_349dae5730.jpg" alt="multiple-input-form.png"></a></p>
+<hr>
+<h3 id="程式本體">程式本體</h3>
+<pre><code class="lang-javascript">let scoreList = scoreData.split(/\n/g)
+document.querySelectorAll(&apos;input[type=text]&apos;).forEach((node, i) =&gt; {
+    node.value = scoreList[i]
+})
+</code></pre>
+<hr>
+<h3 id="處理-io">處理 io</h3>
+<ul>
+<li>從剪貼簿貼上是最快的作法；
+無論是在 excel、word 中框選後貼上，
+或是用命令 <code>xsel --input --clipboard &lt; file.txt</code> 。</li>
+<li>使用 js 的反引號字串，可以在主控台內輸入含換行的資料。</li>
+<li>使用 <code>prompt()</code> 可以簡單讀取使用者輸入，但換行會被換成空白。</li>
+</ul>
+<hr>
+<h3 id="多行字串的處理">多行字串的處理</h3>
+<p><a href="http://www.flickr.com/photos/144554087@N04/49132195236"><img src="http://farm66.staticflickr.com/65535/49132195236_50f7f5abba.jpg" alt="console-insert-multiple-line.png"></a></p>
+<hr>
+<h3 id="簡單與使用者互動">簡單與使用者互動</h3>
+<ul>
+<li>善用 <code>alert()</code> <code>prompt()</code> <code>confirm()</code> 等活化石函數。</li>
+<li>用 <code>console.log()</code> 或 <code>alert()</code> 輸出結果。</li>
+<li>如果結果較長，可以建立一個 <code>&lt;pre&gt;</code> 元素再將結果填入，
+<code>body.appendChild(pre)</code> 加到結尾。</li>
+<li>也可以把結果輸出到剪貼簿，或把結果存到 blob 物件，
+再用 <code>URL.createObjectURL()</code> 產生下載連結。</li>
+</ul>
+<hr>
+<h3 id="熟悉你的工具">熟悉你的工具</h3>
+<p>如果你發現你常使用主控台做事，那找個時間好好認識一下開發者工具，
+找篇文章或是 google、mdn 的文件來讀，會受益良多的。</p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/49132252211"><img src="http://farm66.staticflickr.com/65535/49132252211_1a63c18ac8.jpg" alt="copy-from-console.png" title="你知道從主控台複製這個功能嗎？"></a></p>
+<hr>
+<h3 id="厭倦不斷貼上重複的程式碼了嗎？">厭倦不斷貼上重複的程式碼了嗎？</h3>
+<ul>
+<li>每次使用某個網頁時，都固定打開發者工具，寫出或貼上同樣的程式碼？</li>
+<li>依照駭客文化，你應該要找出方式來簡化這個過程。</li>
+<li>來看看 <strong>小書籤</strong> 吧。</li>
+<li>或是你可以試試 firefox 內建的程式碼片斷編輯器。</li>
+</ul>
+<p><a href="http://www.flickr.com/photos/144554087@N04/49131789658"><img src="http://farm66.staticflickr.com/65535/49131789658_353317a1ab.jpg" alt="firefox-console-code-snippet.png"></a></p>
 <hr>
 <h2 id="小書籤">小書籤</h2>
 <p>一種特殊的 url schema，
 和 <code>data:</code> 一樣不指向某一位置，
 而是本身帶有意義。</p>
-<p><a href="javascript:alert(&#39;hello world!&#39;)">greet-js</a></p>
+<p><a href="javascript:alert%28%27hello%20world%21%27%29">greet-js</a></p>
 <hr>
 <h3 id="技術細節">技術細節</h3>
 <ul>
-<li><code>javascript:</code> 後的程片會在 global scope 下執行</li>
-<li>如果有回傳值，回傳值會被轉成字串，被當成下一個頁面的 html 內容</li>
+<li><code>javascript:</code> 後的程式會在 global scope 下執行。</li>
+<li>如果有回傳值，回傳值會被轉成字串，被當成下一個頁面的 html 內容。</li>
 <li>如果有多個 statement，和 <code>eval()</code> 一樣是用最後一個 statment 的回傳值。</li>
 </ul>
 <hr>
@@ -152,7 +257,102 @@ function helloHtml(name) {
 
 <p><a href="javascript:helloHtml()">hello</a></p>
 <hr>
-<h3 id="相對 onclick">相對 onclick</h3>
+<h3 id="安裝小書籤">安裝小書籤</h3>
+<ul>
+<li>如同一般的 url，可以被 <em>加入書籤</em> 。</li>
+<li>可以用拖拉的方式，或右鍵加入書籤；讓麻瓜也能使用。</li>
+<li>因此可以 <em>打包</em> 一段程式碼成一個書籤，
+方便使用與分享；不用再一直開開發者工具了。</li>
+<li>點擊書籤後可以在當前頁面執行。</li>
+<li>執行小書籤等於執行任意程式碼，所以不要執行來路不明的小書籤。
+小書籤可以看到執行時所在網頁的所有內容，
+包含 cookie，所以可以盜取帳號。</li>
+</ul>
+<hr>
+<h3 id="發布需知">發布需知</h3>
+<ul>
+<li>因安全考量，一般的網站基本上不允許插入小書籤程式碼，
+所以至少需要一個靜態網站，例如 <a href="https://gholk.github.io/bookmarklet/">github page</a>
+或是 <a href="http://jsfiddle.net">jsfiddle</a> 這類可以托管完整網頁的。
+（或是叫使用者自己複製程式碼，然後在書籤列新增。）</li>
+<li>程式碼太長書籤放的下嗎？我最多放過 5 KB 的程式。</li>
+<li>真的太長怎麼辦？
+打包成一個 js 檔，托管到靜態網站上，
+在小書籤內容則是產生一個指向該檔案的 script 標籤，匯入執行。</li>
+</ul>
+<hr>
+<h3 id="範例">範例</h3>
+<ul>
+<li><a href="http://jsfiddle.net">jsfiddle</a> 基本上可以托管任何 javascript，
+<a href="https://jsfiddle.net/c85v4rLy/">就把小書籤編碼後，嵌入在 html 入放入就可以了。</a></li>
+<li>github page 是指托管靜態網站那種，
+我自己把寫的小書籤都放在 <a href="http://github.com/GHolk/bookmarklet">bookmarklet repository</a> ，
+雖然 github repository readme 裡的小書籤不會顯示，
+但 <a href="https://gholk.github.io/bookmarklet/">靜態網頁</a> 上是會顯示的。</li>
+</ul>
+<hr>
+<h3 id="youtube-搜尋小書籤">youtube 搜尋小書籤</h3>
+<pre><code class="lang-javascript">const keyWord = prompt(&apos;youtube 關鍵字&apos;)
+window.open(&apos;http://youtube.com/search?q=&apos; + keyWord)
+</code></pre>
+<p>小書籤 <a href="javascript:const%20keyWord%20%3D%20prompt%28%27youtube%20%E9%97%9C%E9%8D%B5%E5%AD%97%27%29%3B%20window.open%28%27http%3A%2F%2Fyoutube.com%2Fsearch%3Fq%3D%27%20%2B%20keyWord%29%3B%20undefined">youtube 關鍵字搜尋</a> ，
+為什麼第二次點擊就不能執行了？</p>
+<hr>
+<h3 id="作用域">作用域</h3>
+<script>
+function promptYoutube() {
+  const keyWord = prompt('youtube 關鍵字')
+  window.open('http://youtube.com/search?q=' + keyWord)
+}
+</script>
+
+<p><a href="javascript:promptYoutube%28%29">只呼叫函數</a> ，收藏後還可以執行嗎？</p>
+<hr>
+<h3 id="把用到的函數包進來">把用到的函數包進來</h3>
+<pre><code class="lang-javascript">void function() {
+  function promptYoutube() {
+    const keyWord=prompt(&quot;youtube 關鍵字&quot;);
+    window.open(&quot;http://youtube.com/search?q=&quot;+keyWord)
+  }
+  promptYoutube()
+}()
+</code></pre>
+<p><a href="javascript:void%20function%28%29%7Bfunction%20promptYoutube%28%29%7Bconst%20keyWord=prompt%28%22youtube%20%E9%97%9C%E9%8D%B5%E5%AD%97%22%29;window.open%28%22http:%2F%2Fyoutube.com%2Fsearch%3Fq%3D%2522%2BkeyWord%2529%257DpromptYoutube%2528%2529%257D%2528%2529">把函數也包進來</a></p>
+<hr>
+<h3 id="void-算符">void 算符</h3>
+<pre><code class="lang-javascript">undefined === void anyExpression
+</code></pre>
+<ul>
+<li><a href="http://zh.wikipedia.org/wiki/%E5%B0%8F%E6%9B%B8%E7%B1%A4#%E5%8E%86%E5%8F%B2">javascript 發明人，為了小書籤所發明的算符。</a></li>
+<li><a href="javascript:void%20prompt%28%27%E9%9A%A8%E4%BE%BF%E8%AA%AA%E9%BB%9E%E8%A9%B1%27%29">有 void</a></li>
+<li><a href="javascript:prompt%28%27%E9%9A%A8%E4%BE%BF%E8%AA%AA%E9%BB%9E%E8%A9%B1%27%29">無 void</a></li>
+</ul>
+<hr>
+<h3 id="函數表達式">函數表達式</h3>
+<pre><code class="lang-javascript">void function () {
+  // do what you want
+)()
+</code></pre>
+<hr>
+<h2 id="打包程式碼">打包程式碼</h2>
+<ul>
+<li>可以將整個程式放在 immeditate invoke function 裡，防止撞名。</li>
+<li>用 <a href="http://zh.wikipedia.org/wiki/%E7%99%BE%E5%88%86%E8%99%9F%E7%B7%A8%E7%A2%BC">百分號編碼</a> 去除特殊字元。</li>
+<li>用 uglify-js 去除多餘空白與縮排，減少體積。</li>
+</ul>
+<hr>
+<h3 id="javascript-url-的用途到底是什麼？">javascript url 的用途到底是什麼？</h3>
+<ul>
+<li>製造一個點擊後執行特定函數的元素，類似 onclick 的功能。</li>
+<li>此外 javascript 的發明者 Brendan Eich，
+特地將它設計成可以被加入書籤中，還幫他設計了 void 算符。</li>
+</ul>
+<pre><code class="lang-html">&lt;a href=&quot;javascript:doAction(&apos;menu&apos;)&quot;&gt;open menu&lt;/a&gt;
+&lt;a href=&quot;javascript:doAction(&apos;save&apos;)&quot;&gt;save change&lt;/a&gt;
+&lt;a href=&quot;javascript:doAction(&apos;exit&apos;)&quot;&gt;discard change&lt;/a&gt;
+</code></pre>
+<hr>
+<h3 id="相對-onclick">相對 onclick</h3>
 <p>onclick 回傳 false 表示不處理本來應該處理的事件，
 例如 <code>&lt;input type=&quot;submit&quot;&gt;</code> 如果 onclick 回傳 false 時不會提交，
 <code>&lt;a href=&quot;//google.com&quot;</code> 如果 onclick 回傳 false 時不會前往新頁面。</p>
@@ -168,99 +368,57 @@ function helloHtml(name) {
 
 <p><a href="./" onclick="return isGreater10()">greet</a></p>
 <hr>
-<h3 id="安裝小書籤">安裝小書籤</h3>
+<h3 id="小書籤的侷限">小書籤的侷限</h3>
 <ul>
-<li>其實就是加入 <strong>我的最愛</strong> 或 <strong>書籤列</strong></li>
-<li>點擊書籤列中小書籤就可以執行</li>
-</ul>
-<hr>
-<h4 id="firefox">firefox</h4>
-<ul>
-<li>右鍵加入書籤</li>
-<li>設置 <code>&lt;a rel=&quot;sidebar&quot; href=&quot;javascript:alert(&#39;hey&#39;)&quot;&gt;</code> 
-可以讓超連結點擊時詢問加入書籤。
-<a rel="sidebar" href="javascript:alert('hey')">say hey!</a></li>
-<li>或拖拉超連結到書籤列就可以直接加入</li>
-</ul>
-<hr>
-<h4 id="chromium">chromium</h4>
-<ul>
-<li>只能拖拉超連結到書籤列加入</li>
-<li>或右鍵複製網址，之後到書籤管理員裡手動加入。</li>
-</ul>
-<hr>
-<h3 id="youtube 搜尋小書籤">youtube 搜尋小書籤</h3>
-<pre><code class="lang-javascript">const keyWord = prompt(&#39;youtube 關鍵字&#39;)
-window.open(&#39;http://youtube.com/search?q=&#39; + keyWord)
-</code></pre>
-<p><a href="javascript:const keyWord = prompt('youtube 關鍵字'); window.open('http://youtube.com/search?q=' + keyWord); undefined">youtube 關鍵字搜尋</a></p>
-<hr>
-<h3 id="作用域">作用域</h3>
-<script>
-function promptYoutube() {
-  const keyWord = prompt('youtube 關鍵字')
-  window.open('http://youtube.com/search?q=' + keyWord)
-}
-</script>
-
-<p><a href="javascript:promptYoutube()">只呼叫函數</a></p>
-<hr>
-<h4 id="把用到的函數包進來">把用到的函數包進來</h4>
-<pre><code class="lang-javascript">void function() {
-  function promptYoutube() {
-    const keyWord=prompt(&quot;youtube 關鍵字&quot;);
-    window.open(&quot;http://youtube.com/search?q=&quot;+keyWord)
-  }
-  promptYoutube()
-}()
-</code></pre>
-<p><a href="javascript:void function(){function promptYoutube(){const keyWord=prompt(&quot;youtube 關鍵字&quot;);window.open(&quot;http://youtube.com/search?q=&quot;+keyWord)}promptYoutube()}()">把函數也包進來</a></p>
-<hr>
-<h3 id="void 算符">void 算符</h3>
-<pre><code class="lang-javascript">undefined === void a
-</code></pre>
-<ul>
-<li><a href="javascript:void prompt(&#39;隨便說點話&#39;)">有 void</a></li>
-<li><a href="javascript:prompt(&#39;隨便說點話&#39;)">無 void</a></li>
-</ul>
-<hr>
-<h3 id="函數表達式">函數表達式</h3>
-<pre><code class="lang-javascript">void function () {
-  // do what you want
-)()
-</code></pre>
-<hr>
-<h3 id="uglify js">uglify js</h3>
-<ul>
-<li>超連結內不能有換行，</li>
-<li>html 內不能有雙引號、單引號、 <code>&lt;&gt;&amp;</code> 。</li>
-<li>保險作法是 uglify-js 再 encode html entities，或 <a href="http://zh.wikipedia.org/wiki/%E7%99%BE%E5%88%86%E8%99%9F%E7%B7%A8%E7%A2%BC">百分號編碼</a> 。</li>
+<li>必須手動打開書籤列點擊執行。</li>
+<li>如果在某網頁固定用到該功能，還是要固定手動點擊才能執行。</li>
+<li>有沒有辦法在進到某一網頁時，就執行對應的程式呢？
+像是固定隱藏網頁中的某個側邊欄、改變字體顏色大小。</li>
 </ul>
 <hr>
 <h2 id="GreaseMonkey">GreaseMonkey</h2>
 <ul>
-<li>暱稱油猴腳本，是管理 <code>*.user.js</code> 的外掛程式。</li>
+<li>暱稱油猴腳本，是管理 <code>*.user.js</code> 的擴充元件。</li>
 <li>firefox 有一些參數，可以在 <a href="about:config">about:config</a> 裡調。</li>
-<li>古早時期，有人會寫一份 javascript，在啟動 firefox 時執行去調那些參數，那份 js 習慣會取名為 <code>*.user.js</code> 。</li>
+<li>古早時期，有人會寫一份 javascript，
+在啟動 firefox 時執行去調那些參數，
+那份 js 習慣會取名為 <code>*.user.js</code> 。</li>
 <li>後來有人在裡面作很多奇怪的事惡搞網頁，這些 <code>*.user.js</code> 量越來越多就需要一種管理的方法。</li>
 <li>好像還有 <code>*.user.css</code> ，但我沒有研究。</li>
 </ul>
 <hr>
 <h3 id="功能">功能</h3>
 <ul>
+<li>首先，需要安裝 grease monkey 這個擴充元件，
+其它 user.js 腳本會由 grease monkey 擴充元件管理、執行。</li>
 <li>提供編輯器和管理介面。</li>
 <li>管理在每個網頁下要載入哪些 user.js。</li>
 <li>在進入附檔名為 <code>*.user.js</code> 的 url 時，會自動詢問安裝。</li>
 </ul>
 <hr>
-<h3 id="常見的散布方式">常見的散布方式</h3>
+<h3 id="安裝與使用">安裝與使用</h3>
 <ul>
-<li><a href="//gist.github.com">//gist.github.com</a> 裡按 raw，正常會出現原始碼，有裝 grease monkey 會詢問安裝。
-<a href="https://gist.github.com/GHolk/3154e8486cf987cf6ab84cae45c7dcc7">bbsjs gist</a> </li>
+<li><a href="//gist.github.com">//gist.github.com</a> 裡按 raw，正常會出現原始碼，
+有裝 grease monkey 會詢問安裝。 <a href="https://gist.github.com/GHolk/3154e8486cf987cf6ab84cae45c7dcc7">bbsjs gist</a></li>
+<li>只要網址結尾是 <code>.user.js</code> ，就會跳出安裝介面，
+就算托管的空間如 pastebin 不支援客制化網址，也可以在網址尾端加上
+<code>?script.user.js</code> 或 <code>#script.user.js</code> 的方式觸發安裝。</li>
 <li><a href="https://wiki.greasespot.net/User_Script_Hosting">grease monkey wiki</a></li>
 </ul>
 <hr>
-<h4 id="metadata header">metadata header</h4>
+<h3 id="pastebin-托管範例">pastebin 托管範例</h3>
+<p>pastebin 的好處是免註冊即可使用。</p>
+<p>在 <a href="http://pastebin.com">pastebin</a> 裡 <a href="https://pastebin.com/ZTuGjA6Y">創建腳本後</a> ，
+<a href="https://pastebin.com/raw/ZTuGjA6Y">點擊 raw 直接取得原始碼</a> ，
+並 <a href="https://pastebin.com/raw/ZTuGjA6Y#hackmd-scroll-flip.user.js">修改網址結尾為 <code>x.user.js</code></a> 。</p>
+<hr>
+<h3 id="gist-托管範例">gist 托管範例</h3>
+<p><a href="https://gist.github.com/GHolk/4a2edcf9cf3f956ec7eb7d7823348b6c">在 gist 創建腳本</a> ，檔名取為 <code>*.user.js</code> ，
+<a href="https://gist.github.com/GHolk/4a2edcf9cf3f956ec7eb7d7823348b6c/raw/1c71ecd469701cfadf149d9687a785c5294191ef/hackmd-scroll-flip.user.js">點擊 raw 即可直接取得原始碼</a> ，
+且網址結尾為自動成為對應的檔名。</p>
+<p><a href="https://github.blog/2018-02-18-deprecation-notice-removing-anonymous-gist-creation/">gist 曾經有一段時間免註冊，但垃圾太多所以又關起來了。</a></p>
+<hr>
+<h4 id="metadata-header">metadata header</h4>
 <p><a href="https://wiki.greasespot.net/Metadata_Block">https://wiki.greasespot.net/Metadata_Block</a></p>
 <pre><code class="lang-user.js">// ==UserScript==
 // @name  chrome bbs javascript executor
@@ -285,7 +443,7 @@ function promptYoutube() {
 <li>操作 dom 還沒什麼問題，可以用原網頁的 jquery： <code>const $ = unsafeWindow.$</code> 。</li>
 </ul>
 <hr>
-<h4 id="`GM.*` API"><code>GM.*</code> API</h4>
+<h4 id="`GM.*`-API"><code>GM.*</code> API</h4>
 <ul>
 <li>GM.notification 可以發通知</li>
 <li>GM.xmlHttpRequest 不受 same origin policy 限制，超爽的</li>
@@ -293,22 +451,74 @@ function promptYoutube() {
 <li>api 都是 promise 非同步，不過除非你很重順序，不然直接呼叫時間也不會差太多</li>
 <li><a href="https://wiki.greasespot.net/API">https://wiki.greasespot.net/API</a></li>
 </ul>
-<pre><code class="lang-javascript">GM.notification(&#39;hello (1)&#39;)
+<pre><code class="lang-javascript">GM.notification(&apos;hello (1)&apos;)
   .then(() =&gt; {
-    return GM.notification(&#39;hello (2)&#39;)
+    return GM.notification(&apos;hello (2)&apos;)
   })
-  .then(() =&gt; console.log(&#39;after send 2 notify&#39;))
+  .then(() =&gt; console.log(&apos;after send 2 notify&apos;))
 </code></pre>
 <hr>
 <h4 id="功能鍵">功能鍵</h4>
 <ul>
 <li>以前有 api 可以在 grease monkey 的選單上設置按鈕。</li>
 <li>不過 firefox 57 quantum 後，api 不允許了。</li>
-<li>綁鍵盤 <code>window.addEventListener(&#39;keydown&#39;)</code> 。</li>
+<li>綁鍵盤 <code>window.addEventListener(&apos;keydown&apos;)</code> 。</li>
 <li>改用 bookmarklet，本身就是要點擊才能執行的。</li>
 <li>grease monkey 較適合直接改 dom 而不是點擊執行。
 像聽 hover 事件、在網頁上加按鈕。</li>
 </ul>
+<hr>
+<h2 id="擴充元件">擴充元件</h2>
+<ul>
+<li>功能更多，彈性更大。
+可以做到上 bbs、修改歷史記錄、新增工具列按鈕等功能。</li>
+<li>權限更清楚。在安裝時會清楚告訴你用到哪些功能。<ul>
+<li>小書籤雖然要點擊才會執行，
+但除非看原始碼，不然完全不知道執行時做了什麼。</li>
+<li>油猴腳本在安裝時會告知腳本會在哪些網頁下運作，
+用到哪些 api，但給的還是很籠統。</li>
+<li>擴充元件的安全性更有保障；
+且 chrome 與 firefox 都會審覈擴充元件的程式碼，較安全。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="擴充元件與油猴的安全性">擴充元件與油猴的安全性</h3>
+<p><a href="http://www.flickr.com/photos/144554087@N04/49136395291"><img src="http://farm66.staticflickr.com/65535/49136395291_0d529072b6.jpg" alt="plugin-permission-request.png"></a></p>
+<p><a href="http://www.flickr.com/photos/144554087@N04/49136395406"><img src="http://farm66.staticflickr.com/65535/49136395406_4e969ac36a.jpg" alt="greasemonkey-permission-request.png"></a></p>
+<hr>
+<h3 id="因為擴充元件太複雜">因為擴充元件太複雜</h3>
+<p>雖然我寫過，但今天就不介紹了。</p>
+<hr>
+<h2 id="總結">總結</h2>
+<ul>
+<li>開發者工具適合快速測試、編寫一次性腳本。</li>
+<li>小書籤適合需要時才執行的功能，例如批次下載、自動砍站。</li>
+<li>油猴腳本通常用來優化使用體驗，像放大影片、預覽圖片。
+較進階的用法也可以在頁面中插入按鈕，
+點擊時再執行類似小書籤的一次性功能。
+例如一些 youtube 的油猴腳本就會在頁面中加一堆按鈕，
+提供五花八門的功能。</li>
+</ul>
+<hr>
+<h3 id="什麼時候該用擴充元件？">什麼時候該用擴充元件？</h3>
+<ul>
+<li>當上面三者的都無法提供你需要的 api 時，例如 bbsfox、連 ftp。</li>
+<li>當你需要寫出 <s>讓麻瓜安心使用</s> <em>真正能用或能賣的東西</em> ，
+而不是客群只限定在 geek 的程式。
+你要有一個正規的管道來發布，最好的選擇就是上架 chrome store 或
+mozilla add on，讓使用者能放心安裝。</li>
+</ul>
+<hr>
+<h3 id="重用小書籤與-user.js-的程式碼">重用小書籤與 user.js 的程式碼</h3>
+<ul>
+<li>有時你會想要發布一個程式到二種平台，
+小書籤的好處是所有人都能用，但 user.js 用起來比較方便。</li>
+<li>可以透過 <code>typeof GM</code> 判斷是否在 grease monkey 下運行。</li>
+</ul>
+<pre><code class="lang-javascript">if (typeof GM == &apos;object&apos;) runInGreaseMonkey()
+else runInBookmarklet()
+</code></pre>
 <hr>
 <h2 id="許願池">許願池</h2>
 <p>你有什麼功能想做嗎？
@@ -317,12 +527,12 @@ function promptYoutube() {
 <div id="disqus_thread"></div>
 
 <hr>
-<h3 id="[簡單 grease monkey repl][gm-repl]"><a href="https://gist.github.com/GHolk/699c7b42d02e9dfd1c8f9af011f1eef1">簡單 grease monkey repl</a></h3>
+<h3 id="[簡單-grease-monkey-repl][gm-repl]"><a href="https://gist.github.com/GHolk/699c7b42d02e9dfd1c8f9af011f1eef1">簡單 grease monkey repl</a></h3>
 <p>Read Evaluate Print Loop，
 可以輸入表達式，程式會調用 eval 然後印出求值結果。
 如果輸入是 promise，會等 resolve 後才顯示結果。</p>
 <hr>
-<h3 id="FB 備份功能">FB 備份功能</h3>
+<h3 id="FB-備份功能">FB 備份功能</h3>
 <p>把一份貼文備份成 JSON 或其它格式，
 並在原文被刪除時可以重發，
 在每層樓 tag 原本的留言者並附上當初的留言。</p>
@@ -332,7 +542,7 @@ function promptYoutube() {
 類似當初 BBSLua 的概念，
 但是跑在瀏覽器上而不是 server 上。</p>
 <hr>
-<h3 id="[clean window](https://github.com/GHolk/bookmarklet/blob/master/youtube-clean-player.js)"><a href="https://github.com/GHolk/bookmarklet/blob/master/youtube-clean-player.js">clean window</a></h3>
+<h3 id="[clean-window](https://github.com/GHolk/bookmarklet/blob/master/youtube-clean-player.js)"><a href="https://github.com/GHolk/bookmarklet/blob/master/youtube-clean-player.js">clean window</a></h3>
 <p>開啟一個沒有工具列、分頁列、網址列的乾淨視窗，
 同義於 <code>chromium --app=https://www.youtube.com/embed/dWKNW5lm3Ss</code> 。
 通常是用在看 youtube 時想空出多點空間。

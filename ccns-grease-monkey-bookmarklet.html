@@ -368,6 +368,19 @@ function promptYoutube() {
 
 <p><a href="./" onclick="return isGreater10()">greet</a></p>
 <hr>
+<h3 id="data-url">data url</h3>
+<ul>
+<li>data url 是以 <code>data:</code> 開頭的 url，他就是把資料直接放在網址。</li>
+<li>例如圖片可以以 data url 內嵌在網頁裡。
+<code>&lt;img src=&quot;data:image/png;base64,aGV5Cg==&quot;&gt;</code></li>
+<li>data url 同樣可以加入書籤。</li>
+<li>小書籤是把 js 打包成一書籤，而 data url 則是把整個網頁，
+不只 javascript，連 html 一起打包進來。</li>
+<li>例如這個 <a href="https://darcs.nomeata.de/screen-message/sm.html">screen message</a> 就是很有用的小工具。
+<a href="https://gholk.github.io/bookmarklet/#screen-message">我有把他整個網頁打包成一個 data url</a> ，加到書籤，
+方便離線時存取。</li>
+</ul>
+<hr>
 <h3 id="小書籤的侷限">小書籤的侷限</h3>
 <ul>
 <li>必須手動打開書籤列點擊執行。</li>

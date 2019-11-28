@@ -440,6 +440,22 @@ onclick 回傳 false 表示不處理本來應該處理的事件，
 
 ----
 
+### data url
+* data url 是以 `data:` 開頭的 url，他就是把資料直接放在網址。
+* 例如圖片可以以 data url 內嵌在網頁裡。
+  `<img src="data:image/png;base64,aGV5Cg==">`
+* data url 同樣可以加入書籤。
+* 小書籤是把 js 打包成一書籤，而 data url 則是把整個網頁，
+  不只 javascript，連 html 一起打包進來。
+* 例如這個 [screen message] 就是很有用的小工具。
+  [我有把他整個網頁打包成一個 data url][screen message data url] ，加到書籤，
+  方便離線時存取。
+
+[screen message]: https://darcs.nomeata.de/screen-message/sm.html
+[screen message data url]: https://gholk.github.io/bookmarklet/#screen-message
+
+----
+
 ### 小書籤的侷限
 * 必須手動打開書籤列點擊執行。
 * 如果在某網頁固定用到該功能，還是要固定手動點擊才能執行。

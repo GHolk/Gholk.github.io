@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-11-28T10:18:42.130Z</updated>
+  <updated>2019-11-29T16:46:44.960Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,569 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/ccns-grease-monkey-bookmarklet.html#駭客文化</id>
+<title>不用寫外掛也能惡搞網頁</title>
+<published>2018-05-05T11:55:20.441Z</published>
+<updated>2019-11-29T16:46:44.948Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/ccns-grease-monkey-bookmarklet.html#駭客文化"/>
+<summary type="html">
+加入什麼是駭客文化的說明，再進入生活駭客。
+引用 eric raymond 的如何成為駭客一文。</summary>
+<category term="ccns"/>
+<category term="ccca"/>
+<category term="javascript"/>
+<category term="html"/>
+<category term="bookmarklet"/>
+<content type="html">&lt;h1 id=&quot;不用寫外掛也能惡搞網頁&quot;&gt;不用寫外掛也能惡搞網頁&lt;/h1&gt;
+&lt;p&gt;有時候是不是覺得瀏覽器很智障？網頁很不人性？
+要是網頁是自己設計的就好了？
+除了寫超爆幹複雜的 plug-in 外，
+還有方便的 greasemonkey，和無腦的 bookmarklet，
+都可以達到類似的效果。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;油猴 &lt;em&gt;Greasemonkey&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;小書籤 &lt;em&gt;bookmarklet&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;開發者工具 &lt;em&gt;inspect&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;[活動介紹][kktix]&quot;&gt;&lt;a href=&quot;https://ccns.kktix.cc/events/106-meetup-gholk-talk-01&quot;&gt;活動介紹&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;本次 gholk 要來分享上古時代的瀏覽器密技 &lt;strong&gt;小書籤&lt;/strong&gt; ，
+和簡單粗勇的 &lt;strong&gt;油猴腳本&lt;/strong&gt; ，
+讓 javascript 開發者再也不用在 F12 開發者工具裡瞎忙半天，
+也不需要寫超爆幹複雜的瀏覽器外掛，
+就能輕鬆惡搞網站。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;[ccca-活動介紹](https://www.facebook.com/NCTUCCCA/posts/810305212736583)&quot;&gt;&lt;a href=&quot;https://www.facebook.com/NCTUCCCA/posts/810305212736583&quot;&gt;ccca 活動介紹&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;【社課 / Activity】&lt;/p&gt;
+&lt;p&gt;學過網頁設計的你，是否曾對設計不良的網頁感到不滿？ 除了按 F12 使用瀏覽器的開發者工具，手動鍵入 js 來修改網頁外， 你還知道有小書籤 (bookmarklet) 、油猴 (greasemonkey) 腳本 (*.user.js) ， 可以用來達成各式各樣的功能嗎？&lt;/p&gt;
+&lt;p&gt;當然，附加元件（瀏覽器外掛）問世後， 很快以更多的功能、更全面的權限管理，站上了這一系列工具的頂端。 但無論如何，如果你常常在開發者工具對第三方網頁敲敲打打， 那你絕對會喜歡小書籤與油猴腳本的。&lt;/p&gt;
+&lt;p&gt;&amp;lt;不用寫外掛也能惡搞網頁 - 小書籤與油猴腳本簡介&amp;gt;&lt;/p&gt;
+&lt;p&gt;社課中會介紹開發者工具、小書籤、油猴腳本， 與開發、發布程式上的技巧。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;對象：會寫 javascript 的人&lt;/li&gt;
+&lt;li&gt;講者：gholk&lt;/li&gt;
+&lt;li&gt;時間：2019-11-28 19:00-21:00&lt;/li&gt;
+&lt;li&gt;地點：網路資訊服務中心 訓練教室（請由小木屋鬆餅側自動門出入）&lt;/li&gt;
+&lt;li&gt;聊天室：&lt;a href=&quot;https://t.me/ccca_chat&quot;&gt;https://t.me/ccca_chat&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;簡報模式&quot;&gt;簡報模式&lt;/h2&gt;
+&lt;h3 id=&quot;切換樣式&quot;&gt;切換樣式&lt;/h3&gt;
+&lt;script&gt;
+function toggleSlideMode() {
+  document.body.classList.toggle(&apos;white-black-slide&apos;)
+}
+&lt;/script&gt;
+
+&lt;style contenteditable=&quot;true&quot;&gt;
+body.white-black-slide {
+  font-size: 250%;
+  color: white;
+  background: black;
+}
+.white-black-slide a {
+  color: cyan;
+}
+&lt;/style&gt;
+
+&lt;button onclick=&quot;toggleSlideMode()&quot;&gt;切換簡報模式&lt;/button&gt;
+
+&lt;hr&gt;
+&lt;h3 id=&quot;顯示小書籤程式碼&quot;&gt;顯示小書籤程式碼&lt;/h3&gt;
+&lt;style&gt;
+a[href^=javascript]::before {
+  color: gray;
+  content: &quot;&lt;a href=\0022&quot; attr(href) &quot;\0022&gt;&quot;;
+}
+a[href^=javascript]::after {
+  color: gray;
+  content: &quot;&lt;/a&gt;&quot;;
+}
+
+a[onclick]::before {
+  color: gray;
+  content: &quot;&lt;a onclick=\0022&quot; attr(onclick) &quot;\0022&gt;&quot;;
+}
+a[onclick]::after {
+  color: gray;
+  content: &quot;&lt;/a&gt;&quot;;
+}
+
+style[contenteditable]::before {
+  content: &quot;&lt;style contenteditable=\0022&quot; attr(contenteditable) &quot;\0022&gt;&quot;;
+}
+&lt;/style&gt;
+
+&lt;hr&gt;
+&lt;h3 id=&quot;翻頁按鈕&quot;&gt;翻頁按鈕&lt;/h3&gt;
+&lt;h4 id=&quot;把按鈕移到螢幕右下角&quot;&gt;把按鈕移到螢幕右下角&lt;/h4&gt;
+&lt;style&gt;
+:this + button {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 1em;
+}
+&lt;/style&gt;
+
+&lt;button onclick=&quot;scrollToNextHr()&quot;&gt;下一頁&lt;/button&gt;
+
+&lt;h4 id=&quot;翻頁函數&quot;&gt;翻頁函數&lt;/h4&gt;
+&lt;script&gt;
+function scrollToNextHr() {
+  const allHr = document.querySelectorAll(&apos;hr&apos;)
+  const windowTop = scrollY
+  for (const hr of allHr) {
+    if (hr.offsetTop &gt; scrollY) {
+      scrollTo(0, hr.offsetTop + 1)
+      break
+    }
+  }
+}
+&lt;/script&gt;
+
+&lt;hr&gt;
+&lt;h2 id=&quot;駭客文化&quot;&gt;駭客文化&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;用創意克服系統中的限制。&lt;/li&gt;
+&lt;li&gt;鼓勵創造，鼓勵動手修改程式的文化。&lt;/li&gt;
+&lt;li&gt;駭客的時間與精力，應該放在解決真正有趣的問題上。&lt;/li&gt;
+&lt;li&gt;所以動手修改系統，用程式自動化乏味的工作，節省時間。&lt;/li&gt;
+&lt;li&gt;更多駭客文化請參看 Eric S Raymond 的 &lt;a href=&quot;http://www.angelfire.com/ok/leekawo/hacker.htm&quot;&gt;如何成為駭客&lt;/a&gt; 一文。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;生活駭客&quot;&gt;生活駭客&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;生活駭客不一定是享受 &lt;em&gt;駭&lt;/em&gt; 的過程的純粹主義者，
+但生活駭客知道如何把駭客技巧應用在生活中，過得更加舒服。&lt;/li&gt;
+&lt;li&gt;誰說軟體工程師不會是電腦白痴？&lt;/li&gt;
+&lt;li&gt;做個聰明的使用者，以程式取代重複、無意義的工作。
+重複無意義的工作，是機器、程式的工作，不是人的工作。
+（例如在二個試算表中，用人眼找出相同的類別，手動複製到第三個表中。）&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.bnext.com.tw/ext_rss/view/id/1099271&quot;&gt;什麼是駭客：自動化所有超過 90 秒的工作&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;使用電腦，而不要被電腦使用；使用程式，不要使用 &lt;em&gt;工人智慧&lt;/em&gt; 。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;伸手可及的距離&quot;&gt;伸手可及的距離&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;取用程式的門檻有多高？啟動編輯器、匯入、編寫程式、匯出，會比剪下貼上十次久嗎？&lt;/li&gt;
+&lt;li&gt;對多數 windows 使用者，確實很久；需要打開 ide。
+（所以 linux user 都習慣平常就開著一個終端機。）&lt;/li&gt;
+&lt;li&gt;很幸運的，一些軟體有 &lt;em&gt;內建 ide&lt;/em&gt; 。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;軟體與他們內建的語言&quot;&gt;軟體與他們內建的語言&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;要自動化 excel 或其它 ms office，你需要學 vba。&lt;/li&gt;
+&lt;li&gt;自動化 google 試算表或其它，要學 google app script。&lt;/li&gt;
+&lt;li&gt;學 javascript，你可以自動化所有網站。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;開發者友好的瀏覽器&quot;&gt;開發者友好的瀏覽器&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;多數瀏覽器都內建了開發者工具。&lt;/li&gt;
+&lt;li&gt;來自良好的駭客傳統；
+最早的瀏覽器同時也是編輯器，www 是互相的，鼓勵使用者建立自己的網頁。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;開發者工具&quot;&gt;開發者工具&lt;/h2&gt;
+&lt;p&gt;瀏覽器 F12 開啟或右鍵檢查，
+各種意義上都很好用。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;快速選擇元素&quot;&gt;快速選擇元素&lt;/h3&gt;
+&lt;p&gt;使用開發者工具的 &lt;em&gt;挑選頁面中的元素&lt;/em&gt; ，
+把畫面上的元素在 &lt;em&gt;檢測器&lt;/em&gt; 中的文件樹中顯示，
+可以用來快速查看 html 文件結構。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49131541478&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49131541478_e0b210d1f7.jpg&quot; alt=&quot;dev-tool-select.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;在主控台中存取元素&quot;&gt;在主控台中存取元素&lt;/h3&gt;
+&lt;p&gt;在檢測器中的選取的元素，
+可以在 &lt;em&gt;主控台&lt;/em&gt; 中使用變數 &lt;code&gt;$0&lt;/code&gt; 存取。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;鎖右鍵圖片時&quot;&gt;鎖右鍵圖片時&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://dq.yam.com/post.php?id=9229&quot;&gt;https://dq.yam.com/post.php?id=9229&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;document.querySelectorAll(&amp;apos;*[oncontextmenu]&amp;apos;).forEach(node =&amp;gt; {
+    node.removeAttribute(&amp;apos;oncontextmenu&amp;apos;)
+})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;批次輸入多個輸入框&quot;&gt;批次輸入多個輸入框&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49132066496&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49132066496_349dae5730.jpg&quot; alt=&quot;multiple-input-form.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;程式本體&quot;&gt;程式本體&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;let scoreList = scoreData.split(/\n/g)
+document.querySelectorAll(&amp;apos;input[type=text]&amp;apos;).forEach((node, i) =&amp;gt; {
+    node.value = scoreList[i]
+})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;處理-io&quot;&gt;處理 io&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;從剪貼簿貼上是最快的作法；
+無論是在 excel、word 中框選後貼上，
+或是用命令 &lt;code&gt;xsel --input --clipboard &amp;lt; file.txt&lt;/code&gt; 。&lt;/li&gt;
+&lt;li&gt;使用 js 的反引號字串，可以在主控台內輸入含換行的資料。&lt;/li&gt;
+&lt;li&gt;使用 &lt;code&gt;prompt()&lt;/code&gt; 可以簡單讀取使用者輸入，但換行會被換成空白。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;多行字串的處理&quot;&gt;多行字串的處理&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49132195236&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49132195236_50f7f5abba.jpg&quot; alt=&quot;console-insert-multiple-line.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;簡單與使用者互動&quot;&gt;簡單與使用者互動&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;善用 &lt;code&gt;alert()&lt;/code&gt; &lt;code&gt;prompt()&lt;/code&gt; &lt;code&gt;confirm()&lt;/code&gt; 等活化石函數。&lt;/li&gt;
+&lt;li&gt;用 &lt;code&gt;console.log()&lt;/code&gt; 或 &lt;code&gt;alert()&lt;/code&gt; 輸出結果。&lt;/li&gt;
+&lt;li&gt;如果結果較長，可以建立一個 &lt;code&gt;&amp;lt;pre&amp;gt;&lt;/code&gt; 元素再將結果填入，
+&lt;code&gt;body.appendChild(pre)&lt;/code&gt; 加到結尾。&lt;/li&gt;
+&lt;li&gt;也可以把結果輸出到剪貼簿，或把結果存到 blob 物件，
+再用 &lt;code&gt;URL.createObjectURL()&lt;/code&gt; 產生下載連結。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;熟悉你的工具&quot;&gt;熟悉你的工具&lt;/h3&gt;
+&lt;p&gt;如果你發現你常使用主控台做事，那找個時間好好認識一下開發者工具，
+找篇文章或是 google、mdn 的文件來讀，會受益良多的。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49132252211&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49132252211_1a63c18ac8.jpg&quot; alt=&quot;copy-from-console.png&quot; title=&quot;你知道從主控台複製這個功能嗎？&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;厭倦不斷貼上重複的程式碼了嗎？&quot;&gt;厭倦不斷貼上重複的程式碼了嗎？&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;每次使用某個網頁時，都固定打開發者工具，寫出或貼上同樣的程式碼？&lt;/li&gt;
+&lt;li&gt;依照駭客文化，你應該要找出方式來簡化這個過程。&lt;/li&gt;
+&lt;li&gt;來看看 &lt;strong&gt;小書籤&lt;/strong&gt; 吧。&lt;/li&gt;
+&lt;li&gt;或是你可以試試 firefox 內建的程式碼片斷編輯器。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49131789658&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49131789658_353317a1ab.jpg&quot; alt=&quot;firefox-console-code-snippet.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;小書籤&quot;&gt;小書籤&lt;/h2&gt;
+&lt;p&gt;一種特殊的 url schema，
+和 &lt;code&gt;data:&lt;/code&gt; 一樣不指向某一位置，
+而是本身帶有意義。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;javascript:alert%28%27hello%20world%21%27%29&quot;&gt;greet-js&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;技術細節&quot;&gt;技術細節&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;javascript:&lt;/code&gt; 後的程式會在 global scope 下執行。&lt;/li&gt;
+&lt;li&gt;如果有回傳值，回傳值會被轉成字串，被當成下一個頁面的 html 內容。&lt;/li&gt;
+&lt;li&gt;如果有多個 statement，和 &lt;code&gt;eval()&lt;/code&gt; 一樣是用最後一個 statment 的回傳值。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h4 id=&quot;回傳值&quot;&gt;回傳值&lt;/h4&gt;
+&lt;script&gt;
+function helloHtml(name) {
+    if (!name) name = prompt(&apos;what is your name?&apos;)
+    var title = &apos;&lt;title&gt;hello &apos; + name + &apos;!&lt;/title&gt;&apos;
+    var body = &apos;&lt;h1&gt;hello &apos; + name + &apos;!&lt;/h1&gt;&apos;
+    var html = &apos;&lt;html&gt;&apos; + title + body + &apos;&lt;/html&gt;&apos;
+    return html
+}
+&lt;/script&gt;
+
+&lt;p&gt;&lt;a href=&quot;javascript:helloHtml()&quot;&gt;hello&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;安裝小書籤&quot;&gt;安裝小書籤&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;如同一般的 url，可以被 &lt;em&gt;加入書籤&lt;/em&gt; 。&lt;/li&gt;
+&lt;li&gt;可以用拖拉的方式，或右鍵加入書籤；讓麻瓜也能使用。&lt;/li&gt;
+&lt;li&gt;因此可以 &lt;em&gt;打包&lt;/em&gt; 一段程式碼成一個書籤，
+方便使用與分享；不用再一直開開發者工具了。&lt;/li&gt;
+&lt;li&gt;點擊書籤後可以在當前頁面執行。&lt;/li&gt;
+&lt;li&gt;執行小書籤等於執行任意程式碼，所以不要執行來路不明的小書籤。
+小書籤可以看到執行時所在網頁的所有內容，
+包含 cookie，所以可以盜取帳號。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;發布需知&quot;&gt;發布需知&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;因安全考量，一般的網站基本上不允許插入小書籤程式碼，
+所以至少需要一個靜態網站，例如 &lt;a href=&quot;https://gholk.github.io/bookmarklet/&quot;&gt;github page&lt;/a&gt;
+或是 &lt;a href=&quot;http://jsfiddle.net&quot;&gt;jsfiddle&lt;/a&gt; 這類可以托管完整網頁的。
+（或是叫使用者自己複製程式碼，然後在書籤列新增。）&lt;/li&gt;
+&lt;li&gt;程式碼太長書籤放的下嗎？我最多放過 5 KB 的程式。&lt;/li&gt;
+&lt;li&gt;真的太長怎麼辦？
+打包成一個 js 檔，托管到靜態網站上，
+在小書籤內容則是產生一個指向該檔案的 script 標籤，匯入執行。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;範例&quot;&gt;範例&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://jsfiddle.net&quot;&gt;jsfiddle&lt;/a&gt; 基本上可以托管任何 javascript，
+&lt;a href=&quot;https://jsfiddle.net/c85v4rLy/&quot;&gt;就把小書籤編碼後，嵌入在 html 入放入就可以了。&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;github page 是指托管靜態網站那種，
+我自己把寫的小書籤都放在 &lt;a href=&quot;http://github.com/GHolk/bookmarklet&quot;&gt;bookmarklet repository&lt;/a&gt; ，
+雖然 github repository readme 裡的小書籤不會顯示，
+但 &lt;a href=&quot;https://gholk.github.io/bookmarklet/&quot;&gt;靜態網頁&lt;/a&gt; 上是會顯示的。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;youtube-搜尋小書籤&quot;&gt;youtube 搜尋小書籤&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;const keyWord = prompt(&amp;apos;youtube 關鍵字&amp;apos;)
+window.open(&amp;apos;http://youtube.com/search?q=&amp;apos; + keyWord)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;小書籤 &lt;a href=&quot;javascript:const%20keyWord%20%3D%20prompt%28%27youtube%20%E9%97%9C%E9%8D%B5%E5%AD%97%27%29%3B%20window.open%28%27http%3A%2F%2Fyoutube.com%2Fsearch%3Fq%3D%27%20%2B%20keyWord%29%3B%20undefined&quot;&gt;youtube 關鍵字搜尋&lt;/a&gt; ，
+為什麼第二次點擊就不能執行了？&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;作用域&quot;&gt;作用域&lt;/h3&gt;
+&lt;script&gt;
+function promptYoutube() {
+  const keyWord = prompt(&apos;youtube 關鍵字&apos;)
+  window.open(&apos;http://youtube.com/search?q=&apos; + keyWord)
+}
+&lt;/script&gt;
+
+&lt;p&gt;&lt;a href=&quot;javascript:promptYoutube%28%29&quot;&gt;只呼叫函數&lt;/a&gt; ，收藏後還可以執行嗎？&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;把用到的函數包進來&quot;&gt;把用到的函數包進來&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;void function() {
+  function promptYoutube() {
+    const keyWord=prompt(&amp;quot;youtube 關鍵字&amp;quot;);
+    window.open(&amp;quot;http://youtube.com/search?q=&amp;quot;+keyWord)
+  }
+  promptYoutube()
+}()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;a href=&quot;javascript:void%20function%28%29%7Bfunction%20promptYoutube%28%29%7Bconst%20keyWord=prompt%28%22youtube%20%E9%97%9C%E9%8D%B5%E5%AD%97%22%29;window.open%28%22http:%2F%2Fyoutube.com%2Fsearch%3Fq%3D%2522%2BkeyWord%2529%257DpromptYoutube%2528%2529%257D%2528%2529&quot;&gt;把函數也包進來&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;void-算符&quot;&gt;void 算符&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;undefined === void anyExpression
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://zh.wikipedia.org/wiki/%E5%B0%8F%E6%9B%B8%E7%B1%A4#%E5%8E%86%E5%8F%B2&quot;&gt;javascript 發明人，為了小書籤所發明的算符。&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;javascript:void%20prompt%28%27%E9%9A%A8%E4%BE%BF%E8%AA%AA%E9%BB%9E%E8%A9%B1%27%29&quot;&gt;有 void&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;javascript:prompt%28%27%E9%9A%A8%E4%BE%BF%E8%AA%AA%E9%BB%9E%E8%A9%B1%27%29&quot;&gt;無 void&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;函數表達式&quot;&gt;函數表達式&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;void function () {
+  // do what you want
+)()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;打包程式碼&quot;&gt;打包程式碼&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;可以將整個程式放在 immeditate invoke function 裡，防止撞名。&lt;/li&gt;
+&lt;li&gt;用 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E7%99%BE%E5%88%86%E8%99%9F%E7%B7%A8%E7%A2%BC&quot;&gt;百分號編碼&lt;/a&gt; 去除特殊字元。&lt;/li&gt;
+&lt;li&gt;用 uglify-js 去除多餘空白與縮排，減少體積。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;javascript-url-的用途到底是什麼？&quot;&gt;javascript url 的用途到底是什麼？&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;製造一個點擊後執行特定函數的元素，類似 onclick 的功能。&lt;/li&gt;
+&lt;li&gt;此外 javascript 的發明者 Brendan Eich，
+特地將它設計成可以被加入書籤中，還幫他設計了 void 算符。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-html&quot;&gt;&amp;lt;a href=&amp;quot;javascript:doAction(&amp;apos;menu&amp;apos;)&amp;quot;&amp;gt;open menu&amp;lt;/a&amp;gt;
+&amp;lt;a href=&amp;quot;javascript:doAction(&amp;apos;save&amp;apos;)&amp;quot;&amp;gt;save change&amp;lt;/a&amp;gt;
+&amp;lt;a href=&amp;quot;javascript:doAction(&amp;apos;exit&amp;apos;)&amp;quot;&amp;gt;discard change&amp;lt;/a&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;相對-onclick&quot;&gt;相對 onclick&lt;/h3&gt;
+&lt;p&gt;onclick 回傳 false 表示不處理本來應該處理的事件，
+例如 &lt;code&gt;&amp;lt;input type=&amp;quot;submit&amp;quot;&amp;gt;&lt;/code&gt; 如果 onclick 回傳 false 時不會提交，
+&lt;code&gt;&amp;lt;a href=&amp;quot;//google.com&amp;quot;&lt;/code&gt; 如果 onclick 回傳 false 時不會前往新頁面。&lt;/p&gt;
+&lt;script&gt;
+  function isGreater10() {
+    let number = prompt(&apos;input a number &gt; 10&apos;)
+    number = Number(number)
+    const isGreater = number &gt; 10
+    alert(isGreater)
+    return isGreater
+  }
+&lt;/script&gt;
+
+&lt;p&gt;&lt;a href=&quot;./&quot; onclick=&quot;return isGreater10()&quot;&gt;greet&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;data-url&quot;&gt;data url&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;data url 是以 &lt;code&gt;data:&lt;/code&gt; 開頭的 url，他就是把資料直接放在網址。&lt;/li&gt;
+&lt;li&gt;例如圖片可以以 data url 內嵌在網頁裡。
+&lt;code&gt;&amp;lt;img src=&amp;quot;data:image/png;base64,aGV5Cg==&amp;quot;&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;data url 同樣可以加入書籤。&lt;/li&gt;
+&lt;li&gt;小書籤是把 js 打包成一書籤，而 data url 則是把整個網頁，
+不只 javascript，連 html 一起打包進來。&lt;/li&gt;
+&lt;li&gt;例如這個 &lt;a href=&quot;https://darcs.nomeata.de/screen-message/sm.html&quot;&gt;screen message&lt;/a&gt; 就是很有用的小工具。
+&lt;a href=&quot;https://gholk.github.io/bookmarklet/#screen-message&quot;&gt;我有把他整個網頁打包成一個 data url&lt;/a&gt; ，加到書籤，
+方便離線時存取。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;小書籤的侷限&quot;&gt;小書籤的侷限&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;必須手動打開書籤列點擊執行。&lt;/li&gt;
+&lt;li&gt;如果在某網頁固定用到該功能，還是要固定手動點擊才能執行。&lt;/li&gt;
+&lt;li&gt;有沒有辦法在進到某一網頁時，就執行對應的程式呢？
+像是固定隱藏網頁中的某個側邊欄、改變字體顏色大小。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;GreaseMonkey&quot;&gt;GreaseMonkey&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;暱稱油猴腳本，是管理 &lt;code&gt;*.user.js&lt;/code&gt; 的擴充元件。&lt;/li&gt;
+&lt;li&gt;firefox 有一些參數，可以在 &lt;a href=&quot;about:config&quot;&gt;about:config&lt;/a&gt; 裡調。&lt;/li&gt;
+&lt;li&gt;古早時期，有人會寫一份 javascript，
+在啟動 firefox 時執行去調那些參數，
+那份 js 習慣會取名為 &lt;code&gt;*.user.js&lt;/code&gt; 。&lt;/li&gt;
+&lt;li&gt;後來有人在裡面作很多奇怪的事惡搞網頁，這些 &lt;code&gt;*.user.js&lt;/code&gt; 量越來越多就需要一種管理的方法。&lt;/li&gt;
+&lt;li&gt;好像還有 &lt;code&gt;*.user.css&lt;/code&gt; ，但我沒有研究。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;功能&quot;&gt;功能&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;首先，需要安裝 grease monkey 這個擴充元件，
+其它 user.js 腳本會由 grease monkey 擴充元件管理、執行。&lt;/li&gt;
+&lt;li&gt;提供編輯器和管理介面。&lt;/li&gt;
+&lt;li&gt;管理在每個網頁下要載入哪些 user.js。&lt;/li&gt;
+&lt;li&gt;在進入附檔名為 &lt;code&gt;*.user.js&lt;/code&gt; 的 url 時，會自動詢問安裝。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;安裝與使用&quot;&gt;安裝與使用&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;//gist.github.com&quot;&gt;//gist.github.com&lt;/a&gt; 裡按 raw，正常會出現原始碼，
+有裝 grease monkey 會詢問安裝。 &lt;a href=&quot;https://gist.github.com/GHolk/3154e8486cf987cf6ab84cae45c7dcc7&quot;&gt;bbsjs gist&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;只要網址結尾是 &lt;code&gt;.user.js&lt;/code&gt; ，就會跳出安裝介面，
+就算托管的空間如 pastebin 不支援客制化網址，也可以在網址尾端加上
+&lt;code&gt;?script.user.js&lt;/code&gt; 或 &lt;code&gt;#script.user.js&lt;/code&gt; 的方式觸發安裝。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://wiki.greasespot.net/User_Script_Hosting&quot;&gt;grease monkey wiki&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;pastebin-托管範例&quot;&gt;pastebin 托管範例&lt;/h3&gt;
+&lt;p&gt;pastebin 的好處是免註冊即可使用。&lt;/p&gt;
+&lt;p&gt;在 &lt;a href=&quot;http://pastebin.com&quot;&gt;pastebin&lt;/a&gt; 裡 &lt;a href=&quot;https://pastebin.com/ZTuGjA6Y&quot;&gt;創建腳本後&lt;/a&gt; ，
+&lt;a href=&quot;https://pastebin.com/raw/ZTuGjA6Y&quot;&gt;點擊 raw 直接取得原始碼&lt;/a&gt; ，
+並 &lt;a href=&quot;https://pastebin.com/raw/ZTuGjA6Y#hackmd-scroll-flip.user.js&quot;&gt;修改網址結尾為 &lt;code&gt;x.user.js&lt;/code&gt;&lt;/a&gt; 。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;gist-托管範例&quot;&gt;gist 托管範例&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://gist.github.com/GHolk/4a2edcf9cf3f956ec7eb7d7823348b6c&quot;&gt;在 gist 創建腳本&lt;/a&gt; ，檔名取為 &lt;code&gt;*.user.js&lt;/code&gt; ，
+&lt;a href=&quot;https://gist.github.com/GHolk/4a2edcf9cf3f956ec7eb7d7823348b6c/raw/1c71ecd469701cfadf149d9687a785c5294191ef/hackmd-scroll-flip.user.js&quot;&gt;點擊 raw 即可直接取得原始碼&lt;/a&gt; ，
+且網址結尾為自動成為對應的檔名。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.blog/2018-02-18-deprecation-notice-removing-anonymous-gist-creation/&quot;&gt;gist 曾經有一段時間免註冊，但垃圾太多所以又關起來了。&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&quot;metadata-header&quot;&gt;metadata header&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&quot;https://wiki.greasespot.net/Metadata_Block&quot;&gt;https://wiki.greasespot.net/Metadata_Block&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-user.js&quot;&gt;// ==UserScript==
+// @name  chrome bbs javascript executor
+// @namespace  http://gholk.github.io/
+// @description  press J in term.ptt.cc can run JavaScript
+// @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js
+// @match https://term.ptt.cc/*
+// @match https://www.clam.ml/*
+// @match https://www.ptt.cc/bbs/*
+// @version  13
+// @grant  GM.notification
+// @grant  GM.xmlHttpRequest
+// ==/UserScript==
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h4 id=&quot;執行環境&quot;&gt;執行環境&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;window 是假的，真的在 unsafeWindow。&lt;/li&gt;
+&lt;li&gt;程式是被包在一個匿名函數裡執行，所以宣告的變數不會變全域變數。&lt;/li&gt;
+&lt;li&gt;jquery 有時會炸，原因不明。&lt;/li&gt;
+&lt;li&gt;事件請愛用原生操作 &lt;code&gt;*.addEventListener&lt;/code&gt; ，jquery 的會炸。&lt;/li&gt;
+&lt;li&gt;操作 dom 還沒什麼問題，可以用原網頁的 jquery： &lt;code&gt;const $ = unsafeWindow.$&lt;/code&gt; 。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h4 id=&quot;`GM.*`-API&quot;&gt;&lt;code&gt;GM.*&lt;/code&gt; API&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;GM.notification 可以發通知&lt;/li&gt;
+&lt;li&gt;GM.xmlHttpRequest 不受 same origin policy 限制，超爽的&lt;/li&gt;
+&lt;li&gt;GM.setClipboard 可以簡單複製內容&lt;/li&gt;
+&lt;li&gt;api 都是 promise 非同步，不過除非你很重順序，不然直接呼叫時間也不會差太多&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://wiki.greasespot.net/API&quot;&gt;https://wiki.greasespot.net/API&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;GM.notification(&amp;apos;hello (1)&amp;apos;)
+  .then(() =&amp;gt; {
+    return GM.notification(&amp;apos;hello (2)&amp;apos;)
+  })
+  .then(() =&amp;gt; console.log(&amp;apos;after send 2 notify&amp;apos;))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h4 id=&quot;功能鍵&quot;&gt;功能鍵&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;以前有 api 可以在 grease monkey 的選單上設置按鈕。&lt;/li&gt;
+&lt;li&gt;不過 firefox 57 quantum 後，api 不允許了。&lt;/li&gt;
+&lt;li&gt;綁鍵盤 &lt;code&gt;window.addEventListener(&amp;apos;keydown&amp;apos;)&lt;/code&gt; 。&lt;/li&gt;
+&lt;li&gt;改用 bookmarklet，本身就是要點擊才能執行的。&lt;/li&gt;
+&lt;li&gt;grease monkey 較適合直接改 dom 而不是點擊執行。
+像聽 hover 事件、在網頁上加按鈕。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;擴充元件&quot;&gt;擴充元件&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;功能更多，彈性更大。
+可以做到上 bbs、修改歷史記錄、新增工具列按鈕等功能。&lt;/li&gt;
+&lt;li&gt;權限更清楚。在安裝時會清楚告訴你用到哪些功能。&lt;ul&gt;
+&lt;li&gt;小書籤雖然要點擊才會執行，
+但除非看原始碼，不然完全不知道執行時做了什麼。&lt;/li&gt;
+&lt;li&gt;油猴腳本在安裝時會告知腳本會在哪些網頁下運作，
+用到哪些 api，但給的還是很籠統。&lt;/li&gt;
+&lt;li&gt;擴充元件的安全性更有保障；
+且 chrome 與 firefox 都會審覈擴充元件的程式碼，較安全。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;擴充元件與油猴的安全性&quot;&gt;擴充元件與油猴的安全性&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49136395291&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49136395291_0d529072b6.jpg&quot; alt=&quot;plugin-permission-request.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49136395406&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49136395406_4e969ac36a.jpg&quot; alt=&quot;greasemonkey-permission-request.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;因為擴充元件太複雜&quot;&gt;因為擴充元件太複雜&lt;/h3&gt;
+&lt;p&gt;雖然我寫過，但今天就不介紹了。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;總結&quot;&gt;總結&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;開發者工具適合快速測試、編寫一次性腳本。&lt;/li&gt;
+&lt;li&gt;小書籤適合需要時才執行的功能，例如批次下載、自動砍站。&lt;/li&gt;
+&lt;li&gt;油猴腳本通常用來優化使用體驗，像放大影片、預覽圖片。
+較進階的用法也可以在頁面中插入按鈕，
+點擊時再執行類似小書籤的一次性功能。
+例如一些 youtube 的油猴腳本就會在頁面中加一堆按鈕，
+提供五花八門的功能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;什麼時候該用擴充元件？&quot;&gt;什麼時候該用擴充元件？&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;當上面三者的都無法提供你需要的 api 時，例如 bbsfox、連 ftp。&lt;/li&gt;
+&lt;li&gt;當你需要寫出 &lt;s&gt;讓麻瓜安心使用&lt;/s&gt; &lt;em&gt;真正能用或能賣的東西&lt;/em&gt; ，
+而不是客群只限定在 geek 的程式。
+你要有一個正規的管道來發布，最好的選擇就是上架 chrome store 或
+mozilla add on，讓使用者能放心安裝。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;重用小書籤與-user.js-的程式碼&quot;&gt;重用小書籤與 user.js 的程式碼&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;有時你會想要發布一個程式到二種平台，
+小書籤的好處是所有人都能用，但 user.js 用起來比較方便。&lt;/li&gt;
+&lt;li&gt;可以透過 &lt;code&gt;typeof GM&lt;/code&gt; 判斷是否在 grease monkey 下運行。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;if (typeof GM == &amp;apos;object&amp;apos;) runInGreaseMonkey()
+else runInBookmarklet()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;許願池&quot;&gt;許願池&lt;/h2&gt;
+&lt;p&gt;你有什麼功能想做嗎？
+或是想練手卻不知道做什麼嗎？
+來許願吧！&lt;/p&gt;
+&lt;div id=&quot;disqus_thread&quot;&gt;&lt;/div&gt;
+
+&lt;hr&gt;
+&lt;h3 id=&quot;[簡單-grease-monkey-repl][gm-repl]&quot;&gt;&lt;a href=&quot;https://gist.github.com/GHolk/699c7b42d02e9dfd1c8f9af011f1eef1&quot;&gt;簡單 grease monkey repl&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Read Evaluate Print Loop，
+可以輸入表達式，程式會調用 eval 然後印出求值結果。
+如果輸入是 promise，會等 resolve 後才顯示結果。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;FB-備份功能&quot;&gt;FB 備份功能&lt;/h3&gt;
+&lt;p&gt;把一份貼文備份成 JSON 或其它格式，
+並在原文被刪除時可以重發，
+在每層樓 tag 原本的留言者並附上當初的留言。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;[BBSJS](bbsjs.html)&quot;&gt;&lt;a href=&quot;bbsjs.html&quot;&gt;BBSJS&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;在 ptt 上執行 javascript，
+類似當初 BBSLua 的概念，
+但是跑在瀏覽器上而不是 server 上。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;[clean-window](https://github.com/GHolk/bookmarklet/blob/master/youtube-clean-player.js)&quot;&gt;&lt;a href=&quot;https://github.com/GHolk/bookmarklet/blob/master/youtube-clean-player.js&quot;&gt;clean window&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;開啟一個沒有工具列、分頁列、網址列的乾淨視窗，
+同義於 &lt;code&gt;chromium --app=https://www.youtube.com/embed/dWKNW5lm3Ss&lt;/code&gt; 。
+通常是用在看 youtube 時想空出多點空間。
+&lt;a href=&quot;http://youtu.be/dWKNW5lm3Ss&quot;&gt;http://youtu.be/dWKNW5lm3Ss&lt;/a&gt; 。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/ccns-grease-monkey-bookmarklet.html#data-url</id>
 <title>不用寫外掛也能惡搞網頁</title>
 <published>2018-05-05T11:55:20.441Z</published>
@@ -4783,645 +5346,7 @@ done
 <category term="shell"/>
 <category term="ccca"/>
 <category term="nctu"/>
-<content type="html">&lt;h1 id=&quot;shell-概念教學&quot;&gt;shell 概念教學&lt;/h1&gt;
-&lt;p&gt;shell 的設計理念以 unix 環境中的程序為中心，
-發展出參數、管道等觀念。
-並且最重要的，是一門可以應用在電腦日常使用上的實際的程式語言。
-對簡單學習過 c 語言的人，
-配合 c 從 shell 認識電腦是一條十分有意義的道路。
-本簡報從使用電腦的角度，帶領有 c 語言基礎的人認識 shell。&lt;/p&gt;
-&lt;hr&gt;
-&lt;script&gt;
-function toggleSlideMode() {
-  document.documentElement.classList.toggle(&apos;white-black-slide&apos;)
-}
-function scrollToNextHr() {
-  const allHr = document.querySelectorAll(&apos;hr&apos;)
-  const windowTop = scrollY
-  for (const hr of allHr) {
-    if (hr.offsetTop &gt; scrollY) {
-      scrollTo(0, hr.offsetTop + 1)
-      break
-    }
-  }
-}
-&lt;/script&gt;
 
-&lt;style contenteditable=&quot;true&quot;&gt;
-.white-black-slide {
-  font-size: 250%;
-  color: white;
-  background: black;
-}
-.white-black-slide a {
-  color: cyan;
-}
-:not(pre) code {
-  border: solid 1px;
-  padding: 0 0.1em;
-}
-.white-black-slide ::selection { color: initial; background-color: yellow; }
-.white-black-slide ::-moz-selection { color: initial; background-color: yellow; }
-
-.white-black-slide {
-  cursor: url(&apos;data:image/cur;base64,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&apos;) 12.5 12.5, auto;
-}
-
-:this + button {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  margin: 1em;
-}
-&lt;/style&gt;
-
-&lt;button onclick=&quot;scrollToNextHr()&quot;&gt;下一頁&lt;/button&gt;
-
-&lt;button onclick=&quot;toggleSlideMode()&quot;&gt;切換簡報模式&lt;/button&gt;
-
-&lt;hr&gt;
-&lt;h2 id=&quot;可以實際應用的程式設計&quot;&gt;可以實際應用的程式設計&lt;/h2&gt;
-&lt;p&gt;高中電腦多半從 c 這種基本的，或其它 &lt;em&gt;簡單的&lt;/em&gt; 程式語言教起，
-但這些語言有個很大的問題，
-他們都無法讓學生應用在日常的電腦操作上。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;c-可以寫什麼&quot;&gt;c 可以寫什麼&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;scanf printf&lt;/li&gt;
-&lt;li&gt;fopen&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;問題的關鍵&quot;&gt;問題的關鍵&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;日常使用電腦的操作，無法輕易用 c 達成。&lt;/li&gt;
-&lt;li&gt;學校的教學偏重在理論，而不是實務應用。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;日常的操作&quot;&gt;日常的操作&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;複製檔案&lt;/li&gt;
-&lt;li&gt;打開網頁&lt;/li&gt;
-&lt;li&gt;壓縮檔案&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;什麼是-shell&quot;&gt;什麼是 shell&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;日常使用的稱為 &lt;abbr title=&quot;Graphic User Interface&quot;&gt;圖形介面&lt;/abbr&gt; 。&lt;/li&gt;
-&lt;li&gt;在圖形介面發明以前，人機之間以文字指令溝通。&lt;/li&gt;
-&lt;li&gt;作業系統內部是一支執行中的程式，
-而 shell 用來稱呼人與作業系統溝通的介面。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;指令的特性&quot;&gt;指令的特性&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;學習門檻較高。&lt;/li&gt;
-&lt;li&gt;由於指令只是一連串文字，可以把要執行的指令存成檔案，方便執行。&lt;/li&gt;
-&lt;li&gt;本實是一種特化的程式語言。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;指令與圖形介面等價&quot;&gt;指令與圖形介面等價&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;在沒有圖形介面以前，人們還是使用電腦。&lt;/li&gt;
-&lt;li&gt;絕大多數在圖形介面能做到的事，指令也都能做到。&lt;/li&gt;
-&lt;li&gt;雖然無法做到 &lt;em&gt;開啟視窗然後按下某個按鈕&lt;/em&gt; 之類的圖形介面操作。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;shell-入門&quot;&gt;shell 入門&lt;/h2&gt;
-&lt;p&gt;指令是不含空白的一連串字元，一般包含底線與連字號。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;pwd
-ls
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;帶有參數的指令&quot;&gt;帶有參數的指令&lt;/h3&gt;
-&lt;p&gt;參數以空白分隔&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;mv config.txt config_backup.txt
-cp config_origin.txt config.txt
-rm log.txt
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;移動到不同資料夾&quot;&gt;移動到不同資料夾&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;cd my-dir
-cd ..
-cd /home
-cd ../usr/bin
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;何謂開啟檔案？&quot;&gt;何謂開啟檔案？&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;用 fopen 打開讀取或寫入&lt;/li&gt;
-&lt;li&gt;更改檔案內容&lt;/li&gt;
-&lt;li&gt;開啟檔案對應的圖形程式&lt;/li&gt;
-&lt;li&gt;用滑鼠點二下&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;開啟圖形程式&quot;&gt;開啟圖形程式&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;gedit
-lowriter
-firefox
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;用圖形程式開啟檔案&quot;&gt;用圖形程式開啟檔案&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;gedit file.txt
-lowriter document.odt
-firefox print.pdf
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;統一的指令&quot;&gt;統一的指令&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;# linux
-xdg-open file.odt
-&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;REM windows
-start file.doc
-
-REM or directly type filename
-file.doc
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h2 id=&quot;快捷鍵&quot;&gt;快捷鍵&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;指令到很複雜的話，敲鍵盤很累的。&lt;/li&gt;
-&lt;li&gt;所以 shell 多半有快捷鍵可以用，
-處理這些快捷鍵的程式稱為 readline。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;自動補全&quot;&gt;自動補全&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;tab 鍵可以自動補全打到一半的單字&lt;/li&gt;
-&lt;li&gt;基本的命令可以自動補全，例如打 pyt 之後按 tab 就會補全成 python。&lt;/li&gt;
-&lt;li&gt;檔名也可以自動補全，例如 &lt;code&gt;xdg-open file.o&lt;/code&gt; 
-之後按 tab 會依存在的檔案補全。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;上一個指令&quot;&gt;上一個指令&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;方向鍵上下可以在歷史記錄中瀏覽&lt;/li&gt;
-&lt;li&gt;或是用 ctrl-p ctrl-n&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;在歷史中搜尋&quot;&gt;在歷史中搜尋&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;ctrl-r 可以在歷史中搜尋&lt;/li&gt;
-&lt;li&gt;如果找到的不是你要的，可以再按一次 ctrl-r 再往前找&lt;/li&gt;
-&lt;li&gt;或是把搜尋字串打完整一點&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;用指令直接更改檔案&quot;&gt;用指令直接更改檔案&lt;/h2&gt;
-&lt;p&gt;上面都是用指令 &lt;em&gt;打開&lt;/em&gt; 一個圖形介面。
-那能不能不透過圖形介面，
-直接用指令完成對檔案的操作呢？&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;處理壓縮檔&quot;&gt;處理壓縮檔&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;# create zip homework.zip,
-# which contain code.c report.odt Makefile
-zip homework.zip code.c report.odt Makefile
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;更改內容&quot;&gt;更改內容&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;# delete file in zip
-zip -d homework.zip Makefile
-
-# update file in zip
-zip -u homework.zip code.c
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h2 id=&quot;選項&quot;&gt;選項&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;在 unix 下，多數程式會把以 &lt;code&gt;-&lt;/code&gt; 開頭的參數當作 &lt;em&gt;選項&lt;/em&gt; 。&lt;/li&gt;
-&lt;li&gt;選項用來改變程式的行為。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;短選項與連寫&quot;&gt;短選項與連寫&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;最早選項都只有一個字 &lt;code&gt;-h&lt;/code&gt; &lt;code&gt;-a&lt;/code&gt; &lt;code&gt;-t&lt;/code&gt; 。&lt;/li&gt;
-&lt;li&gt;工程師都很懶，所以慣例上短選項可以寫在一起 &lt;code&gt;-hat&lt;/code&gt; 。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;bsd-的長選項&quot;&gt;bsd 的長選項&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;後來程式越來越複雜，26 個選項不夠用。&lt;/li&gt;
-&lt;li&gt;bsd 發明長選項，選項從字元改成單字 &lt;code&gt;-help&lt;/code&gt; &lt;code&gt;-all&lt;/code&gt; 。&lt;/li&gt;
-&lt;li&gt;因此連寫不能用了。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;gnu-的長選項&quot;&gt;gnu 的長選項&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;gnu 覺得這樣不向下相容，不優。&lt;/li&gt;
-&lt;li&gt;規定為了與短選項區隔，長選項應該要用二個 &lt;code&gt;-&lt;/code&gt; 開頭， &lt;code&gt;--help&lt;/code&gt; &lt;code&gt;--all&lt;/code&gt; 。&lt;/li&gt;
-&lt;li&gt;程式可以同時有短選項與長選項，短選項仍可以連寫。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;但選項的格式只是慣例&quot;&gt;但選項的格式只是慣例&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;程式看到的只是一連串的字串格式參數，只是某些參數用 &lt;code&gt;-&lt;/code&gt; 開頭。&lt;/li&gt;
-&lt;li&gt;程式作者可以把程式設計成用 &lt;code&gt;/&lt;/code&gt; 當選項開頭，用 &lt;code&gt;\&lt;/code&gt; 當路徑分隔符。
-（windows: 誰叫我？）&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;dd&lt;/code&gt; 就是一支不同風格的常用程式。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;選項查詢&quot;&gt;選項查詢&lt;/h3&gt;
-&lt;p&gt;要怎麼知道命令怎麼下？有哪些選項？&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;s&gt;google&lt;/s&gt;&lt;/li&gt;
-&lt;li&gt;求助選項： &lt;code&gt;zip --help&lt;/code&gt; 或 &lt;code&gt;zip -h&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;線上手冊： &lt;code&gt;man zip&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;搜尋手冊： &lt;code&gt;apropos zip&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;求助選項&quot;&gt;求助選項&lt;/h3&gt;
-&lt;p&gt;多數程式會有一個求助選項，
-看到 &lt;code&gt;--help&lt;/code&gt; 或 &lt;code&gt;-h&lt;/code&gt; 就會直接輸出簡短的說明。
-當然也不是所有程式都有，還是那句話，看作者。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;手冊&quot;&gt;手冊&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;unix 系統中自帶有說明書，說明書可以用一支叫 &lt;code&gt;man&lt;/code&gt; 的程式閱讀。&lt;/li&gt;
-&lt;li&gt;man 會開啟一個介面，可以用方向鍵翻閱，用 &lt;code&gt;q&lt;/code&gt; 可以離開。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;搜尋合適的指令&quot;&gt;搜尋合適的指令&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;apropos 可以用關鍵字搜尋手冊。&lt;/li&gt;
-&lt;li&gt;一般有手冊也就代表有指令可以用。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;第一支腳本&quot;&gt;第一支腳本&lt;/h2&gt;
-&lt;pre&gt;&lt;code&gt;# pack homework files into zip
-zip homework.zip report.odt code.c
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;執行腳本&quot;&gt;執行腳本&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;sh script.sh
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;加入提示&quot;&gt;加入提示&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;echo start packing file
-zip homework.zip report.odt code.c
-echo finish packing file
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;echo&quot;&gt;echo&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;寫在腳本裡的指令是直接執行，而執行時不會顯示現在在執行什麼。
-（dos 會，可以用 &lt;code&gt;echo on&lt;/code&gt; &lt;code&gt;echo off&lt;/code&gt; 控制。）&lt;/li&gt;
-&lt;li&gt;所以要用 echo 把想顯示的文字 &lt;em&gt;回音&lt;/em&gt; 出來。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;輸出字串&quot;&gt;輸出字串&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;echo 就是單純輸出字串，對特殊字元和格式化的支援有限。&lt;/li&gt;
-&lt;li&gt;printf 可以做到接近 c printf 的五花八門功能。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;printf&quot;&gt;printf&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;printf &amp;quot;file-%03d.txt\n&amp;quot; 12 # file-012.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h2 id=&quot;輸出太長怎麼辦&quot;&gt;輸出太長怎麼辦&lt;/h2&gt;
-&lt;p&gt;剛剛說的 apropos&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;~:$ apropos zip
-CPAN::Tarzip (3pm)   - internal handling of tar archives for CPAN.pm
-Archive::Zip (3pm)   - Provide an interface to ZIP archive files.
-Archive::Zip::FAQ (3pm) - Answers to a few frequently asked questions about A...
-Archive::Zip::MemberRead (3pm) - A wrapper that lets you read Zip archive mem...
-Archive::Zip::Tree (3pm) - (DEPRECATED) methods for adding/extracting trees u...
-bunzip2 (1)          - a block-sorting file compressor, v1.0.6
-bzcmp (1)            - compare bzip2 compressed files
-bzdiff (1)           - compare bzip2 compressed files
-bzegrep (1)          - search possibly bzip2 compressed files for a regular e...
-bzfgrep (1)          - search possibly bzip2 compressed files for a regular e...
-bzgrep (1)           - search possibly bzip2 compressed files for a regular e...
-bzip2 (1)            - a block-sorting file compressor, v1.0.6
-bzip2recover (1)     - recovers data from damaged bzip2 files
-bzless (1)           - file perusal filter for crt viewing of bzip2 compresse...
-bzmore (1)           - file perusal filter for crt viewing of bzip2 compresse...
-Compress::Raw::Bzip2 (3perl) - Low-Level Interface to bzip2 compression library
-CPAN::Tarzip (3perl) - internal handling of tar archives for CPAN.pm
-docker-context-import (1) - Import a context from a tar or zip file
-fcrackzip (1)        - a Free/Fast Zip Password Cracker
-fcrackzipinfo (1)    - display zip information
-funzip (1)           - filter for extracting from a ZIP archive in a pipe
-gpg-zip (1)          - encrypt or sign files into an archive
-gunzip (1)           - compress or expand files
-gzip (1)             - compress or expand files
-IO::Compress::Bzip2 (3perl) - Write bzip2 files/buffers
-IO::Compress::Gzip (3perl) - Write RFC 1952 files/buffers
-IO::Compress::Zip (3perl) - Write zip files/buffers
-IO::Uncompress::AnyInflate (3perl) - Uncompress zlib-based (zip, gzip) file/b...
-IO::Uncompress::AnyUncompress (3perl) - Uncompress gzip, zip, bzip2 or lzop f...
-IO::Uncompress::Bunzip2 (3perl) - Read bzip2 files/buffers
-IO::Uncompress::Gunzip (3perl) - Read RFC 1952 files/buffers
-IO::Uncompress::Unzip (3perl) - Read zip files/buffers
-MIME::Decoder::Gzip64 (3pm) - decode a &amp;quot;base64&amp;quot; gzip stream
-p7zip (1)            - Wrapper on 7-Zip file archiver with high compression r...
-pbzip2 (1)           - parallel bzip2 file compressor, v1.1.9
-PerlIO::gzip (3pm)   - Perl extension to provide a PerlIO layer to gzip/gunzip
-preunzip (1)         - prefix delta compressor for Aspell
-prezip (1)           - prefix delta compressor for Aspell
-prezip-bin (1)       - prefix zip delta word list compressor/decompressor
-unzip (1)            - list, test and extract compressed files in a ZIP archive
-unzipsfx (1)         - self-extracting stub for prepending to ZIP archives
-zforce (1)           - force a &amp;apos;.gz&amp;apos; extension on all gzip files
-zip (1)              - package and compress (archive) files
-zipcloak (1)         - encrypt entries in a zipfile
-zipdetails (1)       - display the internal structure of zip files
-zipgrep (1)          - search files in a ZIP archive for lines matching a pat...
-zipinfo (1)          - list detailed information about a ZIP archive
-zipnote (1)          - write the comments in zipfile to stdout, edit comments...
-zipsplit (1)         - split a zipfile into smaller zipfiles
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;用-less-接起來&quot;&gt;用 less 接起來&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;那條直線叫管道符號，可以把前面程式的輸出，丟給後面程式。&lt;/li&gt;
-&lt;li&gt;less 的功能就是把過多的輸出接起來，可以上下翻頁慢慢看。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;apropos zip | less
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;其它用來接輸出的程式&quot;&gt;其它用來接輸出的程式&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;apropos zip | head
-apropos zip | tail
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;或是輸入到檔案&quot;&gt;或是輸入到檔案&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;apropos zip &amp;gt; apropos-zip.txt
-head &amp;lt; apropos-zip.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;重導向或是直接指定檔名？&quot;&gt;重導向或是直接指定檔名？&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;head &amp;lt; apropos-zip.txt
-head apropos-zip.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;有關-man&quot;&gt;有關 man&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;man 是一支很聰明的程式，會判斷輸出的裝置決定行為。&lt;/li&gt;
-&lt;li&gt;直接呼叫時，man 因為輸出對向是終端機，所以呼叫 less 把內容接起來。&lt;/li&gt;
-&lt;li&gt;如果對向是檔案，man 就會直接輸出文字檔。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;man zip # 開啟 less 讓使用者翻閱手冊
-man zip &amp;gt; zip.txt # 把手冊存成文字檔
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;更改檔案內容&quot;&gt;更改檔案內容&lt;/h3&gt;
-&lt;p&gt;上面提過 echo printf，輸出也能重導向到檔案。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;echo hey &amp;gt; hey
-printf &amp;quot;hello world!&amp;quot; &amp;gt; hey
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;覆寫與附加&quot;&gt;覆寫與附加&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;一個 &lt;code&gt;&amp;gt;&lt;/code&gt; 會寫入，如果檔案已經存在會被清空後寫入新內容。&lt;/li&gt;
-&lt;li&gt;二個 &lt;code&gt;&amp;gt;&amp;gt;&lt;/code&gt; 會附加，如果檔案已經存在會附加在檔案結尾。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;echo bye &amp;gt;&amp;gt; hey
-printf &amp;quot;byby!&amp;quot; &amp;gt;&amp;gt; hey
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h2 id=&quot;shell-批次處理&quot;&gt;shell 批次處理&lt;/h2&gt;
-&lt;p&gt;先前也提過，shell 最大的好處是可以寫成腳本執行，
-可以省去用滑鼠點來點去的時間。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;命令代換&quot;&gt;命令代換&lt;/h3&gt;
-&lt;p&gt;被 &lt;code&gt;$()&lt;/code&gt; 包起來的命令，執行後的結果會被置換到命令中。&lt;/p&gt;
-&lt;p&gt;用 wc 計算 ls 命令列出的第一個檔案大小。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;wc -c $(ls | head -n 1)
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;變數賦值&quot;&gt;變數賦值&lt;/h3&gt;
-&lt;p&gt;sh 中，所有變數內容都是字串。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;a=file.txt
-b=$(ls | head -n 1)
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;變數取值&quot;&gt;變數取值&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;要展開變數需要用 &lt;code&gt;$&lt;/code&gt; 標記，不然只會被當成單純字串而不是變數名。&lt;/li&gt;
-&lt;li&gt;但賦值時不能有 &lt;code&gt;$&lt;/code&gt; 號！&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;wc -c a # 計算檔名為 a 的大小
-wc -c $a # 計算檔名為變數 a 的內容的大小
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;管道的力量&quot;&gt;管道的力量&lt;/h3&gt;
-&lt;p&gt;串連多個小程式，就能快速達到各種功能。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;sed &amp;apos;s/[^[:alnum:]]/\n/g&amp;apos; | sort | uniq -c
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h2 id=&quot;程式&quot;&gt;程式&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;stdin 標準輸入、stdout 標準輸出&lt;/li&gt;
-&lt;li&gt;argv 參數&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;簡單的-c&quot;&gt;簡單的 c&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-c&quot;&gt;// substr.c
-int main(int argc, char **argv) {
-
-  // argv
-  int start;
-  sscanf(argv[1], &amp;quot;%d&amp;quot;, &amp;amp;start);
-  int end;
-  sscanf(argv[2], &amp;quot;%d&amp;quot;, &amp;amp;end);
-
-  char string[80];
-  fgets(string, sizeof(string), stdin);
-  scanf(&amp;quot;%s&amp;quot;, string); // stdin
-  for (int i=start; i&amp;lt;end; i++) putchar(string[i]); // stdout
-  putchar(&amp;apos;\n&amp;apos;);
-  return 0;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;編譯執行&quot;&gt;編譯執行&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~/code:$ gcc -o substrc substr.c
-~/code:$ echo hello world | ./substrc 3 8
-lo wo
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;如何讓程式變成命令&quot;&gt;如何讓程式變成命令&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;shell 內有變數 &lt;code&gt;PATH&lt;/code&gt; ，輸入的命令會在 PATH 中的目錄中搜尋執行檔。&lt;/li&gt;
-&lt;li&gt;所以，把執行檔丟到 PATH 的任一目錄，&lt;/li&gt;
-&lt;li&gt;或者，把執行檔所在目錄加入 PATH。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;萬變不離宗&quot;&gt;萬變不離宗&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;絕大多數的命令都是程式&lt;/li&gt;
-&lt;li&gt;從參數與標準輸入讀取，執行對應的行為。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;組合的力量&quot;&gt;組合的力量&lt;/h3&gt;
-&lt;p&gt;shell 本質即是組合大量行為單純的程式，從而達到複雜的功能。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;shell-編程&quot;&gt;shell 編程&lt;/h2&gt;
-&lt;p&gt;shell 是一門完整的程式語言，當然帶有流程控制、迴圈等功能。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;流程控制&quot;&gt;流程控制&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;if pwd | grep &amp;quot;^/home/$USER&amp;quot;
-then echo inside home directory
-else echo outside home directory
-fi
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;控制原理&quot;&gt;控制原理&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;shell 中 if 後接的命令會被執行，並依命令的返回值判斷分支。&lt;/li&gt;
-&lt;li&gt;若回傳 0 即為 true，以外為 false。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;c-語言的返回值&quot;&gt;c 語言的返回值&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-c&quot;&gt;int main(int argc, char **argv) {
-  /* some code */
-  if (true) return 0;
-  else return error_code;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;判斷迴圈&quot;&gt;判斷迴圈&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;while pgrep wget
-do
-    echo wget is downloading
-    sleep 1m
-done
-
-echo wget finish
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;while true
-do
-    if pgrep wget
-    then
-        echo wget is downloading
-        sleep 1m
-    else
-        echo wget finish
-        break
-    fi
-done
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;遍歷迴圈&quot;&gt;遍歷迴圈&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;for number in `seq 10`
-do
-    file=$(printf &amp;quot;file-%02d.txt&amp;quot; $number)
-    cat $file &amp;gt;&amp;gt; all.txt
-done
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;判斷的命令&quot;&gt;判斷的命令&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;string=abc
-test $string = abc # return 0
-[ $string = abc ] # as same as test
-if [ $n = 0 ]
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;c-實作&quot;&gt;c 實作&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;int main(int argc, char **argv) {
-  return !strcmp(argv[1], argv[3]);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;gcc -o test test.c
-cp test [
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h2 id=&quot;執行檔&quot;&gt;執行檔&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;上面的執行檔都是用 c 語言示範&lt;/li&gt;
-&lt;li&gt;因為大家應該都會 c 語言&lt;/li&gt;
-&lt;li&gt;但實務上沒有人會想用 c 語言&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;hashbang-變身執行檔&quot;&gt;hashbang 變身執行檔&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;多數直譯語言執行： &lt;code&gt;python script.py&lt;/code&gt; &lt;code&gt;sh script.sh&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;如果在文字檔第一行加上 &lt;code&gt;#!&lt;/code&gt; 與直譯器的絕對路徑，
-就能讓文字檔能被執行： &lt;code&gt;./script.py&lt;/code&gt; &lt;code&gt;./script.sh&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;並且要賦與該檔案可執行權限： &lt;code&gt;chmod +x script.sh&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;#!/usr/bin/python
-print &amp;quot;hello world!&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;#!/bin/sh
-echo hello world!
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;選項的解析&quot;&gt;選項的解析&lt;/h3&gt;
-&lt;p&gt;另外，一開始有提過長短選項；
-不管是哪一種風格選項，解析選項都不是一件容易的事。
-有興趣可以自己試試看。
-&lt;a href=&quot;http://github.com/GHolk/loco/blob/bin/parse-option-example.sh&quot;&gt;我之前寫的用 sh 解析選項的範例程式。&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;shell-與通用語言&quot;&gt;shell 與通用語言&lt;/h2&gt;
-&lt;p&gt;shell 本身的功能很少，多數都是靠其它程式實現的。
-例如上述示範的，字串比較這種基礎功能也可以靠外部實現。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;shell-的特性&quot;&gt;shell 的特性&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;不適合寫複雜的邏輯、數字、字串。&lt;/li&gt;
-&lt;li&gt;缺乏資料結構。&lt;/li&gt;
-&lt;li&gt;但呼叫其它程式很方便。&lt;ul&gt;
-&lt;li&gt;有人吐嘈 shell 做點屁大的事都要 fork 一堆進程。&lt;/li&gt;
-&lt;li&gt;如果用管道或命令代換，更會開到子 shell。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;在一般程式語言中呼叫其它命令&quot;&gt;在一般程式語言中呼叫其它命令&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;開一個 shell 來執行傳入的字串。&lt;/li&gt;
-&lt;li&gt;跳過 shell，直接執行該程式，參數要自己分割好傳入。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-c&quot;&gt;system(&amp;quot;zip -u homework.zip code.c&amp;quot;);
-execlp(&amp;quot;zip&amp;quot;, &amp;quot;-u&amp;quot;, &amp;quot;homework.zip&amp;quot;, &amp;quot;code.c&amp;quot;);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;一般程式語言特性&quot;&gt;一般程式語言特性&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;內建功能完整。&lt;/li&gt;
-&lt;li&gt;呼叫其它程式不方便。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;建議&quot;&gt;建議&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;精通 shell，和一門 &lt;strong&gt;通用的程式語言&lt;/strong&gt; 。&lt;/li&gt;
-&lt;li&gt;shell 像 bash、fish、power shell&lt;/li&gt;
-&lt;li&gt;雖然 shell 能做很多事，但一些比較龐大的軟體會有自己內部語言。&lt;ul&gt;
-&lt;li&gt;microsoft office visual basic for applications&lt;/li&gt;
-&lt;li&gt;瀏覽器的 javascript&lt;/li&gt;
-&lt;li&gt;但有時仍可以用通用程式語言溝通&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;GUI-程式&quot;&gt;GUI 程式&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;現代很多人只把 gui 程式認為是 &lt;em&gt;真正的&lt;/em&gt; 程式。&lt;/li&gt;
-&lt;li&gt;那我們就用 shell 來寫 gui 吧！&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;彈出視窗的命令&quot;&gt;彈出視窗的命令&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;瀏覽器有 &lt;code&gt;alert()&lt;/code&gt; &lt;code&gt;confirm()&lt;/code&gt; &lt;code&gt;prompt()&lt;/code&gt; 可以 &lt;em&gt;彈出對話框&lt;/em&gt; ，&lt;/li&gt;
-&lt;li&gt;shell 有沒有類似的東西呢？&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;zenity&quot;&gt;zenity&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;zenity --info --text &amp;apos;hello zenity!&amp;apos;
-if zenity --question --text &amp;apos;do you want to give me your name?&amp;apos;
-then
-    name=$(zenity --entry --text &amp;apos;what is your name?&amp;apos;)
-    zenity --info --text &amp;quot;hello $name&amp;quot;
-fi
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;結論&quot;&gt;結論&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;社課很短，能講的東西有限。&lt;/li&gt;
-&lt;li&gt;希望大家有接收到我想傳達的訊息。&lt;/li&gt;
-&lt;li&gt;shell 是一門 &lt;strong&gt;實際&lt;/strong&gt; 且 &lt;em&gt;能與所學結合&lt;/em&gt; 的語言。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;指令示範&quot;&gt;指令示範&lt;/h3&gt;
-&lt;hr&gt;
-&lt;p&gt;把系統大檔案移到另一個硬碟&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;find -size +1G | while read path
-do
-    mv $path /mnt/backup/
-    ln -s /mnt/backup/$(basename $path) $path
-done
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;p&gt;每 30 分鐘提醒一次眼睛休息&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;(
-    while sleep 30m
-    do zenity --info --text &amp;quot;30 分鐘了，眼睛休息一下吧！&amp;quot;
-    done
-) &amp;amp;
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;延伸閱讀&quot;&gt;延伸閱讀&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.cyut.edu.tw/~ckhung/b/clr/&quot;&gt;命令列讀本&lt;/a&gt; ，
-用輕鬆、務實的角度入門 shell 使用。&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://book.ashan.org/Advanced-Bash-Scripting-Guide-in-Chinese/&quot;&gt;高級 Bash 脚本编程指南&lt;/a&gt; ，
-讓讀者清楚理解 bash 的功能，不會不清楚類似的功能差別。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;zenity&quot;&gt;zenity&lt;/h2&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/gnss-teqc-data-bulk-process.html#只在需要時手動啟用-contorl-master</id>
 <title>teqc 蠻力處理 gnss 數據技巧</title>

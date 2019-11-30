@@ -514,7 +514,7 @@ if (__name__ == '__main__'):
     main(sys.argv[:])
 ```
 
-<link type="stylesheet" href="ext/paper.css">
+<link rel="stylesheet" href="ext/paper.css">
 
 <script src="ext/paper.js?execute"></script>
 

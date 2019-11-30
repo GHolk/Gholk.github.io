@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-11-29T16:58:59.554Z</updated>
+  <updated>2019-11-30T15:41:29.399Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,450 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/image-processing-edge-line-detection.html</id>
+<title>影像處理作業二：邊緣與直線偵測</title>
+<published>2019-11-30T15:13:33.199Z</published>
+<updated>2019-11-30T15:41:29.383Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/image-processing-edge-line-detection.html"/>
+<summary type="html">影像處理作業二，以指定的程式語言，實作數種邊緣偵測。
+另外要選一種直線偵測或 watershed segmentation 演算法。
+其中邊緣偵測我嘗試了 sobel 與 prewitt 二種矩陣，
+而直線偵測我實作了 hough transform，但結果不是很好。</summary>
+<category term="nctu"/>
+<category term="report"/>
+<category term="study"/>
+<category term="python"/>
+<category term="computer"/>
+<content type="html">&lt;h1 id=&quot;影像處理作業二：邊緣與直線偵測&quot;&gt;影像處理作業二：邊緣與直線偵測&lt;/h1&gt;
+&lt;p&gt;影像處理作業二，以指定的程式語言，實作數種邊緣偵測。
+另外要選一種直線偵測或 watershed segmentation 演算法。
+其中邊緣偵測我嘗試了 sobel 與 prewitt 二種矩陣，
+而直線偵測我實作了 hough transform，但結果不是很好。&lt;/p&gt;
+&lt;h2 id=&quot;程式&quot;&gt;程式&lt;/h2&gt;
+&lt;p&gt;和 &lt;a href=&quot;image-processing-6-free-style.html&quot;&gt;作業一&lt;/a&gt; 一樣使用 pythun3。
+因為用到一些矩陣乘法，雖然還是用
+&lt;abbr title=&quot;python image library&quot;&gt;pil&lt;/abbr&gt; ，
+但讀進來後就直接把整張影片轉成 numpy array 了；
+當然事後存檔時也就要再轉回 pil 的格式，再存回 bmp。&lt;/p&gt;
+&lt;p&gt;程式的參數寫法比作業一好看一點了，只要串連二個演算法，
+就能把上一個結果丟到下一個演算法中處理，
+而輸入和輸出是寫在第一個和最後一個參數。
+寫起來像是這樣：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# input -&amp;gt; sobel -&amp;gt; threshold -&amp;gt; hough -&amp;gt; output
+python3 prog2.py p1im4.bmp \
+    gradient sobel \
+    threshold 0.96 \
+    hough \
+    p1im4_hough.bmp
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果要串接上一次的程式，只能直接各執行一次，透過檔案傳遞：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;python3 prog1.py mean 3 p1im4.bmp p1im4_mean.bmp
+python3 prog2.py p1im4_mean.bmp \
+    gradient sobel \
+    threshold 0.96 \
+    hough \
+    p1im4_mean_hough.bmp
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;參數&quot;&gt;參數&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;gradient: sobel 或 prewitt，對應二種不同矩陣。&lt;/li&gt;
+&lt;li&gt;threshold: 0-1 數字，以百分位數作門檻二值化。&lt;/li&gt;
+&lt;li&gt;hough: 無參數。&lt;/li&gt;
+&lt;li&gt;LoG: 無參數。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;差分邊緣偵測&quot;&gt;差分邊緣偵測&lt;/h2&gt;
+&lt;p&gt;邊緣偵測作法是將一個 pixel 與前後的 pixel 強度相減，
+若該 pixel 處於交界處，相減後的差異就會很大。
+將影片看成矩陣的話，相減差分的算式也可以用矩陣來表示，
+也就是摺積的概念。
+我試了 sobel 與 prewitt 二種矩陣，矩陣如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;sobel = \begin{bmatrix}
+    -1 &amp;amp; -2 &amp;amp; -1 \\
+     0 &amp;amp;  0 &amp;amp;  0 \\
+     1 &amp;amp;  2 &amp;amp;  1
+\end{bmatrix}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;prewitt = \begin{bmatrix}
+    -1 &amp;amp; -1 &amp;amp; -1 \\
+     0 &amp;amp;  0 &amp;amp;  0 \\
+     1 &amp;amp;  1 &amp;amp;  1
+\end{bmatrix}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;相減是單一方向的操作，但影像是二維的，
+所以一般做法是在垂直和水平方向上都做一次差分。
+二方向上的差分可以取絕對值後相加，
+或是計算歐幾里德長度。&lt;/p&gt;
+&lt;p&gt;對於彩色影像，通常是分別計算 rgb 三個波段的差分，
+再將三個波段的結果組合。
+一樣可以用絕對值相加，或是歐氏長度。
+我都是用歐氏長度。&lt;/p&gt;
+&lt;h3 id=&quot;差分成果&quot;&gt;差分成果&lt;/h3&gt;
+&lt;p&gt;由於 sobel 的系數較大，在值的分布上，sobel 會較 prewitt 大。
+但二者的結果，都會超過原有影像的亮度區間，
+如果將二者都正規化為 0-1 或 0-255 的話，
+那其實沒有很明顯的差別。&lt;/p&gt;
+&lt;p&gt;此處展示所有 sobel 的差分影像，
+其中所有影像都是用上次作業處理過的版本再去差分，
+而非原始影像。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49145785323&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49145785323_f64988b6ce.jpg&quot; alt=&quot;p1im1_sobel.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146278596&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146278596_b8baef7755.jpg&quot; alt=&quot;p1im2_sobel.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146278691&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146278691_da152a69df.jpg&quot; alt=&quot;p1im3_sobel.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49145785828&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49145785828_d4589015dd.jpg&quot; alt=&quot;p1im4_sobel.png-notitle&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146480832&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146480832_b4cb133666.jpg&quot; alt=&quot;p1im5_sobel.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146481022&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146481022_79d71d8f0d.jpg&quot; alt=&quot;p1im6_sobel.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;濾鏡&quot;&gt;濾鏡&lt;/h2&gt;
+&lt;p&gt;一些影像我在處理時，使用像 gamma 或直方圖均化時，
+或是使用影像銳化時，會把原本的雜訊放大；
+就會造成差分後的影像雜訊也變重。&lt;/p&gt;
+&lt;p&gt;反之，如果使用了模糊的濾鏡，也就會減少差分後的雜訊。
+而 mean filter 又比 median filter 的效果要好，
+因 mean filter 只是讓整體的變化變平緩，
+但 median filter 會讓整體的色塊趨近一致，導致邊界變形，
+不同色塊的邊界差距也不會縮小，邊界的區域也就不會擴張。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146565647&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146565647_624e6e1daf.jpg&quot; alt=&quot;p1im4_sobel.png&quot; title=&quot;以銳化的結果再差分的結果&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146364211&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146364211_a4c08935b7.jpg&quot; alt=&quot;p1im4_origin_sobel.png&quot; title=&quot;原始影像差分的結果，雜訊較少&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146565912&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146565912_4a54bdde23.jpg&quot; alt=&quot;p1im4_mean_sobel.png&quot; title=&quot;原始影像以 mean filter 模糊，雜訊更少&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146364606&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146364606_7fb5c68cdf.jpg&quot; alt=&quot;p1im4_median_sobel.png&quot; title=&quot;原始影像以 median filter 模糊，雜訊也少，但有些微變形&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;二值化&quot;&gt;二值化&lt;/h2&gt;
+&lt;p&gt;二值化我是以百分位數做統計後挑出門檻，
+沒有想出較好的判斷法。
+不是很喜歡這種需要每張影像調整不同參數的做法，
+但全自動又很困難。&lt;/p&gt;
+&lt;p&gt;有時也很難定義哪些是雜訊，有些影像會有很多樹葉邊界，
+都市的照片除了建築邊界，也有很多雜物的邊界；
+且那些細小的邊界的強度還不一定比建築物的邊界低。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146683582&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146683582_f54dfec410.jpg&quot; alt=&quot;p1im5_threshold.png&quot; title=&quot;一些建物的邊界消失了，但很多雜訊還留著&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;laplacian-of-gaussian&quot;&gt;laplacian of gaussian&lt;/h2&gt;
+&lt;p&gt;這個實作普通，但如同上課講的，效果不是很好；
+除非要使用 zero crossing 或判斷邊界方向之類的進階操作。
+我嘗試直接用 &lt;code&gt;threshold = 0&lt;/code&gt; 判斷 zero crossing，
+但結果沒有很好，會把大片什麼都沒有的區域也都判成 zero crossing。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146763012&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146763012_144b18e49c.jpg&quot; alt=&quot;p1im4_log_abs.png&quot; title=&quot;laplacian 結果直接取絕對值&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146066598&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146066598_631a760b56.jpg&quot; alt=&quot;p1im4_log_zc.png&quot; title=&quot;用等於 0 作門檻二值化&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;hough&quot;&gt;hough&lt;/h2&gt;
+&lt;p&gt;最後是第二題，我挑選了 hough transform 實作，
+本來以為是最簡單，結果在把找出的直線還原回原始圖片上花了很多時間。
+而且結果的品質一直沒有很好，除非是很簡單的圖像，
+不然都會出現一堆雜訊導致的錯誤直線。&lt;/p&gt;
+&lt;p&gt;hough transform 的最大特色，
+是為了消除線條垂直時斜率無限大的問題，
+所以以 cos 和 sin 當作方程式中 x y 的系數。
+所以在轉換的目標域中避免了無限大的問題。
+但我在將目標域中求出的直線參數，
+對應回原始影像中的直線時，一開始直覺以每個 x 值找出對應的 y 值，
+就又撞回 0 或無限大的問題，當 y 值的系數為 0 時即無法求解。&lt;/p&gt;
+&lt;p&gt;後來一直想不到比較好的解法，就參考了 &lt;a href=&quot;https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_houghlines/py_houghlines.html&quot;&gt;opencv 教學中的作法&lt;/a&gt; 。
+opencv 教學中，是直接選出位在圖像中的一點，
+並取一個極大的數，求出相對於圖像中一點的 x 距離為該數的 y，
+再將極大數取負號即可得出另外一點。
+最後只要將二點間連線即可，因為以計算來說，
+參數式的計算是較固定的，這部份我就實現了一個類似於 &lt;code&gt;cv2.line&lt;/code&gt; 的函數。&lt;/p&gt;
+&lt;h3 id=&quot;hough-transform-結果&quot;&gt;hough transform 結果&lt;/h3&gt;
+&lt;p&gt;結果很差，只有在圖像很簡單時，偵測結果比較明顯。
+最好的成果大概是道路號誌牌的四條邊界，
+在結果看得出來是對應的四條線。
+作法就是用上一次作業的影像 4，
+經過 mean filter、sobel、threshold、hough 得到結果。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146270898&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146270898_786c3641ce.jpg&quot; alt=&quot;p1im4_mean.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146565912&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146565912_4a54bdde23.jpg&quot; alt=&quot;p1im4_mean_sobel.png-notitle&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146755856&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146755856_020d306fdd.jpg&quot; alt=&quot;p1im4_mean_threshold.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146756056&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146756056_a021af67a8.jpg&quot; alt=&quot;p1im4_mean_hough.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;但我將 hough 轉回原始影像的程式只用 threshold，
+沒有辦法很好的找出唯一那個點，
+所以周圍的幾個點也都會抓進來，讓一條直線分身成好幾條。
+且實作的畫線程式也沒有很好，有時線還不到影像邊界就結束。&lt;/p&gt;
+&lt;h2 id=&quot;調參數的介面&quot;&gt;調參數的介面&lt;/h2&gt;
+&lt;p&gt;寫函數是簡單的，處理人機介面才是最麻煩的地方。
+影像處理中，很多地方要調整參數，
+如果沒有全自動，就只能一個個嘗試，
+這時候程式的介面就很重要了。
+而對人友善和介面乾淨又是完全不同的二件事，
+雖然不見得互斥，但絕對不會介面拆的乾淨，
+需要互動使用時就用的舒服。&lt;/p&gt;
+&lt;h2 id=&quot;程式原始碼&quot;&gt;程式原始碼&lt;/h2&gt;
+&lt;style&gt;
+:this + pre &gt; code {
+  font-size: 10pt;
+  line-height: normal;
+}
+&lt;/style&gt;
+
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;import sys
+# import prog1 # reuse some code from previous homework
+import numpy
+import PIL.Image
+
+def numpy_image_open(path):
+    pil_image = PIL.Image.open(path)
+    numpy_image = numpy.array(pil_image)
+    return numpy_image
+
+def numpy_image_save(image, path):
+    pil_image = PIL.Image.fromarray(image.astype(&amp;apos;uint8&amp;apos;))
+    pil_image.save(path)
+
+def numpy_image_to_gray(image):
+    matrix = numpy.matrix([1,1,1])
+    return image * numpy.transpose(matrix / 3)
+
+def numpy_matrix_3x3(text):
+    return numpy.array(text.split()).astype(int).reshape((3,3))
+def numpy_matrix_nxn(n, text):
+    return numpy.array(text.split()).astype(int).reshape((n,n))
+
+def convolute_image(image, f, radius=1):
+    radius = int(radius)
+    pad_spec = ((radius, radius), (radius, radius))
+    pad_image = numpy.pad(image, pad_spec, mode=&amp;apos;reflect&amp;apos;)
+    copy = numpy.ndarray(image.shape)
+    for x in range(0, image.shape[1]):
+        for y in range(0, image.shape[0]):
+            (pad_x, pad_y) = (x+radius, y+radius)
+            area = pad_image[
+                pad_y-radius:pad_y+radius+1,
+                pad_x-radius:pad_x+radius+1
+            ]
+            copy[y,x] = numpy.sum(f(area, (y,x), image))
+    return copy
+
+def gradient_image(image, image_filter):
+    radius = (image_filter.shape[0] - 1) / 2
+    def gradient(area, index, image):
+        return area * image_filter
+    vertical = convolute_image(image, gradient, radius)
+
+    image_filter = numpy.transpose(image_filter)
+    horizontal = convolute_image(image, gradient, radius)
+
+    return (vertical ** 2 + horizontal ** 2) ** 0.5
+
+
+def gradient_image_color(image, image_filter):
+    result = numpy.zeros(image.shape[0:2])
+    for i in (0,1,2):
+        result += gradient_image(image[:,:,i], image_filter) ** 2 
+    result = result ** 0.5
+    return image_range_adjust_linear(result ** 0.5)
+
+def laplacian_of_gaussian(image, radius=2, threshold=2):
+    result = numpy.zeros(image.shape[0:2])
+    for i in range(3):
+        result += image[:,:,i]
+    result /= 3
+
+    matrix = image_filter[&amp;apos;laplacian_of_gaussian&amp;apos;]
+    def f(area, index, image):
+        return area * matrix
+    radius = (matrix.shape[0] - 1) / 2
+    result = convolute_image(result, f, radius)
+    # return find_zero_cross(result, threshold)
+    return image_range_adjust_linear(numpy.abs(result))
+
+def find_zero_cross(image, threshold):
+    return (numpy.abs(image) &amp;lt; threshold).astype(int) * pixel_max
+
+def image_range_adjust_linear(image):
+    max = numpy.max(image)
+    min = numpy.min(image)
+    range = max - min
+    image = (image - min) / range * pixel_max
+    return image
+
+image_filter = {}
+image_filter[&amp;apos;sobel&amp;apos;] = numpy_matrix_3x3(&amp;apos;&amp;apos;&amp;apos;
+    -1 -2 -1
+     0  0  0
+     1  2  1&amp;apos;&amp;apos;&amp;apos;)
+
+image_filter[&amp;apos;prewitt&amp;apos;] = numpy_matrix_3x3(&amp;apos;&amp;apos;&amp;apos;
+    -1 -1 -1
+     0  0  0
+     1  1  1&amp;apos;&amp;apos;&amp;apos;)
+image_filter[&amp;apos;laplacian_of_gaussian&amp;apos;] = numpy_matrix_nxn(5, &amp;apos;&amp;apos;&amp;apos;
+0   0 -1  0  0
+0  -1 -2 -1  0
+-1 -2 16 -2 -1
+0  -1 -2 -1  0
+0   0 -1  0  0
+&amp;apos;&amp;apos;&amp;apos;)
+
+pixel_max = 255
+def statistic_ratio_gate(image, ratio):
+    histogram = numpy.zeros([pixel_max+1])
+    def statistic(area, index, image):
+        pixel = area[1,1]
+        if pixel &amp;gt; 255:
+            pixel = 255
+        histogram[int(pixel)] += 1
+    convolute_image(image, statistic)
+
+    total_pixel = image.shape[0] * image.shape[1]
+    gate_pixel_number = int(total_pixel * ratio)
+
+    below_pixel_count = 0
+    for gate in range(0, 256):
+        if below_pixel_count &amp;gt;= gate_pixel_number:
+            return gate - 1
+        else:
+            below_pixel_count += histogram[gate]
+    return pixel_max
+
+def threshold_ratio(image, ratio):
+    # gate = ratio * pixel_max
+    gate = statistic_ratio_gate(image, ratio)
+    def threshold(area, index, image):
+        if area[1,1] &amp;gt;= gate:
+            return pixel_max
+        else:
+            return 0
+    return convolute_image(image, threshold)
+
+# hough transform
+def find_distance_at_angle(xy, angle):
+    (x,y) = xy
+    return y * numpy.cos(angle) + x * numpy.sin(angle)
+
+def find_y_in_x(angle_distance, x):
+    (angle, distance) = angle_distance
+    return (x * numpy.sin(angle) - distance) / numpy.cos(angle)
+
+def increase_count_in_struct(struct, p, weight=1):
+    (angle, distance) = p
+    struct[angle, distance] += weight
+
+def make_hough_struct(image, resolution):
+    (angle_resolution, distance_resolution) = resolution
+    angle_number = int(numpy.pi / angle_resolution) + 1
+    distance_max = (image.shape[0]**2 + image.shape[1]**2) ** 0.5
+    distance_number = int(distance_max / distance_resolution) + 1
+    return numpy.zeros([angle_number, distance_number])
+
+
+def draw_line_in_image(image, p1, p2):
+    vector = numpy.array(p2) - numpy.array(p1)
+    length = numpy.sum(vector ** 2) ** 0.5
+    unit_vector = vector / length
+    draw_point = numpy.array(p1).astype(float)
+    (height, width) = image.shape
+    def draw(point):
+        if (0 &amp;lt;= point[0] and point[0] &amp;lt; width-1 and
+            0 &amp;lt;= point[1] and point[1] &amp;lt; height-1):
+           image[int(point[1]), int(point[0])] = pixel_max
+    for l in range(0, int(length)+1):
+        draw(draw_point)
+        draw_point += unit_vector
+
+def hough_transform(image):
+    distance_resolution = int(image.shape[0] / 40)
+    angle_resolution = numpy.pi / (15 * 4)
+
+    struct = make_hough_struct(image, (angle_resolution, distance_resolution))
+    def increase_from_point(value, index, image):
+        angle = 0
+        (y, x) = index
+        while angle &amp;lt; numpy.pi:
+            distance = find_distance_at_angle((x,y), angle)
+            distance_index = int(round(distance / distance_resolution))
+            angle_index = round(angle / angle_resolution)
+            increase_count_in_struct(struct, (angle_index, distance_index))
+            angle += angle_resolution
+
+    # image_gate = statistic_ratio_gate(image, threshold_ratio)
+    for_point_in_image(image, image &amp;gt; 0, increase_from_point)
+
+    copy = numpy.zeros(image.shape)
+    # reverse angle dinstance to x y result infinity
+    def draw_line_from_angle_distance(value, index, struct):
+        (angle_index, distance_index) = index
+        angle = angle_index * angle_resolution
+        distance = distance_index * distance_resolution
+        (height, width) = image.shape
+        a = numpy.sin(angle)
+        b = numpy.cos(angle)
+        x0 = a*distance
+        y0 = b*distance
+        x1 = int(x0 + width*(-b))
+        y1 = int(y0 + height*(a))
+        x2 = int(x0 - width*(-b))
+        y2 = int(y0 - height*(a))
+        draw_line_in_image(copy, (x1,y1), (x2,y2))
+
+    # edge_gate = statistic_ratio_gate(struct, threshold_ratio)
+    edge_gate = numpy.max(struct) * 0.4
+    for_point_in_image(struct, struct&amp;gt;=edge_gate, draw_line_from_angle_distance)
+    return copy
+
+# def find_cross_border(image, angle, distance):
+#     (height, width) = image.shape
+#     solve_x = lambda y: -(y*numpy.cos(angle)-distance) / numpy.sin(angle)
+#     solve_y = lambda x: (distance-x*numpy.sin(angle)) / numpy.cos(angle)
+#     in_range = lambda l,x,u: l &amp;lt;= x and x &amp;lt;= u
+#     if in_range(0, solve_x(0), height):
+#         return (0, solve_x(0))
+#     elif in_range(0, solve_x(width-1), height):
+#         return (width-1, solve_x(width-1))
+#     elif in_range(0, solve_y(0), height):
+#         return (width
+
+
+def for_point_in_image(image, expression, f):
+    iterator = numpy.nditer(expression, flags=[&amp;apos;multi_index&amp;apos;])
+    while not iterator.finished:
+        if iterator[0]:
+            f(image[iterator.multi_index], iterator.multi_index, image)
+        iterator.iternext()
+
+def main(argv):
+    argv = argv[1:] # remove program name
+    path_read = argv[0]
+    image = numpy_image_open(path_read)
+    argv = argv[1:]
+
+    while len(argv) &amp;gt; 1:
+        if argv[0] == &amp;apos;gradient&amp;apos;:
+            matrix = image_filter[argv[1]]
+            argv = argv[2:]
+            gradient_image = gradient_image_color(image, matrix)
+            image = gradient_image
+        elif argv[0] == &amp;apos;threshold&amp;apos;:
+            ratio = float(argv[1])
+            argv = argv[2:]
+            image = threshold_ratio(image, ratio)
+        elif argv[0] == &amp;apos;LoG&amp;apos;:
+            argv = argv[1:]
+            image = laplacian_of_gaussian(image, 2)
+        elif argv[0] == &amp;apos;hough&amp;apos;:
+            argv = argv[1:]
+            image = hough_transform(image)
+        else:
+            print(&amp;apos;unknown parameter: &amp;apos;, argv, file=sys.stderr)
+            exit(1)
+
+    path_write = argv[0]
+    numpy_image_save(image, path_write)
+
+if (__name__ == &amp;apos;__main__&amp;apos;):
+    main(sys.argv[:])
+&lt;/code&gt;&lt;/pre&gt;
+&lt;link type=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
+
+&lt;script src=&quot;ext/paper.js?execute&quot;&gt;&lt;/script&gt;
+
+&lt;style&gt;
+@media print {
+    a {
+        color: gray;
+    }
+    a:not(.image)::after {
+        content: &quot; (&quot; attr(href) &quot;)&quot;;
+    }
+    img {
+        page-break-inside: avoid;
+    }
+}
+&lt;/style&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/ccns-grease-monkey-bookmarklet.html#hacker-hate-repeat</id>
 <title>不用寫外掛也能惡搞網頁</title>
 <published>2018-05-05T11:55:20.441Z</published>
@@ -4324,831 +4768,7 @@ done
 <category term="shell"/>
 <category term="ccca"/>
 <category term="nctu"/>
-<content type="html">&lt;h1 id=&quot;shell-概念教學&quot;&gt;shell 概念教學&lt;/h1&gt;
-&lt;p&gt;shell 的設計理念以 unix 環境中的程序為中心，
-發展出參數、管道等觀念。
-並且最重要的，是一門可以應用在電腦日常使用上的實際的程式語言。
-對簡單學習過 c 語言的人，
-配合 c 從 shell 認識電腦是一條十分有意義的道路。
-本簡報從使用電腦的角度，帶領有 c 語言基礎的人認識 shell。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
-&lt;p&gt;這算我玩 linux 以來的小小願望吧。&lt;/p&gt;
-&lt;p&gt;一直覺得學校的資訊教育打不到點。雖然高中學過 C 語言，但那時的演算法競賽完全無法挑起我的興趣。直到大學接觸到 linux 和 shell 後才感受到什麼叫 &lt;em&gt;學會使用電腦&lt;/em&gt; 。所以有人問怎麼學程式設計，我都直接回灌 linux，過程會用到指令，指令就是電腦運作最真實的模樣。最終，指令也會引導你走向程式語言，任何一種程式語言都可以；你才算是學會電腦。&lt;/p&gt;
-&lt;p&gt;現在單純學程式語言的很多，但會有個門檻是要能跨出 IDE，要知道可以怎麼應用。至少這是現在我回想高中時的心得。所以我比較推 shell。&lt;/p&gt;
-&lt;p&gt;希望這堂課能引起共鳴，至少讓其它人聽懂我在說什麼。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;社課說明&quot;&gt;社課說明&lt;/h2&gt;
-&lt;h3 id=&quot;在程式語言基礎上的-linux-shell-指令教學&quot;&gt;在程式語言基礎上的 linux shell 指令教學&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;時間：2019-10-05 19:00-21:20 (五)&lt;/li&gt;
-&lt;li&gt;地點：交通大學資訊服務中心 電腦教室四&lt;/li&gt;
-&lt;li&gt;預期聽眾：&lt;ul&gt;
-&lt;li&gt;學過基本程式語言，卻覺得還是什麼都做不了的人。&lt;/li&gt;
-&lt;li&gt;對指令介面嚮往的新手到老手。&lt;/li&gt;
-&lt;li&gt;不懂程式語言，想要實用地學電腦的人。&lt;/li&gt;
-&lt;li&gt;要學 git 的人；因為 git 要靠指令操作。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;是否有經驗看著 linux 大神兩眼映照在漆黑的終端機中，
-雙手運指如飛，指令在螢幕上傾洩而下的的模樣？
-又或是否懷疑過，為什麼有一群人放著好好的 windows 不用，
-而要特別在電腦上安裝另一種作業系統 linux？
-linux 的 shell，就是其中一個常見的答案。&lt;/p&gt;
-&lt;p&gt;linux 強大的 shell 指令介面是許多人對 linux 愛不釋手的原因；
-但對新手而言，過度依靠 shell 也是讓 linux 難以入門的因素。
-shell 的學習門檻高，使用上需要熟悉大量的指令，較圖形介面難以上手。&lt;/p&gt;
-&lt;p&gt;本次社課將從日常使用講起，
-介紹 shell 如何是一門貼近使用者與務實的語言，
-並穿插 shell 運作的基本邏輯，
-使聽眾能將課堂所學的程式設計，實際運用到電腦的日常使用中，
-自力成為 linux 大師。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;靠北板發文&quot;&gt;靠北板發文&lt;/h2&gt;
-&lt;p&gt;為什麼同學上完一學期 python 還是電腦白痴啊？
-不過就簡單的檔案處理，寫個 one-liner 去跑很難嗎？
-抱怨函數沒看過，也不會翻文件，
-沒寫過如我不翻文件都看得懂大半了。
-深深覺得台灣資訊教育真的缺了某個很重要的部份。&lt;/p&gt;
-&lt;p&gt;真想推薦他們 CCCA 這周五 10/4 19:00 在資訊中心電腦教室四的社課：
-《在程式語言基礎上的 linux shell 指令教學》
-聽說會從日常使用講起，介紹 shell 如何是一門貼近使用者與務實的語言，
-讓聽眾能將課堂所學的程式設計，實際運用到電腦的日常使用中。
-&lt;a href=&quot;https://www.facebook.com/NCTUCCCA/posts/768329356934169&quot;&gt;https://www.facebook.com/NCTUCCCA/posts/768329356934169&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;但主要還是要先有勇氣跨進 linux，至少裝個 cygwin 或 wsl。&lt;/p&gt;
-&lt;hr&gt;
-&lt;script&gt;
-function toggleSlideMode() {
-  const slideClass = &apos;white-black-slide&apos;
-  const root = document.documentElement
-  root.classList.toggle(slideClass)
-}
-function scrollToRelativeHr(relative = 1) {
-  const allHr = Array.from(document.querySelectorAll(&apos;hr&apos;))
-  const windowTop = window.scrollY
-  const seenHrIndex = allHr.findIndex(hr =&gt; hr.offsetTop &gt; windowTop)
-  const targetHrIndex = seenHrIndex - 1 + relative
-  window.scrollTo(0, allHr[targetHrIndex].offsetTop + 1)
-}
-function flipOnWheel(wheel) {
-  /* two case do not match
-   * 1. wheel on scroll bar, then target become &lt;html&gt; it self, not child.
-   * 2. not in slide mode.
-   */
-  if (wheel.target.matches(&apos;.white-black-slide *&apos;) &amp;&amp; wheel.buttons == 0) {
-    const scrollDirection = wheel.deltaY &gt; 0 ? 1 : -1
-    scrollToRelativeHr(scrollDirection)
-  }
-}
-window.addEventListener(&apos;wheel&apos;, flipOnWheel, {passive: true})
-&lt;/script&gt;
 
-&lt;style contenteditable=&quot;true&quot;&gt;
-.white-black-slide {
-  font-size: 250%;
-  color: white;
-  background: black;
-}
-.white-black-slide a {
-  color: cyan;
-}
-:not(pre) code {
-  border: solid 1px;
-  padding: 0 0.1em;
-}
-.white-black-slide ::selection { color: initial; background-color: yellow; }
-.white-black-slide ::-moz-selection { color: initial; background-color: yellow; }
-
-.white-black-slide {
-  cursor: url(&apos;data:image/cur;base64,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&apos;) 12.5 12.5, auto;
-}
-
-:this + button {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  margin: 1em;
-}
-&lt;/style&gt;
-
-&lt;button onclick=&quot;scrollToRelativeHr()&quot;&gt;下一頁&lt;/button&gt;
-
-&lt;button onclick=&quot;toggleSlideMode()&quot;&gt;切換簡報模式&lt;/button&gt;
-
-&lt;hr&gt;
-&lt;h2 id=&quot;大綱&quot;&gt;大綱&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;可以實際應用的程式設計&lt;/li&gt;
-&lt;li&gt;shell 入門&lt;/li&gt;
-&lt;li&gt;程式與命令&lt;/li&gt;
-&lt;li&gt;shell 編程&lt;/li&gt;
-&lt;li&gt;改檔名的啟示&lt;/li&gt;
-&lt;li&gt;圖形介面&lt;/li&gt;
-&lt;li&gt;結論&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;可以實際應用的程式設計&quot;&gt;可以實際應用的程式設計&lt;/h2&gt;
-&lt;p&gt;高中電腦多半從 c 這種基本的，或其它 &lt;em&gt;簡單的&lt;/em&gt; 程式語言教起，
-但這些語言有個很大的問題，
-他們都無法讓學生應用在日常的電腦操作上。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;c-可以寫什麼&quot;&gt;c 可以寫什麼&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;scanf printf&lt;/li&gt;
-&lt;li&gt;fopen&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;問題的關鍵&quot;&gt;問題的關鍵&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;日常使用電腦的操作，無法輕易用 c 達成。&lt;/li&gt;
-&lt;li&gt;學校的教學偏重在理論，而不是實務應用。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;日常的操作&quot;&gt;日常的操作&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;複製檔案&lt;/li&gt;
-&lt;li&gt;打開網頁&lt;/li&gt;
-&lt;li&gt;壓縮檔案&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;什麼是-shell&quot;&gt;什麼是 shell&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;日常使用的稱為 &lt;abbr title=&quot;Graphic User Interface&quot;&gt;圖形介面&lt;/abbr&gt; 。&lt;/li&gt;
-&lt;li&gt;在圖形介面發明以前，人機之間以文字指令溝通。&lt;/li&gt;
-&lt;li&gt;作業系統內部是一支執行中的程式，
-而 shell 用來稱呼人與作業系統溝通的介面。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;指令的特性&quot;&gt;指令的特性&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;學習門檻較高。&lt;/li&gt;
-&lt;li&gt;由於指令只是一連串文字，可以把要執行的指令存成檔案，方便執行。&lt;/li&gt;
-&lt;li&gt;本質是一種特化的程式語言。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;指令與圖形介面等價&quot;&gt;指令與圖形介面等價&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;在沒有圖形介面以前，人們還是使用電腦。&lt;/li&gt;
-&lt;li&gt;絕大多數在圖形介面能做到的事，指令也都能做到。&lt;/li&gt;
-&lt;li&gt;雖然無法做到 &lt;em&gt;開啟視窗然後按下某個按鈕&lt;/em&gt; 之類的圖形介面操作。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;shell-入門&quot;&gt;shell 入門&lt;/h2&gt;
-&lt;p&gt;指令是不含空白的一連串字元，一般包含底線與連字號。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;pwd
-ls
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;帶有參數的指令&quot;&gt;帶有參數的指令&lt;/h3&gt;
-&lt;p&gt;參數以空白分隔&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;mv config.txt config_backup.txt
-cp config_origin.txt config.txt
-rm log.txt
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;移動到不同資料夾&quot;&gt;移動到不同資料夾&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;cd my-dir
-cd ..
-cd /home
-cd ../usr/bin
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;何謂開啟檔案？&quot;&gt;何謂開啟檔案？&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;用 fopen 打開讀取或寫入&lt;/li&gt;
-&lt;li&gt;更改檔案內容&lt;/li&gt;
-&lt;li&gt;開啟檔案對應的圖形程式&lt;/li&gt;
-&lt;li&gt;用滑鼠點二下&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;開啟圖形程式&quot;&gt;開啟圖形程式&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;gedit
-lowriter
-firefox
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;用圖形程式開啟檔案&quot;&gt;用圖形程式開啟檔案&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;gedit file.txt
-lowriter document.odt
-firefox print.pdf
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;統一的指令&quot;&gt;統一的指令&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;# linux
-xdg-open file.odt
-&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;REM windows
-start file.doc
-
-REM or directly type filename
-file.doc
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h2 id=&quot;快捷鍵&quot;&gt;快捷鍵&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;指令到很複雜的話，敲鍵盤很累的。&lt;/li&gt;
-&lt;li&gt;所以 shell 多半有快捷鍵可以用，
-bash 中處理這些快捷鍵的程式稱為 readline。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;自動補全&quot;&gt;自動補全&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;tab 鍵可以自動補全打到一半的單字&lt;/li&gt;
-&lt;li&gt;基本的命令可以自動補全，例如打 pyt 之後按 tab 就會補全成 python。&lt;/li&gt;
-&lt;li&gt;檔名也可以自動補全，例如 &lt;code&gt;xdg-open file.o&lt;/code&gt; 
-之後按 tab 會依存在的檔案補全。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;上一個指令&quot;&gt;上一個指令&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;方向鍵上下可以在歷史記錄中瀏覽&lt;/li&gt;
-&lt;li&gt;或是用 ctrl-p ctrl-n&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;在歷史中搜尋&quot;&gt;在歷史中搜尋&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;ctrl-r 可以在歷史中搜尋&lt;/li&gt;
-&lt;li&gt;如果找到的不是你要的，可以再按一次 ctrl-r 再往前找&lt;/li&gt;
-&lt;li&gt;或是把搜尋字串打完整一點&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;用指令直接更改檔案&quot;&gt;用指令直接更改檔案&lt;/h2&gt;
-&lt;p&gt;上面都是用指令 &lt;em&gt;打開&lt;/em&gt; 一個圖形介面。
-那能不能不透過圖形介面，
-直接用指令完成對檔案的操作呢？&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;處理壓縮檔&quot;&gt;處理壓縮檔&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;# create zip homework.zip,
-# which contain code.c report.odt Makefile
-zip homework.zip code.c report.odt Makefile
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;看壓縮檔的內容&quot;&gt;看壓縮檔的內容&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;unzip homework.zip # directly unzip
-unzip -l homework.zip # list content of zip
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;更改內容&quot;&gt;更改內容&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;# delete file in zip
-zip -d homework.zip Makefile
-
-# update file in zip
-zip -u homework.zip code.c
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h2 id=&quot;選項&quot;&gt;選項&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;在 unix 下，多數程式會把以 &lt;code&gt;-&lt;/code&gt; 開頭的參數當作 &lt;em&gt;選項&lt;/em&gt; 。&lt;/li&gt;
-&lt;li&gt;選項用來改變程式的行為。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;短選項與連寫&quot;&gt;短選項與連寫&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;最早選項都只有一個字 &lt;code&gt;-h&lt;/code&gt; &lt;code&gt;-a&lt;/code&gt; &lt;code&gt;-t&lt;/code&gt; 。&lt;/li&gt;
-&lt;li&gt;工程師都很懶，所以慣例上短選項可以寫在一起 &lt;code&gt;-hat&lt;/code&gt; 。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;bsd-的長選項&quot;&gt;bsd 的長選項&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;後來程式越來越複雜，26 個選項不夠用。&lt;/li&gt;
-&lt;li&gt;bsd 發明長選項，選項從字元改成單字 &lt;code&gt;-help&lt;/code&gt; &lt;code&gt;-all&lt;/code&gt; 。&lt;/li&gt;
-&lt;li&gt;因此連寫不能用了。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;gnu-的長選項&quot;&gt;gnu 的長選項&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;gnu 覺得這樣不向下相容，不優。&lt;/li&gt;
-&lt;li&gt;規定為了與短選項區隔，長選項應該要用二個 &lt;code&gt;-&lt;/code&gt; 開頭， &lt;code&gt;--help&lt;/code&gt; &lt;code&gt;--all&lt;/code&gt; 。&lt;/li&gt;
-&lt;li&gt;程式可以同時有短選項與長選項，短選項仍可以連寫。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;但選項的格式只是慣例&quot;&gt;但選項的格式只是慣例&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;程式看到的只是一連串的字串格式參數，只是某些參數用 &lt;code&gt;-&lt;/code&gt; 開頭。&lt;/li&gt;
-&lt;li&gt;程式作者可以把程式設計成用 &lt;code&gt;/&lt;/code&gt; 當選項開頭，用 &lt;code&gt;\&lt;/code&gt; 當路徑分隔符。
-（windows: 誰叫我？）&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;dd&lt;/code&gt; 就是一支不同風格的常用程式。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;選項查詢&quot;&gt;選項查詢&lt;/h3&gt;
-&lt;p&gt;要怎麼知道命令怎麼下？有哪些選項？&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;s&gt;google&lt;/s&gt;&lt;/li&gt;
-&lt;li&gt;求助選項： &lt;code&gt;zip --help&lt;/code&gt; 或 &lt;code&gt;zip -h&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;線上手冊： &lt;code&gt;man zip&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;搜尋手冊： &lt;code&gt;apropos zip&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;求助選項&quot;&gt;求助選項&lt;/h3&gt;
-&lt;p&gt;多數程式會有一個求助選項，
-看到 &lt;code&gt;--help&lt;/code&gt; 或 &lt;code&gt;-h&lt;/code&gt; 就會直接輸出簡短的說明。
-當然也不是所有程式都有，還是那句話，看作者。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;手冊&quot;&gt;手冊&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;unix 系統中自帶有說明書，說明書可以用一支叫 &lt;code&gt;man&lt;/code&gt; 的程式閱讀。&lt;/li&gt;
-&lt;li&gt;man 會開啟一個介面，可以用方向鍵翻閱，用 &lt;code&gt;q&lt;/code&gt; 可以離開。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;搜尋合適的指令&quot;&gt;搜尋合適的指令&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;apropos 可以用關鍵字搜尋手冊。&lt;/li&gt;
-&lt;li&gt;一般有手冊也就代表有指令可以用。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;第一支腳本&quot;&gt;第一支腳本&lt;/h2&gt;
-&lt;pre&gt;&lt;code&gt;# pack homework files into zip
-zip homework.zip report.odt code.c
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;執行腳本&quot;&gt;執行腳本&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;sh script.sh
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;加入提示&quot;&gt;加入提示&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;echo start packing file
-zip homework.zip report.odt code.c
-echo finish packing file
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;echo&quot;&gt;echo&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;寫在腳本裡的指令是直接執行，而執行時不會顯示現在在執行什麼。
-（dos 會，可以用 &lt;code&gt;echo on&lt;/code&gt; &lt;code&gt;echo off&lt;/code&gt; 控制。）&lt;/li&gt;
-&lt;li&gt;所以要用 echo 把想顯示的文字 &lt;em&gt;回音&lt;/em&gt; 出來。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;輸出字串&quot;&gt;輸出字串&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;echo 就是單純輸出字串，對特殊字元和格式化的支援有限。&lt;/li&gt;
-&lt;li&gt;printf 可以做到接近 c printf 的五花八門功能。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;printf&quot;&gt;printf&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;printf &amp;quot;file-%03d.txt\n&amp;quot; 12 # file-012.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h2 id=&quot;輸出太長怎麼辦&quot;&gt;輸出太長怎麼辦&lt;/h2&gt;
-&lt;p&gt;剛剛說的 apropos&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;~:$ apropos zip
-CPAN::Tarzip (3pm)   - internal handling of tar archives for CPAN.pm
-Archive::Zip (3pm)   - Provide an interface to ZIP archive files.
-Archive::Zip::FAQ (3pm) - Answers to a few frequently asked questions about A...
-Archive::Zip::MemberRead (3pm) - A wrapper that lets you read Zip archive mem...
-Archive::Zip::Tree (3pm) - (DEPRECATED) methods for adding/extracting trees u...
-bunzip2 (1)          - a block-sorting file compressor, v1.0.6
-bzcmp (1)            - compare bzip2 compressed files
-bzdiff (1)           - compare bzip2 compressed files
-bzegrep (1)          - search possibly bzip2 compressed files for a regular e...
-bzfgrep (1)          - search possibly bzip2 compressed files for a regular e...
-bzgrep (1)           - search possibly bzip2 compressed files for a regular e...
-bzip2 (1)            - a block-sorting file compressor, v1.0.6
-bzip2recover (1)     - recovers data from damaged bzip2 files
-bzless (1)           - file perusal filter for crt viewing of bzip2 compresse...
-bzmore (1)           - file perusal filter for crt viewing of bzip2 compresse...
-Compress::Raw::Bzip2 (3perl) - Low-Level Interface to bzip2 compression library
-CPAN::Tarzip (3perl) - internal handling of tar archives for CPAN.pm
-docker-context-import (1) - Import a context from a tar or zip file
-fcrackzip (1)        - a Free/Fast Zip Password Cracker
-fcrackzipinfo (1)    - display zip information
-funzip (1)           - filter for extracting from a ZIP archive in a pipe
-gpg-zip (1)          - encrypt or sign files into an archive
-gunzip (1)           - compress or expand files
-gzip (1)             - compress or expand files
-IO::Compress::Bzip2 (3perl) - Write bzip2 files/buffers
-IO::Compress::Gzip (3perl) - Write RFC 1952 files/buffers
-IO::Compress::Zip (3perl) - Write zip files/buffers
-IO::Uncompress::AnyInflate (3perl) - Uncompress zlib-based (zip, gzip) file/b...
-IO::Uncompress::AnyUncompress (3perl) - Uncompress gzip, zip, bzip2 or lzop f...
-IO::Uncompress::Bunzip2 (3perl) - Read bzip2 files/buffers
-IO::Uncompress::Gunzip (3perl) - Read RFC 1952 files/buffers
-IO::Uncompress::Unzip (3perl) - Read zip files/buffers
-MIME::Decoder::Gzip64 (3pm) - decode a &amp;quot;base64&amp;quot; gzip stream
-p7zip (1)            - Wrapper on 7-Zip file archiver with high compression r...
-pbzip2 (1)           - parallel bzip2 file compressor, v1.1.9
-PerlIO::gzip (3pm)   - Perl extension to provide a PerlIO layer to gzip/gunzip
-preunzip (1)         - prefix delta compressor for Aspell
-prezip (1)           - prefix delta compressor for Aspell
-prezip-bin (1)       - prefix zip delta word list compressor/decompressor
-unzip (1)            - list, test and extract compressed files in a ZIP archive
-unzipsfx (1)         - self-extracting stub for prepending to ZIP archives
-zforce (1)           - force a &amp;apos;.gz&amp;apos; extension on all gzip files
-zip (1)              - package and compress (archive) files
-zipcloak (1)         - encrypt entries in a zipfile
-zipdetails (1)       - display the internal structure of zip files
-zipgrep (1)          - search files in a ZIP archive for lines matching a pat...
-zipinfo (1)          - list detailed information about a ZIP archive
-zipnote (1)          - write the comments in zipfile to stdout, edit comments...
-zipsplit (1)         - split a zipfile into smaller zipfiles
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;用-less-接起來&quot;&gt;用 less 接起來&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;那條直線叫管道符號，可以把前面程式的輸出，丟給後面程式。&lt;/li&gt;
-&lt;li&gt;less 的功能就是把過多的輸出接起來，可以上下翻頁慢慢看。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;apropos zip | less
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;其它用來接輸出的程式&quot;&gt;其它用來接輸出的程式&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;apropos zip | head
-apropos zip | tail
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;或是輸入到檔案&quot;&gt;或是輸入到檔案&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;apropos zip &amp;gt; apropos-zip.txt
-head &amp;lt; apropos-zip.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;重導向或是直接指定檔名？&quot;&gt;重導向或是直接指定檔名？&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;head &amp;lt; apropos-zip.txt
-head apropos-zip.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;有關-man&quot;&gt;有關 man&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;man 是一支很聰明的程式，會判斷輸出的裝置決定行為。&lt;/li&gt;
-&lt;li&gt;直接呼叫時，man 因為輸出對向是終端機，所以呼叫 less 把內容接起來。&lt;/li&gt;
-&lt;li&gt;如果對向是檔案，man 就會直接輸出文字檔。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;man zip # 開啟 less 讓使用者翻閱手冊
-man zip &amp;gt; zip.txt # 把手冊存成文字檔
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;更改檔案內容&quot;&gt;更改檔案內容&lt;/h3&gt;
-&lt;p&gt;上面提過 echo printf，輸出也能重導向到檔案。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;echo hey &amp;gt; hey
-printf &amp;quot;hello world!&amp;quot; &amp;gt; hey
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;覆寫與附加&quot;&gt;覆寫與附加&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;一個 &lt;code&gt;&amp;gt;&lt;/code&gt; 會寫入，如果檔案已經存在會被清空後寫入新內容。&lt;/li&gt;
-&lt;li&gt;二個 &lt;code&gt;&amp;gt;&amp;gt;&lt;/code&gt; 會附加，如果檔案已經存在會附加在檔案結尾。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;echo bye &amp;gt;&amp;gt; hey
-printf &amp;quot;byby!&amp;quot; &amp;gt;&amp;gt; hey
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h2 id=&quot;組合-shell-命令&quot;&gt;組合 shell 命令&lt;/h2&gt;
-&lt;p&gt;先前也提過，shell 最大的好處是可以寫成腳本執行，
-可以省去用滑鼠點來點去的時間。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;命令代換&quot;&gt;命令代換&lt;/h3&gt;
-&lt;p&gt;被 &lt;code&gt;$()&lt;/code&gt; 包起來的命令，執行後的結果會被置換到命令中。&lt;/p&gt;
-&lt;p&gt;用 wc 計算 ls 命令列出的第一個檔案大小。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;wc -c $(ls | head -n 1)
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;變數賦值&quot;&gt;變數賦值&lt;/h3&gt;
-&lt;p&gt;sh 中，所有變數內容都是字串。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;a=file.txt
-b=$(ls | head -n 1)
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;變數取值&quot;&gt;變數取值&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;要展開變數需要用 &lt;code&gt;$&lt;/code&gt; 標記，不然只會被當成單純字串而不是變數名。&lt;/li&gt;
-&lt;li&gt;但賦值時不能有 &lt;code&gt;$&lt;/code&gt; 號！&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;wc -c a # 計算檔名為 a 的大小
-wc -c $a # 計算檔名為變數 a 的內容的大小
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;管道的力量&quot;&gt;管道的力量&lt;/h3&gt;
-&lt;p&gt;串連多個小程式，就能快速達到各種功能。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;sed &amp;apos;s/[^[:alnum:]]/\n/g&amp;apos; | sort | uniq -c
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;網頁爬取&quot;&gt;網頁爬取&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;url=&amp;apos;http://jamesiscurly.pixnet.net/blog/post/295281136-%e6%98%af%e6%97%a5%e6%a2%97%e5%9c%960621&amp;apos;
-curl $url | grep -o &amp;apos;&amp;lt;img.*?&amp;gt;&amp;apos;
-curl $url | tidy -asxml -q &amp;gt;meme.xml
-xpath -e &amp;apos;//img&amp;apos; meme.xml
-# or curl $url | tidy -asxml -q | xpath -e &amp;apos;//img&amp;apos;
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h2 id=&quot;程式&quot;&gt;程式&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;stdin 標準輸入、stdout 標準輸出&lt;/li&gt;
-&lt;li&gt;argv 參數&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;簡單的-c&quot;&gt;簡單的 c&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-c&quot;&gt;// substr.c
-int main(int argc, char **argv) {
-
-  // argv
-  int start;
-  sscanf(argv[1], &amp;quot;%d&amp;quot;, &amp;amp;start); // atoi()
-  int end;
-  sscanf(argv[2], &amp;quot;%d&amp;quot;, &amp;amp;end);
-
-  char string[80];
-  fgets(string, sizeof(string), stdin); // scanf(&amp;quot;%s&amp;quot;, string)
-  for (int i=start; i&amp;lt;end; i++) putchar(string[i]); // stdout
-  putchar(&amp;apos;\n&amp;apos;);
-  return 0;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;編譯執行&quot;&gt;編譯執行&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~/code:$ gcc -o substrc substr.c
-~/code:$ echo hello world | ./substrc 3 8
-lo wo
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;如何讓程式變成命令&quot;&gt;如何讓程式變成命令&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;shell 內有變數 &lt;code&gt;PATH&lt;/code&gt; ，輸入的命令會在 PATH 中的目錄中搜尋執行檔。&lt;/li&gt;
-&lt;li&gt;所以，把執行檔丟到 PATH 的任一目錄，&lt;/li&gt;
-&lt;li&gt;或者，把執行檔所在目錄加入 PATH。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;萬變不離宗&quot;&gt;萬變不離宗&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;絕大多數的命令都是程式&lt;/li&gt;
-&lt;li&gt;從參數與標準輸入讀取，執行對應的行為。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;組合的力量&quot;&gt;組合的力量&lt;/h3&gt;
-&lt;p&gt;shell 本質即是組合大量行為單純的程式，從而達到複雜的功能。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;shell-編程&quot;&gt;shell 編程&lt;/h2&gt;
-&lt;p&gt;shell 是一門完整的程式語言，當然帶有流程控制、迴圈等功能。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;流程控制&quot;&gt;流程控制&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;if pwd | grep &amp;quot;^/home/$USER&amp;quot;
-then echo inside home directory
-else echo outside home directory
-fi
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;控制原理&quot;&gt;控制原理&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;shell 中 if 後接的命令會被執行，並依命令的返回值判斷分支。&lt;/li&gt;
-&lt;li&gt;若回傳 0 即為 true，以外為 false。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;c-語言的返回值&quot;&gt;c 語言的返回值&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-c&quot;&gt;int main(int argc, char **argv) {
-  /* some code */
-  if (true) return 0;
-  else return error_code;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;判斷迴圈&quot;&gt;判斷迴圈&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;while pgrep wget
-do
-    echo wget is downloading
-    sleep 1m
-done
-
-echo wget finish
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;while true
-do
-    if pgrep wget
-    then
-        echo wget is downloading
-        sleep 1m
-    else
-        echo wget finish
-        break
-    fi
-done
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;遍歷迴圈&quot;&gt;遍歷迴圈&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;for number in $(seq 10)
-do
-    file=$(printf &amp;quot;file-%02d.txt&amp;quot; $number)
-    cat $file &amp;gt;&amp;gt; all.txt
-done
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;判斷的命令&quot;&gt;判斷的命令&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;string=abc
-test $string = abc # return 0
-[ $string = abc ] # as same as test
-if [ $n = 0 ]
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;c-實作&quot;&gt;c 實作&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;int main(int argc, char **argv) {
-  return !strcmp(argv[1], argv[3]);
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;gcc -o test test.c
-cp test [
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h2 id=&quot;執行檔&quot;&gt;執行檔&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;上面的執行檔都是用 c 語言示範&lt;/li&gt;
-&lt;li&gt;因為大家應該都會 c 語言&lt;/li&gt;
-&lt;li&gt;但實務上沒有人會想用 c 語言&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;hashbang-變身執行檔&quot;&gt;hashbang 變身執行檔&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;多數直譯語言執行： &lt;code&gt;python script.py&lt;/code&gt; &lt;code&gt;sh script.sh&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;如果在文字檔第一行加上 &lt;code&gt;#!&lt;/code&gt; 與直譯器的絕對路徑，
-就能讓文字檔能被執行： &lt;code&gt;./script.py&lt;/code&gt; &lt;code&gt;./script.sh&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;並且要賦與該檔案可執行權限： &lt;code&gt;chmod +x script.sh&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;#!/usr/bin/python
-print &amp;quot;hello world!&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;#!/bin/sh
-echo hello world!
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;選項的解析&quot;&gt;選項的解析&lt;/h3&gt;
-&lt;p&gt;另外，一開始有提過長短選項；
-不管是哪一種風格選項，解析選項都不是一件容易的事。
-有興趣可以自己試試看。
-&lt;a href=&quot;http://github.com/GHolk/loco/blob/bin/parse-option-example.sh&quot;&gt;我之前寫的用 sh 解析選項的範例程式。&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;shell-與通用語言&quot;&gt;shell 與通用語言&lt;/h2&gt;
-&lt;p&gt;shell 本身的功能很少，多數都是靠其它程式實現的。
-例如上述示範的，字串比較這種基礎功能也可以靠外部實現。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;shell-的特性&quot;&gt;shell 的特性&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;不適合寫複雜的邏輯、數字、字串。&lt;/li&gt;
-&lt;li&gt;缺乏資料結構。&lt;/li&gt;
-&lt;li&gt;但呼叫其它程式很方便。&lt;ul&gt;
-&lt;li&gt;只要可以成為執行檔，都是 shell 指令。&lt;/li&gt;
-&lt;li&gt;有人吐嘈 shell 做點屁大的事都要 fork 一堆進程。&lt;/li&gt;
-&lt;li&gt;如果用管道或命令代換，更會開到子 shell。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;在一般程式語言中呼叫其它命令&quot;&gt;在一般程式語言中呼叫其它命令&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;開一個 shell 來執行傳入的字串。&lt;/li&gt;
-&lt;li&gt;跳過 shell，直接執行該程式，參數要自己分割好傳入。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-c&quot;&gt;system(&amp;quot;zip -u homework.zip code.c&amp;quot;);
-execlp(&amp;quot;zip&amp;quot;, &amp;quot;-u&amp;quot;, &amp;quot;homework.zip&amp;quot;, &amp;quot;code.c&amp;quot;);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;一般程式語言特性&quot;&gt;一般程式語言特性&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;內建功能完整。&lt;/li&gt;
-&lt;li&gt;呼叫其它程式不方便。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;shell-是-linux-的統一介面&quot;&gt;shell 是 linux 的統一介面&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;不同程式語言內部有自己互相呼叫的介面。&lt;/li&gt;
-&lt;li&gt;可執行檔是 linux 的統一介面，呼叫要傳入參數、環境變數，處理輸入輸出。&lt;/li&gt;
-&lt;li&gt;shell 是執行檔呼叫的最簡單介面。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;建議&quot;&gt;建議&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;精通 shell，和一門 &lt;strong&gt;通用的程式語言&lt;/strong&gt; 。&lt;/li&gt;
-&lt;li&gt;shell 也有很多種，像 bash、fish、power shell。&lt;/li&gt;
-&lt;li&gt;shell 受限於系統執行檔所提供的功能。&lt;/li&gt;
-&lt;li&gt;一些比較龐大的軟體會有自己內部語言。&lt;ul&gt;
-&lt;li&gt;microsoft office visual basic for applications&lt;/li&gt;
-&lt;li&gt;瀏覽器的 javascript&lt;/li&gt;
-&lt;li&gt;但有時仍可以用通用程式語言溝通，如 libre office libuno&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;以改檔名為例&quot;&gt;以改檔名為例&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;看似簡單的操作&lt;/li&gt;
-&lt;li&gt;但現成的批次重命名工具功能有限&lt;/li&gt;
-&lt;li&gt;直接用程式語言實作太麻煩&lt;/li&gt;
-&lt;li&gt;用 shell 是最有效的方法&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;gnss-觀測數據命名格式&quot;&gt;gnss 觀測數據命名格式&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;NCTU0100.19o：站名、一年中的日數、0、西元年、o&lt;/li&gt;
-&lt;li&gt;NCTU201901100.rnx：站名、年月日、0、rnx&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;批次工具&quot;&gt;批次工具&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;有完整 regexp 就很了不起了&lt;/li&gt;
-&lt;li&gt;但很多時候還需要改大小寫、條件判斷、數字運算，不是單純字串代換能處理的。&lt;/li&gt;
-&lt;li&gt;&lt;cite&gt;excel&lt;/cite&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;寫一個-python&quot;&gt;寫一個 python&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;要 import 套件&lt;/li&gt;
-&lt;li&gt;如何讀取檔名？ &lt;code&gt;os.listdir()&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;如何改檔名？&lt;/li&gt;
-&lt;li&gt;要處理文字、數字轉換&lt;/li&gt;
-&lt;li&gt;每轉換一個資料夾，就寫一次腳本？還不能重用？&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;直接用-python-輸出-shell-指令&quot;&gt;直接用 python 輸出 shell 指令&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;不用想怎麼在 python 中執行指令。&lt;/li&gt;
-&lt;li&gt;直接 print 出指令，用貼上的或 pipe 給 shell。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;print(&amp;apos;mv&amp;apos;, oldname, newname)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;剪下貼上-shell-輸出&quot;&gt;剪下貼上 shell 輸出&lt;/h3&gt;
-&lt;p&gt;有時候，直接把 ls 的輸出複製到檔案，
-再用 regexp 改成一堆 mv 還比較快。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;ls | vi -
-# in vi
-# :%s/\(.*\).html/mv \1.html \1.htm/
-# :%!sh
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;直接用-shell-解決&quot;&gt;直接用 shell 解決&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# rename Trim201904010000.rnx to NCTU0910.19o
-for file in *
-do
-    old_format=$(date -d $(echo $file | substr 4 12) +&amp;quot;NCTU%03j0.%02y&amp;quot;)
-    echo mv $file $old_format
-    mv $file $old_format
-done
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;shell-的優勢&quot;&gt;shell 的優勢&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;自動補全、萬用字元、REPL 可以即時看到結果。&lt;/li&gt;
-&lt;li&gt;加個 echo 先確認會跑出什麼東西。&lt;/li&gt;
-&lt;li&gt;極適合寫這種一次性用完即丟的程式。&lt;/li&gt;
-&lt;li&gt;bash 的歷史記錄可以讓你翻出不久前打過的命令，稍作修改就能重用。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;其它程式語言&quot;&gt;其它程式語言&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;每次寫這種東西都要先匯入類似的函式庫、寫一堆類似的 code。&lt;/li&gt;
-&lt;li&gt;但又很難抽象化成可以重用的程式。&lt;/li&gt;
-&lt;li&gt;留下一大堆不知道該不該刪的程式。&lt;/li&gt;
-&lt;li&gt;擅常 one-liner 的語言：perl awk。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;glob-萬用字元&quot;&gt;glob 萬用字元&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;shell 會依據檔名展開某些特殊字元&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;*&lt;/code&gt;: 任意個任意字元&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;?&lt;/code&gt;: 一個任意字元&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;[a-ez0-9]&lt;/code&gt;: 一個範圍內的字元&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;萬用字元用例&quot;&gt;萬用字元用例&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;mv * ../backup/
-rename &amp;apos;s/.tar.gz$/.tgz/&amp;apos; *.tar.gz
-
-# match filename longer then n word
-for zip in ??????????????????????????*.zip
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h2 id=&quot;GUI-程式&quot;&gt;GUI 程式&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;現代很多人只把 gui 程式認為是 &lt;em&gt;真正的&lt;/em&gt; 程式。&lt;/li&gt;
-&lt;li&gt;那我們就用 shell 來寫 gui 吧！&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;彈出視窗的命令&quot;&gt;彈出視窗的命令&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;瀏覽器有 &lt;code&gt;alert()&lt;/code&gt; &lt;code&gt;confirm()&lt;/code&gt; &lt;code&gt;prompt()&lt;/code&gt; 可以 &lt;em&gt;彈出對話框&lt;/em&gt; ，&lt;/li&gt;
-&lt;li&gt;shell 有沒有類似的東西呢？&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;xmessage&quot;&gt;xmessage&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;if xmessage -buttons yes:0,no:2 &amp;apos;do you want to clean trash can?&amp;apos;
-then gio trash --empty
-fi
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;zenity&quot;&gt;zenity&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;zenity --info --text &amp;apos;hello zenity!&amp;apos;
-if zenity --question --text &amp;apos;do you want to give me your name?&amp;apos;
-then
-    name=$(zenity --entry --text &amp;apos;what is your name?&amp;apos;)
-    zenity --info --text &amp;quot;hello $name&amp;quot;
-fi
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;其它-x-window-好用工具&quot;&gt;其它 x window 好用工具&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;xdotool: 用來摸擬滑鼠點擊、鍵盤事件的命令。&lt;/li&gt;
-&lt;li&gt;wmctrl: 用來控制視窗放大縮小。&lt;/li&gt;
-&lt;li&gt;xprop: 比較底層，用來查詢各視窗的屬性、控制的程序。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;結論&quot;&gt;結論&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;shell 是一門 &lt;strong&gt;實際&lt;/strong&gt; 且 &lt;em&gt;能與所學結合&lt;/em&gt; 的語言。&lt;/li&gt;
-&lt;li&gt;社課很短，能講的東西有限。&lt;/li&gt;
-&lt;li&gt;希望我的表達能力正常無礙。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;指令示範&quot;&gt;指令示範&lt;/h3&gt;
-&lt;hr&gt;
-&lt;p&gt;把系統大檔案移到另一個硬碟&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;find -size +1G | while read path
-do
-    mv $path /mnt/backup/
-    ln -s /mnt/backup/$(basename $path) $path
-done
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;p&gt;每 30 分鐘提醒一次眼睛休息&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;(
-    while sleep 30m
-    do zenity --info --text &amp;quot;30 分鐘了，眼睛休息一下吧！&amp;quot;
-    done
-) &amp;amp;
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;h3 id=&quot;延伸閱讀&quot;&gt;延伸閱讀&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.cyut.edu.tw/~ckhung/b/clr/&quot;&gt;命令列讀本&lt;/a&gt; ，
-用輕鬆、務實的角度入門 shell 使用。&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://book.ashan.org/Advanced-Bash-Scripting-Guide-in-Chinese/&quot;&gt;高級 Bash 脚本编程指南&lt;/a&gt; ，
-完全理解 bash 的功能，了解不同語法間的細微差異。&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://cmdchallanges.com&quot;&gt;考驗對 shell 常指令的理解&lt;/a&gt; 。&lt;/li&gt;
-&lt;/ul&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/shell-script-concept-from-program.html#flip-slide-while-scroll</id>
 <title>shell 概念教學</title>

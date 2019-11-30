@@ -294,3 +294,4 @@ javascript-async-debounce-atomic.html
 shell-script-concept-from-program.html
 image-processing-6-free-style.html
 linux-shell-script-for-windows-ssh.html
+image-processing-edge-line-detection.html

@@ -59,7 +59,7 @@ blockquote {
 main pre > code {
     display: block;
     padding: 1em;
-    font-size: 1rem;
+    font-size: unset;
     border: solid 1px;
     white-space: pre;
     overflow: auto;

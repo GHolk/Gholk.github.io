@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2019-12-12T13:59:21.229Z</updated>
+  <updated>2020-01-13T06:45:28.374Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,408 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/ccca-dokuwiki-hello-world-slide.html</id>
+<title>CCCA dokuwiki 雜談</title>
+<published>2020-01-13T05:11:28.684Z</published>
+<updated>2020-01-13T06:45:28.359Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/ccca-dokuwiki-hello-world-slide.html"/>
+<summary type="html">wiki 是通常執行於 world wide web 上的多人協作文件管理系統。
+其中 dokuwiki 是基於 php 與檔案系統的輕量級 wiki，
+在安裝、客制化、維護上門檻都較低，
+因此選擇 dokuwiki 作為本社團的網站。
+社課上將介紹 &lt;a href=&quot;http://ccca.tw&quot;&gt;社團的 wiki 網站&lt;/a&gt; 、wiki 相比 CMS 的優勢，
+以及如何站在 dokuwiki 的肩膀上，以 html php 開發新功能。 </summary>
+<category term="ccca"/>
+<category term="nctu"/>
+<category term="wiki"/>
+<category term="slide"/>
+<content type="html">&lt;h1 id=&quot;CCCA-dokuwiki-雜談&quot;&gt;CCCA dokuwiki 雜談&lt;/h1&gt;
+&lt;p&gt;wiki 是通常執行於 world wide web 上的多人協作文件管理系統。
+其中 dokuwiki 是基於 php 與檔案系統的輕量級 wiki，
+在安裝、客制化、維護上門檻都較低，
+因此選擇 dokuwiki 作為本社團的網站。
+社課上將介紹 &lt;a href=&quot;http://ccca.tw&quot;&gt;社團的 wiki 網站&lt;/a&gt; 、wiki 相比 CMS 的優勢，
+以及如何站在 dokuwiki 的肩膀上，以 html php 開發新功能。 &lt;/p&gt;
+&lt;h2 id=&quot;簡報程式&quot;&gt;簡報程式&lt;/h2&gt;
+&lt;script&gt;
+function toggleSlideMode() {
+  document.body.classList.toggle(&apos;white-black-slide&apos;)
+}
+&lt;/script&gt;
+
+&lt;style contenteditable=&quot;true&quot;&gt;
+body.white-black-slide {
+  font-size: 250%;
+  color: white;
+  background: black;
+}
+.white-black-slide a {
+  color: cyan;
+}
+.white-black-slide hr,
+.white-black-slide h2,
+.white-black-slide h3 {
+  margin-top: 3em;
+}
+&lt;/style&gt;
+
+&lt;button onclick=&quot;toggleSlideMode()&quot;&gt;切換簡報模式&lt;/button&gt;
+
+&lt;script&gt;
+function scrollToNextSlide() {
+  const allSlide = document.querySelectorAll(&apos;hr,h2,h3&apos;)
+  const windowTop = window.scrollY
+  for (const slide of allSlide) {
+    if (slide.offsetTop &gt; windowTop) {
+      scrollTo(0, slide.offsetTop + 1)
+      break
+    }
+  }
+}
+&lt;/script&gt;
+
+&lt;style&gt;
+:this + button {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 1em;
+}
+&lt;/style&gt;
+
+&lt;button onclick=&quot;scrollToNextSlide()&quot;&gt;下一頁&lt;/button&gt;
+
+&lt;h2 id=&quot;資訊自主&quot;&gt;資訊自主&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;身為一個資訊社團，有自己的網站是很重要的。&lt;/li&gt;
+&lt;li&gt;代表你的資料，不會被平台 &lt;strong&gt;綁&lt;/strong&gt; 住。&lt;/li&gt;
+&lt;li&gt;不讓企業掌握個人資訊。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;免費網站的問題&quot;&gt;免費網站的問題&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;你的內容、上傳的資料，都只在該網站上散布&lt;/li&gt;
+&lt;li&gt;只能寄居在該網站上&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;搬遷問題&quot;&gt;搬遷問題&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;如何讓你的受眾知道，網址換位址了？&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;公告：網站由 fb.me/xxxx 搬遷到 t.co/xxxx&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;祈禱使用者會自己 &lt;s&gt;通靈&lt;/s&gt; google 到新網站&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;根本性的解決辦法&quot;&gt;根本性的解決辦法&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;買一個域名，付錢，確保這個網址永遠連到你的網站。&lt;/li&gt;
+&lt;li&gt;背後的 ip 可以換&lt;/li&gt;
+&lt;li&gt;甚至可以托管到 blogspot 這類可以自訂域名的網站&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;域名是唯一的識別符號&quot;&gt;域名是唯一的識別符號&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;只有域名是最通用的識別符號，不依賴於平台&lt;/li&gt;
+&lt;li&gt;可以印在名片上、寫在書上&lt;/li&gt;
+&lt;li&gt;平台會倒、會搬家，只有域名可以由自己完全掌控&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;平台只作為宣傳管道&quot;&gt;平台只作為宣傳管道&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;平台是不穩定性的，內容可能遺失&lt;/li&gt;
+&lt;li&gt;內容必定發布在自己可以完控制的域名下&lt;/li&gt;
+&lt;li&gt;其它平台只作為宣傳管道&lt;/li&gt;
+&lt;li&gt;可以用轉貼、自動發布的方式方便管理&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;無法互通的多個私人平台&quot;&gt;無法互通的多個私人平台&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Facebook 掘起後，web 逐漸往多個無法互通的平台發展。&lt;/li&gt;
+&lt;li&gt;資訊只在單一平台上流通，facebook 內外成為二個無法溝通的世界。&lt;/li&gt;
+&lt;li&gt;facebook twitter discord telegram line，都是一個個獨立的世界。&lt;/li&gt;
+&lt;li&gt;且平台多為公司所有&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;開放的意義&quot;&gt;開放的意義&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;要自己架一個有 facebook 功能的網站，只是技術問題。&lt;/li&gt;
+&lt;li&gt;但該由誰來管理這個平台？&lt;/li&gt;
+&lt;li&gt;就算原始碼是開放的，但就算架起了第二個網站，
+你的網站和我的網站還是無法互通，只會形成更小的社群，
+以社交網站來看是沒有意義的。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;聯邦制的服務&quot;&gt;聯邦制的服務&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;聯邦或說 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E4%BA%92%E8%81%AF&quot;&gt;互聯&lt;/a&gt; ，是指多個伺服器之間的使用者，仍可以彼此溝通。&lt;/li&gt;
+&lt;li&gt;不同的 email 服務提供者的帳號，仍可以互相寄信。&lt;/li&gt;
+&lt;li&gt;任何人都可以自己架自己的 email server。&lt;/li&gt;
+&lt;li&gt;其它還有 &lt;a href=&quot;http://zh.wikipedia.org/wiki/IRC&quot;&gt;IRC&lt;/a&gt; 、 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E6%96%B0%E8%81%9E%E7%BE%A4%E7%B5%84&quot;&gt;新聞群組&lt;/a&gt; 、
+早期台灣 bbs 的看板間轉信功能都屬於這類聯邦制的服務。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;web-的原始聯邦&quot;&gt;web 的原始聯邦&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;整個 world wide web 算是一種廣義的聯邦制，以網頁中的超連結互聯。&lt;/li&gt;
+&lt;li&gt;原始的消息發送協議 &lt;a href=&quot;http://zh.wikipedia.org/wiki/RSS&quot;&gt;RSS&lt;/a&gt; 。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;動態網頁後的世界&quot;&gt;動態網頁後的世界&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;很快有人發明了動態網頁，留言板、討論區。這時候 RSS 還足夠運作。&lt;/li&gt;
+&lt;li&gt;但多數都是相對封閉的。就算可以用網址互連，
+但無法在一個論壇回覆另一個論壇的文章。（想想 bbs 的轉信）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;封閉的社群網路&quot;&gt;封閉的社群網路&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;到最後的終極形態，如 facebook 般的社群網路。
+在內部提供完美的消息發送功能。&lt;/li&gt;
+&lt;li&gt;內部基於動態網頁技術提供消息發送，不再需要原始的 RSS 了。&lt;/li&gt;
+&lt;li&gt;且自身的規模，不再需要與外部合作。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;聯邦制的社群網路&quot;&gt;聯邦制的社群網路&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;有沒有可能建造一個，類似 email 的分散式的 facebook？&lt;/li&gt;
+&lt;li&gt;在不同伺服器上，仍可以像在同一個平台上，互相分享、留言？&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://zh.wikipedia.org/wiki/%E5%88%86%E6%95%A3%E5%BC%8F%E7%A4%BE%E4%BA%A4%E7%B6%B2%E8%B7%AF&quot;&gt;分散式社交網路&lt;/a&gt; ： &lt;a href=&quot;http://zh.wikipedia.org/wiki/GNU_social&quot;&gt;GNU social&lt;/a&gt; 、 &lt;a href=&quot;http://zh.wikipedia.org/wiki/Mastodon&quot;&gt;Mastodon&lt;/a&gt; 。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;小結&quot;&gt;小結&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;聯邦式的社群網路，雖然可以自己架，但維護成本可能太高。&lt;/li&gt;
+&lt;li&gt;學校的資訊社團，可能是合適的大小。&lt;/li&gt;
+&lt;li&gt;我混了二個學校，卻還是只在空話。&lt;/li&gt;
+&lt;li&gt;主要還是要有人用。 &lt;s&gt;你就是沒有人&lt;/s&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;為什麼選擇-wiki&quot;&gt;為什麼選擇 wiki&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;從頭刻網站太累了，就算用框架也很沒必要。&lt;/li&gt;
+&lt;li&gt;專門的管理系統如 moodle 太複雜。&lt;/li&gt;
+&lt;li&gt;blog 和 wiki 是較好的選擇。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;完全自己寫&quot;&gt;完全自己寫&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;要寫很多 code&lt;/li&gt;
+&lt;li&gt;自由度最高，想要什麼功能都可以，只是要自己寫。&lt;/li&gt;
+&lt;li&gt;適合對網站有很多需求的人，像很要求板面、多層式下拉選單、特殊功能者。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;blog-特色&quot;&gt;blog 特色&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;管理介面有善，適合內容間不需要互連的獨立文章。&lt;/li&gt;
+&lt;li&gt;板面固定，就是規劃好的文章列表、分類、首頁。&lt;/li&gt;
+&lt;li&gt;比較接近內容發布中心，而不適合用來管理文件。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;wiki-特色&quot;&gt;wiki 特色&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;容易客制化，用 wiki 語法，不動到後端的程式也可以改很多東西。&lt;/li&gt;
+&lt;li&gt;wiki 語法讓使用者能專注在內容而非樣式。&lt;/li&gt;
+&lt;li&gt;適合多人協作，內建版本管理。&lt;/li&gt;
+&lt;li&gt;適合有一定技術能力的社團。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;依附於系統下&quot;&gt;依附於系統下&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;完全自己寫是很累的，就算用框架也是。&lt;/li&gt;
+&lt;li&gt;使用現有的 blog 或其它系統，在上面改出自己想要的功能比較快。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;自幹程式的問題&quot;&gt;自幹程式的問題&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;沒有人想維護；時過境遷後，程式如何使用也成為問題。&lt;/li&gt;
+&lt;li&gt;wiki 的特色是可以用來管理文件，適合把使用說明也寫進 wiki 裡。&lt;/li&gt;
+&lt;li&gt;甚至可以把程式的原始碼也托管在 wiki 上，畢竟 wiki 有基本的版本管理功能。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;wiki-的多重角色&quot;&gt;wiki 的多重角色&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;記錄社團的文件：有哪些 server、社辦使用公約、社團組織架構。&lt;/li&gt;
+&lt;li&gt;當作社團網站：把社團的活動、成果記錄在上面。&lt;/li&gt;
+&lt;li&gt;當公用 server：可以把自己想要的功能、程式在上面跑。&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://ccca.tw/playground:test-bookmarklet-js&quot;&gt;托管 javascript 小書籤程式&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;參考資料&quot;&gt;參考資料&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://caslab.ee.ncku.edu.tw/dokuwiki/why_wiki&quot;&gt;為什麼要用 wiki&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://stackoverflow.com/questions/226132/what-are-the-differences-between-a-wiki-and-a-cms&quot;&gt;wiki vs cms&lt;/a&gt; 。blog 可以稱作一種 &lt;abbr title=&quot;content management system&quot;&gt;內容管理系統&lt;/abbr&gt; ，但也有較正式的、有複雜權限管理的提供給公司內部使用的商用系統。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.cyut.edu.tw/~ckhung/g/ofset/post.php?id=105c&quot;&gt;wiki 作為雲端系統&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;dokuwiki-使用說明&quot;&gt;dokuwiki 使用說明&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://ccca.tw&quot;&gt;ccca wiki&lt;/a&gt; 為半開放 wiki，特定內容只對特定使用者開放。&lt;/li&gt;
+&lt;li&gt;編輯使用 dokuwiki 的純文字語法，類似 mediawiki。&lt;/li&gt;
+&lt;li&gt;歡迎所有社員、非社員註冊使用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;使用者與權限&quot;&gt;使用者與權限&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;未註冊者只能瀏覽與編輯 &lt;code&gt;talk:&lt;/code&gt; 命名空間下的頁面。&lt;/li&gt;
+&lt;li&gt;有社員 &lt;code&gt;officer&lt;/code&gt; 、系統管理者 &lt;code&gt;admin&lt;/code&gt; 二個群組。&lt;/li&gt;
+&lt;li&gt;僅有 &lt;code&gt;officer&lt;/code&gt; 群組能編輯 html js 語法。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;命名空間&quot;&gt;命名空間&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;命名空間以 &lt;code&gt;:&lt;/code&gt; 分隔， &lt;a href=&quot;https://ccca.tw/?do=index&quot;&gt;這是 wiki 上所有頁面&lt;/a&gt; 。&lt;/li&gt;
+&lt;li&gt;user: 使用者的個人頁面。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://ccca.tw/talk:&quot;&gt;talk:&lt;/a&gt; 用於留言、討論。&lt;/li&gt;
+&lt;li&gt;playground: 用於測試各類語法。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://ccca.tw/社課:&quot;&gt;社課:&lt;/a&gt; 社課公告於此。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://ccca.tw/社務:&quot;&gt;社務:&lt;/a&gt; 社團內部文件，只開放社員瀏覽。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;語法&quot;&gt;語法&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;====== 標題 ======&lt;/code&gt; ，六個是一級標題。
+和 markdown 相反，等號越少越小。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;**粗體**&lt;/code&gt; &lt;code&gt;//斜體//&lt;/code&gt; &lt;code&gt;__底線__&lt;/code&gt; &lt;code&gt;&amp;apos;&amp;apos;等寬字體&amp;apos;&amp;apos;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;[[頁面名稱|顯示名稱]]&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://ccca.tw/wiki:syntax&quot;&gt;所有語法&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;pre&gt;&lt;code&gt;  * 無序清單
+    * 第二層
+  - 有序清單
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;pre&gt;&lt;code&gt;&amp;gt; 引用
+&amp;gt;&amp;gt; 第二層引用
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;pre&gt;&lt;code&gt;引用檔案。
+圖片會顯示，影片、音樂會播放，
+檔案會變成可下載連結。
+
+{{image.png}}
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;pre&gt;&lt;code&gt;code block
+
+&amp;lt;code javascript&amp;gt;
+alert(&amp;apos;hello world!&amp;apos;)
+&amp;lt;/code&amp;gt;
+
+downloadable code block
+
+&amp;lt;file javascript hello-world.js&amp;gt;
+alert(&amp;apos;hello wrold!&amp;apos;)
+&amp;lt;/file&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;內嵌-html&quot;&gt;內嵌 html&lt;/h2&gt;
+&lt;p&gt;可以嵌入 html，也就可以嵌入 javascript。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;hello button
+
+&amp;lt;html&amp;gt;
+&amp;lt;button onclick=&amp;quot;hello()&amp;quot;&amp;gt;hello wrold!&amp;lt;/button&amp;gt;
+&amp;lt;script&amp;gt;
+    function hello() {
+        alert(&amp;apos;hello world!&amp;apos;)
+    }
+&amp;lt;/script&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;javascript-的風險&quot;&gt;javascript 的風險&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;javascript 可以存取 cookie，cookie 含有登入資訊。&lt;/li&gt;
+&lt;li&gt;如果允許任何人寫 js，只要在頁面插一段程式
+把 cookie 用 ajax 發出去，點開該頁面的人的帳號就被盜走了。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;dokuwiki-對-html-的管理&quot;&gt;dokuwiki 對 html 的管理&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;wiki 有一個選項可以設定是否允許 html，只能全域允許或禁止。&lt;/li&gt;
+&lt;li&gt;我改了一點原始碼，讓 dokuwiki 在儲存編輯前檢察內容有沒有 html，
+如果使用者在 &lt;code&gt;$config[&amp;quot;htmlok_user&amp;quot;]&lt;/code&gt; 裡就可以使用 html。&lt;/li&gt;
+&lt;li&gt;本 wiki 只有屬於 officer 群組的人可以編輯含有 html 的頁面。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;include-外掛&quot;&gt;include 外掛&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;dokuwiki 有豐富的 &lt;a href=&quot;https://www.dokuwiki.org/plugins&quot;&gt;外掛系統&lt;/a&gt; ，
+可以加入自訂語法、快速編輯功能、自製 api。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.dokuwiki.org/plugin:include&quot;&gt;include&lt;/a&gt; 這個外掛，可以用語法引用另一個頁面的內容。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;===== 聯絡我們 =====
+{{page&amp;gt;聊天室}}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;用-include-引用-javascript&quot;&gt;用 include 引用 javascript&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;如果程式想要可以複用，可以寫成單獨的頁面，在想用的頁面裡 include。&lt;/li&gt;
+&lt;li&gt;含有 html 的頁面不能被一般人編輯，
+如果想要讓一般人可以編輯，可以把 js 寫在另外的頁面，
+再用 include 抓進來，這樣該頁面只有 include 語法沒有 html，
+就可以被一般人編輯。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;dokuwiki-api&quot;&gt;dokuwiki api&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.dokuwiki.org/devel:xmlrpc&quot;&gt;dokuwiki 提供 xml-rpc api&lt;/a&gt; ，
+可以以 ajax 呼叫， 用來做快速編輯等功能。&lt;/li&gt;
+&lt;li&gt;用 xml-rpc 的函式庫呼叫會比較方便。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;使用範例&quot;&gt;使用範例&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://ccca.tw/talk:&quot;&gt;快速留言板&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://ccca.tw/playground:test-bookmarklet-js&quot;&gt;小書籤發布&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;以-wiki-管理設定檔&quot;&gt;以 wiki 管理設定檔&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;dokuwiki 有一些設定檔是要手動編輯的。&lt;/li&gt;
+&lt;li&gt;那為什麼不能直接像編輯一個 wiki 頁面一樣，直接編輯它呢？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;wiki-的-logo&quot;&gt;wiki 的 logo&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;許多人裝好 dokuwiki 後，第一件事就是換上自家的 logo。&lt;/li&gt;
+&lt;li&gt;如何更換 wiki 的 logo？
+&lt;a href=&quot;https://www.dokuwiki.org/template:dokuwiki#changing_the_logo&quot;&gt;以預設的模版 dokuwiki 來說，只要把圖片上傳為 &lt;code&gt;wiki:logo.png&lt;/code&gt; 即可。&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;這是一種以 wiki 來管理 wiki 自身的風格。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;interwiki-簡寫功能&quot;&gt;interwiki 簡寫功能&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;interwiki 是一種在 wiki 中定義網址簡寫的功能。&lt;/li&gt;
+&lt;li&gt;在 &lt;code&gt;conf/interwiki.conf&lt;/code&gt; 中定義 &lt;code&gt;doku https://www.dokuwiki.org/{NAME}&lt;/code&gt; ，&lt;/li&gt;
+&lt;li&gt;之後只要寫 &lt;code&gt;[[doku&amp;gt;install]]&lt;/code&gt; ，
+即可解析為連到 &lt;a href=&quot;https://www.dokuwiki.org/install&quot;&gt;https://www.dokuwiki.org/install&lt;/a&gt; 的連結。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;檔案系統的魔術&quot;&gt;檔案系統的魔術&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;能不能像 wiki:logo 一樣，可以直接把新設定檔當作一個文字檔上傳？
+或直接 &lt;a href=&quot;https://ccca.tw/admin:interwiki&quot;&gt;當成一個頁面編輯&lt;/a&gt; ？&lt;/li&gt;
+&lt;li&gt;由於 dokuwiki 的頁面資料是直接以文字檔的形式儲存在檔案系統，而不是資料庫，
+所以只要直接把 &lt;code&gt;conf/interwiki.conf&lt;/code&gt; 設成符號連結，連到該頁面的檔案即可。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;cd conf/interwiki.conf
+ln -s ../data/pages/admin/interwiki.txt interwiki.conf
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;格式化設定檔的魔術&quot;&gt;格式化設定檔的魔術&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;但 dokuwiki 只會把 &lt;a href=&quot;https://ccca.tw/admin:interwiki&quot;&gt;interwiki 頁面&lt;/a&gt; 
+當作普通的頁面，格式應該會亂掉。（換行被刪掉，並嘗試解析檔案內的 wiki 語法。）&lt;/li&gt;
+&lt;li&gt;用 &lt;code&gt;&amp;lt;code&amp;gt;&lt;/code&gt; 把整個檔案包起來，可以讓排版出來的結果比較好看。&lt;/li&gt;
+&lt;li&gt;但 interwiki 設定檔解析時看到 &lt;code&gt;&amp;lt;code&amp;gt;&lt;/code&gt; 會報錯。&lt;/li&gt;
+&lt;li&gt;把 &lt;code&gt;&amp;lt;code&amp;gt;&lt;/code&gt; 放在 interwiki 的 &lt;code&gt;#&lt;/code&gt; 註解後面。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;pre&gt;&lt;code&gt;# this is interwiki config file
+# &amp;lt;code&amp;gt;
+fb        https://www.facebook.com/{NAME}
+tg        https://t.me/{NAME}
+github    http://github.com/{NAME}
+# &amp;lt;/code&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;p&gt;類似早年 css 和 javascript 內嵌在 html 中的作法，
+在不同語言間互相用註解跳脫彼此看不懂的內容。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;script&amp;gt;
+// &amp;lt;!--
+alert(&amp;apos;hello world!&amp;apos;)
+// --&amp;gt;
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;interwiki-圖標的魔術&quot;&gt;interwiki 圖標的魔術&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;interwiki 連結前會顯示一個小小圖標，可以自訂不同簡寫對應的圖標。&lt;/li&gt;
+&lt;li&gt;將與簡寫同名的圖片上傳到 &lt;a href=&quot;https://ccca.tw/admin:interwiki-icon:&quot;&gt;&lt;code&gt;admin:interwiki-icon:&lt;/code&gt; 命名空間&lt;/a&gt; 即可。&lt;/li&gt;
+&lt;li&gt;因為檔案系統上 &lt;code&gt;lib/images/interwiki&lt;/code&gt; 為
+&lt;code&gt;data/media/admin/interwiki-icon&lt;/code&gt; 的符號連結。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;userstyle.css&quot;&gt;userstyle.css&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;dokuwiki 允許管理者編輯 userstyle.css userscript.js，&lt;/li&gt;
+&lt;li&gt;一樣 &lt;a href=&quot;https://ccca.tw/admin:userstyle.css&quot;&gt;將 userstyle.css 設為頁面的連結&lt;/a&gt; 。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;反方向的跳脫&quot;&gt;反方向的跳脫&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://ccca.tw/admin:bookmarkletify&quot;&gt;admin:bookmarkletify&lt;/a&gt; 是另一種反向跳脫，
+讀取頁面中的小書籤程式碼並做成小書籤。&lt;/li&gt;
+&lt;li&gt;把文件和程式寫在一起，並互相關，類似 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E6%96%87%E5%AD%B8%E7%B7%A8%E7%A8%8B&quot;&gt;文學編程&lt;/a&gt; 。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;bootstrap&quot;&gt;bootstrap&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;將 wiki 的設定檔移到 wiki 內本身的過程，
+類似於編譯器 &lt;abbr title=&quot;bootstrap&quot;&gt;自舉&lt;/abbr&gt; 的過程。&lt;/li&gt;
+&lt;li&gt;設定檔會佔據一些命名空間，類似
+&lt;abbr title=&quot;convention over configuration&quot;&gt;慣例優先設定&lt;/abbr&gt;  。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;wiki-todo&quot;&gt;wiki todo&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://ccca.tw/admin:todo&quot;&gt;想做的事很多&lt;/a&gt; ，有空的時間很少。&lt;/li&gt;
+&lt;li&gt;社團需要一個一起發展的專案來凝聚。&lt;/li&gt;
+&lt;li&gt;這個網站到底有沒有人要用？沒人用的話，我玩這麼多也是白費。&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/bbsjs.html#jquery-bye</id>
 <title>BBSJS 原型概念版</title>
 <published>2018-03-15T12:52:05.029Z</published>
@@ -3776,144 +4178,7 @@ visual stdio 太肥，雖然也是有各種 ide，如 code block dev c++。
 <category term="study"/>
 <category term="gnss"/>
 <category term="shell"/>
-<content type="html">&lt;h1 id=&quot;以-linux-shell-為基礎在-windows-中批次處理&quot;&gt;以 linux shell 為基礎在 windows 中批次處理&lt;/h1&gt;
-&lt;p&gt;trimble 的 gnss 接收儀預設是記錄 trimble 的 T02 格式，
-要用 trimble 的 windows 程式 convertToRINEX 轉成 rinex 格式，
-只能開虛擬機或在另一台 windows 電腦上轉換。
-但檔案很多，於是研究了一下 convert to rinex 的命令列介面，
-運用 windows 10 開始內建的 ssh 功能傳檔案，
-再在 linux 上產生 bat 批次檔，完成一次跨系統合作演出。&lt;/p&gt;
-&lt;p&gt;現在在管系館的 gnss 站，是 trimble 的接收儀，
-預設是記錄 trimble 的 t02 格式，
-要用 trimble 提供的程式 convertToRINEX
-才能轉換成通用的 rinex 格式。&lt;/p&gt;
-&lt;h2 id=&quot;convert-to-rinex&quot;&gt;convert to rinex&lt;/h2&gt;
-&lt;p&gt;convert to rinex 執行時可以有圖形介面，
-同時也可以用參數傳入檔名，單純在命令列處理。
-雖然圖形介面中，可以一次選取多個檔案，
-提供基本的批次處理功能。&lt;/p&gt;
-&lt;p&gt;但 convert to rinex 的處理速度實在太慢，
-一天長度周期一秒的 T02 檔案，要轉五分鐘。
-而且 convert to rinex 的圖形介面設計，
-是會先掃描完整個檔案，才能點下轉換鈕轉換；
-一個檔案大概掃 4 分鐘，轉換 1 分鐘。&lt;/p&gt;
-&lt;p&gt;選取多個檔案批次處理時，則是全部掃描完才會開始轉換。
-我不確定記憶體用量會不會隨檔案數增加，
-所以不敢一口氣轉全部。
-最後決定用命令列的介面，轉一次呼叫一次程式，
-也避免要一次把所有檔案傳到 windows 上，怕硬碟空間不足。&lt;/p&gt;
-&lt;h2 id=&quot;使用-sftp-在虛擬機與本機間傳送檔案&quot;&gt;使用 sftp 在虛擬機與本機間傳送檔案&lt;/h2&gt;
-&lt;p&gt;trimble 的程式 convertToRINEX 只提供 exe 格式，
-我試了在 wine 下執行，也裝了.NET 框架，
-但執行時還是會報錯。最後就放棄在 wine 下執行了。&lt;/p&gt;
-&lt;p&gt;但還是計劃要做，就決定開 qemu 虛擬機來轉。
-本來想弄個 9p 來共享虛擬機和本機的檔案，
-後來發現 9p 開起來只是虛擬機裡可以連上去，
-但虛擬機裡還是要有 9p 的客戶端才有用；
-windows 還是放棄吧。&lt;/p&gt;
-&lt;p&gt;本來在考慮 smb，但忽然想到 windows 10 內建 ssh 了，
-於是可以用 sftp 來傳。
-於是 batch 程式寫起來就像這樣：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-bat&quot;&gt;scp user@10.0.2.2:data/2019-01-01.T02 .
-&amp;quot;C:\Program Files (x86)\Trimble\convertToRINEX\convertToRinex.exe&amp;quot; 2019-01-01.T02 -mo GHLK -v 2.11
-scp 2019-01-01.19o user@10.0.2.2:data
-del 2019-01-01.*
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;但有個問題，我不會寫 batch 迴圈。
-而且我不想一次下載全部的 t02 檔案，
-所以我想要下載一個，轉檔完傳回去，刪掉後再換下一個。
-可是這樣我得要從 sftp 的 ls 輸出中，
-取得檔案列表，然後遍歷。
-聽說 batch 的編程能力是有限制的，
-不像 bash 是一門完整的程式語言，
-我想這已經超出 batch 的能力範圍。&lt;/p&gt;
-&lt;h2 id=&quot;在-linux-上產生腳本&quot;&gt;在 linux 上產生腳本&lt;/h2&gt;
-&lt;p&gt;反正 shell 腳本的本質只是一連串依序執行的命令，
-可編程只是用來降低複雜度的附加功能。
-若是缺少編程功能，只能以更複雜的方式完成程式，
-像是由 &lt;em&gt;另一種程式&lt;/em&gt; ，來產生目標腳本；
-甚至直接在程式中呼叫 &lt;code&gt;system()&lt;/code&gt; 達到編程需求。
-總之我就跑了個 bash 迴圈，
-生出了要在 windows 上執行的 batch 檔：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;host=user@10.0.2.2
-convert=&amp;apos;&amp;quot;C:\Program Files (x86)\Trimble\convertToRINEX\convertToRinex.exe&amp;quot;&amp;apos;
 
-for t02 in data/*.T02
-do
-    filename=$(basename $t02)
-    basename=$(basename $filename .T02)
-    cat &amp;lt;&amp;lt;BATCH
-
-scp $host:$t02 .
-$convert $filename -mo GHLK -v 2.11
-scp $(printf &amp;quot;$basename.19%s &amp;quot; o g n q b c) $host:data
-del $basename.*
-
-BATCH
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;首先最重要的，ssh 要開免密碼登入，
-否則執行一次 scp 就要輸入一次登入密碼，
-根本不可能批次作業。
-在 windows 的 ssh 除了基本的 ssh，
-傳送檔案的 sftp 外，連 ssh-keygen 也內建了。
-執行一次產生金鑰後，丟到 linux 的 &lt;code&gt;.ssh/authorized_keys&lt;/code&gt; 即可。
-如果不信任 windows 的話，
-可以跑完腳本就把公鑰從 authorized_keys 裡刪除。&lt;/p&gt;
-&lt;p&gt;windows 的 glob 萬用字元，
-似乎不會由 shell 展開，而是命令得自己展開。
-cmd 的內建命令 del dir 之類的，多支援 glob，
-但 ssh 就不支援，直接回找不到檔案。
-（但 scp 複製遠端 linux 上的檔案時是支援 glob 的。）&lt;/p&gt;
-&lt;h2 id=&quot;傳到-linux-上並壓縮&quot;&gt;傳到 linux 上並壓縮&lt;/h2&gt;
-&lt;p&gt;由於本人收納習慣極差，server 的硬碟也快滿了。
-而轉換出來的 rinex 檔是 ascii 格式很佔空間，
-尤其我是轉出周期一秒的檔案。
-所以我希望可以在上傳後自動壓縮。&lt;/p&gt;
-&lt;p&gt;rinex 壓縮有二步：rnxcmp 軟體提出了一種格式
-&lt;abbr title=&quot;compress rinex&quot;&gt;crx&lt;/abbr&gt;，
-可以最小化 rinex 中文字所記錄的資訊，
-並提供了 rnx2crx crx2rnx 二個轉換程式。
-rnx2crx 的輸出仍為文字檔，
-所以可以再用 gzip 或其它壓縮工具壓縮一次。&lt;/p&gt;
-&lt;p&gt;在 server 上監視檔案上傳我還沒試過，
-而且感覺就很麻煩，還要處理檔案複製到一半的情況。
-所以我決定直接在 windows 中處理，
-直接把傳送最大的 rinex 檔案 &lt;code&gt;*.??o&lt;/code&gt; 的 scp，
-換成以下的 ssh 命令：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-cmd&quot;&gt;ssh user@10.0.2.2 &amp;quot;rnx2crx - | gzip - &amp;gt; 2019-01-01.19d.gz&amp;quot; &amp;lt;2019-01-01.19o
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;但發現這樣重導向不知道為什麼會卡住，會卡在 gzip 那邊，
-或是其它在 linux 上讀取標準輸入的程式，
-可能 windows 沒有送出 eof 之類的？
-後來試了管道不會卡住，
-就 google 到 cmd 裡類似 &lt;code&gt;cat&lt;/code&gt; 的命令 &lt;code&gt;type&lt;/code&gt; ，
-最後就這樣用了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-cmd&quot;&gt;type 2019-01-01.19o | ssh user@10.0.2.2 &amp;quot;rnx2crx - | gzip - &amp;gt; 2019-01-01.19d.gz&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;另外還有試了在傳送文字檔時壓縮會不會好一點，但幾乎沒有差別。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-cmd&quot;&gt;type 2019-01-01.19o ^
-| ssh -o Compression=yes ^
-  user@10.0.2.2 &amp;quot;rnx2crx - | gzip - &amp;gt; 2019-01-01.19d.gz&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;推測原因：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;虛擬機裡壓縮有性能銷耗，且 linux 端還要解壓一次，都吃同一台機器的 cpu。&lt;/li&gt;
-&lt;li&gt;虛擬機的網路是假的網路，和本機間的網路速度遠超實體網路。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&quot;用-runpkr00-直接在-linux-上轉檔&quot;&gt;用 runpkr00 直接在 linux 上轉檔&lt;/h2&gt;
-&lt;p&gt;後來與 &lt;a href=&quot;https://github.com/holishing&quot;&gt;r2&lt;/a&gt; 討論後，才知道另一支程式 runpkr00，
-是古早時期 trimble 提供用來轉換 t02 格式的。
-最大的優勢是提供了 linux 甚至 solaris 版本的執行檔，
-雖然主要支援對向是 t02 之前的 t00 t01，
-但如今仍可以運作在 t02 格式上。&lt;/p&gt;
-&lt;p&gt;我是在 &lt;a href=&quot;https://kb.unavco.org/kb/article/trimble-runpkr00-v5-40-latest-version-mac-osx-10-7-windows-xp-7-linux-solaris-744.html&quot;&gt;unavco 的網站上找到 runpkr00 的執行檔的&lt;/a&gt; ，
-但總之為了防止死檔，還是
-&lt;a href=&quot;drive&quot;&gt;自己再備份一次 unavco 提供的 rpm 包&lt;/a&gt; 。&lt;/p&gt;
-&lt;h2 id=&quot;技術總結&quot;&gt;技術總結&lt;/h2&gt;
-&lt;p&gt;在 linux 上產生 batch 腳本， 並且在產生的 batch 腳本中，
-再使用 windows 10 中的 ssh 登入回 linux 執行 linux shell 指令。&lt;/p&gt;
-&lt;h2 id=&quot;powershell-與-windows-舒適圈&quot;&gt;powershell 與 windows 舒適圈&lt;/h2&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/image-processing-6-free-style.html</id>
 <title>影像處理作業一：自由影像最佳化</title>

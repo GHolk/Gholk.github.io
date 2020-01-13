@@ -1,0 +1,415 @@
+# CCCA dokuwiki 雜談
+wiki 是通常執行於 world wide web 上的多人協作文件管理系統。
+其中 dokuwiki 是基於 php 與檔案系統的輕量級 wiki，
+在安裝、客制化、維護上門檻都較低，
+因此選擇 dokuwiki 作為本社團的網站。
+社課上將介紹 [社團的 wiki 網站][ccca wiki] 、wiki 相比 CMS 的優勢，
+以及如何站在 dokuwiki 的肩膀上，以 html php 開發新功能。 
+
+## 簡報程式
+<script>
+function toggleSlideMode() {
+  document.body.classList.toggle('white-black-slide')
+}
+</script>
+
+<style contenteditable="true">
+body.white-black-slide {
+  font-size: 250%;
+  color: white;
+  background: black;
+}
+.white-black-slide a {
+  color: cyan;
+}
+.white-black-slide hr,
+.white-black-slide h2,
+.white-black-slide h3 {
+  margin-top: 3em;
+}
+</style>
+
+<button onclick="toggleSlideMode()">切換簡報模式</button>
+
+<script>
+function scrollToNextSlide() {
+  const allSlide = document.querySelectorAll('hr,h2,h3')
+  const windowTop = window.scrollY
+  for (const slide of allSlide) {
+    if (slide.offsetTop > windowTop) {
+      scrollTo(0, slide.offsetTop + 1)
+      break
+    }
+  }
+}
+</script>
+
+<style>
+:this + button {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 1em;
+}
+</style>
+
+<button onclick="scrollToNextSlide()">下一頁</button>
+
+## 資訊自主
+* 身為一個資訊社團，有自己的網站是很重要的。
+* 代表你的資料，不會被平台 **綁** 住。
+* 不讓企業掌握個人資訊。
+
+### 免費網站的問題
+* 你的內容、上傳的資料，都只在該網站上散布
+* 只能寄居在該網站上
+
+### 搬遷問題
+* 如何讓你的受眾知道，網址換位址了？
+* *公告：網站由 fb.me/xxxx 搬遷到 t.co/xxxx*
+* 祈禱使用者會自己 -通靈- google 到新網站
+
+### 根本性的解決辦法
+* 買一個域名，付錢，確保這個網址永遠連到你的網站。
+* 背後的 ip 可以換
+* 甚至可以托管到 blogspot 這類可以自訂域名的網站
+
+### 域名是唯一的識別符號
+* 只有域名是最通用的識別符號，不依賴於平台
+* 可以印在名片上、寫在書上
+* 平台會倒、會搬家，只有域名可以由自己完全掌控
+
+### 平台只作為宣傳管道
+* 平台是不穩定性的，內容可能遺失
+* 內容必定發布在自己可以完控制的域名下
+* 其它平台只作為宣傳管道
+* 可以用轉貼、自動發布的方式方便管理
+
+## 無法互通的多個私人平台
+* Facebook 掘起後，web 逐漸往多個無法互通的平台發展。
+* 資訊只在單一平台上流通，facebook 內外成為二個無法溝通的世界。
+* facebook twitter discord telegram line，都是一個個獨立的世界。
+* 且平台多為公司所有
+
+### 開放的意義
+* 要自己架一個有 facebook 功能的網站，只是技術問題。
+* 但該由誰來管理這個平台？
+* 就算原始碼是開放的，但就算架起了第二個網站，
+  你的網站和我的網站還是無法互通，只會形成更小的社群，
+  以社交網站來看是沒有意義的。
+
+### 聯邦制的服務
+* 聯邦或說 [[互聯]] ，是指多個伺服器之間的使用者，仍可以彼此溝通。
+* 不同的 email 服務提供者的帳號，仍可以互相寄信。
+* 任何人都可以自己架自己的 email server。
+* 其它還有 [[IRC]] 、 [[新聞群組]] 、
+  早期台灣 bbs 的看板間轉信功能都屬於這類聯邦制的服務。
+
+### web 的原始聯邦
+* 整個 world wide web 算是一種廣義的聯邦制，以網頁中的超連結互聯。
+* 原始的消息發送協議 [[RSS]] 。
+
+### 動態網頁後的世界
+* 很快有人發明了動態網頁，留言板、討論區。這時候 RSS 還足夠運作。
+* 但多數都是相對封閉的。就算可以用網址互連，
+  但無法在一個論壇回覆另一個論壇的文章。（想想 bbs 的轉信）
+
+### 封閉的社群網路
+* 到最後的終極形態，如 facebook 般的社群網路。
+  在內部提供完美的消息發送功能。
+* 內部基於動態網頁技術提供消息發送，不再需要原始的 RSS 了。
+* 且自身的規模，不再需要與外部合作。
+
+### 聯邦制的社群網路
+* 有沒有可能建造一個，類似 email 的分散式的 facebook？
+* 在不同伺服器上，仍可以像在同一個平台上，互相分享、留言？
+* [[分散式社交網路]] ： [[GNU social]] 、 [[Mastodon]] 。
+
+### 小結
+* 聯邦式的社群網路，雖然可以自己架，但維護成本可能太高。
+* 學校的資訊社團，可能是合適的大小。
+* 我混了二個學校，卻還是只在空話。
+* 主要還是要有人用。 -你就是沒有人-
+
+## 為什麼選擇 wiki
+* 從頭刻網站太累了，就算用框架也很沒必要。
+* 專門的管理系統如 moodle 太複雜。
+* blog 和 wiki 是較好的選擇。
+
+### 完全自己寫
+* 要寫很多 code
+* 自由度最高，想要什麼功能都可以，只是要自己寫。
+* 適合對網站有很多需求的人，像很要求板面、多層式下拉選單、特殊功能者。
+
+### blog 特色
+* 管理介面有善，適合內容間不需要互連的獨立文章。
+* 板面固定，就是規劃好的文章列表、分類、首頁。
+* 比較接近內容發布中心，而不適合用來管理文件。
+
+### wiki 特色
+* 容易客制化，用 wiki 語法，不動到後端的程式也可以改很多東西。
+* wiki 語法讓使用者能專注在內容而非樣式。
+* 適合多人協作，內建版本管理。
+* 適合有一定技術能力的社團。
+
+### 依附於系統下
+* 完全自己寫是很累的，就算用框架也是。
+* 使用現有的 blog 或其它系統，在上面改出自己想要的功能比較快。
+
+### 自幹程式的問題
+* 沒有人想維護；時過境遷後，程式如何使用也成為問題。
+* wiki 的特色是可以用來管理文件，適合把使用說明也寫進 wiki 裡。
+* 甚至可以把程式的原始碼也托管在 wiki 上，畢竟 wiki 有基本的版本管理功能。
+
+### wiki 的多重角色
+* 記錄社團的文件：有哪些 server、社辦使用公約、社團組織架構。
+* 當作社團網站：把社團的活動、成果記錄在上面。
+* 當公用 server：可以把自己想要的功能、程式在上面跑。
+  - [托管 javascript 小書籤程式][bookmarklet example]
+
+[bookmarklet example]: https://ccca.tw/playground:test-bookmarklet-js
+[大聊天室計劃]: http://ccca.tw/聊天室#大聊天室計劃
+[gamer rss php]: https://github.com/wsmwason/gamer-to-rss
+
+### 參考資料
+* [為什麼要用 wiki]
+* [wiki vs cms] 。blog 可以稱作一種 <abbr title="content management system">內容管理系統</abbr> ，但也有較正式的、有複雜權限管理的提供給公司內部使用的商用系統。
+* [wiki 作為雲端系統]
+
+[為什麼要用 wiki]: https://caslab.ee.ncku.edu.tw/dokuwiki/why_wiki
+[wiki vs cms]: https://stackoverflow.com/questions/226132/what-are-the-differences-between-a-wiki-and-a-cms
+[wiki 作為雲端系統]: https://www.cyut.edu.tw/~ckhung/g/ofset/post.php?id=105c
+
+## dokuwiki 使用說明
+* [ccca wiki] 為半開放 wiki，特定內容只對特定使用者開放。
+* 編輯使用 dokuwiki 的純文字語法，類似 mediawiki。
+* 歡迎所有社員、非社員註冊使用。
+
+[ccca wiki]: http://ccca.tw
+
+### 使用者與權限
+* 未註冊者只能瀏覽與編輯 `talk:` 命名空間下的頁面。
+* 有社員 `officer` 、系統管理者 `admin` 二個群組。
+* 僅有 `officer` 群組能編輯 html js 語法。
+
+### 命名空間
+* 命名空間以 `:` 分隔， [這是 wiki 上所有頁面][all page] 。
+* user: 使用者的個人頁面。
+* [talk:] 用於留言、討論。
+* playground: 用於測試各類語法。
+* [社課:] 社課公告於此。
+* [社務:] 社團內部文件，只開放社員瀏覽。
+
+[talk:]: http://ccca.tw/talk:
+[社課:]: http://ccca.tw/社課:
+[社務:]: http://ccca.tw/社務:
+[all page]: https://ccca.tw/?do=index
+
+### 語法
+* `====== 標題 ======` ，六個是一級標題。
+  和 markdown 相反，等號越少越小。
+* `**粗體**` `//斜體//` `__底線__` `''等寬字體''`
+* `[[頁面名稱|顯示名稱]]`
+* [所有語法][all syntax]
+
+[all syntax]: http://ccca.tw/wiki:syntax
+
+---
+
+```
+  * 無序清單
+    * 第二層
+  - 有序清單
+```
+
+---
+
+```
+> 引用
+>> 第二層引用
+```
+
+---
+
+```
+引用檔案。
+圖片會顯示，影片、音樂會播放，
+檔案會變成可下載連結。
+
+{{image.png}}
+```
+
+---
+
+```
+code block
+
+<code javascript>
+alert('hello world!')
+</code>
+
+downloadable code block
+
+<file javascript hello-world.js>
+alert('hello wrold!')
+</file>
+```
+
+## 內嵌 html
+可以嵌入 html，也就可以嵌入 javascript。
+
+```
+hello button
+
+<html>
+<button onclick="hello()">hello wrold!</button>
+<script>
+    function hello() {
+        alert('hello world!')
+    }
+</script>
+</html>
+```
+
+### javascript 的風險
+* javascript 可以存取 cookie，cookie 含有登入資訊。
+* 如果允許任何人寫 js，只要在頁面插一段程式
+  把 cookie 用 ajax 發出去，點開該頁面的人的帳號就被盜走了。
+
+### dokuwiki 對 html 的管理
+* wiki 有一個選項可以設定是否允許 html，只能全域允許或禁止。
+* 我改了一點原始碼，讓 dokuwiki 在儲存編輯前檢察內容有沒有 html，
+  如果使用者在 `$config["htmlok_user"]` 裡就可以使用 html。
+* 本 wiki 只有屬於 officer 群組的人可以編輯含有 html 的頁面。
+
+### include 外掛
+* dokuwiki 有豐富的 [外掛系統][dokuwiki plugin] ，
+  可以加入自訂語法、快速編輯功能、自製 api。
+* [include][dokuwiki include] 這個外掛，可以用語法引用另一個頁面的內容。
+
+```
+===== 聯絡我們 =====
+{{page>聊天室}}
+```
+
+[dokuwiki plugin]: https://www.dokuwiki.org/plugins
+[dokuwiki include]: https://www.dokuwiki.org/plugin:include
+
+### 用 include 引用 javascript
+* 如果程式想要可以複用，可以寫成單獨的頁面，在想用的頁面裡 include。
+* 含有 html 的頁面不能被一般人編輯，
+  如果想要讓一般人可以編輯，可以把 js 寫在另外的頁面，
+  再用 include 抓進來，這樣該頁面只有 include 語法沒有 html，
+  就可以被一般人編輯。
+
+### dokuwiki api
+* [dokuwiki 提供 xml-rpc api][doku rpc] ，
+  可以以 ajax 呼叫， 用來做快速編輯等功能。
+* 用 xml-rpc 的函式庫呼叫會比較方便。
+
+[doku rpc]: https://www.dokuwiki.org/devel:xmlrpc
+
+### 使用範例
+* [快速留言板][talk:]
+* [小書籤發布][bookmarklet example]
+
+## 以 wiki 管理設定檔
+* dokuwiki 有一些設定檔是要手動編輯的。
+* 那為什麼不能直接像編輯一個 wiki 頁面一樣，直接編輯它呢？
+
+### wiki 的 logo
+* 許多人裝好 dokuwiki 後，第一件事就是換上自家的 logo。
+* 如何更換 wiki 的 logo？
+  [以預設的模版 dokuwiki 來說，只要把圖片上傳為 `wiki:logo.png` 即可。][dokuwiki logo]
+* 這是一種以 wiki 來管理 wiki 自身的風格。
+
+[dokuwiki logo]: https://www.dokuwiki.org/template:dokuwiki#changing_the_logo
+
+### interwiki 簡寫功能
+* interwiki 是一種在 wiki 中定義網址簡寫的功能。
+* 在 `conf/interwiki.conf` 中定義 `doku https://www.dokuwiki.org/{NAME}` ，
+* 之後只要寫 `[[doku>install]]` ，
+  即可解析為連到 <https://www.dokuwiki.org/install> 的連結。
+
+### 檔案系統的魔術
+* 能不能像 wiki:logo 一樣，可以直接把新設定檔當作一個文字檔上傳？
+  或直接 [當成一個頁面編輯][ccca interwiki] ？
+* 由於 dokuwiki 的頁面資料是直接以文字檔的形式儲存在檔案系統，而不是資料庫，
+  所以只要直接把 `conf/interwiki.conf` 設成符號連結，連到該頁面的檔案即可。
+
+```
+cd conf/interwiki.conf
+ln -s ../data/pages/admin/interwiki.txt interwiki.conf
+```
+
+[ccca interwiki]: https://ccca.tw/admin:interwiki
+
+### 格式化設定檔的魔術
+* 但 dokuwiki 只會把 [interwiki 頁面][ccca interwiki] 
+  當作普通的頁面，格式應該會亂掉。（換行被刪掉，並嘗試解析檔案內的 wiki 語法。）
+* 用 `<code>` 把整個檔案包起來，可以讓排版出來的結果比較好看。
+* 但 interwiki 設定檔解析時看到 `<code>` 會報錯。
+* 把 `<code>` 放在 interwiki 的 `#` 註解後面。
+
+---
+
+```
+# this is interwiki config file
+# <code>
+fb        https://www.facebook.com/{NAME}
+tg        https://t.me/{NAME}
+github    http://github.com/{NAME}
+# </code>
+```
+
+---
+
+類似早年 css 和 javascript 內嵌在 html 中的作法，
+在不同語言間互相用註解跳脫彼此看不懂的內容。
+
+```
+<script>
+// <!--
+alert('hello world!')
+// -->
+</script>
+```
+
+### interwiki 圖標的魔術
+* interwiki 連結前會顯示一個小小圖標，可以自訂不同簡寫對應的圖標。
+* 將與簡寫同名的圖片上傳到 [`admin:interwiki-icon:` 命名空間][interwiki icon] 即可。
+* 因為檔案系統上 `lib/images/interwiki` 為
+  `data/media/admin/interwiki-icon` 的符號連結。
+
+[interwiki icon]: https://ccca.tw/admin:interwiki-icon:
+
+### userstyle.css
+* dokuwiki 允許管理者編輯 userstyle.css userscript.js，
+* 一樣 [將 userstyle.css 設為頁面的連結][ccca userstyle] 。
+
+[ccca userstyle]: https://ccca.tw/admin:userstyle.css
+
+### 反方向的跳脫
+* [admin:bookmarkletify][ccca bookmarklet] 是另一種反向跳脫，
+  讀取頁面中的小書籤程式碼並做成小書籤。
+* 把文件和程式寫在一起，並互相關，類似 [[文學編程]] 。
+
+[ccca bookmarklet]: https://ccca.tw/admin:bookmarkletify
+
+### bootstrap
+* 將 wiki 的設定檔移到 wiki 內本身的過程，
+  類似於編譯器 <abbr title="bootstrap">自舉</abbr> 的過程。
+* 設定檔會佔據一些命名空間，類似
+  <abbr title="convention over configuration">慣例優先設定</abbr>  。
+
+### wiki todo
+* [想做的事很多][ccca todo] ，有空的時間很少。
+* 社團需要一個一起發展的專案來凝聚。
+* 這個網站到底有沒有人要用？沒人用的話，我玩這麼多也是白費。
+
+[ccca todo]: https://ccca.tw/admin:todo
+
+##ccca
+##nctu
+##wiki
+##slide

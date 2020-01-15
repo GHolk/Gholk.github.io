@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2020-01-13T06:45:28.374Z</updated>
+  <updated>2020-01-15T15:39:28.237Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,441 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/image-processing-transform-code.html</id>
+<title>影像處理作業三：影像編碼</title>
+<published>2020-01-15T14:19:56.343Z</published>
+<updated>2020-01-15T15:39:28.218Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/image-processing-transform-code.html"/>
+<summary type="html">本次作業內容為實作數種二維的影像塊編碼，
+包括 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E9%9B%A2%E6%95%A3%E5%82%85%E7%AB%8B%E8%91%89%E8%AE%8A%E6%8F%9B&quot;&gt;離散傅立葉變換&lt;/a&gt; 、 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E9%98%BF%E9%81%94%E9%A6%AC%E8%AE%8A%E6%8F%9B&quot;&gt;阿達馬變換&lt;/a&gt; 、 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E9%9B%A2%E6%95%A3%E9%A4%98%E5%BC%A6%E8%AE%8A%E6%8F%9B&quot;&gt;離散餘弦變換&lt;/a&gt; ，
+並試驗以數種不同方式省略高階項系數對影像品質的影響。</summary>
+<category term="nctu"/>
+<category term="python"/>
+<category term="study"/>
+<category term="image-processing"/>
+<content type="html">&lt;h1 id=&quot;影像處理作業三：影像編碼&quot;&gt;影像處理作業三：影像編碼&lt;/h1&gt;
+&lt;p&gt;本次作業內容為實作數種二維的影像塊編碼，
+包括 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E9%9B%A2%E6%95%A3%E5%82%85%E7%AB%8B%E8%91%89%E8%AE%8A%E6%8F%9B&quot;&gt;離散傅立葉變換&lt;/a&gt; 、 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E9%98%BF%E9%81%94%E9%A6%AC%E8%AE%8A%E6%8F%9B&quot;&gt;阿達馬變換&lt;/a&gt; 、 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E9%9B%A2%E6%95%A3%E9%A4%98%E5%BC%A6%E8%AE%8A%E6%8F%9B&quot;&gt;離散餘弦變換&lt;/a&gt; ，
+並試驗以數種不同方式省略高階項系數對影像品質的影響。&lt;/p&gt;
+&lt;h2 id=&quot;程式原理&quot;&gt;程式原理&lt;/h2&gt;
+&lt;p&gt;程式以 python3 撰寫，
+使用 pil 讀取影像，以 numpy 進行矩陣計算。
+過程會將整張影像讀取到記憶體。&lt;/p&gt;
+&lt;p&gt;轉換過程中會將影像分割為固定大小的區塊，
+將每一區塊轉換為以一組二維向量基底表示的參數，
+在參數上進行嘗試省略高階項等操作後，
+立即轉換回原本的空間域。
+過程並沒有將整張影像都編碼，而是一個區塊一個區塊的進行。&lt;/p&gt;
+&lt;h2 id=&quot;程式使用&quot;&gt;程式使用&lt;/h2&gt;
+&lt;p&gt;程式假設輸入影像為灰階影像，
+彩色影像可以以 imagick 的 convert 程式轉換為灰階影像：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;convert color.png -colorspace gray gray.png
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;例如以 &lt;abbr title=&quot;discrete cosine transform&quot;&gt;DCT&lt;/abbr&gt; ，
+區塊大小為 16x16，並在轉換後只保留 u+v 最小的前 64 個參數，
+命令如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;./prog3.py input.png dct 16 first 64 output.png
+&lt;/code&gt;&lt;/pre&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;第一個參數為輸入檔名，可以為任何 pil 認得的影像格式。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;第二個參數為小寫的編碼模式，有
+ &lt;abbr title=&quot;walsh hadamard transform&quot;&gt;wht&lt;/abbr&gt; dct
+ &lt;abbr title=&quot;discrete fourier transform&quot;&gt;dft&lt;/abbr&gt;
+ 三種。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;第三個參數為區塊大小的邊長，dct dft 可以為任意整數，wht 只能為 2ⁿ。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;第四個參數為省略高階系數的規則，有 first large quantity 三種。
+下一個參數則用來調整省略的等級。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;first 為保留前 n 個參數，參數間以 u+v 也就是離第一個參數的距離排序。&lt;/li&gt;
+&lt;li&gt;large 為保留前 n 大的參數。&lt;/li&gt;
+&lt;li&gt;quantity 為將各參數根據其變異數的對數大小，作為量化的門檻。
+詳細會在下文說明。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;第五個參數為對第四個參數的調整，若第四個參數為 first 或 large，
+則第五個參數必須為整數，意義為保留的參數個數。&lt;/p&gt;
+&lt;p&gt;若第四個參數為 quantity，第五個參數為浮點數，
+其意義為將各參數變異數取對數的結果，乘上第五個參數作尺度調整。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;第六個參數為輸出的設定。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;若參數為字串 &lt;code&gt;statistic&lt;/code&gt; ，則在對標準輸出寫出
+&lt;abbr title=&quot;均方根誤差&quot;&gt;erms&lt;/abbr&gt; 與
+&lt;abbr title=&quot;信噪比&quot;&gt;snr&lt;/abbr&gt; 。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;若參數為以 &lt;code&gt;.diff.png&lt;/code&gt; 結尾的路徑或檔名，
+則會輸出成果影像減去原始影像的差值 + 127。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;其它情況將參數作為檔名直接輸出成果影像。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;若環境變數 &lt;code&gt;DEBUG&lt;/code&gt; 存在，程式會顯示一些額外資訊。
+（因為矩陣很多很大，輸出會很多。）&lt;/p&gt;
+&lt;h2 id=&quot;已知問題&quot;&gt;已知問題&lt;/h2&gt;
+&lt;h3 id=&quot;保留前-n-個參數&quot;&gt;保留前 n 個參數&lt;/h3&gt;
+&lt;p&gt;如果用 first 保留前 n 個參數，
+我的計算方式是直接算出要保留到第幾條斜線，
+也就是 &lt;code&gt;u+v&amp;gt;(n*2)^0.5&lt;/code&gt;。
+本來有想做一個斜線的 zonal coding，
+但作到有 bug 才發現蠻麻煩的，就寫一個比較簡單的版本擋著用。&lt;/p&gt;
+&lt;h3 id=&quot;wht-的-bug&quot;&gt;wht 的 bug&lt;/h3&gt;
+&lt;p&gt;我 wht 的實作好像點問題？
+就算我所有參數都保留，
+但轉回來的影像看起來還是和原始的不一樣。
+也沒有找到 bug。&lt;/p&gt;
+&lt;h3 id=&quot;溢位斑點&quot;&gt;溢位斑點&lt;/h3&gt;
+&lt;p&gt;在城堡與橋、山丘的俯瞰二張照片中，
+轉換結果中較暗的部份出現了白點，較亮的部份則出現了黑點。
+可能是溢位所造成，但沒有找出臭蟲位置也沒有修正。&lt;/p&gt;
+&lt;h3 id=&quot;量化尺度的數學意義&quot;&gt;量化尺度的數學意義&lt;/h3&gt;
+&lt;p&gt;我在實作 quantity 參數時，
+是單純依作業中指示，將參數的變異數取對數作為量化尺度基準。
+此外為了達成可調整的尺度，我加了一個浮點數參數直接乘上調整基準，
+以調整影像的壓縮品質。
+但我不確定直接乘上一個尺度因子，是否有數學上的意義，
+我取對數是以 2 為底，也不確定以不同基底是否有不同意義。&lt;/p&gt;
+&lt;p&gt;另外我並沒有統計整張影像的各參數變異數，
+而是隨機取樣出所有區塊的 20% ，統計其中各參數的變異數，
+因此每次程式的執行結果可能會不同。&lt;/p&gt;
+&lt;h3 id=&quot;區塊大小&quot;&gt;區塊大小&lt;/h3&gt;
+&lt;p&gt;我是將輸入影像的尺寸，擴充為區塊大小的整數倍，
+在輸出時再截去擴充的大小。
+擴充區域是以鏡射方式補值。&lt;/p&gt;
+&lt;h2 id=&quot;原始影像&quot;&gt;原始影像&lt;/h2&gt;
+&lt;p&gt;我找了三張解析度超過 3000x3000 的桌布，
+並以 imagick 的 convert 程式取樣為 800x600 的大小。
+以無損壓縮格式 png 儲存。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;convert high.jpg -resize 800x600 -colorspace gray low.png
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49389537596&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49389537596_c9223b26d3.jpg&quot; alt=&quot;architecture-art-bridge-cliff.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49389066663&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49389066663_4153569292.jpg&quot; alt=&quot;brown-and-green-mountain-view-photo.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49389067643&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49389067643_fbfcbe660f.jpg&quot; alt=&quot;silhouette-of-golden-gate-bridge-during-golden-hour.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;處理結果&quot;&gt;處理結果&lt;/h2&gt;
+&lt;h3 id=&quot;統計數值&quot;&gt;統計數值&lt;/h3&gt;
+&lt;p&gt;這裡只列出 architecture 影像的在不同區塊大小下的統計結果，
+保留的參數個數為前 1/4。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;區塊大小&lt;/th&gt;
+&lt;th&gt;保留參數個數&lt;/th&gt;
+&lt;th&gt;erms&lt;/th&gt;
+&lt;th&gt;snr&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;4x4&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;21.62&lt;/td&gt;
+&lt;td&gt;30.57&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;8x8&lt;/td&gt;
+&lt;td&gt;16&lt;/td&gt;
+&lt;td&gt;18.73&lt;/td&gt;
+&lt;td&gt;41.03&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;16x16&lt;/td&gt;
+&lt;td&gt;64&lt;/td&gt;
+&lt;td&gt;17.26&lt;/td&gt;
+&lt;td&gt;48.52&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&quot;影像結果&quot;&gt;影像結果&lt;/h3&gt;
+&lt;p&gt;處理的參數以程式執行時的相同順序附加在檔名結尾。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49389536406&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49389536406_49e2db5bfe.jpg&quot; alt=&quot;architecture-art-bridge-cliff-dct-16-first-128.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49389536586&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49389536586_6ca23ef127.jpg&quot; alt=&quot;architecture-art-bridge-cliff-dct-16-first-256.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49389536721&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49389536721_8d41eafe17.jpg&quot; alt=&quot;architecture-art-bridge-cliff-dct-16-first-32.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49389064868&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49389064868_81cdf44a92.jpg&quot; alt=&quot;architecture-art-bridge-cliff-dct-16-first-64.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49389537016&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49389537016_3124177ea5.jpg&quot; alt=&quot;architecture-art-bridge-cliff-dct-4-first-4.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49389734902&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49389734902_e9b3b40b8a.jpg&quot; alt=&quot;architecture-art-bridge-cliff-dct-8-first-16.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49389537366&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49389537366_bfbcdaa3ca.jpg&quot; alt=&quot;architecture-art-bridge-cliff-net-dct-16-first-64.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49389537451&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49389537451_618d5381b8.jpg&quot; alt=&quot;architecture-art-bridge-cliff-net-dct-4-first-4.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49389065613&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49389065613_f5ca3f5b04.jpg&quot; alt=&quot;architecture-art-bridge-cliff-net-dct-8-first-16.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49389537846&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49389537846_5aab84c9fe.jpg&quot; alt=&quot;architecture-art-bridge-cliff-wht-16-first-128.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49389538041&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49389538041_4042e18048.jpg&quot; alt=&quot;architecture-art-bridge-cliff-wht-16-first-256.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49389735872&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49389735872_43d019bbcf.jpg&quot; alt=&quot;architecture-art-bridge-cliff-wht-16-first-64.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49389066453&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49389066453_3f00a82e6d.jpg&quot; alt=&quot;brown-and-green-mountain-view-photo-dct-16-first-64.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49389538741&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49389538741_e6537df761.jpg&quot; alt=&quot;silhouette-of-golden-gate-bridge-during-golden-hour-dct-16-first-64.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49389538881&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49389538881_2a3263187a.jpg&quot; alt=&quot;silhouette-of-golden-gate-bridge-during-golden-hour-dct-16-large-64.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49389736597&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49389736597_03966f2b8c.jpg&quot; alt=&quot;silhouette-of-golden-gate-bridge-during-golden-hour-dft-16-large-64.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49389736752&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49389736752_42ab89378e.jpg&quot; alt=&quot;silhouette-of-golden-gate-bridge-during-golden-hour-dft-4-first-4.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49389539286&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49389539286_a2f4b3b48f.jpg&quot; alt=&quot;silhouette-of-golden-gate-bridge-during-golden-hour-dft-8-first-16.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49389539401&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49389539401_df69eb4616.jpg&quot; alt=&quot;silhouette-of-golden-gate-bridge-during-golden-hour.diff.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49389539676&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49389539676_7b3c40a688.jpg&quot; alt=&quot;silhouette-of-golden-gate-bridge-during-golden-hour-wht-16-large-64.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;script&gt;
+document.querySelectorAll(&apos;img&apos;).forEach(img =&gt; {
+    img.title = img.alt
+})
+&lt;/script&gt;
+
+&lt;h2 id=&quot;心得&quot;&gt;心得&lt;/h2&gt;
+&lt;p&gt;因為時間很趕，一開始只上傳了半成品程式，
+後來又上傳了成品，最後才是這份報告。&lt;/p&gt;
+&lt;p&gt;因為要求項目還蠻多的，要數張影像，
+又要不同區塊尺寸、不同壓縮方式、不同向量基底，
+也不確定怎麼在報告上呈現，
+就各結果都跑幾次，全部丟上報告。&lt;/p&gt;
+&lt;p&gt;python 寫起來蠻順手的。
+這堂課是我第一次正式寫 python，
+因為以前寫的 js 有一些類似的功能，
+例如 callback generator，
+只要查一下語法就能馬上拿來用。
+numpy 也是很強大的函式庫，
+和 matlab 很像，不知道是誰抄誰。&lt;/p&gt;
+&lt;h2 id=&quot;程式原始碼&quot;&gt;程式原始碼&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;#!/usr/bin/env python3
+&amp;apos;&amp;apos;&amp;apos;
+python3 prog3.py input.png $basis $block_size $compress $level $output
+# basis = dct | wht | dft
+# block_size = 2 4 8 16 32 64 ...
+# compress level = first $n_block | large $n_block | quantity $level
+# n_block = 1 2 ...
+# level = 0.1 0.5 ... 1 1.5 2 5 # float, large is better
+# output = output.png | output.diff.png | statistics
+
+# image must be gray image.
+# imagick: `convert color.png -colorspace gray gray.png`
+&amp;apos;&amp;apos;&amp;apos;
+
+import numpy
+import os
+import sys
+
+import prog2
+
+def debug(*argv, **kwarg):
+    if &amp;apos;DEBUG&amp;apos; in os.environ:
+        return print(*argv, **kwarg)
+
+def discrete_cosine_transform_basis(n):
+    basis_matrix = numpy.matrix(numpy.zeros((n*n,n*n)))
+    x = y = numpy.matrix(range(n))
+    scale = lambda u: n**-0.5 if u == 0 else n**-0.5 * 2
+    block = lambda u,v: (
+        numpy.transpose(scale(u) * numpy.cos((2*x+1)*u*numpy.pi/2/n)) *
+        (scale(v) * numpy.cos((2*y+1)*v*numpy.pi/2/n))
+    )
+    for u in range(n):
+        for v in range(n):
+            block_uv = block(u,v)
+            block_1d = block_uv.flatten()
+            basis_matrix[u*n+v,:] = block_1d
+    return numpy.transpose(basis_matrix)
+
+def discrete_fourier_transform_basis(n):
+    x = numpy.matrix(range(n))
+    fourier_1d = lambda u: n**-0.5 * numpy.exp(2j * numpy.pi * u * x / n)
+    s = [fourier_1d(u) for u in range(n)]
+    fourier_2d = lambda u,v: s[u].transpose() * s[v]
+
+    basis_matrix = numpy.matrix(numpy.zeros((n*n, n*n))).astype(complex)
+    for u in range(n):
+        for v in range(n):
+            block = fourier_2d(u, v)
+            block_1d = block.flatten() #.reshape(block.shape[0] ** 2)
+            debug(block_1d)
+            basis_matrix[u*n+v, :] = block_1d
+    return basis_matrix.transpose()
+
+def walsh_hadamard_transform_basis(n):
+    m22 = numpy.matrix([1,1,1,-1]).reshape((2,2)).astype(float)
+    kron_parameter = m22
+
+    def sort_column_vector(m):
+        def sign_change_times(v):
+            return numpy.abs(numpy.diff(v)).sum()
+        l = m.transpose().tolist()
+        l.sort(key=sign_change_times)
+        return numpy.matrix(l).transpose()
+
+    def column_base_to_row_base(m):
+        length = m.shape[0]
+        n = int(length ** 0.5)
+        r = numpy.array(m.transpose()).reshape((length, n, n))
+        for i in range(length):
+            r[i] = r[i].transpose()
+        return numpy.matrix(r.reshape((length, length)).transpose())
+
+    m = m22
+    while m.shape[0] &amp;lt; n**2:
+        m = numpy.kron(kron_parameter, m)
+        m = sort_column_vector(m)
+    return column_base_to_row_base(m)
+
+def transform_in_basis(origin, column_vector):
+    t = lambda m: m.conj() if m.dtype == complex else m.transpose()
+    scale = numpy.diag(t(column_vector) * column_vector)
+    return numpy.array(t(column_vector) * origin).flatten() / scale
+
+def block_transform_in_basis(block, column_vector):
+    debug(block.shape)
+    column_data = numpy.matrix(block).reshape((block.shape[0]**2, 1))
+    return transform_in_basis(column_data, column_vector).reshape(block.shape)
+
+def recover_from_basis(parameter, basis):
+    return basis * parameter
+
+def block_recover_from_basis(block, basis):
+    matrix = numpy.matrix(block).reshape((block.shape[0]**2, 1))
+    return recover_from_basis(matrix, basis).reshape(block.shape)
+
+def transform_image(image, basis, filter=None):
+    n = int(basis.shape[0] ** 0.5)
+    debug(image.shape)
+    (height, width) = image.shape
+    height_pad = n - (height % n)
+    width_pad = n - (width % n)
+    image = numpy.pad(image, ((0, height_pad), (0, width_pad)), mode=&amp;apos;reflect&amp;apos;)
+
+    for x in range(0, width, n):
+        for y in range(0, height, n):
+            block = image[y:y+n, x:x+n]
+            matrix = numpy.matrix(block)
+            parameter = block_transform_in_basis(matrix, basis)
+            debug(parameter)
+            if filter: parameter = filter(parameter)
+            block = block_recover_from_basis(parameter, basis)
+            image[y:y+n, x:x+n] = block
+
+    return image
+
+def zigzag_shape(shape):
+    i = 0
+    r = 0
+    for r in range(shape[0] + shape[1] - 2 + 1):
+        if r % 2 == 1:
+            x = 0
+            y = r
+            while y &amp;gt;= 0 and x &amp;lt; shape[1]:
+                yield (i, (x,y))
+                i += 1
+                x += 1
+                y -= 1
+        else:
+            x = r
+            y = 0
+            while x &amp;gt;= 0 and y &amp;lt; shape[0]:
+                yield (i, (x,y))
+                i += 1
+                x -= 1
+                y += 1
+
+def zigzag_block_to_vector(block):
+    vector = numpy.zeros(block.shape[0] * block.shape[1])
+    for (i, (x,y)) in zigzag_shape(block.shape):
+        vector[i] = block[y,x]
+    return vector
+
+def zigzag_vector_to_block(vector, block):
+    for (i, (x,y)) in zigzag_shape(block.shape):
+        debug(i, y, x)
+        block[y,x] = vector[i]
+
+def walk_block(block):
+    for y in range(block.shape[0]):
+        for x in range(block.shape[1]):
+            yield (x,y)
+
+def first_nth_block_filter(keep, block_size):
+    block = numpy.zeros((block_size, block_size))
+    vector = numpy.zeros(block_size**2)
+    radius = int((keep * 2) ** 0.5)
+    for (x,y) in walk_block(block):
+        if x+y &amp;lt; radius:
+            block[y, x] = 1
+    return block
+
+def large_nth_block_filter(block, n):
+    vector = numpy.array(block.reshape(block.shape[0]**2))
+    vector[ numpy.abs(vector).argsort()[0: vector.shape[0] - n] ] = 0
+    return numpy.matrix(vector).reshape(block.shape)
+
+def quantity_image_sample(image, basis, ratio=0.2):
+    block_size = int(basis.shape[0] ** 0.5)
+    sample_number = int(numpy.prod(image.shape) / block_size ** 2 * ratio)
+    width_number = int(image.shape[1] / block_size)
+    height_number = int(image.shape[0] / block_size)
+
+    parameter_array = numpy.zeros((sample_number, block_size**2))
+    for i in range(sample_number):
+        y = numpy.random.randint(0, height_number)
+        x = numpy.random.randint(0, width_number)
+        block = image[
+            y*block_size : (y+1)*block_size,
+            x*block_size : (x+1)*block_size
+        ]
+        parameter = block_transform_in_basis(block, basis)
+        parameter_array[i, :] = parameter.reshape(block_size**2)
+
+    variance_array = numpy.zeros(block_size**2)
+    for i in range(block_size**2):
+        variance_array[i] = numpy.var(parameter_array[:, i])
+    debug(variance_array)
+    return numpy.log2(variance_array + 1)
+
+
+def main(program, file, transform, block_size, keep_type, keep_size, output):
+    block_size = int(block_size)
+
+    if transform == &amp;apos;dct&amp;apos;:
+        basis = discrete_cosine_transform_basis(block_size)
+    elif transform == &amp;apos;wht&amp;apos;:
+        basis = walsh_hadamard_transform_basis(block_size)
+    elif transform == &amp;apos;dft&amp;apos;:
+        basis = discrete_fourier_transform_basis(block_size)
+    else:
+        raise Exception(&amp;apos;unknown transform %s&amp;apos; % transform)
+
+    image = prog2.numpy_image_open(file).astype(int)
+    image_gray = image #(image[:,:,0] + image[:,:,1] +image[:,:,2]) / 3
+
+    if keep_type == &amp;apos;first&amp;apos;:
+        keep_size = int(keep_size)
+        filter_block = first_nth_block_filter(keep_size, block_size)
+        filter_function = lambda b: numpy.matrix(numpy.array(b) * filter_block)
+    elif keep_type == &amp;apos;large&amp;apos;:
+        keep_size = int(keep_size)
+        filter_function = lambda b: large_nth_block_filter(b, keep_size)
+    elif keep_type == &amp;apos;quantity&amp;apos;:
+        keep_size = float(keep_size)
+        quantity = quantity_image_sample(image, basis) * keep_size
+        debug(quantity)
+        quantity = quantity.reshape((block_size, block_size))
+        quantity_nozero = quantity.copy()
+        quantity_nozero[quantity == 0] = 1
+        filter_function = lambda b: numpy.matrix(
+            (numpy.array(b) / quantity_nozero).astype(int) * quantity
+        )
+    else:
+        raise Exception(&amp;apos;unknown keep type %s&amp;apos; % keep_type)
+
+    result = transform_image(image_gray, basis, filter_function)
+    debug(result)
+    # image[:,:,0] = image[:,:,1] = image[:,:,2] = result
+    result = result[0:image_gray.shape[0], 0:image_gray.shape[1]]
+    if output == &amp;apos;statistic&amp;apos;:
+        diff = result - image_gray
+        print(&amp;apos;erms&amp;apos;, numpy.mean(diff ** 2) ** 0.5)
+        print(&amp;apos;snr&amp;apos;, numpy.sum(result ** 2) / numpy.sum(diff ** 2))
+    else:
+        if output[-9:][0:5] == &amp;apos;.diff&amp;apos;:
+            result = result - image_gray + 127
+        prog2.numpy_image_save(result, output)
+
+if __name__ == &amp;apos;__main__&amp;apos;:
+    main(*sys.argv)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
+
+&lt;script src=&quot;ext/paper.js?execute&quot;&gt;&lt;/script&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/ccca-dokuwiki-hello-world-slide.html</id>
 <title>CCCA dokuwiki 雜談</title>
 <published>2020-01-13T05:11:28.684Z</published>
@@ -3943,224 +4378,7 @@ visual stdio 太肥，雖然也是有各種 ide，如 code block dev c++。
 <category term="study"/>
 <category term="gnss"/>
 <category term="shell"/>
-<content type="html">&lt;h1 id=&quot;以-linux-shell-為基礎在-windows-中批次處理&quot;&gt;以 linux shell 為基礎在 windows 中批次處理&lt;/h1&gt;
-&lt;p&gt;trimble 的 gnss 接收儀預設是記錄 trimble 的 T02 格式，
-要用 trimble 的 windows 程式 convertToRINEX 轉成 rinex 格式，
-只能開虛擬機或在另一台 windows 電腦上轉換。
-但檔案很多，於是研究了一下 convert to rinex 的命令列介面，
-運用 windows 10 開始內建的 ssh 功能傳檔案，
-再在 linux 上產生 bat 批次檔，完成一次跨系統合作演出。&lt;/p&gt;
-&lt;p&gt;現在在管系館的 gnss 站，是 trimble 的接收儀，
-預設是記錄 trimble 的 t02 格式，
-要用 trimble 提供的程式 convertToRINEX
-才能轉換成通用的 rinex 格式。&lt;/p&gt;
-&lt;h2 id=&quot;convert-to-rinex&quot;&gt;convert to rinex&lt;/h2&gt;
-&lt;p&gt;convert to rinex 執行時可以有圖形介面，
-同時也可以用參數傳入檔名，單純在命令列處理。
-雖然圖形介面中，可以一次選取多個檔案，
-提供基本的批次處理功能。&lt;/p&gt;
-&lt;p&gt;但 convert to rinex 的處理速度實在太慢，
-一天長度周期一秒的 T02 檔案，要轉五分鐘。
-而且 convert to rinex 的圖形介面設計，
-是會先掃描完整個檔案，才能點下轉換鈕轉換；
-一個檔案大概掃 4 分鐘，轉換 1 分鐘。&lt;/p&gt;
-&lt;p&gt;選取多個檔案批次處理時，則是全部掃描完才會開始轉換。
-我不確定記憶體用量會不會隨檔案數增加，
-所以不敢一口氣轉全部。
-最後決定用命令列的介面，轉一次呼叫一次程式，
-也避免要一次把所有檔案傳到 windows 上，怕硬碟空間不足。&lt;/p&gt;
-&lt;h2 id=&quot;使用-sftp-在虛擬機與本機間傳送檔案&quot;&gt;使用 sftp 在虛擬機與本機間傳送檔案&lt;/h2&gt;
-&lt;p&gt;trimble 的程式 convertToRINEX 只提供 exe 格式，
-我試了在 wine 下執行，也裝了.NET 框架，
-但執行時還是會報錯。最後就放棄在 wine 下執行了。&lt;/p&gt;
-&lt;p&gt;但還是計劃要做，就決定開 qemu 虛擬機來轉。
-本來想弄個 9p 來共享虛擬機和本機的檔案，
-後來發現 9p 開起來只是虛擬機裡可以連上去，
-但虛擬機裡還是要有 9p 的客戶端才有用；
-windows 還是放棄吧。&lt;/p&gt;
-&lt;p&gt;本來在考慮 smb，但忽然想到 windows 10 內建 ssh 了，
-於是可以用 sftp 來傳。
-於是 batch 程式寫起來就像這樣：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-bat&quot;&gt;scp user@10.0.2.2:data/2019-01-01.T02 .
-&amp;quot;C:\Program Files (x86)\Trimble\convertToRINEX\convertToRinex.exe&amp;quot; 2019-01-01.T02 -mo GHLK -v 2.11
-scp 2019-01-01.19o user@10.0.2.2:data
-del 2019-01-01.*
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;但有個問題，我不會寫 batch 迴圈。
-而且我不想一次下載全部的 t02 檔案，
-所以我想要下載一個，轉檔完傳回去，刪掉後再換下一個。
-可是這樣我得要從 sftp 的 ls 輸出中，
-取得檔案列表，然後遍歷。
-聽說 batch 的編程能力是有限制的，
-不像 bash 是一門完整的程式語言，
-我想這已經超出 batch 的能力範圍。&lt;/p&gt;
-&lt;h2 id=&quot;在-linux-上產生腳本&quot;&gt;在 linux 上產生腳本&lt;/h2&gt;
-&lt;p&gt;反正 shell 腳本的本質只是一連串依序執行的命令，
-可編程只是用來降低複雜度的附加功能。
-若是缺少編程功能，只能以更複雜的方式完成程式，
-像是由 &lt;em&gt;另一種程式&lt;/em&gt; ，來產生目標腳本；
-甚至直接在程式中呼叫 &lt;code&gt;system()&lt;/code&gt; 達到編程需求。
-總之我就跑了個 bash 迴圈，
-生出了要在 windows 上執行的 batch 檔：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;host=user@10.0.2.2
-convert=&amp;apos;&amp;quot;C:\Program Files (x86)\Trimble\convertToRINEX\convertToRinex.exe&amp;quot;&amp;apos;
 
-for t02 in data/*.T02
-do
-    filename=$(basename $t02)
-    basename=$(basename $filename .T02)
-    cat &amp;lt;&amp;lt;BATCH
-
-scp $host:$t02 .
-$convert $filename -mo GHLK -v 2.11
-scp $(printf &amp;quot;$basename.19%s &amp;quot; o g n q b c) $host:data
-del $basename.*
-
-BATCH
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;首先最重要的，ssh 要開免密碼登入，
-否則執行一次 scp 就要輸入一次登入密碼，
-根本不可能批次作業。
-在 windows 的 ssh 除了基本的 ssh，
-傳送檔案的 sftp 外，連 ssh-keygen 也內建了。
-執行一次產生金鑰後，丟到 linux 的 &lt;code&gt;.ssh/authorized_keys&lt;/code&gt; 即可。
-如果不信任 windows 的話，
-可以跑完腳本就把公鑰從 authorized_keys 裡刪除。&lt;/p&gt;
-&lt;p&gt;windows 的 glob 萬用字元，
-似乎不會由 shell 展開，而是命令得自己展開。
-cmd 的內建命令 del dir 之類的，多支援 glob，
-但 ssh 就不支援，直接回找不到檔案。
-（但 scp 複製遠端 linux 上的檔案時是支援 glob 的。）&lt;/p&gt;
-&lt;h2 id=&quot;傳到-linux-上並壓縮&quot;&gt;傳到 linux 上並壓縮&lt;/h2&gt;
-&lt;p&gt;由於本人收納習慣極差，server 的硬碟也快滿了。
-而轉換出來的 rinex 檔是 ascii 格式很佔空間，
-尤其我是轉出周期一秒的檔案。
-所以我希望可以在上傳後自動壓縮。&lt;/p&gt;
-&lt;p&gt;rinex 壓縮有二步：rnxcmp 軟體提出了一種格式
-&lt;abbr title=&quot;compress rinex&quot;&gt;crx&lt;/abbr&gt;，
-可以最小化 rinex 中文字所記錄的資訊，
-並提供了 rnx2crx crx2rnx 二個轉換程式。
-rnx2crx 的輸出仍為文字檔，
-所以可以再用 gzip 或其它壓縮工具壓縮一次。&lt;/p&gt;
-&lt;p&gt;在 server 上監視檔案上傳我還沒試過，
-而且感覺就很麻煩，還要處理檔案複製到一半的情況。
-所以我決定直接在 windows 中處理，
-直接把傳送最大的 rinex 檔案 &lt;code&gt;*.??o&lt;/code&gt; 的 scp，
-換成以下的 ssh 命令：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-cmd&quot;&gt;ssh user@10.0.2.2 &amp;quot;rnx2crx - | gzip - &amp;gt; 2019-01-01.19d.gz&amp;quot; &amp;lt;2019-01-01.19o
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;但發現這樣重導向不知道為什麼會卡住，會卡在 gzip 那邊，
-或是其它在 linux 上讀取標準輸入的程式，
-可能 windows 沒有送出 eof 之類的？
-後來試了管道不會卡住，
-就 google 到 cmd 裡類似 &lt;code&gt;cat&lt;/code&gt; 的命令 &lt;code&gt;type&lt;/code&gt; ，
-最後就這樣用了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-cmd&quot;&gt;type 2019-01-01.19o | ssh user@10.0.2.2 &amp;quot;rnx2crx - | gzip - &amp;gt; 2019-01-01.19d.gz&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;另外還有試了在傳送文字檔時壓縮會不會好一點，但幾乎沒有差別。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-cmd&quot;&gt;type 2019-01-01.19o ^
-| ssh -o Compression=yes ^
-  user@10.0.2.2 &amp;quot;rnx2crx - | gzip - &amp;gt; 2019-01-01.19d.gz&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;推測原因：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;虛擬機裡壓縮有性能銷耗，且 linux 端還要解壓一次，都吃同一台機器的 cpu。&lt;/li&gt;
-&lt;li&gt;虛擬機的網路是假的網路，和本機間的網路速度遠超實體網路。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&quot;用-runpkr00-直接在-linux-上轉檔&quot;&gt;用 runpkr00 直接在 linux 上轉檔&lt;/h2&gt;
-&lt;p&gt;後來與 &lt;a href=&quot;https://github.com/holishing&quot;&gt;r2&lt;/a&gt; 討論後，才知道另一支程式 runpkr00，
-是古早時期 trimble 提供用來轉換 t02 格式的。
-最大的優勢是提供了 linux 甚至 solaris 版本的執行檔，
-雖然主要支援對向是 t02 之前的 t00 t01，
-但如今仍可以運作在 t02 格式上。&lt;/p&gt;
-&lt;p&gt;我是在 &lt;a href=&quot;https://kb.unavco.org/kb/article/trimble-runpkr00-v5-40-latest-version-mac-osx-10-7-windows-xp-7-linux-solaris-744.html&quot;&gt;unavco 的網站上找到 runpkr00 的執行檔的&lt;/a&gt; ，
-但總之為了防止死檔，還是
-&lt;a href=&quot;https://drive.google.com/drive/folders/1-WSCp14Yt3g8DMmNo1qsknaAHM_wCA3f?usp=sharing&quot;&gt;自己再備份一次 unavco 提供的 rpm 包&lt;/a&gt; 。&lt;/p&gt;
-&lt;p&gt;下載 rpm 包後，可能會因為作業系統太新，
-不符合 rpm 包的要求無法安裝。
-但總之裝就對了，看要強制裝，
-或是用其它工具解壓縮 rpm 包，
-再手動複製到作業系統內。
-我是用 debian，所以用 alien 把 rpm 轉成 tgz 後手動解壓縮。
-裡面的執行檔是 static link，
-雖然是古董了，但還是可以正常執行。
-還有附手冊，雖然內容有夠少，雖然選項都有介紹，
-但 unavco 網站提的眉角都沒記錄。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;alien --to-tgz runpkr00*.rpm
-tar -xvf runpkr00*.tgz
-install ./usr/bin/runpkr00 /usr/local/bin
-install --mode 644 ./usr/share/man/man1/runpkr00.1.gz \
-                   /usr/local/share/man/man1
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;runpkr00 如同 unavco 的網站建議的，
-runpkr00 在轉換 t02 格式時，最好加上 &lt;code&gt;-g&lt;/code&gt; 選項，
-若是記錄檔包含 &lt;abbr title=&quot;record type 27&quot;&gt;rt27&lt;/abbr&gt; 
-時會一併轉換，（手冊寫 type 27。）副檔名會從 dat 變成 tgd。
-teqc 能處理 trimble 的 dat 及 tgd 格式，
-直接 &lt;code&gt;teqc 2019-01-01.tgd &amp;gt; 2019-01-01.19o&lt;/code&gt; 即可。
-另外 runpkr00 在選項解析上設計不良，
-（也可能是因為在現在的環境執行很老的執行檔。）
-參數順序或連寫都可能造成錯誤，最好照 unavco 或手冊上的建議用法。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;runpkr00 -g -d 2019-01-01.T02
-teqc 2019-01-01.tgd &amp;gt; 2019-01-01.19o
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;runpkr00 轉出來的 rinex 檔案，
-相比新版程式 convert to rinex 少了一些觀測量。
-我的 runpkr00 轉出來有 L1 L2 C1 P1 P2 S1 S2，
-而 convert to rinex 有 C1 C2 C5 C7 C8 L1 L2 L5 L7 L8 P1 P2。
-就 gipsy 和 csrs-ppp 的解算結果來看，
-convert to rinex 稍好，但沒有很明顯。
-考慮 convert to rinex 的執行門檻，
-使用 runpkr00 是可接受的。
-但就後處理而言，執行速度好像不是重點；
-花個 10 幾分鐘處理一整天的數據，應該不是不可接受。&lt;/p&gt;
-&lt;p&gt;另外 runpkr00 轉出來的 rinex 檔案，
-會缺少記錄天線位移的 &lt;code&gt;ANTENNA: DELTA H/E/N&lt;/code&gt; 欄位，
-如果需要，記得在 teqc 時手動加上去。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;eastd=1 northd=2 heightd=3
-teqc -O.pehEN,m $eastd $northd $heightd 2019-01-01.tgd &amp;gt; 2019-01-01.19o
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;powershell-與-windows-舒適圈&quot;&gt;powershell 與 windows 舒適圈&lt;/h2&gt;
-&lt;p&gt;這篇文章中，我繞了很大一圈，在 linux 上產生 windows 的 batch 腳本，
-並且在產生的 batch 腳本中，再使用 windows 10 中的 ssh
-登入回 linux 執行 linux shell 指令。
-最主要的原因是我無法把 trimble 的 convert to rinex
-整合進現有的 linux shell 工具鏈中。
-我所需要的是，在 linux 上執行一條命令後，就幫我轉好檔。&lt;/p&gt;
-&lt;p&gt;如果是不同 unix like 作業系統中，
-最最基礎也可以用 ssh 簡單連結，
-把另一台電腦上的程式當自己家用。
-（也許我可以試試在 linux 上以 shell 介面登入 windows？）&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;ssh user@another.os &amp;apos;
-    cat &amp;gt; 2019-01-01.t02
-    convert 2019-01-01.t02
-    cat 2019-01-01.19o
-    rm 2019-01-01.*
-&amp;apos; &amp;lt; 2019-01-01.t02 &amp;gt; 2019-01-01.19o
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;或是如果可以讓 convert to rinex 在 linux 的 wine 中運作，
-也可以有更好的效果。
-但都不行，只好想辦法在 windows 中處理了。&lt;/p&gt;
-&lt;p&gt;對於一直生活在 windows 中的人，則根本沒這個問題。
-由於檔案也本來就存在本機，
-可以直接寫個 batch 遍歷所有檔案一一轉換；
-就算 batch 的功能有限，這樣基本的功能還是做的到的。
-而且 crx2rnx teqc 或其它這類 gnss 數據，
-多也會提供 windows 版本，所以完全在 windows 處理，
-雖然 batch 沒有 bash 那麼好用，還是足夠了。&lt;/p&gt;
-&lt;p&gt;何況現在還有 powershell，先天體質就比 bash 好，
-只差在完整的生態和配合的工具。
-以批次處理來說，要活在 windows 中完成這些工作，
-windows 和 linux 的差距已經不像以前那樣巨大了。&lt;/p&gt;
-&lt;p&gt;但 windows user 的主要問題，
-是系統的設計哲學，不鼓勵使用者動手的文化。
-要一個慣用 windows 圖形介面的人，
-去學習命令列操作是很困難的。&lt;/p&gt;
-&lt;p&gt;另一個門檻就是 windows 上寫程式太麻煩，windows 有很多自己的鍋。
-visual stdio 太肥，雖然也是有各種 ide，如 code block dev c++。
-但 linux 對腳本語言的支持還是最好的，
-一個 shebang 直接把所有直譯語言當執行檔用。&lt;/p&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/linux-shell-script-for-windows-ssh.html</id>
 <title>以 linux shell 為基礎在 windows 中批次處理</title>

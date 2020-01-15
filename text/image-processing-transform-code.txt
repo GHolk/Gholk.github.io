@@ -1,0 +1,524 @@
+# 影像處理作業三：影像編碼
+本次作業內容為實作數種二維的影像塊編碼，
+包括 [[離散傅立葉變換]] 、 [[阿達馬變換]] 、 [[離散餘弦變換]] ，
+並試驗以數種不同方式省略高階項系數對影像品質的影響。
+
+## 程式原理
+程式以 python3 撰寫，
+使用 pil 讀取影像，以 numpy 進行矩陣計算。
+過程會將整張影像讀取到記憶體。
+
+轉換過程中會將影像分割為固定大小的區塊，
+將每一區塊轉換為以一組二維向量基底表示的參數，
+在參數上進行嘗試省略高階項等操作後，
+立即轉換回原本的空間域。
+過程並沒有將整張影像都編碼，而是一個區塊一個區塊的進行。
+
+## 程式使用
+程式假設輸入影像為灰階影像，
+彩色影像可以以 imagick 的 convert 程式轉換為灰階影像：
+
+```
+convert color.png -colorspace gray gray.png
+```
+
+例如以 <abbr title="discrete cosine transform">DCT</abbr> ，
+區塊大小為 16x16，並在轉換後只保留 u+v 最小的前 64 個參數，
+命令如下：
+
+```
+./prog3.py input.png dct 16 first 64 output.png
+```
+
+ 1. 第一個參數為輸入檔名，可以為任何 pil 認得的影像格式。
+
+ 2. 第二個參數為小寫的編碼模式，有
+     <abbr title="walsh hadamard transform">wht</abbr> dct
+     <abbr title="discrete fourier transform">dft</abbr>
+     三種。
+
+ 3. 第三個參數為區塊大小的邊長，dct dft 可以為任意整數，wht 只能為 2ⁿ。
+
+ 4. 第四個參數為省略高階系數的規則，有 first large quantity 三種。
+    下一個參數則用來調整省略的等級。
+      - first 為保留前 n 個參數，參數間以 u+v 也就是離第一個參數的距離排序。
+      - large 為保留前 n 大的參數。
+      - quantity 為將各參數根據其變異數的對數大小，作為量化的門檻。
+        詳細會在下文說明。
+
+ 5. 第五個參數為對第四個參數的調整，若第四個參數為 first 或 large，
+    則第五個參數必須為整數，意義為保留的參數個數。
+    
+    若第四個參數為 quantity，第五個參數為浮點數，
+    其意義為將各參數變異數取對數的結果，乘上第五個參數作尺度調整。
+ 
+ 6. 第六個參數為輸出的設定。
+
+      - 若參數為字串 `statistic` ，則在對標準輸出寫出
+        <abbr title="均方根誤差">erms</abbr> 與
+        <abbr title="信噪比">snr</abbr> 。
+    
+      - 若參數為以 `.diff.png` 結尾的路徑或檔名，
+        則會輸出成果影像減去原始影像的差值 + 127。
+
+      - 其它情況將參數作為檔名直接輸出成果影像。
+
+若環境變數 `DEBUG` 存在，程式會顯示一些額外資訊。
+（因為矩陣很多很大，輸出會很多。）
+
+## 已知問題
+### 保留前 n 個參數
+如果用 first 保留前 n 個參數，
+我的計算方式是直接算出要保留到第幾條斜線，
+也就是 `u+v>(n*2)^0.5`。
+本來有想做一個斜線的 zonal coding，
+但作到有 bug 才發現蠻麻煩的，就寫一個比較簡單的版本擋著用。
+
+### wht 的 bug
+我 wht 的實作好像點問題？
+就算我所有參數都保留，
+但轉回來的影像看起來還是和原始的不一樣。
+也沒有找到 bug。
+
+### 溢位斑點
+在城堡與橋、山丘的俯瞰二張照片中，
+轉換結果中較暗的部份出現了白點，較亮的部份則出現了黑點。
+可能是溢位所造成，但沒有找出臭蟲位置也沒有修正。
+
+### 量化尺度的數學意義
+我在實作 quantity 參數時，
+是單純依作業中指示，將參數的變異數取對數作為量化尺度基準。
+此外為了達成可調整的尺度，我加了一個浮點數參數直接乘上調整基準，
+以調整影像的壓縮品質。
+但我不確定直接乘上一個尺度因子，是否有數學上的意義，
+我取對數是以 2 為底，也不確定以不同基底是否有不同意義。
+
+另外我並沒有統計整張影像的各參數變異數，
+而是隨機取樣出所有區塊的 20% ，統計其中各參數的變異數，
+因此每次程式的執行結果可能會不同。
+
+### 區塊大小
+我是將輸入影像的尺寸，擴充為區塊大小的整數倍，
+在輸出時再截去擴充的大小。
+擴充區域是以鏡射方式補值。
+
+## 原始影像
+我找了三張解析度超過 3000x3000 的桌布，
+並以 imagick 的 convert 程式取樣為 800x600 的大小。
+以無損壓縮格式 png 儲存。
+
+```
+convert high.jpg -resize 800x600 -colorspace gray low.png
+```
+
+[![architecture-art-bridge-cliff.png]]
+
+[![brown-and-green-mountain-view-photo.png]]
+
+[![silhouette-of-golden-gate-bridge-during-golden-hour.png]]
+
+
+## 處理結果
+
+### 統計數值
+這裡只列出 architecture 影像的在不同區塊大小下的統計結果，
+保留的參數個數為前 1/4。
+
+區塊大小 | 保留參數個數 | erms | snr
+--------|------------|------|-----
+4x4     |  4         | 21.62| 30.57
+8x8     |  16        | 18.73| 41.03
+16x16   |  64        | 17.26| 48.52
+
+### 影像結果
+處理的參數以程式執行時的相同順序附加在檔名結尾。
+
+[![architecture-art-bridge-cliff-dct-16-first-128.png]]
+
+[![architecture-art-bridge-cliff-dct-16-first-256.png]]
+
+[![architecture-art-bridge-cliff-dct-16-first-32.png]]
+
+[![architecture-art-bridge-cliff-dct-16-first-64.png]]
+
+[![architecture-art-bridge-cliff-dct-4-first-4.png]]
+
+[![architecture-art-bridge-cliff-dct-8-first-16.png]]
+
+[![architecture-art-bridge-cliff-net-dct-16-first-64.png]]
+
+[![architecture-art-bridge-cliff-net-dct-4-first-4.png]]
+
+[![architecture-art-bridge-cliff-net-dct-8-first-16.png]]
+
+[![architecture-art-bridge-cliff-wht-16-first-128.png]]
+
+[![architecture-art-bridge-cliff-wht-16-first-256.png]]
+
+[![architecture-art-bridge-cliff-wht-16-first-64.png]]
+
+[![brown-and-green-mountain-view-photo-dct-16-first-64.png]]
+
+[![silhouette-of-golden-gate-bridge-during-golden-hour-dct-16-first-64.png]]
+
+[![silhouette-of-golden-gate-bridge-during-golden-hour-dct-16-large-64.png]]
+
+[![silhouette-of-golden-gate-bridge-during-golden-hour-dft-16-large-64.png]]
+
+[![silhouette-of-golden-gate-bridge-during-golden-hour-dft-4-first-4.png]]
+
+[![silhouette-of-golden-gate-bridge-during-golden-hour-dft-8-first-16.png]]
+
+[![silhouette-of-golden-gate-bridge-during-golden-hour.diff.png]]
+
+[![silhouette-of-golden-gate-bridge-during-golden-hour-wht-16-large-64.png]]
+
+
+
+[architecture-art-bridge-cliff-dct-16-first-128.png]: http://farm66.staticflickr.com/65535/49389536406_49e2db5bfe.jpg
+[![architecture-art-bridge-cliff-dct-16-first-128.png]]: http://www.flickr.com/photos/144554087@N04/49389536406
+
+[architecture-art-bridge-cliff-dct-16-first-256.png]: http://farm66.staticflickr.com/65535/49389536586_6ca23ef127.jpg
+[![architecture-art-bridge-cliff-dct-16-first-256.png]]: http://www.flickr.com/photos/144554087@N04/49389536586
+
+[architecture-art-bridge-cliff-dct-16-first-32.png]: http://farm66.staticflickr.com/65535/49389536721_8d41eafe17.jpg
+[![architecture-art-bridge-cliff-dct-16-first-32.png]]: http://www.flickr.com/photos/144554087@N04/49389536721
+
+[architecture-art-bridge-cliff-dct-16-first-64.png]: http://farm66.staticflickr.com/65535/49389064868_81cdf44a92.jpg
+[![architecture-art-bridge-cliff-dct-16-first-64.png]]: http://www.flickr.com/photos/144554087@N04/49389064868
+
+[architecture-art-bridge-cliff-dct-4-first-4.png]: http://farm66.staticflickr.com/65535/49389537016_3124177ea5.jpg
+[![architecture-art-bridge-cliff-dct-4-first-4.png]]: http://www.flickr.com/photos/144554087@N04/49389537016
+
+[architecture-art-bridge-cliff-dct-8-first-16.png]: http://farm66.staticflickr.com/65535/49389734902_e9b3b40b8a.jpg
+[![architecture-art-bridge-cliff-dct-8-first-16.png]]: http://www.flickr.com/photos/144554087@N04/49389734902
+
+[architecture-art-bridge-cliff-net-dct-16-first-64.png]: http://farm66.staticflickr.com/65535/49389537366_bfbcdaa3ca.jpg
+[![architecture-art-bridge-cliff-net-dct-16-first-64.png]]: http://www.flickr.com/photos/144554087@N04/49389537366
+
+[architecture-art-bridge-cliff-net-dct-4-first-4.png]: http://farm66.staticflickr.com/65535/49389537451_618d5381b8.jpg
+[![architecture-art-bridge-cliff-net-dct-4-first-4.png]]: http://www.flickr.com/photos/144554087@N04/49389537451
+
+[architecture-art-bridge-cliff-net-dct-8-first-16.png]: http://farm66.staticflickr.com/65535/49389065613_f5ca3f5b04.jpg
+[![architecture-art-bridge-cliff-net-dct-8-first-16.png]]: http://www.flickr.com/photos/144554087@N04/49389065613
+
+[architecture-art-bridge-cliff.png]: http://farm66.staticflickr.com/65535/49389537596_c9223b26d3.jpg
+[![architecture-art-bridge-cliff.png]]: http://www.flickr.com/photos/144554087@N04/49389537596
+
+[architecture-art-bridge-cliff-wht-16-first-128.png]: http://farm66.staticflickr.com/65535/49389537846_5aab84c9fe.jpg
+[![architecture-art-bridge-cliff-wht-16-first-128.png]]: http://www.flickr.com/photos/144554087@N04/49389537846
+
+[architecture-art-bridge-cliff-wht-16-first-256.png]: http://farm66.staticflickr.com/65535/49389538041_4042e18048.jpg
+[![architecture-art-bridge-cliff-wht-16-first-256.png]]: http://www.flickr.com/photos/144554087@N04/49389538041
+
+[architecture-art-bridge-cliff-wht-16-first-64.png]: http://farm66.staticflickr.com/65535/49389735872_43d019bbcf.jpg
+[![architecture-art-bridge-cliff-wht-16-first-64.png]]: http://www.flickr.com/photos/144554087@N04/49389735872
+
+[brown-and-green-mountain-view-photo-dct-16-first-64.png]: http://farm66.staticflickr.com/65535/49389066453_3f00a82e6d.jpg
+[![brown-and-green-mountain-view-photo-dct-16-first-64.png]]: http://www.flickr.com/photos/144554087@N04/49389066453
+
+[brown-and-green-mountain-view-photo.png]: http://farm66.staticflickr.com/65535/49389066663_4153569292.jpg
+[![brown-and-green-mountain-view-photo.png]]: http://www.flickr.com/photos/144554087@N04/49389066663
+
+[silhouette-of-golden-gate-bridge-during-golden-hour-dct-16-first-64.png]: http://farm66.staticflickr.com/65535/49389538741_e6537df761.jpg
+[![silhouette-of-golden-gate-bridge-during-golden-hour-dct-16-first-64.png]]: http://www.flickr.com/photos/144554087@N04/49389538741
+
+[silhouette-of-golden-gate-bridge-during-golden-hour-dct-16-large-64.png]: http://farm66.staticflickr.com/65535/49389538881_2a3263187a.jpg
+[![silhouette-of-golden-gate-bridge-during-golden-hour-dct-16-large-64.png]]: http://www.flickr.com/photos/144554087@N04/49389538881
+
+[silhouette-of-golden-gate-bridge-during-golden-hour-dft-16-large-64.png]: http://farm66.staticflickr.com/65535/49389736597_03966f2b8c.jpg
+[![silhouette-of-golden-gate-bridge-during-golden-hour-dft-16-large-64.png]]: http://www.flickr.com/photos/144554087@N04/49389736597
+
+[silhouette-of-golden-gate-bridge-during-golden-hour-dft-4-first-4.png]: http://farm66.staticflickr.com/65535/49389736752_42ab89378e.jpg
+[![silhouette-of-golden-gate-bridge-during-golden-hour-dft-4-first-4.png]]: http://www.flickr.com/photos/144554087@N04/49389736752
+
+[silhouette-of-golden-gate-bridge-during-golden-hour-dft-8-first-16.png]: http://farm66.staticflickr.com/65535/49389539286_a2f4b3b48f.jpg
+[![silhouette-of-golden-gate-bridge-during-golden-hour-dft-8-first-16.png]]: http://www.flickr.com/photos/144554087@N04/49389539286
+
+[silhouette-of-golden-gate-bridge-during-golden-hour.diff.png]: http://farm66.staticflickr.com/65535/49389539401_df69eb4616.jpg
+[![silhouette-of-golden-gate-bridge-during-golden-hour.diff.png]]: http://www.flickr.com/photos/144554087@N04/49389539401
+
+[silhouette-of-golden-gate-bridge-during-golden-hour.png]: http://farm66.staticflickr.com/65535/49389067643_fbfcbe660f.jpg
+[![silhouette-of-golden-gate-bridge-during-golden-hour.png]]: http://www.flickr.com/photos/144554087@N04/49389067643
+
+[silhouette-of-golden-gate-bridge-during-golden-hour-wht-16-large-64.png]: http://farm66.staticflickr.com/65535/49389539676_7b3c40a688.jpg
+[![silhouette-of-golden-gate-bridge-during-golden-hour-wht-16-large-64.png]]: http://www.flickr.com/photos/144554087@N04/49389539676
+
+<script>
+document.querySelectorAll('img').forEach(img => {
+    img.title = img.alt
+})
+</script>
+
+## 心得
+因為時間很趕，一開始只上傳了半成品程式，
+後來又上傳了成品，最後才是這份報告。
+
+因為要求項目還蠻多的，要數張影像，
+又要不同區塊尺寸、不同壓縮方式、不同向量基底，
+也不確定怎麼在報告上呈現，
+就各結果都跑幾次，全部丟上報告。
+
+python 寫起來蠻順手的。
+這堂課是我第一次正式寫 python，
+因為以前寫的 js 有一些類似的功能，
+例如 callback generator，
+只要查一下語法就能馬上拿來用。
+numpy 也是很強大的函式庫，
+和 matlab 很像，不知道是誰抄誰。
+
+
+## 程式原始碼
+```python
+#!/usr/bin/env python3
+'''
+python3 prog3.py input.png $basis $block_size $compress $level $output
+# basis = dct | wht | dft
+# block_size = 2 4 8 16 32 64 ...
+# compress level = first $n_block | large $n_block | quantity $level
+# n_block = 1 2 ...
+# level = 0.1 0.5 ... 1 1.5 2 5 # float, large is better
+# output = output.png | output.diff.png | statistics
+
+# image must be gray image.
+# imagick: `convert color.png -colorspace gray gray.png`
+'''
+
+import numpy
+import os
+import sys
+
+import prog2
+
+def debug(*argv, **kwarg):
+    if 'DEBUG' in os.environ:
+        return print(*argv, **kwarg)
+
+def discrete_cosine_transform_basis(n):
+    basis_matrix = numpy.matrix(numpy.zeros((n*n,n*n)))
+    x = y = numpy.matrix(range(n))
+    scale = lambda u: n**-0.5 if u == 0 else n**-0.5 * 2
+    block = lambda u,v: (
+        numpy.transpose(scale(u) * numpy.cos((2*x+1)*u*numpy.pi/2/n)) *
+        (scale(v) * numpy.cos((2*y+1)*v*numpy.pi/2/n))
+    )
+    for u in range(n):
+        for v in range(n):
+            block_uv = block(u,v)
+            block_1d = block_uv.flatten()
+            basis_matrix[u*n+v,:] = block_1d
+    return numpy.transpose(basis_matrix)
+
+def discrete_fourier_transform_basis(n):
+    x = numpy.matrix(range(n))
+    fourier_1d = lambda u: n**-0.5 * numpy.exp(2j * numpy.pi * u * x / n)
+    s = [fourier_1d(u) for u in range(n)]
+    fourier_2d = lambda u,v: s[u].transpose() * s[v]
+
+    basis_matrix = numpy.matrix(numpy.zeros((n*n, n*n))).astype(complex)
+    for u in range(n):
+        for v in range(n):
+            block = fourier_2d(u, v)
+            block_1d = block.flatten() #.reshape(block.shape[0] ** 2)
+            debug(block_1d)
+            basis_matrix[u*n+v, :] = block_1d
+    return basis_matrix.transpose()
+
+def walsh_hadamard_transform_basis(n):
+    m22 = numpy.matrix([1,1,1,-1]).reshape((2,2)).astype(float)
+    kron_parameter = m22
+
+    def sort_column_vector(m):
+        def sign_change_times(v):
+            return numpy.abs(numpy.diff(v)).sum()
+        l = m.transpose().tolist()
+        l.sort(key=sign_change_times)
+        return numpy.matrix(l).transpose()
+
+    def column_base_to_row_base(m):
+        length = m.shape[0]
+        n = int(length ** 0.5)
+        r = numpy.array(m.transpose()).reshape((length, n, n))
+        for i in range(length):
+            r[i] = r[i].transpose()
+        return numpy.matrix(r.reshape((length, length)).transpose())
+
+    m = m22
+    while m.shape[0] < n**2:
+        m = numpy.kron(kron_parameter, m)
+        m = sort_column_vector(m)
+    return column_base_to_row_base(m)
+
+def transform_in_basis(origin, column_vector):
+    t = lambda m: m.conj() if m.dtype == complex else m.transpose()
+    scale = numpy.diag(t(column_vector) * column_vector)
+    return numpy.array(t(column_vector) * origin).flatten() / scale
+
+def block_transform_in_basis(block, column_vector):
+    debug(block.shape)
+    column_data = numpy.matrix(block).reshape((block.shape[0]**2, 1))
+    return transform_in_basis(column_data, column_vector).reshape(block.shape)
+
+def recover_from_basis(parameter, basis):
+    return basis * parameter
+
+def block_recover_from_basis(block, basis):
+    matrix = numpy.matrix(block).reshape((block.shape[0]**2, 1))
+    return recover_from_basis(matrix, basis).reshape(block.shape)
+
+def transform_image(image, basis, filter=None):
+    n = int(basis.shape[0] ** 0.5)
+    debug(image.shape)
+    (height, width) = image.shape
+    height_pad = n - (height % n)
+    width_pad = n - (width % n)
+    image = numpy.pad(image, ((0, height_pad), (0, width_pad)), mode='reflect')
+
+    for x in range(0, width, n):
+        for y in range(0, height, n):
+            block = image[y:y+n, x:x+n]
+            matrix = numpy.matrix(block)
+            parameter = block_transform_in_basis(matrix, basis)
+            debug(parameter)
+            if filter: parameter = filter(parameter)
+            block = block_recover_from_basis(parameter, basis)
+            image[y:y+n, x:x+n] = block
+
+    return image
+
+def zigzag_shape(shape):
+    i = 0
+    r = 0
+    for r in range(shape[0] + shape[1] - 2 + 1):
+        if r % 2 == 1:
+            x = 0
+            y = r
+            while y >= 0 and x < shape[1]:
+                yield (i, (x,y))
+                i += 1
+                x += 1
+                y -= 1
+        else:
+            x = r
+            y = 0
+            while x >= 0 and y < shape[0]:
+                yield (i, (x,y))
+                i += 1
+                x -= 1
+                y += 1
+
+def zigzag_block_to_vector(block):
+    vector = numpy.zeros(block.shape[0] * block.shape[1])
+    for (i, (x,y)) in zigzag_shape(block.shape):
+        vector[i] = block[y,x]
+    return vector
+
+def zigzag_vector_to_block(vector, block):
+    for (i, (x,y)) in zigzag_shape(block.shape):
+        debug(i, y, x)
+        block[y,x] = vector[i]
+
+def walk_block(block):
+    for y in range(block.shape[0]):
+        for x in range(block.shape[1]):
+            yield (x,y)
+
+def first_nth_block_filter(keep, block_size):
+    block = numpy.zeros((block_size, block_size))
+    vector = numpy.zeros(block_size**2)
+    radius = int((keep * 2) ** 0.5)
+    for (x,y) in walk_block(block):
+        if x+y < radius:
+            block[y, x] = 1
+    return block
+
+def large_nth_block_filter(block, n):
+    vector = numpy.array(block.reshape(block.shape[0]**2))
+    vector[ numpy.abs(vector).argsort()[0: vector.shape[0] - n] ] = 0
+    return numpy.matrix(vector).reshape(block.shape)
+
+def quantity_image_sample(image, basis, ratio=0.2):
+    block_size = int(basis.shape[0] ** 0.5)
+    sample_number = int(numpy.prod(image.shape) / block_size ** 2 * ratio)
+    width_number = int(image.shape[1] / block_size)
+    height_number = int(image.shape[0] / block_size)
+
+    parameter_array = numpy.zeros((sample_number, block_size**2))
+    for i in range(sample_number):
+        y = numpy.random.randint(0, height_number)
+        x = numpy.random.randint(0, width_number)
+        block = image[
+            y*block_size : (y+1)*block_size,
+            x*block_size : (x+1)*block_size
+        ]
+        parameter = block_transform_in_basis(block, basis)
+        parameter_array[i, :] = parameter.reshape(block_size**2)
+
+    variance_array = numpy.zeros(block_size**2)
+    for i in range(block_size**2):
+        variance_array[i] = numpy.var(parameter_array[:, i])
+    debug(variance_array)
+    return numpy.log2(variance_array + 1)
+
+
+def main(program, file, transform, block_size, keep_type, keep_size, output):
+    block_size = int(block_size)
+
+    if transform == 'dct':
+        basis = discrete_cosine_transform_basis(block_size)
+    elif transform == 'wht':
+        basis = walsh_hadamard_transform_basis(block_size)
+    elif transform == 'dft':
+        basis = discrete_fourier_transform_basis(block_size)
+    else:
+        raise Exception('unknown transform %s' % transform)
+
+    image = prog2.numpy_image_open(file).astype(int)
+    image_gray = image #(image[:,:,0] + image[:,:,1] +image[:,:,2]) / 3
+
+    if keep_type == 'first':
+        keep_size = int(keep_size)
+        filter_block = first_nth_block_filter(keep_size, block_size)
+        filter_function = lambda b: numpy.matrix(numpy.array(b) * filter_block)
+    elif keep_type == 'large':
+        keep_size = int(keep_size)
+        filter_function = lambda b: large_nth_block_filter(b, keep_size)
+    elif keep_type == 'quantity':
+        keep_size = float(keep_size)
+        quantity = quantity_image_sample(image, basis) * keep_size
+        debug(quantity)
+        quantity = quantity.reshape((block_size, block_size))
+        quantity_nozero = quantity.copy()
+        quantity_nozero[quantity == 0] = 1
+        filter_function = lambda b: numpy.matrix(
+            (numpy.array(b) / quantity_nozero).astype(int) * quantity
+        )
+    else:
+        raise Exception('unknown keep type %s' % keep_type)
+
+    result = transform_image(image_gray, basis, filter_function)
+    debug(result)
+    # image[:,:,0] = image[:,:,1] = image[:,:,2] = result
+    result = result[0:image_gray.shape[0], 0:image_gray.shape[1]]
+    if output == 'statistic':
+        diff = result - image_gray
+        print('erms', numpy.mean(diff ** 2) ** 0.5)
+        print('snr', numpy.sum(result ** 2) / numpy.sum(diff ** 2))
+    else:
+        if output[-9:][0:5] == '.diff':
+            result = result - image_gray + 127
+        prog2.numpy_image_save(result, output)
+
+if __name__ == '__main__':
+    main(*sys.argv)
+
+```
+
+<link rel="stylesheet" href="ext/paper.css">
+
+<script src="ext/paper.js?execute"></script>
+
+#nctu
+#python
+#study
+#image-processing

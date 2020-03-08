@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2020-02-09T15:49:46.419Z</updated>
+  <updated>2020-03-08T08:20:11.111Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,146 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/shell-kill-pipe-process-group.html</id>
+<title>用 pgid 終止一組管道程序</title>
+<published>2020-03-08T08:15:46.813Z</published>
+<updated>2020-03-08T08:20:11.094Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/shell-kill-pipe-process-group.html"/>
+<summary type="html">&lt;a href=&quot;gnss-rtklib-real-time-ppp.html&quot;&gt;之前寫 rtklib 的腳本時&lt;/a&gt;，
+發現把管道丟到背景後，只會拿到管道最後一個程序的 pid，
+要用 &lt;abbr title=&quot;progress group id&quot;&gt;pgid&lt;/abbr&gt;
+才能一次終止所有程序。
+於是研究了一下怎麼拿到 pgid，和使用的方式。</summary>
+<category term="linux"/>
+<category term="shell"/>
+<category term="program"/>
+<category term="gnss"/>
+<category term="rtklib"/>
+<content type="html">&lt;h1 id=&quot;用-pgid-終止一組管道程序&quot;&gt;用 pgid 終止一組管道程序&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;gnss-rtklib-real-time-ppp.html&quot;&gt;之前寫 rtklib 的腳本時&lt;/a&gt;，
+發現把管道丟到背景後，只會拿到管道最後一個程序的 pid，
+要用 &lt;abbr title=&quot;progress group id&quot;&gt;pgid&lt;/abbr&gt;
+才能一次終止所有程序。
+於是研究了一下怎麼拿到 pgid，和使用的方式。&lt;/p&gt;
+&lt;h2 id=&quot;正確關掉丟到背景的程序&quot;&gt;正確關掉丟到背景的程序&lt;/h2&gt;
+&lt;p&gt;以前以為在 sh 裡把程序丟到背景後，
+就只能用 &lt;code&gt;kill %1&lt;/code&gt; 的方式終止。
+有一段時間還不知道為什麼腳本執行起來有問題。
+最近才發現是 &lt;code&gt;%&lt;/code&gt; 的表示法只能在互動式 shell 裡用，
+在腳本裡是會被忽略的。
+（那時候還開了 dash 測都沒問題，
+原來 dash 也有分互動模式和腳本模式， 互動模式才可以用 &lt;code&gt;%&lt;/code&gt; 。）
+又 google 了很久，才學到可以用 &lt;code&gt;$!&lt;/code&gt; 取得丟到背景的程序 pid。&lt;/p&gt;
+&lt;p&gt;會用到這功能，去年有寫過自動重啟某程序的腳本，
+需要判斷該程序是不是還活著，
+就踩了很多 &lt;code&gt;$(jobs)&lt;/code&gt; 因為是在子程序中執行，
+看不到母程序的子程序的搞笑事件。
+（ &lt;code&gt;jobs &amp;gt; jobs-list&lt;/code&gt; 倒是可以運作，因為不是子程序。）&lt;/p&gt;
+&lt;p&gt;另外就是 rtklib 的 cli 版本程式，
+都會很貼心的忽略 SIGHUP 訊號，
+以讓程序在 shell 退出後還能繼續執行；
+逼我要手動用 kill 終止。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;rtkrcv -o rtkrcv.conf -p 5564 &amp;amp;
+pid_rtkrcv=$!
+
+trap on_exit EXIT TERM INT HUP
+on_exit() {
+    kill $pid_rtkrcv
+    trap - EXIT
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;rtklib-str2str-的串流問題&quot;&gt;rtklib str2str 的串流問題&lt;/h2&gt;
+&lt;p&gt;之前寫 rtklib 的腳本，因為不想用 http 明文傳登入資訊，
+所以接 igs 的星曆都是用 curl 走 https，
+再用管道傳給 str2str 串流到 tcp 給 rtkrcv 用。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;curl --user-agent &amp;apos;NTRIP RTKLIB (curl)&amp;apos; \
+    https://username:password@products.igs-ip.net/CLK93 \
+| str2str -out tcpsvr://:5567 &amp;amp;
+pid_ntrip=$!
+
+on_exit() {
+    kill $pid_ntrip
+    trap - EXIT
+}
+
+trap on_exit EXIT INT TERM HUP
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;那時就有注意到，在終止後雖然 str2str 被殺掉了，
+但 curl 仍執行了一段時間，
+才因為寫入到已經關閉的程序，發生錯誤自己退出。&lt;/p&gt;
+&lt;p&gt;後來是解 &lt;a href=&quot;https://github.com/rtklibexplorer/RTKLIB/issues/51#issuecomment-595661883&quot;&gt;另一個 bug&lt;/a&gt; ：
+str2str 把 serial (com port) 串流到 tcp 時，
+如果有多個客戶端同時連接，收到的內容會是錯的。
+因為用到二個 str2str，只關掉最後一個程序前面的還是會繼續執行，
+所以才想找一次關掉整個管道的方法。&lt;/p&gt;
+&lt;h2 id=&quot;程序群組&quot;&gt;程序群組&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.kawabangga.com/posts/3849&quot;&gt;以前就有看過程序群組的概念&lt;/a&gt; ，
+也就是 shell 會把一個管道中的所有程序分到同一個新群組，
+這樣就可以一次終止整個群組來結束整個管道。
+群組 id 也就是群組長程序 id，也就是群組中第一支程序的 id。
+posix c 的 kill 函數，如果傳入的 pid 是負數，
+就代表終止該程序群組中的所有程序。&lt;/p&gt;
+&lt;p&gt;當時沒有想太多，只覺得 shell 會處理好。
+現在回頭看，在 &lt;code&gt;kill %1&lt;/code&gt; 時，如果 &lt;code&gt;%1&lt;/code&gt; 是一組管道，
+那 shell 實際上做的就是終止整個程序群組。&lt;/p&gt;
+&lt;p&gt;而 shell 指令 kill 也和 c 的 kill 函數一樣，
+可以接受負數來一次終止群組中的所有程序。
+只是如果直接寫 &lt;code&gt;kill -5566&lt;/code&gt; ，會被當成選項，
+然後因為沒有 5566 這個項選項就報錯了。&lt;/p&gt;
+&lt;p&gt;可以用二個減號告訴 kill 之後的都不是選項：
+&lt;code&gt;kill -- -5566&lt;/code&gt; ，就能正確解析。
+或在參數前面加個空白： &lt;code&gt;kill &amp;apos; -5566&amp;apos;&lt;/code&gt;
+因為第一個字元不是減號，
+kill 就不會把該參數當成選項，但仍能解析出負數。&lt;/p&gt;
+&lt;p&gt;要終止群組需要的是群組 id，也就是群組長的 id，然後傳給 kill。
+但問題是在腳本中， &lt;code&gt;$!&lt;/code&gt; 是管道中最後一個程序的 id，
+而沒辦法知道一組管道的第一支程序的 id。
+有二個解決方式，一是把整個管道包在一支子程序裡，
+二是用 ps 查出該程序所屬的程序群組。&lt;/p&gt;
+&lt;h3 id=&quot;把管道包進單一子程序&quot;&gt;把管道包進單一子程序&lt;/h3&gt;
+&lt;p&gt;這招是 google 時在 stackoverflow 上第一個找出的方法。
+把原本 &lt;code&gt;foo | bar &amp;amp;&lt;/code&gt; 寫成 &lt;code&gt;(foo | bar) &amp;amp;&lt;/code&gt; ，
+這樣就只有一支程序，所以最後一支程序也就是第一支程序，
+也就是群組長了，在括號中的管道也會同一個群組中。
+就能用 &lt;code&gt;kill -- -$!&lt;/code&gt; 直接殺掉。
+但缺點是會多包一層，多出一個子程序。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;~ $ sleep 6m | sleep 8m &amp;amp;
+[1] 12661
+~ $ (sleep 6m | sleep 8m) &amp;amp;
+[2] 12664
+~ $ pstree $$
+bash(9149)-+-bash(12664)-+-sleep(12665)
+           |             `-sleep(12667)
+           |-pstree(12669)
+           |-sleep(12660)
+           `-sleep(12661)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;用-ps-列出該程序所屬的群組&quot;&gt;用 ps 列出該程序所屬的群組&lt;/h3&gt;
+&lt;p&gt;雖然 &lt;code&gt;$!&lt;/code&gt; 只有管道中最後一個程序的 id，
+但用 &lt;code&gt;ps -j $!&lt;/code&gt; 就能看到該程序的群組，顯示為 pgid。
+查閱 ps 的手冊後，可以知道如果只要列出 pgid，
+可以用以下選項： &lt;code&gt;ps --no-headers --format pgid:1 $!&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;其中 format 是只列出特定欄位，而 &lt;code&gt;:1&lt;/code&gt; 是指定欄位的寬度，
+預設是似乎是 5，會出現一個前置空白，
+如果搭配 kill 需要負數，要前置減號時會變成 &lt;code&gt;- 5566&lt;/code&gt; ，
+會無法解析，所以要消掉前置的空白。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;pgid() {
+    ps --no-headers --format pgid:1 $1
+}
+
+str2str -in serial://serial0#ubx \
+| str2str -out file://f9p.ubx::T \
+          -out tcpsvr://:5567 &amp;amp;
+pgid_ublox=`pgid $!`
+
+on_exit() {
+    kill -- -$pgid_ublox
+    trap - EXIT
+}
+
+trap on_exit EXIT INT TERM HUP
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/gnss-rtklib-real-time-ppp.html</id>
 <title>以 RTKLIB 與 RTCM SSR 訊息進行 real time PPP</title>
 <published>2020-02-09T13:26:00.522Z</published>
@@ -4081,530 +4221,7 @@ else runInBookmarklet()
 <category term="javascript"/>
 <category term="html"/>
 <category term="bookmarklet"/>
-<content type="html">&lt;h1 id=&quot;不用寫外掛也能惡搞網頁&quot;&gt;不用寫外掛也能惡搞網頁&lt;/h1&gt;
-&lt;p&gt;有時候是不是覺得瀏覽器很智障？網頁很不人性？
-要是網頁是自己設計的就好了？
-除了寫超爆幹複雜的 plug-in 外，
-還有方便的 greasemonkey，和無腦的 bookmarklet，
-都可以達到類似的效果。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;油猴 &lt;em&gt;Greasemonkey&lt;/em&gt;&lt;/li&gt;
-&lt;li&gt;小書籤 &lt;em&gt;bookmarklet&lt;/em&gt;&lt;/li&gt;
-&lt;li&gt;開發者工具 &lt;em&gt;inspect&lt;/em&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;[活動介紹][kktix]&quot;&gt;&lt;a href=&quot;https://ccns.kktix.cc/events/106-meetup-gholk-talk-01&quot;&gt;活動介紹&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;本次 gholk 要來分享上古時代的瀏覽器密技 &lt;strong&gt;小書籤&lt;/strong&gt; ，
-和簡單粗勇的 &lt;strong&gt;油猴腳本&lt;/strong&gt; ，
-讓 javascript 開發者再也不用在 F12 開發者工具裡瞎忙半天，
-也不需要寫超爆幹複雜的瀏覽器外掛，
-就能輕鬆惡搞網站。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;[ccca-活動介紹](https://www.facebook.com/NCTUCCCA/posts/810305212736583)&quot;&gt;&lt;a href=&quot;https://www.facebook.com/NCTUCCCA/posts/810305212736583&quot;&gt;ccca 活動介紹&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;【社課 / Activity】&lt;/p&gt;
-&lt;p&gt;學過網頁設計的你，是否曾對設計不良的網頁感到不滿？ 除了按 F12 使用瀏覽器的開發者工具，手動鍵入 js 來修改網頁外， 你還知道有小書籤 (bookmarklet) 、油猴 (greasemonkey) 腳本 (*.user.js) ， 可以用來達成各式各樣的功能嗎？&lt;/p&gt;
-&lt;p&gt;當然，附加元件（瀏覽器外掛）問世後， 很快以更多的功能、更全面的權限管理，站上了這一系列工具的頂端。 但無論如何，如果你常常在開發者工具對第三方網頁敲敲打打， 那你絕對會喜歡小書籤與油猴腳本的。&lt;/p&gt;
-&lt;p&gt;&amp;lt;不用寫外掛也能惡搞網頁 - 小書籤與油猴腳本簡介&amp;gt;&lt;/p&gt;
-&lt;p&gt;社課中會介紹開發者工具、小書籤、油猴腳本， 與開發、發布程式上的技巧。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;對象：會寫 javascript 的人&lt;/li&gt;
-&lt;li&gt;講者：gholk&lt;/li&gt;
-&lt;li&gt;時間：2019-11-28 19:00-21:00&lt;/li&gt;
-&lt;li&gt;地點：網路資訊服務中心 訓練教室（請由小木屋鬆餅側自動門出入）&lt;/li&gt;
-&lt;li&gt;聊天室：&lt;a href=&quot;https://t.me/ccca_chat&quot;&gt;https://t.me/ccca_chat&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;簡報模式&quot;&gt;簡報模式&lt;/h2&gt;
-&lt;h3 id=&quot;切換樣式&quot;&gt;切換樣式&lt;/h3&gt;
-&lt;script&gt;
-function toggleSlideMode() {
-  document.body.classList.toggle(&apos;white-black-slide&apos;)
-}
-&lt;/script&gt;
 
-&lt;style contenteditable=&quot;true&quot;&gt;
-body.white-black-slide {
-  font-size: 250%;
-  color: white;
-  background: black;
-}
-.white-black-slide a {
-  color: cyan;
-}
-&lt;/style&gt;
-
-&lt;button onclick=&quot;toggleSlideMode()&quot;&gt;切換簡報模式&lt;/button&gt;
-
-&lt;hr&gt;
-&lt;h3 id=&quot;顯示小書籤程式碼&quot;&gt;顯示小書籤程式碼&lt;/h3&gt;
-&lt;style&gt;
-a[href^=javascript]::before {
-  color: gray;
-  content: &quot;&lt;a href=\0022&quot; attr(href) &quot;\0022&gt;&quot;;
-}
-a[href^=javascript]::after {
-  color: gray;
-  content: &quot;&lt;/a&gt;&quot;;
-}
-
-a[onclick]::before {
-  color: gray;
-  content: &quot;&lt;a onclick=\0022&quot; attr(onclick) &quot;\0022&gt;&quot;;
-}
-a[onclick]::after {
-  color: gray;
-  content: &quot;&lt;/a&gt;&quot;;
-}
-
-style[contenteditable]::before {
-  content: &quot;&lt;style contenteditable=\0022&quot; attr(contenteditable) &quot;\0022&gt;&quot;;
-}
-&lt;/style&gt;
-
-&lt;hr&gt;
-&lt;h3 id=&quot;翻頁按鈕&quot;&gt;翻頁按鈕&lt;/h3&gt;
-&lt;h4 id=&quot;把按鈕移到螢幕右下角&quot;&gt;把按鈕移到螢幕右下角&lt;/h4&gt;
-&lt;style&gt;
-:this + button {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  margin: 1em;
-}
-&lt;/style&gt;
-
-&lt;button onclick=&quot;scrollToNextHr()&quot;&gt;下一頁&lt;/button&gt;
-
-&lt;h4 id=&quot;翻頁函數&quot;&gt;翻頁函數&lt;/h4&gt;
-&lt;script&gt;
-function scrollToNextHr() {
-  const allHr = document.querySelectorAll(&apos;hr&apos;)
-  const windowTop = scrollY
-  for (const hr of allHr) {
-    if (hr.offsetTop &gt; scrollY) {
-      scrollTo(0, hr.offsetTop + 1)
-      break
-    }
-  }
-}
-&lt;/script&gt;
-
-&lt;hr&gt;
-&lt;h2 id=&quot;生活駭客&quot;&gt;生活駭客&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;誰說軟體工程師不會是電腦白痴？&lt;/li&gt;
-&lt;li&gt;做個聰明的使用者，以程式取代重複、無意義的工作。
-（例如在二個試算表中，用人眼找出相同的類別，手動複製到第三個表中。）&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.bnext.com.tw/ext_rss/view/id/1099271&quot;&gt;什麼是駭客：自動化所有超過 90 秒的工作&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;使用電腦，而不要被電腦使用；使用程式，不要使用 &lt;em&gt;工人智慧&lt;/em&gt; 。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;伸手可及的距離&quot;&gt;伸手可及的距離&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;取用程式的門檻有多高？啟動、匯入、編寫程式、匯出，會比剪下貼上十次久嗎？&lt;/li&gt;
-&lt;li&gt;對多數 windows 使用者，確實很久；需要打開 ide。
-（所以 linux user 都習慣平常就開著一個終端機。）&lt;/li&gt;
-&lt;li&gt;很幸運的，一些軟體有 &lt;em&gt;內建 ide&lt;/em&gt; 。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;軟體與他們內建的語言&quot;&gt;軟體與他們內建的語言&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;要自動化 excel 或其它 ms office，你需要學 vba。&lt;/li&gt;
-&lt;li&gt;自動化 google 試算表或其它，要學 google app script。&lt;/li&gt;
-&lt;li&gt;學 javascript，你可以自動化所有網站。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;開發者友好的瀏覽器&quot;&gt;開發者友好的瀏覽器&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;多數瀏覽器都內建了開發者工具。&lt;/li&gt;
-&lt;li&gt;來自良好的駭客傳統；
-最早的瀏覽器同時也是編輯器，www 是互相的，鼓勵使用者建立自己的網頁。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;開發者工具&quot;&gt;開發者工具&lt;/h2&gt;
-&lt;p&gt;瀏覽器 F12 開啟或右鍵檢查，
-各種意義上都很好用。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;快速選擇元素&quot;&gt;快速選擇元素&lt;/h3&gt;
-&lt;p&gt;使用開發者工具的 &lt;em&gt;挑選頁面中的元素&lt;/em&gt; ，
-把畫面上的元素在 &lt;em&gt;檢測器&lt;/em&gt; 中的文件樹中顯示，
-可以用來快速查看 html 文件結構。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49131541478&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49131541478_e0b210d1f7.jpg&quot; alt=&quot;dev-tool-select.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;在主控台中存取元素&quot;&gt;在主控台中存取元素&lt;/h3&gt;
-&lt;p&gt;在檢測器中的選取的元素，
-可以在 &lt;em&gt;主控台&lt;/em&gt; 中使用變數 &lt;code&gt;$0&lt;/code&gt; 存取。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;鎖右鍵圖片時&quot;&gt;鎖右鍵圖片時&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;https://dq.yam.com/post.php?id=9229&quot;&gt;https://dq.yam.com/post.php?id=9229&lt;/a&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;document.querySelectorAll(&amp;apos;*[oncontextmenu]&amp;apos;).forEach(node =&amp;gt; {
-    node.removeAttribute(&amp;apos;oncontextmenu&amp;apos;)
-})
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;批次輸入多個輸入框&quot;&gt;批次輸入多個輸入框&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49132066496&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49132066496_349dae5730.jpg&quot; alt=&quot;multiple-input-form.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;程式本體&quot;&gt;程式本體&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;let scoreList = scoreData.split(/\n/g)
-document.querySelectorAll(&amp;apos;input[type=text]&amp;apos;).forEach((node, i) =&amp;gt; {
-    node.value = scoreList[i]
-})
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;處理-io&quot;&gt;處理 io&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;從剪貼簿貼上是最快的作法；
-無論是在 excel、word 中框選後貼上，
-或是用命令 &lt;code&gt;xsel --input --clipboard &amp;lt; file.txt&lt;/code&gt; 。&lt;/li&gt;
-&lt;li&gt;使用 js 的反引號字串，可以在主控台內輸入含換行的資料。&lt;/li&gt;
-&lt;li&gt;使用 &lt;code&gt;prompt()&lt;/code&gt; 可以簡單讀取使用者輸入，但換行會被換成空白。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;多行字串的處理&quot;&gt;多行字串的處理&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49132195236&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49132195236_50f7f5abba.jpg&quot; alt=&quot;console-insert-multiple-line.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;簡單與使用者互動&quot;&gt;簡單與使用者互動&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;善用 &lt;code&gt;alert()&lt;/code&gt; &lt;code&gt;prompt()&lt;/code&gt; &lt;code&gt;confirm()&lt;/code&gt; 等活化石函數。&lt;/li&gt;
-&lt;li&gt;用 &lt;code&gt;console.log()&lt;/code&gt; 或 &lt;code&gt;alert()&lt;/code&gt; 輸出結果。&lt;/li&gt;
-&lt;li&gt;如果結果較長，可以建立一個 &lt;code&gt;&amp;lt;pre&amp;gt;&lt;/code&gt; 元素再將結果填入，
-&lt;code&gt;body.appendChild(pre)&lt;/code&gt; 加到結尾。&lt;/li&gt;
-&lt;li&gt;也可以把結果輸出到剪貼簿，或把結果存到 blob 物件，
-再用 &lt;code&gt;URL.createObjectURL()&lt;/code&gt; 產生下載連結。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;熟悉你的工具&quot;&gt;熟悉你的工具&lt;/h3&gt;
-&lt;p&gt;如果你發現你常使用主控台做事，那找個時間好好認識一下開發者工具，
-找篇文章或是 google、mdn 的文件來讀，會受益良多的。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49132252211&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49132252211_1a63c18ac8.jpg&quot; alt=&quot;copy-from-console.png&quot; title=&quot;你知道從主控台複製這個功能嗎？&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;厭倦不斷貼上重複的程式碼了嗎？&quot;&gt;厭倦不斷貼上重複的程式碼了嗎？&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;每次使用某個網頁時，都固定打開發者工具，寫出或貼上同樣的程式碼？&lt;/li&gt;
-&lt;li&gt;依照駭客文化，你應該要找出方式來簡化這個過程。&lt;/li&gt;
-&lt;li&gt;來看看 &lt;strong&gt;小書籤&lt;/strong&gt; 吧。&lt;/li&gt;
-&lt;li&gt;或是你可以試試 firefox 內建的程式碼片斷編輯器。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49131789658&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49131789658_353317a1ab.jpg&quot; alt=&quot;firefox-console-code-snippet.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;小書籤&quot;&gt;小書籤&lt;/h2&gt;
-&lt;p&gt;一種特殊的 url schema，
-和 &lt;code&gt;data:&lt;/code&gt; 一樣不指向某一位置，
-而是本身帶有意義。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;javascript:alert%28%27hello%20world%21%27%29&quot;&gt;greet-js&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;技術細節&quot;&gt;技術細節&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;javascript:&lt;/code&gt; 後的程式會在 global scope 下執行。&lt;/li&gt;
-&lt;li&gt;如果有回傳值，回傳值會被轉成字串，被當成下一個頁面的 html 內容。&lt;/li&gt;
-&lt;li&gt;如果有多個 statement，和 &lt;code&gt;eval()&lt;/code&gt; 一樣是用最後一個 statment 的回傳值。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h4 id=&quot;回傳值&quot;&gt;回傳值&lt;/h4&gt;
-&lt;script&gt;
-function helloHtml(name) {
-    if (!name) name = prompt(&apos;what is your name?&apos;)
-    var title = &apos;&lt;title&gt;hello &apos; + name + &apos;!&lt;/title&gt;&apos;
-    var body = &apos;&lt;h1&gt;hello &apos; + name + &apos;!&lt;/h1&gt;&apos;
-    var html = &apos;&lt;html&gt;&apos; + title + body + &apos;&lt;/html&gt;&apos;
-    return html
-}
-&lt;/script&gt;
-
-&lt;p&gt;&lt;a href=&quot;javascript:helloHtml()&quot;&gt;hello&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;安裝小書籤&quot;&gt;安裝小書籤&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;如同一般的 url，可以被 &lt;em&gt;加入書籤&lt;/em&gt; 。&lt;/li&gt;
-&lt;li&gt;可以用拖拉的方式，或右鍵加入書籤；讓麻瓜也能使用。&lt;/li&gt;
-&lt;li&gt;因此可以 &lt;em&gt;打包&lt;/em&gt; 一段程式碼成一個書籤，
-方便使用與分享；不用再一直開開發者工具了。&lt;/li&gt;
-&lt;li&gt;點擊書籤後可以在當前頁面執行。&lt;/li&gt;
-&lt;li&gt;執行小書籤等於執行任意程式碼，所以不要執行來路不明的小書籤。
-小書籤可以看到執行時所在網頁的所有內容，
-包含 cookie，所以可以盜取帳號。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;發布需知&quot;&gt;發布需知&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;因安全考量，一般的網站基本上不允許插入小書籤程式碼，
-所以至少需要一個靜態網站，例如 &lt;a href=&quot;https://gholk.github.io/bookmarklet/&quot;&gt;github page&lt;/a&gt;
-或是 &lt;a href=&quot;http://jsfiddle.net&quot;&gt;jsfiddle&lt;/a&gt; 這類可以托管完整網頁的。
-（或是叫使用者自己複製程式碼，然後在書籤列新增。）&lt;/li&gt;
-&lt;li&gt;程式碼太長書籤放的下嗎？我最多放過 5 KB 的程式。&lt;/li&gt;
-&lt;li&gt;真的太長怎麼辦？
-打包成一個 js 檔，托管到靜態網站上，
-在小書籤內容則是產生一個指向該檔案的 script 標籤，匯入執行。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;範例&quot;&gt;範例&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://jsfiddle.net&quot;&gt;jsfiddle&lt;/a&gt; 基本上可以托管任何 javascript，
-&lt;a href=&quot;https://jsfiddle.net/c85v4rLy/&quot;&gt;就把小書籤編碼後，嵌入在 html 入放入就可以了。&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;github page 是指托管靜態網站那種，
-我自己把寫的小書籤都放在 &lt;a href=&quot;http://github.com/GHolk/bookmarklet&quot;&gt;bookmarklet repository&lt;/a&gt; ，
-雖然 github repository readme 裡的小書籤不會顯示，
-但 &lt;a href=&quot;https://gholk.github.io/bookmarklet/&quot;&gt;靜態網頁&lt;/a&gt; 上是會顯示的。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;youtube-搜尋小書籤&quot;&gt;youtube 搜尋小書籤&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;const keyWord = prompt(&amp;apos;youtube 關鍵字&amp;apos;)
-window.open(&amp;apos;http://youtube.com/search?q=&amp;apos; + keyWord)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;小書籤 &lt;a href=&quot;javascript:const%20keyWord%20%3D%20prompt%28%27youtube%20%E9%97%9C%E9%8D%B5%E5%AD%97%27%29%3B%20window.open%28%27http%3A%2F%2Fyoutube.com%2Fsearch%3Fq%3D%27%20%2B%20keyWord%29%3B%20undefined&quot;&gt;youtube 關鍵字搜尋&lt;/a&gt; ，
-為什麼第二次點擊就不能執行了？&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;作用域&quot;&gt;作用域&lt;/h3&gt;
-&lt;script&gt;
-function promptYoutube() {
-  const keyWord = prompt(&apos;youtube 關鍵字&apos;)
-  window.open(&apos;http://youtube.com/search?q=&apos; + keyWord)
-}
-&lt;/script&gt;
-
-&lt;p&gt;&lt;a href=&quot;javascript:promptYoutube%28%29&quot;&gt;只呼叫函數&lt;/a&gt; ，收藏後還可以執行嗎？&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;把用到的函數包進來&quot;&gt;把用到的函數包進來&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;void function() {
-  function promptYoutube() {
-    const keyWord=prompt(&amp;quot;youtube 關鍵字&amp;quot;);
-    window.open(&amp;quot;http://youtube.com/search?q=&amp;quot;+keyWord)
-  }
-  promptYoutube()
-}()
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;a href=&quot;javascript:void%20function%28%29%7Bfunction%20promptYoutube%28%29%7Bconst%20keyWord=prompt%28%22youtube%20%E9%97%9C%E9%8D%B5%E5%AD%97%22%29;window.open%28%22http:%2F%2Fyoutube.com%2Fsearch%3Fq%3D%2522%2BkeyWord%2529%257DpromptYoutube%2528%2529%257D%2528%2529&quot;&gt;把函數也包進來&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;void-算符&quot;&gt;void 算符&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;undefined === void anyExpression
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://zh.wikipedia.org/wiki/%E5%B0%8F%E6%9B%B8%E7%B1%A4#%E5%8E%86%E5%8F%B2&quot;&gt;javascript 發明人，為了小書籤所發明的算符。&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;javascript:void%20prompt%28%27%E9%9A%A8%E4%BE%BF%E8%AA%AA%E9%BB%9E%E8%A9%B1%27%29&quot;&gt;有 void&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;javascript:prompt%28%27%E9%9A%A8%E4%BE%BF%E8%AA%AA%E9%BB%9E%E8%A9%B1%27%29&quot;&gt;無 void&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;函數表達式&quot;&gt;函數表達式&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;void function () {
-  // do what you want
-)()
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;打包程式碼&quot;&gt;打包程式碼&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;可以將整個程式放在 immeditate invoke function 裡，防止撞名。&lt;/li&gt;
-&lt;li&gt;用 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E7%99%BE%E5%88%86%E8%99%9F%E7%B7%A8%E7%A2%BC&quot;&gt;百分號編碼&lt;/a&gt; 去除特殊字元。&lt;/li&gt;
-&lt;li&gt;用 uglify-js 去除多餘空白與縮排，減少體積。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;javascript-url-的用途到底是什麼？&quot;&gt;javascript url 的用途到底是什麼？&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;製造一個點擊後執行特定函數的元素，類似 onclick 的功能。&lt;/li&gt;
-&lt;li&gt;此外 javascript 的發明者 Brendan Eich，
-特地將它設計成可以被加入書籤中，還幫他設計了 void 算符。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-html&quot;&gt;&amp;lt;a href=&amp;quot;javascript:doAction(&amp;apos;menu&amp;apos;)&amp;quot;&amp;gt;open menu&amp;lt;/a&amp;gt;
-&amp;lt;a href=&amp;quot;javascript:doAction(&amp;apos;save&amp;apos;)&amp;quot;&amp;gt;save change&amp;lt;/a&amp;gt;
-&amp;lt;a href=&amp;quot;javascript:doAction(&amp;apos;exit&amp;apos;)&amp;quot;&amp;gt;discard change&amp;lt;/a&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;相對-onclick&quot;&gt;相對 onclick&lt;/h3&gt;
-&lt;p&gt;onclick 回傳 false 表示不處理本來應該處理的事件，
-例如 &lt;code&gt;&amp;lt;input type=&amp;quot;submit&amp;quot;&amp;gt;&lt;/code&gt; 如果 onclick 回傳 false 時不會提交，
-&lt;code&gt;&amp;lt;a href=&amp;quot;//google.com&amp;quot;&lt;/code&gt; 如果 onclick 回傳 false 時不會前往新頁面。&lt;/p&gt;
-&lt;script&gt;
-  function isGreater10() {
-    let number = prompt(&apos;input a number &gt; 10&apos;)
-    number = Number(number)
-    const isGreater = number &gt; 10
-    alert(isGreater)
-    return isGreater
-  }
-&lt;/script&gt;
-
-&lt;p&gt;&lt;a href=&quot;./&quot; onclick=&quot;return isGreater10()&quot;&gt;greet&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;小書籤的侷限&quot;&gt;小書籤的侷限&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;必須手動打開書籤列點擊執行。&lt;/li&gt;
-&lt;li&gt;如果在某網頁固定用到該功能，還是要固定手動點擊才能執行。&lt;/li&gt;
-&lt;li&gt;有沒有辦法在進到某一網頁時，就執行對應的程式呢？
-像是固定隱藏網頁中的某個側邊欄、改變字體顏色大小。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;GreaseMonkey&quot;&gt;GreaseMonkey&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;暱稱油猴腳本，是管理 &lt;code&gt;*.user.js&lt;/code&gt; 的擴充元件。&lt;/li&gt;
-&lt;li&gt;firefox 有一些參數，可以在 &lt;a href=&quot;about:config&quot;&gt;about:config&lt;/a&gt; 裡調。&lt;/li&gt;
-&lt;li&gt;古早時期，有人會寫一份 javascript，
-在啟動 firefox 時執行去調那些參數，
-那份 js 習慣會取名為 &lt;code&gt;*.user.js&lt;/code&gt; 。&lt;/li&gt;
-&lt;li&gt;後來有人在裡面作很多奇怪的事惡搞網頁，這些 &lt;code&gt;*.user.js&lt;/code&gt; 量越來越多就需要一種管理的方法。&lt;/li&gt;
-&lt;li&gt;好像還有 &lt;code&gt;*.user.css&lt;/code&gt; ，但我沒有研究。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;功能&quot;&gt;功能&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;首先，需要安裝 grease monkey 這個擴充元件，
-其它 user.js 腳本會由 grease monkey 擴充元件管理、執行。&lt;/li&gt;
-&lt;li&gt;提供編輯器和管理介面。&lt;/li&gt;
-&lt;li&gt;管理在每個網頁下要載入哪些 user.js。&lt;/li&gt;
-&lt;li&gt;在進入附檔名為 &lt;code&gt;*.user.js&lt;/code&gt; 的 url 時，會自動詢問安裝。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;安裝與使用&quot;&gt;安裝與使用&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;//gist.github.com&quot;&gt;//gist.github.com&lt;/a&gt; 裡按 raw，正常會出現原始碼，
-有裝 grease monkey 會詢問安裝。 &lt;a href=&quot;https://gist.github.com/GHolk/3154e8486cf987cf6ab84cae45c7dcc7&quot;&gt;bbsjs gist&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;只要網址結尾是 &lt;code&gt;.user.js&lt;/code&gt; ，就會跳出安裝介面，
-就算托管的空間如 pastebin 不支援客制化網址，也可以在網址尾端加上
-&lt;code&gt;?script.user.js&lt;/code&gt; 或 &lt;code&gt;#script.user.js&lt;/code&gt; 的方式觸發安裝。&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://wiki.greasespot.net/User_Script_Hosting&quot;&gt;grease monkey wiki&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;pastebin-托管範例&quot;&gt;pastebin 托管範例&lt;/h3&gt;
-&lt;p&gt;pastebin 的好處是免註冊即可使用。&lt;/p&gt;
-&lt;p&gt;在 &lt;a href=&quot;http://pastebin.com&quot;&gt;pastebin&lt;/a&gt; 裡 &lt;a href=&quot;https://pastebin.com/ZTuGjA6Y&quot;&gt;創建腳本後&lt;/a&gt; ，
-&lt;a href=&quot;https://pastebin.com/raw/ZTuGjA6Y&quot;&gt;點擊 raw 直接取得原始碼&lt;/a&gt; ，
-並 &lt;a href=&quot;https://pastebin.com/raw/ZTuGjA6Y#hackmd-scroll-flip.user.js&quot;&gt;修改網址結尾為 &lt;code&gt;x.user.js&lt;/code&gt;&lt;/a&gt; 。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;gist-托管範例&quot;&gt;gist 托管範例&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;https://gist.github.com/GHolk/4a2edcf9cf3f956ec7eb7d7823348b6c&quot;&gt;在 gist 創建腳本&lt;/a&gt; ，檔名取為 &lt;code&gt;*.user.js&lt;/code&gt; ，
-&lt;a href=&quot;https://gist.github.com/GHolk/4a2edcf9cf3f956ec7eb7d7823348b6c/raw/1c71ecd469701cfadf149d9687a785c5294191ef/hackmd-scroll-flip.user.js&quot;&gt;點擊 raw 即可直接取得原始碼&lt;/a&gt; ，
-且網址結尾為自動成為對應的檔名。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://github.blog/2018-02-18-deprecation-notice-removing-anonymous-gist-creation/&quot;&gt;gist 曾經有一段時間免註冊，但垃圾太多所以又關起來了。&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;h4 id=&quot;metadata-header&quot;&gt;metadata header&lt;/h4&gt;
-&lt;p&gt;&lt;a href=&quot;https://wiki.greasespot.net/Metadata_Block&quot;&gt;https://wiki.greasespot.net/Metadata_Block&lt;/a&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-user.js&quot;&gt;// ==UserScript==
-// @name  chrome bbs javascript executor
-// @namespace  http://gholk.github.io/
-// @description  press J in term.ptt.cc can run JavaScript
-// @require https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js
-// @match https://term.ptt.cc/*
-// @match https://www.clam.ml/*
-// @match https://www.ptt.cc/bbs/*
-// @version  13
-// @grant  GM.notification
-// @grant  GM.xmlHttpRequest
-// ==/UserScript==
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h4 id=&quot;執行環境&quot;&gt;執行環境&lt;/h4&gt;
-&lt;ul&gt;
-&lt;li&gt;window 是假的，真的在 unsafeWindow。&lt;/li&gt;
-&lt;li&gt;程式是被包在一個匿名函數裡執行，所以宣告的變數不會變全域變數。&lt;/li&gt;
-&lt;li&gt;jquery 有時會炸，原因不明。&lt;/li&gt;
-&lt;li&gt;事件請愛用原生操作 &lt;code&gt;*.addEventListener&lt;/code&gt; ，jquery 的會炸。&lt;/li&gt;
-&lt;li&gt;操作 dom 還沒什麼問題，可以用原網頁的 jquery： &lt;code&gt;const $ = unsafeWindow.$&lt;/code&gt; 。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h4 id=&quot;`GM.*`-API&quot;&gt;&lt;code&gt;GM.*&lt;/code&gt; API&lt;/h4&gt;
-&lt;ul&gt;
-&lt;li&gt;GM.notification 可以發通知&lt;/li&gt;
-&lt;li&gt;GM.xmlHttpRequest 不受 same origin policy 限制，超爽的&lt;/li&gt;
-&lt;li&gt;GM.setClipboard 可以簡單複製內容&lt;/li&gt;
-&lt;li&gt;api 都是 promise 非同步，不過除非你很重順序，不然直接呼叫時間也不會差太多&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://wiki.greasespot.net/API&quot;&gt;https://wiki.greasespot.net/API&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;GM.notification(&amp;apos;hello (1)&amp;apos;)
-  .then(() =&amp;gt; {
-    return GM.notification(&amp;apos;hello (2)&amp;apos;)
-  })
-  .then(() =&amp;gt; console.log(&amp;apos;after send 2 notify&amp;apos;))
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h4 id=&quot;功能鍵&quot;&gt;功能鍵&lt;/h4&gt;
-&lt;ul&gt;
-&lt;li&gt;以前有 api 可以在 grease monkey 的選單上設置按鈕。&lt;/li&gt;
-&lt;li&gt;不過 firefox 57 quantum 後，api 不允許了。&lt;/li&gt;
-&lt;li&gt;綁鍵盤 &lt;code&gt;window.addEventListener(&amp;apos;keydown&amp;apos;)&lt;/code&gt; 。&lt;/li&gt;
-&lt;li&gt;改用 bookmarklet，本身就是要點擊才能執行的。&lt;/li&gt;
-&lt;li&gt;grease monkey 較適合直接改 dom 而不是點擊執行。
-像聽 hover 事件、在網頁上加按鈕。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;擴充元件&quot;&gt;擴充元件&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;功能更多，彈性更大。
-可以做到上 bbs、修改歷史記錄、新增工具列按鈕等功能。&lt;/li&gt;
-&lt;li&gt;權限更清楚。在安裝時會清楚告訴你用到哪些功能。&lt;ul&gt;
-&lt;li&gt;小書籤雖然要點擊才會執行，
-但除非看原始碼，不然完全不知道執行時做了什麼。&lt;/li&gt;
-&lt;li&gt;油猴腳本在安裝時會告知腳本會在哪些網頁下運作，
-用到哪些 api，但給的還是很籠統。&lt;/li&gt;
-&lt;li&gt;擴充元件的安全性更有保障；
-且 chrome 與 firefox 都會審覈擴充元件的程式碼，較安全。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;擴充元件與油猴的安全性&quot;&gt;擴充元件與油猴的安全性&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49136395291&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49136395291_0d529072b6.jpg&quot; alt=&quot;plugin-permission-request.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49136395406&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49136395406_4e969ac36a.jpg&quot; alt=&quot;greasemonkey-permission-request.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;因為擴充元件太複雜&quot;&gt;因為擴充元件太複雜&lt;/h3&gt;
-&lt;p&gt;雖然我寫過，但今天就不介紹了。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;總結&quot;&gt;總結&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;開發者工具適合快速測試、編寫一次性腳本。&lt;/li&gt;
-&lt;li&gt;小書籤適合需要時才執行的功能，例如批次下載、自動砍站。&lt;/li&gt;
-&lt;li&gt;油猴腳本通常用來優化使用體驗，像放大影片、預覽圖片。
-較進階的用法也可以在頁面中插入按鈕，
-點擊時再執行類似小書籤的一次性功能。
-例如一些 youtube 的油猴腳本就會在頁面中加一堆按鈕，
-提供五花八門的功能。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;什麼時候該用擴充元件？&quot;&gt;什麼時候該用擴充元件？&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;當上面三者的都無法提供你需要的 api 時，例如 bbsfox、連 ftp。&lt;/li&gt;
-&lt;li&gt;當你需要寫出 &lt;s&gt;讓麻瓜安心使用&lt;/s&gt; &lt;em&gt;真正能用或能賣的東西&lt;/em&gt; ，
-而不是客群只限定在 geek 的程式。
-你要有一個正規的管道來發布，最好的選擇就是上架 chrome store 或
-mozilla add on，讓使用者能放心安裝。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;重用小書籤與-user.js-的程式碼&quot;&gt;重用小書籤與 user.js 的程式碼&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;有時你會想要發布一個程式到二種平台，
-小書籤的好處是所有人都能用，但 user.js 用起來比較方便。&lt;/li&gt;
-&lt;li&gt;可以透過 &lt;code&gt;typeof GM&lt;/code&gt; 判斷是否在 grease monkey 下運行。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;if (typeof GM == &amp;apos;object&amp;apos;) runInGreaseMonkey()
-else runInBookmarklet()
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;許願池&quot;&gt;許願池&lt;/h2&gt;
-&lt;p&gt;你有什麼功能想做嗎？
-或是想練手卻不知道做什麼嗎？
-來許願吧！&lt;/p&gt;
-&lt;div id=&quot;disqus_thread&quot;&gt;&lt;/div&gt;
-
-&lt;hr&gt;
-&lt;h3 id=&quot;[簡單-grease-monkey-repl][gm-repl]&quot;&gt;&lt;a href=&quot;https://gist.github.com/GHolk/699c7b42d02e9dfd1c8f9af011f1eef1&quot;&gt;簡單 grease monkey repl&lt;/a&gt;&lt;/h3&gt;
-&lt;p&gt;Read Evaluate Print Loop，
-可以輸入表達式，程式會調用 eval 然後印出求值結果。
-如果輸入是 promise，會等 resolve 後才顯示結果。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;FB-備份功能&quot;&gt;FB 備份功能&lt;/h3&gt;
-&lt;p&gt;把一份貼文備份成 JSON 或其它格式，
-並在原文被刪除時可以重發，
-在每層樓 tag 原本的留言者並附上當初的留言。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;[BBSJS](bbsjs.html)&quot;&gt;&lt;a href=&quot;bbsjs.html&quot;&gt;BBSJS&lt;/a&gt;&lt;/h3&gt;
-&lt;p&gt;在 ptt 上執行 javascript，
-類似當初 BBSLua 的概念，
-但是跑在瀏覽器上而不是 server 上。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;[clean-window](https://github.com/GHolk/bookmarklet/blob/master/youtube-clean-player.js)&quot;&gt;&lt;a href=&quot;https://github.com/GHolk/bookmarklet/blob/master/youtube-clean-player.js&quot;&gt;clean window&lt;/a&gt;&lt;/h3&gt;
-&lt;p&gt;開啟一個沒有工具列、分頁列、網址列的乾淨視窗，
-同義於 &lt;code&gt;chromium --app=https://www.youtube.com/embed/dWKNW5lm3Ss&lt;/code&gt; 。
-通常是用在看 youtube 時想空出多點空間。
-&lt;a href=&quot;http://youtu.be/dWKNW5lm3Ss&quot;&gt;http://youtu.be/dWKNW5lm3Ss&lt;/a&gt; 。&lt;/p&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/linux-shell-script-for-windows-ssh.html#fix-for-loop-close-done</id>
 <title>以 linux shell 為基礎在 windows 中批次處理</title>

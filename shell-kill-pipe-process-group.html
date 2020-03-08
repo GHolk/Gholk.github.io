@@ -1,0 +1,157 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2020-03-08T08:15:46.813Z">
+<meta name="keywords" property="og:article:tag" content="linux,shell,program,gnss,rtklib">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="gnss-rtklib-real-time-ppp.html" title="以 RTKLIB 與 RTCM SSR 訊息進行 real time PPP">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>用 pgid 終止一組管道程序</title>
+</head>
+<body>
+<main><h1 id="用-pgid-終止一組管道程序">用 pgid 終止一組管道程序</h1>
+<p><a href="gnss-rtklib-real-time-ppp.html">之前寫 rtklib 的腳本時</a>，
+發現把管道丟到背景後，只會拿到管道最後一個程序的 pid，
+要用 <abbr title="progress group id">pgid</abbr>
+才能一次終止所有程序。
+於是研究了一下怎麼拿到 pgid，和使用的方式。</p>
+<h2 id="正確關掉丟到背景的程序">正確關掉丟到背景的程序</h2>
+<p>以前以為在 sh 裡把程序丟到背景後，
+就只能用 <code>kill %1</code> 的方式終止。
+有一段時間還不知道為什麼腳本執行起來有問題。
+最近才發現是 <code>%</code> 的表示法只能在互動式 shell 裡用，
+在腳本裡是會被忽略的。
+（那時候還開了 dash 測都沒問題，
+原來 dash 也有分互動模式和腳本模式， 互動模式才可以用 <code>%</code> 。）
+又 google 了很久，才學到可以用 <code>$!</code> 取得丟到背景的程序 pid。</p>
+<p>會用到這功能，去年有寫過自動重啟某程序的腳本，
+需要判斷該程序是不是還活著，
+就踩了很多 <code>$(jobs)</code> 因為是在子程序中執行，
+看不到母程序的子程序的搞笑事件。
+（ <code>jobs &gt; jobs-list</code> 倒是可以運作，因為不是子程序。）</p>
+<p>另外就是 rtklib 的 cli 版本程式，
+都會很貼心的忽略 SIGHUP 訊號，
+以讓程序在 shell 退出後還能繼續執行；
+逼我要手動用 kill 終止。</p>
+<pre><code class="lang-sh">rtkrcv -o rtkrcv.conf -p 5564 &amp;
+pid_rtkrcv=$!
+
+trap on_exit EXIT TERM INT HUP
+on_exit() {
+    kill $pid_rtkrcv
+    trap - EXIT
+}
+</code></pre>
+<h2 id="rtklib-str2str-的串流問題">rtklib str2str 的串流問題</h2>
+<p>之前寫 rtklib 的腳本，因為不想用 http 明文傳登入資訊，
+所以接 igs 的星曆都是用 curl 走 https，
+再用管道傳給 str2str 串流到 tcp 給 rtkrcv 用。</p>
+<pre><code class="lang-sh">curl --user-agent &apos;NTRIP RTKLIB (curl)&apos; \
+    https://username:password@products.igs-ip.net/CLK93 \
+| str2str -out tcpsvr://:5567 &amp;
+pid_ntrip=$!
+
+on_exit() {
+    kill $pid_ntrip
+    trap - EXIT
+}
+
+trap on_exit EXIT INT TERM HUP
+</code></pre>
+<p>那時就有注意到，在終止後雖然 str2str 被殺掉了，
+但 curl 仍執行了一段時間，
+才因為寫入到已經關閉的程序，發生錯誤自己退出。</p>
+<p>後來是解 <a href="https://github.com/rtklibexplorer/RTKLIB/issues/51#issuecomment-595661883">另一個 bug</a> ：
+str2str 把 serial (com port) 串流到 tcp 時，
+如果有多個客戶端同時連接，收到的內容會是錯的。
+因為用到二個 str2str，只關掉最後一個程序前面的還是會繼續執行，
+所以才想找一次關掉整個管道的方法。</p>
+<h2 id="程序群組">程序群組</h2>
+<p><a href="https://www.kawabangga.com/posts/3849">以前就有看過程序群組的概念</a> ，
+也就是 shell 會把一個管道中的所有程序分到同一個新群組，
+這樣就可以一次終止整個群組來結束整個管道。
+群組 id 也就是群組長程序 id，也就是群組中第一支程序的 id。
+posix c 的 kill 函數，如果傳入的 pid 是負數，
+就代表終止該程序群組中的所有程序。</p>
+<p>當時沒有想太多，只覺得 shell 會處理好。
+現在回頭看，在 <code>kill %1</code> 時，如果 <code>%1</code> 是一組管道，
+那 shell 實際上做的就是終止整個程序群組。</p>
+<p>而 shell 指令 kill 也和 c 的 kill 函數一樣，
+可以接受負數來一次終止群組中的所有程序。
+只是如果直接寫 <code>kill -5566</code> ，會被當成選項，
+然後因為沒有 5566 這個項選項就報錯了。</p>
+<p>可以用二個減號告訴 kill 之後的都不是選項：
+<code>kill -- -5566</code> ，就能正確解析。
+或在參數前面加個空白： <code>kill &apos; -5566&apos;</code>
+因為第一個字元不是減號，
+kill 就不會把該參數當成選項，但仍能解析出負數。</p>
+<p>要終止群組需要的是群組 id，也就是群組長的 id，然後傳給 kill。
+但問題是在腳本中， <code>$!</code> 是管道中最後一個程序的 id，
+而沒辦法知道一組管道的第一支程序的 id。
+有二個解決方式，一是把整個管道包在一支子程序裡，
+二是用 ps 查出該程序所屬的程序群組。</p>
+<h3 id="把管道包進單一子程序">把管道包進單一子程序</h3>
+<p>這招是 google 時在 stackoverflow 上第一個找出的方法。
+把原本 <code>foo | bar &amp;</code> 寫成 <code>(foo | bar) &amp;</code> ，
+這樣就只有一支程序，所以最後一支程序也就是第一支程序，
+也就是群組長了，在括號中的管道也會同一個群組中。
+就能用 <code>kill -- -$!</code> 直接殺掉。
+但缺點是會多包一層，多出一個子程序。</p>
+<pre><code>~ $ sleep 6m | sleep 8m &amp;
+[1] 12661
+~ $ (sleep 6m | sleep 8m) &amp;
+[2] 12664
+~ $ pstree $$
+bash(9149)-+-bash(12664)-+-sleep(12665)
+           |             `-sleep(12667)
+           |-pstree(12669)
+           |-sleep(12660)
+           `-sleep(12661)
+</code></pre><h3 id="用-ps-列出該程序所屬的群組">用 ps 列出該程序所屬的群組</h3>
+<p>雖然 <code>$!</code> 只有管道中最後一個程序的 id，
+但用 <code>ps -j $!</code> 就能看到該程序的群組，顯示為 pgid。
+查閱 ps 的手冊後，可以知道如果只要列出 pgid，
+可以用以下選項： <code>ps --no-headers --format pgid:1 $!</code>。</p>
+<p>其中 format 是只列出特定欄位，而 <code>:1</code> 是指定欄位的寬度，
+預設是似乎是 5，會出現一個前置空白，
+如果搭配 kill 需要負數，要前置減號時會變成 <code>- 5566</code> ，
+會無法解析，所以要消掉前置的空白。</p>
+<pre><code class="lang-sh">pgid() {
+    ps --no-headers --format pgid:1 $1
+}
+
+str2str -in serial://serial0#ubx \
+| str2str -out file://f9p.ubx::T \
+          -out tcpsvr://:5567 &amp;
+pgid_ublox=`pgid $!`
+
+on_exit() {
+    kill -- -$pgid_ublox
+    trap - EXIT
+}
+
+trap on_exit EXIT INT TERM HUP
+</code></pre>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

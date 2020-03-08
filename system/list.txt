@@ -299,3 +299,4 @@ ccca-dokuwiki-hello-world-slide.html
 image-processing-transform-code.html
 geomatics-flat-taiwan-road-pavement.html
 gnss-rtklib-real-time-ppp.html
+shell-kill-pipe-process-group.html

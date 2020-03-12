@@ -123,7 +123,10 @@ bash(9149)-+-bash(12664)-+-sleep(12665)
            |-pstree(12669)
            |-sleep(12660)
            `-sleep(12661)
-</code></pre><h3 id="用-ps-列出該程序所屬的群組">用 ps 列出該程序所屬的群組</h3>
+</code></pre><p>但後來發現不管用，要開啟 job control 功能才有此效果，
+在 dash 的非互動模式預設是關閉的，
+也查不到是否為 posix 標準。</p>
+<h3 id="用-ps-列出該程序所屬的群組">用 ps 列出該程序所屬的群組</h3>
 <p>雖然 <code>$!</code> 只有管道中最後一個程序的 id，
 但用 <code>ps -j $!</code> 就能看到該程序的群組，顯示為 pgid。
 查閱 ps 的手冊後，可以知道如果只要列出 pgid，
@@ -147,6 +150,51 @@ on_exit() {
 }
 
 trap on_exit EXIT INT TERM HUP
+</code></pre>
+<h2 id="子-shell-的問題">子 shell 的問題</h2>
+<p>寫腳本時碰到一個問題，偶爾 curl 會斷線退出，
+所以我需要讓 curl 退出後重啟。
+我很直覺寫了個 while 迴圈來處理：</p>
+<pre><code class="lang-sh">while sleep 5
+do curl --user-agent &apos;NTRIP RTKLIB (curl)&apos; \
+    https://username:password@products.igs-ip.net/CLK93
+done \
+| str2str -out tcpsvr://:5567 &amp;
+pgid_ntrip=`pgid $!`
+</code></pre>
+<p>但後來發現這種寫法會讓 sleep curl str2str
+三支程序 pgid 都和 shell 一樣，
+而不會生出一個新程序群組。
+所以在終止整個程序群組時也會終止 shell 自己。</p>
+<p>然後我在 shell 又 trap 了終止信號，
+造成在終止時發信號給自己，
+又觸發一次事件處理，又發一次信號；
+最後疊太多層 stack overflow。</p>
+<pre><code>on_exit() {
+    echo exiting
+    kill -- -$pgid_ublox
+    trap - EXIT
+}
+
+trap on_exit EXIT INT TERM HUP
+</code></pre><p>找到問題後也想不到什麼好的辦法，
+畢竟就是不會開新群組，只有原本的群組。
+只能先把重複觸發事件處理的問題解決，
+在收到信號就直接重置處理函數就不會重複觸發了。</p>
+<pre><code class="lang-sh">on_exit() {
+    trap - EXIT INT TERM HUP
+    echo exiting
+    kill -- -$pgid_ublox
+}
+
+trap on_exit EXIT INT TERM HUP
+</code></pre>
+<p>至於在管道中使用 shell 內建語法造成無法新建群組的問題，
+除非打開 job control，
+不然也只能用 ps 和 awk 去抓了。</p>
+<pre><code class="lang-sh">ps -o pgid:1,pid -au $USER \
+| awk &quot;(\$1==$pgid &amp;&amp; \$2!=$pgid) {print \$2}&quot; \
+| xargs kill
 </code></pre>
 </main>
 

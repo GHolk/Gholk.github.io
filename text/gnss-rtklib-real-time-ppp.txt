@@ -7,6 +7,8 @@ RTCM 要選 products.igs-ip.net，天線要用雙頻。
 
 [rtkexplorer rtklib]: http://rtkexplorer.com/downloads/rtklib-code/
 
+<script src="ext/toc.js"></script>
+
 ## 無關技術的事情起緣
 之前教授不知哪裡看到 real time ppp 的消息，
 認為 rt-ppp 是未來的潮流，
@@ -84,6 +86,70 @@ windows 下 com port 就直接叫 com1，也沒有所謂的完整路徑。
 像用 `nc localhost 5566` 讀取；
 如果是 client，就是會主動連到該 ip port 輸出資料，
 類似 http post 到某一個 port 的概念。
+
+### 重播用的 timetag
+後來我發現，rtklib 有一個 **重播** 功能，
+把串流存到檔案後，可以再從檔案串流出來，供事後反覆解算。
+但這個功能除了原始串流資料，
+還需要什麼時間串流了多少資料的時間資料。
+要啟用這功能，在 rtklib 或 str2str 中的
+`file://` 路徑結尾加上 `::T` 即可，
+例如 `file://ublox-f9p.ubx::T` 。
+rtklib 用雙冒號當作參數的語法。
+（怎麼不是用 querystring 的風格？）
+
+如果在儲存時加上 T 選項，除了原始檔案，
+還會多儲存一個 `*.*.tag` 的 timetag 檔案來記錄時間戳。
+（像 `ublox-f9p.ubx` 和 `ublox-f9p.ubx.tag` ）
+在讀取時如果加上 T 選項，就會照 timetag 檔案裡記錄的時間重播。
+
+如果不用 T 選項，基本上就無法正確的重播；
+rtklib 只會以最快速度一次把所有資料讀完，
+而不同格式的檔案間也無法配合。
+所以可能星曆讀到一半，但觀測量已經讀完了，
+讀取到的時間點沒重疊，無法一起解算。
+
+很可惜的是明明多數觀測量都已經有時間戳了，
+但卻還是要額外記錄一個 timetag 檔案才能正確重播。
+有想過自己寫一支程式讀觀測量產生 timetag 檔案，
+但後來發現超出我的能力，幾乎看不懂 rtklib 的原始碼，就放棄了。
+別人已經寫好就乖乖照他的框架走就好了。
+
+#### 時間戳的格式
+麻煩的是時間戳還有二種格式，
+似乎和 c 語言中的時間戳資料結構大小有關。
+在 raspberry pi 中是 4 byte，
+在一般 64 bit PC 是 8 byte。
+
+在讀取時可以用 `::P=4` 或 `::P=8` 來指定，
+在存儲時 P 選項好像沒有用，不能更改。
+而且更麻煩的是一支 rtkrcv 程序在讀取二個檔案時，
+不能指定不同格式的時間戳；
+得要開二支 str2str 以不同大小讀取串流，
+到 tcp 上就沒有時間戳問題了。
+
+這個選項沒有寫在手冊裡，
+我去翻 [原始碼才在註解裡][comment p option] 找到的……。
+不過原始碼還是超出我能力範圍，無法修改。
+
+[comment p option]: https://github.com/GHolk/RTKLIB/blob/79767dc828e1cf315238812c02e0e1627b0126b0/src/stream.c#L2721
+
+#### 時間的同步
+如果在腳本中，那數支 str2str 是在不同行命令中執行，
+雖然 shell 不是很快的語言，約有數十 ms 等級的時差，
+但對 gnss 的速度來說算是同步的。
+
+但如果很不幸二份檔案是在不同時間開始記錄的，
+那就需要讓二者播放時能 **同步** 。
+可以用 `::+60` 的選項來快轉 60 秒。
+另外 rtkrcv 中如果讀取來源是有 timetag 的檔案，
+就會自動將二者同步。
+如果是 str2str，則需要手動算出誤差秒數來同步。
+
+要算同步秒數，可以在 rtkrcv console 中，
+用 observ 命令來看到目前的觀測量的時間，
+用 ssr 可以看到星曆的時間。
+rtk 的話，二者都會顯示在 observ 裡。
 
 ### ser2net
 str2str 是只能單向讀取 serial 輸出到其它串流，
@@ -348,6 +414,118 @@ trap on_exit EXIT TERM INT HUP
 
 wait
 ```
+
+#### str2str 從 serial 讀取的 bug
+碰到一個問題，用 str2str 把 serial 傳到 tcp
+再傳到 rtkrcv 後，收到的資料很多是錯的。
+原因大概是單一一支 str2str 程序，
+如果同時要讀取 serial、寫入檔案、傳送到 tcp，負擔會太大。
+雖然儲存的檔案會是正確的，但 tcp 上會缺資料。
+我猜是因為 serial baud 設太高，cpu 來不及，
+但也不確定 baud 和 str2str 內部的程式有沒有關係，
+我太廢 str2str 的原始碼基本看不懂。
+
+解決方法是啟動二支 str2str 程式，
+一支只負責讀 serial 送到 stdout，
+另一支再負責儲存到檔案和送到 tcp。
+
+```sh
+str2str -in serial://serial0#ubx \
+| str2str -out file://ublox-f9p.ubx::T \
+          -out tcpsvr://:5566
+```
+
+只用一支 str2str 同時讀取 serial 並儲存時，
+存的 timetag 會變很大，幾乎比原始觀測量還大，
+我猜可能是讀取頻率很高，所以要記錄很多次時間戳。
+如果用二支 str2str 管道並在第二支 str2str 存，
+timetag 就比較正常，大小變原始檔的十分之一左右。
+
+#### 選項 logstr 儲存觀測量
+原本我是啟動 str2str 和 rtkrcv，
+才能同時把資料用來定位也儲存到檔案。
+後來發現 rtkrcv 有一個 logstr 選項，
+語法就和 str2str 的 `-out` 一樣，
+可以直接把 inpstr 收到資料再轉發出去，
+可以直接存成檔案，也可以用 tcp 再傳出去。
+
+但之前用 str2str 讀 serial 同時存檔和 tcp 廣播就很吃力，
+如果要用單一支 rtkrcv 做，因為還要定位，可能會更吃力。
+
+之前有一次要在二個站收 network rtk，
+本來就直接要了二組 egnss 帳號來連。
+後來想到，其實可以只用一個帳號，
+然後二個站距離很近，都和同一個 egnss 訊號差分就可以了。
+就可以用 logstr 把收到訊號送出去給另一台機器。
+
+network rtk 除了收資料，
+還需要把測站所在的大略位置，
+用 nmea 格式放在 ntrip 請求的 body 送給伺服器，以內插虛擬觀測量。
+（對，就是有 body 的 http get。）
+雖然用 str2str `-p` 選項也可以，
+但要先知道大略座標比較麻煩。
+如果用 rtkrcv 的話，直接在設定檔裡設
+`inpstr2-nmeareq=single` `ant2-postype=rtcm` ，
+就會把 sps (single) 的定位結果用 nmea 傳到伺服器，
+並把 rtcm 訊息中的座標當基站座標。
+
+#### kill 終止 str2str 的問題
+如果要終止 str2str，直接用 `$!` 和 kill 即可；
+但如果 str2str 還串了管道和一堆有的沒的，
+要一次終止就比較麻煩；
+可能只能一次終止整個 process group。
+詳細可以參考 [下一篇專門談終止子程序的文章][kill sub process] 。
+
+[kill sub process]: shell-kill-pipe-process-group.html
+
+#### 重播時的時間戳來源
+之前提過可以重播記錄的檔案，但在重播 rtcm 時有個問題，
+rtklib 似乎會解析某些資料的時間戳，
+有些則不會，會直接拿現在時間。
+
+我碰到的問題是我的 ublox 資料是 P=4 的，
+但 rtcm 是 P=8 的，所以不能二個都在設定檔裡讀。
+我就把 ublox 和 rtcm 都改用 str2str 播到 tcp，
+然後在 rtkrcv 裡從 tcp 讀。
+結果 tcp 讀進來的 ublox 時間是觀測時間，
+但 rtcm 讀進來的則變成現在，造成二個不同步。
+可能因為 ublox 帶時間戳，而 rtcm 沒有；
+或是 rtkrcv 直接假定從 tcp 讀 rtcm 是即時。
+
+總之這個麻煩的問題，我後來是分開讀取來源。
+rtcm 直接用 `file://ublox-f9p.ubx::T` 從檔案讀，就會帶正確的時間戳了；
+ublox 則用另一支 str2str 串到 tcp 讀，
+觀測量自帶時間戳所以沒問題。
+只是這樣要算時差，手動在 str2str 加上去；
+而且要用命令一次執行，不能一行一行打，時差會跑掉。
+
+```sh
+str2str -in file://ublox-f9p.ubx::T::+3600::x300 \
+        -out tcpsvr://:5567 1>/dev/null 2>&1 &
+rtkrcv -o post.conf -s
+```
+
+#### rtkrcv 自動開始只在終端機連結時啟動
+rtkrcv 預設 rtkrcv 只會開啟終端介面，
+要在介面裡下 start 命令才會開始讀取資料定位。
+所以有設計一個 `-s` 選項，帶選項的話相當於自動輸入 start 命令。
+
+問題是 s 選項的行為是在開啟終端時會自動執行 start，
+如果結合另一個 `-p` 選項把終端開在 tcp 上，
+就不會開啟預設開在 shell tty 上的終端了，
+也就要等到有人用 telnet 連到 tcp 上的終端時，
+才會 **自動開始** 定位。
+
+於是就有人在 github issue 上報了這個 [自動啟動選項
+並不是真的自動啟動的詭異 issue][rtkrcv auto start issue] 。
+然後建議也五花八門，什麼在腳本內用 python 連進去後送出 start 命令；
+我則是直接改原始碼，強制用 stdio 開一個假終端，
+在假終端中執行 start 命令。
+然後也有人給出另一個比較簡單的解法，
+用 `-d` 選項指定一個終端，這樣就能自動開啟了；
+如果沒有終端裝置能指定，指定在 `/dev/null` 也能自動執行。
+
+[rtkrcv auto start issue]: https://github.com/rtklibexplorer/RTKLIB/issues/38
 
 #### 設定檔
 從 [rtkexplorer 的文章][rtkexplorer rt ppp] 裡改來的。

@@ -1,0 +1,429 @@
+# 為什麼學界應使用自由軟體？
+所有人都應該堅持軟體的自由。
+因為這是你的電腦，你有權知道內部的程式如何運行。
+而 *非自由軟體* 則像是魔鬼：
+（以下簡稱 [[閉源軟體]] 。）
+「你可以使用這個軟體，但你不能分享給其它人，
+也不能偷看程式是如何運作的。」
+這篇文章則說明相對於一般人，
+為什麼學校 *更應該* 使用 [[自由軟體]] 。
+本文改寫自 [GNU][] [[理查·史托曼|RMS]] 的 
+[Why Schools Should Exclusively Use Free Software][free_school_rms] 。
+
+[free_school_rms]: http://www.gnu.org/education/edu-schools.en.html
+[GNU]: http://www.gnu.org
+
+<script src="ext/toc.js"></script>
+
+## 類似文章
+* [Why Schools Should Exclusively Use Free Software][free_school_rms]
+* [【資訊人權貴專欄】學校應採用自由軟體，這也是讓世界變得更好的「童軍精神」](http://buzzorange.com/techorange/2013/07/01/free-software-and-scouting/)
+* [為什麼該接觸 GNU/Linux 開發工具](https://hackmd.io/@sysprog/r1Psrf0KW) -- jserv
+* [為什麼計算機的學生要學習 Linux 開源技術](https://read01.com/zh-tw/x4Ba.html)
+
+## 自由軟體定義
+自由軟體基金會定義自由軟體賦予使用者四種自由。
+
+ 0. 自由之零：不論目的為何，有使用該軟體的自由。
+
+ 1. 自由之一：
+    有研究該軟體如何運作的自由，
+    並且得以修改該軟體來符合使用者自身的需求。
+    取得該軟體之源碼為達成此目的之前提。
+
+ 2. 自由之二：
+    有重新散布該軟體的自由，
+    所以每個人都可以藉由散布自由軟體來敦親睦鄰。
+
+ 3. 自由之三：
+    有改善再利用該軟體的自由，
+    並且可以發表修訂後的版本供公眾使用，
+    如此一來，整個社群都可以受惠。
+    如前項，取得該軟體之源碼為達成此目的之前提。
+
+## 學界的超然獨立
+學界一直是超然獨立的。
+學校教導學生獨立思考的能力。
+學校不是國家的宣傳工具，不應在思想上有任何偏袒。
+學校教導獨立，而閉源軟體導致依賴。
+自由軟體培養 **獨立** ，教導 **自由** 、 **分享** 。
+使用自由軟體、了解自由軟體精神背後的意義，
+就是一堂公民課的實踐。
+
+### 免費
+免費也是自由軟體的好處之一，許多自由軟體是免費的。
+自由軟體是非營利的，因此它也十分適合學界。
+要注意的是，某些公司會提供學界 *優惠方案* 。
+這個行為就像商店提供 *免費試用* ；
+可能你覺得好用，或是因為資料無法轉出，
+未來就會成為 *忠實客戶* 。
+
+而提供學校優惠方案還有更重要的意義。
+因為學校是學生學習的地方，
+如果學校以特定軟體教學某項技術，
+學生畢業後脫離學校，因為只會使用該軟體，
+就會向廠商購買該軟體使用，
+也就是從學生階段搶佔市場。
+
+故儘管免費很好，但廠商會也會免費的方式推廣自家軟體，
+對於採用自由軟體來說，免費並非最重要的考量，
+背後自由的概念才是更重要的；
+否則容易被廠商提供的免費或優惠方案模糊焦點。
+
+## 自由軟體鼓勵學習
+自由軟體擁有十分豐富的文件；
+從入門、使用、客製化、開發，都有十分齊全的說明。
+且原始碼是公開的，可以任意修改、再散布。
+
+而閉源軟體則視原始碼為 **商業機密** 。
+不可說、不可見，禁止窺看。
+用 [[逆向工程]] 去修改軟體、再散布，
+都可能因為 **侵犯智慧財產權** 而吃上官司。
+
+在學校，學生被鼓勵 **發問** 、 **學習** 。
+而閉源軟體不允許你窺看 **商業機密** ，
+所以閉源軟體不應該出現在學校。
+
+## 自由軟體是學習電腦的最佳起點
+
+### 學習閉源軟體
+學習一套閉源軟體是需要謹慎評估的，
+因為付出的時間成本可能會回不來。
+
+  - 閉源軟體需要購買。
+    若不買，學到的技巧就浪費掉了。
+
+  - 閉源軟體要看公司臉色
+    若公司倒了，要求你付錢更新，
+    或其它奇奇怪怪的理由，你都只能接受。
+
+  - 閉源軟體的格式封閉
+    若你今天想換換口味，使用其它的軟體，
+    還得看檔案格式支不支援。
+
+### 學習開源軟體 ###
+自由軟體能夠讓學習不浪費；
+一次學習，終生受用。
+
+自由軟體都是公開原始碼的。
+不怕沒有人維護；
+*除非全世界只剩你一個人在用，而且你不懂寫程式。*
+要是用得不滿意，也僅管自己修改。
+
+開源界注重統一標準。
+所以不怕 [被特定軟體綁架][software_kidnap] 。
+因為開源界常常某某幾個人，
+對一個軟體不滿意，就自己分支出一個新版本；
+或是多種不同的軟體實現同樣的功能。
+這就是開源界的多樣性。
+
+[software_kidnap]: http://ckhung0.blogspot.tw/2014/10/barrier-of-exit.html "下賊船的代價"
+
+### 學習開發程式
+學習開發大型程式最好的辦法，
+就是從理解一個現有程式的運作開始。
+從閱讀原始碼、添加新功能、嘗試修改、修正 bug , 
+你才能學會如何開發大型程式。
+且閉源軟體不可能允許你接觸原始碼，
+更惶論修改或再散布了。
+
+## 研究必須公開所有細節
+基於科學的研究，必須是可再現的。
+（更嚴謹地，必須可被推翻。）
+一般來說研究成果會完全公開，供所有人檢視。
+（某些企業可能會介由專利的方式，
+獨佔自己實驗室的成果一段時間；但絕不是永遠。）
+但如果研究中使用到了閉源軟體呢？
+要怎麼證明閉源軟體所產出的結果是正確的？
+
+大部份閉源軟體的程式碼、
+運作細節都是商業機密，無從檢視。
+你只能相信軟體公司所言真實：
+「我們的軟體是正確的。」
+
+當然，並非所有的軟體都關係到研究成果。
+只是這不是一個好的研究；
+它成了經由某些你不知道原理，
+但結果正確的方法得出的結論。
+望所有人謹記，一旦經由閉源軟體，
+研究將不再是 *完全公開* 的。
+
+## 自由軟體符合學術界的人類共同體概念
+大多數學術界的研究都是公開的。
+整個基礎科學知識，
+是全人類共同體一步步累積、一同分享的成果。
+而自由軟體也符合類似的精神，
+所有自由軟體的原始碼，
+是全人類可以自由取用、共享的財產。
+
+## 原文及翻譯
+原本這篇是發在我在成大的部落格，
+用成大提供的網頁空間，後來畢業後就被收掉了。
+後來想想這篇蠻有價值的，
+應該要持續散布，就把舊文整理一下重發了。
+
+這是 [RMS 的原文][free_school_rms] 
+，但我覺得寫得不好；有點冗言。
+我本來想翻譯加潤飾就好，所以沒有照原文逐字翻。
+但後來還是覺得不好，就自己又寫了一篇。
+以下原文與逐段翻譯，也提供參考。
+
+> 
+> Education → In Depth → Why Schools Should Exclusively Use Free Software
+> 
+> # Why Schools Should Exclusively Use Free Software
+> 
+> 為什麼學界應當使用自由軟體？
+> 
+> by Richard Stallman
+> 
+> 作者：理查．斯托曼
+> 
+> Educational activities, including schools of all 
+> levels from kindergarten to university, have a moral 
+> duty to teach only free software.
+> 
+> **學界** ：包括幼稚園到大學，有更多責任 **只** 教導 
+> [[自由軟體]]  。
+> 
+> All computer users ought to insist on free software: 
+> it gives users the freedom to control their own 
+> computers—with proprietary software, the program does 
+> what its owner or developer wants it to do, not what 
+> the user wants it to do. Free software also gives 
+> users the freedom to cooperate with each other, to 
+> lead an upright life. These reasons apply to schools 
+> as they do to everyone. However, the purpose of this 
+> article is to present the additional reasons that 
+> apply specifically to education.
+> 
+> 所有電腦使用者都應該 **堅持** *軟體的自由* 。
+> 自由的軟體才讓使用者能 *自由的控制自己的電腦* 。
+> *非自由* 軟體做它的設計者期望它做的事；
+> 而非你 （使用者）希望它做的事。
+> （指所有不公開原始碼的軟體。
+> 因為不公開原始碼，理論上只有設計者知道它做了什麼。）
+> 自由軟體更提供使用者與其它人 *共同改善該軟體* 的功能。
+> 這些事實不指適用於學界，也適用於任何人；
+> 而本文的更列舉出其它 *學界應該使用自由軟體的理由* 。
+> 
+> Free software can save schools money, but this is a 
+> secondary benefit. Savings are possible because free 
+> software gives schools, like other users, the freedom 
+> to copy and redistribute the software; the school 
+> system can give a copy to every school, and each 
+> school can install the program in all its computers, 
+> with no obligation to pay for doing so.
+> 
+> 自由軟體可以節省學校的經費；但這只是次要的理由。
+> 省錢只是因為軟體的自由而產生的許多外部效益之一。
+> 
+> This benefit is useful, but we firmly refuse to give 
+> it first place, because it is shallow compared to the 
+> important ethical issues at stake. Moving schools to 
+> free software is more than a way to make education a 
+> little “better”: it is a matter of doing good 
+> education instead of bad education. So let's consider 
+> the deeper issues.
+> 
+> 免費很吸引人，是十分直接明瞭的好處，
+> 但我們拒絕將它放在首位。
+> 與蘊藏在 **自由軟體** 中的道德意義相比，免費是十分膚淺的理由。
+> 學校使用自由軟體並教授自由的理念，
+> 是將教育提昇到一個更佳的層次。
+> 
+> Schools have a social mission: to teach students to 
+> be citizens of a strong, capable, independent, 
+> cooperating and free society. They should promote the 
+> use of free software just as they promote conservation 
+> and voting. By teaching students free software, they 
+> can graduate citizens ready to live in a free digital 
+> society. This will help society as a whole escape from 
+> being dominated by megacorporations.
+> 
+> 學校的重要任務，是將學生培養成
+>  *獨立* 、 *自由* 、 *合作精神* 的公民。
+> 而自由軟體培養 *獨立* ，教導 *自由* 。
+> 
+> 
+> In contrast, to teach a nonfree program is 
+> implanting dependence, which goes counter to the 
+> schools' social mission. Schools should never do this.
+> 
+> 非自由軟體導致 *依賴* ；
+> 從根本上就和學校教育的精神背道而馳。
+> 
+> Why, after all, do some proprietary software 
+> developers offer gratis copies [^1](#foot-note) of their nonfree 
+> programs to schools? Because they want to use the 
+> schools to implant dependence on their products, like 
+> tobacco companies distributing gratis cigarettes to 
+> school children [^2](#foot-note). They will not give gratis copies 
+> to these students once they've graduated, nor to the 
+> companies that they go to work for. Once you're 
+> dependent, you're expected to pay, and future upgrades 
+> may be expensive.
+> 
+> 非自由軟體授權學界 *優惠* 就像藥頭免費提供毒品。
+> 有些軟體公司，給予學界 *優惠方案* ，
+> 甚至免費授權 [^1](#foot-note) 。
+> 就好像美國的菸草公司曾經免費散布紙菸給學生 [^2](#foot-note) 。
+> 學生畢業後，菸草公司不會再供應免費的紙菸；
+> 他們所效力的公司也不可能。
+> 一旦你養成了習慣，未來你就得購買；
+> 甚至為昂貴的升級付費。
+> 可能會……，許多公司會向微軟購買 _office_ , 
+> 或購買專業的軟體。像 [[Photoshop]] 。
+> 
+> 
+> Free software permits students to learn how software 
+> works. Some students, natural-born programmers, on 
+> reaching their teens yearn to learn everything there 
+> is to know about their computer and its software. They 
+> are intensely curious to read the source code of the 
+> programs that they use every day.
+> 
+> 自由軟體使學生可以接觸原始碼，了解程式。
+> 許多人是 *電腦天才* ，他們十分渴望接觸到電腦與軟體，
+> 研究它們的原始碼，了解它們是如何運作的。
+> 
+> Proprietary software rejects their thirst for 
+> knowledge: it says, “The knowledge you want is a 
+> secret—learning is forbidden!” Proprietary software is 
+> the enemy of the spirit of education, so it should not 
+> be tolerated in a school, except as an object for 
+> reverse engineering.
+> 
+> 非自由軟體拒絕學生對知識的渴望。
+> 非自由軟體視原始碼 *商業機密* ，不可說，禁止接觸。
+> 嚴重衝突學校 *鼓勵學習* 、 *鼓勵發問* 的精神。
+> 固自由軟體不應出現在學校。
+> 除非是為了 [[逆向工程]] 的因素。
+> 
+> Free software encourages everyone to learn. The free 
+> software community rejects the “priesthood of 
+> technology”, which keeps the general public in 
+> ignorance of how technology works; we encourage 
+> students of any age and situation to read the source 
+> code and learn as much as they want to know.
+> 
+> 自由軟體鼓勵學習。
+> 在自由軟體界，沒有 *密傳* 的技術。
+> 我們鼓勵任何人閱讀原始碼。
+> 
+> 
+> Schools that use free software will enable gifted 
+> programming students to advance. How do natural-born 
+> programmers learn to be good programmers? They need to 
+> read and understand real programs that people really 
+> use. You learn to write good, clear code by reading 
+> lots of code and writing lots of code. Only free 
+> software permits this.
+> 
+> 自由軟體發掘電腦天才。
+> 使用自由軟體的學校，能讓電腦天才進步。
+> 任何人都必須接觸原始碼，了解程式如何運作，
+> 才能成為傑出的程序員。
+> 只有自由軟體允許閱讀、修改原始碼。
+> 
+> 
+> How do you learn to write code for large programs? 
+> You do that by writing lots of changes in existing 
+> large programs. Free Software lets you do this; 
+> proprietary software forbids this. Any school can 
+> offer its students the chance to master the craft of 
+> programming, but only if it is a free software school.
+> 
+> 自由軟體讓人學會開發大型程式。
+> 如何學習開發大型程式？
+> 你必須先了解一個程式是如何運作的，
+> 然後學著修改它。
+> 自由軟體允許你這麼作，但非自由軟體不准。
+> 
+> The deepest reason for using free software in 
+> schools is for moral education. We expect schools to 
+> teach students basic facts and useful skills, but that 
+> is only part of their job. The most fundamental task 
+> of schools is to teach good citizenship, including the 
+> habit of helping others. In the area of computing, 
+> this means teaching people to share software. Schools, 
+> starting from nursery school, should tell their 
+> students, “If you bring software to school, you must 
+> share it with the other students. You must show the 
+> source code to the class, in case someone wants to 
+> learn. Therefore bringing nonfree software to class is 
+> not permitted, unless it is for reverse-engineering 
+> work.”
+> 
+> 學校教授自由軟體是道德層次的議題。
+> 社會期待學校教授學生基礎知識和實用的技術，但這只是一部份。
+> 學校最重要的功能是培養學生成獨立、自由、樂於分享的公民，
+> 在電腦科學界，這代表 *分享你的軟體* 。
+> 學校應該要求帶軟體來學校的人與其它人分享，
+> 包含原始碼，或許有人想要從中學習。
+> 因此帶非自由軟體來學校是不被准許的；
+> 除非用於逆向工程。
+> 
+> > 譯者註：
+> > 這裡提一下有關非自由軟體的說明。
+> > 在RMS的概念中，非自由軟體就像有人給你一個軟體，
+> > 但他要求你不得與其它人分享。
+> 
+> Of course, the school must practice what it 
+> preaches: it should bring only free software to class 
+> (except objects for reverse-engineering), and share 
+> copies including source code with the students so they 
+> can copy it, take it home, and redistribute it further.
+> 
+> 學校必須以身作則，學校只應提供自由軟體，
+> 且連同原始碼散布他們。
+> 因此學生可以在任何地方使用、任意修改、再散布。
+> 
+> Teaching the students to use free software, and to 
+> participate in the free software community, is a 
+> hands-on civics lesson. It also teaches students the 
+> role model of public service rather than that of 
+> tycoons. All levels of school should use free software.
+> 
+> 
+> 教導學生使用自由軟體、參與社群，同時是一堂公民課的實踐。
+> 它讓學生了解非營利社群中各個角色的運作，而不非財閥、大公司。
+> 任何層級的學校都應該使用自由軟體。
+> 
+> If you have a relationship with a school —if you are 
+> a student, a teacher, an employee, an administrator, a 
+> donor, or a parent— it's your responsibility to 
+> campaign for the school to migrate to free software. 
+> If a private request doesn't achieve the goal, raise 
+> the issue publicly in those communities; that is the 
+> way to make more people aware of the issue and find 
+> allies for the campaign.
+> 
+> 如果你與學校與有任何關係；
+> 你是學生、教師、識員、管理者、損款者、學生的家長，
+> 你有責任要求學校使用自由軟體。
+> 如果個人的意見不足以影響決策，試著在公開場合宣傳。
+> 我們需要更多人認知到這件事的重要，並組成聯盟推動自由軟體。
+> 
+> ## foot note
+> 腳註
+>
+>  1. Warning: a school that accepts such an offer may 
+>     find subsequent upgrades rather expensive.
+>
+>     警告：接收這些優惠的學校，
+>     可能會發現廠商隨後提供的升級服務更加昂貴。
+>
+>  2. RJ Reynolds Tobacco Company was fined $15m in 2002 
+>     for handing out free samples of cigarettes at events 
+>     attended by children. See 
+>     <http://www.bbc.co.uk/worldservice/sci_tech/features/health/tobaccotrial/usa.htm>
+>
+>     美國雷諾菸草公司在2002年，
+>     因為在未成年人的活動中提供免費香菸，
+>     被罰款1500萬美元。
+> 
+
+#自由軟體
+#翻譯
+#學校

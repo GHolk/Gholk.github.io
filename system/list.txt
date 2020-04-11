@@ -301,3 +301,5 @@ geomatics-flat-taiwan-road-pavement.html
 gnss-rtklib-real-time-ppp.html
 shell-kill-pipe-process-group.html
 git-decenterlize-diff-slide.html
+linux-user.html
+school-should-use-free-software.html

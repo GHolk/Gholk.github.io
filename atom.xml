@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2020-04-11T11:24:43.974Z</updated>
+  <updated>2020-05-09T08:14:36.143Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,161 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/linux-user.html</id>
+<title>linux 使用者</title>
+<published>2020-04-04T05:54:16.821Z</published>
+<updated>2020-05-09T08:14:36.132Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/linux-user.html"/>
+<summary type="html">我是一個 linux 使用者，與業餘的網頁開發者，
+能夠寫程式解決自己的問題。
+linux 使用者，代表我懂得如何聰明的使用電腦，
+操作命令列介面自動化或批次操作。
+web 開發者的身份，讓我能以 web 為介面，
+開發跨平台的圖形介面程式。</summary>
+<category term="linux"/>
+<category term="blog"/>
+<content type="html">&lt;h1 id=&quot;linux-使用者&quot;&gt;linux 使用者&lt;/h1&gt;
+&lt;p&gt;我是一個 linux 使用者，與業餘的網頁開發者，
+能夠寫程式解決自己的問題。
+linux 使用者，代表我懂得如何聰明的使用電腦，
+操作命令列介面自動化或批次操作。
+web 開發者的身份，讓我能以 web 為介面，
+開發跨平台的圖形介面程式。&lt;/p&gt;
+&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
+&lt;p&gt;大概三年前在成功大學的 &lt;a href=&quot;http://ccns.io&quot;&gt;ccns&lt;/a&gt; 活動時，
+我對自己的定位是：
+&lt;em&gt;linux 使用者，業餘的 web 開發者。&lt;/em&gt;
+但研究所後越來越懶，已經很久沒寫 web 了，
+只是 linux 使用者的身份不變。&lt;/p&gt;
+&lt;p&gt;某天回顧自己時，發現我雖然對自己的定位很明確，
+但似乎沒有寫文章介紹過，就開寫了。&lt;/p&gt;
+&lt;h2 id=&quot;在-linux-中打滾多年的使用者&quot;&gt;在 linux 中打滾多年的使用者&lt;/h2&gt;
+&lt;p&gt;我不是所謂的 &lt;strong&gt;專業&lt;/strong&gt; 程式設計師，
+也不寫大型的實用的程式。
+對我來說，程式就是用來解決自己的問題的。
+只是我在 linux 這個屎坑中打滾了比較久，
+對環境比較熟悉。&lt;/p&gt;
+&lt;p&gt;然後因為想和性質類似的人交流，
+就加入了程式設計的社團，
+在成大是 ccns，在交大是 &lt;a href=&quot;http://ccca.tw&quot;&gt;ccca&lt;/a&gt; 。
+這種社團的共同點大概就是都寫程式玩 linux，
+但目的卻各有不同。
+有的是資安，有的是競技程式設計，
+有的是深度學習、平行處理最佳化、
+系統管理、遊戲設計，技能樹各有不同。
+而我算是比較奇怪的一個，玩 linux 本身就是目的；
+或說使用 linux 讓生活更愜意才是目的。&lt;/p&gt;
+&lt;h2 id=&quot;進階使用者的見多識廣&quot;&gt;進階使用者的見多識廣&lt;/h2&gt;
+&lt;p&gt;我把自己定位為 linux 使用者，
+意思是我擅長以 linux 解決各式各樣的問題。
+linux 系統的特性，鼓勵使用者學習各種技術，
+因此很多技術我都碰過，但又不會真正想往更深處鑽研，
+可以說是樣樣通樣樣鬆的半吊子結果。&lt;/p&gt;
+&lt;h3 id=&quot;shell-與程式語言&quot;&gt;shell 與程式語言&lt;/h3&gt;
+&lt;p&gt;但作為一個 linux 使用者，使用 shell 是基本技能。
+linux 離不開 shell，久了就會磨的爐火純青。&lt;/p&gt;
+&lt;p&gt;當然 sh 不是個好語言，雖然他可以做很多事，
+但最終，你還是會需要一個 &lt;strong&gt;真正的&lt;/strong&gt; 程式語言。
+我選擇了 javascript，他的優勢是能夠在瀏覽器上執行，
+在瀏覽器外則有 node 等直譯器。&lt;/p&gt;
+&lt;p&gt;至於如何區分程式語言與 shell 腳本的界線，
+我把自己定位為 linux 使用者，
+因此我的原則是能優雅的用 shell 解決的，就不動到程式語言。&lt;/p&gt;
+&lt;h3 id=&quot;系統管理&quot;&gt;系統管理&lt;/h3&gt;
+&lt;p&gt;玩 linux 很不幸的一點，
+就是必需兼任自己的系統管理員，
+所以算是半專業的系統管理人。
+架 server、開虛擬機、資料備份、網路管理，
+這些都很基礎的會一點。
+寫腳本管理機器，更是大大加分的自動化技巧。&lt;/p&gt;
+&lt;h3 id=&quot;自動化技巧&quot;&gt;自動化技巧&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;ccns-grease-monkey-bookmarklet.html#駭客文化&quot;&gt;自動化是駭客文化很重要的一環，
+如之前寫過的有關網頁腳本文章中提到的。&lt;/a&gt;
+例如我手上有在維護一個固定衛星接收站，
+接收儀會將每天的 gps 觀測成果存在內部儲存空間，得要定期下載庫存。
+於是我就寫了一個腳本，讓伺服器每天連到接收儀自動下載。&lt;/p&gt;
+&lt;p&gt;這些自動化技巧，用 shell 都是可以輕易達成的，
+對專業的開發者可能不屑一顧，對一般人來說，
+可能也只是小技巧等級，上不了檯面的技能。
+但當你真的能熟練使用這些 shell 與自動化技巧，
+你會發現世界開擴很多，很多問題都不再是問題。&lt;/p&gt;
+&lt;h3 id=&quot;網站開發&quot;&gt;網站開發&lt;/h3&gt;
+&lt;p&gt;會架站又會寫網頁，自然就可以自稱全端工程師了！
+雖然現在前端已經博大精深，我似乎有跟不上時代了，
+但我本來就沒有要努力追新的意思，所以就隨便吧。&lt;/p&gt;
+&lt;p&gt;我一向是以自己需求為中心。
+所以懂得網站開發對我來說，
+最重要的是可以維護自己的部落格、自己想做的程式，
+以及可以寫腳本來 hack 別人網站。&lt;/p&gt;
+&lt;p&gt;因為我目前唯一會寫的圖形介面程式，
+只有網頁程式，所以如果要開發給電腦麻瓜使用的程式，
+也只能以網頁的形式發布。&lt;/p&gt;
+&lt;p&gt;而所謂 hack 不一定是滲透或攻擊別人的主機，
+可能是用 wget curl 去戳別人網人網站提供的表單提交頁面。
+或是指用 js 操作瀏覽器中的網站介面，自動留言或填寫表單，
+例如寫 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E5%B0%8F%E6%9B%B8%E7%B1%A4&quot;&gt;小書籤&lt;/a&gt; 、 &lt;a href=&quot;http://zh.wikipedia.org/wiki/greasemonkey&quot;&gt;greasemonkey&lt;/a&gt; 腳本，
+甚至是瀏覽器擴充元件。&lt;/p&gt;
+&lt;h3 id=&quot;程式設計雜務&quot;&gt;程式設計雜務&lt;/h3&gt;
+&lt;p&gt;其它我還有許多技能，程式設計必要的 git、make、測試，
+我也是都摸過一點。
+雖然我寫的絕大多數程式規模都用不上測試，
+但我的確見識過測試的好處。&lt;/p&gt;
+&lt;p&gt;當程式規模一大，必然會面臨不確定自己的修改正不正確，
+以及忘了自己改了哪些地方。
+改了哪些地方就必須要靠版本控制系統，
+而修改正不正確，除了直接跑跑看，
+最快的方式就是跑測試，哪裡改壞了一目瞭然。
+（至少比手動戳過每一個功能省時間。）&lt;/p&gt;
+&lt;h3 id=&quot;編輯器&quot;&gt;編輯器&lt;/h3&gt;
+&lt;p&gt;至於編輯器，早期我是用 unix 下的標配 vim，
+對 windows 使用者來說，光是一個 vim 就能做不少事了。
+學了基本的取代功能，就能用編輯器產生批次的命令，
+也可以用 &lt;code&gt;:r !ls&lt;/code&gt; 之類的操作和外部互動，
+或是直接從外部剪下貼上。&lt;/p&gt;
+&lt;p&gt;後來因為接觸 lisp，就開始用 emacs，
+寫 emacs lisp。
+在 vim 我只有把基本功能學完，
+冒號的命令和多數按鍵的命令，
+沒有學到進階的 vim script，
+變數之類的內容。&lt;/p&gt;
+&lt;p&gt;但我在 emacs 也是用 evil，
+在 emacs 裡用 vi 風格的按鍵。
+因為之前看一篇文章，
+與其在 vim 裡寫 vim script，
+不如換到 emacs 裡用 lisp，
+寫 text object 還比較舒服。&lt;/p&gt;
+&lt;h3 id=&quot;雜務&quot;&gt;雜務&lt;/h3&gt;
+&lt;p&gt;其它還有很多，是身為一個 &lt;strong&gt;專業使用者&lt;/strong&gt; 的技能。
+如修圖、畫圖，在 linux 上就是 gimp、inkscape。
+雖然稱不上專業的設計師，
+但做傳單、畫簡單的 icon，也是沒問題的。&lt;/p&gt;
+&lt;p&gt;雖然我不是太好的講者，也沒有朝這方向精進的意願，
+但我會用 inkscape 和 sozi 作很酷的投影片，
+或用 markdown 作一般的投影片，用瀏覽器播。
+markdown 可以用 python landslide 直接生成 html，
+或是寫 js 的可以用 reveal。&lt;/p&gt;
+&lt;p&gt;寫文件、寫部落格也是用 markdown，來生出網頁；
+用 markdown 寫的文件也都可以用 git 管理。
+markdown 文件也可以混入 html，甚至 css javascript，
+來簡單更改配色，少寫一點 markdown 語法之類的。&lt;/p&gt;
+&lt;h2 id=&quot;平凡的程式人&quot;&gt;平凡的程式人&lt;/h2&gt;
+&lt;p&gt;在交大 ccca 時，我第一年為社團成員的定位是 &lt;a href=&quot;https://hackmd.io/RnfQFlLwSWuk4WdB37amfQ&quot;&gt;平凡的程式人&lt;/a&gt; ，
+其實核心就和這篇文章類似，
+代表的是一種 &lt;em&gt;沒有到頂尖，但已經很厲害&lt;/em&gt; 的程式人。
+不打競技程式競賽，不打 ctf，
+但有能力開發出絕大多數的程式，使用與貢獻開源軟體。
+（雖然社團後來再起不能，可能代表這個觀點不是很受歡迎；
+或說除了理念，人之間的連結更為重要。）&lt;/p&gt;
+&lt;h2 id=&quot;結論&quot;&gt;結論&lt;/h2&gt;
+&lt;p&gt;最後文章有點不知所芸，有點跑題，不知道要寫什麼；
+就引用前面在自動化的心得作結。&lt;/p&gt;
+&lt;p&gt;這些技巧，對專業的開發者來說可能不屑一顧，對一般人來說，
+可能也只是小技巧等級，上不了檯面的技能。
+但當你真的能熟練使用這些 shell 與自動化技巧，
+你會發現世界開擴很多，很多問題都不再是問題。&lt;/p&gt;
+&lt;p&gt;這就是我，一個 linux 使用者，所具備的能力。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/school-should-use-free-software.html</id>
 <title>為什麼學界應使用自由軟體？</title>
 <published>2020-04-11T09:28:47.896Z</published>
@@ -3029,435 +3184,7 @@ disqus 如果不想註冊，可以匿名評論。
 <category term="study"/>
 <category term="python"/>
 <category term="computer"/>
-<content type="html">&lt;h1 id=&quot;影像處理作業二：邊緣與直線偵測&quot;&gt;影像處理作業二：邊緣與直線偵測&lt;/h1&gt;
-&lt;p&gt;影像處理作業二，以指定的程式語言，實作數種邊緣偵測。
-另外要選一種直線偵測或 watershed segmentation 演算法。
-其中邊緣偵測我嘗試了 sobel 與 prewitt 二種矩陣，
-而直線偵測我實作了 hough transform，但結果不是很好。&lt;/p&gt;
-&lt;h2 id=&quot;程式&quot;&gt;程式&lt;/h2&gt;
-&lt;p&gt;和 &lt;a href=&quot;image-processing-6-free-style.html&quot;&gt;作業一&lt;/a&gt; 一樣使用 pythun3。
-因為用到一些矩陣乘法，雖然還是用
-&lt;abbr title=&quot;python image library&quot;&gt;pil&lt;/abbr&gt; ，
-但讀進來後就直接把整張影片轉成 numpy array 了；
-當然事後存檔時也就要再轉回 pil 的格式，再存回 bmp。&lt;/p&gt;
-&lt;p&gt;程式的參數寫法比作業一好看一點了，只要串連二個演算法，
-就能把上一個結果丟到下一個演算法中處理，
-而輸入和輸出是寫在第一個和最後一個參數。
-寫起來像是這樣：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# input -&amp;gt; sobel -&amp;gt; threshold -&amp;gt; hough -&amp;gt; output
-python3 prog2.py p1im4.bmp \
-    gradient sobel \
-    threshold 0.96 \
-    hough \
-    p1im4_hough.bmp
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;如果要串接上一次的程式，只能直接各執行一次，透過檔案傳遞：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;python3 prog1.py mean 3 p1im4.bmp p1im4_mean.bmp
-python3 prog2.py p1im4_mean.bmp \
-    gradient sobel \
-    threshold 0.96 \
-    hough \
-    p1im4_mean_hough.bmp
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;參數&quot;&gt;參數&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;gradient: sobel 或 prewitt，對應二種不同矩陣。&lt;/li&gt;
-&lt;li&gt;threshold: 0-1 數字，以百分位數作門檻二值化。&lt;/li&gt;
-&lt;li&gt;hough: 無參數。&lt;/li&gt;
-&lt;li&gt;LoG: 無參數。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;差分邊緣偵測&quot;&gt;差分邊緣偵測&lt;/h2&gt;
-&lt;p&gt;邊緣偵測作法是將一個 pixel 與前後的 pixel 強度相減，
-若該 pixel 處於交界處，相減後的差異就會很大。
-將影片看成矩陣的話，相減差分的算式也可以用矩陣來表示，
-也就是摺積的概念。
-我試了 sobel 與 prewitt 二種矩陣，矩陣如下：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;sobel = \begin{bmatrix}
-    -1 &amp;amp; -2 &amp;amp; -1 \\
-     0 &amp;amp;  0 &amp;amp;  0 \\
-     1 &amp;amp;  2 &amp;amp;  1
-\end{bmatrix}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-math&quot;&gt;prewitt = \begin{bmatrix}
-    -1 &amp;amp; -1 &amp;amp; -1 \\
-     0 &amp;amp;  0 &amp;amp;  0 \\
-     1 &amp;amp;  1 &amp;amp;  1
-\end{bmatrix}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;相減是單一方向的操作，但影像是二維的，
-所以一般做法是在垂直和水平方向上都做一次差分。
-二方向上的差分可以取絕對值後相加，
-或是計算歐幾里德長度。&lt;/p&gt;
-&lt;p&gt;對於彩色影像，通常是分別計算 rgb 三個波段的差分，
-再將三個波段的結果組合。
-一樣可以用絕對值相加，或是歐氏長度。
-我都是用歐氏長度。&lt;/p&gt;
-&lt;h3 id=&quot;差分成果&quot;&gt;差分成果&lt;/h3&gt;
-&lt;p&gt;由於 sobel 的系數較大，在值的分布上，sobel 會較 prewitt 大。
-但二者的結果，都會超過原有影像的亮度區間，
-如果將二者都正規化為 0-1 或 0-255 的話，
-那其實沒有很明顯的差別。&lt;/p&gt;
-&lt;p&gt;此處展示所有 sobel 的差分影像，
-其中所有影像都是用上次作業處理過的版本再去差分，
-而非原始影像。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49145785323&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49145785323_f64988b6ce.jpg&quot; alt=&quot;p1im1_sobel.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146278596&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146278596_b8baef7755.jpg&quot; alt=&quot;p1im2_sobel.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146278691&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146278691_da152a69df.jpg&quot; alt=&quot;p1im3_sobel.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49145785828&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49145785828_d4589015dd.jpg&quot; alt=&quot;p1im4_sobel.png-notitle&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146480832&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146480832_b4cb133666.jpg&quot; alt=&quot;p1im5_sobel.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146481022&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146481022_79d71d8f0d.jpg&quot; alt=&quot;p1im6_sobel.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;濾鏡&quot;&gt;濾鏡&lt;/h2&gt;
-&lt;p&gt;一些影像我在處理時，使用像 gamma 或直方圖均化時，
-或是使用影像銳化時，會把原本的雜訊放大；
-就會造成差分後的影像雜訊也變重。&lt;/p&gt;
-&lt;p&gt;反之，如果使用了模糊的濾鏡，也就會減少差分後的雜訊。
-而 mean filter 又比 median filter 的效果要好，
-因 mean filter 只是讓整體的變化變平緩，
-但 median filter 會讓整體的色塊趨近一致，導致邊界變形，
-不同色塊的邊界差距也不會縮小，邊界的區域也就不會擴張。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146565647&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146565647_624e6e1daf.jpg&quot; alt=&quot;p1im4_sobel.png&quot; title=&quot;以銳化的結果再差分的結果&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146364211&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146364211_a4c08935b7.jpg&quot; alt=&quot;p1im4_origin_sobel.png&quot; title=&quot;原始影像差分的結果，雜訊較少&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146565912&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146565912_4a54bdde23.jpg&quot; alt=&quot;p1im4_mean_sobel.png&quot; title=&quot;原始影像以 mean filter 模糊，雜訊更少&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146364606&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146364606_7fb5c68cdf.jpg&quot; alt=&quot;p1im4_median_sobel.png&quot; title=&quot;原始影像以 median filter 模糊，雜訊也少，但有些微變形&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;二值化&quot;&gt;二值化&lt;/h2&gt;
-&lt;p&gt;二值化我是以百分位數做統計後挑出門檻，
-沒有想出較好的判斷法。
-不是很喜歡這種需要每張影像調整不同參數的做法，
-但全自動又很困難。&lt;/p&gt;
-&lt;p&gt;有時也很難定義哪些是雜訊，有些影像會有很多樹葉邊界，
-都市的照片除了建築邊界，也有很多雜物的邊界；
-且那些細小的邊界的強度還不一定比建築物的邊界低。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146683582&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146683582_f54dfec410.jpg&quot; alt=&quot;p1im5_threshold.png&quot; title=&quot;一些建物的邊界消失了，但很多雜訊還留著&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;laplacian-of-gaussian&quot;&gt;laplacian of gaussian&lt;/h2&gt;
-&lt;p&gt;這個實作普通，但如同上課講的，效果不是很好；
-除非要使用 zero crossing 或判斷邊界方向之類的進階操作。
-我嘗試直接用 &lt;code&gt;threshold = 0&lt;/code&gt; 判斷 zero crossing，
-但結果沒有很好，會把大片什麼都沒有的區域也都判成 zero crossing。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146763012&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146763012_144b18e49c.jpg&quot; alt=&quot;p1im4_log_abs.png&quot; title=&quot;laplacian 結果直接取絕對值&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146066598&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146066598_631a760b56.jpg&quot; alt=&quot;p1im4_log_zc.png&quot; title=&quot;用等於 0 作門檻二值化&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;hough&quot;&gt;hough&lt;/h2&gt;
-&lt;p&gt;最後是第二題，我挑選了 hough transform 實作，
-本來以為是最簡單，結果在把找出的直線還原回原始圖片上花了很多時間。
-而且結果的品質一直沒有很好，除非是很簡單的圖像，
-不然都會出現一堆雜訊導致的錯誤直線。&lt;/p&gt;
-&lt;p&gt;hough transform 的最大特色，
-是為了消除線條垂直時斜率無限大的問題，
-所以以 cos 和 sin 當作方程式中 x y 的系數。
-所以在轉換的目標域中避免了無限大的問題。
-但我在將目標域中求出的直線參數，
-對應回原始影像中的直線時，一開始直覺以每個 x 值找出對應的 y 值，
-就又撞回 0 或無限大的問題，當 y 值的系數為 0 時即無法求解。&lt;/p&gt;
-&lt;p&gt;後來一直想不到比較好的解法，就參考了 &lt;a href=&quot;https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_houghlines/py_houghlines.html&quot;&gt;opencv 教學中的作法&lt;/a&gt; 。
-opencv 教學中，是直接選出位在圖像中的一點，
-並取一個極大的數，求出相對於圖像中一點的 x 距離為該數的 y，
-再將極大數取負號即可得出另外一點。
-最後只要將二點間連線即可，因為以計算來說，
-參數式的計算是較固定的，這部份我就實現了一個類似於 &lt;code&gt;cv2.line&lt;/code&gt; 的函數。&lt;/p&gt;
-&lt;h3 id=&quot;hough-transform-結果&quot;&gt;hough transform 結果&lt;/h3&gt;
-&lt;p&gt;結果很差，只有在圖像很簡單時，偵測結果比較明顯。
-最好的成果大概是道路號誌牌的四條邊界，
-在結果看得出來是對應的四條線。
-作法就是用上一次作業的影像 4，
-經過 mean filter、sobel、threshold、hough 得到結果。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146270898&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146270898_786c3641ce.jpg&quot; alt=&quot;p1im4_mean.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146565912&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146565912_4a54bdde23.jpg&quot; alt=&quot;p1im4_mean_sobel.png-notitle&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146755856&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146755856_020d306fdd.jpg&quot; alt=&quot;p1im4_mean_threshold.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/144554087@N04/49146756056&quot;&gt;&lt;img src=&quot;http://farm66.staticflickr.com/65535/49146756056_a021af67a8.jpg&quot; alt=&quot;p1im4_mean_hough.png&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;但我將 hough 轉回原始影像的程式只用 threshold，
-沒有辦法很好的找出唯一那個點，
-所以周圍的幾個點也都會抓進來，讓一條直線分身成好幾條。
-且實作的畫線程式也沒有很好，有時線還不到影像邊界就結束。&lt;/p&gt;
-&lt;h2 id=&quot;調參數的介面&quot;&gt;調參數的介面&lt;/h2&gt;
-&lt;p&gt;寫函數是簡單的，處理人機介面才是最麻煩的地方。
-影像處理中，很多地方要調整參數，
-如果沒有全自動，就只能一個個嘗試，
-這時候程式的介面就很重要了。
-而對人友善和介面乾淨又是完全不同的二件事，
-雖然不見得互斥，但絕對不會介面拆的乾淨，
-需要互動使用時就用的舒服。&lt;/p&gt;
-&lt;h2 id=&quot;程式原始碼&quot;&gt;程式原始碼&lt;/h2&gt;
-&lt;style&gt;
-:this + pre &gt; code {
-  font-size: 10pt;
-  line-height: normal;
-}
-&lt;/style&gt;
 
-&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;import sys
-# import prog1 # reuse some code from previous homework
-import numpy
-import PIL.Image
-
-def numpy_image_open(path):
-    pil_image = PIL.Image.open(path)
-    numpy_image = numpy.array(pil_image)
-    return numpy_image
-
-def numpy_image_save(image, path):
-    pil_image = PIL.Image.fromarray(image.astype(&amp;apos;uint8&amp;apos;))
-    pil_image.save(path)
-
-def numpy_image_to_gray(image):
-    matrix = numpy.matrix([1,1,1])
-    return image * numpy.transpose(matrix / 3)
-
-def numpy_matrix_3x3(text):
-    return numpy.array(text.split()).astype(int).reshape((3,3))
-def numpy_matrix_nxn(n, text):
-    return numpy.array(text.split()).astype(int).reshape((n,n))
-
-def convolute_image(image, f, radius=1):
-    radius = int(radius)
-    pad_spec = ((radius, radius), (radius, radius))
-    pad_image = numpy.pad(image, pad_spec, mode=&amp;apos;reflect&amp;apos;)
-    copy = numpy.ndarray(image.shape)
-    for x in range(0, image.shape[1]):
-        for y in range(0, image.shape[0]):
-            (pad_x, pad_y) = (x+radius, y+radius)
-            area = pad_image[
-                pad_y-radius:pad_y+radius+1,
-                pad_x-radius:pad_x+radius+1
-            ]
-            copy[y,x] = numpy.sum(f(area, (y,x), image))
-    return copy
-
-def gradient_image(image, image_filter):
-    radius = (image_filter.shape[0] - 1) / 2
-    def gradient(area, index, image):
-        return area * image_filter
-    vertical = convolute_image(image, gradient, radius)
-
-    image_filter = numpy.transpose(image_filter)
-    horizontal = convolute_image(image, gradient, radius)
-
-    return (vertical ** 2 + horizontal ** 2) ** 0.5
-
-
-def gradient_image_color(image, image_filter):
-    result = numpy.zeros(image.shape[0:2])
-    for i in (0,1,2):
-        result += gradient_image(image[:,:,i], image_filter) ** 2 
-    result = result ** 0.5
-    return image_range_adjust_linear(result ** 0.5)
-
-def laplacian_of_gaussian(image, radius=2, threshold=2):
-    result = numpy.zeros(image.shape[0:2])
-    for i in range(3):
-        result += image[:,:,i]
-    result /= 3
-
-    matrix = image_filter[&amp;apos;laplacian_of_gaussian&amp;apos;]
-    def f(area, index, image):
-        return area * matrix
-    radius = (matrix.shape[0] - 1) / 2
-    result = convolute_image(result, f, radius)
-    # return find_zero_cross(result, threshold)
-    return image_range_adjust_linear(numpy.abs(result))
-
-def find_zero_cross(image, threshold):
-    return (numpy.abs(image) &amp;lt; threshold).astype(int) * pixel_max
-
-def image_range_adjust_linear(image):
-    max = numpy.max(image)
-    min = numpy.min(image)
-    range = max - min
-    image = (image - min) / range * pixel_max
-    return image
-
-image_filter = {}
-image_filter[&amp;apos;sobel&amp;apos;] = numpy_matrix_3x3(&amp;apos;&amp;apos;&amp;apos;
-    -1 -2 -1
-     0  0  0
-     1  2  1&amp;apos;&amp;apos;&amp;apos;)
-
-image_filter[&amp;apos;prewitt&amp;apos;] = numpy_matrix_3x3(&amp;apos;&amp;apos;&amp;apos;
-    -1 -1 -1
-     0  0  0
-     1  1  1&amp;apos;&amp;apos;&amp;apos;)
-image_filter[&amp;apos;laplacian_of_gaussian&amp;apos;] = numpy_matrix_nxn(5, &amp;apos;&amp;apos;&amp;apos;
-0   0 -1  0  0
-0  -1 -2 -1  0
--1 -2 16 -2 -1
-0  -1 -2 -1  0
-0   0 -1  0  0
-&amp;apos;&amp;apos;&amp;apos;)
-
-pixel_max = 255
-def statistic_ratio_gate(image, ratio):
-    histogram = numpy.zeros([pixel_max+1])
-    def statistic(area, index, image):
-        pixel = area[1,1]
-        if pixel &amp;gt; 255:
-            pixel = 255
-        histogram[int(pixel)] += 1
-    convolute_image(image, statistic)
-
-    total_pixel = image.shape[0] * image.shape[1]
-    gate_pixel_number = int(total_pixel * ratio)
-
-    below_pixel_count = 0
-    for gate in range(0, 256):
-        if below_pixel_count &amp;gt;= gate_pixel_number:
-            return gate - 1
-        else:
-            below_pixel_count += histogram[gate]
-    return pixel_max
-
-def threshold_ratio(image, ratio):
-    # gate = ratio * pixel_max
-    gate = statistic_ratio_gate(image, ratio)
-    def threshold(area, index, image):
-        if area[1,1] &amp;gt;= gate:
-            return pixel_max
-        else:
-            return 0
-    return convolute_image(image, threshold)
-
-# hough transform
-def find_distance_at_angle(xy, angle):
-    (x,y) = xy
-    return y * numpy.cos(angle) + x * numpy.sin(angle)
-
-def find_y_in_x(angle_distance, x):
-    (angle, distance) = angle_distance
-    return (x * numpy.sin(angle) - distance) / numpy.cos(angle)
-
-def increase_count_in_struct(struct, p, weight=1):
-    (angle, distance) = p
-    struct[angle, distance] += weight
-
-def make_hough_struct(image, resolution):
-    (angle_resolution, distance_resolution) = resolution
-    angle_number = int(numpy.pi / angle_resolution) + 1
-    distance_max = (image.shape[0]**2 + image.shape[1]**2) ** 0.5
-    distance_number = int(distance_max / distance_resolution) + 1
-    return numpy.zeros([angle_number, distance_number])
-
-
-def draw_line_in_image(image, p1, p2):
-    vector = numpy.array(p2) - numpy.array(p1)
-    length = numpy.sum(vector ** 2) ** 0.5
-    unit_vector = vector / length
-    draw_point = numpy.array(p1).astype(float)
-    (height, width) = image.shape
-    def draw(point):
-        if (0 &amp;lt;= point[0] and point[0] &amp;lt; width-1 and
-            0 &amp;lt;= point[1] and point[1] &amp;lt; height-1):
-           image[int(point[1]), int(point[0])] = pixel_max
-    for l in range(0, int(length)+1):
-        draw(draw_point)
-        draw_point += unit_vector
-
-def hough_transform(image):
-    distance_resolution = int(image.shape[0] / 40)
-    angle_resolution = numpy.pi / (15 * 4)
-
-    struct = make_hough_struct(image, (angle_resolution, distance_resolution))
-    def increase_from_point(value, index, image):
-        angle = 0
-        (y, x) = index
-        while angle &amp;lt; numpy.pi:
-            distance = find_distance_at_angle((x,y), angle)
-            distance_index = int(round(distance / distance_resolution))
-            angle_index = round(angle / angle_resolution)
-            increase_count_in_struct(struct, (angle_index, distance_index))
-            angle += angle_resolution
-
-    # image_gate = statistic_ratio_gate(image, threshold_ratio)
-    for_point_in_image(image, image &amp;gt; 0, increase_from_point)
-
-    copy = numpy.zeros(image.shape)
-    # reverse angle dinstance to x y result infinity
-    def draw_line_from_angle_distance(value, index, struct):
-        (angle_index, distance_index) = index
-        angle = angle_index * angle_resolution
-        distance = distance_index * distance_resolution
-        (height, width) = image.shape
-        a = numpy.sin(angle)
-        b = numpy.cos(angle)
-        x0 = a*distance
-        y0 = b*distance
-        x1 = int(x0 + width*(-b))
-        y1 = int(y0 + height*(a))
-        x2 = int(x0 - width*(-b))
-        y2 = int(y0 - height*(a))
-        draw_line_in_image(copy, (x1,y1), (x2,y2))
-
-    # edge_gate = statistic_ratio_gate(struct, threshold_ratio)
-    edge_gate = numpy.max(struct) * 0.4
-    for_point_in_image(struct, struct&amp;gt;=edge_gate, draw_line_from_angle_distance)
-    return copy
-
-# def find_cross_border(image, angle, distance):
-#     (height, width) = image.shape
-#     solve_x = lambda y: -(y*numpy.cos(angle)-distance) / numpy.sin(angle)
-#     solve_y = lambda x: (distance-x*numpy.sin(angle)) / numpy.cos(angle)
-#     in_range = lambda l,x,u: l &amp;lt;= x and x &amp;lt;= u
-#     if in_range(0, solve_x(0), height):
-#         return (0, solve_x(0))
-#     elif in_range(0, solve_x(width-1), height):
-#         return (width-1, solve_x(width-1))
-#     elif in_range(0, solve_y(0), height):
-#         return (width
-
-
-def for_point_in_image(image, expression, f):
-    iterator = numpy.nditer(expression, flags=[&amp;apos;multi_index&amp;apos;])
-    while not iterator.finished:
-        if iterator[0]:
-            f(image[iterator.multi_index], iterator.multi_index, image)
-        iterator.iternext()
-
-def main(argv):
-    argv = argv[1:] # remove program name
-    path_read = argv[0]
-    image = numpy_image_open(path_read)
-    argv = argv[1:]
-
-    while len(argv) &amp;gt; 1:
-        if argv[0] == &amp;apos;gradient&amp;apos;:
-            matrix = image_filter[argv[1]]
-            argv = argv[2:]
-            gradient_image = gradient_image_color(image, matrix)
-            image = gradient_image
-        elif argv[0] == &amp;apos;threshold&amp;apos;:
-            ratio = float(argv[1])
-            argv = argv[2:]
-            image = threshold_ratio(image, ratio)
-        elif argv[0] == &amp;apos;LoG&amp;apos;:
-            argv = argv[1:]
-            image = laplacian_of_gaussian(image, 2)
-        elif argv[0] == &amp;apos;hough&amp;apos;:
-            argv = argv[1:]
-            image = hough_transform(image)
-        else:
-            print(&amp;apos;unknown parameter: &amp;apos;, argv, file=sys.stderr)
-            exit(1)
-
-    path_write = argv[0]
-    numpy_image_save(image, path_write)
-
-if (__name__ == &amp;apos;__main__&amp;apos;):
-    main(sys.argv[:])
-&lt;/code&gt;&lt;/pre&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
-
-&lt;script src=&quot;ext/paper.js?execute&quot;&gt;&lt;/script&gt;
-
-&lt;style&gt;
-@media print {
-    a {
-        color: gray;
-    }
-    a:not(.image)::after {
-        content: &quot; (&quot; attr(href) &quot;)&quot;;
-    }
-    img {
-        page-break-inside: avoid;
-    }
-}
-&lt;/style&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/image-processing-edge-line-detection.html</id>
 <title>影像處理作業二：邊緣與直線偵測</title>

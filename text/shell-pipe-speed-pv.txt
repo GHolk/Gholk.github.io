@@ -36,7 +36,7 @@ adb push 我不會控制速度，以我的經驗就是速度會吃滿，
 
 [wifi adb]: adb-over-wifi.html
 
-[shell send]: linux-easy-shell-send-file.html#adb%20 也可以通
+[shell send]: linux-easy-shell-send-file.html#adb%20%E4%B9%9F%E5%8F%AF%E4%BB%A5%E9%80%9A
 
 ```sh
 # 用 adb

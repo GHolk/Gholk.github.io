@@ -9,10 +9,10 @@
 <!-- 後設資料 -->
 <meta name="date" property="og:article:public_time" content="2017-12-25T17:11:47.791Z">
 <meta name="keywords" property="og:article:tag" content="html,xml,rss,atom,css,xsl,程式,web">
-<link rel="index" type="text/html" href="index.html" title="&#x9996;&#x9801;">
-<link rel="start" type="text/html" href="index.html" title="&#x9996;&#x9801;">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
 <link rel="next" type="text/html" href="cheerio-escape-xml-suck.html" title="cheerio 跳脫 html 的問題">
-<link rel="prev" type="text/html" href="educate-revolution-affect-nothing.html" title=" &#x6559;&#x80B2;&#x5236;&#x5EA6;&#x7684;&#x5F71;&#x97FF;&#x4E0D;&#x5927;">
+<link rel="prev" type="text/html" href="educate-revolution-affect-nothing.html" title=" 教育制度的影響不大">
 
 <!-- 和網頁位置有關 -->
 <link rel="icon" type="image/png" href="ext/icon.png">
@@ -23,13 +23,13 @@
 <title>xsl xpath 中的 namespace</title>
 </head>
 <body>
-<main><h1 id="xsl xpath 中的 namespace">xsl xpath 中的 namespace</h1>
+<main><h1 id="xsl-xpath-中的-namespace">xsl xpath 中的 namespace</h1>
 <p>最近在玩 atom，（rss 那個 atom。）
 覺得這東西和 xml 太棒了。
 在練習 xml 的樣式 xsl 時踩坑，
 xsl 1.0 中沒辦法像一般 xml 為 xpath 指定全域的 namespace，
 於是就必須為每個 xpath 裡的元素加上 prefix，根本反智作法。</p>
-<h2 id="namespace 基本概念">namespace 基本概念</h2>
+<h2 id="namespace-基本概念">namespace 基本概念</h2>
 <p>xml 中有 namespace 的概念，
 指定了的話，定義的元素就成為全世界唯一的，
 不會發生別人也定義了同名的元素，
@@ -59,12 +59,12 @@ xsl 1.0 中沒辦法像一般 xml 為 xpath 指定全域的 namespace，
   &lt;atom:title&gt; 測試 &lt;/atom:title&gt;
 &lt;/atom:feed&gt;
 </code></pre>
-<h2 id="xsl 的問題">xsl 的問題</h2>
+<h2 id="xsl-的問題">xsl 的問題</h2>
 <p>xsl 裡用 xpath 來選出元素的內容、屬性，填到特定位置。
 xsl 是用 xml 表示，但 xpath 不是；
 xpath 是以字串的方式嵌在 xsl 元素的屬性值裡。</p>
 <pre><code class="lang-xml">標題: &lt;xsl:value-of select=&quot;/html/head/title&quot; /&gt;
-超連結: &lt;xsl:value-of select=&quot;/html/link[@rel=&#39;canonical&#39;]@href&quot; /&gt;
+超連結: &lt;xsl:value-of select=&quot;/html/link[@rel=&apos;canonical&apos;]/@href&quot; /&gt;
 </code></pre>
 <p>因為 xpath 並不是以元素或屬性的方式存在於 xml 內，
 所以沒辦法用 xmlns 為她指定命名空間。
@@ -91,11 +91,15 @@ xsl 中也沒有特別為 xpath 規定要預設為引用的 namespace
                      反正是指向 <a href="http://www.w3.org/2005/Atom">http://www.w3.org/2005/Atom</a> 就對了。 --&gt;
   &lt;xsl:output method=&quot;html&quot; /&gt;
   &lt;xsl:template match=&quot;/&quot;&gt;
-    &lt;!-- 抓不到東西 --&gt;
-    &lt;xsl:value-of select=&quot;/feed/entry&quot; /&gt;
+    &lt;html&gt;
+      &lt;body&gt;
+        &lt;h2&gt;抓不到東西&lt;/h2&gt;
+        &lt;p&gt;&lt;xsl:value-of select=&quot;/feed/entry&quot; /&gt;&lt;/p&gt;
 
-    &lt;!-- 抓屬於 <a href="http://www.w3.org/2005/Atom">http://www.w3.org/2005/Atom</a> 下的 feed 和 entry --&gt;
-    &lt;xsl:value-of select=&quot;/a:feed/a:entry&quot; /&gt;
+        &lt;h2&gt;抓屬於 <a href="http://www.w3.org/2005/Atom">http://www.w3.org/2005/Atom</a> 下的 feed 和 entry&lt;/h2&gt;
+        &lt;p&gt;&lt;xsl:value-of select=&quot;/a:feed/a:entry&quot; /&gt;&lt;/p&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;
   &lt;/xsl:template&gt;
 &lt;/xsl:stylesheet&gt;
 </textarea> </label>

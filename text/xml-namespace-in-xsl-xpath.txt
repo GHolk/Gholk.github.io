@@ -49,7 +49,7 @@ xpath 是以字串的方式嵌在 xsl 元素的屬性值裡。
 
 ```xml
 標題: <xsl:value-of select="/html/head/title" />
-超連結: <xsl:value-of select="/html/link[@rel='canonical']@href" />
+超連結: <xsl:value-of select="/html/link[@rel='canonical']/@href" />
 ```
 
 因為 xpath 並不是以元素或屬性的方式存在於 xml 內，
@@ -81,11 +81,15 @@ xsl 中也沒有特別為 xpath 規定要預設為引用的 namespace
                      反正是指向 http://www.w3.org/2005/Atom 就對了。 --&gt;
   &lt;xsl:output method=&quot;html&quot; /&gt;
   &lt;xsl:template match=&quot;/&quot;&gt;
-    &lt;!-- 抓不到東西 --&gt;
-    &lt;xsl:value-of select=&quot;/feed/entry&quot; /&gt;
+    &lt;html&gt;
+      &lt;body&gt;
+        &lt;h2&gt;&#x6293;&#x4E0D;&#x5230;&#x6771;&#x897F;&lt;/h2&gt;
+        &lt;p&gt;&lt;xsl:value-of select="/feed/entry" /&gt;&lt;/p&gt;
 
-    &lt;!-- 抓屬於 http://www.w3.org/2005/Atom 下的 feed 和 entry --&gt;
-    &lt;xsl:value-of select=&quot;/a:feed/a:entry&quot; /&gt;
+        &lt;h2&gt;&#x6293;&#x5C6C;&#x65BC; http://www.w3.org/2005/Atom &#x4E0B;&#x7684; feed &#x548C; entry&lt;/h2&gt;
+        &lt;p&gt;&lt;xsl:value-of select="/a:feed/a:entry" /&gt;&lt;/p&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;
   &lt;/xsl:template&gt;
 &lt;/xsl:stylesheet&gt;
 </textarea> </label>

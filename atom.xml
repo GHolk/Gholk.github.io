@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2020-05-28T13:04:36.642Z</updated>
+  <updated>2020-05-29T12:21:36.352Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,257 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/xml-starlet-kml-lack.html</id>
+<title>xmlstarlet 處理 kml 資料的經驗</title>
+<published>2020-05-28T16:26:25.197Z</published>
+<updated>2020-05-29T12:21:36.323Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/xml-starlet-kml-lack.html"/>
+<summary type="html">trimble 接收儀內建的定位可以輸出成 kml 格式，
+要把 kml 中的座標取出來，翻出了很久以前聽說過的神器 xmlstarlet。
+但只能說 xml 的設計有缺陷，沒有達到當初很多人期望的效果；
+加上很多工具操作上也沒有想像上的方便。
+後來 json 興起，算是對 xml 複雜的一種反撲。</summary>
+<category term="linux"/>
+<category term="程式"/>
+<category term="xml"/>
+<category term="cli"/>
+<content type="html">&lt;h1 id=&quot;xmlstarlet-處理-kml-資料的經驗&quot;&gt;xmlstarlet 處理 kml 資料的經驗&lt;/h1&gt;
+&lt;p&gt;trimble 接收儀內建的定位可以輸出成 kml 格式，
+要把 kml 中的座標取出來，翻出了很久以前聽說過的神器 xmlstarlet。
+但只能說 xml 的設計有缺陷，沒有達到當初很多人期望的效果；
+加上很多工具操作上也沒有想像上的方便。
+後來 json 興起，算是對 xml 複雜的一種反撲。&lt;/p&gt;
+&lt;h2 id=&quot;trimble-接收儀的輸出格式&quot;&gt;trimble 接收儀的輸出格式&lt;/h2&gt;
+&lt;p&gt;最近在測 trimble 推出的 rtx 服務，感覺是一種 ppp-rtk。
+其透過通訊衛星廣播改正資料，只要是支援該服務的接收儀，
+在收 gnss 訊號同時即會接收到改正資料，也就會直接以 rtx 定位。
+所以幾乎是無需設定，開箱即用的服務。&lt;/p&gt;
+&lt;p&gt;trimble 接收儀有二種 io 方式，一是即時的，一是儲存到內部硬碟。
+一般 trimble 接收儀有提供網路、藍牙、序列埠數種即時介面，
+在設定上可以讓接收儀把資料從以上管道即時輸出。
+可以輸出 binex 原始資料、其它 trimble 的專利格式、直接定位的座標等。
+若是支援 rtx 的接收儀，其直接定位的座標就是有 rtx 的成果。&lt;/p&gt;
+&lt;p&gt;但在戶外作業時，還要背一台電腦連到接收儀上，
+只為了存他輸出的座標實在有點蠢，
+所以使用另一種儲存到內部硬碟的方式。&lt;/p&gt;
+&lt;p&gt;存到內部硬碟的格式是 trimble 的專利格式 t02，
+一般使用上是可以用 trimble business center 讀出裡面的資料，
+我之前使用上都是用 trimble 提供的 convert to rinex 程式把 t02 轉成 rinex。
+但其實 t02 除了 gnss 觀測資料，還存了很多有的沒的，
+像接收儀的硬體資訊、電量，連內建的定位結果也會存在裡面。
+（在 session 中的 position interval 可以控制要多久記錄一次座標。）&lt;/p&gt;
+&lt;p&gt;但我無法從 t02 讀出定位座標。
+交大土木的 tbc 因為大人的原因我沒辦法用，
+而 convert to rinex 如同字面上的意思，
+只能轉出 rinex 而不能轉出其它資訊。
+t02 又是專利格式，我也沒辦法直接解析。&lt;/p&gt;
+&lt;h3 id=&quot;從-t02-取出座標的方式&quot;&gt;從 t02 取出座標的方式&lt;/h3&gt;
+&lt;p&gt;我後來找到二個方式，
+一是網頁工具以 ascii dump 出 t02 內的訊息，
+一是用接收儀內建的轉換功能轉成 kml，再取出其中的座標。&lt;/p&gt;
+&lt;p&gt;網頁是有個似乎是 trimble 員工的人，
+維護了個半業餘的網站 &lt;a href=&quot;https://trimbletools.com/&quot;&gt;https://trimbletools.com/&lt;/a&gt; ，
+其中一個功能是 &lt;a href=&quot;https://trimbletools.com/T02_2_PNG.html&quot;&gt;用 t02 內的座標資訊作圖&lt;/a&gt; 。
+如果勾選表單中的 &lt;code&gt;Save raw position files&lt;/code&gt; 選項，
+就會把 t02 中的訊息存到副名檔為 &lt;code&gt;x29&lt;/code&gt; 的檔案，
+之後用 awk 之類的工具就抓出座標訊息。&lt;/p&gt;
+&lt;p&gt;另一個 kml 則是 trimble 的接收儀內建功能。
+trimble 接收儀都有網頁介面，（至少我碰的 net r9 和 alloy 都有。）
+在下載的介面上就能選擇下載 t02，或由接收儀轉成 rinex 或 kml 讓下載。
+kml 裡的座標當然就是 t02 裡的座標了。&lt;/p&gt;
+&lt;p&gt;唯一問題是我用 net r9 時，接收儀內建的轉換功能會跑很久，
+所以我們一般都下載到電腦上用 convert to rinex 轉。
+（雖然還是蠻久的。）
+如果長度一天、觀測頻率 1 秒、定位頻率 1 分鐘，
+轉成 kml 大概要跑一小時，才會轉好開始輸出第一個 byte。
+瀏覽器基本上不會開著一個什麼都不傳的連線 1 小時，
+所以我是用開發者工具弄出網址後，用 curl 載的。
+換成 alloy 時，不知道是 cpu 升級還怎樣，
+總之轉換變很快，數小時的觀測幾秒就轉好了。&lt;/p&gt;
+&lt;h2 id=&quot;xmlstarlet&quot;&gt;xmlstarlet&lt;/h2&gt;
+&lt;p&gt;那要從 kml 抓出資料，當然要用 xml parser 了。
+我一直很相信程式界一句諺語：
+&lt;em&gt;xml 就該用 xml parser，用 regexp 處理 xml/html 的人，總有一天要付出代價。&lt;/em&gt;
+所以就找了用來處理 xml 的工具 xmlstarlet。
+（聽說有二個齊名的工具，xmlstarlet 和 xml-coreutils，
+但我先聽過 xmlstarlet 的，也沒試過 xml-coreutils，
+有空再試吧。）&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://xmlstar.sourceforge.net/&quot;&gt;xmlstarlet&lt;/a&gt; 是一支用來處理 xml 的工具程式。
+想想在 unix 環境下，有 grep sed awk 各種工具可以用來處理文字資料，
+但這些工具頂多使用 regexp，只適合處理格式單純的資料，碰到 xml 都不太方便。
+因此就有人開發了 xmlstarlet，可以使用 xpath 來操作 xml 資料。
+如同 json 開始流行後，有人開發了 &lt;a href=&quot;https://stedolan.github.io/jq/&quot;&gt;jq&lt;/a&gt; 來處理 json 資料。&lt;/p&gt;
+&lt;p&gt;其中 xmlstarlet 的 select 命令就能用來取出 xml 文件內的內容，
+簡單可以對 xpath 求值，複雜的用法相當於命令列版本的 xsl。&lt;/p&gt;
+&lt;p&gt;如果只是單純想對 xpath 求值，
+還有另一個更簡單的工具叫 xpath，
+在 debian 是屬於 libxml-xpath-perl 這個套件下。
+雖然它無法處理 utf-8 的命令行參數，
+我的經驗是在 perl 啟動時加上 &lt;code&gt;-Ca&lt;/code&gt; 即可，
+詳情可以 &lt;code&gt;man perlrun&lt;/code&gt; 。&lt;/p&gt;
+&lt;h3 id=&quot;xmlstarlet-的命名空間問題&quot;&gt;xmlstarlet 的命名空間問題&lt;/h3&gt;
+&lt;p&gt;xmlstarlet 個不方便的點就是對 xpath 命名空間的處理，
+之前有寫過一篇 &lt;a href=&quot;xml-namespace-in-xsl-xpath.html&quot;&gt;在 xsl 中 xpath 元素的命名空間問題&lt;/a&gt; ，
+然後就又再 xmlstarlet 碰到這個問題了。
+如果 xml 中指定了命名空間，
+則也必須在 xpath 中指定相同的命名空間才能正確處理。&lt;/p&gt;
+&lt;p&gt;但在 xml 中可以指定預設命名空間，
+就不用為每個元素加上命名空間前綴；但要 xpath 這麼作有困難。
+前述的 perl xpath 腳本是直接忽略命名空間，
+而 xmlstarlet 則提供了一個 &lt;code&gt;-N&lt;/code&gt; 參數來指定命名空間。&lt;/p&gt;
+&lt;p&gt;例如一份 kml 開頭如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-xml&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;kml xmlns=&amp;quot;http://www.opengis.net/kml/2.2&amp;quot; 
+     xmlns:gx=&amp;quot;http://www.google.com/kml/ext/2.2&amp;quot; 
+     xmlns:kml=&amp;quot;http://www.opengis.net/kml/2.2&amp;quot;&amp;gt;
+&amp;lt;Document&amp;gt;&amp;lt;name&amp;gt;Trimble 2020051900F.T02&amp;lt;/name&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;則必須要用 &lt;code&gt;xmlstarlet -N k=http://www.opengis.net/kml/2.2 //k:name&lt;/code&gt;
+才選得到位於 &lt;code&gt;http://www.opengis.net/kml/2.2&lt;/code&gt; 命名空間下的 name 元素。
+也就是 xpath 中幾乎每個元素都要加上命名空間前綴，使用上極不方便。
+（當然，這份 kml 除了預設，還把 kml 前綴也指向同一個命名空間，
+因此其實不用 &lt;code&gt;-N k=&lt;/code&gt; 的選項，直接指定 &lt;code&gt;//kml:name&lt;/code&gt; 也選得到。）&lt;/p&gt;
+&lt;p&gt;如我在前文提的舊文中所述，xsl 中可以指定 xpath 預設的命名空間，
+就不需要在每個 xpath 中指定元素的命名空間。
+xmlstarlet 沒有這項功能，
+&lt;a href=&quot;http://xmlstar.sourceforge.net/doc/UG/ch05.html#idm47989546158480&quot;&gt;其手冊給了二個解決方式&lt;/a&gt; ，
+一是以內建的底線可以代表根文件的命名空間，
+二是直接以 sed 刪除 xml 的命名空間。&lt;/p&gt;
+&lt;p&gt;第二個方式太蠢了，我說好歹也加個命令是用來刪除命名空間的，
+直接用 sed 刪不是落入用 regexp 處理 xml 的問題了嗎？&lt;/p&gt;
+&lt;p&gt;底線的用法，則是指 xml 文件若有預設命名空間，
+該命名空間會被綁到底線 &lt;code&gt;_&lt;/code&gt; 上。
+也就是上述的 xpath 可以寫成 &lt;code&gt;//_:name&lt;/code&gt; ，
+這裡的 &lt;code&gt;_&lt;/code&gt; 就相當於前面的 k 或 kml，
+也就相當於在命令上加了 &lt;code&gt;-N _=http://www.opengis.net/kml/2.2&lt;/code&gt; 的選項。
+超棒的對吧，從此只要在 xpath 中每個元素名加上 &lt;code&gt;_:&lt;/code&gt; 就好了，真是蠢死了。&lt;/p&gt;
+&lt;p&gt;也許有時間可以去幫忙維護，
+看能不能像 xsl &lt;code&gt;xpath-default-namespace&lt;/code&gt; 屬性，
+有個參數可以指定無指定命名空間時的預設命名空間。&lt;/p&gt;
+&lt;h2 id=&quot;kml-資料的問題&quot;&gt;kml 資料的問題&lt;/h2&gt;
+&lt;p&gt;trimble 轉出 kml 的模式，我是選擇 line and point。
+kml 裡有座標資訊，但每個座標的資訊，如時間、衛星、誤差、速度，
+是以跳脫後的 html table 格式記在 kml 的 description 裡。
+所以處理起來很麻煩。&lt;/p&gt;
+&lt;h3 id=&quot;w3m-格式化表格&quot;&gt;w3m 格式化表格&lt;/h3&gt;
+&lt;p&gt;我原本是只抓出 html 表格，反正表格裡也有座標，
+然後丟到 w3m 排版，就能用 awk 處理了。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;xmlstarlet select --text --template \
+    --value-of &amp;quot;/kml/Document/Folder[name=&amp;apos;Points&amp;apos;]/Placemark/description&amp;quot; \
+| w3m -T text/html -dump
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;抓出座標與對應的表格資料&quot;&gt;抓出座標與對應的表格資料&lt;/h3&gt;
+&lt;p&gt;後來我發現表格中的經緯度座標小數位數不夠，
+只到 7 位 mm 等級，要 coordinate 元素內的才有 9 位。
+只好研究 xmlstarlet 的進階用法，
+來同時抓出 html 表格和相鄰的座標元素。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;xmlstarlet select --text --template \
+    --match &amp;quot;/kml/Document/Folder[name=&amp;apos;Points&amp;apos;]/Placemark&amp;quot; \
+    --value-of description --nl \
+    --value-of Point/coordinates --nl --nl
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;程式大概如上，因為 namespace 很煩，
+所以我會先用 sed 把 xmlns 刪掉；不然每個 xpath 都要加一堆 namespace。
+概念就是先找到 xpath &lt;code&gt;/kml/Document/Folder[name=&amp;apos;Points&amp;apos;]/Placemark&lt;/code&gt; ，
+然後取出相對於該位置的 &lt;code&gt;description&lt;/code&gt; 與 &lt;code&gt;Point/coordinates&lt;/code&gt; 元素。
+至於 &lt;code&gt;--nl&lt;/code&gt; 是輸出一個換行符的意思；
+所以就是定位到 Placemark 後，輸出 description 後輸出一個換行，
+再輸出 Point/coordinates 再二個換行。&lt;/p&gt;
+&lt;p&gt;這樣的問題是，description 節點的內容是跳脫的 html，
+所以我加上 &lt;code&gt;--text&lt;/code&gt; 參數讓輸出不會跳脫，變成直接輸出內容。
+但這樣變成 html 和純文字混在一起。&lt;/p&gt;
+&lt;h3 id=&quot;直接解碼-html-當作-xml-處理&quot;&gt;直接解碼 html 當作 xml 處理&lt;/h3&gt;
+&lt;p&gt;所以後來改成輸出也格式化成 xml，
+然後 html 一樣跳脫後嵌在其中一個元素內，再用 &lt;code&gt;xmlstarlet unesc&lt;/code&gt; 解碼。
+也不太想再依賴 w3m，就直接解碼跳脫後的 html，直接當作 xml 處理。
+但解碼後的 html 裡會有 html entities，
+xmlstarlet 不認識會報錯，所以再用 sed 刪掉。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;xmlstarlet select --template --element xml \
+    --match &amp;quot;/kml/Document/Folder[name=&amp;apos;Points&amp;apos;]/Placemark&amp;quot; \
+    --element p --value-of description \
+    --element c --value-of Point/coordinates \
+| xmlstarlet unescape \
+| sed &amp;apos;s/&amp;amp;nbsp;/ /g&amp;apos;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;這段參數的意思是，輸出放在根元素為 xml 的元素內，
+然後每匹配到 placemark 後，輸出一個 p 元素，內容為 description 的內容，
+再在 p 元素中加上一個 c 元素，內容為 point/coordinates 的內容。&lt;/p&gt;
+&lt;p&gt;想試玩可以這樣試：
+因為空字串不是一個合法的 xml 文件，
+所以至少要送一個空的元素。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;echo &amp;apos;&amp;lt;xml/&amp;gt;&amp;apos; \
+| xmlstarlet select --template \
+    --element p --output pc \
+    --element c --output cc
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;之後再用以下的 xsel 重新抓出時間與座標即可：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;xmlstarlet select --template --match /xml/p \
+    --value-of &amp;apos;normalize-space(c)&amp;apos; --output , \
+    --value-of &amp;apos;table/tr/td[.=&amp;quot;UTC&amp;quot;]/following-sibling::td&amp;apos; --nl
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;xpath 相對 css selector 一個很大的強項，
+就是可以匹配節點的文字內容，
+甚至可以匹配父節點或反向選取等，css 做不到的事。&lt;/p&gt;
+&lt;h2 id=&quot;xmlstarlet-的問題&quot;&gt;xmlstarlet 的問題&lt;/h2&gt;
+&lt;p&gt;xmlstarlet 的問題，大概就是一些細節沒處理好，
+使用起來有些地方應該可以更方便的。
+且程式本身也缺人維護，所以想想也是理所當然的。
+這裡談二個問題，一是之前提的 xpath 裡的命名空間問題，
+一是處理 html 常碰到的 entities 問題。&lt;/p&gt;
+&lt;p&gt;xmlns 之前提過了，就是如果文件有指定命名空間，
+那 xpath 中每個元素也都要前綴命名空間，才抓得到元素。
+xsl 中提供了設置 xpath 的預設命名空間的機制，
+但 xmlstarlet 中就沒有這個機制。&lt;/p&gt;
+&lt;p&gt;xmlstarlet 官方手冊給的解決也很蠢，
+用 sed 刪除 xmlns 的屬性，那不是又回到原始的 regexp 了。
+而且 xml 理論上是可以有任意換行與空白的語法，
+所以完全正確的 regexp 會很難寫。&lt;/p&gt;
+&lt;p&gt;我是比較希望可以用 xmlstarlet 本身的功能刪除 xmlns 之類的，
+但 xmlns 是一種特殊屬性，不能直接當作一般屬性刪除。
+所以可能要特別開一個功能來刪，或是把文件當作 html 處理，
+那 html 裡就沒有所謂的命名空間，
+xmlns 就只是一個名稱中可能帶冒號的屬性而已。&lt;/p&gt;
+&lt;p&gt;另一個問題就是我混著處理 html 時，
+因為其中含有 html entities，xml 不認識，
+所以 xmlstarlet 就報錯。
+我是比較希望能開個選項，讓 xmlstarlet 不要那麼嚴格。
+或像 &lt;code&gt;-N&lt;/code&gt; 一樣可以設一個命名空間對應一樣，
+有選項可以設 entities 的值，
+或可以指定額外的 dtd 文件，那就能額外指定 entities。&lt;/p&gt;
+&lt;p&gt;總之大概就是 xmlstarlet 都得用一些 ugly hack 才能達到功能，
+所以不太滿意。但這也很大原因也是專案的人力不足造成的。&lt;/p&gt;
+&lt;h2 id=&quot;xml-與-docbook-的時代&quot;&gt;xml 與 docbook 的時代&lt;/h2&gt;
+&lt;p&gt;xmlstarlet 很老了，大概是 2000 年時 xml 橫空出世，
+被全世界冀望為解決所有格式問題的銀彈，
+在這樣的時空背景下誕生的。
+後來也缺乏維護，該專案的主頁上也掛著大大的請求協助。&lt;/p&gt;
+&lt;p&gt;當年很多人希望 xsl 和 xml 可以一口氣解決所有資料互通的問題。
+但後來 xhtml 沒有獲得普遍採用，
+大家還是覺得用 js 操作 dom，css 形式的選擇器和 jquery 比較好用。
+隨後 json 隨著 js 掘起，作為對 xml 過於複雜的反撲，
+ajax 的 x 也就是 xml 幾乎成為歷史，
+最終 html5 放棄成為 xml 和 sgml 的子集，故事結束。&lt;/p&gt;
+&lt;p&gt;docbook 似乎也是那個時代下的產物。
+我看過好幾本比較正式的 linux 介紹 &lt;strong&gt;書&lt;/strong&gt; ：
+&lt;a href=&quot;https://www.freebsd.org/doc/zh_TW/books/fdp-primer/&quot;&gt;freebsd 文件計劃&lt;/a&gt; 、 &lt;a href=&quot;https://i.linuxtoy.org/docs/guide/index.html&quot;&gt;開源世界旅行手冊&lt;/a&gt; 、
+&lt;a href=&quot;https://dywang.csie.cyut.edu.tw/dywang/linux-wangyin/&quot;&gt;完全以 gnu/linux 工作&lt;/a&gt; 、unix 編程藝術，
+幾乎都會提到 docbook。
+似乎那時 docbook 被冀望成一種萬靈丹，
+可以發布成紙本書、pdf、html 等各種格式，
+所有的文章都可以以 docbook 格式撰寫。&lt;/p&gt;
+&lt;p&gt;同時與 docbook 常被一起提起的名字，則為 LaTeX，
+那時世界似乎分為 xml/docbook 與 TeX/LaTeX 二大派系，
+如同 vi 與 emacs 二大派系。
+xml 派批評 tex 是排版語言，xml 的結構與樣式分離才是正確的作法；
+tex 系則有較美觀的排版效果，
+且 xml 派工具鏈的實作成果不佳，實際使用上有許多問題。&lt;/p&gt;
+&lt;p&gt;markdown 似乎是相對新的產物，後來 markdown 掘起後，
+docbook 似乎就被 markdown 吃光了，
+如同 json 取代 xml、python 取代 java。
+tex 系則繼續演化，如 XeTeX，
+儘管 tex 系對中文的支援似乎一直不是很好，。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/xml-namespace-in-xsl-xpath.html#xsl-的問題</id>
 <title>xsl xpath 中的 namespace</title>
 <published>2017-12-25T17:11:47.791Z</published>
@@ -2148,470 +2399,7 @@ RTCM 要選 products.igs-ip.net，天線要用雙頻。</summary>
 <category term="rtklib"/>
 <category term="linux"/>
 <category term="raspberry-pi"/>
-<content type="html">&lt;h1 id=&quot;以-RTKLIB-與-RTCM-SSR-訊息進行-real-time-PPP&quot;&gt;以 RTKLIB 與 RTCM SSR 訊息進行 real time PPP&lt;/h1&gt;
-&lt;p&gt;這算是我論文的一部份，之前教授就說他想試，
-我也糊里糊塗沒仔細評估就答應了，還好真的做的出來。
-過程不難，但我自己耍蠢撞牆居多。
-關鍵有幾個點：要用 &lt;a href=&quot;http://rtkexplorer.com/downloads/rtklib-code/&quot;&gt;rtkexplore 版本的 rtklib&lt;/a&gt; ，
-RTCM 要選 products.igs-ip.net，天線要用雙頻。&lt;/p&gt;
-&lt;h2 id=&quot;無關技術的事情起緣&quot;&gt;無關技術的事情起緣&lt;/h2&gt;
-&lt;p&gt;之前教授不知哪裡看到 real time ppp 的消息，
-認為 rt-ppp 是未來的潮流，
-知道現在 igs 之類的組織有在網路上提供 &lt;strong&gt;即時精密星曆&lt;/strong&gt; ，
-只要有網路就可以收，用接收儀做 &lt;strong&gt;即時精密單點定位&lt;/strong&gt; 。&lt;/p&gt;
-&lt;p&gt;他主要是參考 &lt;a href=&quot;https://rtklibexplorer.wordpress.com/2018/05/08/using-ssr-corrections-with-rtklib-for-ppp-solutions/&quot;&gt;rtkexplorer 的 rt ppp 文章&lt;/a&gt;，
-就要我試試看，用平價的接收儀如 u-blox 的 f9p 晶片，
-和行動網路或 wifi 接星曆做 rt-ppp。&lt;/p&gt;
-&lt;p&gt;他聯絡了另一個有 u-blox 長期使用、開發經驗的教授林修國，
-要我去請教可行性之類的。
-那時候我還搞不太清楚要幹麻，
-想說應該一定做的起來，就沒有很認真參考。
-事後想想那時就應該要拒絕，因為林修國那時是說他幾年前做過，
-但他印像中 rtklib 接網路星曆的 rt-ppp 還不能直接用，要自己改 code。&lt;/p&gt;
-&lt;p&gt;這時候我就應該要拒絕了，因為我根本沒有改 code 的能力。
-結果那時不知道是鬼遮眼，還是敷衍上級的老毛病又犯了，
-回去後還是和教授說沒問題，可以買 f9p 了。
-事後想想真是有驚無險，還好做出來了。&lt;/p&gt;
-&lt;h2 id=&quot;技術&quot;&gt;技術&lt;/h2&gt;
-&lt;p&gt;教授買的是和 raspberry pi 接好的 f9p 晶片，和一顆雙頻的天線。
-pi 開機後可以從 &lt;code&gt;/dev/serial0&lt;/code&gt; 讀寫 f9p 的訊息，
-pi 本身沒有電池，可以從 micro usb 接電源，
-所以接上手機用的行動電源就可以使用。&lt;/p&gt;
-&lt;p&gt;主要流程我也是參考 &lt;a href=&quot;https://rtklibexplorer.wordpress.com/2018/05/08/using-ssr-corrections-with-rtklib-for-ppp-solutions/&quot;&gt;rtkexplorer 的 rt ppp 文章&lt;/a&gt; 。&lt;/p&gt;
-&lt;h3 id=&quot;ublox-晶片連結&quot;&gt;ublox 晶片連結&lt;/h3&gt;
-&lt;p&gt;ublox 的 f9p 晶片是用 serial port 連到 pi 上，
-windows 叫 com1，unix 則是會位在 &lt;code&gt;/dev/serial0&lt;/code&gt; 。
-（數字可能改變。）
-實際上 serial0 是個指到 &lt;code&gt;/dev/ttyS0&lt;/code&gt; 的符號連結，
-總之可以動。&lt;/p&gt;
-&lt;p&gt;serial0 在 linux 下表現為 character special device，
-但我一直不知道怎麼和這類裝置互動。
-寫入就直接 &lt;code&gt;echo foo &amp;gt;/dev/serial0&lt;/code&gt; 即可，
-但讀取好像不能直接 &lt;code&gt;cat /dev/serial0&lt;/code&gt; ？
-cat 一下就讀取完就退出了，但我是需要不斷讀取他的輸出，
-把他當成像標準輸入一樣的 stream 來讀。&lt;/p&gt;
-&lt;h3 id=&quot;str2str&quot;&gt;str2str&lt;/h3&gt;
-&lt;p&gt;還好 rtklib 可以直接處理這種細節，
-提供了一個叫 str2str 的程式，
-可以用來把一個 stream 轉到多個 stream 甚至轉存成檔案。
-所以就把 serial 轉成 tcp stream 來處理；
-也同時存成檔案，也就是 ubx 格式的原始記錄檔。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;str2str -in serial://serial0:115200 \
-        -out tcpsvr://:5566 \
-        -out file:///home/pi/test.ubx
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;一個 str2str 可以從一個 stream 讀取，輸出到多個輸出。
-這個指令可以把 &lt;code&gt;/dev/serial0&lt;/code&gt; 以 115200 baud 讀取，
-並在 localhost 5566 port 輸出，
-並存成 &lt;code&gt;/home/pi/test.ubx&lt;/code&gt; 的檔案。
-rtklib 風格的 url 不用寫 &lt;code&gt;/dev/&lt;/code&gt; ，直接寫裝置名稱即可，
-大概是從 windows 來的習慣；
-windows 下 com port 就直接叫 com1，也沒有所謂的完整路徑。&lt;/p&gt;
-&lt;p&gt;對 baud rate 我還是不太懂，要怎麼知道裝置的 baud rate，
-我看之前測試的人留在 pi 裡面的設定檔才知道的。
-如果不設的話，str2str 似乎會自己測？我看也是測對。&lt;/p&gt;
-&lt;p&gt;輸出除了&lt;abbr title=&quot;tcp server&quot;&gt;tcpsvr&lt;/abbr&gt;，
-也可以是&lt;abbr title=&quot;tcp client&quot;&gt;tcpcli&lt;/abbr&gt;。
-如果是 server，就是可以有多個 client 連上去讀取，
-像用 &lt;code&gt;nc localhost 5566&lt;/code&gt; 讀取；
-如果是 client，就是會主動連到該 ip port 輸出資料，
-類似 http post 到某一個 port 的概念。&lt;/p&gt;
-&lt;h3 id=&quot;ser2net&quot;&gt;ser2net&lt;/h3&gt;
-&lt;p&gt;str2str 是只能單向讀取 serial 輸出到其它串流，
-但 serial 是雙向的，有時需要 config 晶片，
-就會需要寫入資料。&lt;/p&gt;
-&lt;p&gt;ublox 提供的 u-center 程式就是用來連結晶片，
-讀取、設定晶片的程式。
-u-center 是在 windows 上執行的程式，
-我用 wine 跑是沒問題的。
-但我不可能在 pi 上跑 wine 再跑 u-center，
-所以我 google 到一支 ser2net 的 linux 程式，
-&lt;a href=&quot;https://ozzmaker.com/using-u-center-to-connect-to-a-raspberry-pi-with-an-attached-berrygps-imu-gsm/&quot;&gt;可以把 serial 轉到 tcp 連線，且可以供讀寫。&lt;/a&gt;
-u-center 除了直接連 serial，也可以連轉成 tcp 的 serial。
-所以問題就解決了。&lt;/p&gt;
-&lt;h3 id=&quot;u-center-設定&quot;&gt;u-center 設定&lt;/h3&gt;
-&lt;p&gt;u-center 可以設定 f9p 要輸出哪些訊息。
-receiver &amp;gt; connection 裡可以選要用 com port (serial) 或 tcp 連，
-連上後在 view &amp;gt; configuration view 裡可以改設定。&lt;/p&gt;
-&lt;p&gt;f9p 本身可以進行基本的基於電碼的定位，
-可以直接以 nmea 輸出定位結果座標、衛星顆數。
-也可以讀取 rtcm 後進行 rtk 定位，
-但這部份怎麼設定就沒研究了。&lt;/p&gt;
-&lt;p&gt;在 configuration view 的 MSG 分類下，
-可以設定在哪些 port 要輸出哪些訊息，
-我看得到有 i2c uart1 uart2 usb spi 五個 port。
-serial 應該是 uart1 或 uart2，所以我都開了。
-如果 f9p 是用 usb 連 pi，那可能要改成開 usb。
-i2c 和 spi 就不知道了。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;F0-00 NMEA GxGGA: nmea 的 gngga 訊息，直接是定位座標，&lt;/li&gt;
-&lt;li&gt;F0-03 NMEA GxGSV: nmea 的 gngsv 訊息，衛星顆數。&lt;/li&gt;
-&lt;li&gt;其它訊息自行參考 &lt;a href=&quot;https://www.gpsinformation.org/dale/nmea.htm&quot;&gt;nmea 標準&lt;/a&gt; 。&lt;/li&gt;
-&lt;li&gt;02-14 RXM-RAWX: 全星系的電碼與相位觀測量，
-用來輸出 rinex 的 observation 檔所需。&lt;/li&gt;
-&lt;li&gt;02-13 RXM-SFRBX: 全星系的星曆觀測量，收廣播星曆所需。&lt;/li&gt;
-&lt;li&gt;沒有 X 的似乎是單一 GPS 星系的？&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;至少要開 rawx 和 sfrbx 才會輸出 gnss 觀測量，
-方能以 rtklib 或其它程式定位。&lt;/p&gt;
-&lt;p&gt;nmea 的訊息開了之後，u-center 上的
-&lt;abbr title=&quot;dash board&quot;&gt;儀表板&lt;/abbr&gt;
-才看得到東西。
-如果 nmea 有開，nmea 訊息會夾在 serial 輸出的二進位訊息裡，
-但不會影響 ubx 二位進格式的解析。
-只是檔案會變大，如果開 gngsv 的話會很大。&lt;/p&gt;
-&lt;p&gt;設定的方式是選好訊息後，在要輸出的 port 上打勾，
-然後按視窗左下角的 send 按鈕，即會將設定發送到晶片上。
-如果要永久保存設定，要切到 CFG，
-選 &lt;em&gt;save current configuration&lt;/em&gt; ，並選擇對應的裝置；
-我選了 BBR 和 FLASH，這二個應該至少有一個是持久的，
-詳細可能要讀手冊。&lt;/p&gt;
-&lt;h3 id=&quot;rtklib-版本&quot;&gt;rtklib 版本&lt;/h3&gt;
-&lt;p&gt;我本來是直接 clone rtklib github 上的 master branch，
-在 raspberry pi 上編譯命令列版本的程式：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;git clone https://github.com/tomojitakasu/RTKLIB rtklib.git
-cd rtklib.git/app
-sh makeall.sh
-sudo find -type f -executable -exec install &amp;apos;{}&amp;apos; /usr/local/bin \;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;但後來發現都解不出來，收下來的資料都只有單頻。
-（而我選了雙頻，所以解不出來。）
-後來發現 2.4.2 2.4.3 版的 rtklib，
-用 convbin 轉出來的資料都只有 L1 波段，
-也就是說這二版的 rtklib 都不支援 ublox 的 L2 波段資料。
-我試 teqc 也是一樣的結果。&lt;/p&gt;
-&lt;p&gt;後來找到 &lt;a href=&quot;https://rtklibexplorer.wordpress.com/2019/08/24/dual-frequency-ppk-solutions-with-rtklib-and-the-u-blox-f9p/&quot;&gt;rtkexplorer 談 f9p ppp 的文章&lt;/a&gt; ，
-才看到 &lt;a href=&quot;http://rtkexplorer.com/downloads/rtklib-code/&quot;&gt;他釋出的支援 ublox f9p 的 rtklib 版本&lt;/a&gt; 。
-因為他只有提供 windows 的執行檔，
-而且 pi 不是 x64 要另外編譯，就直接 clone 他的 github 原始碼自己編譯。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;git clone https://github.com/rtklibexplorer/RTKLIB rtklib-explorer.git
-cd rtklib-explorer.git/app
-make -j4 # 四核心編譯
-sudo make install # 預設裝到 /usr/local/bin
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;之後 convbin 轉出來的就有 L2 了，
-預設也從 rinex 2.11 變成 3.03。
-也就代表 rtkrcv 程式可以解析 ublox 雙頻訊號。&lt;/p&gt;
-&lt;h3 id=&quot;雙頻天線問題&quot;&gt;雙頻天線問題&lt;/h3&gt;
-&lt;p&gt;後來發現天線也有分雙頻單頻。
-之前有從教授拿到一個單頻的 skytraq 接收儀，
-有附一個小小的磁鐵天線，可以黏在車頂。
-在宿舍頂樓測試時，因為 ublox 的天線接口在底部，
-不能直接放在地上，所以想先用小天線頂著用；
-結果收到的就只有單頻訊號。&lt;/p&gt;
-&lt;h3 id=&quot;rtcm-ntrip-與-ssr-訊息&quot;&gt;rtcm ntrip 與 ssr 訊息&lt;/h3&gt;
-&lt;p&gt;igs 即時精密星曆除了 15 分鐘發布一次的檔案外，
-也有用 ntrip 協議發送。
-ntrip 是 rtcm 協議在 http 上運行的版本，
-rtcm 則是用來傳輸 gnss 訊號的協議。
-我印象中 rtcm2 只能用來傳輸 rtk 需要的差分訊號，
-而 rtcm3 中定義了
-&lt;abbr title=&quot;state space representation&quot;&gt;ssr&lt;/abbr&gt; 訊息，
-用來表示即時精密星曆。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.use-snip.com/kb/knowledge-base/an-rtcm-message-cheat-sheet/&quot;&gt;我有找到一篇文章有提供 rtcm 訊息的意義&lt;/a&gt; ，
-rtkrcv 會顯示收到的訊息，
-還有 ntrip source table 也會顯示該 mount point 提供哪些格式訊息，
-可以用來粗略判斷運作正不正常。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://register.rtcm-ntrip.org/cgi-bin/registration.cgi&quot;&gt;要收 igs 的 ntrip 協議需要註冊&lt;/a&gt; ，
-在連接時提供使用者名稱和密碼。
-註冊時可以選要申請 igs 或 euref 的，
-這個服務似乎很多國家或組織都有提供。&lt;/p&gt;
-&lt;p&gt;以 igs 來說，在 &lt;a href=&quot;http://www.igs-ip.net/home&quot;&gt;http://www.igs-ip.net/home&lt;/a&gt; 有說明，
-而 &lt;a href=&quot;http://www.igs-ip.net/&quot;&gt;http://www.igs-ip.net/&lt;/a&gt; 則有以 ntrip 格式提供的
-&lt;abbr title=&quot;sourcetable&quot;&gt;資源列表&lt;/abbr&gt;，
-每行是一比記錄，其中以分號分隔不同欄位。
-其中以 STR 開頭的記錄是一比可以用 ntrip 連上的站。
-例如 &lt;code&gt;STR;NIUM00NIU0;...&lt;/code&gt; ，
-就表示 www.igs-ip.net 有收集 NIUMOONIUO 站的 ntrip 資料，
-可以透過 &lt;code&gt;www.igs-ip.net/NIUMOONIUO&lt;/code&gt; 取得 niumooniuo 的資料。
-（NIUMOONIUO 稱為 www.igs-ip.net 的一個 mount point。）&lt;/p&gt;
-&lt;p&gt;igs 下有
-&lt;a href=&quot;http://www.igs-ip.net/&quot;&gt;http://www.igs-ip.net/&lt;/a&gt;
-&lt;a href=&quot;http://mgex.igs-ip.net/&quot;&gt;http://mgex.igs-ip.net/&lt;/a&gt;
-&lt;a href=&quot;http://products.igs-ip.net/&quot;&gt;http://products.igs-ip.net/&lt;/a&gt;
-三個 server。
-www 上可以串流所有所有 igs 收集的 gnss 測站資料，
-mgex 不知道，
-而 products 就是依收集的所有 ntrip 資料，
-計算出精密星曆並提供 ssr 訊息的 server。
-可以透過 &lt;code&gt;products.igs-ip.net/CLK93&lt;/code&gt; 取得即時精密星曆訊息。&lt;/p&gt;
-&lt;p&gt;ntrip 是以基礎的 http basic authentication 登入，
-所以用 http 其實蠻危險的，密碼會以明碼傳送，
-雖然多數 server 也提供在 https 上的 ntrip，
-但目前 str2str 還不支援 https。
-所以建議用 wget 或 curl 代理，再交給 str2str。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;wget --user-agent &amp;apos;NTRIP RTKLIB (wget)&amp;apos; --output-document - \
-     https://username:password@products.igs-ip.net/CLK93 \
-| str2str -out tcpsvr://:5567
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;curl --user-agent &amp;apos;NTRIP RTKLIB (curl)&amp;apos; \
-     https://username:password@products.igs-ip.net/CLK93 \
-| str2str -out tcpsvr://:5567
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;ntrip server 如果 http 的 user agent 標頭不以 &lt;code&gt;NTRIP&lt;/code&gt; 開頭，
-就只會吐 http 403 forbidden 錯誤。&lt;/li&gt;
-&lt;li&gt;str2str 如果沒有指定 &lt;code&gt;-in&lt;/code&gt; 選項，就會從 stdin 讀取，
-上面的腳本就是讓 curl 或 wget 把 ntrip 的 rtcm 輸出，
-用管道傳到 str2str 的 stdin。&lt;/li&gt;
-&lt;li&gt;ntrip 就是 http，所以除了開頭的登入用的 http header，
-基本上是單向的協議，就是單方面不停的送二進位資料。
-（所以也沒有 content-length 標頭。）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;rtkrcv-執行細節&quot;&gt;rtkrcv 執行細節&lt;/h3&gt;
-&lt;p&gt;因為我是 raspberry pi，所以是用命令列版本的 rtkrcv 定位，
-就寫設定檔後執行，沒有 gui。&lt;/p&gt;
-&lt;p&gt;我在執行上因為需要比較 rtklib 和後處理的定位結果，
-要把 ublox 的原始數據也存成檔案，
-所以是用 str2str 從 serial 讀取，
-一邊在 tcp 上送給 rtkrcv，另一邊則存成檔案。
-ntrip 也可以比照辦理。&lt;/p&gt;
-&lt;h4 id=&quot;執行腳本&quot;&gt;執行腳本&lt;/h4&gt;
-&lt;p&gt;igs ntrip 的帳號密碼則寫在檔案 &lt;code&gt;login&lt;/code&gt; 裡，
-內容就一行帳號密碼，用冒號隔開，
-像 &lt;code&gt;username:password&lt;/code&gt; 。&lt;/p&gt;
-&lt;p&gt;有個小問題是 rtkexplorer 版本的 rtkrcv，
-&lt;code&gt;-s&lt;/code&gt; 選項似乎不能自動執行。
-預設 rtkrcv 是只會開啟一個終端，
-可以開在 tcp port、指定的 terminal device 或 shell 所在的 tty 上，
-要在終端中輸入 start 命令才會開始定位。
-所以我加了個 nc 指令，
-用來自動連進去後輸入 start 命令。
-tcp console 下面的設定檔裡設密碼，
-如果手動設為空就可以不用打密碼；
-但不設的話會會用預設密碼 &lt;code&gt;admin&lt;/code&gt; 。&lt;/p&gt;
-&lt;p&gt;執行後可以在其它 shell &lt;code&gt;telnet localhost 5564&lt;/code&gt;
-連進 rtkrcv 的介面，
-原本的 shell 則會顯示 str2str 的狀況。
-如果要結束，就在原本的 shell 按 ctrl-C，
-或直接 kill 掉一開始執行時顯示的 pid。&lt;/p&gt;
-&lt;p&gt;rtkrcv 的終端中，exit 指令是指離開終端，
-要結束 rtkrcv 則是要用 shutdown 指令，
-或是直接 kill rtkrcv 程序。
-但如果執行時不指定 port 或 terminal device，
-就會直接把終端開在現在的終端上，
-那就會無法 exit，（否則 exit 了就無法再連上終端了。）
-要退出只能直接 shutdown。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;#!/bin/sh
 
-ntrip_igs_login=`cat login`
-
-# port
-port_real_time_ppp_console=5564 # igs ntrip real time ppp console
-port_ublox=5566                 # ublox raw observation
-port_igs_ssr_rtcm=5567          # igs real time clock orbit
-
-# log=$(date -Is)-run.log
-# exec 1&amp;gt;$log 2&amp;gt;&amp;amp;1
-
-echo script pid $$
-
-time_stamp=`date -Is`
-
-str2str -in serial://serial0 \
-    -out tcpsvr://:$port_ublox \
-    -out file://$PWD/$time_stamp.ubx &amp;amp;
-pid_ublox=$!
-
-curl --user-agent &amp;apos;NTRIP RTKLIB (curl)&amp;apos; \
-     https://$ntrip_igs_login@products.igs-ip.net/CLK93 \
-| str2str -out tcpsvr://:$port_igs_ssr_rtcm &amp;amp;
-pid_ntrip=$!
-
-rtkrcv -o igs-ntrip.conf -p $port_real_time_ppp_console &amp;amp;
-pid_ppp=$!
-
-nc -Ct localhost $port_real_time_ppp_console &amp;lt;&amp;lt;CONSOLE
-start
-exit
-CONSOLE
-
-on_exit() {
-    echo exiting
-    kill $pid_ublox $pid_ntrip $pid_ppp
-    mv igs-ntrip.pos $time_stamp.ppp.pos
-    mv single-dual-frequency.pos
-    trap - EXIT # prevent calling exit again after term int hup
-}
-trap on_exit EXIT TERM INT HUP
-
-wait
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h4 id=&quot;設定檔&quot;&gt;設定檔&lt;/h4&gt;
-&lt;p&gt;從 &lt;a href=&quot;https://rtklibexplorer.wordpress.com/2018/05/08/using-ssr-corrections-with-rtklib-for-ppp-solutions/&quot;&gt;rtkexplorer 的文章&lt;/a&gt; 裡改來的。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;pos1-posmode&lt;/code&gt;看要設 &lt;code&gt;ppp-kine&lt;/code&gt; 或 &lt;code&gt;ppp-static&lt;/code&gt; 都可以。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;用 ssr ppp 的話，&lt;code&gt;pos1-sateph&lt;/code&gt; 要設成 &lt;code&gt;brdc+ssrarp&lt;/code&gt; 
-或 &lt;code&gt;brdc+ssrcom&lt;/code&gt; ，據文章說法，
-二個好像差在對 GNSS 衛星的中心的定位不同？
-一個是天線中心、一個是質心。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;因為在腳本裡用 str2str 把 ublox 和 ntrip 都接到 tcp 上了，
-所以輸入都是 tcp。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;igs08.atx&lt;/code&gt; 是 rtklib 提供的 igs 濾定的天線參數，
-網路上可以載到。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;# RTKNAVI options (2020/02/09 rtkexplorer/rtklib demo5 gholk)
-pos1-posmode       =ppp-static # (0:single,1:dgps,2:kinematic,3:static,4:movingbase,5:fixed,6:ppp-kine,7:ppp-static,8:ppp-fixed)
-pos1-frequency     =l1+l2      # (1:l1,2:l1+l2,3:l1+l2+l5,4:l1+l5)
-pos1-soltype       =forward    # (0:forward,1:backward,2:combined)
-pos1-elmask        =15         # (deg)
-pos1-snrmask_r     =off        # (0:off,1:on)
-pos1-snrmask_b     =off        # (0:off,1:on)
-pos1-snrmask_L1    =0,0,0,0,0,0,0,0,0
-pos1-snrmask_L2    =0,0,0,0,0,0,0,0,0
-pos1-snrmask_L5    =0,0,0,0,0,0,0,0,0
-pos1-dynamics      =off        # (0:off,1:on)
-pos1-tidecorr      =off        # (0:off,1:on,2:otl)
-
-## important ############################################
-pos1-ionoopt       =dual-freq  # (0:off,1:brdc,2:sbas,3:dual-freq,4:est-stec,5:ionex-tec,6:qzs-brdc,7:qzs-lex,8:stec)
-pos1-tropopt       =est-ztd    # (0:off,1:saas,2:sbas,3:est-ztd,4:est-ztdgrad,5:ztd)
-pos1-sateph        =brdc+ssrapc # (0:brdc,1:precise,2:brdc+sbas,3:brdc+ssrapc,4:brdc+ssrcom)
-
-pos1-posopt1       =off        # (0:off,1:on)
-pos1-posopt2       =off        # (0:off,1:on)
-pos1-posopt3       =off        # (0:off,1:on,2:precise)
-pos1-posopt4       =off        # (0:off,1:on)
-pos1-posopt5       =off        # (0:off,1:on)
-pos1-posopt6       =off        # (0:off,1:on)
-pos1-exclsats      =           # (prn ...)
-pos1-navsys        =1          # (1:gps+2:sbas+4:glo+8:gal+16:qzs+32:comp)
-pos2-armode        =continuous # (0:off,1:continuous,2:instantaneous,3:fix-and-hold)
-pos2-gloarmode     =off        # (0:off,1:on,2:autocal)
-pos2-bdsarmode     =off        # (0:off,1:on)
-pos2-arthres       =3
-pos2-arthres1      =0.9999
-pos2-arthres2      =0.25
-pos2-arthres3      =0.1
-pos2-arthres4      =0.05
-pos2-arlockcnt     =0
-pos2-arelmask      =0          # (deg)
-pos2-arminfix      =10
-pos2-armaxiter     =1
-pos2-elmaskhold    =0          # (deg)
-pos2-aroutcnt      =5
-pos2-maxage        =30         # (s)
-pos2-syncsol       =off        # (0:off,1:on)
-pos2-slipthres     =0.05       # (m)
-pos2-rejionno      =30         # (m)
-pos2-rejgdop       =30
-pos2-niter         =1
-pos2-baselen       =0          # (m)
-pos2-basesig       =0          # (m)
-out-solformat      =llh        # (0:llh,1:xyz,2:enu,3:nmea)
-out-outhead        =off        # (0:off,1:on)
-out-outopt         =off        # (0:off,1:on)
-out-outvel         =off        # (0:off,1:on)
-out-timesys        =gpst       # (0:gpst,1:utc,2:jst)
-out-timeform       =hms        # (0:tow,1:hms)
-out-timendec       =3
-out-degform        =deg        # (0:deg,1:dms)
-out-fieldsep       =
-out-outsingle      =off        # (0:off,1:on)
-out-maxsolstd      =0          # (m)
-out-height         =ellipsoidal # (0:ellipsoidal,1:geodetic)
-out-geoid          =internal   # (0:internal,1:egm96,2:egm08_2.5,3:egm08_1,4:gsi2000)
-out-solstatic      =all        # (0:all,1:single)
-out-nmeaintv1      =0          # (s)
-out-nmeaintv2      =0          # (s)
-out-outstat        =off        # (0:off,1:state,2:residual)
-stats-eratio1      =100
-stats-eratio2      =100
-stats-errphase     =0.003      # (m)
-stats-errphaseel   =0.003      # (m)
-stats-errphasebl   =0          # (m/10km)
-stats-errdoppler   =1          # (Hz)
-stats-stdbias      =30         # (m)
-stats-stdiono      =0.03       # (m)
-stats-stdtrop      =0.3        # (m)
-stats-prnaccelh    =10         # (m/s^2)
-stats-prnaccelv    =10         # (m/s^2)
-stats-prnbias      =0.0001     # (m)
-stats-prniono      =0.001      # (m)
-stats-prntrop      =0.0001     # (m)
-stats-prnpos       =0          # (m)
-stats-clkstab      =5e-12      # (s/s)
-ant1-postype       =llh        # (0:llh,1:xyz,2:single,3:posfile,4:rinexhead,5:rtcm,6:raw)
-ant1-pos1          =90         # (deg|m)
-ant1-pos2          =0          # (deg|m)
-ant1-pos3          =-6335367.62849036 # (m|m)
-ant1-anttype       =
-ant1-antdele       =0          # (m)
-ant1-antdeln       =0          # (m)
-ant1-antdelu       =0          # (m)
-ant2-postype       =llh        # (0:llh,1:xyz,2:single,3:posfile,4:rinexhead,5:rtcm,6:raw)
-ant2-pos1          =90         # (deg|m)
-ant2-pos2          =0          # (deg|m)
-ant2-pos3          =-6335367.62849036 # (m|m)
-ant2-anttype       =
-ant2-antdele       =0          # (m)
-ant2-antdeln       =0          # (m)
-ant2-antdelu       =0          # (m)
-ant2-maxaveep      =3600
-ant2-initrst       =on         # (0:off,1:on)
-misc-timeinterp    =off        # (0:off,1:on)
-misc-sbasatsel     =0          # (0:all)
-misc-rnxopt1       =
-misc-rnxopt2       =
-misc-pppopt        =
-
-## important ############################################
-file-satantfile    =igs08.atx
-file-rcvantfile    =igs08.atx
-file-staposfile    =
-file-geoidfile     =
-file-ionofile      =
-file-dcbfile       =
-file-eopfile       =
-file-blqfile       =
-
-## important ############################################
-# set empty password
-console-passwd     =
-file-tempdir       =/tmp
-file-geexefile     =
-file-solstatfile   =
-file-tracefile     =
-
-## important ############################################
-inpstr1-type       =tcpcli     # (0:off,1:serial,2:file,3:tcpsvr,4:tcpcli,7:ntripcli,8:ftp,9:http)
-inpstr2-type       =tcpcli     # (0:off,1:serial,2:file,3:tcpsvr,4:tcpcli,7:ntripcli,8:ftp,9:http)
-inpstr3-type       =off        # (0:off,1:serial,2:file,3:tcpsvr,4:tcpcli,7:ntripcli,8:ftp,9:http)
-inpstr1-path       =localhost:5566
-inpstr2-path       =localhost:5567
-inpstr3-path       =
-inpstr1-format     =ubx        # (0:rtcm2,1:rtcm3,2:oem4,3:oem3,4:ubx,5:ss2,6:hemis,7:skytraq,8:gw10,9:javad,10:nvs,11:binex,12:rt17,13:sbf,14:cmr,17:sp3)
-inpstr2-format     =rtcm3      # (0:rtcm2,1:rtcm3,2:oem4,3:oem3,4:ubx,5:ss2,6:hemis,7:skytraq,8:gw10,9:javad,10:nvs,11:binex,12:rt17,13:sbf,14:cmr,17:sp3)
-inpstr3-format     =rtcm2      # (0:rtcm2,1:rtcm3,2:oem4,3:oem3,4:ubx,5:ss2,6:hemis,7:skytraq,8:gw10,9:javad,10:nvs,11:binex,12:rt17,13:sbf,14:cmr,17:sp3)
-inpstr2-nmeareq    =off        # (0:off,1:latlon,2:single)
-inpstr2-nmealat    =0          # (deg)
-inpstr2-nmealon    =0          # (deg)
-outstr1-type       =file       # (0:off,1:serial,2:file,3:tcpsvr,4:tcpcli,6:ntripsvr)
-outstr2-type       =off #tcpsvr     # (0:off,1:serial,2:file,3:tcpsvr,4:tcpcli,6:ntripsvr)
-
-## important ############################################
-outstr1-path       =igs-ntrip.pos
-outstr2-path       =
-outstr1-format     =llh        # (0:llh,1:xyz,2:enu,3:nmea)
-outstr2-format     =llh        # (0:llh,1:xyz,2:enu,3:nmea)
-logstr1-type       =off        # (0:off,1:serial,2:file,3:tcpsvr,4:tcpcli,6:ntripsvr)
-logstr2-type       =off        # (0:off,1:serial,2:file,3:tcpsvr,4:tcpcli,6:ntripsvr)
-logstr3-type       =off        # (0:off,1:serial,2:file,3:tcpsvr,4:tcpcli,6:ntripsvr)
-logstr1-path       =
-logstr2-path       =
-logstr3-path       =
-misc-svrcycle      =10         # (ms)
-misc-timeout       =10000      # (ms)
-misc-reconnect     =10000      # (ms)
-misc-nmeacycle     =5000       # (ms)
-misc-buffsize      =32768      # (bytes)
-misc-navmsgsel     =all        # (0:all,1:rover,2:base,3:corr)
-misc-proxyaddr     =
-misc-fswapmargin   =30         # (s)
-&lt;/code&gt;&lt;/pre&gt;</content>
 </entry><entry>
 <id>http://gholk.github.io/image-processing-transform-code.html</id>
 <title>影像處理作業三：影像編碼</title>

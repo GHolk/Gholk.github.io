@@ -1,0 +1,269 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2020-05-28T16:26:25.197Z">
+<meta name="keywords" property="og:article:tag" content="linux,程式,xml,cli">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="geomatics-proj-itrf-twd97-transform.html" title="使用proj在itrf與twd97間轉換">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>xmlstarlet 處理 kml 資料的經驗</title>
+</head>
+<body>
+<main><h1 id="xmlstarlet-處理-kml-資料的經驗">xmlstarlet 處理 kml 資料的經驗</h1>
+<p>trimble 接收儀內建的定位可以輸出成 kml 格式，
+要把 kml 中的座標取出來，翻出了很久以前聽說過的神器 xmlstarlet。
+但只能說 xml 的設計有缺陷，沒有達到當初很多人期望的效果；
+加上很多工具操作上也沒有想像上的方便。
+後來 json 興起，算是對 xml 複雜的一種反撲。</p>
+<h2 id="trimble-接收儀的輸出格式">trimble 接收儀的輸出格式</h2>
+<p>最近在測 trimble 推出的 rtx 服務，感覺是一種 ppp-rtk。
+其透過通訊衛星廣播改正資料，只要是支援該服務的接收儀，
+在收 gnss 訊號同時即會接收到改正資料，也就會直接以 rtx 定位。
+所以幾乎是無需設定，開箱即用的服務。</p>
+<p>trimble 接收儀有二種 io 方式，一是即時的，一是儲存到內部硬碟。
+一般 trimble 接收儀有提供網路、藍牙、序列埠數種即時介面，
+在設定上可以讓接收儀把資料從以上管道即時輸出。
+可以輸出 binex 原始資料、其它 trimble 的專利格式、直接定位的座標等。
+若是支援 rtx 的接收儀，其直接定位的座標就是有 rtx 的成果。</p>
+<p>但在戶外作業時，還要背一台電腦連到接收儀上，
+只為了存他輸出的座標實在有點蠢，
+所以使用另一種儲存到內部硬碟的方式。</p>
+<p>存到內部硬碟的格式是 trimble 的專利格式 t02，
+一般使用上是可以用 trimble business center 讀出裡面的資料，
+我之前使用上都是用 trimble 提供的 convert to rinex 程式把 t02 轉成 rinex。
+但其實 t02 除了 gnss 觀測資料，還存了很多有的沒的，
+像接收儀的硬體資訊、電量，連內建的定位結果也會存在裡面。
+（在 session 中的 position interval 可以控制要多久記錄一次座標。）</p>
+<p>但我無法從 t02 讀出定位座標。
+交大土木的 tbc 因為大人的原因我沒辦法用，
+而 convert to rinex 如同字面上的意思，
+只能轉出 rinex 而不能轉出其它資訊。
+t02 又是專利格式，我也沒辦法直接解析。</p>
+<h3 id="從-t02-取出座標的方式">從 t02 取出座標的方式</h3>
+<p>我後來找到二個方式，
+一是網頁工具以 ascii dump 出 t02 內的訊息，
+一是用接收儀內建的轉換功能轉成 kml，再取出其中的座標。</p>
+<p>網頁是有個似乎是 trimble 員工的人，
+維護了個半業餘的網站 <a href="https://trimbletools.com/">https://trimbletools.com/</a> ，
+其中一個功能是 <a href="https://trimbletools.com/T02_2_PNG.html">用 t02 內的座標資訊作圖</a> 。
+如果勾選表單中的 <code>Save raw position files</code> 選項，
+就會把 t02 中的訊息存到副名檔為 <code>x29</code> 的檔案，
+之後用 awk 之類的工具就抓出座標訊息。</p>
+<p>另一個 kml 則是 trimble 的接收儀內建功能。
+trimble 接收儀都有網頁介面，（至少我碰的 net r9 和 alloy 都有。）
+在下載的介面上就能選擇下載 t02，或由接收儀轉成 rinex 或 kml 讓下載。
+kml 裡的座標當然就是 t02 裡的座標了。</p>
+<p>唯一問題是我用 net r9 時，接收儀內建的轉換功能會跑很久，
+所以我們一般都下載到電腦上用 convert to rinex 轉。
+（雖然還是蠻久的。）
+如果長度一天、觀測頻率 1 秒、定位頻率 1 分鐘，
+轉成 kml 大概要跑一小時，才會轉好開始輸出第一個 byte。
+瀏覽器基本上不會開著一個什麼都不傳的連線 1 小時，
+所以我是用開發者工具弄出網址後，用 curl 載的。
+換成 alloy 時，不知道是 cpu 升級還怎樣，
+總之轉換變很快，數小時的觀測幾秒就轉好了。</p>
+<h2 id="xmlstarlet">xmlstarlet</h2>
+<p>那要從 kml 抓出資料，當然要用 xml parser 了。
+我一直很相信程式界一句諺語：
+<em>xml 就該用 xml parser，用 regexp 處理 xml/html 的人，總有一天要付出代價。</em>
+所以就找了用來處理 xml 的工具 xmlstarlet。
+（聽說有二個齊名的工具，xmlstarlet 和 xml-coreutils，
+但我先聽過 xmlstarlet 的，也沒試過 xml-coreutils，
+有空再試吧。）</p>
+<p><a href="http://xmlstar.sourceforge.net/">xmlstarlet</a> 是一支用來處理 xml 的工具程式。
+想想在 unix 環境下，有 grep sed awk 各種工具可以用來處理文字資料，
+但這些工具頂多使用 regexp，只適合處理格式單純的資料，碰到 xml 都不太方便。
+因此就有人開發了 xmlstarlet，可以使用 xpath 來操作 xml 資料。
+如同 json 開始流行後，有人開發了 <a href="https://stedolan.github.io/jq/">jq</a> 來處理 json 資料。</p>
+<p>其中 xmlstarlet 的 select 命令就能用來取出 xml 文件內的內容，
+簡單可以對 xpath 求值，複雜的用法相當於命令列版本的 xsl。</p>
+<p>如果只是單純想對 xpath 求值，
+還有另一個更簡單的工具叫 xpath，
+在 debian 是屬於 libxml-xpath-perl 這個套件下。
+雖然它無法處理 utf-8 的命令行參數，
+我的經驗是在 perl 啟動時加上 <code>-Ca</code> 即可，
+詳情可以 <code>man perlrun</code> 。</p>
+<h3 id="xmlstarlet-的命名空間問題">xmlstarlet 的命名空間問題</h3>
+<p>xmlstarlet 個不方便的點就是對 xpath 命名空間的處理，
+之前有寫過一篇 <a href="xml-namespace-in-xsl-xpath.html">在 xsl 中 xpath 元素的命名空間問題</a> ，
+然後就又再 xmlstarlet 碰到這個問題了。
+如果 xml 中指定了命名空間，
+則也必須在 xpath 中指定相同的命名空間才能正確處理。</p>
+<p>但在 xml 中可以指定預設命名空間，
+就不用為每個元素加上命名空間前綴；但要 xpath 這麼作有困難。
+前述的 perl xpath 腳本是直接忽略命名空間，
+而 xmlstarlet 則提供了一個 <code>-N</code> 參數來指定命名空間。</p>
+<p>例如一份 kml 開頭如下：</p>
+<pre><code class="lang-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;kml xmlns=&quot;http://www.opengis.net/kml/2.2&quot; 
+     xmlns:gx=&quot;http://www.google.com/kml/ext/2.2&quot; 
+     xmlns:kml=&quot;http://www.opengis.net/kml/2.2&quot;&gt;
+&lt;Document&gt;&lt;name&gt;Trimble 2020051900F.T02&lt;/name&gt;
+</code></pre>
+<p>則必須要用 <code>xmlstarlet -N k=http://www.opengis.net/kml/2.2 //k:name</code>
+才選得到位於 <code>http://www.opengis.net/kml/2.2</code> 命名空間下的 name 元素。
+也就是 xpath 中幾乎每個元素都要加上命名空間前綴，使用上極不方便。
+（當然，這份 kml 除了預設，還把 kml 前綴也指向同一個命名空間，
+因此其實不用 <code>-N k=</code> 的選項，直接指定 <code>//kml:name</code> 也選得到。）</p>
+<p>如我在前文提的舊文中所述，xsl 中可以指定 xpath 預設的命名空間，
+就不需要在每個 xpath 中指定元素的命名空間。
+xmlstarlet 沒有這項功能，
+<a href="http://xmlstar.sourceforge.net/doc/UG/ch05.html#idm47989546158480">其手冊給了二個解決方式</a> ，
+一是以內建的底線可以代表根文件的命名空間，
+二是直接以 sed 刪除 xml 的命名空間。</p>
+<p>第二個方式太蠢了，我說好歹也加個命令是用來刪除命名空間的，
+直接用 sed 刪不是落入用 regexp 處理 xml 的問題了嗎？</p>
+<p>底線的用法，則是指 xml 文件若有預設命名空間，
+該命名空間會被綁到底線 <code>_</code> 上。
+也就是上述的 xpath 可以寫成 <code>//_:name</code> ，
+這裡的 <code>_</code> 就相當於前面的 k 或 kml，
+也就相當於在命令上加了 <code>-N _=http://www.opengis.net/kml/2.2</code> 的選項。
+超棒的對吧，從此只要在 xpath 中每個元素名加上 <code>_:</code> 就好了，真是蠢死了。</p>
+<p>也許有時間可以去幫忙維護，
+看能不能像 xsl <code>xpath-default-namespace</code> 屬性，
+有個參數可以指定無指定命名空間時的預設命名空間。</p>
+<h2 id="kml-資料的問題">kml 資料的問題</h2>
+<p>trimble 轉出 kml 的模式，我是選擇 line and point。
+kml 裡有座標資訊，但每個座標的資訊，如時間、衛星、誤差、速度，
+是以跳脫後的 html table 格式記在 kml 的 description 裡。
+所以處理起來很麻煩。</p>
+<h3 id="w3m-格式化表格">w3m 格式化表格</h3>
+<p>我原本是只抓出 html 表格，反正表格裡也有座標，
+然後丟到 w3m 排版，就能用 awk 處理了。</p>
+<pre><code class="lang-sh">xmlstarlet select --text --template \
+    --value-of &quot;/kml/Document/Folder[name=&apos;Points&apos;]/Placemark/description&quot; \
+| w3m -T text/html -dump
+</code></pre>
+<h3 id="抓出座標與對應的表格資料">抓出座標與對應的表格資料</h3>
+<p>後來我發現表格中的經緯度座標小數位數不夠，
+只到 7 位 mm 等級，要 coordinate 元素內的才有 9 位。
+只好研究 xmlstarlet 的進階用法，
+來同時抓出 html 表格和相鄰的座標元素。</p>
+<pre><code class="lang-sh">xmlstarlet select --text --template \
+    --match &quot;/kml/Document/Folder[name=&apos;Points&apos;]/Placemark&quot; \
+    --value-of description --nl \
+    --value-of Point/coordinates --nl --nl
+</code></pre>
+<p>程式大概如上，因為 namespace 很煩，
+所以我會先用 sed 把 xmlns 刪掉；不然每個 xpath 都要加一堆 namespace。
+概念就是先找到 xpath <code>/kml/Document/Folder[name=&apos;Points&apos;]/Placemark</code> ，
+然後取出相對於該位置的 <code>description</code> 與 <code>Point/coordinates</code> 元素。
+至於 <code>--nl</code> 是輸出一個換行符的意思；
+所以就是定位到 Placemark 後，輸出 description 後輸出一個換行，
+再輸出 Point/coordinates 再二個換行。</p>
+<p>這樣的問題是，description 節點的內容是跳脫的 html，
+所以我加上 <code>--text</code> 參數讓輸出不會跳脫，變成直接輸出內容。
+但這樣變成 html 和純文字混在一起。</p>
+<h3 id="直接解碼-html-當作-xml-處理">直接解碼 html 當作 xml 處理</h3>
+<p>所以後來改成輸出也格式化成 xml，
+然後 html 一樣跳脫後嵌在其中一個元素內，再用 <code>xmlstarlet unesc</code> 解碼。
+也不太想再依賴 w3m，就直接解碼跳脫後的 html，直接當作 xml 處理。
+但解碼後的 html 裡會有 html entities，
+xmlstarlet 不認識會報錯，所以再用 sed 刪掉。</p>
+<pre><code class="lang-sh">xmlstarlet select --template --element xml \
+    --match &quot;/kml/Document/Folder[name=&apos;Points&apos;]/Placemark&quot; \
+    --element p --value-of description \
+    --element c --value-of Point/coordinates \
+| xmlstarlet unescape \
+| sed &apos;s/&amp;nbsp;/ /g&apos;
+</code></pre>
+<p>這段參數的意思是，輸出放在根元素為 xml 的元素內，
+然後每匹配到 placemark 後，輸出一個 p 元素，內容為 description 的內容，
+再在 p 元素中加上一個 c 元素，內容為 point/coordinates 的內容。</p>
+<p>想試玩可以這樣試：
+因為空字串不是一個合法的 xml 文件，
+所以至少要送一個空的元素。</p>
+<pre><code class="lang-sh">echo &apos;&lt;xml/&gt;&apos; \
+| xmlstarlet select --template \
+    --element p --output pc \
+    --element c --output cc
+</code></pre>
+<p>之後再用以下的 xsel 重新抓出時間與座標即可：</p>
+<pre><code class="lang-sh">xmlstarlet select --template --match /xml/p \
+    --value-of &apos;normalize-space(c)&apos; --output , \
+    --value-of &apos;table/tr/td[.=&quot;UTC&quot;]/following-sibling::td&apos; --nl
+</code></pre>
+<p>xpath 相對 css selector 一個很大的強項，
+就是可以匹配節點的文字內容，
+甚至可以匹配父節點或反向選取等，css 做不到的事。</p>
+<h2 id="xmlstarlet-的問題">xmlstarlet 的問題</h2>
+<p>xmlstarlet 的問題，大概就是一些細節沒處理好，
+使用起來有些地方應該可以更方便的。
+且程式本身也缺人維護，所以想想也是理所當然的。
+這裡談二個問題，一是之前提的 xpath 裡的命名空間問題，
+一是處理 html 常碰到的 entities 問題。</p>
+<p>xmlns 之前提過了，就是如果文件有指定命名空間，
+那 xpath 中每個元素也都要前綴命名空間，才抓得到元素。
+xsl 中提供了設置 xpath 的預設命名空間的機制，
+但 xmlstarlet 中就沒有這個機制。</p>
+<p>xmlstarlet 官方手冊給的解決也很蠢，
+用 sed 刪除 xmlns 的屬性，那不是又回到原始的 regexp 了。
+而且 xml 理論上是可以有任意換行與空白的語法，
+所以完全正確的 regexp 會很難寫。</p>
+<p>我是比較希望可以用 xmlstarlet 本身的功能刪除 xmlns 之類的，
+但 xmlns 是一種特殊屬性，不能直接當作一般屬性刪除。
+所以可能要特別開一個功能來刪，或是把文件當作 html 處理，
+那 html 裡就沒有所謂的命名空間，
+xmlns 就只是一個名稱中可能帶冒號的屬性而已。</p>
+<p>另一個問題就是我混著處理 html 時，
+因為其中含有 html entities，xml 不認識，
+所以 xmlstarlet 就報錯。
+我是比較希望能開個選項，讓 xmlstarlet 不要那麼嚴格。
+或像 <code>-N</code> 一樣可以設一個命名空間對應一樣，
+有選項可以設 entities 的值，
+或可以指定額外的 dtd 文件，那就能額外指定 entities。</p>
+<p>總之大概就是 xmlstarlet 都得用一些 ugly hack 才能達到功能，
+所以不太滿意。但這也很大原因也是專案的人力不足造成的。</p>
+<h2 id="xml-與-docbook-的時代">xml 與 docbook 的時代</h2>
+<p>xmlstarlet 很老了，大概是 2000 年時 xml 橫空出世，
+被全世界冀望為解決所有格式問題的銀彈，
+在這樣的時空背景下誕生的。
+後來也缺乏維護，該專案的主頁上也掛著大大的請求協助。</p>
+<p>當年很多人希望 xsl 和 xml 可以一口氣解決所有資料互通的問題。
+但後來 xhtml 沒有獲得普遍採用，
+大家還是覺得用 js 操作 dom，css 形式的選擇器和 jquery 比較好用。
+隨後 json 隨著 js 掘起，作為對 xml 過於複雜的反撲，
+ajax 的 x 也就是 xml 幾乎成為歷史，
+最終 html5 放棄成為 xml 和 sgml 的子集，故事結束。</p>
+<p>docbook 似乎也是那個時代下的產物。
+我看過好幾本比較正式的 linux 介紹 <strong>書</strong> ：
+<a href="https://www.freebsd.org/doc/zh_TW/books/fdp-primer/">freebsd 文件計劃</a> 、 <a href="https://i.linuxtoy.org/docs/guide/index.html">開源世界旅行手冊</a> 、
+<a href="https://dywang.csie.cyut.edu.tw/dywang/linux-wangyin/">完全以 gnu/linux 工作</a> 、unix 編程藝術，
+幾乎都會提到 docbook。
+似乎那時 docbook 被冀望成一種萬靈丹，
+可以發布成紙本書、pdf、html 等各種格式，
+所有的文章都可以以 docbook 格式撰寫。</p>
+<p>同時與 docbook 常被一起提起的名字，則為 LaTeX，
+那時世界似乎分為 xml/docbook 與 TeX/LaTeX 二大派系，
+如同 vi 與 emacs 二大派系。
+xml 派批評 tex 是排版語言，xml 的結構與樣式分離才是正確的作法；
+tex 系則有較美觀的排版效果，
+且 xml 派工具鏈的實作成果不佳，實際使用上有許多問題。</p>
+<p>markdown 似乎是相對新的產物，後來 markdown 掘起後，
+docbook 似乎就被 markdown 吃光了，
+如同 json 取代 xml、python 取代 java。
+tex 系則繼續演化，如 XeTeX，
+儘管 tex 系對中文的支援似乎一直不是很好，。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

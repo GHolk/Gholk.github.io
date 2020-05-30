@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2020-05-29T13:50:36.123Z</updated>
+  <updated>2020-05-30T12:38:02.676Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,302 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/xml-starlet-kml-lack.html#xmlstarlet-select-簡易上手</id>
+<title>xmlstarlet 處理 kml 資料的經驗</title>
+<published>2020-05-28T16:26:25.197Z</published>
+<updated>2020-05-30T12:38:02.661Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/xml-starlet-kml-lack.html#xmlstarlet-select-簡易上手"/>
+<summary type="html">
+增加 xmlstarlet select 的簡單用法說明與範例。</summary>
+<category term="linux"/>
+<category term="程式"/>
+<category term="xml"/>
+<category term="cli"/>
+<content type="html">&lt;h1 id=&quot;xmlstarlet-處理-kml-資料的經驗&quot;&gt;xmlstarlet 處理 kml 資料的經驗&lt;/h1&gt;
+&lt;p&gt;trimble 接收儀內建的定位可以輸出成 kml 格式，
+要把 kml 中的座標取出來，翻出了很久以前聽說過的神器 xmlstarlet。
+但只能說 xml 的設計有缺陷，沒有達到當初很多人期望的效果；
+加上很多工具操作上也沒有想像上的方便。
+後來 json 興起，算是對 xml 複雜的一種反撲。&lt;/p&gt;
+&lt;h2 id=&quot;trimble-接收儀的輸出格式&quot;&gt;trimble 接收儀的輸出格式&lt;/h2&gt;
+&lt;p&gt;最近在測 trimble 推出的 rtx 服務，感覺是一種 ppp-rtk。
+其透過通訊衛星廣播改正資料，只要是支援該服務的接收儀，
+在收 gnss 訊號同時即會接收到改正資料，也就會直接以 rtx 定位。
+所以幾乎是無需設定，開箱即用的服務。&lt;/p&gt;
+&lt;p&gt;trimble 接收儀有二種 io 方式，一是即時的，一是儲存到內部硬碟。
+一般 trimble 接收儀有提供網路、藍牙、序列埠數種即時介面，
+在設定上可以讓接收儀把資料從以上管道即時輸出。
+可以輸出 binex 原始資料、其它 trimble 的專利格式、直接定位的座標等。
+若是支援 rtx 的接收儀，其直接定位的座標就是有 rtx 的成果。&lt;/p&gt;
+&lt;p&gt;但在戶外作業時，還要背一台電腦連到接收儀上，
+只為了存他輸出的座標實在有點蠢，
+所以使用另一種儲存到內部硬碟的方式。&lt;/p&gt;
+&lt;p&gt;存到內部硬碟的格式是 trimble 的專利格式 t02，
+一般使用上是可以用 trimble business center 讀出裡面的資料，
+我之前使用上都是用 trimble 提供的 convert to rinex 程式把 t02 轉成 rinex。
+但其實 t02 除了 gnss 觀測資料，還存了很多有的沒的，
+像接收儀的硬體資訊、電量，連內建的定位結果也會存在裡面。
+（在 session 中的 position interval 可以控制要多久記錄一次座標。）&lt;/p&gt;
+&lt;p&gt;但我無法從 t02 讀出定位座標。
+交大土木的 tbc 因為大人的原因我沒辦法用，
+而 convert to rinex 如同字面上的意思，
+只能轉出 rinex 而不能轉出其它資訊。
+t02 又是專利格式，我也沒辦法直接解析。&lt;/p&gt;
+&lt;h3 id=&quot;從-t02-取出座標的方式&quot;&gt;從 t02 取出座標的方式&lt;/h3&gt;
+&lt;p&gt;我後來找到二個方式，
+一是網頁工具以 ascii dump 出 t02 內的訊息，
+一是用接收儀內建的轉換功能轉成 kml，再取出其中的座標。&lt;/p&gt;
+&lt;p&gt;網頁是有個似乎是 trimble 員工的人，
+維護了個半業餘的網站 &lt;a href=&quot;https://trimbletools.com/&quot;&gt;https://trimbletools.com/&lt;/a&gt; ，
+其中一個功能是 &lt;a href=&quot;https://trimbletools.com/T02_2_PNG.html&quot;&gt;用 t02 內的座標資訊作圖&lt;/a&gt; 。
+如果勾選表單中的 &lt;code&gt;Save raw position files&lt;/code&gt; 選項，
+就會把 t02 中的訊息存到副名檔為 &lt;code&gt;x29&lt;/code&gt; 的檔案，
+之後用 awk 之類的工具就抓出座標訊息。&lt;/p&gt;
+&lt;p&gt;另一個 kml 則是 trimble 的接收儀內建功能。
+trimble 接收儀都有網頁介面，（至少我碰的 net r9 和 alloy 都有。）
+在下載的介面上就能選擇下載 t02，或由接收儀轉成 rinex 或 kml 讓下載。
+kml 裡的座標當然就是 t02 裡的座標了。&lt;/p&gt;
+&lt;p&gt;唯一問題是我用 net r9 時，接收儀內建的轉換功能會跑很久，
+所以我們一般都下載到電腦上用 convert to rinex 轉。
+（雖然還是蠻久的。）
+如果長度一天、觀測頻率 1 秒、定位頻率 1 分鐘，
+轉成 kml 大概要跑一小時，才會轉好開始輸出第一個 byte。
+瀏覽器基本上不會開著一個什麼都不傳的連線 1 小時，
+所以我是用開發者工具弄出網址後，用 curl 載的。
+換成 alloy 時，不知道是 cpu 升級還怎樣，
+總之轉換變很快，數小時的觀測幾秒就轉好了。&lt;/p&gt;
+&lt;h2 id=&quot;xmlstarlet&quot;&gt;xmlstarlet&lt;/h2&gt;
+&lt;p&gt;那要從 kml 抓出資料，當然要用 xml parser 了。
+我一直很相信程式界一句諺語：
+&lt;em&gt;xml 就該用 xml parser，用 regexp 處理 xml/html 的人，總有一天要付出代價。&lt;/em&gt;
+所以就找了用來處理 xml 的工具 xmlstarlet。
+（聽說有二個齊名的工具，xmlstarlet 和 xml-coreutils，
+但我先聽過 xmlstarlet 的，也沒試過 xml-coreutils，
+有空再試吧。）&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://xmlstar.sourceforge.net/&quot;&gt;xmlstarlet&lt;/a&gt; 是一支用來處理 xml 的工具程式。
+想想在 unix 環境下，有 grep sed awk 各種工具可以用來處理文字資料，
+但這些工具頂多使用 regexp，只適合處理格式單純的資料，碰到 xml 都不太方便。
+因此就有人開發了 xmlstarlet，可以使用 xpath 來操作 xml 資料。
+如同 json 開始流行後，有人開發了 &lt;a href=&quot;https://stedolan.github.io/jq/&quot;&gt;jq&lt;/a&gt; 來處理 json 資料。&lt;/p&gt;
+&lt;p&gt;其中 xmlstarlet 的 select 命令就能用來取出 xml 文件內的內容，
+簡單可以對 xpath 求值，複雜的用法相當於命令列版本的 xsl。&lt;/p&gt;
+&lt;p&gt;如果只是單純想對 xpath 求值，
+還有另一個更簡單的工具叫 xpath，
+在 debian 是屬於 libxml-xpath-perl 這個套件下。
+雖然它無法處理 utf-8 的命令行參數，
+我的經驗是在 perl 啟動時加上 &lt;code&gt;-Ca&lt;/code&gt; 即可，
+詳情可以 &lt;code&gt;man perlrun&lt;/code&gt; 。&lt;/p&gt;
+&lt;h3 id=&quot;xmlstarlet-select-簡易上手&quot;&gt;xmlstarlet select 簡易上手&lt;/h3&gt;
+&lt;p&gt;xmlstarlet 可以簡單從標準輸入讀取資料，
+為了方便以下的例子都是用 echo 輸入。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ echo &amp;apos;&amp;lt;a href=&amp;quot;/&amp;quot;&amp;gt;home&amp;lt;/a&amp;gt;&amp;apos; \
+&amp;gt; | xmlstarlet select --template --value-of /a/@href --nl
+/
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $  echo &amp;apos;&amp;lt;a href=&amp;quot;/&amp;quot;&amp;gt;home&amp;lt;/a&amp;gt;&amp;apos; \
+&amp;gt; | xmlstarlet select --template --value-of /a --nl
+home
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ echo &amp;apos;&amp;lt;a href=&amp;quot;/&amp;quot;&amp;gt;home&amp;lt;/a&amp;gt;&amp;apos; \
+&amp;gt; | xmlstarlet select --template --copy-of /a --nl
+&amp;lt;a href=&amp;quot;/&amp;quot;&amp;gt;home&amp;lt;/a&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ echo &amp;apos;&amp;lt;a href=&amp;quot;/&amp;quot;&amp;gt;home&amp;lt;/a&amp;gt;&amp;apos; \
+&amp;gt; | xmlstarlet select --template --output &amp;quot;let&amp;apos;s go &amp;quot; --copy-of /a --nl
+let&amp;apos;s go &amp;lt;a href=&amp;quot;/&amp;quot;&amp;gt;home&amp;lt;/a&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ echo &amp;apos;&amp;lt;a href=&amp;quot;/&amp;quot;&amp;gt;home&amp;lt;/a&amp;gt;&amp;apos; | xmlstarlet select --template \
+&amp;gt; --output &amp;quot;let&amp;apos;s go&amp;quot; --nl --copy-of /a --nl \
+&amp;gt; --output &amp;quot;(&amp;quot; --value-of /a --output &amp;quot; is &amp;quot; \
+&amp;gt; --value-of /a/@href --output &amp;quot;)&amp;quot; --nl
+let&amp;apos;s go
+&amp;lt;a href=&amp;quot;/&amp;quot;&amp;gt;home&amp;lt;/a&amp;gt;
+(home is /)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;xmlstarlet 的參數寫法中，
+用 copy-of value-of output 三個選項可以輸出內容，
+copy-of value-of 會輸出 xpath 的元素與值，而 output 則是直接輸出字串。
+默認下會直接輸出，若前面使用了 attr 屬性，則會輸出到屬性內。
+要表示結束輸出到屬性，需要使用 break 選項來 &lt;em&gt;跳出&lt;/em&gt; ，
+同樣 break 也可以用來結束一個節點。&lt;/p&gt;
+&lt;p&gt;複雜一點的例子，輸出多個元素與屬性。
+在輸出元素時，xmlstarlet 的參數寫法有點像 &lt;a href=&quot;https://pugjs.org/&quot;&gt;pug&lt;/a&gt; ，
+是 &lt;em&gt;反向&lt;/em&gt; 從對 xml 結構的描述生成完整 xml 的方式。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ echo &amp;apos;&amp;lt;html name=&amp;quot;root&amp;quot; /&amp;gt;&amp;apos; \
+&amp;gt; | xmlstarlet select --template \
+&amp;gt;     --value-of /html/@name --output : --nl \
+&amp;gt;     --output &amp;quot;let&amp;apos;s go &amp;quot; \
+&amp;gt;     --elem a --attr href --output / --break \
+&amp;gt;         --output home \
+&amp;gt;             --elem strong --output &amp;apos;!&amp;apos; --break \
+&amp;gt;     --break \
+&amp;gt;     --output . --nl
+root:
+let&amp;apos;s go &amp;lt;a href=&amp;quot;/&amp;quot;&amp;gt;home&amp;lt;strong&amp;gt;!&amp;lt;/strong&amp;gt;&amp;lt;/a&amp;gt;.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;完整的教學可以參見 &lt;a href=&quot;http://xmlstar.sourceforge.net/doc/UG/ch04.html&quot;&gt;xmlstarlet 網站的使用手冊中對 select 的說明&lt;/a&gt; 。&lt;/p&gt;
+&lt;h3 id=&quot;xmlstarlet-的命名空間問題&quot;&gt;xmlstarlet 的命名空間問題&lt;/h3&gt;
+&lt;p&gt;xmlstarlet 個不方便的點就是對 xpath 命名空間的處理，
+之前有寫過一篇 &lt;a href=&quot;xml-namespace-in-xsl-xpath.html&quot;&gt;在 xsl 中 xpath 元素的命名空間問題&lt;/a&gt; ，
+然後就又再 xmlstarlet 碰到這個問題了。
+如果 xml 中指定了命名空間，
+則也必須在 xpath 中指定相同的命名空間才能正確處理。&lt;/p&gt;
+&lt;p&gt;但在 xml 中可以指定預設命名空間，
+就不用為每個元素加上命名空間前綴；但要 xpath 這麼作有困難。
+前述的 perl xpath 腳本是直接忽略命名空間，
+而 xmlstarlet 則提供了一個 &lt;code&gt;-N&lt;/code&gt; 參數來指定命名空間。&lt;/p&gt;
+&lt;p&gt;例如一份 kml 開頭如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-xml&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;kml xmlns=&amp;quot;http://www.opengis.net/kml/2.2&amp;quot; 
+     xmlns:gx=&amp;quot;http://www.google.com/kml/ext/2.2&amp;quot; 
+     xmlns:kml=&amp;quot;http://www.opengis.net/kml/2.2&amp;quot;&amp;gt;
+&amp;lt;Document&amp;gt;&amp;lt;name&amp;gt;Trimble 2020051900F.T02&amp;lt;/name&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;則必須要用 &lt;code&gt;xmlstarlet -N k=http://www.opengis.net/kml/2.2 //k:name&lt;/code&gt;
+才選得到位於 &lt;code&gt;http://www.opengis.net/kml/2.2&lt;/code&gt; 命名空間下的 name 元素。
+也就是 xpath 中幾乎每個元素都要加上命名空間前綴，使用上極不方便。
+（當然，這份 kml 除了預設，還把 kml 前綴也指向同一個命名空間，
+因此其實不用 &lt;code&gt;-N k=&lt;/code&gt; 的選項，直接指定 &lt;code&gt;//kml:name&lt;/code&gt; 也選得到。）&lt;/p&gt;
+&lt;p&gt;如我在前文提的舊文中所述，xsl 中可以指定 xpath 預設的命名空間，
+就不需要在每個 xpath 中指定元素的命名空間。
+xmlstarlet 沒有這項功能，
+&lt;a href=&quot;http://xmlstar.sourceforge.net/doc/UG/ch05.html#idm47989546158480&quot;&gt;其手冊給了二個解決方式&lt;/a&gt; ，
+一是以內建的底線可以代表根文件的命名空間，
+二是直接以 sed 刪除 xml 的命名空間。&lt;/p&gt;
+&lt;p&gt;第二個方式太蠢了，我說好歹也加個命令是用來刪除命名空間的，
+直接用 sed 刪不是落入用 regexp 處理 xml 的問題了嗎？&lt;/p&gt;
+&lt;p&gt;底線的用法，則是指 xml 文件若有預設命名空間，
+該命名空間會被綁到底線 &lt;code&gt;_&lt;/code&gt; 上。
+也就是上述的 xpath 可以寫成 &lt;code&gt;//_:name&lt;/code&gt; ，
+這裡的 &lt;code&gt;_&lt;/code&gt; 就相當於前面的 k 或 kml，
+也就相當於在命令上加了 &lt;code&gt;-N _=http://www.opengis.net/kml/2.2&lt;/code&gt; 的選項。
+超棒的對吧，從此只要在 xpath 中每個元素名加上 &lt;code&gt;_:&lt;/code&gt; 就好了，真是蠢死了。&lt;/p&gt;
+&lt;p&gt;也許有時間可以去幫忙維護，
+看能不能像 xsl &lt;code&gt;xpath-default-namespace&lt;/code&gt; 屬性，
+有個參數可以指定無指定命名空間時的預設命名空間。&lt;/p&gt;
+&lt;h2 id=&quot;kml-資料的問題&quot;&gt;kml 資料的問題&lt;/h2&gt;
+&lt;p&gt;trimble 轉出 kml 的模式，我是選擇 line and point。
+kml 裡有座標資訊，但每個座標的資訊，如時間、衛星、誤差、速度，
+是以跳脫後的 html table 格式記在 kml 的 description 裡。
+所以處理起來很麻煩。&lt;/p&gt;
+&lt;h3 id=&quot;w3m-格式化表格&quot;&gt;w3m 格式化表格&lt;/h3&gt;
+&lt;p&gt;我原本是只抓出 html 表格，反正表格裡也有座標，
+然後丟到 w3m 排版，就能用 awk 處理了。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;xmlstarlet select --text --template \
+    --value-of &amp;quot;/kml/Document/Folder[name=&amp;apos;Points&amp;apos;]/Placemark/description&amp;quot; \
+| w3m -T text/html -dump
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;抓出座標與對應的表格資料&quot;&gt;抓出座標與對應的表格資料&lt;/h3&gt;
+&lt;p&gt;後來我發現表格中的經緯度座標小數位數不夠，
+只到 7 位 mm 等級，要 coordinate 元素內的才有 9 位。
+只好研究 xmlstarlet 的進階用法，
+來同時抓出 html 表格和相鄰的座標元素。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;xmlstarlet select --text --template \
+    --match &amp;quot;/kml/Document/Folder[name=&amp;apos;Points&amp;apos;]/Placemark&amp;quot; \
+    --value-of description --nl \
+    --value-of Point/coordinates --nl --nl
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;程式大概如上，因為 namespace 很煩，
+所以我會先用 sed 把 xmlns 刪掉；不然每個 xpath 都要加一堆 namespace。
+概念就是先找到 xpath &lt;code&gt;/kml/Document/Folder[name=&amp;apos;Points&amp;apos;]/Placemark&lt;/code&gt; ，
+然後取出相對於該位置的 &lt;code&gt;description&lt;/code&gt; 與 &lt;code&gt;Point/coordinates&lt;/code&gt; 元素。
+至於 &lt;code&gt;--nl&lt;/code&gt; 是輸出一個換行符的意思；
+所以就是定位到 Placemark 後，輸出 description 後輸出一個換行，
+再輸出 Point/coordinates 再二個換行。&lt;/p&gt;
+&lt;p&gt;這樣的問題是，description 節點的內容是跳脫的 html，
+所以我加上 &lt;code&gt;--text&lt;/code&gt; 參數讓輸出不會跳脫，變成直接輸出內容。
+但這樣變成 html 和純文字混在一起。&lt;/p&gt;
+&lt;h3 id=&quot;直接解碼-html-當作-xml-處理&quot;&gt;直接解碼 html 當作 xml 處理&lt;/h3&gt;
+&lt;p&gt;所以後來改成輸出也格式化成 xml，
+然後 html 一樣跳脫後嵌在其中一個元素內，再用 &lt;code&gt;xmlstarlet unesc&lt;/code&gt; 解碼。
+也不太想再依賴 w3m，就直接解碼跳脫後的 html，直接當作 xml 處理。
+但解碼後的 html 裡會有 html entities，
+xmlstarlet 不認識會報錯，所以再用 sed 刪掉。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;xmlstarlet select --template --elem xml \
+    --match &amp;quot;/kml/Document/Folder[name=&amp;apos;Points&amp;apos;]/Placemark&amp;quot; \
+    --elem p --value-of description \
+    --elem c --value-of Point/coordinates \
+| xmlstarlet unescape \
+| sed &amp;apos;s/&amp;amp;nbsp;/ /g&amp;apos;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;上面參數的意思是，輸出放在根元素為 xml 的元素內，
+然後每匹配到 placemark 後，輸出一個 p 元素，內容為 description 的內容，
+再在 p 元素中加上一個 c 元素，內容為 point/coordinates 的內容。&lt;/p&gt;
+&lt;p&gt;前面把 kml 格式化成含 html 表格格式的 xml 資料，
+再用以下的 xsel 重新抓出時間與座標即可：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;xmlstarlet select --template --match /xml/p \
+    --value-of &amp;apos;normalize-space(c)&amp;apos; --output , \
+    --value-of &amp;apos;table/tr/td[.=&amp;quot;UTC&amp;quot;]/following-sibling::td&amp;apos; --nl
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;xpath 相對 css selector 一個很大的強項，
+就是可以匹配節點的文字內容，
+甚至可以匹配父節點或反向選取等，css 做不到的事。
+例如上面就是匹配文字內容為 UTC 的 td 元素，
+並選取出該元素的下一個 td 元素。&lt;/p&gt;
+&lt;h2 id=&quot;xmlstarlet-的問題&quot;&gt;xmlstarlet 的問題&lt;/h2&gt;
+&lt;p&gt;xmlstarlet 的問題，大概就是一些細節沒處理好，
+使用起來有些地方應該可以更方便的。
+且程式本身也缺人維護，所以想想也是理所當然的。
+這裡談二個問題，一是之前提的 xpath 裡的命名空間問題，
+一是處理 html 常碰到的 entities 問題。&lt;/p&gt;
+&lt;p&gt;xmlns 之前提過了，就是如果文件有指定命名空間，
+那 xpath 中每個元素也都要前綴命名空間，才抓得到元素。
+xsl 中提供了設置 xpath 的預設命名空間的機制，
+但 xmlstarlet 中就沒有這個機制。&lt;/p&gt;
+&lt;p&gt;xmlstarlet 官方手冊給的解決也很蠢，
+用 sed 刪除 xmlns 的屬性，那不是又回到原始的 regexp 了。
+而且 xml 理論上是可以有任意換行與空白的語法，
+所以完全正確的 regexp 會很難寫。&lt;/p&gt;
+&lt;p&gt;我是比較希望可以用 xmlstarlet 本身的功能刪除 xmlns 之類的，
+但 xmlns 是一種特殊屬性，不能直接當作一般屬性刪除。
+所以可能要特別開一個功能來刪，或是把文件當作 html 處理，
+那 html 裡就沒有所謂的命名空間，
+xmlns 就只是一個名稱中可能帶冒號的屬性而已。&lt;/p&gt;
+&lt;p&gt;另一個問題就是我混著處理 html 時，
+因為其中含有 html entities，xml 不認識，
+所以 xmlstarlet 就報錯。
+我是比較希望能開個選項，讓 xmlstarlet 不要那麼嚴格。
+或像 &lt;code&gt;-N&lt;/code&gt; 一樣可以設一個命名空間對應一樣，
+有選項可以設 entities 的值，
+或可以指定額外的 dtd 文件，那就能額外指定 entities。&lt;/p&gt;
+&lt;p&gt;總之大概就是 xmlstarlet 都得用一些 ugly hack 才能達到功能，
+所以不太滿意。但這也很大原因也是專案的人力不足造成的。&lt;/p&gt;
+&lt;h2 id=&quot;xml-與-docbook-的時代&quot;&gt;xml 與 docbook 的時代&lt;/h2&gt;
+&lt;p&gt;xmlstarlet 很老了，大概是 2000 年時 xml 橫空出世，
+被全世界冀望為解決所有格式問題的銀彈，
+在這樣的時空背景下誕生的。
+後來也缺乏維護，該專案的主頁上也掛著大大的請求協助。&lt;/p&gt;
+&lt;p&gt;當年很多人希望 xsl 和 xml 可以一口氣解決所有資料互通的問題。
+但後來 xhtml 沒有獲得普遍採用，
+大家還是覺得用 js 操作 dom，css 形式的選擇器和 jquery 比較好用。
+隨後 json 隨著 js 掘起，作為對 xml 過於複雜的反撲，
+ajax 的 x 也就是 xml 幾乎成為歷史，
+最終 html5 放棄成為 xml 和 sgml 的子集，故事結束。&lt;/p&gt;
+&lt;p&gt;docbook 似乎也是那個時代下的產物。
+我看過好幾本比較正式的 linux 介紹 &lt;strong&gt;書&lt;/strong&gt; ：
+&lt;a href=&quot;https://www.freebsd.org/doc/zh_TW/books/fdp-primer/&quot;&gt;freebsd 文件計劃&lt;/a&gt; 、 &lt;a href=&quot;https://i.linuxtoy.org/docs/guide/index.html&quot;&gt;開源世界旅行手冊&lt;/a&gt; 、
+&lt;a href=&quot;https://dywang.csie.cyut.edu.tw/dywang/linux-wangyin/&quot;&gt;完全以 gnu/linux 工作&lt;/a&gt; 、unix 編程藝術，
+幾乎都會提到 docbook。
+似乎那時 docbook 被冀望成一種萬靈丹，
+可以發布成紙本書、pdf、html 等各種格式，
+所有的文章都可以以 docbook 格式撰寫。&lt;/p&gt;
+&lt;p&gt;同時與 docbook 常被一起提起的名字，則為 LaTeX，
+那時世界似乎分為 xml/docbook 與 TeX/LaTeX 二大派系，
+如同 vi 與 emacs 二大派系。
+xml 派批評 tex 是排版語言，xml 的結構與樣式分離才是正確的作法；
+tex 系則有較美觀的排版效果，
+且 xml 派工具鏈的實作成果不佳，實際使用上有許多問題。&lt;/p&gt;
+&lt;p&gt;markdown 似乎是相對新的產物，後來 markdown 掘起後，
+docbook 似乎就被 markdown 吃光了，
+如同 json 取代 xml、python 取代 java。
+tex 系則繼續演化，如 XeTeX，
+儘管 tex 系對中文的支援似乎一直不是很好，。&lt;/p&gt;
+&lt;p&gt;本文中對 xml docbook json markdown 各格式之間的歷史消長，
+都只是耳聞與臆測，並沒有詳細的資料或確實經歷過。
+因此若有錯誤，歡迎指正或補充。
+我也蠻想知道 docbook 專案的歷史，與當時 xml 興趣的盛況。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/taiwan-consensus-stolen-base.html#從三國殺八神詩補到特攝片中的怪獸要爆炸</id>
 <title>台灣共識就是贏球不能盜壘</title>
 <published>2018-12-08T09:50:42.438Z</published>
@@ -2983,178 +3279,7 @@ misc-fswapmargin   =30         # (s)
 <category term="program"/>
 <category term="gnss"/>
 <category term="rtklib"/>
-<content type="html">&lt;h1 id=&quot;用-pgid-終止一組管道程序&quot;&gt;用 pgid 終止一組管道程序&lt;/h1&gt;
-&lt;p&gt;&lt;a href=&quot;gnss-rtklib-real-time-ppp.html&quot;&gt;之前寫 rtklib 的腳本時&lt;/a&gt;，
-發現把管道丟到背景後，只會拿到管道最後一個程序的 pid，
-要用 &lt;abbr title=&quot;progress group id&quot;&gt;pgid&lt;/abbr&gt;
-才能一次終止所有程序。
-於是研究了一下怎麼拿到 pgid，和使用的方式。&lt;/p&gt;
-&lt;h2 id=&quot;正確關掉丟到背景的程序&quot;&gt;正確關掉丟到背景的程序&lt;/h2&gt;
-&lt;p&gt;以前以為在 sh 裡把程序丟到背景後，
-就只能用 &lt;code&gt;kill %1&lt;/code&gt; 的方式終止。
-有一段時間還不知道為什麼腳本執行起來有問題。
-最近才發現是 &lt;code&gt;%&lt;/code&gt; 的表示法只能在互動式 shell 裡用，
-在腳本裡是會被忽略的。
-（那時候還開了 dash 測都沒問題，
-原來 dash 也有分互動模式和腳本模式， 互動模式才可以用 &lt;code&gt;%&lt;/code&gt; 。）
-又 google 了很久，才學到可以用 &lt;code&gt;$!&lt;/code&gt; 取得丟到背景的程序 pid。&lt;/p&gt;
-&lt;p&gt;會用到這功能，去年有寫過自動重啟某程序的腳本，
-需要判斷該程序是不是還活著，
-就踩了很多 &lt;code&gt;$(jobs)&lt;/code&gt; 因為是在子程序中執行，
-看不到母程序的子程序的搞笑事件。
-（ &lt;code&gt;jobs &amp;gt; jobs-list&lt;/code&gt; 倒是可以運作，因為不是子程序。）&lt;/p&gt;
-&lt;p&gt;另外就是 rtklib 的 cli 版本程式，
-都會很貼心的忽略 SIGHUP 訊號，
-以讓程序在 shell 退出後還能繼續執行；
-逼我要手動用 kill 終止。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;rtkrcv -o rtkrcv.conf -p 5564 &amp;amp;
-pid_rtkrcv=$!
 
-trap on_exit EXIT TERM INT HUP
-on_exit() {
-    kill $pid_rtkrcv
-    trap - EXIT
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;rtklib-str2str-的串流問題&quot;&gt;rtklib str2str 的串流問題&lt;/h2&gt;
-&lt;p&gt;之前寫 rtklib 的腳本，因為不想用 http 明文傳登入資訊，
-所以接 igs 的星曆都是用 curl 走 https，
-再用管道傳給 str2str 串流到 tcp 給 rtkrcv 用。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;curl --user-agent &amp;apos;NTRIP RTKLIB (curl)&amp;apos; \
-    https://username:password@products.igs-ip.net/CLK93 \
-| str2str -out tcpsvr://:5567 &amp;amp;
-pid_ntrip=$!
-
-on_exit() {
-    kill $pid_ntrip
-    trap - EXIT
-}
-
-trap on_exit EXIT INT TERM HUP
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;那時就有注意到，在終止後雖然 str2str 被殺掉了，
-但 curl 仍執行了一段時間，
-才因為寫入到已經關閉的程序，發生錯誤自己退出。&lt;/p&gt;
-&lt;p&gt;後來是解 &lt;a href=&quot;https://github.com/rtklibexplorer/RTKLIB/issues/51#issuecomment-595661883&quot;&gt;另一個 bug&lt;/a&gt; ：
-str2str 把 serial (com port) 串流到 tcp 時，
-如果有多個客戶端同時連接，收到的內容會是錯的。
-因為用到二個 str2str，只關掉最後一個程序前面的還是會繼續執行，
-所以才想找一次關掉整個管道的方法。&lt;/p&gt;
-&lt;h2 id=&quot;程序群組&quot;&gt;程序群組&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.kawabangga.com/posts/3849&quot;&gt;以前就有看過程序群組的概念&lt;/a&gt; ，
-也就是 shell 會把一個管道中的所有程序分到同一個新群組，
-這樣就可以一次終止整個群組來結束整個管道。
-群組 id 也就是群組長程序 id，也就是群組中第一支程序的 id。
-posix c 的 kill 函數，如果傳入的 pid 是負數，
-就代表終止該程序群組中的所有程序。&lt;/p&gt;
-&lt;p&gt;當時沒有想太多，只覺得 shell 會處理好。
-現在回頭看，在 &lt;code&gt;kill %1&lt;/code&gt; 時，如果 &lt;code&gt;%1&lt;/code&gt; 是一組管道，
-那 shell 實際上做的就是終止整個程序群組。&lt;/p&gt;
-&lt;p&gt;而 shell 指令 kill 也和 c 的 kill 函數一樣，
-可以接受負數來一次終止群組中的所有程序。
-只是如果直接寫 &lt;code&gt;kill -5566&lt;/code&gt; ，會被當成選項，
-然後因為沒有 5566 這個項選項就報錯了。&lt;/p&gt;
-&lt;p&gt;可以用二個減號告訴 kill 之後的都不是選項：
-&lt;code&gt;kill -- -5566&lt;/code&gt; ，就能正確解析。
-或在參數前面加個空白： &lt;code&gt;kill &amp;apos; -5566&amp;apos;&lt;/code&gt;
-因為第一個字元不是減號，
-kill 就不會把該參數當成選項，但仍能解析出負數。&lt;/p&gt;
-&lt;p&gt;要終止群組需要的是群組 id，也就是群組長的 id，然後傳給 kill。
-但問題是在腳本中， &lt;code&gt;$!&lt;/code&gt; 是管道中最後一個程序的 id，
-而沒辦法知道一組管道的第一支程序的 id。
-有二個解決方式，一是把整個管道包在一支子程序裡，
-二是用 ps 查出該程序所屬的程序群組。&lt;/p&gt;
-&lt;h3 id=&quot;把管道包進單一子程序&quot;&gt;把管道包進單一子程序&lt;/h3&gt;
-&lt;p&gt;這招是 google 時在 stackoverflow 上第一個找出的方法。
-把原本 &lt;code&gt;foo | bar &amp;amp;&lt;/code&gt; 寫成 &lt;code&gt;(foo | bar) &amp;amp;&lt;/code&gt; ，
-這樣就只有一支程序，所以最後一支程序也就是第一支程序，
-也就是群組長了，在括號中的管道也會同一個群組中。
-就能用 &lt;code&gt;kill -- -$!&lt;/code&gt; 直接殺掉。
-但缺點是會多包一層，多出一個子程序。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;~ $ sleep 6m | sleep 8m &amp;amp;
-[1] 12661
-~ $ (sleep 6m | sleep 8m) &amp;amp;
-[2] 12664
-~ $ pstree $$
-bash(9149)-+-bash(12664)-+-sleep(12665)
-           |             `-sleep(12667)
-           |-pstree(12669)
-           |-sleep(12660)
-           `-sleep(12661)
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;但後來發現不管用，要開啟 job control 功能才有此效果，
-在 dash 的非互動模式預設是關閉的，
-也查不到是否為 posix 標準。&lt;/p&gt;
-&lt;h3 id=&quot;用-ps-列出該程序所屬的群組&quot;&gt;用 ps 列出該程序所屬的群組&lt;/h3&gt;
-&lt;p&gt;雖然 &lt;code&gt;$!&lt;/code&gt; 只有管道中最後一個程序的 id，
-但用 &lt;code&gt;ps -j $!&lt;/code&gt; 就能看到該程序的群組，顯示為 pgid。
-查閱 ps 的手冊後，可以知道如果只要列出 pgid，
-可以用以下選項： &lt;code&gt;ps --no-headers --format pgid:1 $!&lt;/code&gt;。&lt;/p&gt;
-&lt;p&gt;其中 format 是只列出特定欄位，而 &lt;code&gt;:1&lt;/code&gt; 是指定欄位的寬度，
-預設是似乎是 5，會出現一個前置空白，
-如果搭配 kill 需要負數，要前置減號時會變成 &lt;code&gt;- 5566&lt;/code&gt; ，
-會無法解析，所以要消掉前置的空白。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;pgid() {
-    ps --no-headers --format pgid:1 $1
-}
-
-str2str -in serial://serial0#ubx \
-| str2str -out file://f9p.ubx::T \
-          -out tcpsvr://:5567 &amp;amp;
-pgid_ublox=`pgid $!`
-
-on_exit() {
-    kill -- -$pgid_ublox
-    trap - EXIT
-}
-
-trap on_exit EXIT INT TERM HUP
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;子-shell-的問題&quot;&gt;子 shell 的問題&lt;/h2&gt;
-&lt;p&gt;寫腳本時碰到一個問題，偶爾 curl 會斷線退出，
-所以我需要讓 curl 退出後重啟。
-我很直覺寫了個 while 迴圈來處理：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;while sleep 5
-do curl --user-agent &amp;apos;NTRIP RTKLIB (curl)&amp;apos; \
-    https://username:password@products.igs-ip.net/CLK93
-done \
-| str2str -out tcpsvr://:5567 &amp;amp;
-pgid_ntrip=`pgid $!`
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;但後來發現這種寫法會讓 sleep curl str2str
-三支程序 pgid 都和 shell 一樣，
-而不會生出一個新程序群組。
-所以在終止整個程序群組時也會終止 shell 自己。&lt;/p&gt;
-&lt;p&gt;然後我在 shell 又 trap 了終止信號，
-造成在終止時發信號給自己，
-又觸發一次事件處理，又發一次信號；
-最後疊太多層 stack overflow。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;on_exit() {
-    echo exiting
-    kill -- -$pgid_ublox
-    trap - EXIT
-}
-
-trap on_exit EXIT INT TERM HUP
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;找到問題後也想不到什麼好的辦法，
-畢竟就是不會開新群組，只有原本的群組。
-只能先把重複觸發事件處理的問題解決，
-在收到信號就直接重置處理函數就不會重複觸發了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;on_exit() {
-    trap - EXIT INT TERM HUP
-    echo exiting
-    kill -- -$pgid_ublox
-}
-
-trap on_exit EXIT INT TERM HUP
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;至於在管道中使用 shell 內建語法造成無法新建群組的問題，
-除非打開 job control，
-不然也只能用 ps 和 awk 去抓了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;ps -o pgid:1,pid -au $USER \
-| awk &amp;quot;(\$1==$pgid &amp;amp;&amp;amp; \$2!=$pgid) {print \$2}&amp;quot; \
-| xargs kill
-&lt;/code&gt;&lt;/pre&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/geomatics-flat-taiwan-road-pavement.html</id>
 <title>台灣路更平：群眾協作的道路鋪面改善專案</title>

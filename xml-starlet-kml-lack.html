@@ -99,6 +99,55 @@ kml 裡的座標當然就是 t02 裡的座標了。</p>
 雖然它無法處理 utf-8 的命令行參數，
 我的經驗是在 perl 啟動時加上 <code>-Ca</code> 即可，
 詳情可以 <code>man perlrun</code> 。</p>
+<h3 id="xmlstarlet-select-簡易上手">xmlstarlet select 簡易上手</h3>
+<p>xmlstarlet 可以簡單從標準輸入讀取資料，
+為了方便以下的例子都是用 echo 輸入。</p>
+<pre><code class="lang-term">~ $ echo &apos;&lt;a href=&quot;/&quot;&gt;home&lt;/a&gt;&apos; \
+&gt; | xmlstarlet select --template --value-of /a/@href --nl
+/
+</code></pre>
+<pre><code class="lang-term">~ $  echo &apos;&lt;a href=&quot;/&quot;&gt;home&lt;/a&gt;&apos; \
+&gt; | xmlstarlet select --template --value-of /a --nl
+home
+</code></pre>
+<pre><code class="lang-term">~ $ echo &apos;&lt;a href=&quot;/&quot;&gt;home&lt;/a&gt;&apos; \
+&gt; | xmlstarlet select --template --copy-of /a --nl
+&lt;a href=&quot;/&quot;&gt;home&lt;/a&gt;
+</code></pre>
+<pre><code class="lang-term">~ $ echo &apos;&lt;a href=&quot;/&quot;&gt;home&lt;/a&gt;&apos; \
+&gt; | xmlstarlet select --template --output &quot;let&apos;s go &quot; --copy-of /a --nl
+let&apos;s go &lt;a href=&quot;/&quot;&gt;home&lt;/a&gt;
+</code></pre>
+<pre><code class="lang-term">~ $ echo &apos;&lt;a href=&quot;/&quot;&gt;home&lt;/a&gt;&apos; | xmlstarlet select --template \
+&gt; --output &quot;let&apos;s go&quot; --nl --copy-of /a --nl \
+&gt; --output &quot;(&quot; --value-of /a --output &quot; is &quot; \
+&gt; --value-of /a/@href --output &quot;)&quot; --nl
+let&apos;s go
+&lt;a href=&quot;/&quot;&gt;home&lt;/a&gt;
+(home is /)
+</code></pre>
+<p>xmlstarlet 的參數寫法中，
+用 copy-of value-of output 三個選項可以輸出內容，
+copy-of value-of 會輸出 xpath 的元素與值，而 output 則是直接輸出字串。
+默認下會直接輸出，若前面使用了 attr 屬性，則會輸出到屬性內。
+要表示結束輸出到屬性，需要使用 break 選項來 <em>跳出</em> ，
+同樣 break 也可以用來結束一個節點。</p>
+<p>複雜一點的例子，輸出多個元素與屬性。
+在輸出元素時，xmlstarlet 的參數寫法有點像 <a href="https://pugjs.org/">pug</a> ，
+是 <em>反向</em> 從對 xml 結構的描述生成完整 xml 的方式。</p>
+<pre><code class="lang-term">~ $ echo &apos;&lt;html name=&quot;root&quot; /&gt;&apos; \
+&gt; | xmlstarlet select --template \
+&gt;     --value-of /html/@name --output : --nl \
+&gt;     --output &quot;let&apos;s go &quot; \
+&gt;     --elem a --attr href --output / --break \
+&gt;         --output home \
+&gt;             --elem strong --output &apos;!&apos; --break \
+&gt;     --break \
+&gt;     --output . --nl
+root:
+let&apos;s go &lt;a href=&quot;/&quot;&gt;home&lt;strong&gt;!&lt;/strong&gt;&lt;/a&gt;.
+</code></pre>
+<p>完整的教學可以參見 <a href="http://xmlstar.sourceforge.net/doc/UG/ch04.html">xmlstarlet 網站的使用手冊中對 select 的說明</a> 。</p>
 <h3 id="xmlstarlet-的命名空間問題">xmlstarlet 的命名空間問題</h3>
 <p>xmlstarlet 個不方便的點就是對 xpath 命名空間的處理，
 之前有寫過一篇 <a href="xml-namespace-in-xsl-xpath.html">在 xsl 中 xpath 元素的命名空間問題</a> ，
@@ -176,32 +225,27 @@ kml 裡有座標資訊，但每個座標的資訊，如時間、衛星、誤差�
 也不太想再依賴 w3m，就直接解碼跳脫後的 html，直接當作 xml 處理。
 但解碼後的 html 裡會有 html entities，
 xmlstarlet 不認識會報錯，所以再用 sed 刪掉。</p>
-<pre><code class="lang-sh">xmlstarlet select --template --element xml \
+<pre><code class="lang-sh">xmlstarlet select --template --elem xml \
     --match &quot;/kml/Document/Folder[name=&apos;Points&apos;]/Placemark&quot; \
-    --element p --value-of description \
-    --element c --value-of Point/coordinates \
+    --elem p --value-of description \
+    --elem c --value-of Point/coordinates \
 | xmlstarlet unescape \
 | sed &apos;s/&amp;nbsp;/ /g&apos;
 </code></pre>
-<p>這段參數的意思是，輸出放在根元素為 xml 的元素內，
+<p>上面參數的意思是，輸出放在根元素為 xml 的元素內，
 然後每匹配到 placemark 後，輸出一個 p 元素，內容為 description 的內容，
 再在 p 元素中加上一個 c 元素，內容為 point/coordinates 的內容。</p>
-<p>想試玩可以這樣試：
-因為空字串不是一個合法的 xml 文件，
-所以至少要送一個空的元素。</p>
-<pre><code class="lang-sh">echo &apos;&lt;xml/&gt;&apos; \
-| xmlstarlet select --template \
-    --element p --output pc \
-    --element c --output cc
-</code></pre>
-<p>之後再用以下的 xsel 重新抓出時間與座標即可：</p>
+<p>前面把 kml 格式化成含 html 表格格式的 xml 資料，
+再用以下的 xsel 重新抓出時間與座標即可：</p>
 <pre><code class="lang-sh">xmlstarlet select --template --match /xml/p \
     --value-of &apos;normalize-space(c)&apos; --output , \
     --value-of &apos;table/tr/td[.=&quot;UTC&quot;]/following-sibling::td&apos; --nl
 </code></pre>
 <p>xpath 相對 css selector 一個很大的強項，
 就是可以匹配節點的文字內容，
-甚至可以匹配父節點或反向選取等，css 做不到的事。</p>
+甚至可以匹配父節點或反向選取等，css 做不到的事。
+例如上面就是匹配文字內容為 UTC 的 td 元素，
+並選取出該元素的下一個 td 元素。</p>
 <h2 id="xmlstarlet-的問題">xmlstarlet 的問題</h2>
 <p>xmlstarlet 的問題，大概就是一些細節沒處理好，
 使用起來有些地方應該可以更方便的。

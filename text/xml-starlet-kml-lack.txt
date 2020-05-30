@@ -91,6 +91,75 @@ kml 裡的座標當然就是 t02 裡的座標了。
 我的經驗是在 perl 啟動時加上 `-Ca` 即可，
 詳情可以 `man perlrun` 。
 
+### xmlstarlet select 簡易上手
+xmlstarlet 可以簡單從標準輸入讀取資料，
+為了方便以下的例子都是用 echo 輸入。
+
+```term
+~ $ echo '<a href="/">home</a>' \
+> | xmlstarlet select --template --value-of /a/@href --nl
+/
+```
+
+```term
+~ $  echo '<a href="/">home</a>' \
+> | xmlstarlet select --template --value-of /a --nl
+home
+```
+
+```term
+~ $ echo '<a href="/">home</a>' \
+> | xmlstarlet select --template --copy-of /a --nl
+<a href="/">home</a>
+```
+
+```term
+~ $ echo '<a href="/">home</a>' \
+> | xmlstarlet select --template --output "let's go " --copy-of /a --nl
+let's go <a href="/">home</a>
+```
+
+```term
+~ $ echo '<a href="/">home</a>' | xmlstarlet select --template \
+> --output "let's go" --nl --copy-of /a --nl \
+> --output "(" --value-of /a --output " is " \
+> --value-of /a/@href --output ")" --nl
+let's go
+<a href="/">home</a>
+(home is /)
+```
+
+xmlstarlet 的參數寫法中，
+用 copy-of value-of output 三個選項可以輸出內容，
+copy-of value-of 會輸出 xpath 的元素與值，而 output 則是直接輸出字串。
+默認下會直接輸出，若前面使用了 attr 屬性，則會輸出到屬性內。
+要表示結束輸出到屬性，需要使用 break 選項來 *跳出* ，
+同樣 break 也可以用來結束一個節點。
+
+複雜一點的例子，輸出多個元素與屬性。
+在輸出元素時，xmlstarlet 的參數寫法有點像 [pug] ，
+是 *反向* 從對 xml 結構的描述生成完整 xml 的方式。
+
+[pug]: https://pugjs.org/
+
+```term
+~ $ echo '<html name="root" />' \
+> | xmlstarlet select --template \
+>     --value-of /html/@name --output : --nl \
+>     --output "let's go " \
+>     --elem a --attr href --output / --break \
+>         --output home \
+>             --elem strong --output '!' --break \
+>     --break \
+>     --output . --nl
+root:
+let's go <a href="/">home<strong>!</strong></a>.
+```
+
+完整的教學可以參見 [xmlstarlet 網站的使用手冊中對 select 的說明] 。
+
+[xmlstarlet 網站的使用手冊中對 select 的說明]: http://xmlstar.sourceforge.net/doc/UG/ch04.html
+
 ### xmlstarlet 的命名空間問題
 xmlstarlet 個不方便的點就是對 xpath 命名空間的處理，
 之前有寫過一篇 [在 xsl 中 xpath 元素的命名空間問題][xsl xpath namespace] ，
@@ -193,30 +262,20 @@ xmlstarlet select --text --template \
 xmlstarlet 不認識會報錯，所以再用 sed 刪掉。
 
 ```sh
-xmlstarlet select --template --element xml \
+xmlstarlet select --template --elem xml \
     --match "/kml/Document/Folder[name='Points']/Placemark" \
-    --element p --value-of description \
-    --element c --value-of Point/coordinates \
+    --elem p --value-of description \
+    --elem c --value-of Point/coordinates \
 | xmlstarlet unescape \
 | sed 's/&nbsp;/ /g'
 ```
 
-這段參數的意思是，輸出放在根元素為 xml 的元素內，
+上面參數的意思是，輸出放在根元素為 xml 的元素內，
 然後每匹配到 placemark 後，輸出一個 p 元素，內容為 description 的內容，
 再在 p 元素中加上一個 c 元素，內容為 point/coordinates 的內容。
 
-想試玩可以這樣試：
-因為空字串不是一個合法的 xml 文件，
-所以至少要送一個空的元素。
-
-```sh
-echo '<xml/>' \
-| xmlstarlet select --template \
-    --element p --output pc \
-    --element c --output cc
-```
-
-之後再用以下的 xsel 重新抓出時間與座標即可：
+前面把 kml 格式化成含 html 表格格式的 xml 資料，
+再用以下的 xsel 重新抓出時間與座標即可：
 
 ```sh
 xmlstarlet select --template --match /xml/p \
@@ -227,6 +286,8 @@ xmlstarlet select --template --match /xml/p \
 xpath 相對 css selector 一個很大的強項，
 就是可以匹配節點的文字內容，
 甚至可以匹配父節點或反向選取等，css 做不到的事。
+例如上面就是匹配文字內容為 UTC 的 td 元素，
+並選取出該元素的下一個 td 元素。
 
 ## xmlstarlet 的問題
 xmlstarlet 的問題，大概就是一些細節沒處理好，

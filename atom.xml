@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2020-05-30T12:38:02.676Z</updated>
+  <updated>2020-06-18T00:34:00.807Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,266 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/geomatics-seminar-hyperspectral-li.html</id>
+<title>高光譜影像分析與應用</title>
+<published>2020-06-17T12:33:38.094Z</published>
+<updated>2020-06-18T00:34:00.753Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/geomatics-seminar-hyperspectral-li.html"/>
+<summary type="html">高光譜影像是指影像中，不只有一般可見光的紅綠藍三個波段，
+還具有其它可見光外的波段，如近紅外光、遠紅外光，
+且在光譜取樣解析度上高，可以繪製出接近連續的光譜曲線。</summary>
+<category term="geomatics"/>
+<category term="study"/>
+<category term="report"/>
+<category term="remote-sensing"/>
+<category term="hyperspectral"/>
+<category term="衛星"/>
+<category term="影像"/>
+<content type="html">&lt;h1 id=&quot;高光譜影像分析與應用&quot;&gt;高光譜影像分析與應用&lt;/h1&gt;
+&lt;p&gt;高光譜影像是指影像中，不只有一般可見光的紅綠藍三個波段，
+還具有其它可見光外的波段，如近紅外光、遠紅外光，
+且在光譜取樣解析度上高，可以繪製出接近連續的光譜曲線。&lt;/p&gt;
+&lt;p&gt;交通大學土木系測量組，
+在 2020-05-20 邀請輔仁大學的李曉祺教授來演講，
+分享她在高光譜影像分析的演算法上的經驗與研究成果，
+並包含將高光譜影像分析的演算法應用在其它領域上的心得。&lt;/p&gt;
+&lt;h2 id=&quot;影像與光譜&quot;&gt;影像與光譜&lt;/h2&gt;
+&lt;p&gt;最早的攝影技術是單一光譜，也就是黑白影像。
+黑白影像只單純記錄光照強度，
+因此在展示上只能表現最弱的全黑色到最亮的全白色。
+後來發展的彩色攝影，則以多層的感光劑搭配濾光劑，
+從而能分別感應紅、綠、藍三原色的強度，
+對應人眼的三種感光細胞，因此可以還原出彩色影像。
+現代的影像則多為數位影像，採用感光的電子元件來記錄入射光強度。&lt;/p&gt;
+&lt;p&gt;不同顏色的光，也就是不同頻率的電磁波，
+若同時記錄人眼可見的頻率以外的光，即為多光譜影像。
+不同物質反射的光譜有不同的特色，
+以可見光舉例，植物為綠色是因為在綠光波段，
+也就是電磁波波長為 550nm 的反射，
+較在紅光與藍光強，因此為綠色。&lt;/p&gt;
+&lt;p&gt;除了綠光外，植物在近紅外光，
+大約是波長 800nm 的位置，也有較強的反射，
+因此即可利用近紅外光的波段，判識影像中的物體是否為植物。
+常見的衛星影像，多半會有近紅外光的感測器，
+如美國的 Landsat 7、Landsat 8、歐盟的 Sentinel-2。&lt;/p&gt;
+&lt;h3 id=&quot;多光譜影像&quot;&gt;多光譜影像&lt;/h3&gt;
+&lt;p&gt;除了上述的近紅外光波段，還有許多特定的波段，
+因為能達成各式各樣的功能，而常出現在光學衛星的感測器列表中。
+例如遠紅外光是在人的體溫時的黑體輻射峰值，
+因此以遠紅外光的強度即可判斷物體的溫度。
+而短波段紅外光中的 1450nm 波段，會被水所吸收，
+因此可以用來判斷水的存在。&lt;/p&gt;
+&lt;p&gt;一些光學影像衛星為了不同的研究用途，即會搭配許多不同的波段。
+因此每張衛星影像，不只有基礎的紅綠藍三色，
+還有許多可見光外的波段，
+稱為 &lt;abbr title=&quot;multispectral&quot;&gt;多光譜&lt;/abbr&gt; 影像。&lt;/p&gt;
+&lt;p&gt;例如以下為美國的 Landsat 7 衛星具有的感測器：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Sensor&lt;/th&gt;
+&lt;th&gt;Band number&lt;/th&gt;
+&lt;th&gt;Band name&lt;/th&gt;
+&lt;th&gt;Wavelength (μm)&lt;/th&gt;
+&lt;th&gt;Resolution (m)&lt;/th&gt;
+&lt;th&gt;Band Applications&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;ETM+&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;Blue&lt;/td&gt;
+&lt;td&gt;0.45-0.52&lt;/td&gt;
+&lt;td&gt;30&lt;/td&gt;
+&lt;td&gt;Bathymetric mapping, distinguishing soil from vegetation, and deciduous from coniferous vegetation&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ETM+&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;Green&lt;/td&gt;
+&lt;td&gt;0.52-0.60&lt;/td&gt;
+&lt;td&gt;30&lt;/td&gt;
+&lt;td&gt;Emphasizes peak vegetation, which is useful for assessing plant vigor&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ETM+&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;Red&lt;/td&gt;
+&lt;td&gt;0.63-0.69&lt;/td&gt;
+&lt;td&gt;30&lt;/td&gt;
+&lt;td&gt;Discriminates vegetation slopes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ETM+&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;NIR&lt;/td&gt;
+&lt;td&gt;0.77-0.90&lt;/td&gt;
+&lt;td&gt;30&lt;/td&gt;
+&lt;td&gt;Emphasizes biomass content and shorelines&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ETM+&lt;/td&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;td&gt;SWIR 1&lt;/td&gt;
+&lt;td&gt;1.55-1.75&lt;/td&gt;
+&lt;td&gt;30&lt;/td&gt;
+&lt;td&gt;Discriminates moisture content of soil and vegetation; penetrates thin clouds&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ETM+&lt;/td&gt;
+&lt;td&gt;6&lt;/td&gt;
+&lt;td&gt;Thermal&lt;/td&gt;
+&lt;td&gt;10.40-12.50&lt;/td&gt;
+&lt;td&gt;60*(30)&lt;/td&gt;
+&lt;td&gt;Thermal mapping and estimated soil moisture&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ETM+&lt;/td&gt;
+&lt;td&gt;7&lt;/td&gt;
+&lt;td&gt;SWIR 2&lt;/td&gt;
+&lt;td&gt;2.09-2.35&lt;/td&gt;
+&lt;td&gt;30&lt;/td&gt;
+&lt;td&gt;Hydrothermally altered rocks associated with mineral deposits&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ETM+&lt;/td&gt;
+&lt;td&gt;8&lt;/td&gt;
+&lt;td&gt;Panchromatic&lt;/td&gt;
+&lt;td&gt;0.52-0.90&lt;/td&gt;
+&lt;td&gt;15&lt;/td&gt;
+&lt;td&gt;15 meter resolution, sharper image definition&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;不同的波段常會有不同的解析度，主要是因為該波段的光線強度緣故。
+如遠紅外光的強度較可見光的強度弱，
+同樣面積的感測器不足以感應到遠紅外光，
+只能將單一感測器面積放大，增加入射的遠紅外光，但也降低解析度。
+如上表中熱影像 (Thermal) 也就是遠紅外光的解析度，就較可見光的三原色低。&lt;/p&gt;
+&lt;p&gt;在黑白影像中，單一個像素只具有一個亮度值純量，顯示為由黑到白的顏色。
+在彩色影像中，則分為紅綠藍三色的個別亮度值，
+可以將一個像素視為具有三個元素向量。
+在多光譜影像中，則由三個元素的向量增加為總波段個數的元素的向量，
+如上述的 landsat 7 在每個像素，有 8 種不同波段的強度值。&lt;/p&gt;
+&lt;h3 id=&quot;高光譜影像&quot;&gt;高光譜影像&lt;/h3&gt;
+&lt;p&gt;而 &lt;abbr title=&quot;hyperspectral&quot;&gt;高光譜&lt;/abbr&gt; 影像，
+則是指波段的數目既多且密，能呈現出物體的 &lt;strong&gt;光譜曲線&lt;/strong&gt; ，
+而不只是數個特定波段。&lt;/p&gt;
+&lt;p&gt;所謂的光譜曲線，即是將單一像素中的所有波段，
+以波長為橫軸、強度為縱軸繪圖。
+多光譜影像由於取樣的數目少，間隔可能也大，
+因此直接將離散點連結為曲線可能不適合，
+而較適合以柱狀圖的方式呈現。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://www.nireos.com/wp-content/uploads/2019/09/What-is-Hyperspectral-Imaging-705x371.png&quot; alt=&quot;hyperspectral and multispectral&quot; title=&quot;多光譜影像與高光譜影像&quot;&gt;&lt;/p&gt;
+&lt;p&gt;在實做上，一般是以波段數目與光譜解析度，
+區分多光譜影像與高光譜影像。
+而李曉祺的老師則從分類演算法上提出另一種觀點：
+若影像的波段數目大於要分類的類別數目，系統為 over-determined，
+則影像可視作 hyperspectral；
+反之系統則為 under-determined，影像可視為 multispectral。&lt;/p&gt;
+&lt;h2 id=&quot;高光譜影像的應用&quot;&gt;高光譜影像的應用&lt;/h2&gt;
+&lt;p&gt;相比多光譜影像，高光譜影像中更密集的取樣，
+可以更好的區別出不同的物質，
+甚至一些波長較長的波段，可以達到淺層的透視，
+穿透表層的材質如油漆。&lt;/p&gt;
+&lt;h3 id=&quot;軍事&quot;&gt;軍事&lt;/h3&gt;
+&lt;p&gt;例如軍事上從二戰開始就有偽裝的應用，在二戰時的北非戰場，
+英軍就曾以橡膠製成充氣的假坦克，虛張聲勢迷惑敵人。
+偽裝的坦克雖然外表顏色與真坦克相像，
+但如果以高光譜或多光譜影像，
+即可依金屬與橡膠在不同波段的反射不同而識破。&lt;/p&gt;
+&lt;h3 id=&quot;藝術&quot;&gt;藝術&lt;/h3&gt;
+&lt;p&gt;另外近年在考古與藝術品的分析上也會用到高光譜影像。
+在中古歐洲有重復使用羊皮紙的習慣，
+聖職人員可能會將書寫過的羊皮紙以刮刀抹平，再重新書寫新的內容。
+但曾經存在過的筆跡，可能會在人眼不可分辨的可見光外波段留下痕跡，
+即能夠以高光譜影像看出曾經存在過的內容。
+文藝複興時期的畫家也有類似的習慣，
+會在失敗的畫作上重新繪製新的作品，
+以高光譜影像即可看出被覆蓋的作品。&lt;/p&gt;
+&lt;h3 id=&quot;腫瘤分辨&quot;&gt;腫瘤分辨&lt;/h3&gt;
+&lt;p&gt;在醫療中，癌症的腫瘤多只能以切除作為最後手段。
+但在腦部的腫瘤組織，與周圍的正常組織顏色相近，
+在切除手術時不易分辨，使醫生難以掌握切除的範圍。
+可能切的太多傷及大腦正常功能，或切的太少又使腫瘤復發。&lt;/p&gt;
+&lt;p&gt;儘管在核磁共振影像上，腫瘤與正常細胞能輕易分辨，
+但在肉眼的可見光卻不是如此，
+因此實際手術時只能以肉眼搭配先前影像判斷區域。
+若使用即時的高光譜影像儀，搭配影像分類的演算法，
+即可即時區分出腫瘤與正常組織，方便下刀。&lt;/p&gt;
+&lt;h2 id=&quot;多光譜影像中的-endmember&quot;&gt;多光譜影像中的 endmember&lt;/h2&gt;
+&lt;p&gt;現實世界中的光，皆為不同物質的輻射或反射組成；
+所以影像中的每一點，理論上也是由不同的物質的光譜組合而成。
+多光譜影像中，因為資訊充足，理論上可以反向推回該點所具有的物質，
+隨後就能完整分類出所有地物。&lt;/p&gt;
+&lt;h2 id=&quot;高光譜影像分析演算法的應用&quot;&gt;高光譜影像分析演算法的應用&lt;/h2&gt;
+&lt;p&gt;由於高光譜影像的分析，本質上是一種向量資料的分類，
+甚至可以跨領域應用在許多看似不相關的領域上。
+從性質接近的皮下血管偵測、核磁共振影像，
+到看似不相干的急診病患評估。&lt;/p&gt;
+&lt;h3 id=&quot;核磁共振影像分析&quot;&gt;核磁共振影像分析&lt;/h3&gt;
+&lt;p&gt;核磁共振影像是醫療中常應用在人體軟組織中的掃描技術，
+利用水中氫原子自旋的磁場，在不同組織中的強度，
+來 &lt;strong&gt;照&lt;/strong&gt; 出不同的組織。
+雖然原理與光學影像不同，但在結果呈現上，
+都是將單元表現為一組向量。&lt;/p&gt;
+&lt;p&gt;在核磁共振影像是三維的結果，
+其中的基本單位為 voxel，可以想像成是立體的 pixel，
+每個 voxel 對應了數個時間點磁場的強度，表現為一組向量。
+不同時間點的磁場強度，在物理上有不同的意義，
+可以簡單看作是一種組織的特徵，
+如同在光學影像中一個像元裡不同光段的值也是一種物質的特徵。&lt;/p&gt;
+&lt;p&gt;通常核磁共振的影像有三個時間點的影像，
+在辨識上各有不同的物理意義，
+但其本質並非可見光等可以直接組合出人腦可理解的影像，難以直觀解讀。
+且在判讀中，還必須連結同一位置在各影像的表現，
+才能完整發揮核磁共振影像的優勢。&lt;/p&gt;
+&lt;p&gt;對人來說，如同在判讀多光譜影像時，難以想像近紅外光、遠紅外光的顏色，
+而只能化算為一維的植生指數來判識植物，或是直接在高維度下進行分類。
+最後核磁共振影像分類的成果，可以從人眼難以理解的影像中，
+分類出灰質、白質、骨骼、肌肉與最重要的腦損傷部位。&lt;/p&gt;
+&lt;h3 id=&quot;急診病患評估&quot;&gt;急診病患評估&lt;/h3&gt;
+&lt;p&gt;如果說核磁共振影像，在同為影像上還有所關聯，
+那急診病患的評估就是看似完全跳到另一領域了。
+急診病患的評估目的是，在一位病患進到急診後，
+藉由病患的身體資訊，分析病患可能的結果，以及可能需要的輸血量。&lt;/p&gt;
+&lt;p&gt;所謂的身體資訊，主要是在救護車上為病患接上各種儀器後，
+開始記錄的數據，如心跳、血壓、氧氣等，以及病歷中的既有資料。
+研究是在美國進行，美國醫院的急診一直是開支很大的部門，
+而急診中最大的病患又是來自外傷，外傷多數需要輸血。
+研究目的即是藉由在到院前收集的資料，
+預判病患需要的輸血量，從而能夠預備足夠的血。&lt;/p&gt;
+&lt;p&gt;每個病患的資料，包含到院前不同時間點的血壓、心跳，
+與事先已知道病歷資料，可以視為一個極長的向量資料。
+研究中所做的即是以這一個個的向量，判斷出可能的需要輸血量，
+甚至回答各種問題，如預估出院時間等。
+但關於出院時間甚至死亡率的預測，可能有道德疑慮；
+如果知道病患的死亡率高，是否仍要全力搶救？&lt;/p&gt;
+&lt;h3 id=&quot;皮下血管偵測&quot;&gt;皮下血管偵測&lt;/h3&gt;
+&lt;p&gt;最後一項應用，則是利用高光譜影像中，
+人眼無法感知的不可見光波段，從影像中偵測出皮下血管的位置。
+雖然原理十分簡單，但實驗是在學校的實驗室做的，因此環境較簡陋；
+為了阻絕光害，費了好一番功夫。&lt;/p&gt;
+&lt;h2 id=&quot;心得與討論&quot;&gt;心得與討論&lt;/h2&gt;
+&lt;p&gt;從李曉祺老師的研究應用上，發現高光譜影像分析的演算法，
+可以應用在許多領域看似不相關的領域。
+因為許多問題的本質，都可以看做是對向量資料的分類，
+這也是最近重新流行的人工智慧中的機器學習經典問題，
+許多資料處理中的技術都是通用的。&lt;/p&gt;
+&lt;p&gt;我現在研究中用來分析資料與畫圖的工具 gnuplot，
+以及輔助資料處理的大量 linux shell 工具腳本，
+在數年前入門時，也難以想像現在我的研究會離不開這些工具。
+不過就像程式語言本來就是通用的工具，
+通常來說只要挑一門語言來學，接下來無論是研究、工作，
+都可以以同一招來應對，畢竟所有程式語言都是圖靈相等的。&lt;/p&gt;
+&lt;script src=&quot;ext/header-nctu.js?execute&amp;amp;editable&quot;&gt;&lt;/script&gt;
+
+&lt;script src=&quot;ext/paper.js?reference&quot;&gt;&lt;/script&gt;
+
+&lt;link rel=&quot;stylesheet&quot; href=&quot;ext/paper.css&quot;&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/xml-starlet-kml-lack.html#xmlstarlet-select-簡易上手</id>
 <title>xmlstarlet 處理 kml 資料的經驗</title>
 <published>2020-05-28T16:26:25.197Z</published>
@@ -2656,614 +2916,7 @@ attended by children. See
 <category term="rtklib"/>
 <category term="linux"/>
 <category term="raspberry-pi"/>
-<content type="html">&lt;h1 id=&quot;以-RTKLIB-與-RTCM-SSR-訊息進行-real-time-PPP&quot;&gt;以 RTKLIB 與 RTCM SSR 訊息進行 real time PPP&lt;/h1&gt;
-&lt;p&gt;這算是我論文的一部份，之前教授就說他想試，
-我也糊里糊塗沒仔細評估就答應了，還好真的做的出來。
-過程不難，但我自己耍蠢撞牆居多。
-關鍵有幾個點：要用 &lt;a href=&quot;http://rtkexplorer.com/downloads/rtklib-code/&quot;&gt;rtkexplore 版本的 rtklib&lt;/a&gt; ，
-RTCM 要選 products.igs-ip.net，天線要用雙頻。&lt;/p&gt;
-&lt;script src=&quot;ext/toc.js&quot;&gt;&lt;/script&gt;
 
-&lt;h2 id=&quot;無關技術的事情起緣&quot;&gt;無關技術的事情起緣&lt;/h2&gt;
-&lt;p&gt;之前教授不知哪裡看到 real time ppp 的消息，
-認為 rt-ppp 是未來的潮流，
-知道現在 igs 之類的組織有在網路上提供 &lt;strong&gt;即時精密星曆&lt;/strong&gt; ，
-只要有網路就可以收，用接收儀做 &lt;strong&gt;即時精密單點定位&lt;/strong&gt; 。&lt;/p&gt;
-&lt;p&gt;他主要是參考 &lt;a href=&quot;https://rtklibexplorer.wordpress.com/2018/05/08/using-ssr-corrections-with-rtklib-for-ppp-solutions/&quot;&gt;rtkexplorer 的 rt ppp 文章&lt;/a&gt;，
-就要我試試看，用平價的接收儀如 u-blox 的 f9p 晶片，
-和行動網路或 wifi 接星曆做 rt-ppp。&lt;/p&gt;
-&lt;p&gt;他聯絡了另一個有 u-blox 長期使用、開發經驗的教授林修國，
-要我去請教可行性之類的。
-那時候我還搞不太清楚要幹麻，
-想說應該一定做的起來，就沒有很認真參考。
-事後想想那時就應該要拒絕，因為林修國那時是說他幾年前做過，
-但他印像中 rtklib 接網路星曆的 rt-ppp 還不能直接用，要自己改 code。&lt;/p&gt;
-&lt;p&gt;這時候我就應該要拒絕了，因為我根本沒有改 code 的能力。
-結果那時不知道是鬼遮眼，還是敷衍上級的老毛病又犯了，
-回去後還是和教授說沒問題，可以買 f9p 了。
-事後想想真是有驚無險，還好做出來了。&lt;/p&gt;
-&lt;h2 id=&quot;技術&quot;&gt;技術&lt;/h2&gt;
-&lt;p&gt;教授買的是和 raspberry pi 接好的 f9p 晶片，和一顆雙頻的天線。
-pi 開機後可以從 &lt;code&gt;/dev/serial0&lt;/code&gt; 讀寫 f9p 的訊息，
-pi 本身沒有電池，可以從 micro usb 接電源，
-所以接上手機用的行動電源就可以使用。&lt;/p&gt;
-&lt;p&gt;主要流程我也是參考 &lt;a href=&quot;https://rtklibexplorer.wordpress.com/2018/05/08/using-ssr-corrections-with-rtklib-for-ppp-solutions/&quot;&gt;rtkexplorer 的 rt ppp 文章&lt;/a&gt; 。&lt;/p&gt;
-&lt;h3 id=&quot;ublox-晶片連結&quot;&gt;ublox 晶片連結&lt;/h3&gt;
-&lt;p&gt;ublox 的 f9p 晶片是用 serial port 連到 pi 上，
-windows 叫 com1，unix 則是會位在 &lt;code&gt;/dev/serial0&lt;/code&gt; 。
-（數字可能改變。）
-實際上 serial0 是個指到 &lt;code&gt;/dev/ttyS0&lt;/code&gt; 的符號連結，
-總之可以動。&lt;/p&gt;
-&lt;p&gt;serial0 在 linux 下表現為 character special device，
-但我一直不知道怎麼和這類裝置互動。
-寫入就直接 &lt;code&gt;echo foo &amp;gt;/dev/serial0&lt;/code&gt; 即可，
-但讀取好像不能直接 &lt;code&gt;cat /dev/serial0&lt;/code&gt; ？
-cat 一下就讀取完就退出了，但我是需要不斷讀取他的輸出，
-把他當成像標準輸入一樣的 stream 來讀。&lt;/p&gt;
-&lt;h3 id=&quot;str2str&quot;&gt;str2str&lt;/h3&gt;
-&lt;p&gt;還好 rtklib 可以直接處理這種細節，
-提供了一個叫 str2str 的程式，
-可以用來把一個 stream 轉到多個 stream 甚至轉存成檔案。
-所以就把 serial 轉成 tcp stream 來處理；
-也同時存成檔案，也就是 ubx 格式的原始記錄檔。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;str2str -in serial://serial0:115200 \
-        -out tcpsvr://:5566 \
-        -out file:///home/pi/test.ubx
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;一個 str2str 可以從一個 stream 讀取，輸出到多個輸出。
-這個指令可以把 &lt;code&gt;/dev/serial0&lt;/code&gt; 以 115200 baud 讀取，
-並在 localhost 5566 port 輸出，
-並存成 &lt;code&gt;/home/pi/test.ubx&lt;/code&gt; 的檔案。
-rtklib 風格的 url 不用寫 &lt;code&gt;/dev/&lt;/code&gt; ，直接寫裝置名稱即可，
-大概是從 windows 來的習慣；
-windows 下 com port 就直接叫 com1，也沒有所謂的完整路徑。&lt;/p&gt;
-&lt;p&gt;對 baud rate 我還是不太懂，要怎麼知道裝置的 baud rate，
-我看之前測試的人留在 pi 裡面的設定檔才知道的。
-如果不設的話，str2str 似乎會自己測？我看也是測對。&lt;/p&gt;
-&lt;p&gt;輸出除了&lt;abbr title=&quot;tcp server&quot;&gt;tcpsvr&lt;/abbr&gt;，
-也可以是&lt;abbr title=&quot;tcp client&quot;&gt;tcpcli&lt;/abbr&gt;。
-如果是 server，就是可以有多個 client 連上去讀取，
-像用 &lt;code&gt;nc localhost 5566&lt;/code&gt; 讀取；
-如果是 client，就是會主動連到該 ip port 輸出資料，
-類似 http post 到某一個 port 的概念。&lt;/p&gt;
-&lt;h3 id=&quot;重播用的-timetag&quot;&gt;重播用的 timetag&lt;/h3&gt;
-&lt;p&gt;後來我發現，rtklib 有一個 &lt;strong&gt;重播&lt;/strong&gt; 功能，
-把串流存到檔案後，可以再從檔案串流出來，供事後反覆解算。
-但這個功能除了原始串流資料，
-還需要什麼時間串流了多少資料的時間資料。
-要啟用這功能，在 rtklib 或 str2str 中的
-&lt;code&gt;file://&lt;/code&gt; 路徑結尾加上 &lt;code&gt;::T&lt;/code&gt; 即可，
-例如 &lt;code&gt;file://ublox-f9p.ubx::T&lt;/code&gt; 。
-rtklib 用雙冒號當作參數的語法。
-（怎麼不是用 querystring 的風格？）&lt;/p&gt;
-&lt;p&gt;如果在儲存時加上 T 選項，除了原始檔案，
-還會多儲存一個 &lt;code&gt;*.*.tag&lt;/code&gt; 的 timetag 檔案來記錄時間戳。
-（像 &lt;code&gt;ublox-f9p.ubx&lt;/code&gt; 和 &lt;code&gt;ublox-f9p.ubx.tag&lt;/code&gt; ）
-在讀取時如果加上 T 選項，就會照 timetag 檔案裡記錄的時間重播。&lt;/p&gt;
-&lt;p&gt;如果不用 T 選項，基本上就無法正確的重播；
-rtklib 只會以最快速度一次把所有資料讀完，
-而不同格式的檔案間也無法配合。
-所以可能星曆讀到一半，但觀測量已經讀完了，
-讀取到的時間點沒重疊，無法一起解算。&lt;/p&gt;
-&lt;p&gt;很可惜的是明明多數觀測量都已經有時間戳了，
-但卻還是要額外記錄一個 timetag 檔案才能正確重播。
-有想過自己寫一支程式讀觀測量產生 timetag 檔案，
-但後來發現超出我的能力，幾乎看不懂 rtklib 的原始碼，就放棄了。
-別人已經寫好就乖乖照他的框架走就好了。&lt;/p&gt;
-&lt;h4 id=&quot;時間戳的格式&quot;&gt;時間戳的格式&lt;/h4&gt;
-&lt;p&gt;麻煩的是時間戳還有二種格式，
-似乎和 c 語言中的時間戳資料結構大小有關。
-在 raspberry pi 中是 4 byte，
-在一般 64 bit PC 是 8 byte。&lt;/p&gt;
-&lt;p&gt;在讀取時可以用 &lt;code&gt;::P=4&lt;/code&gt; 或 &lt;code&gt;::P=8&lt;/code&gt; 來指定，
-在存儲時 P 選項好像沒有用，不能更改。
-而且更麻煩的是一支 rtkrcv 程序在讀取二個檔案時，
-不能指定不同格式的時間戳；
-得要開二支 str2str 以不同大小讀取串流，
-到 tcp 上就沒有時間戳問題了。&lt;/p&gt;
-&lt;p&gt;這個選項沒有寫在手冊裡，
-我去翻 &lt;a href=&quot;https://github.com/GHolk/RTKLIB/blob/79767dc828e1cf315238812c02e0e1627b0126b0/src/stream.c#L2721&quot;&gt;原始碼才在註解裡&lt;/a&gt; 找到的……。
-不過原始碼還是超出我能力範圍，無法修改。&lt;/p&gt;
-&lt;h4 id=&quot;時間的同步&quot;&gt;時間的同步&lt;/h4&gt;
-&lt;p&gt;如果在腳本中，那數支 str2str 是在不同行命令中執行，
-雖然 shell 不是很快的語言，約有數十 ms 等級的時差，
-但對 gnss 的速度來說算是同步的。&lt;/p&gt;
-&lt;p&gt;但如果很不幸二份檔案是在不同時間開始記錄的，
-那就需要讓二者播放時能 &lt;strong&gt;同步&lt;/strong&gt; 。
-可以用 &lt;code&gt;::+60&lt;/code&gt; 的選項來快轉 60 秒。
-另外 rtkrcv 中如果讀取來源是有 timetag 的檔案，
-就會自動將二者同步。
-如果是 str2str，則需要手動算出誤差秒數來同步。&lt;/p&gt;
-&lt;p&gt;要算同步秒數，可以在 rtkrcv console 中，
-用 observ 命令來看到目前的觀測量的時間，
-用 ssr 可以看到星曆的時間。
-rtk 的話，二者都會顯示在 observ 裡。&lt;/p&gt;
-&lt;h3 id=&quot;ser2net&quot;&gt;ser2net&lt;/h3&gt;
-&lt;p&gt;str2str 是只能單向讀取 serial 輸出到其它串流，
-但 serial 是雙向的，有時需要 config 晶片，
-就會需要寫入資料。&lt;/p&gt;
-&lt;p&gt;ublox 提供的 u-center 程式就是用來連結晶片，
-讀取、設定晶片的程式。
-u-center 是在 windows 上執行的程式，
-我用 wine 跑是沒問題的。
-但我不可能在 pi 上跑 wine 再跑 u-center，
-所以我 google 到一支 ser2net 的 linux 程式，
-&lt;a href=&quot;https://ozzmaker.com/using-u-center-to-connect-to-a-raspberry-pi-with-an-attached-berrygps-imu-gsm/&quot;&gt;可以把 serial 轉到 tcp 連線，且可以供讀寫。&lt;/a&gt;
-u-center 除了直接連 serial，也可以連轉成 tcp 的 serial。
-所以問題就解決了。&lt;/p&gt;
-&lt;h3 id=&quot;u-center-設定&quot;&gt;u-center 設定&lt;/h3&gt;
-&lt;p&gt;u-center 可以設定 f9p 要輸出哪些訊息。
-receiver &amp;gt; connection 裡可以選要用 com port (serial) 或 tcp 連，
-連上後在 view &amp;gt; configuration view 裡可以改設定。&lt;/p&gt;
-&lt;p&gt;f9p 本身可以進行基本的基於電碼的定位，
-可以直接以 nmea 輸出定位結果座標、衛星顆數。
-也可以讀取 rtcm 後進行 rtk 定位，
-但這部份怎麼設定就沒研究了。&lt;/p&gt;
-&lt;p&gt;在 configuration view 的 MSG 分類下，
-可以設定在哪些 port 要輸出哪些訊息，
-我看得到有 i2c uart1 uart2 usb spi 五個 port。
-serial 應該是 uart1 或 uart2，所以我都開了。
-如果 f9p 是用 usb 連 pi，那可能要改成開 usb。
-i2c 和 spi 就不知道了。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;F0-00 NMEA GxGGA: nmea 的 gngga 訊息，直接是定位座標，&lt;/li&gt;
-&lt;li&gt;F0-03 NMEA GxGSV: nmea 的 gngsv 訊息，衛星顆數。&lt;/li&gt;
-&lt;li&gt;其它訊息自行參考 &lt;a href=&quot;https://www.gpsinformation.org/dale/nmea.htm&quot;&gt;nmea 標準&lt;/a&gt; 。&lt;/li&gt;
-&lt;li&gt;02-14 RXM-RAWX: 全星系的電碼與相位觀測量，
-用來輸出 rinex 的 observation 檔所需。&lt;/li&gt;
-&lt;li&gt;02-13 RXM-SFRBX: 全星系的星曆觀測量，收廣播星曆所需。&lt;/li&gt;
-&lt;li&gt;沒有 X 的似乎是單一 GPS 星系的？&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;至少要開 rawx 和 sfrbx 才會輸出 gnss 觀測量，
-方能以 rtklib 或其它程式定位。&lt;/p&gt;
-&lt;p&gt;nmea 的訊息開了之後，u-center 上的
-&lt;abbr title=&quot;dash board&quot;&gt;儀表板&lt;/abbr&gt;
-才看得到東西。
-如果 nmea 有開，nmea 訊息會夾在 serial 輸出的二進位訊息裡，
-但不會影響 ubx 二位進格式的解析。
-只是檔案會變大，如果開 gngsv 的話會很大。&lt;/p&gt;
-&lt;p&gt;設定的方式是選好訊息後，在要輸出的 port 上打勾，
-然後按視窗左下角的 send 按鈕，即會將設定發送到晶片上。
-如果要永久保存設定，要切到 CFG，
-選 &lt;em&gt;save current configuration&lt;/em&gt; ，並選擇對應的裝置；
-我選了 BBR 和 FLASH，這二個應該至少有一個是持久的，
-詳細可能要讀手冊。&lt;/p&gt;
-&lt;h3 id=&quot;rtklib-版本&quot;&gt;rtklib 版本&lt;/h3&gt;
-&lt;p&gt;我本來是直接 clone rtklib github 上的 master branch，
-在 raspberry pi 上編譯命令列版本的程式：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;git clone https://github.com/tomojitakasu/RTKLIB rtklib.git
-cd rtklib.git/app
-sh makeall.sh
-sudo find -type f -executable -exec install &amp;apos;{}&amp;apos; /usr/local/bin \;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;但後來發現都解不出來，收下來的資料都只有單頻。
-（而我選了雙頻，所以解不出來。）
-後來發現 2.4.2 2.4.3 版的 rtklib，
-用 convbin 轉出來的資料都只有 L1 波段，
-也就是說這二版的 rtklib 都不支援 ublox 的 L2 波段資料。
-我試 teqc 也是一樣的結果。&lt;/p&gt;
-&lt;p&gt;後來找到 &lt;a href=&quot;https://rtklibexplorer.wordpress.com/2019/08/24/dual-frequency-ppk-solutions-with-rtklib-and-the-u-blox-f9p/&quot;&gt;rtkexplorer 談 f9p ppp 的文章&lt;/a&gt; ，
-才看到 &lt;a href=&quot;http://rtkexplorer.com/downloads/rtklib-code/&quot;&gt;他釋出的支援 ublox f9p 的 rtklib 版本&lt;/a&gt; 。
-因為他只有提供 windows 的執行檔，
-而且 pi 不是 x64 要另外編譯，就直接 clone 他的 github 原始碼自己編譯。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;git clone https://github.com/rtklibexplorer/RTKLIB rtklib-explorer.git
-cd rtklib-explorer.git/app
-make -j4 # 四核心編譯
-sudo make install # 預設裝到 /usr/local/bin
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;之後 convbin 轉出來的就有 L2 了，
-預設也從 rinex 2.11 變成 3.03。
-也就代表 rtkrcv 程式可以解析 ublox 雙頻訊號。&lt;/p&gt;
-&lt;h3 id=&quot;雙頻天線問題&quot;&gt;雙頻天線問題&lt;/h3&gt;
-&lt;p&gt;後來發現天線也有分雙頻單頻。
-之前有從教授拿到一個單頻的 skytraq 接收儀，
-有附一個小小的磁鐵天線，可以黏在車頂。
-在宿舍頂樓測試時，因為 ublox 的天線接口在底部，
-不能直接放在地上，所以想先用小天線頂著用；
-結果收到的就只有單頻訊號。&lt;/p&gt;
-&lt;h3 id=&quot;rtcm-ntrip-與-ssr-訊息&quot;&gt;rtcm ntrip 與 ssr 訊息&lt;/h3&gt;
-&lt;p&gt;igs 即時精密星曆除了 15 分鐘發布一次的檔案外，
-也有用 ntrip 協議發送。
-ntrip 是 rtcm 協議在 http 上運行的版本，
-rtcm 則是用來傳輸 gnss 訊號的協議。
-我印象中 rtcm2 只能用來傳輸 rtk 需要的差分訊號，
-而 rtcm3 中定義了
-&lt;abbr title=&quot;state space representation&quot;&gt;ssr&lt;/abbr&gt; 訊息，
-用來表示即時精密星曆。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.use-snip.com/kb/knowledge-base/an-rtcm-message-cheat-sheet/&quot;&gt;我有找到一篇文章有提供 rtcm 訊息的意義&lt;/a&gt; ，
-rtkrcv 會顯示收到的訊息，
-還有 ntrip source table 也會顯示該 mount point 提供哪些格式訊息，
-可以用來粗略判斷運作正不正常。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://register.rtcm-ntrip.org/cgi-bin/registration.cgi&quot;&gt;要收 igs 的 ntrip 協議需要註冊&lt;/a&gt; ，
-在連接時提供使用者名稱和密碼。
-註冊時可以選要申請 igs 或 euref 的，
-這個服務似乎很多國家或組織都有提供。&lt;/p&gt;
-&lt;p&gt;以 igs 來說，在 &lt;a href=&quot;http://www.igs-ip.net/home&quot;&gt;http://www.igs-ip.net/home&lt;/a&gt; 有說明，
-而 &lt;a href=&quot;http://www.igs-ip.net/&quot;&gt;http://www.igs-ip.net/&lt;/a&gt; 則有以 ntrip 格式提供的
-&lt;abbr title=&quot;sourcetable&quot;&gt;資源列表&lt;/abbr&gt;，
-每行是一比記錄，其中以分號分隔不同欄位。
-其中以 STR 開頭的記錄是一比可以用 ntrip 連上的站。
-例如 &lt;code&gt;STR;NIUM00NIU0;...&lt;/code&gt; ，
-就表示 www.igs-ip.net 有收集 NIUMOONIUO 站的 ntrip 資料，
-可以透過 &lt;code&gt;www.igs-ip.net/NIUMOONIUO&lt;/code&gt; 取得 niumooniuo 的資料。
-（NIUMOONIUO 稱為 www.igs-ip.net 的一個 mount point。）&lt;/p&gt;
-&lt;p&gt;igs 下有
-&lt;a href=&quot;http://www.igs-ip.net/&quot;&gt;http://www.igs-ip.net/&lt;/a&gt;
-&lt;a href=&quot;http://mgex.igs-ip.net/&quot;&gt;http://mgex.igs-ip.net/&lt;/a&gt;
-&lt;a href=&quot;http://products.igs-ip.net/&quot;&gt;http://products.igs-ip.net/&lt;/a&gt;
-三個 server。
-www 上可以串流所有所有 igs 收集的 gnss 測站資料，
-mgex 不知道，
-而 products 就是依收集的所有 ntrip 資料，
-計算出精密星曆並提供 ssr 訊息的 server。
-可以透過 &lt;code&gt;products.igs-ip.net/CLK93&lt;/code&gt; 取得即時精密星曆訊息。&lt;/p&gt;
-&lt;p&gt;ntrip 是以基礎的 http basic authentication 登入，
-所以用 http 其實蠻危險的，密碼會以明碼傳送，
-雖然多數 server 也提供在 https 上的 ntrip，
-但目前 str2str 還不支援 https。
-所以建議用 wget 或 curl 代理，再交給 str2str。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;wget --user-agent &amp;apos;NTRIP RTKLIB (wget)&amp;apos; --output-document - \
-     https://username:password@products.igs-ip.net/CLK93 \
-| str2str -out tcpsvr://:5567
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;curl --user-agent &amp;apos;NTRIP RTKLIB (curl)&amp;apos; \
-     https://username:password@products.igs-ip.net/CLK93 \
-| str2str -out tcpsvr://:5567
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;ntrip server 如果 http 的 user agent 標頭不以 &lt;code&gt;NTRIP&lt;/code&gt; 開頭，
-就只會吐 http 403 forbidden 錯誤。&lt;/li&gt;
-&lt;li&gt;str2str 如果沒有指定 &lt;code&gt;-in&lt;/code&gt; 選項，就會從 stdin 讀取，
-上面的腳本就是讓 curl 或 wget 把 ntrip 的 rtcm 輸出，
-用管道傳到 str2str 的 stdin。&lt;/li&gt;
-&lt;li&gt;ntrip 就是 http，所以除了開頭的登入用的 http header，
-基本上是單向的協議，就是單方面不停的送二進位資料。
-（所以也沒有 content-length 標頭。）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;rtkrcv-執行細節&quot;&gt;rtkrcv 執行細節&lt;/h3&gt;
-&lt;p&gt;因為我是 raspberry pi，所以是用命令列版本的 rtkrcv 定位，
-就寫設定檔後執行，沒有 gui。&lt;/p&gt;
-&lt;p&gt;我在執行上因為需要比較 rtklib 和後處理的定位結果，
-要把 ublox 的原始數據也存成檔案，
-所以是用 str2str 從 serial 讀取，
-一邊在 tcp 上送給 rtkrcv，另一邊則存成檔案。
-ntrip 也可以比照辦理。&lt;/p&gt;
-&lt;h4 id=&quot;執行腳本&quot;&gt;執行腳本&lt;/h4&gt;
-&lt;p&gt;igs ntrip 的帳號密碼則寫在檔案 &lt;code&gt;login&lt;/code&gt; 裡，
-內容就一行帳號密碼，用冒號隔開，
-像 &lt;code&gt;username:password&lt;/code&gt; 。&lt;/p&gt;
-&lt;p&gt;有個小問題是 rtkexplorer 版本的 rtkrcv，
-&lt;code&gt;-s&lt;/code&gt; 選項似乎不能自動執行。
-預設 rtkrcv 是只會開啟一個終端，
-可以開在 tcp port、指定的 terminal device 或 shell 所在的 tty 上，
-要在終端中輸入 start 命令才會開始定位。
-所以我加了個 nc 指令，
-用來自動連進去後輸入 start 命令。
-tcp console 下面的設定檔裡設密碼，
-如果手動設為空就可以不用打密碼；
-但不設的話會會用預設密碼 &lt;code&gt;admin&lt;/code&gt; 。&lt;/p&gt;
-&lt;p&gt;執行後可以在其它 shell &lt;code&gt;telnet localhost 5564&lt;/code&gt;
-連進 rtkrcv 的介面，
-原本的 shell 則會顯示 str2str 的狀況。
-如果要結束，就在原本的 shell 按 ctrl-C，
-或直接 kill 掉一開始執行時顯示的 pid。&lt;/p&gt;
-&lt;p&gt;rtkrcv 的終端中，exit 指令是指離開終端，
-要結束 rtkrcv 則是要用 shutdown 指令，
-或是直接 kill rtkrcv 程序。
-但如果執行時不指定 port 或 terminal device，
-就會直接把終端開在現在的終端上，
-那就會無法 exit，（否則 exit 了就無法再連上終端了。）
-要退出只能直接 shutdown。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;#!/bin/sh
-
-ntrip_igs_login=`cat login`
-
-# port
-port_real_time_ppp_console=5564 # igs ntrip real time ppp console
-port_ublox=5566                 # ublox raw observation
-port_igs_ssr_rtcm=5567          # igs real time clock orbit
-
-# log=$(date -Is)-run.log
-# exec 1&amp;gt;$log 2&amp;gt;&amp;amp;1
-
-echo script pid $$
-
-time_stamp=`date -Is`
-
-str2str -in serial://serial0 \
-    -out tcpsvr://:$port_ublox \
-    -out file://$PWD/$time_stamp.ubx &amp;amp;
-pid_ublox=$!
-
-curl --user-agent &amp;apos;NTRIP RTKLIB (curl)&amp;apos; \
-     https://$ntrip_igs_login@products.igs-ip.net/CLK93 \
-| str2str -out tcpsvr://:$port_igs_ssr_rtcm &amp;amp;
-pid_ntrip=$!
-
-rtkrcv -o igs-ntrip.conf -p $port_real_time_ppp_console &amp;amp;
-pid_ppp=$!
-
-nc -Ct localhost $port_real_time_ppp_console &amp;lt;&amp;lt;CONSOLE
-start
-exit
-CONSOLE
-
-on_exit() {
-    echo exiting
-    kill $pid_ublox $pid_ntrip $pid_ppp
-    mv igs-ntrip.pos $time_stamp.ppp.pos
-    mv single-dual-frequency.pos
-    trap - EXIT # prevent calling exit again after term int hup
-}
-trap on_exit EXIT TERM INT HUP
-
-wait
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h4 id=&quot;str2str-從-serial-讀取的-bug&quot;&gt;str2str 從 serial 讀取的 bug&lt;/h4&gt;
-&lt;p&gt;碰到一個問題，用 str2str 把 serial 傳到 tcp
-再傳到 rtkrcv 後，收到的資料很多是錯的。
-原因大概是單一一支 str2str 程序，
-如果同時要讀取 serial、寫入檔案、傳送到 tcp，負擔會太大。
-雖然儲存的檔案會是正確的，但 tcp 上會缺資料。
-我猜是因為 serial baud 設太高，cpu 來不及，
-但也不確定 baud 和 str2str 內部的程式有沒有關係，
-我太廢 str2str 的原始碼基本看不懂。&lt;/p&gt;
-&lt;p&gt;解決方法是啟動二支 str2str 程式，
-一支只負責讀 serial 送到 stdout，
-另一支再負責儲存到檔案和送到 tcp。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;str2str -in serial://serial0#ubx \
-| str2str -out file://ublox-f9p.ubx::T \
-          -out tcpsvr://:5566
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;只用一支 str2str 同時讀取 serial 並儲存時，
-存的 timetag 會變很大，幾乎比原始觀測量還大，
-我猜可能是讀取頻率很高，所以要記錄很多次時間戳。
-如果用二支 str2str 管道並在第二支 str2str 存，
-timetag 就比較正常，大小變原始檔的十分之一左右。&lt;/p&gt;
-&lt;h4 id=&quot;選項-logstr-儲存觀測量&quot;&gt;選項 logstr 儲存觀測量&lt;/h4&gt;
-&lt;p&gt;原本我是啟動 str2str 和 rtkrcv，
-才能同時把資料用來定位也儲存到檔案。
-後來發現 rtkrcv 有一個 logstr 選項，
-語法就和 str2str 的 &lt;code&gt;-out&lt;/code&gt; 一樣，
-可以直接把 inpstr 收到資料再轉發出去，
-可以直接存成檔案，也可以用 tcp 再傳出去。&lt;/p&gt;
-&lt;p&gt;但之前用 str2str 讀 serial 同時存檔和 tcp 廣播就很吃力，
-如果要用單一支 rtkrcv 做，因為還要定位，可能會更吃力。&lt;/p&gt;
-&lt;p&gt;之前有一次要在二個站收 network rtk，
-本來就直接要了二組 egnss 帳號來連。
-後來想到，其實可以只用一個帳號，
-然後二個站距離很近，都和同一個 egnss 訊號差分就可以了。
-就可以用 logstr 把收到訊號送出去給另一台機器。&lt;/p&gt;
-&lt;p&gt;network rtk 除了收資料，
-還需要把測站所在的大略位置，
-用 nmea 格式放在 ntrip 請求的 body 送給伺服器，以內插虛擬觀測量。
-（對，就是有 body 的 http get。）
-雖然用 str2str &lt;code&gt;-p&lt;/code&gt; 選項也可以，
-但要先知道大略座標比較麻煩。
-如果用 rtkrcv 的話，直接在設定檔裡設
-&lt;code&gt;inpstr2-nmeareq=single&lt;/code&gt; &lt;code&gt;ant2-postype=rtcm&lt;/code&gt; ，
-就會把 sps (single) 的定位結果用 nmea 傳到伺服器，
-並把 rtcm 訊息中的座標當基站座標。&lt;/p&gt;
-&lt;h4 id=&quot;kill-終止-str2str-的問題&quot;&gt;kill 終止 str2str 的問題&lt;/h4&gt;
-&lt;p&gt;如果要終止 str2str，直接用 &lt;code&gt;$!&lt;/code&gt; 和 kill 即可；
-但如果 str2str 還串了管道和一堆有的沒的，
-要一次終止就比較麻煩；
-可能只能一次終止整個 process group。
-詳細可以參考 &lt;a href=&quot;shell-kill-pipe-process-group.html&quot;&gt;下一篇專門談終止子程序的文章&lt;/a&gt; 。&lt;/p&gt;
-&lt;h4 id=&quot;重播時的時間戳來源&quot;&gt;重播時的時間戳來源&lt;/h4&gt;
-&lt;p&gt;之前提過可以重播記錄的檔案，但在重播 rtcm 時有個問題，
-rtklib 似乎會解析某些資料的時間戳，
-有些則不會，會直接拿現在時間。&lt;/p&gt;
-&lt;p&gt;我碰到的問題是我的 ublox 資料是 P=4 的，
-但 rtcm 是 P=8 的，所以不能二個都在設定檔裡讀。
-我就把 ublox 和 rtcm 都改用 str2str 播到 tcp，
-然後在 rtkrcv 裡從 tcp 讀。
-結果 tcp 讀進來的 ublox 時間是觀測時間，
-但 rtcm 讀進來的則變成現在，造成二個不同步。
-可能因為 ublox 帶時間戳，而 rtcm 沒有；
-或是 rtkrcv 直接假定從 tcp 讀 rtcm 是即時。&lt;/p&gt;
-&lt;p&gt;總之這個麻煩的問題，我後來是分開讀取來源。
-rtcm 直接用 &lt;code&gt;file://ublox-f9p.ubx::T&lt;/code&gt; 從檔案讀，就會帶正確的時間戳了；
-ublox 則用另一支 str2str 串到 tcp 讀，
-觀測量自帶時間戳所以沒問題。
-只是這樣要算時差，手動在 str2str 加上去；
-而且要用命令一次執行，不能一行一行打，時差會跑掉。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;str2str -in file://ublox-f9p.ubx::T::+3600::x300 \
-        -out tcpsvr://:5567 1&amp;gt;/dev/null 2&amp;gt;&amp;amp;1 &amp;amp;
-rtkrcv -o post.conf -s
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h4 id=&quot;rtkrcv-自動開始只在終端機連結時啟動&quot;&gt;rtkrcv 自動開始只在終端機連結時啟動&lt;/h4&gt;
-&lt;p&gt;rtkrcv 預設 rtkrcv 只會開啟終端介面，
-要在介面裡下 start 命令才會開始讀取資料定位。
-所以有設計一個 &lt;code&gt;-s&lt;/code&gt; 選項，帶選項的話相當於自動輸入 start 命令。&lt;/p&gt;
-&lt;p&gt;問題是 s 選項的行為是在開啟終端時會自動執行 start，
-如果結合另一個 &lt;code&gt;-p&lt;/code&gt; 選項把終端開在 tcp 上，
-就不會開啟預設開在 shell tty 上的終端了，
-也就要等到有人用 telnet 連到 tcp 上的終端時，
-才會 &lt;strong&gt;自動開始&lt;/strong&gt; 定位。&lt;/p&gt;
-&lt;p&gt;於是就有人在 github issue 上報了這個 &lt;a href=&quot;https://github.com/rtklibexplorer/RTKLIB/issues/38&quot;&gt;自動啟動選項
-並不是真的自動啟動的詭異 issue&lt;/a&gt; 。
-然後建議也五花八門，什麼在腳本內用 python 連進去後送出 start 命令；
-我則是直接改原始碼，強制用 stdio 開一個假終端，
-在假終端中執行 start 命令。
-然後也有人給出另一個比較簡單的解法，
-用 &lt;code&gt;-d&lt;/code&gt; 選項指定一個終端，這樣就能自動開啟了；
-如果沒有終端裝置能指定，指定在 &lt;code&gt;/dev/null&lt;/code&gt; 也能自動執行。&lt;/p&gt;
-&lt;h4 id=&quot;設定檔&quot;&gt;設定檔&lt;/h4&gt;
-&lt;p&gt;從 &lt;a href=&quot;https://rtklibexplorer.wordpress.com/2018/05/08/using-ssr-corrections-with-rtklib-for-ppp-solutions/&quot;&gt;rtkexplorer 的文章&lt;/a&gt; 裡改來的。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;pos1-posmode&lt;/code&gt;看要設 &lt;code&gt;ppp-kine&lt;/code&gt; 或 &lt;code&gt;ppp-static&lt;/code&gt; 都可以。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;用 ssr ppp 的話，&lt;code&gt;pos1-sateph&lt;/code&gt; 要設成 &lt;code&gt;brdc+ssrarp&lt;/code&gt; 
-或 &lt;code&gt;brdc+ssrcom&lt;/code&gt; ，據文章說法，
-二個好像差在對 GNSS 衛星的中心的定位不同？
-一個是天線中心、一個是質心。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;因為在腳本裡用 str2str 把 ublox 和 ntrip 都接到 tcp 上了，
-所以輸入都是 tcp。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;igs08.atx&lt;/code&gt; 是 rtklib 提供的 igs 濾定的天線參數，
-網路上可以載到。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;# RTKNAVI options (2020/02/09 rtkexplorer/rtklib demo5 gholk)
-pos1-posmode       =ppp-static # (0:single,1:dgps,2:kinematic,3:static,4:movingbase,5:fixed,6:ppp-kine,7:ppp-static,8:ppp-fixed)
-pos1-frequency     =l1+l2      # (1:l1,2:l1+l2,3:l1+l2+l5,4:l1+l5)
-pos1-soltype       =forward    # (0:forward,1:backward,2:combined)
-pos1-elmask        =15         # (deg)
-pos1-snrmask_r     =off        # (0:off,1:on)
-pos1-snrmask_b     =off        # (0:off,1:on)
-pos1-snrmask_L1    =0,0,0,0,0,0,0,0,0
-pos1-snrmask_L2    =0,0,0,0,0,0,0,0,0
-pos1-snrmask_L5    =0,0,0,0,0,0,0,0,0
-pos1-dynamics      =off        # (0:off,1:on)
-pos1-tidecorr      =off        # (0:off,1:on,2:otl)
-
-## important ############################################
-pos1-ionoopt       =dual-freq  # (0:off,1:brdc,2:sbas,3:dual-freq,4:est-stec,5:ionex-tec,6:qzs-brdc,7:qzs-lex,8:stec)
-pos1-tropopt       =est-ztd    # (0:off,1:saas,2:sbas,3:est-ztd,4:est-ztdgrad,5:ztd)
-pos1-sateph        =brdc+ssrapc # (0:brdc,1:precise,2:brdc+sbas,3:brdc+ssrapc,4:brdc+ssrcom)
-
-pos1-posopt1       =off        # (0:off,1:on)
-pos1-posopt2       =off        # (0:off,1:on)
-pos1-posopt3       =off        # (0:off,1:on,2:precise)
-pos1-posopt4       =off        # (0:off,1:on)
-pos1-posopt5       =off        # (0:off,1:on)
-pos1-posopt6       =off        # (0:off,1:on)
-pos1-exclsats      =           # (prn ...)
-pos1-navsys        =1          # (1:gps+2:sbas+4:glo+8:gal+16:qzs+32:comp)
-pos2-armode        =continuous # (0:off,1:continuous,2:instantaneous,3:fix-and-hold)
-pos2-gloarmode     =off        # (0:off,1:on,2:autocal)
-pos2-bdsarmode     =off        # (0:off,1:on)
-pos2-arthres       =3
-pos2-arthres1      =0.9999
-pos2-arthres2      =0.25
-pos2-arthres3      =0.1
-pos2-arthres4      =0.05
-pos2-arlockcnt     =0
-pos2-arelmask      =0          # (deg)
-pos2-arminfix      =10
-pos2-armaxiter     =1
-pos2-elmaskhold    =0          # (deg)
-pos2-aroutcnt      =5
-pos2-maxage        =30         # (s)
-pos2-syncsol       =off        # (0:off,1:on)
-pos2-slipthres     =0.05       # (m)
-pos2-rejionno      =30         # (m)
-pos2-rejgdop       =30
-pos2-niter         =1
-pos2-baselen       =0          # (m)
-pos2-basesig       =0          # (m)
-out-solformat      =llh        # (0:llh,1:xyz,2:enu,3:nmea)
-out-outhead        =off        # (0:off,1:on)
-out-outopt         =off        # (0:off,1:on)
-out-outvel         =off        # (0:off,1:on)
-out-timesys        =gpst       # (0:gpst,1:utc,2:jst)
-out-timeform       =hms        # (0:tow,1:hms)
-out-timendec       =3
-out-degform        =deg        # (0:deg,1:dms)
-out-fieldsep       =
-out-outsingle      =off        # (0:off,1:on)
-out-maxsolstd      =0          # (m)
-out-height         =ellipsoidal # (0:ellipsoidal,1:geodetic)
-out-geoid          =internal   # (0:internal,1:egm96,2:egm08_2.5,3:egm08_1,4:gsi2000)
-out-solstatic      =all        # (0:all,1:single)
-out-nmeaintv1      =0          # (s)
-out-nmeaintv2      =0          # (s)
-out-outstat        =off        # (0:off,1:state,2:residual)
-stats-eratio1      =100
-stats-eratio2      =100
-stats-errphase     =0.003      # (m)
-stats-errphaseel   =0.003      # (m)
-stats-errphasebl   =0          # (m/10km)
-stats-errdoppler   =1          # (Hz)
-stats-stdbias      =30         # (m)
-stats-stdiono      =0.03       # (m)
-stats-stdtrop      =0.3        # (m)
-stats-prnaccelh    =10         # (m/s^2)
-stats-prnaccelv    =10         # (m/s^2)
-stats-prnbias      =0.0001     # (m)
-stats-prniono      =0.001      # (m)
-stats-prntrop      =0.0001     # (m)
-stats-prnpos       =0          # (m)
-stats-clkstab      =5e-12      # (s/s)
-ant1-postype       =llh        # (0:llh,1:xyz,2:single,3:posfile,4:rinexhead,5:rtcm,6:raw)
-ant1-pos1          =90         # (deg|m)
-ant1-pos2          =0          # (deg|m)
-ant1-pos3          =-6335367.62849036 # (m|m)
-ant1-anttype       =
-ant1-antdele       =0          # (m)
-ant1-antdeln       =0          # (m)
-ant1-antdelu       =0          # (m)
-ant2-postype       =llh        # (0:llh,1:xyz,2:single,3:posfile,4:rinexhead,5:rtcm,6:raw)
-ant2-pos1          =90         # (deg|m)
-ant2-pos2          =0          # (deg|m)
-ant2-pos3          =-6335367.62849036 # (m|m)
-ant2-anttype       =
-ant2-antdele       =0          # (m)
-ant2-antdeln       =0          # (m)
-ant2-antdelu       =0          # (m)
-ant2-maxaveep      =3600
-ant2-initrst       =on         # (0:off,1:on)
-misc-timeinterp    =off        # (0:off,1:on)
-misc-sbasatsel     =0          # (0:all)
-misc-rnxopt1       =
-misc-rnxopt2       =
-misc-pppopt        =
-
-## important ############################################
-file-satantfile    =igs08.atx
-file-rcvantfile    =igs08.atx
-file-staposfile    =
-file-geoidfile     =
-file-ionofile      =
-file-dcbfile       =
-file-eopfile       =
-file-blqfile       =
-
-## important ############################################
-# set empty password
-console-passwd     =
-file-tempdir       =/tmp
-file-geexefile     =
-file-solstatfile   =
-file-tracefile     =
-
-## important ############################################
-inpstr1-type       =tcpcli     # (0:off,1:serial,2:file,3:tcpsvr,4:tcpcli,7:ntripcli,8:ftp,9:http)
-inpstr2-type       =tcpcli     # (0:off,1:serial,2:file,3:tcpsvr,4:tcpcli,7:ntripcli,8:ftp,9:http)
-inpstr3-type       =off        # (0:off,1:serial,2:file,3:tcpsvr,4:tcpcli,7:ntripcli,8:ftp,9:http)
-inpstr1-path       =localhost:5566
-inpstr2-path       =localhost:5567
-inpstr3-path       =
-inpstr1-format     =ubx        # (0:rtcm2,1:rtcm3,2:oem4,3:oem3,4:ubx,5:ss2,6:hemis,7:skytraq,8:gw10,9:javad,10:nvs,11:binex,12:rt17,13:sbf,14:cmr,17:sp3)
-inpstr2-format     =rtcm3      # (0:rtcm2,1:rtcm3,2:oem4,3:oem3,4:ubx,5:ss2,6:hemis,7:skytraq,8:gw10,9:javad,10:nvs,11:binex,12:rt17,13:sbf,14:cmr,17:sp3)
-inpstr3-format     =rtcm2      # (0:rtcm2,1:rtcm3,2:oem4,3:oem3,4:ubx,5:ss2,6:hemis,7:skytraq,8:gw10,9:javad,10:nvs,11:binex,12:rt17,13:sbf,14:cmr,17:sp3)
-inpstr2-nmeareq    =off        # (0:off,1:latlon,2:single)
-inpstr2-nmealat    =0          # (deg)
-inpstr2-nmealon    =0          # (deg)
-outstr1-type       =file       # (0:off,1:serial,2:file,3:tcpsvr,4:tcpcli,6:ntripsvr)
-outstr2-type       =off #tcpsvr     # (0:off,1:serial,2:file,3:tcpsvr,4:tcpcli,6:ntripsvr)
-
-## important ############################################
-outstr1-path       =igs-ntrip.pos
-outstr2-path       =
-outstr1-format     =llh        # (0:llh,1:xyz,2:enu,3:nmea)
-outstr2-format     =llh        # (0:llh,1:xyz,2:enu,3:nmea)
-logstr1-type       =off        # (0:off,1:serial,2:file,3:tcpsvr,4:tcpcli,6:ntripsvr)
-logstr2-type       =off        # (0:off,1:serial,2:file,3:tcpsvr,4:tcpcli,6:ntripsvr)
-logstr3-type       =off        # (0:off,1:serial,2:file,3:tcpsvr,4:tcpcli,6:ntripsvr)
-logstr1-path       =
-logstr2-path       =
-logstr3-path       =
-misc-svrcycle      =10         # (ms)
-misc-timeout       =10000      # (ms)
-misc-reconnect     =10000      # (ms)
-misc-nmeacycle     =5000       # (ms)
-misc-buffsize      =32768      # (bytes)
-misc-navmsgsel     =all        # (0:all,1:rover,2:base,3:corr)
-misc-proxyaddr     =
-misc-fswapmargin   =30         # (s)
-&lt;/code&gt;&lt;/pre&gt;</content>
 </entry><entry>
 <id>http://gholk.github.io/shell-kill-pipe-process-group.html#子-shell-的問題</id>
 <title>用 pgid 終止一組管道程序</title>

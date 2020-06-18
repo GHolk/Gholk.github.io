@@ -1,0 +1,277 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2020-06-17T12:33:38.094Z">
+<meta name="keywords" property="og:article:tag" content="geomatics,study,report,remote-sensing,hyperspectral,衛星,影像">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="xml-starlet-kml-lack.html" title="xmlstarlet 處理 kml 資料的經驗">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>高光譜影像分析與應用</title>
+</head>
+<body>
+<main><h1 id="高光譜影像分析與應用">高光譜影像分析與應用</h1>
+<p>高光譜影像是指影像中，不只有一般可見光的紅綠藍三個波段，
+還具有其它可見光外的波段，如近紅外光、遠紅外光，
+且在光譜取樣解析度上高，可以繪製出接近連續的光譜曲線。</p>
+<p>交通大學土木系測量組，
+在 2020-05-20 邀請輔仁大學的李曉祺教授來演講，
+分享她在高光譜影像分析的演算法上的經驗與研究成果，
+並包含將高光譜影像分析的演算法應用在其它領域上的心得。</p>
+<h2 id="影像與光譜">影像與光譜</h2>
+<p>最早的攝影技術是單一光譜，也就是黑白影像。
+黑白影像只單純記錄光照強度，
+因此在展示上只能表現最弱的全黑色到最亮的全白色。
+後來發展的彩色攝影，則以多層的感光劑搭配濾光劑，
+從而能分別感應紅、綠、藍三原色的強度，
+對應人眼的三種感光細胞，因此可以還原出彩色影像。
+現代的影像則多為數位影像，採用感光的電子元件來記錄入射光強度。</p>
+<p>不同顏色的光，也就是不同頻率的電磁波，
+若同時記錄人眼可見的頻率以外的光，即為多光譜影像。
+不同物質反射的光譜有不同的特色，
+以可見光舉例，植物為綠色是因為在綠光波段，
+也就是電磁波波長為 550nm 的反射，
+較在紅光與藍光強，因此為綠色。</p>
+<p>除了綠光外，植物在近紅外光，
+大約是波長 800nm 的位置，也有較強的反射，
+因此即可利用近紅外光的波段，判識影像中的物體是否為植物。
+常見的衛星影像，多半會有近紅外光的感測器，
+如美國的 Landsat 7、Landsat 8、歐盟的 Sentinel-2。</p>
+<h3 id="多光譜影像">多光譜影像</h3>
+<p>除了上述的近紅外光波段，還有許多特定的波段，
+因為能達成各式各樣的功能，而常出現在光學衛星的感測器列表中。
+例如遠紅外光是在人的體溫時的黑體輻射峰值，
+因此以遠紅外光的強度即可判斷物體的溫度。
+而短波段紅外光中的 1450nm 波段，會被水所吸收，
+因此可以用來判斷水的存在。</p>
+<p>一些光學影像衛星為了不同的研究用途，即會搭配許多不同的波段。
+因此每張衛星影像，不只有基礎的紅綠藍三色，
+還有許多可見光外的波段，
+稱為 <abbr title="multispectral">多光譜</abbr> 影像。</p>
+<p>例如以下為美國的 Landsat 7 衛星具有的感測器：</p>
+<table>
+<thead>
+<tr>
+<th>Sensor</th>
+<th>Band number</th>
+<th>Band name</th>
+<th>Wavelength (μm)</th>
+<th>Resolution (m)</th>
+<th>Band Applications</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ETM+</td>
+<td>1</td>
+<td>Blue</td>
+<td>0.45-0.52</td>
+<td>30</td>
+<td>Bathymetric mapping, distinguishing soil from vegetation, and deciduous from coniferous vegetation</td>
+</tr>
+<tr>
+<td>ETM+</td>
+<td>2</td>
+<td>Green</td>
+<td>0.52-0.60</td>
+<td>30</td>
+<td>Emphasizes peak vegetation, which is useful for assessing plant vigor</td>
+</tr>
+<tr>
+<td>ETM+</td>
+<td>3</td>
+<td>Red</td>
+<td>0.63-0.69</td>
+<td>30</td>
+<td>Discriminates vegetation slopes</td>
+</tr>
+<tr>
+<td>ETM+</td>
+<td>4</td>
+<td>NIR</td>
+<td>0.77-0.90</td>
+<td>30</td>
+<td>Emphasizes biomass content and shorelines</td>
+</tr>
+<tr>
+<td>ETM+</td>
+<td>5</td>
+<td>SWIR 1</td>
+<td>1.55-1.75</td>
+<td>30</td>
+<td>Discriminates moisture content of soil and vegetation; penetrates thin clouds</td>
+</tr>
+<tr>
+<td>ETM+</td>
+<td>6</td>
+<td>Thermal</td>
+<td>10.40-12.50</td>
+<td>60*(30)</td>
+<td>Thermal mapping and estimated soil moisture</td>
+</tr>
+<tr>
+<td>ETM+</td>
+<td>7</td>
+<td>SWIR 2</td>
+<td>2.09-2.35</td>
+<td>30</td>
+<td>Hydrothermally altered rocks associated with mineral deposits</td>
+</tr>
+<tr>
+<td>ETM+</td>
+<td>8</td>
+<td>Panchromatic</td>
+<td>0.52-0.90</td>
+<td>15</td>
+<td>15 meter resolution, sharper image definition</td>
+</tr>
+</tbody>
+</table>
+<p>不同的波段常會有不同的解析度，主要是因為該波段的光線強度緣故。
+如遠紅外光的強度較可見光的強度弱，
+同樣面積的感測器不足以感應到遠紅外光，
+只能將單一感測器面積放大，增加入射的遠紅外光，但也降低解析度。
+如上表中熱影像 (Thermal) 也就是遠紅外光的解析度，就較可見光的三原色低。</p>
+<p>在黑白影像中，單一個像素只具有一個亮度值純量，顯示為由黑到白的顏色。
+在彩色影像中，則分為紅綠藍三色的個別亮度值，
+可以將一個像素視為具有三個元素向量。
+在多光譜影像中，則由三個元素的向量增加為總波段個數的元素的向量，
+如上述的 landsat 7 在每個像素，有 8 種不同波段的強度值。</p>
+<h3 id="高光譜影像">高光譜影像</h3>
+<p>而 <abbr title="hyperspectral">高光譜</abbr> 影像，
+則是指波段的數目既多且密，能呈現出物體的 <strong>光譜曲線</strong> ，
+而不只是數個特定波段。</p>
+<p>所謂的光譜曲線，即是將單一像素中的所有波段，
+以波長為橫軸、強度為縱軸繪圖。
+多光譜影像由於取樣的數目少，間隔可能也大，
+因此直接將離散點連結為曲線可能不適合，
+而較適合以柱狀圖的方式呈現。</p>
+<p><img src="https://www.nireos.com/wp-content/uploads/2019/09/What-is-Hyperspectral-Imaging-705x371.png" alt="hyperspectral and multispectral" title="多光譜影像與高光譜影像"></p>
+<p>在實做上，一般是以波段數目與光譜解析度，
+區分多光譜影像與高光譜影像。
+而李曉祺的老師則從分類演算法上提出另一種觀點：
+若影像的波段數目大於要分類的類別數目，系統為 over-determined，
+則影像可視作 hyperspectral；
+反之系統則為 under-determined，影像可視為 multispectral。</p>
+<h2 id="高光譜影像的應用">高光譜影像的應用</h2>
+<p>相比多光譜影像，高光譜影像中更密集的取樣，
+可以更好的區別出不同的物質，
+甚至一些波長較長的波段，可以達到淺層的透視，
+穿透表層的材質如油漆。</p>
+<h3 id="軍事">軍事</h3>
+<p>例如軍事上從二戰開始就有偽裝的應用，在二戰時的北非戰場，
+英軍就曾以橡膠製成充氣的假坦克，虛張聲勢迷惑敵人。
+偽裝的坦克雖然外表顏色與真坦克相像，
+但如果以高光譜或多光譜影像，
+即可依金屬與橡膠在不同波段的反射不同而識破。</p>
+<h3 id="藝術">藝術</h3>
+<p>另外近年在考古與藝術品的分析上也會用到高光譜影像。
+在中古歐洲有重復使用羊皮紙的習慣，
+聖職人員可能會將書寫過的羊皮紙以刮刀抹平，再重新書寫新的內容。
+但曾經存在過的筆跡，可能會在人眼不可分辨的可見光外波段留下痕跡，
+即能夠以高光譜影像看出曾經存在過的內容。
+文藝複興時期的畫家也有類似的習慣，
+會在失敗的畫作上重新繪製新的作品，
+以高光譜影像即可看出被覆蓋的作品。</p>
+<h3 id="腫瘤分辨">腫瘤分辨</h3>
+<p>在醫療中，癌症的腫瘤多只能以切除作為最後手段。
+但在腦部的腫瘤組織，與周圍的正常組織顏色相近，
+在切除手術時不易分辨，使醫生難以掌握切除的範圍。
+可能切的太多傷及大腦正常功能，或切的太少又使腫瘤復發。</p>
+<p>儘管在核磁共振影像上，腫瘤與正常細胞能輕易分辨，
+但在肉眼的可見光卻不是如此，
+因此實際手術時只能以肉眼搭配先前影像判斷區域。
+若使用即時的高光譜影像儀，搭配影像分類的演算法，
+即可即時區分出腫瘤與正常組織，方便下刀。</p>
+<h2 id="多光譜影像中的-endmember">多光譜影像中的 endmember</h2>
+<p>現實世界中的光，皆為不同物質的輻射或反射組成；
+所以影像中的每一點，理論上也是由不同的物質的光譜組合而成。
+多光譜影像中，因為資訊充足，理論上可以反向推回該點所具有的物質，
+隨後就能完整分類出所有地物。</p>
+<h2 id="高光譜影像分析演算法的應用">高光譜影像分析演算法的應用</h2>
+<p>由於高光譜影像的分析，本質上是一種向量資料的分類，
+甚至可以跨領域應用在許多看似不相關的領域上。
+從性質接近的皮下血管偵測、核磁共振影像，
+到看似不相干的急診病患評估。</p>
+<h3 id="核磁共振影像分析">核磁共振影像分析</h3>
+<p>核磁共振影像是醫療中常應用在人體軟組織中的掃描技術，
+利用水中氫原子自旋的磁場，在不同組織中的強度，
+來 <strong>照</strong> 出不同的組織。
+雖然原理與光學影像不同，但在結果呈現上，
+都是將單元表現為一組向量。</p>
+<p>在核磁共振影像是三維的結果，
+其中的基本單位為 voxel，可以想像成是立體的 pixel，
+每個 voxel 對應了數個時間點磁場的強度，表現為一組向量。
+不同時間點的磁場強度，在物理上有不同的意義，
+可以簡單看作是一種組織的特徵，
+如同在光學影像中一個像元裡不同光段的值也是一種物質的特徵。</p>
+<p>通常核磁共振的影像有三個時間點的影像，
+在辨識上各有不同的物理意義，
+但其本質並非可見光等可以直接組合出人腦可理解的影像，難以直觀解讀。
+且在判讀中，還必須連結同一位置在各影像的表現，
+才能完整發揮核磁共振影像的優勢。</p>
+<p>對人來說，如同在判讀多光譜影像時，難以想像近紅外光、遠紅外光的顏色，
+而只能化算為一維的植生指數來判識植物，或是直接在高維度下進行分類。
+最後核磁共振影像分類的成果，可以從人眼難以理解的影像中，
+分類出灰質、白質、骨骼、肌肉與最重要的腦損傷部位。</p>
+<h3 id="急診病患評估">急診病患評估</h3>
+<p>如果說核磁共振影像，在同為影像上還有所關聯，
+那急診病患的評估就是看似完全跳到另一領域了。
+急診病患的評估目的是，在一位病患進到急診後，
+藉由病患的身體資訊，分析病患可能的結果，以及可能需要的輸血量。</p>
+<p>所謂的身體資訊，主要是在救護車上為病患接上各種儀器後，
+開始記錄的數據，如心跳、血壓、氧氣等，以及病歷中的既有資料。
+研究是在美國進行，美國醫院的急診一直是開支很大的部門，
+而急診中最大的病患又是來自外傷，外傷多數需要輸血。
+研究目的即是藉由在到院前收集的資料，
+預判病患需要的輸血量，從而能夠預備足夠的血。</p>
+<p>每個病患的資料，包含到院前不同時間點的血壓、心跳，
+與事先已知道病歷資料，可以視為一個極長的向量資料。
+研究中所做的即是以這一個個的向量，判斷出可能的需要輸血量，
+甚至回答各種問題，如預估出院時間等。
+但關於出院時間甚至死亡率的預測，可能有道德疑慮；
+如果知道病患的死亡率高，是否仍要全力搶救？</p>
+<h3 id="皮下血管偵測">皮下血管偵測</h3>
+<p>最後一項應用，則是利用高光譜影像中，
+人眼無法感知的不可見光波段，從影像中偵測出皮下血管的位置。
+雖然原理十分簡單，但實驗是在學校的實驗室做的，因此環境較簡陋；
+為了阻絕光害，費了好一番功夫。</p>
+<h2 id="心得與討論">心得與討論</h2>
+<p>從李曉祺老師的研究應用上，發現高光譜影像分析的演算法，
+可以應用在許多領域看似不相關的領域。
+因為許多問題的本質，都可以看做是對向量資料的分類，
+這也是最近重新流行的人工智慧中的機器學習經典問題，
+許多資料處理中的技術都是通用的。</p>
+<p>我現在研究中用來分析資料與畫圖的工具 gnuplot，
+以及輔助資料處理的大量 linux shell 工具腳本，
+在數年前入門時，也難以想像現在我的研究會離不開這些工具。
+不過就像程式語言本來就是通用的工具，
+通常來說只要挑一門語言來學，接下來無論是研究、工作，
+都可以以同一招來應對，畢竟所有程式語言都是圖靈相等的。</p>
+<script src="ext/header-nctu.js?execute&amp;editable"></script>
+
+<script src="ext/paper.js?reference"></script>
+
+<link rel="stylesheet" href="ext/paper.css">
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

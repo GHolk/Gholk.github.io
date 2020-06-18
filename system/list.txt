@@ -305,3 +305,4 @@ linux-user.html
 school-should-use-free-software.html
 geomatics-proj-itrf-twd97-transform.html
 xml-starlet-kml-lack.html
+geomatics-seminar-hyperspectral-li.html

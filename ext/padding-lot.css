@@ -231,6 +231,10 @@ abbr:after {
     padding: 0 1em;
 }
 
+main pre > code.lang-wrap {
+    white-space: pre-wrap;
+}
+
 summary {
     margin: 1em;
 }

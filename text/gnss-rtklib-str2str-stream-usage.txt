@@ -1,0 +1,334 @@
+# 使用 rtklib str2str 串流資料
+rtklib 中用作資料串流的工具為 gui 介面的 strsvr 與 cli 介面的 str2str。
+但 str2str 欠缺說明，入門時我根本不會用，
+後來才漸漸試出 tcp 傳資料、記錄到檔案、
+時間戳、雙向資料連結等功能。
+同時本文也記錄使用上的一些問題，
+像型別差異導致的 time tag 格式不相容，
+與連接 serial 時會掉資料的問題。
+
+## serial 裝置
+我多是在一台接上 u-blox F9P 定位晶片的樹莓派裝置上進行定位實驗。
+在該裝置上 f9p 是以 serial 介面與樹莓派連接，
+在 linux raspbian 下表現為 `/dev/serial0` 裝置，
+讀取可以讀到 f9p 輸出的資料，而寫入可以對 f9p 下指令。
+但 serial 裝置似乎不是簡單用 cat dd 就能讀取，要用特別的程式；
+寫入就比較簡單，應該直接用 `echo command > /dev/serial0` 寫入即可。
+
+目前我只知道可以用 str2str 和 ser2net 二支程式讀取。
+str2str 要寫到 tcp 串流或檔案都可以，ser2net 就是寫到網路。
+二個都可以雙向溝通，但目前我只有用 ser2net 把 tcp
+
+另外 serial 裝置要設定 baud，
+裝置的鮑正確才能正常讀取寫入，錯誤的話會讀寫到錯誤的資料。
+在 linux 下需要手動設定，我只知道可以用 stty 設定和列出現在的 baud，
+但要怎麼測出正確的 baud 我就不知道了。
+
+```sh
+# 列出目前的裝置參數
+stty -F /dev/serial0 -a
+
+# 設定為 115200 baud
+stty -F /dev/serial0 115200
+```
+
+我目前想到的唯一方法就是用 str2str 讀出資料後，看資料正不正確；
+例如 u-blox 的資料就用 convbin 看能不能轉成 rinex，
+不行的話就可能是 baud 錯誤。
+
+## ser2net
+ser2net 是將 serial 裝置轉成 tcp 串流的程式，
+寫好設定檔 `/etc/ser2net.conf` 設好 baud 和 tcp port 後，
+連到該 tcp port 如用 nc，就能讀寫該 serial 裝置了。
+
+我平常是不用 ser2net 的，主要是用來設定 f9p 晶片的。
+f9p 晶片 u-blox 提供了 u-center 軟體來讀取資料和控制參數，
+u-center 只提供 windows 版，但我用 wine 可以在 debian stratch 下跑起來。
+u-center 可以直接和同一台電腦上的 serial 溝通，
+或是也可以透過 tcp 來讀取資料和下指令。
+
+f9p 的參數像是觀測周期、觀測星系、要不要輸出 nmea、輸出的觀測量、星曆等。
+如果是用 serial 裝置連接 f9p 的話，u-center 還能調整 baud，
+但用 u-center 則不能經 tcp 調整 baud。
+
+## str2str
+str2str 則是 rtklib 中用來處理資料串流的程式，還包含格式轉換的功能。
+也可以做到上述 ser2net 的功能，把 serial 資料透過 tcp 傳出來，
+甚至也能像 ser2net 透過同一個 tcp 連線讀寫的能力。
+但 str2str 的手冊頁寫的很爛，
+很多選項都只用一個單字帶過，第一次用的人根本看不懂。
+所以這裡會介紹一些常用的用法。
+
+linux 下裝好 rtklib 後，可以用 `man str2str` 看稍微詳細的手冊，
+或是 `str2str -h` 也會顯示簡短的說明。
+另外就是 rtklib 官網上的 pdf 格式手冊，
+在 debian 則是包在 rtklib-doc 裡，
+裝了會把該 pdf 放在 `/usr/share/doc/rtklib-doc` 。
+
+基本的用法是用 `-in` 選項指定輸入，用 `-out` 指定輸出，
+一個 str2str 可以有多個 out，但只能有一個 in。
+而輸入輸出的種類是檔案、裝置、tcp，
+則是用類似 url protocol 的雙斜線指定，
+像接 ntrip 資料就可以寫成 `-in ntrip://ip.address/path` 。
+帳號、密碼、連接埠也是用 url 的慣例寫法指定。
+
+### serial 裝置
+如果輸入是 serial，在 linux 下 serial 是 `/dev/serial0` 或其它數字。
+str2str 繼承了 windows 的用法，像連 com1 就是 com1，
+沒有完整的路徑，所以用 `serial://` 就不用寫 `/dev/` 。
+
+以下指令可以以 115200 baud 讀取 serial0 的資料，
+再從本機 2101 埠送出去，
+只要連到本機 2101 port，就會收到 serial 送出的資料，
+就類似 ser2net 的效果。
+若是不給定 baud，rtklib 預設是使用 115200。
+
+```sh
+str2str -in serial://serial0:115200 -out tcpsvr://:2101
+```
+
+tcpsvr 是表示 str2str 會 listen 本機的 2101 port 等待連線，
+而 str2str 設計上是會聽所有 tcp 介面，
+所以不論是 `127.0.0.1` 或固定 ip 都連的到，
+不能指定只聽 `127.1.2.3` 某個位址之類的。
+因為不能指定位址，所以 url 中的位址是省略不寫的。
+
+另外我發現也可以直接把 serial 當 file 讀取，
+所以寫成 `str2str -in file:///dev/serial0` 似乎也可以。
+
+### 雙向連結
+但預設是輸出端只能讀取，不像 ser2net 讀取外還可以寫入。
+如果要寫入，要加上 `-b 1` 選項，
+手冊中是寫 `-b` 選項會讓輸出端的寫入會回傳回輸入端；
+但應該只能用在少數幾種能同時讀寫的協議，
+像 tcp、serial、ntrip。
+
+手冊中的 `-b` 也寫的不清不楚，預設是 no，
+如果要開啟只加選項似乎沒用，該選項要加一個參數。
+我翻原始碼，是會用 atoi 把參數轉數字當布林值判斷，
+所以應該是要用 `-b 1` 。
+
+雙向連結一種用途是像 ser2net，給 u-center 下指令，
+另一種是用來餵入 ntrip 觀測量做 rtk。
+如果要做 rtk，應該要先用 u-center 設定好
+讓晶片輸出 nmea 或其它格式座標，
+然後餵入 rtcm 或支援的格式後，輸出的 nmea 即是 rtk 成果。
+
+### 存成檔案
+另一項我常用的功能是把 serial 存成檔案，
+之後再把檔案轉成 rinex，或是以同樣速度重播串流。
+那需要把 out 指定成 file 協議 `-out file://serial.log`，
+或是如果是檔案可以省略協議名，直接寫成 `-out serial.log` 。
+file 協議後可以接絕對路徑也可以接相對路徑，
+如果是絕對路徑，看起來就和瀏覽器一樣是三條線。
+
+```sh
+str2str -in serial://serial0:115200 file://serial.log
+```
+
+很多時候，我們希望可以用和記錄時相同的速度重播資料，
+那就可以在輸出到檔案時加上 `::T` 選項，
+即會在 `serial.log` 外再多存一個 time-tag 檔案 `serial.log.tag` ，
+有每個時間戳對應的檔案大小。
+
+```sh
+str2str -in serial://serial0:115200 file://serial.log::T
+```
+
+而重播時如果要依 time-tag 重播，也是加上 `::T` 選項即可。
+
+```sh
+str2str -in file://serial.log::T -out tcpsvr://:2101
+```
+
+### serial 讀取問題
+但我在樹莓派 raspbian 上用 str2str 讀取 serial 時，
+碰到問題是如果同時從 serial 讀取又寫到其它地方會漏資料。
+像是同時指定從 serial 讀取又寫到 tcp 就會漏。
+但寫到檔案似乎還好，但 time-tag 會變的很大。
+
+```sh
+str2str -in serial:///dev/serial0:115200 \
+        -out tcpsvr://:2101 -out file://serial.log::T
+```
+
+我在想可能是 baud 太高，或是從 serial 讀取是很累的一件事，
+又要寫 tcp 可能就對單一一支程序負擔太大。
+
+後來我發現如果寫到管道就比較不會漏資料，
+str2str 有個功能是如果沒有指定 in out 就會從標準輸入輸出讀取，
+（在 linux 下也可以用 file 指定 `/dev/stdin` `/dev/stdout` 。）
+所以就改成一支 str2str 把 serial 送到標準輸出，
+另一支把標準輸入送到 tcp 和檔案，這樣就不會漏了，
+但也就不能雙向讀寫。
+
+```sh
+str2str -in serial://serial0:115200 \
+| str2str -out tcpsvr://:2101
+```
+
+### time-tag 格式差異
+使用 `::T` 記錄時間戳檔案時，
+會因為不同平台上 C 語言的 `fpos_t` 的大小不同，
+而造成記錄成 32 bit 或 64 bit 無號整數。
+通常 32 bit 平台是記錄 32 bit，64 是 64，
+例如樹莓派是 32 bit，現在一般的 x86_64 是 64 bit。
+
+記錄時不能指定要記錄幾 bit，只能在讀取時改。
+雖然我覺得這應該可以從程式方面解決，
+就統一位元數，不要有時 32 有時 64；
+但至少目前我沒時間也沒能力改。
+
+在讀取時，str2str 可以指定檔案是 32 或 64，之後照原速播放，
+是用 `::P=4` 或 `::P=8` 的參數指定，
+分別對應 4 byte 32 bit 或 8 byte 64 bit。
+
+```sh
+str2str -in serial.log::T::P=4 -out tcpsvr://:2101
+```
+
+這個參數我找超級久，本來一直不知道為什麼重播會出錯，
+後來在 github issue 裡看到有人提到 P 參數，
+去翻 rtklib 原始碼 [src/stream.c] 才看到藏在原始碼註解裡的說明，
+str2str 手冊裡的說明連有 P 這個選項都沒提到。
+
+[src/stream.c]: https://github.com/GHolk/RTKLIB/blob/17a7219f0f6371/src/stream.c#L2714
+
+但 rtkrcv 中，似乎需要所有輸入的 time tag 都是同一格式。
+我有寫一支程式可以把 32 轉 64，但似乎沒什麼用，
+因為就算轉了，還是無法同步時間，原因見下一小節。
+
+### time-tag 同步問題
+rtklib 重播 time-tag 來事後模擬即時定位時，會有一些問題。
+rtkrcv 與 str2str 相同，在選擇輸入檔案時只要加上 `::T` ，
+就會依 time tag 檔案速度讀取。
+
+但如 rtk 或 rt-ppp 需要二個串流，
+如果二個 time-tag 的起始時間不同，rtkrcv 會嘗試同步。
+但同步是使用檔頭的一個時間戳，
+該時間戳在 linux 上是用 `clock_gettime(3)` `CLOCK_MONOTONIC` ，
+似乎是在同一台電腦上會連續的，但在不同台電腦上同步就會出錯。
+
+另一個做法是同時啟動二個 str2str，
+把資料丟到 tcp，rtkrcv 再從 tcp 讀資料。
+但是只要有微小的時間差，rtk 就可能會無法 fix，
+至少我是無法把在不同電腦上分別記錄的檔案 rtx fix。
+而時差對 rt-ppp 就幾乎沒有影響，
+因為 ssr 訊息的時差要求沒有 rtk 那麼嚴，所以差個幾秒也沒有影響。
+
+而且還有個問題是某些資料可能沒有帶時間戳，
+所以如 rtcm 的資料用 str2str tcp 串流出去，
+rtkrcv 讀到會以為是現在的修正資料，
+但其實是想要模擬解算，造成時間無法同步。
+所以說 rtcm 資料只能直接在 rtkrcv 裡和 time tag 檔案一起讀，
+這樣才會有正確的時間。
+
+比較好的作法是不要使用 str2str 的 time tag 功能，
+而是使用 rtkrcv 的 log-str 功能，
+在定位時把多個輸入都直接記錄原始資料與 time tag，
+因為是一起記錄的，所以重播時也就沒有同步問題。
+
+### tcp server 與 client
+另外 str2str 的 tcp 有分 server 與 client 二種，
+分別對應 `tcpsvr://` 與 `tcpcli://` 。
+二者的差別在於，server 是會在本機對應的 port 等待連線，
+而 client 則是會發起連線連到該 ip；
+二者都可以輸入輸出。
+
+例如同樣是輸出，可以以 server 輸出或 client 輸出。
+以 server 輸出就是在本機的該 port 等待連線，
+對方連上就會把現在的資料傳過去。
+而以 client 輸出意思是，就是會主動連過去該位址，連上後把資料傳過去。
+最簡單的方式就是對方也用一個 str2str 在另一台電腦上等你連上來丟資料。
+
+```sh
+# ip 192.168.1.10
+# 把 serial 的資料送到 192.168.1.11 port 2101
+str2str -in serial://serial0:115200 -out tcpcli://192.168.1.11:2101
+
+# ip 192.168.1.11
+# 把送到 port 2101 的資料存到檔案 serial.log 並儲存時間標記
+str2str -in tcpsvr://:2101 -out file://serial.log::T
+```
+
+### 格式轉換
+str2str 除了把資料丟來丟去的能力外，還有格式轉換的能力。
+用法是將輸入與輸出路徑結尾加上 `#` 再加上指定的格式，
+像是如果要把 ubx 格式轉成 rtcm3 訊息：
+
+```sh
+str2str -in serial://serial0:115200#ubx -out tcpsvr://:2101#rtcm3
+```
+
+但 rtcm3 格式可能得確認要輸出哪些 rtcm 訊息，
+有時預設輸出的那幾種可能不是你要用。
+以 str2str 來說，
+可以用 `-msg 1074,1084,1094` 等來指定要輸出的訊息編號，
+當然要是 rtklib 支援的 rtcm 訊息指定才有效。
+如果要指定輸出頻率可以寫成 `-msg "1074(5),1084(10),1094(20)"` ，
+分別指定三種訊息周期為 5 10 20 秒，
+要加雙引號是因為在 bash 裡括號是特殊字元。
+
+我也是 rtcm3 格式門外漢，所以對各訊息詳細內容也不是很了解。
+我只知道 rtcm3 訊息分的很細，有專供 rtk 用的訊息，
+也有純代表觀測量的訊息，還有廣播星曆用的訊息。
+rtklib 中主站可能需要觀測量訊息，而廣播星曆可以用接收儀觀測到的，
+也可以直接接 igs-rts 上的廣播星曆，可以讓接收儀不用傳那麼多資料回來。
+
+debug 最保險方式就是實際跑一次，看預設的能不能用。
+我 rtcm 訊息是在 [snip 的網站][snip rtcm cheat sheet] 查的，
+就把看起來用的到的都寫上去。
+或是程式底子夠可以直接翻 rtklib 原始碼。
+
+[snip rtcm cheat sheet]: https://www.use-snip.com/kb/knowledge-base/an-rtcm-message-cheat-sheet/
+
+這塊我不太熟，也沒有試過哪些訊息是可用的。
+我通常不會做轉換，都直接把 ubx 格式傳出去。
+如果是產品或長期監測，可能希望對外一律傳 rtcm 格式，
+甚至一律不傳廣播星曆訊息，在解算時一律用 igs-rts 的，
+還可以省頻宽，不然每個站回傳的廣播星曆都是一樣重復的，沒什麼意義。
+
+### 格式化路徑與檔案切割
+用 str2str 把資料存進檔案時，可能希望每天切成一個檔案，
+可以用 `::S=24` 選項，指定 24 小時切成一個檔案。
+那這時就不能用單純的路徑，不然下一個檔案會把上一個蓋掉。
+這時得搭配 printf 風格的格式化字串，在路徑中用特殊字元，
+表示日期時間等，實際即會存到對應的不同檔案中。
+
+```sh
+str2str -in serial://serial:115200 -out stream-%Y-%m-%dT%h-%M.log::T::S=24
+# stream-2020-08-21T20-00.log
+# 年 月 日 時 分
+```
+
+詳細的說明可以在 pdf 手冊裡 rtkget 的部份找到，
+但不是所有 rtkget 中的字元都支援，
+例如我發現流水號 `%N` 和站名 `%r` 都不支援。
+而時間粒度最小似乎只能到 1 也就是一小時。
+str2str 設計上似乎是在每個整點切，而不是從開始執行時間計算。
+
+## 直接用 tcp 傳輸的缺點
+一般 real-time 透過網路監控的作業，
+需要將接收儀的資料透過網路傳回來，
+或是把星曆、rtk 資料傳到接收儀端。
+如果只有一台接收儀，用 tcpsvr 和 tcpcli 就很夠用了，
+而當 server 的那端需要有公網 ip。
+
+但如果有多台接收儀就會比較麻煩，
+因為直接用 tcp 的話只能一個埠對應一個串流，
+如果有很多台接收儀就會開一堆埠，很難管理。
+在 gnss 領域中使用 ntrip 的架構來解決這個問題，
+其架構類似 http，客戶端統一對單一埠口連線，
+並將欲取得的資料名稱放在請求標頭中，
+而伺服器則依標頭提供對應的資料給客戶端。
+
+rtklib 的 str2str 與 strsvr，
+除了能以 ntrip clinet 身份收資料，
+也都有扮演 ntrip caster 的能力。
+詳細請見下一篇文章， <./gnss-rtklib-str2str-ntrip-caster.html> 。
+
+#linux
+#gnss
+#cli
+#study
+#nctu

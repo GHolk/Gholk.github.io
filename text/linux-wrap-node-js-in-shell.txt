@@ -1,0 +1,189 @@
+# 簡單將 node.js 或其它腳本語言的函數包裝成執行檔
+有時一些 npm 的套件沒有提供命令列的呼叫介面，
+或是想用的功能在 node.js 裡就能做到，
+懶的另外用 apt 裝可執行檔的程式。
+這時就能用 node 的 `-e` 選項直接執行一小段程式，
+可以簡單直接把參數放到指令裡，或透過 argv 傳，
+使用上還可以把整段程式設成 alias 或者寫成 shell script。
+這種用法也可以適用於 python perl 等其它直譯式語言。
+
+## 前言
+以前用 fedora 23 lxde 時有支程式可以轉各類編碼，
+像 base64、xml entities、urlencode 等。
+但我忘了那工具叫什麼名字，只記得他是用子命令的方式呼叫，
+像是跳脫 xml 就是 `xxxencoder xml < article.txt` ，
+之後 `<>&` 就會被取代成 `&lt;` `&gt;` `&amp;` 。
+
+之後換到 debian 偶爾需要跳脫時，
+沒有現成的工具在手邊就不太方便。
+雖然也可以裝專門的 apt 套件，
+但總覺得為了這麼簡單的事額外裝套件有點蠢，
+只要開 node.js 或是在瀏覽器的開發者工具，
+呼叫 `encodeURIComponent` 即可以用百分號編碼，
+可是每次都要這樣開又很麻煩。
+
+## 用 shebang 和腳本語言解決
+後來就寫了簡單的 node.js 腳本 [urlencode][node.js urlencode] ，
+呼叫 js 內建的函數來編碼 url。
+但發現這樣寫一寫其實程式量還不少，要 30 行多。
+
+[node.js urlencode]: https://github.com/gholk/loco/blob/f67abd2/bin/urlencode.js
+
+一方面是我特別寫成物件導向，
+加上還要處理命令列選項，所以程式稍微多了一點。
+另一個問題是 node.js 在讀取標準輸入上不太方便，
+只能用事件驅動的方式讀資料。
+
+node.js 為了支援 shebang，
+特別允許在程式的第一行有 `#!` 開頭。
+而其它腳本語言，多半將 `#` 號做為註解，
+而能直接忽略 shebang。
+
+例如 awk 就可以用 shebang 化身為可執行檔，
+除了用 `awk -f` 指定從檔案裡讀取程式執行外，
+也可以加上執行權限與 shebang 直接執行；
+[可以參考我 github 上的 awk 程式][git awk file] 。
+
+[git awk file]: https://github.com/gholk/loco/blob/f67abd2/gnss/nmea-to-tsv.awk
+
+## 用 one liner 解決
+一些程式語言有 one liner 的設計，
+除了叫出 repl 從 stdin 打程式外，
+可以把程式用 `-e` 選項傳入直接執行，
+就像直接呼叫一個小工具一樣，
+可以用來在 shell 裡做 shell 缺少的數學計算。
+
+```sh
+a=16
+b=9
+perl -e "print $a/$b"
+```
+
+或者也有本身就是設計來做 one liner 的工具，如 sed awk。
+
+```sh
+sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g;' < article.txt
+awk 'BEGIN {print 16/9}'
+```
+
+這些 one liner 雖然寫起來不長，
+但首先要是對該語言夠熟悉才有能力使用。
+而且一般語言寫 one liner 不太方便，
+像 c 或 java 根本不能想像寫成 one liner，
+比較適合的像是 sed awk，通用的程式語言則有 perl。
+
+perl 語言設計上包含了大量的簡寫、省略、特殊符號，
+使得 perl 成為最適合寫 one liner 的語言。
+[網路上有不少 perl one liner 的範例][perl one liner gist]，
+對於懶得學 sed awk 的人，可以選擇只學 perl 一個當二個打。
+
+[perl one liner gist]: https://gist.github.com/joyrexus/7328094
+
+## 讀參數、環境變數、標準輸入
+前面的用法大多是把變數用 shell 的變數代換，
+用雙引號直接嵌在要執行的程式碼內。
+但這種作法的缺點是要擔心特殊字元的跳脫，
+還有把資料和程式混在一起。
+其實多數直譯器，只要不是從 stdin 輸入程式，
+都可以像一般寫程式讀 stdin、參數。
+如果要傳參數，各語言有自己的習慣，
+以 node.js 來說，就是有 `-e` 選項的話，其它就會被視為參數。
+
+```term
+~ $ node -e 'console.log(process.argv)' hello world "$PWD" 'by by'
+[ '/usr/bin/node', 'hello', 'world', '/home/gholk', 'by by' ]
+```
+
+例如如果想傳一個陣列到程式裡，
+那一般內建的字串傳就要想辦法先把資料格式化成該語言的陣列寫法。
+如果用參數傳就比較簡單，因為參數在 shell 已經都分割好了。
+
+```term
+~ $ node -p 'process.argv.slice(1).sort()' hello world "$PWD" 'by by'
+[ '/home/gholk', 'by by', 'hello', 'world' ]
+```
+
+## 存成腳本
+這些 one liner 雖然寫起來不長，但每次都要重新打一邊也是很麻煩。
+因此有些人會放到 bashrc 的 alias 或 function，比較不會忘記。
+
+```sh
+alias urlencode="node -p \"encodeURIComponent(process.argv.slice(1).join(' '))\""
+
+urldecode() {
+    node -p "encodeURIComponent(process.argv.slice(1).join(' '))" "$@"
+}
+```
+
+甚至一些比較少用或比較長的 one liner，就直接寫成一個腳本，
+可以用前面提過的 [shebang](#用-shebang-和腳本語言解決) ，
+不適合 shebang 的，則可以用 shell 包裝。
+
+## 使用 shell 包裝
+有些程式不適合使用 shebang，也可以改成寫 shell 腳本，
+再在腳本裡呼叫程式傳入程式碼。
+
+```sh
+#!/bin/sh
+node -p "encodeURIComponent(process.argv.slice(1).join(' '))" "$@"
+```
+
+一些程式能力不足的 dsl 會用這種做法，
+例如 gnuplot 如果要使用其語言完成參數解析、邏輯處理、計算等工作可能有困難，
+所以不會用 `#!/usr/bin/gnuplot` 這種寫法。
+因此常和 shell 搭配使用，甚至使用 awk 對輸入做預處理，
+如 [我幾個月前寫的 gnuplot 和 awk 合作的腳本][gnuplot shell] ，
+與其看成 gnuplot 腳本，也能看成 awk 腳本。
+
+[gnuplot shell]: https://github.com/GHolk/loco/blob/aca8fac/gnss/sar-spatial-temporal-baseline.sh
+
+另一項理由是方便。
+如 node.js 要處理標準輸入較麻煩，需要使用到事件導向的函數，
+直接以 shell 負責讀取標準輸入，再以參數傳入會較方便。
+
+```sh
+#!/bin/sh
+if [ $# -eq 0 ]
+then data="$(cat)"
+else data="$*"
+fi
+
+node -e 'require("qrcode-terminal").generate(process.argv[1], {small:true}))' \
+    -- "$data"
+```
+
+例如以上是呼叫 qrcode-terminal 這項 npm 套件來產生 qrcode 的腳本，
+雖然該套件也有提供可執行的腳本，但並不支援 small 選項，
+因此只能寫一段簡單的程式來載入該套件，
+並依需求客制化選項產生 qrcode。
+
+## 套件提供的主程式
+npm 的設計上是一個套件可以包含可執行檔，
+在安裝時會裝到資料夾的 `node_modules/.bin` 或是 `~/.local/bin` 。
+但 python 的做法則是，一個模組除了直接載入外，
+如果用 `-m` 選項加上模組名稱，即可以直接執行該檔案，
+而在程式內部則可以用 `__name__ == '__main__'` 來判斷
+此腳本目前是作為模組被載入或被執行。
+
+因此在程式撰寫上，可以把函式庫和主程式腳本寫在同一支程式裡。
+在執行期間再判斷目前程式是被載入或被執行，
+若是被執行就表現出命令列程式的行為，
+否則就只提供函數，不執行具體行為。
+
+node.js 雖然也能用 `require.main == module` 
+來判斷目前腳本是被載入或是被執行，卻缺少 python 的 `-m` 選項。
+雖然有 `-r` 選項，但僅具備事先載入的功能，
+而不能將模組作為主程式執行。
+
+舊有的 npm 中，全域安裝的程式會直接寫入使用者指定的路徑，
+一般也會在 PATH 裡，沒什麼問題。
+但安裝在專案目錄下的套件會放在 `node_modules/.bin` 裡，
+要執行起來稍嫌麻煩，
+唯一比較方便的做法是 `$(npm bin)/script-name` ，
+或直接寫路徑 `node_modules/.bin/script-name` 。
+而新版的 npm 則多出了 npx 這支程式，
+可以直接寫成 `npx script-name` 。
+
+#javascript
+#linux
+#shell

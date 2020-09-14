@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2020-09-07T11:52:37.771Z</updated>
+  <updated>2020-09-14T07:17:19.912Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,349 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/android-adb-tor-howto.html</id>
+<title>使用 adb 經 tor 網路連上具有洋蒽網址的 android</title>
+<published>2020-09-14T07:01:19.528Z</published>
+<updated>2020-09-14T07:17:19.899Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/android-adb-tor-howto.html"/>
+<summary type="html">tor 除了用來隱藏真實 ip，
+還有一個好用的功能是能直接連線到無公網 ip 的裝置。
+因此手機裝好 tor 後，無論有無公網 ip、使用行動網路或 wifi，
+都可以在手機上開 vnc、sftp、adb over tcp 等服務，
+在電腦上使用 torsocks 包裝程式後直接連線到手機。
+但使用 adb 連線時，因為 PC 端 adb 程式的設計，
+使用上需要將 daemon 丟到 tor 內，但 client 則需要在 tor 外。</summary>
+<category term="android"/>
+<category term="adb"/>
+<category term="tor"/>
+<content type="html">&lt;h1 id=&quot;使用-adb-經-tor-網路連上具有洋蒽網址的-android&quot;&gt;使用 adb 經 tor 網路連上具有洋蒽網址的 android&lt;/h1&gt;
+&lt;p&gt;tor 除了用來隱藏真實 ip，
+還有一個好用的功能是能直接連線到無公網 ip 的裝置。
+因此手機裝好 tor 後，無論有無公網 ip、使用行動網路或 wifi，
+都可以在手機上開 vnc、sftp、adb over tcp 等服務，
+在電腦上使用 torsocks 包裝程式後直接連線到手機。
+但使用 adb 連線時，因為 PC 端 adb 程式的設計，
+使用上需要將 daemon 丟到 tor 內，但 client 則需要在 tor 外。&lt;/p&gt;
+&lt;h2 id=&quot;tor-簡介&quot;&gt;tor 簡介&lt;/h2&gt;
+&lt;p&gt;tor 最主要的功能是隱藏自己的 ip 位址，
+經由 tor 連線到其它伺服器時，
+對方無法看到你的真實位址，而是會看到 tor 出口的位址。&lt;/p&gt;
+&lt;p&gt;同時若是將伺服器架在 tor 網路內，
+則連線上的客戶端也不知道伺服器的 ip，
+連線時是使用 tor 軟體產生的 &lt;code&gt;*.onion&lt;/code&gt; 洋蒽地址，
+來讓客戶端能連上伺服器。
+tor 地址還有一個特性，也就是無論是否有公網 ip，
+都可以產生洋蒽地址，讓其它使用者直接連線。&lt;/p&gt;
+&lt;h2 id=&quot;tor-on-android&quot;&gt;tor on android&lt;/h2&gt;
+&lt;p&gt;在 android 上有 orbot 這款 tor 官方的 app 可以使用，
+執行後可以讓特定 app 的連線都走 tor，
+或使用 vpn 模式讓整支手機的連線都經由 tor。&lt;/p&gt;
+&lt;p&gt;某些需要連線的 app，如我用的 ssh 的 connect bot vx，
+是用來連線 ssh server 的，如果他經由 tor 連線，
+則連線的域名也可以是洋蒽地址；
+那就可以用來連到沒有公網 ip 的電腦。&lt;/p&gt;
+&lt;h2 id=&quot;android-tor-service&quot;&gt;android tor service&lt;/h2&gt;
+&lt;p&gt;orbot 同時也提供產生洋蒽地址的功能，
+使用其中的 onion services &amp;gt; hosted services，
+即可產生供外部連入的洋蒽地址。
+orbot 的 ui 設計是一個地址只對應一個本機的連接埠，
+可能是因為安全考量，這樣就不會讓人發現多個服務都在同一個地址上&lt;/p&gt;
+&lt;p&gt;（雖然一個洋蒽地址理論上是對應到一支 ip，
+通常是設成自己的 ip，也就是 127.0.0.1，
+一支 ip 則可以有 65536 個埠，但開放是選擇性的，
+一般只會開要架設的服務用到的埠。）&lt;/p&gt;
+&lt;p&gt;如果你的 android 有 &lt;a href=&quot;adb-over-wifi.html&quot;&gt;經由網路讓 adb 連入的功能&lt;/a&gt; ，
+那你就可以開 adb 用的 5555 埠；
+ftp 通常會用 2121，因為開 21 要 root；
+sftp 常用 2222，vnc 5900 等。&lt;/p&gt;
+&lt;p&gt;開好後，就可以用其它裝置經由 tor，
+以洋蒽地址連上你的 android 上的對應連接埠。
+以 linux 上來說，會使用 torsocks 這支程式
+來包裝對應的 client 程式。&lt;/p&gt;
+&lt;p&gt;例如要使用 tor 連上 sftp：
+（這洋蒽位址是假的，不用嘗試。）&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# connect to sftp
+android_ip=192.168.0.1
+sftp -P 2222 android@$android_ip
+
+# connect sftp via tor
+android_tor_address=6jazqa4obmpudf6qxs46gzqgt2ckb356rticws4d4gv4lsqk2fz7b47f.onion
+torsocks sftp -P 2222 android@$android_tor_address
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;這種做法的優勢是，多數這些經由網路的服務，
+都需要 android 手機的 ip。
+但多數時候 android 手機都是經由行動網路上網，
+拿到的都是浮動 ip 甚至虛擬 ip，
+浮動 ip 有時會被電信商以防火牆擋住，而虛擬 ip 則根本無法連線。
+故只有在使用 wifi 時，或是以手機分享熱點時，
+手機才會和 PC 在同一區網，也才能以虛擬 ip 連入。&lt;/p&gt;
+&lt;p&gt;但使用 tor 時無論 ip 為何，只要能接觸網路網路，
+都可以經由同一組洋蒽地址連入。
+所以就算是使用行動網路，
+開啟 tor 後即可以以電腦經 adb，
+或其它需要 android ip 的軟體連上 android。&lt;/p&gt;
+&lt;h2 id=&quot;PC-端-adb-的設計&quot;&gt;PC 端 adb 的設計&lt;/h2&gt;
+&lt;p&gt;adb 連線的問題是在 PC 這端的 adb 程式上。
+adb 設計上都是走 tcp 連線，就算是經由 usb 將 android 連上 pc，
+adb 也是在 usb 上用 tcp 和 android 連線。&lt;/p&gt;
+&lt;p&gt;而 PC 上的 adb 設計成 daemon 和 client 二部份，
+daemon 在後台執行，保持和 android 的連線，
+而執行 adb 指定時，則是啟動 adb client 和 daemon 連線；
+而這 client 和 daemon 間，同樣是以 tcp 連線。
+使用上 adb client 執行時，如果沒有發現 adb daemon，
+則會自動啟動一支 daemon。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ adb devices
+List of devices attached
+* daemon not running; starting now at tcp:5037
+* daemon started successfully
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;pc-端-adb-連線的問題&quot;&gt;pc 端 adb 連線的問題&lt;/h2&gt;
+&lt;p&gt;adb client 與 daemon 連線是，是連到 localhost &lt;code&gt;127.0.0.1:*&lt;/code&gt; ，
+但 tor 預設是不允許連線到 localhost 的：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ torsocks nc localhost 5566
+1600064227 WARNING torsocks[15253]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
+localhost [127.0.0.1] 5566 (?) : Operation not permitted
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;而且實際上在和手機連線的是 adb daemon，
+所以單純讓 client 跑在 tor 是沒有用的，
+要讓 daemon 跑在 tor 裡，
+daemon 才能連上 android 的洋蒽地址。
+而 client 則不能跑在 tor 裡，不然會不能和 localhost 的 daemon 連線。&lt;/p&gt;
+&lt;h2 id=&quot;使用-adb-經-tor-連線的方式&quot;&gt;使用 adb 經 tor 連線的方式&lt;/h2&gt;
+&lt;p&gt;首先先檢查有沒有已經執行中的 adb daemon，如果有就把他終止。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ pgrep --list-full --full adb
+14748 adb -L tcp:5037 fork-server server --reply-fd 4                          
+~ $ kill 14748
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;再來，就得啟動一支在 tor 內的 daemon，
+因為 adb man-page 裡沒寫怎麼以 daemon 方式執行，
+我就直接用 adb 會自動啟動的特性，
+以及子程序會繼承父程序的環境變數，
+啟動一支在 tor 裡的子程序，讓 client fork 出的 daemon，
+也位在 tor 裡，之後經該 daemon 的連線就都會走 tor 了。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ torsocks adb devices # fork daemon from process inside tor
+List of devices attached
+1600065838 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
+1600065838 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
+* daemon not running; starting now at tcp:5037
+* daemon started successfully
+1600065841 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
+1600065841 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
+* daemon still not running
+error: cannot connect to daemon at tcp:5037: Operation not permitted
+~ $ adb devices
+List of devices attached
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;雖然啟動 daemon 後有跳錯誤，
+那是因為 client 發現 daemon 不存在，
+先啟動 daemon 後 client 再繼續原本的指令 devices，
+但因為 client 也在 tor 裡，所以不能與 localhost 連線，就報錯了。
+之後 daemon 也的確有成功啟動，
+不使用 torsocks 啟動的 client 也能成功與 daemon 連線。&lt;/p&gt;
+&lt;p&gt;之後與 tor 中的 android 連線時，
+adb 指令也都不需要使用 torsocks；
+因為 adb daemon 已經在 tor 中執行了，
+所以與經 daemon 的 client 也都能使用洋蒽位址。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;adb connect 6jazqa4obmpudf6qxs46gzqgt2ckb356rticws4d4gv4lsqk2fz7b47f.onion
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+</entry><entry>
+<id>http://gholk.github.io/adb-over-wifi.html</id>
+<title>透過 wifi 執行 adb</title>
+<published>2017-09-20T12:38:27.641Z</published>
+<updated>2020-09-14T07:16:32.293Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/adb-over-wifi.html"/>
+<summary type="html">Android Debug Bridge 是刷 android 系統
+和做各種壞事的必要工具。
+其實雖然稱為線刷，但不透過線也是可以的。
+adb 底層是透過 tcp/ip 實作，所以可以透過 wifi 也運作。</summary>
+<category term="刷機"/>
+<category term="android"/>
+<category term="wifi"/>
+<category term="無線"/>
+<content type="html">&lt;h1 id=&quot;透過-wifi-執行-adb&quot;&gt;透過 wifi 執行 adb&lt;/h1&gt;
+&lt;p&gt;Android Debug Bridge 是刷 android 系統
+和做各種壞事的必要工具。
+其實雖然稱為線刷，但不透過線也是可以的。
+adb 底層是透過 tcp/ip 實作，所以可以透過 wifi 也運作。&lt;/p&gt;
+&lt;p&gt;身為一個 nerd，如果還要接 usb 就 low 掉了，
+電腦的 usb 孔容易鬆，
+現在也流行用雲端，沒人在用 usb 的。&lt;/p&gt;
+&lt;h2 id=&quot;無-root&quot;&gt;無 root&lt;/h2&gt;
+&lt;p&gt;無 root 也能用，
+確認 android 和 PC 在同一區網，
+接上線進入偵錯模式。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;adb devices # 看有沒有抓到 android
+adb tcpip 5555 # 設定用 tcpip 5555 port
+# 可以拔掉線了
+adb connect $your_android_ip # 在手機裡 wifi 裡看 android 的 ip
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;(這邊我沒實驗，以前用過但忘了，
+應該沒錯吧。)&lt;/p&gt;
+&lt;h2 id=&quot;有-root&quot;&gt;有 root&lt;/h2&gt;
+&lt;p&gt;去 google play 找 adb wifi 應該就用不少，
+我是用 f-droid 的 &lt;a href=&quot;https://f-droid.org/en/packages/com.github.sryze.wirebug/&quot;&gt;ADB Manager&lt;/a&gt; ，
+另一款有 bug 不能裝。
+開啟 app 點 Start Network ADB 後就能用了，
+PC 一樣要下 &lt;code&gt;adb connect $your_android_ip&lt;/code&gt; 。&lt;/p&gt;
+&lt;h2 id=&quot;換成-wirebug&quot;&gt;換成 wirebug&lt;/h2&gt;
+&lt;p&gt;後來在新手機 atom 上不 adb manager 不能用，
+就又找到一款更老的 &lt;a href=&quot;https://f-droid.org/en/packages/com.github.sryze.wirebug/&quot;&gt;wirebug&lt;/a&gt; ，介面簡單好用，
+而且啟動後還會釘選在通知欄，
+通知上還有一顆按鈕可以直接關掉 adb。&lt;/p&gt;
+&lt;h2 id=&quot;在-4g-行動網路或內網-ip-中用-ssh-轉發&quot;&gt;在 4g 行動網路或內網 ip 中用 ssh 轉發&lt;/h2&gt;
+&lt;p&gt;如果手機在行動網路，或是 wifi 是在內網中，
+但想連上的電腦不在同一內網，這時如果有一台有公網 ip 的伺服器，
+就能 &lt;a href=&quot;android-adb-4g-ssh-tunnel.html&quot;&gt;用 vx connect bot 把手機上的 port 綁到伺服器上&lt;/a&gt; 。
+之後直接連該伺服器的 ip 就行了。&lt;/p&gt;
+&lt;h2 id=&quot;把-adb-做成-tor-service-經由洋蒽位址連線&quot;&gt;把 adb 做成 tor service 經由洋蒽位址連線&lt;/h2&gt;
+&lt;p&gt;後來發現手機上也能跑 tor，
+&lt;a href=&quot;android-adb-tor-howto.html&quot;&gt;使用 tor 的洋蒽位址&lt;/a&gt;，
+不管 android 有沒有公網 ip 都能直接連線了。&lt;/p&gt;
+</content>
+</entry><entry>
+<id>http://gholk.github.io/android-adb-tor-howto.html</id>
+<title>使用 adb 經 tor 網路連上具有洋蒽網址的 android</title>
+<published>2020-09-14T07:01:19.528Z</published>
+<updated>2020-09-14T07:08:54.661Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/android-adb-tor-howto.html"/>
+<summary type="html">tor 除了用來隱藏真實 ip，
+還有一個好用的功能是能直接連線到無公網 ip 的裝置。
+因此手機裝好 tor 後，無論有無公網 ip、使用行動網路或 wifi，
+都可以在手機上開 vnc、sftp、adb over tcp 等服務，
+在電腦上使用 torsocks 包裝程式後直接連線到手機。</summary>
+<category term="android"/>
+<category term="adb"/>
+<category term="tor"/>
+<content type="html">&lt;h1 id=&quot;使用-adb-經-tor-網路連上具有洋蒽網址的-android&quot;&gt;使用 adb 經 tor 網路連上具有洋蒽網址的 android&lt;/h1&gt;
+&lt;p&gt;tor 除了用來隱藏真實 ip，
+還有一個好用的功能是能直接連線到無公網 ip 的裝置。
+因此手機裝好 tor 後，無論有無公網 ip、使用行動網路或 wifi，
+都可以在手機上開 vnc、sftp、adb over tcp 等服務，
+在電腦上使用 torsocks 包裝程式後直接連線到手機。&lt;/p&gt;
+&lt;h2 id=&quot;tor-簡介&quot;&gt;tor 簡介&lt;/h2&gt;
+&lt;p&gt;tor 最主要的功能是隱藏自己的 ip 位址，
+經由 tor 連線到其它伺服器時，
+對方無法看到你的真實位址，而是會看到 tor 出口的位址。&lt;/p&gt;
+&lt;p&gt;同時若是將伺服器架在 tor 網路內，
+則連線上的客戶端也不知道伺服器的 ip，
+連線時是使用 tor 軟體產生的 &lt;code&gt;*.onion&lt;/code&gt; 洋蒽地址，
+來讓客戶端能連上伺服器。
+tor 地址還有一個特性，也就是無論是否有公網 ip，
+都可以產生洋蒽地址，讓其它使用者直接連線。&lt;/p&gt;
+&lt;h2 id=&quot;tor-on-android&quot;&gt;tor on android&lt;/h2&gt;
+&lt;p&gt;在 android 上有 orbot 這款 tor 官方的 app 可以使用，
+執行後可以讓特定 app 的連線都走 tor，
+或使用 vpn 模式讓整支手機的連線都經由 tor。&lt;/p&gt;
+&lt;p&gt;某些需要連線的 app，如我用的 ssh 的 connect bot vx，
+是用來連線 ssh server 的，如果他經由 tor 連線，
+則連線的域名也可以是洋蒽地址；
+那就可以用來連到沒有公網 ip 的電腦。&lt;/p&gt;
+&lt;h2 id=&quot;android-tor-service&quot;&gt;android tor service&lt;/h2&gt;
+&lt;p&gt;orbot 同時也提供產生洋蒽地址的功能，
+使用其中的 onion services &amp;gt; hosted services，
+即可產生供外部連入的洋蒽地址。
+orbot 的 ui 設計是一個地址只對應一個本機的連接埠，
+可能是因為安全考量，這樣就不會讓人發現多個服務都在同一個地址上&lt;/p&gt;
+&lt;p&gt;（雖然一個洋蒽地址理論上是對應到一支 ip，
+通常是設成自己的 ip，也就是 127.0.0.1，
+一支 ip 則可以有 65536 個埠，但開放是選擇性的，
+一般只會開要架設的服務用到的埠。）&lt;/p&gt;
+&lt;p&gt;如果你的 android 有 &lt;a href=&quot;adb-over-wifi.html&quot;&gt;經由網路讓 adb 連入的功能&lt;/a&gt; ，
+那你就可以開 adb 用的 5555 埠；
+ftp 通常會用 2121，因為開 21 要 root；
+sftp 常用 2222，vnc 5900 等。&lt;/p&gt;
+&lt;p&gt;開好後，就可以用其它裝置經由 tor，
+以洋蒽地址連上你的 android 上的對應連接埠。
+以 linux 上來說，會使用 torsocks 這支程式
+來包裝對應的 client 程式。&lt;/p&gt;
+&lt;p&gt;例如要使用 tor 連上 sftp：
+（這洋蒽位址是假的，不用嘗試。）&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# connect to sftp
+android_ip=192.168.0.1
+sftp -P 2222 android@$android_ip
+
+# connect sftp via tor
+android_tor_address=6jazqa4obmpudf6qxs46gzqgt2ckb356rticws4d4gv4lsqk2fz7b47f.onion
+torsocks sftp -P 2222 android@$android_tor_address
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;這種做法的優勢是，多數這些經由網路的服務，
+都需要 android 手機的 ip。
+但多數時候 android 手機都是經由行動網路上網，
+拿到的都是浮動 ip 甚至虛擬 ip，
+浮動 ip 有時會被電信商以防火牆擋住，而虛擬 ip 則根本無法連線。
+故只有在使用 wifi 時，或是以手機分享熱點時，
+手機才會和 PC 在同一區網，也才能以虛擬 ip 連入。&lt;/p&gt;
+&lt;p&gt;但使用 tor 時無論 ip 為何，只要能接觸網路網路，
+都可以經由同一組洋蒽地址連入。
+所以就算是使用行動網路，
+開啟 tor 後即可以以電腦經 adb，
+或其它需要 android ip 的軟體連上 android。&lt;/p&gt;
+&lt;h2 id=&quot;PC-端-adb-的設計&quot;&gt;PC 端 adb 的設計&lt;/h2&gt;
+&lt;p&gt;adb 連線的問題是在 PC 這端的 adb 程式上。
+adb 設計上都是走 tcp 連線，就算是經由 usb 將 android 連上 pc，
+adb 也是在 usb 上用 tcp 和 android 連線。&lt;/p&gt;
+&lt;p&gt;而 PC 上的 adb 設計成 daemon 和 client 二部份，
+daemon 在後台執行，保持和 android 的連線，
+而執行 adb 指定時，則是啟動 adb client 和 daemon 連線；
+而這 client 和 daemon 間，同樣是以 tcp 連線。
+使用上 adb client 執行時，如果沒有發現 adb daemon，
+則會自動啟動一支 daemon。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ adb devices
+List of devices attached
+* daemon not running; starting now at tcp:5037
+* daemon started successfully
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;pc-端-adb-連線的問題&quot;&gt;pc 端 adb 連線的問題&lt;/h2&gt;
+&lt;p&gt;adb client 與 daemon 連線是，是連到 localhost &lt;code&gt;127.0.0.1:*&lt;/code&gt; ，
+但 tor 預設是不允許連線到 localhost 的：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ torsocks nc localhost 5566
+1600064227 WARNING torsocks[15253]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
+localhost [127.0.0.1] 5566 (?) : Operation not permitted
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;而且實際上在和手機連線的是 adb daemon，
+所以單純讓 client 跑在 tor 是沒有用的，
+要讓 daemon 跑在 tor 裡，
+daemon 才能連上 android 的洋蒽地址。
+而 client 則不能跑在 tor 裡，不然會不能和 localhost 的 daemon 連線。&lt;/p&gt;
+&lt;h2 id=&quot;使用-adb-經-tor-連線的方式&quot;&gt;使用 adb 經 tor 連線的方式&lt;/h2&gt;
+&lt;p&gt;首先先檢查有沒有已經執行中的 adb daemon，如果有就把他終止。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ pgrep --list-full --full adb
+14748 adb -L tcp:5037 fork-server server --reply-fd 4                          
+~ $ kill 14748
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;再來，就得啟動一支在 tor 內的 daemon，
+因為 adb man-page 裡沒寫怎麼以 daemon 方式執行，
+我就直接用 adb 會自動啟動的特性，
+以及子程序會繼承父程序的環境變數，
+啟動一支在 tor 裡的子程序，讓 client fork 出的 daemon，
+也位在 tor 裡，之後經該 daemon 的連線就都會走 tor 了。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ torsocks adb devices # fork daemon from process inside tor
+List of devices attached
+1600065838 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
+1600065838 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
+* daemon not running; starting now at tcp:5037
+* daemon started successfully
+1600065841 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
+1600065841 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
+* daemon still not running
+error: cannot connect to daemon at tcp:5037: Operation not permitted
+~ $ adb devices
+List of devices attached
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;雖然啟動 daemon 後有跳錯誤，
+那是因為 client 發現 daemon 不存在，
+先啟動 daemon 後 client 再繼續原本的指令 devices，
+但因為 client 也在 tor 裡，所以不能與 localhost 連線，就報錯了。
+之後 daemon 也的確有成功啟動，
+不使用 torsocks 啟動的 client 也能成功與 daemon 連線。&lt;/p&gt;
+&lt;p&gt;之後與 tor 中的 android 連線時，
+adb 指令也都不需要使用 torsocks；
+因為 adb daemon 已經在 tor 中執行了，
+所以與經 daemon 的 client 也都能使用洋蒽位址。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;adb connect 6jazqa4obmpudf6qxs46gzqgt2ckb356rticws4d4gv4lsqk2fz7b47f.onion
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/linux-wrap-node-js-in-shell.html#存成腳本</id>
 <title>簡單將 node.js 或其它腳本語言的函數包裝成執行檔</title>
 <published>2020-09-07T06:53:03.436Z</published>
@@ -2944,290 +3287,7 @@ Juice Weld：好想念癲癇發作之前
 <category term="程式"/>
 <category term="xml"/>
 <category term="cli"/>
-<content type="html">&lt;h1 id=&quot;xmlstarlet-處理-kml-資料的經驗&quot;&gt;xmlstarlet 處理 kml 資料的經驗&lt;/h1&gt;
-&lt;p&gt;trimble 接收儀內建的定位可以輸出成 kml 格式，
-要把 kml 中的座標取出來，翻出了很久以前聽說過的神器 xmlstarlet。
-但只能說 xml 的設計有缺陷，沒有達到當初很多人期望的效果；
-加上很多工具操作上也沒有想像上的方便。
-後來 json 興起，算是對 xml 複雜的一種反撲。&lt;/p&gt;
-&lt;h2 id=&quot;trimble-接收儀的輸出格式&quot;&gt;trimble 接收儀的輸出格式&lt;/h2&gt;
-&lt;p&gt;最近在測 trimble 推出的 rtx 服務，感覺是一種 ppp-rtk。
-其透過通訊衛星廣播改正資料，只要是支援該服務的接收儀，
-在收 gnss 訊號同時即會接收到改正資料，也就會直接以 rtx 定位。
-所以幾乎是無需設定，開箱即用的服務。&lt;/p&gt;
-&lt;p&gt;trimble 接收儀有二種 io 方式，一是即時的，一是儲存到內部硬碟。
-一般 trimble 接收儀有提供網路、藍牙、序列埠數種即時介面，
-在設定上可以讓接收儀把資料從以上管道即時輸出。
-可以輸出 binex 原始資料、其它 trimble 的專利格式、直接定位的座標等。
-若是支援 rtx 的接收儀，其直接定位的座標就是有 rtx 的成果。&lt;/p&gt;
-&lt;p&gt;但在戶外作業時，還要背一台電腦連到接收儀上，
-只為了存他輸出的座標實在有點蠢，
-所以使用另一種儲存到內部硬碟的方式。&lt;/p&gt;
-&lt;p&gt;存到內部硬碟的格式是 trimble 的專利格式 t02，
-一般使用上是可以用 trimble business center 讀出裡面的資料，
-我之前使用上都是用 trimble 提供的 convert to rinex 程式把 t02 轉成 rinex。
-但其實 t02 除了 gnss 觀測資料，還存了很多有的沒的，
-像接收儀的硬體資訊、電量，連內建的定位結果也會存在裡面。
-（在 session 中的 position interval 可以控制要多久記錄一次座標。）&lt;/p&gt;
-&lt;p&gt;但我無法從 t02 讀出定位座標。
-交大土木的 tbc 因為大人的原因我沒辦法用，
-而 convert to rinex 如同字面上的意思，
-只能轉出 rinex 而不能轉出其它資訊。
-t02 又是專利格式，我也沒辦法直接解析。&lt;/p&gt;
-&lt;h3 id=&quot;從-t02-取出座標的方式&quot;&gt;從 t02 取出座標的方式&lt;/h3&gt;
-&lt;p&gt;我後來找到二個方式，
-一是網頁工具以 ascii dump 出 t02 內的訊息，
-一是用接收儀內建的轉換功能轉成 kml，再取出其中的座標。&lt;/p&gt;
-&lt;p&gt;網頁是有個似乎是 trimble 員工的人，
-維護了個半業餘的網站 &lt;a href=&quot;https://trimbletools.com/&quot;&gt;https://trimbletools.com/&lt;/a&gt; ，
-其中一個功能是 &lt;a href=&quot;https://trimbletools.com/T02_2_PNG.html&quot;&gt;用 t02 內的座標資訊作圖&lt;/a&gt; 。
-如果勾選表單中的 &lt;code&gt;Save raw position files&lt;/code&gt; 選項，
-就會把 t02 中的訊息存到副名檔為 &lt;code&gt;x29&lt;/code&gt; 的檔案，
-之後用 awk 之類的工具就抓出座標訊息。&lt;/p&gt;
-&lt;p&gt;另一個 kml 則是 trimble 的接收儀內建功能。
-trimble 接收儀都有網頁介面，（至少我碰的 net r9 和 alloy 都有。）
-在下載的介面上就能選擇下載 t02，或由接收儀轉成 rinex 或 kml 讓下載。
-kml 裡的座標當然就是 t02 裡的座標了。&lt;/p&gt;
-&lt;p&gt;唯一問題是我用 net r9 時，接收儀內建的轉換功能會跑很久，
-所以我們一般都下載到電腦上用 convert to rinex 轉。
-（雖然還是蠻久的。）
-如果長度一天、觀測頻率 1 秒、定位頻率 1 分鐘，
-轉成 kml 大概要跑一小時，才會轉好開始輸出第一個 byte。
-瀏覽器基本上不會開著一個什麼都不傳的連線 1 小時，
-所以我是用開發者工具弄出網址後，用 curl 載的。
-換成 alloy 時，不知道是 cpu 升級還怎樣，
-總之轉換變很快，數小時的觀測幾秒就轉好了。&lt;/p&gt;
-&lt;h2 id=&quot;xmlstarlet&quot;&gt;xmlstarlet&lt;/h2&gt;
-&lt;p&gt;那要從 kml 抓出資料，當然要用 xml parser 了。
-我一直很相信程式界一句諺語：
-&lt;em&gt;xml 就該用 xml parser，用 regexp 處理 xml/html 的人，總有一天要付出代價。&lt;/em&gt;
-所以就找了用來處理 xml 的工具 xmlstarlet。
-（聽說有二個齊名的工具，xmlstarlet 和 xml-coreutils，
-但我先聽過 xmlstarlet 的，也沒試過 xml-coreutils，
-有空再試吧。）&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://xmlstar.sourceforge.net/&quot;&gt;xmlstarlet&lt;/a&gt; 是一支用來處理 xml 的工具程式。
-想想在 unix 環境下，有 grep sed awk 各種工具可以用來處理文字資料，
-但這些工具頂多使用 regexp，只適合處理格式單純的資料，碰到 xml 都不太方便。
-因此就有人開發了 xmlstarlet，可以使用 xpath 來操作 xml 資料。
-如同 json 開始流行後，有人開發了 &lt;a href=&quot;https://stedolan.github.io/jq/&quot;&gt;jq&lt;/a&gt; 來處理 json 資料。&lt;/p&gt;
-&lt;p&gt;其中 xmlstarlet 的 select 命令就能用來取出 xml 文件內的內容，
-簡單可以對 xpath 求值，複雜的用法相當於命令列版本的 xsl。&lt;/p&gt;
-&lt;p&gt;如果只是單純想對 xpath 求值，
-還有另一個更簡單的工具叫 xpath，
-在 debian 是屬於 libxml-xpath-perl 這個套件下。
-雖然它無法處理 utf-8 的命令行參數，
-我的經驗是在 perl 啟動時加上 &lt;code&gt;-Ca&lt;/code&gt; 即可，
-詳情可以 &lt;code&gt;man perlrun&lt;/code&gt; 。&lt;/p&gt;
-&lt;h3 id=&quot;xmlstarlet-select-簡易上手&quot;&gt;xmlstarlet select 簡易上手&lt;/h3&gt;
-&lt;p&gt;xmlstarlet 可以簡單從標準輸入讀取資料，
-為了方便以下的例子都是用 echo 輸入。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ echo &amp;apos;&amp;lt;a href=&amp;quot;/&amp;quot;&amp;gt;home&amp;lt;/a&amp;gt;&amp;apos; \
-&amp;gt; | xmlstarlet select --template --value-of /a/@href --nl
-/
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $  echo &amp;apos;&amp;lt;a href=&amp;quot;/&amp;quot;&amp;gt;home&amp;lt;/a&amp;gt;&amp;apos; \
-&amp;gt; | xmlstarlet select --template --value-of /a --nl
-home
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ echo &amp;apos;&amp;lt;a href=&amp;quot;/&amp;quot;&amp;gt;home&amp;lt;/a&amp;gt;&amp;apos; \
-&amp;gt; | xmlstarlet select --template --copy-of /a --nl
-&amp;lt;a href=&amp;quot;/&amp;quot;&amp;gt;home&amp;lt;/a&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ echo &amp;apos;&amp;lt;a href=&amp;quot;/&amp;quot;&amp;gt;home&amp;lt;/a&amp;gt;&amp;apos; \
-&amp;gt; | xmlstarlet select --template --output &amp;quot;let&amp;apos;s go &amp;quot; --copy-of /a --nl
-let&amp;apos;s go &amp;lt;a href=&amp;quot;/&amp;quot;&amp;gt;home&amp;lt;/a&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ echo &amp;apos;&amp;lt;a href=&amp;quot;/&amp;quot;&amp;gt;home&amp;lt;/a&amp;gt;&amp;apos; | xmlstarlet select --template \
-&amp;gt; --output &amp;quot;let&amp;apos;s go&amp;quot; --nl --copy-of /a --nl \
-&amp;gt; --output &amp;quot;(&amp;quot; --value-of /a --output &amp;quot; is &amp;quot; \
-&amp;gt; --value-of /a/@href --output &amp;quot;)&amp;quot; --nl
-let&amp;apos;s go
-&amp;lt;a href=&amp;quot;/&amp;quot;&amp;gt;home&amp;lt;/a&amp;gt;
-(home is /)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;xmlstarlet 的參數寫法中，
-用 copy-of value-of output 三個選項可以輸出內容，
-copy-of value-of 會輸出 xpath 的元素與值，而 output 則是直接輸出字串。
-默認下會直接輸出，若前面使用了 attr 屬性，則會輸出到屬性內。
-要表示結束輸出到屬性，需要使用 break 選項來 &lt;em&gt;跳出&lt;/em&gt; ，
-同樣 break 也可以用來結束一個節點。&lt;/p&gt;
-&lt;p&gt;複雜一點的例子，輸出多個元素與屬性。
-在輸出元素時，xmlstarlet 的參數寫法有點像 &lt;a href=&quot;https://pugjs.org/&quot;&gt;pug&lt;/a&gt; ，
-是 &lt;em&gt;反向&lt;/em&gt; 從對 xml 結構的描述生成完整 xml 的方式。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ echo &amp;apos;&amp;lt;html name=&amp;quot;root&amp;quot; /&amp;gt;&amp;apos; \
-&amp;gt; | xmlstarlet select --template \
-&amp;gt;     --value-of /html/@name --output : --nl \
-&amp;gt;     --output &amp;quot;let&amp;apos;s go &amp;quot; \
-&amp;gt;     --elem a --attr href --output / --break \
-&amp;gt;         --output home \
-&amp;gt;             --elem strong --output &amp;apos;!&amp;apos; --break \
-&amp;gt;     --break \
-&amp;gt;     --output . --nl
-root:
-let&amp;apos;s go &amp;lt;a href=&amp;quot;/&amp;quot;&amp;gt;home&amp;lt;strong&amp;gt;!&amp;lt;/strong&amp;gt;&amp;lt;/a&amp;gt;.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;完整的教學可以參見 &lt;a href=&quot;http://xmlstar.sourceforge.net/doc/UG/ch04.html&quot;&gt;xmlstarlet 網站的使用手冊中對 select 的說明&lt;/a&gt; 。&lt;/p&gt;
-&lt;h3 id=&quot;xmlstarlet-的命名空間問題&quot;&gt;xmlstarlet 的命名空間問題&lt;/h3&gt;
-&lt;p&gt;xmlstarlet 個不方便的點就是對 xpath 命名空間的處理，
-之前有寫過一篇 &lt;a href=&quot;xml-namespace-in-xsl-xpath.html&quot;&gt;在 xsl 中 xpath 元素的命名空間問題&lt;/a&gt; ，
-然後就又再 xmlstarlet 碰到這個問題了。
-如果 xml 中指定了命名空間，
-則也必須在 xpath 中指定相同的命名空間才能正確處理。&lt;/p&gt;
-&lt;p&gt;但在 xml 中可以指定預設命名空間，
-就不用為每個元素加上命名空間前綴；但要 xpath 這麼作有困難。
-前述的 perl xpath 腳本是直接忽略命名空間，
-而 xmlstarlet 則提供了一個 &lt;code&gt;-N&lt;/code&gt; 參數來指定命名空間。&lt;/p&gt;
-&lt;p&gt;例如一份 kml 開頭如下：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-xml&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
-&amp;lt;kml xmlns=&amp;quot;http://www.opengis.net/kml/2.2&amp;quot; 
-     xmlns:gx=&amp;quot;http://www.google.com/kml/ext/2.2&amp;quot; 
-     xmlns:kml=&amp;quot;http://www.opengis.net/kml/2.2&amp;quot;&amp;gt;
-&amp;lt;Document&amp;gt;&amp;lt;name&amp;gt;Trimble 2020051900F.T02&amp;lt;/name&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;則必須要用 &lt;code&gt;xmlstarlet -N k=http://www.opengis.net/kml/2.2 //k:name&lt;/code&gt;
-才選得到位於 &lt;code&gt;http://www.opengis.net/kml/2.2&lt;/code&gt; 命名空間下的 name 元素。
-也就是 xpath 中幾乎每個元素都要加上命名空間前綴，使用上極不方便。
-（當然，這份 kml 除了預設，還把 kml 前綴也指向同一個命名空間，
-因此其實不用 &lt;code&gt;-N k=&lt;/code&gt; 的選項，直接指定 &lt;code&gt;//kml:name&lt;/code&gt; 也選得到。）&lt;/p&gt;
-&lt;p&gt;如我在前文提的舊文中所述，xsl 中可以指定 xpath 預設的命名空間，
-就不需要在每個 xpath 中指定元素的命名空間。
-xmlstarlet 沒有這項功能，
-&lt;a href=&quot;http://xmlstar.sourceforge.net/doc/UG/ch05.html#idm47989546158480&quot;&gt;其手冊給了二個解決方式&lt;/a&gt; ，
-一是以內建的底線可以代表根文件的命名空間，
-二是直接以 sed 刪除 xml 的命名空間。&lt;/p&gt;
-&lt;p&gt;第二個方式太蠢了，我說好歹也加個命令是用來刪除命名空間的，
-直接用 sed 刪不是落入用 regexp 處理 xml 的問題了嗎？&lt;/p&gt;
-&lt;p&gt;底線的用法，則是指 xml 文件若有預設命名空間，
-該命名空間會被綁到底線 &lt;code&gt;_&lt;/code&gt; 上。
-也就是上述的 xpath 可以寫成 &lt;code&gt;//_:name&lt;/code&gt; ，
-這裡的 &lt;code&gt;_&lt;/code&gt; 就相當於前面的 k 或 kml，
-也就相當於在命令上加了 &lt;code&gt;-N _=http://www.opengis.net/kml/2.2&lt;/code&gt; 的選項。
-超棒的對吧，從此只要在 xpath 中每個元素名加上 &lt;code&gt;_:&lt;/code&gt; 就好了，真是蠢死了。&lt;/p&gt;
-&lt;p&gt;也許有時間可以去幫忙維護，
-看能不能像 xsl &lt;code&gt;xpath-default-namespace&lt;/code&gt; 屬性，
-有個參數可以指定無指定命名空間時的預設命名空間。&lt;/p&gt;
-&lt;h2 id=&quot;kml-資料的問題&quot;&gt;kml 資料的問題&lt;/h2&gt;
-&lt;p&gt;trimble 轉出 kml 的模式，我是選擇 line and point。
-kml 裡有座標資訊，但每個座標的資訊，如時間、衛星、誤差、速度，
-是以跳脫後的 html table 格式記在 kml 的 description 裡。
-所以處理起來很麻煩。&lt;/p&gt;
-&lt;h3 id=&quot;w3m-格式化表格&quot;&gt;w3m 格式化表格&lt;/h3&gt;
-&lt;p&gt;我原本是只抓出 html 表格，反正表格裡也有座標，
-然後丟到 w3m 排版，就能用 awk 處理了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;xmlstarlet select --text --template \
-    --value-of &amp;quot;/kml/Document/Folder[name=&amp;apos;Points&amp;apos;]/Placemark/description&amp;quot; \
-| w3m -T text/html -dump
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;抓出座標與對應的表格資料&quot;&gt;抓出座標與對應的表格資料&lt;/h3&gt;
-&lt;p&gt;後來我發現表格中的經緯度座標小數位數不夠，
-只到 7 位 mm 等級，要 coordinate 元素內的才有 9 位。
-只好研究 xmlstarlet 的進階用法，
-來同時抓出 html 表格和相鄰的座標元素。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;xmlstarlet select --text --template \
-    --match &amp;quot;/kml/Document/Folder[name=&amp;apos;Points&amp;apos;]/Placemark&amp;quot; \
-    --value-of description --nl \
-    --value-of Point/coordinates --nl --nl
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;程式大概如上，因為 namespace 很煩，
-所以我會先用 sed 把 xmlns 刪掉；不然每個 xpath 都要加一堆 namespace。
-概念就是先找到 xpath &lt;code&gt;/kml/Document/Folder[name=&amp;apos;Points&amp;apos;]/Placemark&lt;/code&gt; ，
-然後取出相對於該位置的 &lt;code&gt;description&lt;/code&gt; 與 &lt;code&gt;Point/coordinates&lt;/code&gt; 元素。
-至於 &lt;code&gt;--nl&lt;/code&gt; 是輸出一個換行符的意思；
-所以就是定位到 Placemark 後，輸出 description 後輸出一個換行，
-再輸出 Point/coordinates 再二個換行。&lt;/p&gt;
-&lt;p&gt;這樣的問題是，description 節點的內容是跳脫的 html，
-所以我加上 &lt;code&gt;--text&lt;/code&gt; 參數讓輸出不會跳脫，變成直接輸出內容。
-但這樣變成 html 和純文字混在一起。&lt;/p&gt;
-&lt;h3 id=&quot;直接解碼-html-當作-xml-處理&quot;&gt;直接解碼 html 當作 xml 處理&lt;/h3&gt;
-&lt;p&gt;所以後來改成輸出也格式化成 xml，
-然後 html 一樣跳脫後嵌在其中一個元素內，再用 &lt;code&gt;xmlstarlet unesc&lt;/code&gt; 解碼。
-也不太想再依賴 w3m，就直接解碼跳脫後的 html，直接當作 xml 處理。
-但解碼後的 html 裡會有 html entities，
-xmlstarlet 不認識會報錯，所以再用 sed 刪掉。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;xmlstarlet select --template --elem xml \
-    --match &amp;quot;/kml/Document/Folder[name=&amp;apos;Points&amp;apos;]/Placemark&amp;quot; \
-    --elem p --value-of description \
-    --elem c --value-of Point/coordinates \
-| xmlstarlet unescape \
-| sed &amp;apos;s/&amp;amp;nbsp;/ /g&amp;apos;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;上面參數的意思是，輸出放在根元素為 xml 的元素內，
-然後每匹配到 placemark 後，輸出一個 p 元素，內容為 description 的內容，
-再在 p 元素中加上一個 c 元素，內容為 point/coordinates 的內容。&lt;/p&gt;
-&lt;p&gt;前面把 kml 格式化成含 html 表格格式的 xml 資料，
-再用以下的 xsel 重新抓出時間與座標即可：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;xmlstarlet select --template --match /xml/p \
-    --value-of &amp;apos;normalize-space(c)&amp;apos; --output , \
-    --value-of &amp;apos;table/tr/td[.=&amp;quot;UTC&amp;quot;]/following-sibling::td&amp;apos; --nl
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;xpath 相對 css selector 一個很大的強項，
-就是可以匹配節點的文字內容，
-甚至可以匹配父節點或反向選取等，css 做不到的事。
-例如上面就是匹配文字內容為 UTC 的 td 元素，
-並選取出該元素的下一個 td 元素。&lt;/p&gt;
-&lt;h2 id=&quot;xmlstarlet-的問題&quot;&gt;xmlstarlet 的問題&lt;/h2&gt;
-&lt;p&gt;xmlstarlet 的問題，大概就是一些細節沒處理好，
-使用起來有些地方應該可以更方便的。
-且程式本身也缺人維護，所以想想也是理所當然的。
-這裡談二個問題，一是之前提的 xpath 裡的命名空間問題，
-一是處理 html 常碰到的 entities 問題。&lt;/p&gt;
-&lt;p&gt;xmlns 之前提過了，就是如果文件有指定命名空間，
-那 xpath 中每個元素也都要前綴命名空間，才抓得到元素。
-xsl 中提供了設置 xpath 的預設命名空間的機制，
-但 xmlstarlet 中就沒有這個機制。&lt;/p&gt;
-&lt;p&gt;xmlstarlet 官方手冊給的解決也很蠢，
-用 sed 刪除 xmlns 的屬性，那不是又回到原始的 regexp 了。
-而且 xml 理論上是可以有任意換行與空白的語法，
-所以完全正確的 regexp 會很難寫。&lt;/p&gt;
-&lt;p&gt;我是比較希望可以用 xmlstarlet 本身的功能刪除 xmlns 之類的，
-但 xmlns 是一種特殊屬性，不能直接當作一般屬性刪除。
-所以可能要特別開一個功能來刪，或是把文件當作 html 處理，
-那 html 裡就沒有所謂的命名空間，
-xmlns 就只是一個名稱中可能帶冒號的屬性而已。&lt;/p&gt;
-&lt;p&gt;另一個問題就是我混著處理 html 時，
-因為其中含有 html entities，xml 不認識，
-所以 xmlstarlet 就報錯。
-我是比較希望能開個選項，讓 xmlstarlet 不要那麼嚴格。
-或像 &lt;code&gt;-N&lt;/code&gt; 一樣可以設一個命名空間對應一樣，
-有選項可以設 entities 的值，
-或可以指定額外的 dtd 文件，那就能額外指定 entities。&lt;/p&gt;
-&lt;p&gt;總之大概就是 xmlstarlet 都得用一些 ugly hack 才能達到功能，
-所以不太滿意。但這也很大原因也是專案的人力不足造成的。&lt;/p&gt;
-&lt;h2 id=&quot;xml-與-docbook-的時代&quot;&gt;xml 與 docbook 的時代&lt;/h2&gt;
-&lt;p&gt;xmlstarlet 很老了，大概是 2000 年時 xml 橫空出世，
-被全世界冀望為解決所有格式問題的銀彈，
-在這樣的時空背景下誕生的。
-後來也缺乏維護，該專案的主頁上也掛著大大的請求協助。&lt;/p&gt;
-&lt;p&gt;當年很多人希望 xsl 和 xml 可以一口氣解決所有資料互通的問題。
-但後來 xhtml 沒有獲得普遍採用，
-大家還是覺得用 js 操作 dom，css 形式的選擇器和 jquery 比較好用。
-隨後 json 隨著 js 掘起，作為對 xml 過於複雜的反撲，
-ajax 的 x 也就是 xml 幾乎成為歷史，
-最終 html5 放棄成為 xml 和 sgml 的子集，故事結束。&lt;/p&gt;
-&lt;p&gt;docbook 似乎也是那個時代下的產物。
-我看過好幾本比較正式的 linux 介紹 &lt;strong&gt;書&lt;/strong&gt; ：
-&lt;a href=&quot;https://www.freebsd.org/doc/zh_TW/books/fdp-primer/&quot;&gt;freebsd 文件計劃&lt;/a&gt; 、 &lt;a href=&quot;https://i.linuxtoy.org/docs/guide/index.html&quot;&gt;開源世界旅行手冊&lt;/a&gt; 、
-&lt;a href=&quot;https://dywang.csie.cyut.edu.tw/dywang/linux-wangyin/&quot;&gt;完全以 gnu/linux 工作&lt;/a&gt; 、unix 編程藝術，
-幾乎都會提到 docbook。
-似乎那時 docbook 被冀望成一種萬靈丹，
-可以發布成紙本書、pdf、html 等各種格式，
-所有的文章都可以以 docbook 格式撰寫。&lt;/p&gt;
-&lt;p&gt;同時與 docbook 常被一起提起的名字，則為 LaTeX，
-那時世界似乎分為 xml/docbook 與 TeX/LaTeX 二大派系，
-如同 vi 與 emacs 二大派系。
-xml 派批評 tex 是排版語言，xml 的結構與樣式分離才是正確的作法；
-tex 系則有較美觀的排版效果，
-且 xml 派工具鏈的實作成果不佳，實際使用上有許多問題。&lt;/p&gt;
-&lt;p&gt;markdown 似乎是相對新的產物，後來 markdown 掘起後，
-docbook 似乎就被 markdown 吃光了，
-如同 json 取代 xml、python 取代 java。
-tex 系則繼續演化，如 XeTeX，
-儘管 tex 系對中文的支援似乎一直不是很好，。&lt;/p&gt;
-&lt;p&gt;本文中對 xml docbook json markdown 各格式之間的歷史消長，
-都只是耳聞與臆測，並沒有詳細的資料或確實經歷過。
-因此若有錯誤，歡迎指正或補充。
-我也蠻想知道 docbook 專案的歷史，與當時 xml 興趣的盛況。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/taiwan-consensus-stolen-base.html#從三國殺八神詩補到特攝片中的怪獸要爆炸</id>
 <title>台灣共識就是贏球不能盜壘</title>
@@ -3243,820 +3303,7 @@ tex 系則繼續演化，如 XeTeX，
 &lt;/pre&gt;</summary>
 <category term="funny"/>
 <category term="daily"/>
-<content type="html">&lt;h1 id=&quot;台灣共識就是贏球不能盜壘&quot;&gt;台灣共識就是贏球不能盜壘&lt;/h1&gt;
-&lt;p&gt;明明記得有聽過這句話，但一直找不到來源，
-只有找到幾篇 &lt;a href=&quot;https://www.ptt.cc/man/Elephants/D3D2/D7D0/D46E/D4B3/M.1307776582.A.092.html&quot;&gt;兄弟象故意砸觸身球的新聞&lt;/a&gt; ，
-沒有找到台灣共識。
-之前的 &lt;a href=&quot;short-life-expensive-price.html&quot;&gt;逢人短命&lt;/a&gt; 也很長了，該換篇了。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.ptt.cc/man/Elephants/D3D2/D7D0/D46E/D4B3/M.1307776582.A.092.html&quot;&gt;台灣共識就是贏球不能盜壘！&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt; 標題  [新聞] 就愛 488 公分　女與飛機模型做愛超興奮
-蜜雪兒說，她曾經嘗試與人類做愛，但怎麼做就是無法讓她興奮，但她與飛機模型做愛之
-後，幾乎每架飛機模型都可以讓她得到高潮。
-→ Leeng: 打飛機(物理)                                             04/20 09:10
-推 PiZ1129: 操飛機 操飛機，來到青草地                              04/20 09:54
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt; 作者  billjason (billjason)                                  看板  Gossiping 
- 標題  [問卦] line 到底為什麼ㄧ堆人用？                                        
- 時間  Sun Dec  9 19:16:30 2018                                               
-※  文章網址: https://www.ptt.cc/bbs/Gossiping/M.1544354192.A.9D0.html
-→ wadeabc: 就一開始女森先用，馬子狗跟上，結果最後大家都在用       12/09 19:19
-→ wadeabc: 你要知道這世界是跟著女森尿尿的地方前進的               12/09 19:19
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;p&gt;這些理工科宅男們一說起妹子來總是很激動的樣子，但你真讓他們去和妹子組織個聯誼卻
-反而沒有什麼行動力。大多數情況下他們會想一想要做的準備以及到時候搞些什麼活動，
-然後會開始頭疼，然後該啃書的啃書、運動的運動、遊戲的遊戲，聯誼的事再無下文。哎
-，所以說性格決定命運，不是因為他們讀了理工科才成為宅男才沒有妹子，而是因為他們
-這個性格讓他們選了理科並成了個宅男，才沒有妹子！&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;魔鬼又帶他上了一座最高的山，將世上的御姊，與萬國的蘿莉，都指給他看。&lt;/p&gt;
-&lt;p&gt;對他說：「你若俯伏拜我，我就把這一切都賜給你。」&lt;/p&gt;
-&lt;p&gt;他說：「魔鬼退去吧！因為本本上記著說，當拜主你的偽娘，單要侍奉他。」&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt; Life is dear, love is dearer. Both can be given up for freedom.
-匈牙利人，裴多菲．山陀爾 (Shandor Petefi, 1823—1849) 於 1847 年 1 月寫下的著名詩篇《自由與愛情》。
-那學習自由軟體？&lt;/p&gt;
-&lt;p&gt;千羽純一如是說：Windows 誠可貴，Apple 價更高；若為 Linux 故，兩者皆可拋。&lt;/p&gt;
-&lt;p&gt;李士傑：自由不是離開某套軟體、某種系統，而是找到自由。&lt;/p&gt;
-&lt;p&gt;Rex：geek by nature linux by choice&lt;/p&gt;
-&lt;p&gt;Tetralet：我們極力抗拒我們所不認同的事物，然後變成我們所認同的事物的奴隸。&lt;/p&gt;
-&lt;p&gt;kenduest：如果真的愛一個作業系統 怎能不害怕不再能使用它 而我們必須接受現實
-於是長大了  寂寞就是沒有了機會再用它  比沒有電腦還要寂寞
-而那些點亮我們生命的作業系統  就彷彿電影中發生在暹邏的愛情故事
-即使短暫使用也會刻骨銘心
-To all the Linux that bring us to kernel.&lt;/p&gt;
-&lt;p&gt;LGJ：①公平的選擇權利②開放的檔案格式&lt;/p&gt;
-&lt;p&gt;RMS：FS 對教育：①最簡單的就是省錢②利於發掘、教育天生的軟體工程師。&lt;/p&gt;
-&lt;p&gt;eliu：free software 是用一種有建設性&amp;amp;免錢的電玩，不要想太多了。&lt;/p&gt;
-&lt;p&gt;caleb 常見誤解：①用自由軟體就要推廣自由軟體 ← 莫名其妙，難道我開 Toyota 的車就得推廣 Toyota 的車？
-             ②要 寫程式/debug 才是對自由軟體有貢獻 ← 其實 下載/安裝/使用/討論/回報問題/提出 wishlist/改善美工/... 很多都是對自由軟體有貢獻&lt;/p&gt;
-&lt;p&gt;↑當然還很多敝人沒有記下來的
-但敝人感受到那麼多前輩們默默的付出和努力
-敝人更該心存感激啊
-敝人有機會分享給別人就多說
-現在不說話
-以後誰為敝人的小 p 說話&lt;/p&gt;
-&lt;p&gt;jserv：「想做就去作」，我天真的認為
-             想寫作業系統，就去寫啊
-             想寫編譯器，就去寫啊
-             想寫電動遊戲，就去寫啊
-             想進行社會主義運動，要花幾百年的時間，但最起碼可以協助讓世界變得更美好，作多少算多少&lt;/p&gt;
-&lt;p&gt;引用自 &lt;a href=&quot;https://hyperrate.com/thread.php?tid=12773&quot;&gt;https://hyperrate.com/thread.php?tid=12773&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;在菜场看到的，神一般的大爷！ 那大爷买西红柿来着的，挑了三个放到秤盘里，摊主秤了下说：“一斤半，三块七。” 大爷说：“我就做个汤，用不着那么多。”说完就去掉了个儿最大的那个西红柿。 摊主迅速又瞧一眼秤子，“一斤二两，三块。” 正当我看不过去想提醒大爷注意摊主的秤子时，大爷从容的掏出了七毛钱，拿起刚刚去掉的那个大的西红柿，扭头就走了…… 摊主当场就凌乱了，我憋成内伤，把头扭向一边……&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;人口普查员： “请问您家里是几口人？” “是一口人” “十一口？” “不是十一口，而是一口人。” “二十一口？” “ 不是二十一口，其实一口人。” “七十一口？不会吧？” “ 不是七十一口，就是一口人！” “ 九十一口？” “ 对了，就是一口人&amp;quot;&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;男孩喜歡上了一個女孩。
 
-男孩是全校最後一名進來的，
-
-可是那個女孩很優秀。
-
-男孩費盡一切努力來引起女孩的注意。
-
-開學一星期後，
-
-他頂著染黃做了造型的頭發大搖大擺進了教室，
-
-看著禿頭班導張大了嘴巴看他。
-
-全班同學都哄堂大笑，看著禿頭班導的反應，
-
-可是男孩卻只是望著女孩。
-
-女孩頭也沒抬，靜靜的坐在座位上做題。
-
-後來，男孩在課上總是怪聲怪氣的接老師的話，
-
-課間在座位上放大音量講昨天他和誰又打了一架，
-
-因為在廁所抽煙點名被黑面校長在升旗儀式上大罵。
-
-他每次都會一臉無所謂，
-
-只是會偷偷地，很快地瞄一眼女孩。
-
-可是女孩的臉上總是驚不起一絲波瀾。
-
-終於他再也忍不住內心的情感，
-
-在一個放學的晚上，
-
-召集一群兄弟在教學樓下，
-
-當女孩安靜的走出樓梯口時，
-
-他用近乎嘶啞的聲音向她表白。
-
-人群一陣沸騰，高呼在一起。
-
-她愣了，白皙修長的手抓緊了書包背帶。
-
-過一會，她只是安靜的走到男孩面前，
-
-仰頭說，我的夢想是台大，我想在那裡等你。
-
-人群一陣哄笑，男孩紅了臉。
-
-以他的成績，專科也上不了。
-
-他一把把花塞到了旁邊的人懷裡，
-
-扭頭頭也不回擠出人群。
-
-第二天，傳來了男孩轉學的消息。
-
-後來的女孩，總是在課堂上看著那個空座位，發愣。
-
-3 年后，台大門口，
-
-她安靜地站著，
-
-比起 3 年前消瘦了許多，帶著行李，只是站著，像是在等誰。
-
-可是她也不知道她究竟在等著什麼，
-
-嘆了一口氣，走進校門。
-
-突然，身後一個明朗的聲音響起，你不是要等我嗎？
-
-怎麼不等了？
-
-女孩的眼淚流了下來，
-
-轉身。 男孩把頭發染回了黑色，
-
-一身簡單的白體恤牛仔褲，像是周遭泛著陽光。
-
-他帥氣地拉起了她的手，走進台大。
-
-後來，成為男孩女朋友多年的她偶然問道，
-
-你那年轉學去哪裡了，能考得這麼好？
-
-男孩說：我休學了，我爸叫我去公司上班，花個幾十萬動用一下関係就推甄上這間學校了。
-
-女孩也説：我早知道你家有錢，要不然我怎麼會跟你這笨小子在一起。
-
-你爸有錢，成就你的夢想
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;p&gt;如果中國發生戰爭，印度和俄羅斯會幹麻？&lt;/p&gt;
-&lt;p&gt;締結印俄互不侵犯條約。&lt;/p&gt;
-&lt;p&gt;俄羅斯：協助維穩內蒙古。&lt;/p&gt;
-&lt;p&gt;印度：人道救援西藏。&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;Anonymous-Tue-04-Dec-2018-07:11:13-No.786494451-Report&quot;&gt;Anonymous Tue 04 Dec 2018 07:11:13 No.786494451 Report&lt;/h2&gt;
-&lt;p&gt;&lt;em&gt;Quoted By: &amp;gt;&amp;gt;786497658 &amp;gt;&amp;gt;786504320 &amp;gt;&amp;gt;786506142 &amp;gt;&amp;gt;786506466 &amp;gt;&amp;gt;786515797 &amp;gt;&amp;gt;786520996 &amp;gt;&amp;gt;786521222 &amp;gt;&amp;gt;786526300 &amp;gt;&amp;gt;786528420 &amp;gt;&amp;gt;786530340 &amp;gt;&amp;gt;786532790 &amp;gt;&amp;gt;786533003&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;I met a trap at an anime convention who I expected to be a typical sissy cockfiend type.&lt;/p&gt;
-&lt;p&gt;Turns out he was a top who liked to dominate guys like me.&lt;/p&gt;
-&lt;p&gt;So instead of having him moan and beg for me to fuck him I spent the night with him cumming inside me as much as he wanted. I had never been bottom before, (though, to be fair, I had had sex like three times before then) so I figured why not? The only bad part was he basically only had three lines of dirty talk, which were along the lines of &amp;quot;You thought you were gonna be fucking a cute girl, didn&amp;apos;t you? So why don&amp;apos;t you beg for more of this cute girl&amp;apos;s dick?&amp;quot; etc.&lt;/p&gt;
-&lt;p&gt;I figured out that he probably just gets a lot of ass at these cons, and didn&amp;apos;t ever expect to go five times with the same guy, so he only has one set of material. I&amp;apos;m guessing he liked me, because afterwards, when I was cleaning his cum out for the fifth time, he asked me to spend the night with him and cuddle, and I asked him &amp;quot;Do I look gay to you?&amp;quot; &lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;把黑色的心臟
-
-          藏在腐爛的身體裡
-
-                        裹著這無趣的世界
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt;  17856 +爆 8/11 織田信長     □  [認真] 最近眼皮一直在跳
-● 17857 +X7 8/14 明智光秀     □  [大喝] 敵人就在本能寺
-  17858 + 1 8/14 武田勝賴     □  [思考] 我是不是應該要切腹
-  17859  11 8/16 鄉民         □  [豪洨] 光秀你他媽雜碎
-  17860 +X6 8/16 德川家康     □  [認真] 再不快跑會被光秀幹掉
-  17861 +   8/16 織田秀忠     □  爹   我要跟你走了
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;p&gt;算命的:「你的命格不能吃牛，會衰」&lt;/p&gt;
-&lt;p&gt;員慶：「好，不用吃的就行了吧」&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;1985/10/30 出生的某位心律不整男子的傳奇事蹟
-華人幼稚園→ 中埔國小→ 慈文國中→ 桃園高中→ 宜大電機→ 中正通訊所
-支持學運 在 PTT 痛罵對岸 經常開分身大戰自己幻想中的中國人 認為大陸沒有前途
-去紐西蘭失敗 居然在對岸支身當台勞 長期幫共匪貢獻 GDP 存了好幾桶金 功在黨國
-與政黑某位被大陸女友甩的花癡齊名，可說是 PTT 上的兩大活寶
-預知詳情，可用站內信詢問原 po 或自行餵狗
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt;推 gundam0613: 真金不怕火煉 甲屌不怕大便    01/22 11:01
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;Raken Chen
-13 小時 ·
-
-越來越多的誤會，使我身敗名裂
-為了讓謠言不再猖獗，讓傷口不再擴大
-這一次我決定要捍衛我的清白，挽救我的名聲
-再次挺身而出，來澄清所有的誤會！
-
-「讓我上她」
-有一次有串正妹文，大家都在私她的臉書
-我也很有興趣，我就留言 讓我上她的臉書看看
-沒想到截圖的人很惡劣，把後面的字拿掉
-變成 讓我上她 ，使我蒙受不白之冤
-
-「我整個硬你知道嗎」
-有一次大家在討論肩膀酸痛的問題
-每個人在說自己肩膀的僵硬程度
-我一摸我自己，發現整個是硬的
-所以我才會有這樣的留言
-
-「好想從後面進去喔」
-有一次搭公車，前門已經一堆人排隊
-後面的門卻遲遲不開，我才很生氣的說
-好想從後面進去，難道這樣也不行嗎?
-
-「好想跟她狠狠的做愛」
-有一次我看到一個公益團體
-正妹主持人號召大家一起來送溫暖 做愛心
-我覺得這活動很有意義
-於是立刻義不容辭留言說：好想跟她狠狠的做愛心
-但打字打太快，打到愛，心還沒出來，就送出去了
-這的確是我的疏失，但我本意是純潔的
-
-「好想跳起來插下去喔」
-有一次在廟裡拜拜完要插香，但那香爐做得太高
-我根本沒辦法去插，所以我才說好想跳起來插下去
-後來卻被人惡意截圖，我覺得很莫名其妙
-
-「好想去弄髒她的身體」
-有一次去參加海邊的玩泥巴活動
-看到有一個女生，從頭到尾不敢碰泥巴
-身體都乾淨的，我知道這時需要有一個人
-為她開一扇窗，帶她走出第一步
-所以我才留言好想去弄髒她的身體
-這也是出自善意不是嗎?
-
-「好想把奶揉到噴出汁來」
-有一次我去農場，看到很多乳牛在吃草
-農場主人邀我去參加擠牛奶的活動
-因為我技術不好，怎麼擠 牛都不給奶
-所以我才留言好想把奶揉到噴出汁來
-
-「好想填滿她身上的每個洞」
-有一次在路上看到一個女生，身上穿的衣服與牛仔褲，
-上面很多破洞，我最討厭這種穿著風格，
-我覺得很破壞道德風俗，所以才說想把她身上的每個洞
-用一針一線給填起來，沒想到這樣你們也能想歪
-
-「如果沒有法律，我一定讓她懷孕」
-大家都知道，台灣不少婦女都患有不孕症
-但礙於法律，很多民俗藥物，都無法讓這些婦女來使用
-所以我在想，如果沒有法律的規範，我真的很想把這些民俗偏方
-來提供給這些不孕症婦女，讓她們可以如願懷孕
-難道這樣也錯了嗎?
-5454
-23 則留言 9 次分享
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt;[請神] 弒父姦母的本
-
-推 max0616: [ややかか]今でも法の外に悠悠としている(683P)           08/28 22:22
-推 SonyXperiaZ3: [72 年次板橋人個人漢化] [ややかか] エディプスコ    08/29 00:37
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;John Wang‎ 
-發文到
- 異端審問會
-39 分鐘 ·
-
-高中的時候
-總是會有那麼一群某個社團的人
-覺得自己辦成發就是神、
-以不回家為驕傲、
-當了社團幹部比畢業後直接上班還要跩、上課瘋狂弄成發的東西老師一干涉就大聲崩潰「這是我的青春你不懂」、
-創了超級多無意義名詞 for example「大成小成北成馬眼北茶馬眼小茶馬眼新茶小活小迎」、
-然後跑了各種高校舞會覺得自己是社交活躍其他同學都是鄉巴佬我們才是校園頂層王、
-自稱老人但其實才高三、
-（然後高一高二的學弟妹都要自稱小孩然後咪比咪比的巴著學長姐）ㄏ 小小腦麻兒
-
-上課會闖入別的班級大喊「打公關囉」然後大聲尖叫、
-在新生臉書群組發一張自拍大聲說「學弟妹不會的問題都可以問我」但自己被當爆，
-然後再集體考上私立學店，或是最後社團內情侶分手而鳥獸散。
-（然後高中的時候不穿制服大學再狂穿制服回去自己的高中耍威風訓學弟妹）
-
-)段考前夕他們在圖書館底下大聲「練活」的時候我都很認真的期望他們全都在跑去別校舞會跳他們半生不熟的表演的時候集體暴斃
-147 你和其他 146 人
-55 則留言
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;p&gt;有一條路，名曰黃泉；有一條河，名曰忘川。
-河邊一石，名曰三生；河上有橋，名曰奈何。
-奈何橋上，有座土台，名曰望鄉。
-望鄉台上，有一老婦，名曰孟婆。
-無論生前種種，飲下孟婆湯，便忘三生事。&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;仰望著讓人目眩神迷的東西只是錫箔
-飛鷹的背後只是一片灰
-可愛妝容只是粉末
-塗亮的指甲也有黑邊
-而一條骯髒的手帕仍然骯髒...即使它散發著香水的氣味!
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;業者看板介紹各個罩杯：
-A：幾乎算是胸部
-B：勉強算胸部
-C：不能抱怨
-D：美味
-DD：雙重美味
-E：巨大
-F：假奶
-G：該去縮胸了
-H：救命，我跌倒爬不起來
-J：「嫉妒我的豪乳嗎？」英國波神喬丹
-K：小心變態
-L：妳的胸部已經大到好笑了
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt;推 orz65535: 689 * 92 =  63388                                     06/03 12:40
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;你比較喜歡哪一個?
-當年不是黨國大老但是被江浙財團捧紅的中國帥哥
-跟同樣擁兵一方的諸侯約會裁軍結果半途諸侯們爽約，平常有在寫日記的莊嚴男人開始發飆
-在旁邊讀著荒漠甘泉冷眼旁觀看著薔薇戰爭的人，為了中國的事情爭吵
-別國調侃是不是中國總統，義正詞嚴的說著我是民族的燈塔的威嚴老先生
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;      將月亮置入他的雙眼，她的潔白會將欺騙者放置的虛妄景象吞噬。
-      將蜜蜂置入他的雙耳，熱愛真理的蜜蜂會將欺騙者的謊言摧毀。
-      將鹽置入他的口中，以免欺騙者以蜂蜜的滋味討其歡心，以灰塵的味道使其作嘔。
-      以鐵釘釘住他的手，讓他無法執行欺騙者的命令。
-      將其心放置於隱密的所在，使他能隨心所欲，不受欺騙者的掌控。
-                                -- 《英倫魔法師》 歐姆斯格的驅除幻覺處方
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;貴族之子受到詛咒化作獸頭人身，孤身流浪尋求解咒。他拯救國王，要求報酬乃是
-國王已有、但國王不知道，這便是他解咒之法。國王返回皇宮，見女王誕下公主，
-知乃獸人要求之報酬。公主成年，與獸人夜會，國王已死，女王尋得狩魔獵人欲殺
-獸人。狩魔獵人救下獸人之命，助其解咒，女王允婚，獸人欣喜，問狩魔獵人欲求
-何物？狩魔獵人冷笑，他要的獸人已有、但獸人不知道：便是公主胎中所懷之子！
-                                                              －－獵魔士
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;新娘霍地住手不攻說道：「風君，你受這妖女迷惑，竟然離我而去。」
-風太郎道：「二乃，請你諒解我的苦衷。咱倆婚姻之約，風太郎絕無反悔，只是稍遲數日
-—  — 」
-新娘冷冷的道：「你去了便休再回來，只盼你日後不要反悔。」 五月咬牙站起，一言不
-發的向外便走，肩頭鮮血，流得滿地都是。
-禮堂眾人雖然見過江湖上不少異事，但今日親見姐妹爭夫，血濺禮堂，新娘子頭披白紗而
-毀傷情敵，無不神眩心驚，誰也說不出話來。 風太郎一頓足，說道：「中野父於我恩重
-如山，情深似海。二乃，二乃，盼你體諒。」說著隨了五月出去。武田、糕點掌櫃、前田
-、江端等不明其中原因，誰也不敢攔阻。
- 新娘霍地伸手扯下頭上白紗，朗聲說道：「各位親眼所見，是他負我，非我負他，自今
-而後。我和姓上杉的恩斷義絕。」
-說著揭下頭頂三朵玫瑰，伸手握緊，忽然另一手中隔空抓了一把不明粉末，雙手一合一搓
- ，三朵玫瑰盡數化為齏粉，簌簌而落，說道；「我中野二乃不雪今日之辱，有如此花。
-」
-糕點掌櫃、武田、江端等待欲善言相慰，要她候風太郎歸來，問明再說，卻見二乃雙手一
-扯 ，嗤的一響，一件紡織華美的白色婚服撕成兩片，拋在地下。她飛身而起，美妙無比
-約在 半空中一個轉折，上了屋頂。
- ----節錄自春場庸&amp;lt;五姝追愛記.第 34 回 新娘素手裂白紗&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;p&gt;文縱人_ 諭使鬼_ 書通五行.. 言知命&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt;推 buzzy0306: 身為碩班研究颱風的，我覺得某幾顆的颱風眼看起來真是   03/14 07:14
-→ buzzy0306: 緊緻且圓潤飽滿，在演變過程中還會不規則的收縮蠕動甚   03/14 07:14
-→ buzzy0306: 至變形。而且就熱力學的觀點，眼牆本身是又熱又濕的，   03/14 07:14
-→ buzzy0306: 應該也很不錯。更何況，眼的中心是很強的下沉氣流，所   03/14 07:14
-→ buzzy0306: 以那個吸吮的力道應該也是不容小覷                     03/14 07:14
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;蘿莉銘&quot;&gt;蘿莉銘&lt;/h2&gt;
-&lt;p&gt;身不在高，米四就行，胸不在大，有型則靈，斯是蘿莉，為吾是侵。
-洋裝貓耳朵，小嘴大眼睛。短髮很俏麗，長髮也飄逸。可以給糖果，玩親親。
-無八卦之亂耳，無血拼之勞行。學校游泳室，公園小涼亭。吾自云：能萌就行&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt; 標題  [新聞] 深海活細菌 8600 萬年未進食
-推 angelplume:真好 不用買第二個便當                                05/24 11:30
-推 asstitle:8600 萬年不吃不喝 可以買下整棟帝寶了                    05/24 11:31
-推 hikon:[新聞]細菌不吃不喝 8600 萬年 買不起台北房                   05/24 11:40
-→ nixon:這細菌怎麼不從 8600 萬年前就存一筆定存, 到現在應該很可觀    05/24 11:50
-推 tokyoto:餓這麼久 跑出來會大吃特吃嗎？                           05/24 11:58
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;p&gt;我們都知道啊，這個問題，大家都非常的關切。
-本人，也非常的關切。
-我們已經聯絡，會同了所有的專家、學者
-一定要研究、擬定出一個，非常妥善合適的，辦法和措施出來。
-相信大家都會得到一個非常圓滿而完美的結果和結局。&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt;推 bitlife:第一步要先取得濃縮柚,這要等到中秋,寒假沒辦法            01/03 07:16
-推 yibeen:要放到寒假才夠濃縮吧 中秋鈾才剛挖出來 含水量還太多       01/03 14:43
-推 Entropy1988:你可以把中指插進柚裡面看看，會有東西噴出來喔!       01/03 16:52
-推 bitlife:樓上的做法會產生黏手反應                                01/03 17:28
-推 hank780420:                     最後柚會爆炸                    01/03 23:21
-           引用自《白痴也會的核子武器 DIY 手冊》(民明書房, 2011).
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;余與汝 遇於雨 汝語余 於雨餘
-於汝寓 汝娛余 汝予乳 予余娛
-余預羽 羽娛乳 娛乳餘 汝如雨
-余御汝 如魚愉 御汝餘 愈譽余
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt;→ weakan: 君不見很多窒息式性愛失誤致死案件                        10/06 20:12
-推 aaron97: 君不見機會不屬於我                                     10/06 20:38
-推 asssstang: 君不見大家只志在幻想                                 10/06 20:43
-推 aposky: 君不見脖子上的手                                        10/06 20:53
-→ weakan: 君不見手是掐在自己丁丁的脖子上                          10/06 21:04
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;八神：
-臭名远扬的抢匪，和为贵鲁肃
-街头行窃的惯犯，掏你兜张辽
-妄自尊大的脑残，我是帝袁术
-借子一勃的弱受，不被骑荀彧
-全扩的单挑废柴，给你屎刘备
-三思的懦弱君主，我溃矣孙权
-黑道的不良妇女，乱惹事貂蝉
-午夜的偷窥砖家，观你妹孔明
-
-八废：
-堕入地狱之番王，红血魔魏延。
-保卫宇宙之战士，蓝高达曹仁。
-盘踞大地之霸主，绿巨蜥周泰。
-蛰伏深渊的大蝎，白兽公孙瓒。
-赤色的夺魂蝙蝠，追命泪马谡。
-深海的蓄爆大龟，人亡盾于禁。
-草原的不死青蛇，无限连陆逊。
-汜水关前的死神，恃勇将华雄
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;三核
-陆逊：这不用我说了，三核之首，可以启动牌堆，又不怕乐，随时都可以爆发
-马谡：心战可以拿三个桃或者三个无中生有，不过挥泪才是神技，最强拆迁，几百张牌都可以拆掉，甘宁张辽之流一辈子都拆不了那么多，但还是敌不过陆逊，因为陆逊失去所有牌还可以连营
-于禁：最强防御，大部分杀都没有用，完美克制连弩，但还是敌不过陆逊，因为陆逊可以一直连营到红杀
-
-八神
-黄盖：八神之首，仅次于三核的强力老将，拿到连弩秒全场，但是就怕陆逊、马谡和于禁
-曹仁：同时放权七人，还可以摸三张牌，比刘禅之流放权一人还要弃一张牌还要跳过出牌阶段强太多
-夏侯惇：别人杀你，一血换一血，你杀别人，别人掉血，等于你一血可以换别人两血
-魏延：杀别人还回复一点血，等于一杀换两血
-张角：打出闪的同时还可以让任意一个人掉两血，就连自己也可以，真是神将
-周泰：十七点血，我都不说什么了，别说夏侯惇魏延之流，陆逊打他也要费点时间
-吕蒙：存牌存到别人连摸牌都摸不了，你不就可以收全场了
-公孙瓒：进可攻退可守，又是卖血流，集合大部分武将的优点
-
-小八神
-关羽：所有红牌当杀，摸到连弩，世界末日
-张春华：陆逊的徒弟，继承了陆逊的衣钵，只可惜要掉血才能发动，而且怕乐，因此比陆逊差了很多
-于吉：想要什么牌就有什么牌，本来应该是三核，但是操作难度较高，很多人不会用，经常让这个神将变成废将，所以排名差了很多
-华雄：六滴血，而且只怕红杀和酒杀，其它都不怕
-魏关羽：和关羽差不多，但是只有主公是曹操时才能展现真正的实力，所以比关羽弱了一些
-杨修：能让别人不能用牌，要知道三国杀是以牌为基础的游戏，连牌都不能用了，还玩什么
-赵云：进可攻退可守，只可惜不是卖血流，没公孙瓒强
-孙策：摸到连弩杀遍天下，只可惜必须是红杀，所以比关羽差
-
-八废
-貂蝉：一张牌只能换一滴血，一回合还只能一次，实力有限
-张郃：干什么事都要弃牌，太差了
-诸葛亮：只能看牌又不能多拿牌，没什么了不起的
-孙权：只能换牌又不能多拿牌，没什么了不起的
-步练师：一回合只能多摸一张牌，每回合才一次，还不定能摸，摸三张牌还是限定技
-刘备：只能给别人牌，又不能多摸牌，没什么了不起的
-张辽：虽然能摸别人的牌，但摸的数量还是不变，没什么了不起的
-刘协：只能给别人牌，摸两张牌还要先弃两张牌，没什么了不起的
-
-三坑
-荀彧：三坑之首，要掉血才能摸牌，垃圾一个
-袁术：摸了多少牌就要弃多少牌，垃圾一个
-鲁肃：虽然可以多摸牌，但是还要给别人一半，垃圾一个
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;Delton Ding
-@DeltonDing
-
-凌晨三点的办公室灯火通明，
-Ruby 开发者在解决性能问题，
-Python 开发者在拿游标卡尺量缩进，
-C 开发者在解决内存泄漏，
-C++ 开发者在编译，
-Java 开发者在各种 Factory，
-Rust 开发者在研究怎么通过编译，
-Go 开发者正在 if err != nil，
-王垠还没选好用什么语言。
-
-上午 10:29 · 2019 年 7 月 17 日 · Twitter for Android
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;班上四位同學受其他同學起鬨選班長，其中真正想選班長的只有一人。
-小韓：「我不想選班長。」        小朱：「小周想選班長啦！」
-小郭：「我真的不想選班長啊。」  小周：「小韓就一副最想選的樣子吼。」
-討論相當熱烈，許多同學都在互開玩笑，已知四位班長候選人只有一人說了實話。
-請問誰說了實話？    誰才是真正想選班長的人？
-                                                 《民明書房-數學邏輯與選民邏輯》
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;它它先生傳 - 先生不知何許人也，亦不詳其姓字，長期居家中，因以為號焉。閑靜少言，
-不擅把妹。好動漫，不惜千金；毎有新品，便欣然忘食。性嗜妹，貌醜不能常得。親舊知
-其如此，或置 AV 而招之。每下輒打，期在必射；既射而刪，曾不吝情去留。汗味體臭，
-不近正妹；荷葉領口，系服拖鞋，晏如也。常 PO 文章酸人，頗示己志。鍵盤萬能，以此自
-終。贊曰：「苗栗小五郎有言：『手上有鍵盤，就有全世界。』極其言，兹若人之儔乎？
-看片打 B，以樂其志。PTT 之民歟？Mobile01 之民歟？」 鍵盤陶淵明全集 - 民明書房出版
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;早在春秋時期，孔老夫子便對 2D 格鬥遊戲做出預言：
-
-「君子無所爭（君子平時不玩格鬥遊戲）。必也射乎（玩的話必然射出飛行道具）！
-　揖讓（「您先跳。」『不，您先請。』）而升（看到對手跳起便昇龍拳）、下（下
-　重手；或泛稱所有的對空技），而飲（給我食下這招對空便敗吧），其爭也君子（
-　這就是格鬥遊戲的君子一戰）！」      ←  孔子的確真知灼見，誠神人也！ &amp;lt;(_ _)&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt; 作者  homechen1990 (包溫)                                        看板  movie
- 標題  [討論] 長期合作的導演與演員
-有些導演或演員可能感情好 也可能演員的演技深受導演的賞識
-1.李奧納多狄卡皮歐/馬丁史柯西斯
-2.昆汀塔倫提諾/山謬傑克森
-推 Aaronko     : 鈕承澤/鈕承澤                                     08/12 19:38
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;成功黑特
-15 小時 ·
-
-#成功黑特 9365
-
-你家的格局應該是坐北朝南
-
-因為你看起來靠北南看
-89 你和其他 88 人
-2 則留言
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;更：
-1.成大勝利早餐
-2.懦夫米糕（移動式，超難追...不知道還有沒有）
-3.阿霞飯店
-4.冰鄉
-5.新化麻婆豆腐包
-6.關廟煎粿
-7.魚腸湯
-8.蒜頭飯
-9.五妃街那個年代杏仁豆腐冰
-
-來！跟著唸一遍：大尖武花尖武花
-
-星期一：大東夜市
-星期二：大東夜市、小北夜市
-星期三：武聖夜市
-星期四：花園夜市
-星期五：大東夜市、小北夜市
-星期六：武聖夜市、花園夜市
-星期日：花園夜市
-—————————————————————
-致：台南地區大學新鮮人
-
-肥宅養成秘笈
-
-大學加上研究所，一待就是待六年；
-唸書打球玩社團，不忘造訪許多店，府城小吃名其實，包羅萬象每一間。
-首先來到國華街，眾多小吃在裡面，富盛碗粿很出名，金得則是賣春捲；
-左邊亞德當歸鴨，繼續前行蚵仔煎，右邊割包叫阿松，還有肉粽稱阿娟。
-路口有間楊桃湯，許家芋粿在街邊，稍微探頭民族路，永樂大賣燒肉飯；
-街上掃店不過癮，大菜市內更多攤，土魠魚羹一個鄭，盡頭阿瑞賣意麵。
-不可不吃江水號，芋頭綿密夠香甜，出來換到另一側，沙卡里巴再嘗鮮；
-榮勝米糕打頭陣，隨之阿財點心店，廖家老闆炒鱔魚，赤崁主打棺材板。
-
-稍作休息繼續衝，直奔安平吃蝦捲，如果周氏已吃膩，還有陳記賣蚵捲；
-安平老街有三寶，尚有豆花加蜜餞，茂記同記舀豆花，一黑一白通通點。
-正合興是化核梅，永泰興為芭樂乾，天從伯賣魚丸湯，古堡前面蚵仔煎；
-邊吃邊玩才高竿，安平古堡登高盼，億載金城有大砲，德記洋行蠟像館 。
-回到市區還沒停，府城小吃萬萬千，光是粽子這一類，數來數去好幾間；
-劉家海龍圓環頂，楊哥楊嫂往上添，百年老店再發號，八寶肉粽一百元。
-或是碗粿也很多，小南森茂吃兩天，個人喜歡小西腳，豆仔湯要順便選；
-如果只是就此收，相信讀者不足滿，所以此處頓逗號，往下繼續再一段：
-
-民族路上右手邊，紅燒土魠魚羹麵 ，只賣晚上八寶冰，就在大遠百對面；
-除了松村燻之味，鴨母寮內有蝦捲，還有你我他鴨翅，新光三越巷子邊。
-吉成還有矮仔成，師出同門蝦仁飯，如同分家鴨肉羹，清珍東巧變兩間；
-台南著名牛肉湯，石精臼來當早餐，或是可以很早起，阿輝凌晨開三點。
-差點忘記寫肉圓，首推一攤武廟前，府前路上有福記，緊接莉莉冰果店 ；
-蝦仁肉圓也出名，隨便數數名字唸，友誠茂雄開始算，永祺建國就四間。
-鱔魚意麵不能忘，阿鐵真味推阿源，小杜阿龍常聽到，兩家也是賣意麵；
-喝口水來喘口氣，上個廁所再來唸，起承轉合別在意，隨意揮灑續敲鍵。
-
-老鄭老鄧不同家，但是都賣牛肉麵，阿銘賣到辦大學，還有老唐未曾遷；
-朋友家中開粘記，我不避嫌來推薦，到此店數共六十，沉思片刻走一遍。
-姚記燒鳥吃宵夜，阿憨鹹粥當早點，包子祿在開山路，肉包輝在市場前；
-上富等買排骨飯，福泰飯桌隨意選，度小月與洪芋頭，古早肉燥擔仔麵。
-小卷米粉跑很遠，卓家汕頭賣魚麵，米糕首府下大道，阿國鵝肉夜未眠；
-上海味香與華都，通通列在路民權，同條尚有太陽城，紅豆牛奶霜超讚。
-總趕宮前松仔腳，雙全紅茶在旁邊，布丁金芳依蕾特，順天冰棒躲巷間；
-最後義豐冬瓜茶，一氣呵成終有限，遺珠之憾別介意，未來有空再補全。
-#義豐不是那個虧雞福來爹&amp;#x1F918;&amp;#x1F3FB;
-
-#剛肚子餓繞了一圈桃園火車站附近都沒東西吃
-
-#我不太吃超商
-
-#我好想回台南啊
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt; 標題  [洽特] 作者/繪師會用自己的本子/作品尻尻嗎？
-───────────────────────────────────────
-→ bamama56: 聽說不會有感覺 光是趕稿就累死了                       06/16 19:19
-→ bamama56: 好比你看著自己女兒長大 你會嗎                         06/16 19:20
-→ bamama56: 抱歉  我會  舉例錯誤                                  06/16 19:20
-推 e446582284: 自己女兒的舉例也太差了，誰不會                      06/16 19:24
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;p&gt;最近在思考著杜絕台女的方法。&lt;/p&gt;
-&lt;p&gt;呼，真該搬個諾貝爾和平獎給我，這方法我苦惱了很久，接下來為您說明：&lt;/p&gt;
-&lt;p&gt;首先要知道台女這個身分不是與生俱來，而是後天影響。&lt;/p&gt;
-&lt;p&gt;也就是說女性在台灣長期生活後受到不知道是輻射還是塑化劑吃太多而造成的生物變化。&lt;/p&gt;
-&lt;p&gt;為何我會這樣說呢？很簡單，因為就我觀察女性有兩個並非台女的時期。&lt;/p&gt;
-&lt;p&gt;一個是幼女期，就在我多次在住家附近的幼稚園所採驗的樣本來看，台灣的幼女並非台女。&lt;/p&gt;
-&lt;p&gt;他們跟各國的幼女一樣，有著可愛的外表、純潔的心靈、牛奶般的味道。&lt;/p&gt;
-&lt;p&gt;但這天使期並不長久，一到 12 歲時就會自動轉職成台女。&lt;/p&gt;
-&lt;p&gt;為這現象我苦惱很久都不明白，之後便放棄了思考為甚麼會變這樣，而是轉為思考該如何阻止這件事。&lt;/p&gt;
-&lt;p&gt;這時我注意到了一個女性並非台女的時期，相信各位也發現……沒錯！就是母性！作為一個母親的時期。&lt;/p&gt;
-&lt;p&gt;母親，這是一個十分偉大的身分，許多科學家做過許多實驗都不明白母愛，那究竟是怎樣的心情呢？或許我們男性一輩子都不會明白吧。&lt;/p&gt;
-&lt;p&gt;捨棄一切，只為自己的孩子著想，多麼純粹又崇高的想法。&lt;/p&gt;
-&lt;p&gt;是的。台女就在進化為母親的那一刻，就會捨棄掉台女身分，成為了只為孩子著想的母親，一切都是由母愛所感化。&lt;/p&gt;
-&lt;p&gt;這也就是為啥你媽不是台女的原因。&lt;/p&gt;
-&lt;p&gt;相信看到這裡，各位都知道我的方法了吧？不清楚沒關係，我再稍微講解一下。&lt;/p&gt;
-&lt;p&gt;這是台灣女性的成長階段 幼女（0-12 歲）&amp;gt;台女（12-？）&amp;gt;母親&lt;/p&gt;
-&lt;p&gt;那我們只要稍微動點手腳，像這樣 幼女(0-12 歲)&amp;gt;母親&lt;/p&gt;
-&lt;p&gt;鏘鏘！這樣就成功跳過台女階段，台女從此不再誕生，每位男性都能跳過那心驚膽跳的時期。&lt;/p&gt;
-&lt;p&gt;不會有越想越覺得不對勁，更不會有像變身那樣遺憾的事發生。&lt;/p&gt;
-&lt;p&gt;沒有台女的台灣，就此誕生！&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;草叢埋伏作戰 讓敵方絕望  吃野怪時留意 隊方的路徑  男癡漢～偷襲補線像那江河湍急
-為何這群隊友 都像個嫩菜  抓準 GANK 時機 出手就斃命  男癡漢～衝臉時像那風暴無情
-你們笨拙散慢又膽怯       膽小又害怕心亂如麻       男癡漢～正面強上像那野火壓境
-我會帶動 整個風向        你遲疑 茫然無助          神出鬼沒像那暗夜的噩夢
-要成為男癡漢 不認輸      要成為男癡漢 不認輸     《男癡漢》詞曲/演唱：趙信
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt; 作者  ichigo100 (草莓 100)                                    看板  Gossiping 
- 標題  [問卦] 百事可樂那麼難喝怎麼不會倒的八卦                                
- 時間  Sat Jul 18 15:11:25 2015                                               
-推 CocaCola: 難喝!!                                                07/18 15:16
-噓 Pepsi: 靠杯哦!                                                  07/18 15:17
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;胡瓜到科技業面試
-
-主管：「你懂製程嗎？」
-
-胡瓜：「不是，我胡瓜。」
--------------------------
-換董至成到科技業面試
-
-主管:你董至成嗎?
-
-董至成:對
-
-主管:你懂什麼?
-
-董至成:志成
-
-主管:什麼製成?
-
-董至成:董
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;空调机上的积雪
-专业 已有 2 人赠与了专业徽章
-
-凌晨四点，起床，内官监太监整理朕的仪容，伺候朕出恭，洗漱，更衣，冠冕，早膳，很烦，昨夜的淑妃已经走了，晨勃，难受，尴尬，宫女的手臂白且胖，想摸但不能，难受。
-
-四点五十分，给圣母皇太后，母后皇太后，老太妃们请安，依旧晨勃，难受，尴尬，刚才有早膳时不饿，现在没早膳却饿，难受，而且冷。太监说朝臣们已经到了，烦躁，王八蛋们又来磨洋工了 ，太仓银贪墨的事情都查明白了么，两广的叛乱都镇压了么，王八蛋们就知道领饷银。
-
-五点十分，朕的心腹们先来向朕汇报百官的情报，礼部尚书又纳了第九房小妾，王八蛋身体可以啊。今天是工部跟户部销账的日子，肯定要扯皮，烦躁。
-
-五点三十分，大内侍卫汇报说昨晚有一个宫女投井死了，那宫女朕还见过的，是博尔济吉特氏的包衣，没事儿投什么井呢，圣母皇太后肯定要斥责我，烦躁。
-
-六点二十分，早朝，果然开始扯皮了，一笔修缮三大宫的费用对不上，果然千算万算，最后都算到朕的头上来，王八蛋。两广的狼土兵杀了朕两个县令，这帮王八蛋却连个剿匪方略都拿不出来，废物点心们，还吵吵嚷嚷的，狗再叫！
-
-六点五十分，早朝结束，单独留兵部尚书，军机章京两人，拟订剿匪方略，一个是朕的妻弟，一个是朕的外甥，都是值得信任的，没注意听就准了。
-
-七点三十分，召翰林院大学士讲《礼记》，王八蛋昨天狎妓的弹劾在我这儿呢，礼义廉耻讲得天花乱坠，无趣，想吃桂花莲子羹，今天午膳会有么？
-
-八点十分，容妃来见，哭哭啼啼的，她哭起来真好看，想摸她的脚，但是淑妃也在，不好意思，容妃说她的哥哥因文字狱获罪，请朕开恩，有这回事儿么？哪个王八蛋办的差，赶紧准了。
-
-八点五十分，占城国和高丽国使臣求见，这两个王八蛋怎么凑到一起的，高丽国还好，只是朝贡，占城国却要朕册封新国王，王八蛋说老国王死了，胡说八道，老国王才三十五岁，咋死的，马上风啊，命礼部核实，太子监督。
-
-九点三十分，观看儿子们写大字，练武，射箭，十四子深得朕意，赐金瓜子一对。
-
-九点五十分，得报，令妃产一女，给了封号，是朕的么，朕有点怀疑，起居注说没问题，那就没问题吧。
-
-十点二十分，顺天府尹报告说又出了杀人案，是母后皇太后弟弟的侄子的儿子干的，王八蛋，朕怎么会有这种亲戚，没奈何，转理事司处理，如果母后那边没话，明天就消了王八蛋一族的旗。
-
-十点四十分，接见大喇嘛，王八蛋有花柳你信么，鼻子都没了，等他走了这偏殿的东西都得烧掉，等过两年他翘辫子，得好好笼络新喇嘛，这老王八蛋就知道恶心朕。
-
-十一点，终于等到午膳了，没有桂花莲子羹，烦躁，还不能发牢骚，不然明天后天都没指望了，赐了两个王八蛋进士开水炖猪肉，给丫高兴的，不腻歪么？
-
-十一点半，御花园行走，碰到德妃了，德妃是圣母皇太后妹妹的侄女，也是个王八蛋，矮且丑，朕还要和她腻歪几句给起居注看。
-
-十一点五十，英吉利画师斯图尔特给朕作画，画得丑且胖，王八蛋，早晚阉了丫的。
-
-十二点半，吏部员外郎献上吴道子假画一副，王八蛋糊弄朕，但朕一样要盖章。
-
-一点整，写诗，盖章，近侍都说好，废话，当然好，朕抄的。
-
-一点半，陪母后皇太后听戏，无聊，母后的宫女有一个好看的，不过是亲戚，很烦，朕想选秀女了。
-
-两点二十分，太仓银贪墨案查出来了，是库吏干的，五十两大锭藏肛门里，怎么做到的，朕很震惊，斩了八个，流放十五个，恶心。
-
-三点十五分，一个宫女披头散发地从朕面前走过去，这是在蔑视朕么，打了她二十板子。
-
-四点整，热，烦躁。
-
-四点半，批奏折，全是废话，写出来的能叫心里话么，下贱。
-
-六点，用晚膳，又没有桂花莲子羹，烦躁。
-
-七点，翻牌子，又是淑妃，淑妃难道使钱了？
-
-七点半，淑妃想给弟弟求个官，去她的，她弟弟是个独眼龙，叫老百姓怎么看朕，烦躁，不准，淑妃闹脾气，朕不管，还是办了她，烦躁。
-
-八点五十，去看皇后，还是皇后识大体，这么晚了还在督促太子学习，朕一高兴，封了她的弟弟爵位，开心。
-
-十点，就寝。
-
-
-我是分割线…
-
-感谢大家的支持，这个点赞数真的吓到我了，写的时候我正在喝桂花莲子羹，还有一小瓶荔枝酒，微醺之中仿佛梦回古代，周围鼓乐齐奏，纸醉金迷…
-鲜元道原肉整切牛排套餐 1000g/10 片 澳洲进口牛肉 菲力
-京东
-￥169.00
-去购买
-
-
-【送 2 香槟杯】尚尼酒庄魔幻云星空酒起泡葡萄酒红酒 4 支
-京东
-￥138.00
-去购买
-
-转载的人好多，而且微博上的点赞量好高，我颇为不服气，以后转载收润笔费五元，还是说护手霜比较好呢？
-编辑于 2019-12-13
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;何源倫‎ 
-發文到
- 迷因模擬器 Memes Simulator
-1 小時 ·
-
-迷因仔：好懷念+*時期
-瘋狂藍蛆：好懷念馬英九時期
-你阿祖骨灰：好懷念日治時期
-炫酷饒舌仔：好想念 Juice Weld
-Juice Weld：好想念癲癇發作之前
-發情仔：好想做愛
-阿神的舊片：嘿大甲好是阿神 cookie 換來到嘔呦屎丟
-阿神：Minecraft [禁忌の附魔]！！把鋤頭附魔加速 X 變成雙頭龍！？[膽小勿入&amp;#x1F602;]
-韓總統：萬歲萬歲萬歲
-蚵 P：不是啦，那個，大菊為重沒錯啦可是大菊太重了，我有亞斯伯格
-蔡菸文：韓國瑜卡韓
-冷凍水餃：...聽…海哭...的聲..音....
-獸控：停止 80 我也是人Úwù *發擬人動物包尿布圖*
-柿子：哈囉？
-北大宿舍新名：是在哈樓
-微波爐：mmmmmmmmmmmmmmmmmm
-跟風揪廚：母答 muda 無駄 :3
-三玖：我是四葉
-五等分廚：［閒聊］為什麼我沒有辦法停止關注糞作？
-理想氣體常數：8.31446J/K•mol
-動漫？卡通：不是動漫的卡通；
-大奶書記：咚打嚘
-迷因仔 Alter：笑死幹這你自己想的嗎郭？
-我：“迷因仔：好懷念...（下略）”
-迷因模擬器：
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt; 作者  hawaii987 (綠茶無糖去冰)                                     看板  sex 
- 標題  [新聞] C.羅女友噴 E 乳　露半球壓奶                                       
-推 mindezi:西螺站 到了                                             02/17 15:48
-→ ChannelV5566:西囉沾 兜勒                                        02/17 15:49
-→ urdie:塞雷站 告阿                                               02/17 15:50
-推 wlsh:we are now at C 羅 station                                  02/17 15:54
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt;推 FXW11314: 119 學生：我讀頂大                                     11/27 18:45
-→ FXW11314: 116 學生：我讀四大                                     11/27 18:45
-→ FXW11314: 114 學生：我讀清交                                     11/27 18:45
-→ FXW11314: 113 學生：我讀交清                                     11/27 18:45
-→ FXW11314: 112 學生：我讀學店                                     11/27 18:45
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt;噓 cwh0105: 樓下要給我什麼? 04/01 23:26
-噓 isaswa: 絕望、痛苦與由內而外死亡 04/01 23:37
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt; 作者  cool5566 (酷哥 56)                                      看板  Gossiping 
- 標題  [新聞] 請辭《新聞深喉嚨》 朱凱翔臉書透露理由                           
- 時間  Wed May 15 21:43:14 2019                                               
-→ diefishfish: 朱大記者 結果我被做成簽名檔                        05/15 21:44
-→ diefishfish: 什麼北連中胡  幹                                   05/15 21:45
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt;#5 樓專業新德文 #1S93EdyW (Gossiping)
-推 ls4860: 幹 一定是整理三小時啊 不然打泡能打三小時嗎              12/27 10:07
-→ lolic: 郝龍斌那個年紀哪可能打三小時                             12/27 10:08
-推 onlythecomet: 人家堂堂前北市長 K 黨副主席，有間自己的倉庫很正常   12/27 10:08
-→ onlythecomet: 摩鐵又不能放東西，那是小民代等級                  12/27 10:09
-推 soong2468: 郝斌斌那年紀,三小時應該是在等他硬吧                 12/27 10:11
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt;推 yoyodiy: 文組從大學聯考就是最競爭的 錄取率比理組低 10%很常見     02/04 14:49
-→ yoyodiy: 就業也要打敗眾多競爭者  這也是我棄理從文的理由 因為    02/04 14:50
-→ yoyodiy: 我喜歡競爭挑戰帶來勝利的感覺                           02/04 14:51
-→ sakuraha: 那 YO 大現在在幹嘛...                                   02/04 14:51
-→ yoyodiy: 失業  因為被其他競爭者打敗了                           02/04 14:52
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt;推 roder:假面騎士的梗     怪獸：我被踢到之後好像該爆炸             08/24 05:03
-推 D122:                  怪獸：我被攻擊後好像需要爆炸             08/24 07:28
-推 LouisCreed:            怪獸：騎士變身的時候我不能動             08/24 08:17
-→ rx5178:                威霸：這個攻擊好像不應該閃躲             08/24 08:37
-→ showcoai:　　　　　　　怪獸：我好像應該聽完招式名稱             08/24 09:09
-&lt;/code&gt;&lt;/pre&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/xml-starlet-kml-lack.html#xml-docbook-json-markdown-的歷史都只是臆測</id>
 <title>xmlstarlet 處理 kml 資料的經驗</title>
@@ -4080,246 +3327,7 @@ Juice Weld：好想念癲癇發作之前
 <category term="程式"/>
 <category term="xml"/>
 <category term="cli"/>
-<content type="html">&lt;h1 id=&quot;xmlstarlet-處理-kml-資料的經驗&quot;&gt;xmlstarlet 處理 kml 資料的經驗&lt;/h1&gt;
-&lt;p&gt;trimble 接收儀內建的定位可以輸出成 kml 格式，
-要把 kml 中的座標取出來，翻出了很久以前聽說過的神器 xmlstarlet。
-但只能說 xml 的設計有缺陷，沒有達到當初很多人期望的效果；
-加上很多工具操作上也沒有想像上的方便。
-後來 json 興起，算是對 xml 複雜的一種反撲。&lt;/p&gt;
-&lt;h2 id=&quot;trimble-接收儀的輸出格式&quot;&gt;trimble 接收儀的輸出格式&lt;/h2&gt;
-&lt;p&gt;最近在測 trimble 推出的 rtx 服務，感覺是一種 ppp-rtk。
-其透過通訊衛星廣播改正資料，只要是支援該服務的接收儀，
-在收 gnss 訊號同時即會接收到改正資料，也就會直接以 rtx 定位。
-所以幾乎是無需設定，開箱即用的服務。&lt;/p&gt;
-&lt;p&gt;trimble 接收儀有二種 io 方式，一是即時的，一是儲存到內部硬碟。
-一般 trimble 接收儀有提供網路、藍牙、序列埠數種即時介面，
-在設定上可以讓接收儀把資料從以上管道即時輸出。
-可以輸出 binex 原始資料、其它 trimble 的專利格式、直接定位的座標等。
-若是支援 rtx 的接收儀，其直接定位的座標就是有 rtx 的成果。&lt;/p&gt;
-&lt;p&gt;但在戶外作業時，還要背一台電腦連到接收儀上，
-只為了存他輸出的座標實在有點蠢，
-所以使用另一種儲存到內部硬碟的方式。&lt;/p&gt;
-&lt;p&gt;存到內部硬碟的格式是 trimble 的專利格式 t02，
-一般使用上是可以用 trimble business center 讀出裡面的資料，
-我之前使用上都是用 trimble 提供的 convert to rinex 程式把 t02 轉成 rinex。
-但其實 t02 除了 gnss 觀測資料，還存了很多有的沒的，
-像接收儀的硬體資訊、電量，連內建的定位結果也會存在裡面。
-（在 session 中的 position interval 可以控制要多久記錄一次座標。）&lt;/p&gt;
-&lt;p&gt;但我無法從 t02 讀出定位座標。
-交大土木的 tbc 因為大人的原因我沒辦法用，
-而 convert to rinex 如同字面上的意思，
-只能轉出 rinex 而不能轉出其它資訊。
-t02 又是專利格式，我也沒辦法直接解析。&lt;/p&gt;
-&lt;h3 id=&quot;從-t02-取出座標的方式&quot;&gt;從 t02 取出座標的方式&lt;/h3&gt;
-&lt;p&gt;我後來找到二個方式，
-一是網頁工具以 ascii dump 出 t02 內的訊息，
-一是用接收儀內建的轉換功能轉成 kml，再取出其中的座標。&lt;/p&gt;
-&lt;p&gt;網頁是有個似乎是 trimble 員工的人，
-維護了個半業餘的網站 &lt;a href=&quot;https://trimbletools.com/&quot;&gt;https://trimbletools.com/&lt;/a&gt; ，
-其中一個功能是 &lt;a href=&quot;https://trimbletools.com/T02_2_PNG.html&quot;&gt;用 t02 內的座標資訊作圖&lt;/a&gt; 。
-如果勾選表單中的 &lt;code&gt;Save raw position files&lt;/code&gt; 選項，
-就會把 t02 中的訊息存到副名檔為 &lt;code&gt;x29&lt;/code&gt; 的檔案，
-之後用 awk 之類的工具就抓出座標訊息。&lt;/p&gt;
-&lt;p&gt;另一個 kml 則是 trimble 的接收儀內建功能。
-trimble 接收儀都有網頁介面，（至少我碰的 net r9 和 alloy 都有。）
-在下載的介面上就能選擇下載 t02，或由接收儀轉成 rinex 或 kml 讓下載。
-kml 裡的座標當然就是 t02 裡的座標了。&lt;/p&gt;
-&lt;p&gt;唯一問題是我用 net r9 時，接收儀內建的轉換功能會跑很久，
-所以我們一般都下載到電腦上用 convert to rinex 轉。
-（雖然還是蠻久的。）
-如果長度一天、觀測頻率 1 秒、定位頻率 1 分鐘，
-轉成 kml 大概要跑一小時，才會轉好開始輸出第一個 byte。
-瀏覽器基本上不會開著一個什麼都不傳的連線 1 小時，
-所以我是用開發者工具弄出網址後，用 curl 載的。
-換成 alloy 時，不知道是 cpu 升級還怎樣，
-總之轉換變很快，數小時的觀測幾秒就轉好了。&lt;/p&gt;
-&lt;h2 id=&quot;xmlstarlet&quot;&gt;xmlstarlet&lt;/h2&gt;
-&lt;p&gt;那要從 kml 抓出資料，當然要用 xml parser 了。
-我一直很相信程式界一句諺語：
-&lt;em&gt;xml 就該用 xml parser，用 regexp 處理 xml/html 的人，總有一天要付出代價。&lt;/em&gt;
-所以就找了用來處理 xml 的工具 xmlstarlet。
-（聽說有二個齊名的工具，xmlstarlet 和 xml-coreutils，
-但我先聽過 xmlstarlet 的，也沒試過 xml-coreutils，
-有空再試吧。）&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;http://xmlstar.sourceforge.net/&quot;&gt;xmlstarlet&lt;/a&gt; 是一支用來處理 xml 的工具程式。
-想想在 unix 環境下，有 grep sed awk 各種工具可以用來處理文字資料，
-但這些工具頂多使用 regexp，只適合處理格式單純的資料，碰到 xml 都不太方便。
-因此就有人開發了 xmlstarlet，可以使用 xpath 來操作 xml 資料。
-如同 json 開始流行後，有人開發了 &lt;a href=&quot;https://stedolan.github.io/jq/&quot;&gt;jq&lt;/a&gt; 來處理 json 資料。&lt;/p&gt;
-&lt;p&gt;其中 xmlstarlet 的 select 命令就能用來取出 xml 文件內的內容，
-簡單可以對 xpath 求值，複雜的用法相當於命令列版本的 xsl。&lt;/p&gt;
-&lt;p&gt;如果只是單純想對 xpath 求值，
-還有另一個更簡單的工具叫 xpath，
-在 debian 是屬於 libxml-xpath-perl 這個套件下。
-雖然它無法處理 utf-8 的命令行參數，
-我的經驗是在 perl 啟動時加上 &lt;code&gt;-Ca&lt;/code&gt; 即可，
-詳情可以 &lt;code&gt;man perlrun&lt;/code&gt; 。&lt;/p&gt;
-&lt;h3 id=&quot;xmlstarlet-的命名空間問題&quot;&gt;xmlstarlet 的命名空間問題&lt;/h3&gt;
-&lt;p&gt;xmlstarlet 個不方便的點就是對 xpath 命名空間的處理，
-之前有寫過一篇 &lt;a href=&quot;xml-namespace-in-xsl-xpath.html&quot;&gt;在 xsl 中 xpath 元素的命名空間問題&lt;/a&gt; ，
-然後就又再 xmlstarlet 碰到這個問題了。
-如果 xml 中指定了命名空間，
-則也必須在 xpath 中指定相同的命名空間才能正確處理。&lt;/p&gt;
-&lt;p&gt;但在 xml 中可以指定預設命名空間，
-就不用為每個元素加上命名空間前綴；但要 xpath 這麼作有困難。
-前述的 perl xpath 腳本是直接忽略命名空間，
-而 xmlstarlet 則提供了一個 &lt;code&gt;-N&lt;/code&gt; 參數來指定命名空間。&lt;/p&gt;
-&lt;p&gt;例如一份 kml 開頭如下：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-xml&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
-&amp;lt;kml xmlns=&amp;quot;http://www.opengis.net/kml/2.2&amp;quot; 
-     xmlns:gx=&amp;quot;http://www.google.com/kml/ext/2.2&amp;quot; 
-     xmlns:kml=&amp;quot;http://www.opengis.net/kml/2.2&amp;quot;&amp;gt;
-&amp;lt;Document&amp;gt;&amp;lt;name&amp;gt;Trimble 2020051900F.T02&amp;lt;/name&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;則必須要用 &lt;code&gt;xmlstarlet -N k=http://www.opengis.net/kml/2.2 //k:name&lt;/code&gt;
-才選得到位於 &lt;code&gt;http://www.opengis.net/kml/2.2&lt;/code&gt; 命名空間下的 name 元素。
-也就是 xpath 中幾乎每個元素都要加上命名空間前綴，使用上極不方便。
-（當然，這份 kml 除了預設，還把 kml 前綴也指向同一個命名空間，
-因此其實不用 &lt;code&gt;-N k=&lt;/code&gt; 的選項，直接指定 &lt;code&gt;//kml:name&lt;/code&gt; 也選得到。）&lt;/p&gt;
-&lt;p&gt;如我在前文提的舊文中所述，xsl 中可以指定 xpath 預設的命名空間，
-就不需要在每個 xpath 中指定元素的命名空間。
-xmlstarlet 沒有這項功能，
-&lt;a href=&quot;http://xmlstar.sourceforge.net/doc/UG/ch05.html#idm47989546158480&quot;&gt;其手冊給了二個解決方式&lt;/a&gt; ，
-一是以內建的底線可以代表根文件的命名空間，
-二是直接以 sed 刪除 xml 的命名空間。&lt;/p&gt;
-&lt;p&gt;第二個方式太蠢了，我說好歹也加個命令是用來刪除命名空間的，
-直接用 sed 刪不是落入用 regexp 處理 xml 的問題了嗎？&lt;/p&gt;
-&lt;p&gt;底線的用法，則是指 xml 文件若有預設命名空間，
-該命名空間會被綁到底線 &lt;code&gt;_&lt;/code&gt; 上。
-也就是上述的 xpath 可以寫成 &lt;code&gt;//_:name&lt;/code&gt; ，
-這裡的 &lt;code&gt;_&lt;/code&gt; 就相當於前面的 k 或 kml，
-也就相當於在命令上加了 &lt;code&gt;-N _=http://www.opengis.net/kml/2.2&lt;/code&gt; 的選項。
-超棒的對吧，從此只要在 xpath 中每個元素名加上 &lt;code&gt;_:&lt;/code&gt; 就好了，真是蠢死了。&lt;/p&gt;
-&lt;p&gt;也許有時間可以去幫忙維護，
-看能不能像 xsl &lt;code&gt;xpath-default-namespace&lt;/code&gt; 屬性，
-有個參數可以指定無指定命名空間時的預設命名空間。&lt;/p&gt;
-&lt;h2 id=&quot;kml-資料的問題&quot;&gt;kml 資料的問題&lt;/h2&gt;
-&lt;p&gt;trimble 轉出 kml 的模式，我是選擇 line and point。
-kml 裡有座標資訊，但每個座標的資訊，如時間、衛星、誤差、速度，
-是以跳脫後的 html table 格式記在 kml 的 description 裡。
-所以處理起來很麻煩。&lt;/p&gt;
-&lt;h3 id=&quot;w3m-格式化表格&quot;&gt;w3m 格式化表格&lt;/h3&gt;
-&lt;p&gt;我原本是只抓出 html 表格，反正表格裡也有座標，
-然後丟到 w3m 排版，就能用 awk 處理了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;xmlstarlet select --text --template \
-    --value-of &amp;quot;/kml/Document/Folder[name=&amp;apos;Points&amp;apos;]/Placemark/description&amp;quot; \
-| w3m -T text/html -dump
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;抓出座標與對應的表格資料&quot;&gt;抓出座標與對應的表格資料&lt;/h3&gt;
-&lt;p&gt;後來我發現表格中的經緯度座標小數位數不夠，
-只到 7 位 mm 等級，要 coordinate 元素內的才有 9 位。
-只好研究 xmlstarlet 的進階用法，
-來同時抓出 html 表格和相鄰的座標元素。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;xmlstarlet select --text --template \
-    --match &amp;quot;/kml/Document/Folder[name=&amp;apos;Points&amp;apos;]/Placemark&amp;quot; \
-    --value-of description --nl \
-    --value-of Point/coordinates --nl --nl
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;程式大概如上，因為 namespace 很煩，
-所以我會先用 sed 把 xmlns 刪掉；不然每個 xpath 都要加一堆 namespace。
-概念就是先找到 xpath &lt;code&gt;/kml/Document/Folder[name=&amp;apos;Points&amp;apos;]/Placemark&lt;/code&gt; ，
-然後取出相對於該位置的 &lt;code&gt;description&lt;/code&gt; 與 &lt;code&gt;Point/coordinates&lt;/code&gt; 元素。
-至於 &lt;code&gt;--nl&lt;/code&gt; 是輸出一個換行符的意思；
-所以就是定位到 Placemark 後，輸出 description 後輸出一個換行，
-再輸出 Point/coordinates 再二個換行。&lt;/p&gt;
-&lt;p&gt;這樣的問題是，description 節點的內容是跳脫的 html，
-所以我加上 &lt;code&gt;--text&lt;/code&gt; 參數讓輸出不會跳脫，變成直接輸出內容。
-但這樣變成 html 和純文字混在一起。&lt;/p&gt;
-&lt;h3 id=&quot;直接解碼-html-當作-xml-處理&quot;&gt;直接解碼 html 當作 xml 處理&lt;/h3&gt;
-&lt;p&gt;所以後來改成輸出也格式化成 xml，
-然後 html 一樣跳脫後嵌在其中一個元素內，再用 &lt;code&gt;xmlstarlet unesc&lt;/code&gt; 解碼。
-也不太想再依賴 w3m，就直接解碼跳脫後的 html，直接當作 xml 處理。
-但解碼後的 html 裡會有 html entities，
-xmlstarlet 不認識會報錯，所以再用 sed 刪掉。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;xmlstarlet select --template --element xml \
-    --match &amp;quot;/kml/Document/Folder[name=&amp;apos;Points&amp;apos;]/Placemark&amp;quot; \
-    --element p --value-of description \
-    --element c --value-of Point/coordinates \
-| xmlstarlet unescape \
-| sed &amp;apos;s/&amp;amp;nbsp;/ /g&amp;apos;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;這段參數的意思是，輸出放在根元素為 xml 的元素內，
-然後每匹配到 placemark 後，輸出一個 p 元素，內容為 description 的內容，
-再在 p 元素中加上一個 c 元素，內容為 point/coordinates 的內容。&lt;/p&gt;
-&lt;p&gt;想試玩可以這樣試：
-因為空字串不是一個合法的 xml 文件，
-所以至少要送一個空的元素。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;echo &amp;apos;&amp;lt;xml/&amp;gt;&amp;apos; \
-| xmlstarlet select --template \
-    --element p --output pc \
-    --element c --output cc
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;之後再用以下的 xsel 重新抓出時間與座標即可：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;xmlstarlet select --template --match /xml/p \
-    --value-of &amp;apos;normalize-space(c)&amp;apos; --output , \
-    --value-of &amp;apos;table/tr/td[.=&amp;quot;UTC&amp;quot;]/following-sibling::td&amp;apos; --nl
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;xpath 相對 css selector 一個很大的強項，
-就是可以匹配節點的文字內容，
-甚至可以匹配父節點或反向選取等，css 做不到的事。&lt;/p&gt;
-&lt;h2 id=&quot;xmlstarlet-的問題&quot;&gt;xmlstarlet 的問題&lt;/h2&gt;
-&lt;p&gt;xmlstarlet 的問題，大概就是一些細節沒處理好，
-使用起來有些地方應該可以更方便的。
-且程式本身也缺人維護，所以想想也是理所當然的。
-這裡談二個問題，一是之前提的 xpath 裡的命名空間問題，
-一是處理 html 常碰到的 entities 問題。&lt;/p&gt;
-&lt;p&gt;xmlns 之前提過了，就是如果文件有指定命名空間，
-那 xpath 中每個元素也都要前綴命名空間，才抓得到元素。
-xsl 中提供了設置 xpath 的預設命名空間的機制，
-但 xmlstarlet 中就沒有這個機制。&lt;/p&gt;
-&lt;p&gt;xmlstarlet 官方手冊給的解決也很蠢，
-用 sed 刪除 xmlns 的屬性，那不是又回到原始的 regexp 了。
-而且 xml 理論上是可以有任意換行與空白的語法，
-所以完全正確的 regexp 會很難寫。&lt;/p&gt;
-&lt;p&gt;我是比較希望可以用 xmlstarlet 本身的功能刪除 xmlns 之類的，
-但 xmlns 是一種特殊屬性，不能直接當作一般屬性刪除。
-所以可能要特別開一個功能來刪，或是把文件當作 html 處理，
-那 html 裡就沒有所謂的命名空間，
-xmlns 就只是一個名稱中可能帶冒號的屬性而已。&lt;/p&gt;
-&lt;p&gt;另一個問題就是我混著處理 html 時，
-因為其中含有 html entities，xml 不認識，
-所以 xmlstarlet 就報錯。
-我是比較希望能開個選項，讓 xmlstarlet 不要那麼嚴格。
-或像 &lt;code&gt;-N&lt;/code&gt; 一樣可以設一個命名空間對應一樣，
-有選項可以設 entities 的值，
-或可以指定額外的 dtd 文件，那就能額外指定 entities。&lt;/p&gt;
-&lt;p&gt;總之大概就是 xmlstarlet 都得用一些 ugly hack 才能達到功能，
-所以不太滿意。但這也很大原因也是專案的人力不足造成的。&lt;/p&gt;
-&lt;h2 id=&quot;xml-與-docbook-的時代&quot;&gt;xml 與 docbook 的時代&lt;/h2&gt;
-&lt;p&gt;xmlstarlet 很老了，大概是 2000 年時 xml 橫空出世，
-被全世界冀望為解決所有格式問題的銀彈，
-在這樣的時空背景下誕生的。
-後來也缺乏維護，該專案的主頁上也掛著大大的請求協助。&lt;/p&gt;
-&lt;p&gt;當年很多人希望 xsl 和 xml 可以一口氣解決所有資料互通的問題。
-但後來 xhtml 沒有獲得普遍採用，
-大家還是覺得用 js 操作 dom，css 形式的選擇器和 jquery 比較好用。
-隨後 json 隨著 js 掘起，作為對 xml 過於複雜的反撲，
-ajax 的 x 也就是 xml 幾乎成為歷史，
-最終 html5 放棄成為 xml 和 sgml 的子集，故事結束。&lt;/p&gt;
-&lt;p&gt;docbook 似乎也是那個時代下的產物。
-我看過好幾本比較正式的 linux 介紹 &lt;strong&gt;書&lt;/strong&gt; ：
-&lt;a href=&quot;https://www.freebsd.org/doc/zh_TW/books/fdp-primer/&quot;&gt;freebsd 文件計劃&lt;/a&gt; 、 &lt;a href=&quot;https://i.linuxtoy.org/docs/guide/index.html&quot;&gt;開源世界旅行手冊&lt;/a&gt; 、
-&lt;a href=&quot;https://dywang.csie.cyut.edu.tw/dywang/linux-wangyin/&quot;&gt;完全以 gnu/linux 工作&lt;/a&gt; 、unix 編程藝術，
-幾乎都會提到 docbook。
-似乎那時 docbook 被冀望成一種萬靈丹，
-可以發布成紙本書、pdf、html 等各種格式，
-所有的文章都可以以 docbook 格式撰寫。&lt;/p&gt;
-&lt;p&gt;同時與 docbook 常被一起提起的名字，則為 LaTeX，
-那時世界似乎分為 xml/docbook 與 TeX/LaTeX 二大派系，
-如同 vi 與 emacs 二大派系。
-xml 派批評 tex 是排版語言，xml 的結構與樣式分離才是正確的作法；
-tex 系則有較美觀的排版效果，
-且 xml 派工具鏈的實作成果不佳，實際使用上有許多問題。&lt;/p&gt;
-&lt;p&gt;markdown 似乎是相對新的產物，後來 markdown 掘起後，
-docbook 似乎就被 markdown 吃光了，
-如同 json 取代 xml、python 取代 java。
-tex 系則繼續演化，如 XeTeX，
-儘管 tex 系對中文的支援似乎一直不是很好，。&lt;/p&gt;
-&lt;p&gt;本文中對 xml docbook json markdown 各格式之間的歷史消長，
-都只是耳聞與臆測，並沒有詳細的資料或確實經歷過。
-因此若有錯誤，歡迎指正或補充。
-我也蠻想知道 docbook 專案的歷史，與當時 xml 興趣的盛況。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/xml-starlet-kml-lack.html</id>
 <title>xmlstarlet 處理 kml 資料的經驗</title>

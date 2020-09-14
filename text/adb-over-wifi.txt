@@ -46,6 +46,13 @@ PC 一樣要下 `adb connect $your_android_ip` 。
 
 [ssh port forward]: android-adb-4g-ssh-tunnel.html
 
+## 把 adb 做成 tor service 經由洋蒽位址連線
+後來發現手機上也能跑 tor，
+[使用 tor 的洋蒽位址][adb tor]，
+不管 android 有沒有公網 ip 都能直接連線了。
+
+[adb tor]: android-adb-tor-howto.html
+
 #刷機
 #android
 #wifi

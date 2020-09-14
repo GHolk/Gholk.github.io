@@ -1,0 +1,164 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2020-09-14T07:01:19.528Z">
+<meta name="keywords" property="og:article:tag" content="android,adb,tor">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="linux-wrap-node-js-in-shell.html" title="簡單將 node.js 或其它腳本語言的函數包裝成執行檔">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>使用 adb 經 tor 網路連上具有洋蒽網址的 android</title>
+</head>
+<body>
+<main><h1 id="使用-adb-經-tor-網路連上具有洋蒽網址的-android">使用 adb 經 tor 網路連上具有洋蒽網址的 android</h1>
+<p>tor 除了用來隱藏真實 ip，
+還有一個好用的功能是能直接連線到無公網 ip 的裝置。
+因此手機裝好 tor 後，無論有無公網 ip、使用行動網路或 wifi，
+都可以在手機上開 vnc、sftp、adb over tcp 等服務，
+在電腦上使用 torsocks 包裝程式後直接連線到手機。
+但使用 adb 連線時，因為 PC 端 adb 程式的設計，
+使用上需要將 daemon 丟到 tor 內，但 client 則需要在 tor 外。</p>
+<h2 id="tor-簡介">tor 簡介</h2>
+<p>tor 最主要的功能是隱藏自己的 ip 位址，
+經由 tor 連線到其它伺服器時，
+對方無法看到你的真實位址，而是會看到 tor 出口的位址。</p>
+<p>同時若是將伺服器架在 tor 網路內，
+則連線上的客戶端也不知道伺服器的 ip，
+連線時是使用 tor 軟體產生的 <code>*.onion</code> 洋蒽地址，
+來讓客戶端能連上伺服器。
+tor 地址還有一個特性，也就是無論是否有公網 ip，
+都可以產生洋蒽地址，讓其它使用者直接連線。</p>
+<h2 id="tor-on-android">tor on android</h2>
+<p>在 android 上有 orbot 這款 tor 官方的 app 可以使用，
+執行後可以讓特定 app 的連線都走 tor，
+或使用 vpn 模式讓整支手機的連線都經由 tor。</p>
+<p>某些需要連線的 app，如我用的 ssh 的 connect bot vx，
+是用來連線 ssh server 的，如果他經由 tor 連線，
+則連線的域名也可以是洋蒽地址；
+那就可以用來連到沒有公網 ip 的電腦。</p>
+<h2 id="android-tor-service">android tor service</h2>
+<p>orbot 同時也提供產生洋蒽地址的功能，
+使用其中的 onion services &gt; hosted services，
+即可產生供外部連入的洋蒽地址。
+orbot 的 ui 設計是一個地址只對應一個本機的連接埠，
+可能是因為安全考量，這樣就不會讓人發現多個服務都在同一個地址上</p>
+<p>（雖然一個洋蒽地址理論上是對應到一支 ip，
+通常是設成自己的 ip，也就是 127.0.0.1，
+一支 ip 則可以有 65536 個埠，但開放是選擇性的，
+一般只會開要架設的服務用到的埠。）</p>
+<p>如果你的 android 有 <a href="adb-over-wifi.html">經由網路讓 adb 連入的功能</a> ，
+那你就可以開 adb 用的 5555 埠；
+ftp 通常會用 2121，因為開 21 要 root；
+sftp 常用 2222，vnc 5900 等。</p>
+<p>開好後，就可以用其它裝置經由 tor，
+以洋蒽地址連上你的 android 上的對應連接埠。
+以 linux 上來說，會使用 torsocks 這支程式
+來包裝對應的 client 程式。</p>
+<p>例如要使用 tor 連上 sftp：
+（這洋蒽位址是假的，不用嘗試。）</p>
+<pre><code class="lang-sh"># connect to sftp
+android_ip=192.168.0.1
+sftp -P 2222 android@$android_ip
+
+# connect sftp via tor
+android_tor_address=6jazqa4obmpudf6qxs46gzqgt2ckb356rticws4d4gv4lsqk2fz7b47f.onion
+torsocks sftp -P 2222 android@$android_tor_address
+</code></pre>
+<p>這種做法的優勢是，多數這些經由網路的服務，
+都需要 android 手機的 ip。
+但多數時候 android 手機都是經由行動網路上網，
+拿到的都是浮動 ip 甚至虛擬 ip，
+浮動 ip 有時會被電信商以防火牆擋住，而虛擬 ip 則根本無法連線。
+故只有在使用 wifi 時，或是以手機分享熱點時，
+手機才會和 PC 在同一區網，也才能以虛擬 ip 連入。</p>
+<p>但使用 tor 時無論 ip 為何，只要能接觸網路網路，
+都可以經由同一組洋蒽地址連入。
+所以就算是使用行動網路，
+開啟 tor 後即可以以電腦經 adb，
+或其它需要 android ip 的軟體連上 android。</p>
+<h2 id="PC-端-adb-的設計">PC 端 adb 的設計</h2>
+<p>adb 連線的問題是在 PC 這端的 adb 程式上。
+adb 設計上都是走 tcp 連線，就算是經由 usb 將 android 連上 pc，
+adb 也是在 usb 上用 tcp 和 android 連線。</p>
+<p>而 PC 上的 adb 設計成 daemon 和 client 二部份，
+daemon 在後台執行，保持和 android 的連線，
+而執行 adb 指定時，則是啟動 adb client 和 daemon 連線；
+而這 client 和 daemon 間，同樣是以 tcp 連線。
+使用上 adb client 執行時，如果沒有發現 adb daemon，
+則會自動啟動一支 daemon。</p>
+<pre><code class="lang-term">~ $ adb devices
+List of devices attached
+* daemon not running; starting now at tcp:5037
+* daemon started successfully
+</code></pre>
+<h2 id="pc-端-adb-連線的問題">pc 端 adb 連線的問題</h2>
+<p>adb client 與 daemon 連線是，是連到 localhost <code>127.0.0.1:*</code> ，
+但 tor 預設是不允許連線到 localhost 的：</p>
+<pre><code class="lang-term">~ $ torsocks nc localhost 5566
+1600064227 WARNING torsocks[15253]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
+localhost [127.0.0.1] 5566 (?) : Operation not permitted
+</code></pre>
+<p>而且實際上在和手機連線的是 adb daemon，
+所以單純讓 client 跑在 tor 是沒有用的，
+要讓 daemon 跑在 tor 裡，
+daemon 才能連上 android 的洋蒽地址。
+而 client 則不能跑在 tor 裡，不然會不能和 localhost 的 daemon 連線。</p>
+<h2 id="使用-adb-經-tor-連線的方式">使用 adb 經 tor 連線的方式</h2>
+<p>首先先檢查有沒有已經執行中的 adb daemon，如果有就把他終止。</p>
+<pre><code class="lang-term">~ $ pgrep --list-full --full adb
+14748 adb -L tcp:5037 fork-server server --reply-fd 4                          
+~ $ kill 14748
+</code></pre>
+<p>再來，就得啟動一支在 tor 內的 daemon，
+因為 adb man-page 裡沒寫怎麼以 daemon 方式執行，
+我就直接用 adb 會自動啟動的特性，
+以及子程序會繼承父程序的環境變數，
+啟動一支在 tor 裡的子程序，讓 client fork 出的 daemon，
+也位在 tor 裡，之後經該 daemon 的連線就都會走 tor 了。</p>
+<pre><code class="lang-term">~ $ torsocks adb devices # fork daemon from process inside tor
+List of devices attached
+1600065838 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
+1600065838 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
+* daemon not running; starting now at tcp:5037
+* daemon started successfully
+1600065841 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
+1600065841 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
+* daemon still not running
+error: cannot connect to daemon at tcp:5037: Operation not permitted
+~ $ adb devices
+List of devices attached
+</code></pre>
+<p>雖然啟動 daemon 後有跳錯誤，
+那是因為 client 發現 daemon 不存在，
+先啟動 daemon 後 client 再繼續原本的指令 devices，
+但因為 client 也在 tor 裡，所以不能與 localhost 連線，就報錯了。
+之後 daemon 也的確有成功啟動，
+不使用 torsocks 啟動的 client 也能成功與 daemon 連線。</p>
+<p>之後與 tor 中的 android 連線時，
+adb 指令也都不需要使用 torsocks；
+因為 adb daemon 已經在 tor 中執行了，
+所以與經 daemon 的 client 也都能使用洋蒽位址。</p>
+<pre><code class="lang-sh">adb connect 6jazqa4obmpudf6qxs46gzqgt2ckb356rticws4d4gv4lsqk2fz7b47f.onion
+</code></pre>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

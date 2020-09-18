@@ -32,9 +32,12 @@ tor 地址還有一個特性，也就是無論是否有公網 ip，
 ## android tor service
 orbot 同時也提供產生洋蒽地址的功能，
 使用其中的 onion services > hosted services，
-即可產生供外部連入的洋蒽地址。
+即可產生供外部連入的洋蒽地址，
+詳細的說明可以看 [這篇 stackexchange 上的回答][orbot service] 。
 orbot 的 ui 設計是一個地址只對應一個本機的連接埠，
 可能是因為安全考量，這樣就不會讓人發現多個服務都在同一個地址上
+
+[orbot service]: https://tor.stackexchange.com/a/14611
 
 （雖然一個洋蒽地址理論上是對應到一支 ip，
 通常是設成自己的 ip，也就是 127.0.0.1，
@@ -79,6 +82,73 @@ torsocks sftp -P 2222 android@$android_tor_address
 所以就算是使用行動網路，
 開啟 tor 後即可以以電腦經 adb，
 或其它需要 android ip 的軟體連上 android。
+
+### 讓一個 tor service 對應多個 port
+orbot 預設的一個洋蒽地址對應一個埠的缺點是，
+如果你要連 adb 得用 adb 的埠的地址，
+sftp 則是 sftp 的地址，
+會有很多組地址要切來切去，很不方便。
+
+我在單純用來直接連線而沒有匿蹤需求時，
+都是用同一組 tor 地址開多個埠，
+這樣就只要記一組，雖然還是不太方便。
+地址和主機的對應我是記在 `ssh_config` 裡，
+反正多數工作用 ssh 都能達成，如果其它服務要用，
+就用 `grep -C 2 onion .ssh/config` 查。
+如果有其它更方便的作法，請推薦給我。
+
+要在 orbot 上讓一個地址開多個埠，
+我是用 orbot 設定裡的進階功能，
+Torrc Custom Config，可以自己輸入 torrc 的設定。
+所以就用該功能建立一個 hidden service 和儲存路徑就可以了。
+
+```
+HiddenServiceDir /sdcard/my-tor-service
+HiddenServicePort 2222
+HiddenServicePort 5555
+HiddenServicePort 5900
+```
+
+之後依 tor 的運作模式，洋蒽地址就會在 tor 執行後儲存在
+`/sdcard/my-tor-service/hostname` 這個檔案裡。
+但 tor 似乎會檢查該目錄的存取權限，
+如果該目錄不是只有擁有者可讀的權限 `rwx------` ，
+在執行時就會報錯。
+（雖然第一次建立目錄時不會報錯，
+但第二次啟動時要讀取目錄裡既有的資料就會報錯。）
+
+偏偏 android 手機中， `/sdcard` 的檔案系統是 fat，
+無法儲存權限和所有者資訊，
+所以不能把 `HiddenServiceDir` 指到 sdcard 裡的路徑。
+
+但 android 手機裡，除了 `/sdcard` 外我們能動的地方實在是不多，
+大概只有 `/data` 比較適合存資料，
+可是 data 分割一般需要 root 才能讀取。
+如果你有 root 的話，可以直接指到 `/data/local/my-tor-service` ，
+啟動一次產生資料夾後，用 su 切到 root
+`cat /data/local/my-tor-service/hostname` 看路徑。
+
+沒有 root 的話，可以用一個比較 hack 的方式：
+
+ 1. 在 torrc custom config 裡把 hidden service 的路徑
+    指到 `/data/data/org.torproject.android/files/hidden_services/hs5566` ，
+    然後看你要開幾個 port 都可以。
+ 2. 連接一次 tor 網路，啟動時就會建立出 hs5566 這個資料夾和內部的設定。
+ 3. 然後斷線，再用 orbot 內建的功能建立一個 5566 port 的 hidden service。
+    依 orbot 的設計，啟動時 tor 會把 5566 port 的設定存到
+    `/data/data/org.torproject.android/files/hidden_services/hs5566` 路徑。
+ 4. 再連接一次 tor，這次應該會失敗，因為二個服務指向同一個資料夾，但沒關係。
+ 5. 可以關閉 tor 了，這時再去 orbot 建立 service 的 ui 裡看，
+    5566 port 的 service 就會顯示出一串較長的 tor 第三版本地址，
+    就是你寫在 torrc custom config 裡的那個 service 的地址。
+ 6. 之後就把 orbot ui 裡該 5566 port 的 service 取消勾選不要啟動，
+    以後啟動 tor 網路後就能用該地址連上 android 了。
+
+這個做法的缺點就是，我不保證他能運作多久。
+反觀用 root 不只能拿到 hostname，還可以把整個 tor service 複製出來
+`cp -r /data/local/my-tor-service /sdcard/my-tor-service` ，
+備份裡面的 secret key 和 public key，
+之後整個資料夾丟到另一個裝置上，用另一個 tor 一樣跑的起來。
 
 ## PC 端 adb 的設計
 adb 連線的問題是在 PC 這端的 adb 程式上。

@@ -34,6 +34,18 @@ function foo() {
 換成型參的名字。
 如果要得到 promise，就記得回傳。
 
+這個做法應該是從 [sweet.js] 看來的，
+sweet.js 是一個以 js 實作 js 巨集的套件，
+但現在找不到比較官方的文章介紹
+怎麼用 sweet.js 實作 async 和 await，
+有一個 [說明比較完整的是一個 github repository readme][github readme async] ，
+另一個是 [部落格，但就用了 sweet.js 的語法][blog async] ，
+第一眼會看不懂，而且似乎只是 pseudo code。
+
+[blog async]: https://khamidou.com/programming/await-statement-in-javascript.html
+[github readme async]: https://github.com/jayphelps/sweet-async-await
+[sweet.js]: https://www.sweetjs.org/
+
 但事情沒有那麼簡單，以上的改寫只在單純序列執行時辦得到，
 如果在 for while if else 的 code block 中使用 await，
 就不能這樣改寫。

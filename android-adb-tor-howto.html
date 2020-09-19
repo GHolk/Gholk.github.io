@@ -43,6 +43,8 @@
 來讓客戶端能連上伺服器。
 tor 地址還有一個特性，也就是無論是否有公網 ip，
 都可以產生洋蒽地址，讓其它使用者直接連線。</p>
+<p>但 tor 的缺點是會有很重的延遲，
+速度倒沒測過，反正我是沒有速度的需求。</p>
 <h2 id="tor-on-android">tor on android</h2>
 <p>在 android 上有 orbot 這款 tor 官方的 app 可以使用，
 執行後可以讓特定 app 的連線都走 tor，
@@ -156,16 +158,17 @@ adb 也是在 usb 上用 tcp 和 android 連線。</p>
 <p>而 PC 上的 adb 設計成 daemon 和 client 二部份，
 daemon 在後台執行，保持和 android 的連線，
 而執行 adb 指定時，則是啟動 adb client 和 daemon 連線；
-而這 client 和 daemon 間，同樣是以 tcp 連線。
-使用上 adb client 執行時，如果沒有發現 adb daemon，
-則會自動啟動一支 daemon。</p>
+而這 client 和 daemon 間，同樣是以 tcp 連線。</p>
+<p>使用上 adb client 執行時，如果沒有發現 adb daemon，
+則會自動啟動一支 daemon。
+也可以用 adb start-server 和 adb kill-server 來顯式啟動或關閉 server。</p>
 <pre><code class="lang-term">~ $ adb devices
 List of devices attached
 * daemon not running; starting now at tcp:5037
 * daemon started successfully
 </code></pre>
 <h2 id="pc-端-adb-連線的問題">pc 端 adb 連線的問題</h2>
-<p>adb client 與 daemon 連線是，是連到 localhost <code>127.0.0.1:*</code> ，
+<p>adb client 與 daemon 連線是，是連到 localhost <code>127.0.0.1:5037</code> ，
 但 tor 預設是不允許連線到 localhost 的：</p>
 <pre><code class="lang-term">~ $ torsocks nc localhost 5566
 1600064227 WARNING torsocks[15253]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
@@ -177,34 +180,22 @@ localhost [127.0.0.1] 5566 (?) : Operation not permitted
 daemon 才能連上 android 的洋蒽地址。
 而 client 則不能跑在 tor 裡，不然會不能和 localhost 的 daemon 連線。</p>
 <h2 id="使用-adb-經-tor-連線的方式">使用 adb 經 tor 連線的方式</h2>
-<p>首先先檢查有沒有已經執行中的 adb daemon，如果有就把他終止。</p>
-<pre><code class="lang-term">~ $ pgrep --list-full --full adb
-14748 adb -L tcp:5037 fork-server server --reply-fd 4                          
-~ $ kill 14748
+<p>首先先確保沒有執行中的 adb daemon，如果有就把他終止。</p>
+<pre><code class="lang-sh">adb kill-server
 </code></pre>
 <p>再來，就得啟動一支在 tor 內的 daemon，
-因為 adb man-page 裡沒寫怎麼以 daemon 方式執行，
-我就直接用 adb 會自動啟動的特性，
-以及子程序會繼承父程序的環境變數，
-啟動一支在 tor 裡的子程序，讓 client fork 出的 daemon，
-也位在 tor 裡，之後經該 daemon 的連線就都會走 tor 了。</p>
-<pre><code class="lang-term">~ $ torsocks adb devices # fork daemon from process inside tor
-List of devices attached
-1600065838 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
-1600065838 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
+之後經該 daemon 的連線就都會走 tor 了。</p>
+<pre><code class="lang-term">~ $ torsocks adb start-server
+1600504690 WARNING torsocks[18435]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
+1600504690 WARNING torsocks[18435]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
 * daemon not running; starting now at tcp:5037
 * daemon started successfully
-1600065841 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
-1600065841 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
-* daemon still not running
-error: cannot connect to daemon at tcp:5037: Operation not permitted
 ~ $ adb devices
 List of devices attached
 </code></pre>
-<p>雖然啟動 daemon 後有跳錯誤，
-那是因為 client 發現 daemon 不存在，
-先啟動 daemon 後 client 再繼續原本的指令 devices，
-但因為 client 也在 tor 裡，所以不能與 localhost 連線，就報錯了。
+<p>雖然啟動 daemon 時有跳錯誤，那是因為 start-server 時
+client 會先連線到 localhost:5037 檢查 daemon 存不存在，
+但因為 tor 不能連線到 localhost，所以跳了警告。
 之後 daemon 也的確有成功啟動，
 不使用 torsocks 啟動的 client 也能成功與 daemon 連線。</p>
 <p>之後與 tor 中的 android 連線時，
@@ -212,6 +203,21 @@ adb 指令也都不需要使用 torsocks；
 因為 adb daemon 已經在 tor 中執行了，
 所以與經 daemon 的 client 也都能使用洋蒽位址。</p>
 <pre><code class="lang-sh">adb connect 6jazqa4obmpudf6qxs46gzqgt2ckb356rticws4d4gv4lsqk2fz7b47f.onion
+</code></pre>
+<p>但在 tor 中的 daemon 會不能連線到虛擬 ip，
+例如一般在 wifi 區域網路中會用手機的區網 ip 連 adb，
+但如果 daemon 在 tor 裡就不行，
+要先把 tor 裡的 server 關掉重開一個新的。</p>
+<pre><code class="lang-term">~ $ adb connect 192.168.0.1
+unable to connect to 192.168.0.1:5555: Connection refused
+~ $ adb connect 6jazqa4obmpudf6qxs46gzqgt2ckb356rticws4d4gv4lsqk2fz7b47f.onion
+connected to 6jazqa4obmpudf6qxs46gzqgt2ckb356rticws4d4gv4lsqk2fz7b47f.onion:5555
+
+~ $ adb kill-server
+~ $ adb connect 192.168.169.2
+* daemon not running; starting now at tcp:5037
+* daemon started successfully
+connected to 192.168.169.2:5555
 </code></pre>
 </main>
 

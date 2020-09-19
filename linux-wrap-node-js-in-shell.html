@@ -169,6 +169,32 @@ node -e &apos;require(&quot;qrcode-terminal&quot;).generate(process.argv[1], {sm
 或直接寫路徑 <code>node_modules/.bin/script-name</code> 。
 而新版的 npm 則多出了 npx 這支程式，
 可以直接寫成 <code>npx script-name</code> 。</p>
+<h2 id="使用-node.js-操作-json">使用 node.js 操作 json</h2>
+<p>最近發現一項好用的作法，在要處理 json 資料時，
+如果手邊沒有 jq，那直接用 node.js 來處理 json 其實蠻方便的。
+例如處理 http api 回傳的 json 格式資料：</p>
+<pre><code class="lang-sh">node -p &quot;JSON.parse(process.argv[1]).data.map(u =&gt; u.name).join(&apos;\n&apos;)&quot; \
+    &quot;$(curl --silent http://api.url/)&quot;
+</code></pre>
+<p>雖然 python 也可以 <code>import json</code> 之後解碼，
+但就多了一個 import 的步驟。
+至於這裡用參數傳而不是用管道，
+是因為 node.js 要讀標準輸入只能用事件驅動的 api，較不方便。</p>
+<p>當然，有時需要寫長一點的腳本，
+也可以寫到多行或用變數宣告：</p>
+<pre><code class="lang-sh">node -p &apos;
+let d = JSON.parse(process.argv[1]).data
+d.reduce((c,a) =&gt; c+Number(a.correct), 0)/d.length
+&apos; &quot;$(wget -O - --quiet $api_url)&quot;
+</code></pre>
+<p>這種腳本的方便處在於，有時在部署服務時，
+布署環境是精簡過的環境什麼都沒有，
+但最少可以保證有要執行的語言，像 python 或 node.js，
+就能快速寫一些 shell 和 js 混在一起的髒腳本來處理。</p>
+<p>以 node.js 來說這些腳本直接寫在 package.json 的 script 裡，
+也可以寫成獨立的檔案，但最好還是把檔名或執行方式
+放到 package.json 裡，或寫到 readme 裡，
+至少讓其它人知道是幹麻的或怎麼用。</p>
 </main>
 
 <script defer src="ext/meta-meta.js"></script>

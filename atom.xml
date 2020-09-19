@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2020-09-18T09:16:58.231Z</updated>
+  <updated>2020-09-19T06:54:37.592Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,201 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/linux-wrap-node-js-in-shell.html#使用-node.js-操作-json</id>
+<title>簡單將 node.js 或其它腳本語言的函數包裝成執行檔</title>
+<published>2020-09-07T06:53:03.436Z</published>
+<updated>2020-09-19T06:54:37.578Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/linux-wrap-node-js-in-shell.html#使用-node.js-操作-json"/>
+<summary type="html">&lt;pre class=&quot;diff&quot;&gt;@@ -187,6 +187,42 @@ node.js 雖然也能用 `require.main == module`
+ 而新版的 npm 則多出了 npx 這支程式，
+ 可以直接寫成 `npx script-name` 。
+ 
++## 使用 node.js 操作 json
++最近發現一項好用的作法，在要處理 json 資料時，
++如果手邊沒有 jq，那直接用 node.js 來處理 json 其實蠻方便的。
++例如處理 http api 回傳的 json 格式資料：
++
++```sh
++node -p &amp;quot;JSON.parse(process.argv[1]).data.map(u =&amp;gt; u.name).join(&amp;apos;\n&amp;apos;)&amp;quot; \
++    &amp;quot;$(curl --silent http://api.url/)&amp;quot;
++```
++
++雖然 python 也可以 `import json` 之後解碼，&lt;/pre&gt;</summary>
+<category term="javascript"/>
+<category term="linux"/>
+<category term="shell"/>
+<content type="html">&lt;h1 id=&quot;簡單將-node.js-或其它腳本語言的函數包裝成執行檔&quot;&gt;簡單將 node.js 或其它腳本語言的函數包裝成執行檔&lt;/h1&gt;
+&lt;p&gt;有時一些 npm 的套件沒有提供命令列的呼叫介面，
+或是想用的功能在 node.js 裡就能做到，
+懶的另外用 apt 裝可執行檔的程式。
+這時就能用 node 的 &lt;code&gt;-e&lt;/code&gt; 選項直接執行一小段程式，
+可以簡單直接把參數放到指令裡，或透過 argv 傳，
+使用上還可以把整段程式設成 alias 或者寫成 shell script。
+這種用法也可以適用於 python perl 等其它直譯式語言。&lt;/p&gt;
+&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
+&lt;p&gt;以前用 fedora 23 lxde 時有支程式可以轉各類編碼，
+像 base64、xml entities、urlencode 等。
+但我忘了那工具叫什麼名字，只記得他是用子命令的方式呼叫，
+像是跳脫 xml 就是 &lt;code&gt;xxxencoder xml &amp;lt; article.txt&lt;/code&gt; ，
+之後 &lt;code&gt;&amp;lt;&amp;gt;&amp;amp;&lt;/code&gt; 就會被取代成 &lt;code&gt;&amp;amp;lt;&lt;/code&gt; &lt;code&gt;&amp;amp;gt;&lt;/code&gt; &lt;code&gt;&amp;amp;amp;&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;之後換到 debian 偶爾需要跳脫時，
+沒有現成的工具在手邊就不太方便。
+雖然也可以裝專門的 apt 套件，
+但總覺得為了這麼簡單的事額外裝套件有點蠢，
+只要開 node.js 或是在瀏覽器的開發者工具，
+呼叫 &lt;code&gt;encodeURIComponent&lt;/code&gt; 即可以用百分號編碼，
+可是每次都要這樣開又很麻煩。&lt;/p&gt;
+&lt;h2 id=&quot;用-shebang-和腳本語言解決&quot;&gt;用 shebang 和腳本語言解決&lt;/h2&gt;
+&lt;p&gt;後來就寫了簡單的 node.js 腳本 &lt;a href=&quot;https://github.com/gholk/loco/blob/f67abd2/bin/urlencode.js&quot;&gt;urlencode&lt;/a&gt; ，
+呼叫 js 內建的函數來編碼 url。
+但發現這樣寫一寫其實程式量還不少，要 30 行多。&lt;/p&gt;
+&lt;p&gt;一方面是我特別寫成物件導向，
+加上還要處理命令列選項，所以程式稍微多了一點。
+另一個問題是 node.js 在讀取標準輸入上不太方便，
+只能用事件驅動的方式讀資料。&lt;/p&gt;
+&lt;p&gt;node.js 為了支援 shebang，
+特別允許在程式的第一行有 &lt;code&gt;#!&lt;/code&gt; 開頭。
+而其它腳本語言，多半將 &lt;code&gt;#&lt;/code&gt; 號做為註解，
+而能直接忽略 shebang。&lt;/p&gt;
+&lt;p&gt;例如 awk 就可以用 shebang 化身為可執行檔，
+除了用 &lt;code&gt;awk -f&lt;/code&gt; 指定從檔案裡讀取程式執行外，
+也可以加上執行權限與 shebang 直接執行；
+&lt;a href=&quot;https://github.com/gholk/loco/blob/f67abd2/gnss/nmea-to-tsv.awk&quot;&gt;可以參考我 github 上的 awk 程式&lt;/a&gt; 。&lt;/p&gt;
+&lt;h2 id=&quot;用-one-liner-解決&quot;&gt;用 one liner 解決&lt;/h2&gt;
+&lt;p&gt;一些程式語言有 one liner 的設計，
+除了叫出 repl 從 stdin 打程式外，
+可以把程式用 &lt;code&gt;-e&lt;/code&gt; 選項傳入直接執行，
+就像直接呼叫一個小工具一樣，
+可以用來在 shell 裡做 shell 缺少的數學計算。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;a=16
+b=9
+perl -e &amp;quot;print $a/$b&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;或者也有本身就是設計來做 one liner 的工具，如 sed awk。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;sed &amp;apos;s/&amp;amp;/\&amp;amp;amp;/g; s/&amp;lt;/\&amp;amp;lt;/g; s/&amp;gt;/\&amp;amp;gt;/g;&amp;apos; &amp;lt; article.txt
+awk &amp;apos;BEGIN {print 16/9}&amp;apos;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;這些 one liner 雖然寫起來不長，
+但首先要是對該語言夠熟悉才有能力使用。
+而且一般語言寫 one liner 不太方便，
+像 c 或 java 根本不能想像寫成 one liner，
+比較適合的像是 sed awk，通用的程式語言則有 perl。&lt;/p&gt;
+&lt;p&gt;perl 語言設計上包含了大量的簡寫、省略、特殊符號，
+使得 perl 成為最適合寫 one liner 的語言。
+&lt;a href=&quot;https://gist.github.com/joyrexus/7328094&quot;&gt;網路上有不少 perl one liner 的範例&lt;/a&gt;，
+對於懶得學 sed awk 的人，可以選擇只學 perl 一個當二個打。&lt;/p&gt;
+&lt;h2 id=&quot;讀參數、環境變數、標準輸入&quot;&gt;讀參數、環境變數、標準輸入&lt;/h2&gt;
+&lt;p&gt;前面的用法大多是把變數用 shell 的變數代換，
+用雙引號直接嵌在要執行的程式碼內。
+但這種作法的缺點是要擔心特殊字元的跳脫，
+還有把資料和程式混在一起。
+其實多數直譯器，只要不是從 stdin 輸入程式，
+都可以像一般寫程式讀 stdin、參數。
+如果要傳參數，各語言有自己的習慣，
+以 node.js 來說，就是有 &lt;code&gt;-e&lt;/code&gt; 選項的話，其它就會被視為參數。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ node -e &amp;apos;console.log(process.argv)&amp;apos; hello world &amp;quot;$PWD&amp;quot; &amp;apos;by by&amp;apos;
+[ &amp;apos;/usr/bin/node&amp;apos;, &amp;apos;hello&amp;apos;, &amp;apos;world&amp;apos;, &amp;apos;/home/gholk&amp;apos;, &amp;apos;by by&amp;apos; ]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;例如如果想傳一個陣列到程式裡，
+那一般內建的字串傳就要想辦法先把資料格式化成該語言的陣列寫法。
+如果用參數傳就比較簡單，因為參數在 shell 已經都分割好了。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ node -p &amp;apos;process.argv.slice(1).sort()&amp;apos; hello world &amp;quot;$PWD&amp;quot; &amp;apos;by by&amp;apos;
+[ &amp;apos;/home/gholk&amp;apos;, &amp;apos;by by&amp;apos;, &amp;apos;hello&amp;apos;, &amp;apos;world&amp;apos; ]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;存成腳本&quot;&gt;存成腳本&lt;/h2&gt;
+&lt;p&gt;這些 one liner 雖然寫起來不長，但每次都要重新打一邊也是很麻煩。
+因此有些人會放到 bashrc 的 alias 或 function，比較不會忘記。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;alias urlencode=&amp;quot;node -p \&amp;quot;encodeURIComponent(process.argv.slice(1).join(&amp;apos; &amp;apos;))\&amp;quot;&amp;quot;
+
+urldecode() {
+    node -p &amp;quot;encodeURIComponent(process.argv.slice(1).join(&amp;apos; &amp;apos;))&amp;quot; &amp;quot;$@&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;甚至一些比較少用或比較長的 one liner，就直接寫成一個腳本，
+可以用前面提過的 &lt;a href=&quot;#用-shebang-和腳本語言解決&quot;&gt;shebang&lt;/a&gt; ，
+不適合 shebang 的，則可以用 shell 包裝。
+總之就是把可以重覆使用的程式記錄起來，之後才不會忘記。
+所以 linux 用久了，累積出一個充滿自己寫的腳本的
+&lt;code&gt;~/.local/bin&lt;/code&gt; 資料夾也是很正常的事。&lt;/p&gt;
+&lt;h2 id=&quot;使用-shell-包裝&quot;&gt;使用 shell 包裝&lt;/h2&gt;
+&lt;p&gt;有些程式不適合使用 shebang，也可以改成寫 shell 腳本，
+再在腳本裡呼叫程式傳入程式碼。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;#!/bin/sh
+node -p &amp;quot;encodeURIComponent(process.argv.slice(1).join(&amp;apos; &amp;apos;))&amp;quot; &amp;quot;$@&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;一些程式能力不足的 dsl 會用這種做法，
+例如 gnuplot 如果要使用其語言完成參數解析、邏輯處理、計算等工作可能有困難，
+所以不會用 &lt;code&gt;#!/usr/bin/gnuplot&lt;/code&gt; 這種寫法。
+因此常和 shell 搭配使用，甚至使用 awk 對輸入做預處理，
+如 &lt;a href=&quot;https://github.com/GHolk/loco/blob/aca8fac/gnss/sar-spatial-temporal-baseline.sh&quot;&gt;我幾個月前寫的 gnuplot 和 awk 合作的腳本&lt;/a&gt; ，
+與其看成 gnuplot 腳本，也能看成 awk 腳本。&lt;/p&gt;
+&lt;p&gt;另一項理由是方便。
+如 node.js 要處理標準輸入較麻煩，需要使用到事件導向的函數，
+直接以 shell 負責讀取標準輸入，再以參數傳入會較方便。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;#!/bin/sh
+if [ $# -eq 0 ]
+then data=&amp;quot;$(cat)&amp;quot;
+else data=&amp;quot;$*&amp;quot;
+fi
+
+node -e &amp;apos;require(&amp;quot;qrcode-terminal&amp;quot;).generate(process.argv[1], {small:true}))&amp;apos; \
+    -- &amp;quot;$data&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;例如以上是呼叫 qrcode-terminal 這項 npm 套件來產生 qrcode 的腳本，
+雖然該套件也有提供可執行的腳本，但並不支援 small 選項，
+因此只能寫一段簡單的程式來載入該套件，
+並依需求客制化選項產生 qrcode。&lt;/p&gt;
+&lt;h2 id=&quot;套件提供的主程式&quot;&gt;套件提供的主程式&lt;/h2&gt;
+&lt;p&gt;npm 的設計上是一個套件可以包含可執行檔，
+在安裝時會裝到資料夾的 &lt;code&gt;node_modules/.bin&lt;/code&gt; 或是 &lt;code&gt;~/.local/bin&lt;/code&gt; 。
+但 python 的做法則是，一個模組除了直接載入外，
+如果用 &lt;code&gt;-m&lt;/code&gt; 選項加上模組名稱，即可以直接執行該檔案，
+而在程式內部則可以用 &lt;code&gt;__name__ == &amp;apos;__main__&amp;apos;&lt;/code&gt; 來判斷
+此腳本目前是作為模組被載入或被執行。&lt;/p&gt;
+&lt;p&gt;因此在程式撰寫上，可以把函式庫和主程式腳本寫在同一支程式裡。
+在執行期間再判斷目前程式是被載入或被執行，
+若是被執行就表現出命令列程式的行為，
+否則就只提供函數，不執行具體行為。&lt;/p&gt;
+&lt;p&gt;node.js 雖然也能用 &lt;code&gt;require.main == module&lt;/code&gt; 
+來判斷目前腳本是被載入或是被執行，卻缺少 python 的 &lt;code&gt;-m&lt;/code&gt; 選項。
+雖然有 &lt;code&gt;-r&lt;/code&gt; 選項，但僅具備事先載入的功能，
+而不能將模組作為主程式執行。&lt;/p&gt;
+&lt;p&gt;舊有的 npm 中，全域安裝的程式會直接寫入使用者指定的路徑，
+一般也會在 PATH 裡，沒什麼問題。
+但安裝在專案目錄下的套件會放在 &lt;code&gt;node_modules/.bin&lt;/code&gt; 裡，
+要執行起來稍嫌麻煩，
+唯一比較方便的做法是 &lt;code&gt;$(npm bin)/script-name&lt;/code&gt; ，
+或直接寫路徑 &lt;code&gt;node_modules/.bin/script-name&lt;/code&gt; 。
+而新版的 npm 則多出了 npx 這支程式，
+可以直接寫成 &lt;code&gt;npx script-name&lt;/code&gt; 。&lt;/p&gt;
+&lt;h2 id=&quot;使用-node.js-操作-json&quot;&gt;使用 node.js 操作 json&lt;/h2&gt;
+&lt;p&gt;最近發現一項好用的作法，在要處理 json 資料時，
+如果手邊沒有 jq，那直接用 node.js 來處理 json 其實蠻方便的。
+例如處理 http api 回傳的 json 格式資料：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;node -p &amp;quot;JSON.parse(process.argv[1]).data.map(u =&amp;gt; u.name).join(&amp;apos;\n&amp;apos;)&amp;quot; \
+    &amp;quot;$(curl --silent http://api.url/)&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;雖然 python 也可以 &lt;code&gt;import json&lt;/code&gt; 之後解碼，
+但就多了一個 import 的步驟。
+至於這裡用參數傳而不是用管道，
+是因為 node.js 要讀標準輸入只能用事件驅動的 api，較不方便。&lt;/p&gt;
+&lt;p&gt;當然，有時需要寫長一點的腳本，
+也可以寫到多行或用變數宣告：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;node -p &amp;apos;
+let d = JSON.parse(process.argv[1]).data
+d.reduce((c,a) =&amp;gt; c+Number(a.correct), 0)/d.length
+&amp;apos; &amp;quot;$(wget -O - --quiet $api_url)&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;這種腳本的方便處在於，有時在部署服務時，
+布署環境是精簡過的環境什麼都沒有，
+但最少可以保證有要執行的語言，像 python 或 node.js，
+就能快速寫一些 shell 和 js 混在一起的髒腳本來處理。&lt;/p&gt;
+&lt;p&gt;以 node.js 來說這些腳本直接寫在 package.json 的 script 裡，
+也可以寫成獨立的檔案，但最好還是把檔名或執行方式
+放到 package.json 裡，或寫到 readme 裡，
+至少讓其它人知道是幹麻的或怎麼用。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/implement-async-by-generator.html#從-sweet.js-看來的巨集實作-async-await-作法</id>
 <title>用 generator 實作 async await</title>
 <published>2018-05-22T09:37:11.268Z</published>
@@ -2463,197 +2658,7 @@ Juice Weld：好想念癲癇發作之前
 <category term="思辨"/>
 <category term="學校"/>
 <category term="大學"/>
-<content type="html">&lt;h1 id=&quot;大學中行政效率與職業疲勞造成的莫不關心&quot;&gt;大學中行政效率與職業疲勞造成的莫不關心&lt;/h1&gt;
-&lt;p&gt;過去就有想過這個議題，也就是警察、醫生等處理 &lt;strong&gt;意外&lt;/strong&gt; 的職業，
-因為每天面對意外，會對意外產生疲勞，
-演化成看淡人生或莫不關心的態度。
-而最近交大資工有個大神等級的人，
-因為系辦行政的問題而誤會導致延畢，在臉書上產生許多共鳴與論戰。
-大學中的行政工作對教授來說多是屎缺，
-而每年不斷重復的畢業也容易造成倦怠，最後讓意外學生成為制度的犠牲者。&lt;/p&gt;
-&lt;h2 id=&quot;職業造成的感受疲勞&quot;&gt;職業造成的感受疲勞&lt;/h2&gt;
-&lt;p&gt;警察、醫生等處理意外的職業，
-每天的工作需要面對不斷發生的意外，如抓捕犯人、救治病人等。
-但每天不斷發生，數量大了肯定偶爾會有遺憾，
-無法偵破的案件、回天乏數的病人。
-這些遺憾不斷發生，很可能讓從業人員產生疲勞，而使得這些遺憾不再特別，
-不再對無法主持的正義咬牙切齒，單純成為工作的一部份。&lt;/p&gt;
-&lt;p&gt;對於一般人，每件發生在自己身邊的意外都是特別的，生老病死、偷柺搶騙。
-但對每天經手這些意外的人而言，
-固定就是有些案件無法偵破，有病患難逃一死。
-也就是作為一種工作，而使得正義二個字變的平凡而不再沉重，
-死亡不再悲痛而變為日常。&lt;/p&gt;
-&lt;p&gt;其它類似的職業，除了上面舉例的警察、醫生外，
-我還有想到社工，甚至是公務員。
-社工日常工作就是人間悲劇，而公務員可能也是，
-因為一般會去找公務員辦公，多半是有出事才會去，
-所以也是每天在面對意外。&lt;/p&gt;
-&lt;h2 id=&quot;交大吳仲昇的故事&quot;&gt;交大吳仲昇的故事&lt;/h2&gt;
-&lt;p&gt;大略是一名交大資工系大神 &lt;a href=&quot;https://www.facebook.com/samsam2310&quot;&gt;吳仲昇&lt;/a&gt; ，在畢業前與系辦確認過自己的學分足夠畢業，
-也排定了畢業後的工作與就職時程。
-但在畢業前才被通知，過去的試算有錯，他的學分不足以畢業，
-原因為苦主有一門以程式設計競賽免修的課程，雖然免修但並沒有拿到學分。
-而主要爭議在於，當初的學分試算，是系辦簽過名的，
-但最後資工系卻無法讓他準時畢業。&lt;/p&gt;
-&lt;p&gt;在與資工系溝通後仍無準時畢業，因此苦主也將自己的經歷
-同時發表在靠北交大匿名粉絲專頁與 &lt;a href=&quot;https://www.facebook.com/samsam2310/posts/3098410996894934&quot;&gt;他自己的塗鴨牆&lt;/a&gt; ，
-以下也搬運全文：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-wrap&quot;&gt;吳仲昇
-4 天 ·
 
-特別補充強調：
-關於文中電資學士班的部分，我擷取部分朋友的經驗，主要想要強調有關於責任模糊的部分的同學在學校的弱勢情況。然而有畢業學長出面澄清，他們認為他們在電資學士班的時候並沒有遇到如同文中描述的部分狀況，如系名的英文翻譯、選不到好課等。特別在此澄清。
-
----- 以下原文 ----
-
-聽說最近指考放榜了啦，所以我就來說一個&amp;quot;被&amp;quot;學校延畢的故事，如果有人有選校選系可以參考一下啦！
-
-故事是這樣的，我原本應該正常的在六月畢業，拿到畢業證書，等當兵，然後去公司上班，本來都排好了。5 月中也就是畢業典禮兩週前，學校註冊組突然打電話給我。
-
-「同學，你學分不夠，要延畢嗎？」
-
-我覺得很奇怪，因為 1 月的畢業審核已經過了，學校都蓋章了。我跑去問，他們一開始還一副不想理我的樣子，結果我一說之前的審核是怎麼回事，助理一翻，態度突然軟了下來。
-
-「哈哈同學不好意思喔，我們之前那個助理新來的，幫你算錯了啦。」
-
-三小？！
-
-「沒關係拉，啊你現在暑修還來得急，你就去修個營養學分，啊我這裡先幫你注記，你修完我就發畢業證書給你。」
-
-不不不完全不是這個問題，是你們他媽的算錯為什麼是我去補修？這樣一延後，我排好的所有東西都亂了要怎麼處理？
-
-於是那一週我跑遍了學校各個處室，確定一堆規則，6 月的太陽讓肥宅我快要融掉了，不過一點卵用都沒有，而且每個處室根本就都只有固定的罐頭回覆，就是回給那些大四被當的同學那一套。
-但是我的狀況不一樣，我學分早就修完了，正常來說可以提早畢業，審核也過了，就因為上學期不小心某個比賽打到第一名要去俄羅斯打決賽我才留在這裡，結果因為疫情也沒打到比賽，而且學校還給我搞了這一大齣。
-
-隔週一我去找我們系助理理論。
-「喔同學，你這個狀況比較特殊，你這個免修呢因為不是拿其他課來抵，所以你必須補學分，啊可是以前都沒有這個狀況，你是第一個，所以我們這邊計算上就有一點問題，然後註冊組那邊也犯了另外一個計算錯誤。不過其他人都有自己再算一次，既然我們三方都有錯，不然就各退一步，你就去暑修補個學分，啊有什麼問題再聯絡我們。」
-不不根本沒有搞清楚問題，問題不是畢業，是我被延後畢業。而且說什麼三方都有錯，結果都是我在查規則、跑文件、聯絡公司、處理兵役，他們只是做了他們&amp;quot;原本就要做的工作&amp;quot;。
-至於那個免修學分呢，是大一我不懂事，跑去考學校程式檢定拿了滿分後，問系上能不能讓我抵掉大一基礎課提前修後面的課，想想我當初去刷個成績，不但成績單好看現在也沒這件事情。
-
-我越想越氣，一個禮拜吃不下飯睡不著覺。於是我寫了一封信跟我們系主任靠北。內容大概是你們他媽的拿了我的比賽成績到處招生宣傳、我又幫你們當了 3 年助教，結果現在出事你們直接放生我？更何況還是你們搞出來的事情？
-
-第二天系辦助理馬上打電話跟我說他們會好好處理一下要我先等等，他們已經知道我的狀況了，主任也想跟我聊聊確定一下發生什麼事情。
-這裡又有一個小插曲，系辦這邊會算錯是因為我們的系主任上任時推了一個自動學分計算系統，而這個系統基本上是學生義務幫忙寫的，品質可想而知，根本禁不起學校三番兩次的改畢業規則。我的學分在上面一直是錯的，但我一開始根本就不清楚。
-重點是我根本沒有依賴這個系統！當初助理給我一張學校蓋章的畢業預審符合資格證明，還給我簽了名確認，上面有兩項，一個是線上預審、一個是紙本預審。我想說兩個都過，很穩了吧？誰知道助理跟我說：「那個紙本預審我們今年是直接把線上印出來。」
-
-幹，那簽兩次名的意義是什麼？
-
-而且第一時間助理把問題全推給線上系統，負責團隊的學妹還馬上密我跟我道歉。我也只能尷尬又不失禮貌的笑笑。我根本沒有打算怪給團隊，因為我知道幫學校寫程式不但沒錢還很幹。會發生這件事情完全是系方完全低估了一個系統的重要程度，就貿然完全依賴它，也沒有任何備案跟損害賠償的 SOP，完全就是放你去死，拿學生當白老鼠。
-
-於是隔週，我和系主任談話，我把上面這些去掉髒話跟它噴了一遍。相關的助理兩個人就坐在旁邊聽。當然，結果什麼都沒改變，還好我也沒有期待。結果基本上就是「我們真的很抱歉，但是也沒辦法只能請你去暑修了。」我也知道，所以跟主任嘴炮一下後意思一下說不然你們賠償我暑修費用，這件事就到此為止。當然我延後當兵跟損失兩個月的薪水就沒跟他們算了。
-
-然後呢，基本上我心情稍微平復了一點，又過了一週才發現不對勁，首先他們跟本就還沒有真的跑什麼程序要賠我錢，而且基本上所有的手續都是我自己跑的、費用我墊，損失我扛，聯絡我做。學校呢？一副這件事情圓滿解決了。
-
-蛤？？？
-
-好拉學校名稱也不用馬了，國立交通大學資訊工程系，反正明年就改名了 XD。基本上這個系很多很好很認真的教授拉，但是基本上就是各顧各的，大家為了經費也只能努接計畫賺錢，所以系上的課和任何系上的建設都是佛系，時間到了自然會有人處理。必修課品質堪優、大學生除非活的跟研究生一樣自己找教授收養不然基本上還不如去讀補習班。（我們系還會幫考上台大碩的同學掛紅布條喔）。
-
-這邊提醒大家準時畢業的重要性。很多公司、兵役問題現在都有良好的配套措施，只要你是應屆 6 月大學畢業生都有完整的 SOP 有人會幫你處理。但是！如果你不是就完了，一切都會變得不確定而且沒人有辦法幫你。還好我要去的公司比較好有聽我解釋，不然就已經玩完了。當然現在也還是存在很多不確定的狀況，但至少，還有機會。
-
-另外很重要的一點，常常有些高中生或是家長被什麼甲組、學士班、之類的騙，而且這些分數還比較高
-。跟大家說，這個是用來騙教育部經費的，你用這個進來絕對是被當韭菜。
-別的不說，當初我們系曾經和電機系合辦一個電機資訊學士班，這個學士班呢，講好聽叫做跨領域整合、培養多元競爭力。事實上就是你要修兩邊大家都不想修、品質最差的爛課，然後兩邊都不把你當親生小孩。當初有這個班的學生想來我們系申請工作站帳號，但是因為我們系沒有把他們當親生的，按照規定他們是外系只能使用次等公民帳號。很巧的是電機系好像也沒當他們是親生的，他們就當了 4 年皮球。而且當初電機分數高的時候這個班是用來偷資工系碩士名額的，結果這幾年資工比較紅之後反而是資工在偷電機名額，於是電機系翻臉馬上不玩了，看這幾屆末代學生真的很可憐。
-不過還算好的，至少資工系有收留他們。你想想那個什麼百川計畫之類的，等之前申請的經費花完學校不知道會怎麼處理他們。
-而且不要低估畢業正書上寫的系名，要是去面試還要跟公司解釋為什麼你不是資工系是 XX 學士班，明明修了課卻不被當作本科生，真的會很可憐。
-
-講了那麼多，反正就是這間學校你沒有走一般路線就會變成孤兒啦。春秋戰國有一個漁夫講過：「人家喝酒你就喝酒，人家買包包你就買包包，不就沒歹基了？」
-你在這個系要是跟別人比較不一樣，你就準備被「你比較特別」這個理由害死。像是什麼「因為你沒有按照順序修課所以學分不算」(學弟 A)、「你不是學測指考入學的？啊我們忘記把你放進入學名單了，你等等我們馬上幫你加，啊你學號想要幾號」(學弟 B)之類的。
-
-很可惜拉，有很多同學都很優秀，實力跟台大比一定不會輸很慘(還是會輸拉？)。但是就是這樣，學校組織鬆散散漫。要改革卻又沒有好好制定規則，一出事馬上說系統都是非官方的是學生做的。如果系上不願意幫系統背書，那憑什麼直接使用，還當作出錯的藉口？難道要學生扛責任？
-
-簡單來說就是這樣，所以我現在在當個快樂的館院學生修會計學，對這間學校真的是哀莫大於心死，世態炎涼，大家自求多福。
-
-啊這邊特別說一下，學校那邊基本上從頭到尾態度都很好，不過也只有態度而已，沒有誠意。因為所有人都不覺得自己有錯，包含我。但學生最後就是受害者，所以要讀大學的大家自己小心，不要以後要選總統才被學校說你的畢業學分算錯了喔！
-
-最後再補個幹。
-4,376 你、詹元耀、Zeng CY 和其他 4,376 人
-310 則留言 1,356 次分享
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;之後貼文引起了廣大的迴響，許多人都來抱怨資工系的問題，
-像是課太爛、非本系的被踢皮球等。&lt;/p&gt;
-&lt;h2 id=&quot;小事與大事&quot;&gt;小事與大事&lt;/h2&gt;
-&lt;p&gt;雖然暑修與延畢對事主來說，可能延誤到之後的本來完整的規劃。
-但對學校裡的行政人員或教授來說，
-每年看學生來來去去，都有人畢業或者延畢。
-雖然對每個人來說，畢業與延畢都是大事，（尤其對你來說，）
-但對校方來說，他們已經習慣了，
-就是無法避免地每年都有人延畢，都不是什麼重要的大事。&lt;/p&gt;
-&lt;h2 id=&quot;責任歸屬&quot;&gt;責任歸屬&lt;/h2&gt;
-&lt;p&gt;回到無法畢業本身，若要追究責任，大概可以分成事主、系辦助理、系主任三者。
-首先事主部份，雖然自己對畢業規則理解錯誤，
-但已經請系辦審覈過，可以理解成責任被推到系辦上了。&lt;/p&gt;
-&lt;p&gt;對於系辦助理，大概就公務員心態，照著規則走，該做什麼就做什麼。
-既有的規劃是用自動學分計算系統算，那就用系統算，
-至於系統算對算錯，反正也不是他要畢業，
-說要負責，事實上學生畢不了業也不能拿助理怎樣，
-也不太可能被開除、罰錢、挨告，頂多就考績吃丙之類的。
-工作本來多少會出點錯，出個幾次包也不奇怪。&lt;/p&gt;
-&lt;p&gt;至於系主任，感覺他蠻有心想處理問題的，
-但受限於畢業的規定，沒辦法放寬。
-學分試算系統雖然是他推的，但實作下去他大概也知道這裡面很多問題，
-規則幾年就更新一次，設計上又有一堆例外要處理，
-所以做出個能動的系統就沒有持續下去了。&lt;/p&gt;
-&lt;p&gt;助理的鍋最後歸到系主任身上，也是沒辦法的，
-組織本來就是這樣設計的，責任一層層吃上去，
-就算你不知道下屬做了什麼，但還是要扛責任，因為你坐在位子上。&lt;/p&gt;
-&lt;p&gt;結論就是，這些雜事，容易產生無人負責的後果；
-或說雖然追究下去都找的出是誰要負責，
-但要負責的人根本對他所承擔的責任沒有意識，
-而只是產生 &lt;em&gt;剛好輪到自己比較倒楣&lt;/em&gt; 的心態。
-或者可以歸為制度設計的問題，使的其中的每個角色，
-都不認為自己實際上要負責，最後產生無人負責的情況。&lt;/p&gt;
-&lt;h2 id=&quot;改進與意外&quot;&gt;改進與意外&lt;/h2&gt;
-&lt;p&gt;系主任感覺是有想協助學生的意思，但他推的預審和計算系統，
-卻造成事主的畢業問題，是很遺憾的一件事。
-退十步來說，如果主任一開始就不要推這些系統與預審，
-那責任可能就不會落到系辦上。
-事主可能得自己爬更久的文，親自和系辦仔細確認每個細節，
-才會確定自己能或不能畢業；
-但系辦卻因為推了這套系統，而造成事主誤認為自己可以畢業，
-而導致一系列的問題。&lt;/p&gt;
-&lt;p&gt;整件事其實很可惜；事主算是意外，意外隨時都會發生，
-系主任推的改革可能是有效的，只是不足以阻擋這個意外。
-那輿論或系上的壓力，可能會讓原本的改革全部喊停，
-甚至退步到不做事就不會犯錯的防御性行政。&lt;/p&gt;
-&lt;h2 id=&quot;教授的本業&quot;&gt;教授的本業&lt;/h2&gt;
-&lt;p&gt;再回到這些行政流程，其實不只學生搞不清楚，很多教授也是一知半解。
-很多教授其實只想專心做研究，但在大學裡就是得處理一堆雜務，
-開不完的會、寫不完的計劃書，還要幫死大學生上課，又根本沒幾個人在聽，
-事實上自己做研究的時間反而被壓縮到很少。&lt;/p&gt;
-&lt;p&gt;因此，系主任對很多教授來說都是屎缺，因為要處理很多雜事，
-雖然也不排除有喜歡做事或權力的人，
-但我碰過的多數教授還是不喜歡這淌混水。
-因此回到文中的系主任，還願意花心力在改善資工系的教學品質與行政，
-其實是很難得了。&lt;/p&gt;
-&lt;h2 id=&quot;同溫層的分裂&quot;&gt;同溫層的分裂&lt;/h2&gt;
-&lt;p&gt;一開始有幾個教授來留言回應，也有幾個學長。
-教授與學長方面，希望學生不要講的太過份，影響到未來資工系的招生，
-也表示自己是很有誠意要解決問題之類的。
-後來 &lt;a href=&quot;https://www.facebook.com/samsam2310/posts/3098410996894934?comment_id=3102829203119780&amp;amp;reply_comment_id=3108198575916176&quot;&gt;尤理衡也跑來把自己被百川和資工系踢皮球的往事&lt;/a&gt; 翻出來說，
-教授就不再回話了。&lt;/p&gt;
-&lt;p&gt;學生方面應該覺得教授都只會說說，事實上都沒有真正改善。
-而教授也蠻有趣的，其中系主任的臉書也變成小同溫層，
-在抱怨學生都只會找麻煩。
-變成二方各自發展出同溫層，互不交集的情形。&lt;/p&gt;
-&lt;h2 id=&quot;好的系與系辦&quot;&gt;好的系與系辦&lt;/h2&gt;
-&lt;p&gt;我自己的結論，大概就是好的系辦帶你上天堂，壞的讓你延畢住套房。
-以前在成大的測量系，系辦小姐很不錯，很多事情都很清楚，
-選課擋修問題也都會幫學生從寬處理。
-但朋友是成大資工，就常抱怨系辦很爛。&lt;/p&gt;
-&lt;p&gt;原文中的留言也有人提到台大的資工系辦不錯，
-我自己是覺得全台的學校都大同小異，尤其是資工系。
-許多常出沒在社群的名人、從小寫程式的大神，
-可能會對程式界的殿堂，大學的資訊工程與電腦科學系充滿憧景。
-但實際上資工系，也只是一個大學科系，
-從小在學校碰過的狗屁倒灶事，也不會少多少；
-&lt;a href=&quot;https://nyllep.wordpress.com/2013/02/06/observations-in-nctucs/&quot;&gt;pellaeon 就為此寫過一篇文章抱怨交大資工&lt;/a&gt; 。
-不用以為進了資工系，就可以盡情做自己想做的事，
-可以碰到一群志同道合的人，大神終究是少數。&lt;/p&gt;
-&lt;p&gt;或許台大真的會不錯，畢竟他是台灣最高學府，
-絕大多數的神人，都是進台大。
-而交大及其它國立名校，就不用冀望太大，
-都是半斤八兩，至少我的成大只會比交大更差。&lt;/p&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/taiwan-consensus-stolen-base.html#科技三定律</id>
 <title>台灣共識就是贏球不能盜壘</title>

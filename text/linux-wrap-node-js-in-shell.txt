@@ -187,6 +187,42 @@ node.js 雖然也能用 `require.main == module`
 而新版的 npm 則多出了 npx 這支程式，
 可以直接寫成 `npx script-name` 。
 
+## 使用 node.js 操作 json
+最近發現一項好用的作法，在要處理 json 資料時，
+如果手邊沒有 jq，那直接用 node.js 來處理 json 其實蠻方便的。
+例如處理 http api 回傳的 json 格式資料：
+
+```sh
+node -p "JSON.parse(process.argv[1]).data.map(u => u.name).join('\n')" \
+    "$(curl --silent http://api.url/)"
+```
+
+雖然 python 也可以 `import json` 之後解碼，
+但就多了一個 import 的步驟。
+至於這裡用參數傳而不是用管道，
+是因為 node.js 要讀標準輸入只能用事件驅動的 api，較不方便。
+
+當然，有時需要寫長一點的腳本，
+也可以寫到多行或用變數宣告：
+
+```sh
+node -p '
+let d = JSON.parse(process.argv[1]).data
+d.reduce((c,a) => c+Number(a.correct), 0)/d.length
+' "$(wget -O - --quiet $api_url)" 
+```
+
+這種腳本的方便處在於，有時在部署服務時，
+布署環境是精簡過的環境什麼都沒有，
+但最少可以保證有要執行的語言，像 python 或 node.js，
+就能快速寫一些 shell 和 js 混在一起的髒腳本來處理。
+
+以 node.js 來說這些腳本直接寫在 package.json 的 script 裡，
+也可以寫成獨立的檔案，但最好還是把檔名或執行方式
+放到 package.json 裡，或寫到 readme 裡，
+至少讓其它人知道是幹麻的或怎麼用。
+
+
 #javascript
 #linux
 #shell

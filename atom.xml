@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2020-10-18T08:18:54.349Z</updated>
+  <updated>2020-10-18T10:05:13.103Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,87 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/linux-binary-patch-http-string.html</id>
+<title>修改二進位執行檔中的 http 請求標頭字串</title>
+<published>2020-10-18T10:03:04.787Z</published>
+<updated>2020-10-18T10:05:13.090Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/linux-binary-patch-http-string.html"/>
+<summary type="html">教授計劃中有和廠商買了樹莓派 gnss 接收儀，
+但他們提供的程式有錯，
+送出的 http request 格式錯誤，使伺服器無法處理。
+後來發現可以直接修改執行檔中的字串，
+在不改變字串長度的情況下，把空格從開頭移到字位，
+就讓 http 標頭格式正確了。</summary>
+<category term="gnss"/>
+<category term="study"/>
+<category term="nctu"/>
+<content type="html">&lt;h1 id=&quot;修改二進位執行檔中的-http-請求標頭字串&quot;&gt;修改二進位執行檔中的 http 請求標頭字串&lt;/h1&gt;
+&lt;p&gt;教授計劃中有和廠商買了樹莓派 gnss 接收儀，
+但他們提供的程式有錯，
+送出的 http request 格式錯誤，使伺服器無法處理。
+後來發現可以直接修改執行檔中的字串，
+在不改變字串長度的情況下，把空格從開頭移到字位，
+就讓 http 標頭格式正確了。&lt;/p&gt;
+&lt;p&gt;廠商提供了在樹莓派中的 rtk 定位程式，
+能將即時的定位成果座標傳到廠商的伺服器，就能顯示在網頁上。
+同時也能將接收儀收到的 gnss 訊號，回傳到設定的 ip。&lt;/p&gt;
+&lt;p&gt;但幾次程式都有 bug：
+一次是類似 http 的協議 ntrip 中的標頭錯誤，
+少一個回車字元多一個 r 字元；
+一次是 http 標頭的格式錯誤，開頭多了一個空白。&lt;/p&gt;
+&lt;p&gt;後來我發現其實一些字串格式問題的 bug 可以直接改執行檔中的字串。
+像是用 vi 直接編輯二進位執行檔的話，
+如果字串是寫死的字面量，就可以直接在檔案中找到。
+c 語言中字串是用 null 結尾來辨認，
+但似乎因為編譯成執行檔後，程式中各字串的位置是寫死的，
+所以如果一個字串增長了，那後面的資料的位置就會變，
+程式就找不到資料。
+所以我要做的，就是在想辦法在不改變整體字串長度的條件下，
+讓字串內容能被 http 伺服器解析。&lt;/p&gt;
+&lt;h2 id=&quot;http-標頭缺少空行的-bug&quot;&gt;http 標頭缺少空行的 bug&lt;/h2&gt;
+&lt;p&gt;第一個是一個 http 標頭缺少空行的 bug，
+我猜應該是原本想寫 c 風格的跳脫字元：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;GET /NCTU HTTP/1.0\r
+User-Agent: NTRIP raspberry pi\r
+\r
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;結果漏了一個反斜線之類的，
+送出的 http request 就沒有空行，
+原本是空行的位置多了 r 字元。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;GET /NCTU HTTP/1.0\r
+User-Agent: NTRIP raspberry pi\r
+r
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;因為不用特殊程式，終端機輸出不會顯示出回車字元，
+所以我一開始沒有猜到 r 是回車字元，
+只是想不知道為什麼 http 中的空行變成一個 r 字元。&lt;/p&gt;
+&lt;p&gt;這個 bug 我沒有 monkey patch，
+因為我到下一個 bug 才想到可以這樣改。&lt;/p&gt;
+&lt;h2 id=&quot;開頭多了空白的-bug&quot;&gt;開頭多了空白的 bug&lt;/h2&gt;
+&lt;p&gt;第二個 bug 是送出的 http request 中一個標頭，
+行首多了一個空白。&lt;/p&gt;
+&lt;p&gt;以下為了方便 debug 把回車符寫成 &lt;code&gt;\r&lt;/code&gt; ，
+而換行符仍然是換行符，http 規定行尾要是 &lt;code&gt;\r\n&lt;/code&gt; ，
+所以顯示就會變成 &lt;code&gt;\r&lt;/code&gt; 是一行最後一個字元。&lt;/p&gt;
+&lt;p&gt;原本是：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;GET / HTTP/1.1\r
+Connection: close\r
+\r
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;但我猜程式裡寫成：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;GET / HTTP/1.1\r
+ Connection: close \r
+\r
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;不知道那個詭異的前後空格是怎麼回事，
+總之他們的 asp 就不能解讀，就無法收到座標。&lt;/p&gt;
+&lt;p&gt;後來試了把行首的空格移到行尾，就能成功解析了。
+本來還煩惱很久，不知道 asp 到底允許 http header 哪裡有空格，
+不知道刪掉後的字元要補在哪裡。
+也許可以把多出來的部份放結尾，然後填成 null？&lt;/p&gt;
+&lt;h2 id=&quot;asp-的附檔名&quot;&gt;asp 的附檔名&lt;/h2&gt;
+&lt;p&gt;我在 debug 第一個 bug 時，
+仔細看還發現他們送的 http request 是送到 &lt;code&gt;*.ashx&lt;/code&gt; 。
+本來還以為是他們是副檔名寫錯才無法回傳，
+就改成 aspx，後來才找到原來 asp 也有副檔為是 ashx 的。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/linux-gzip-inplace-overwrite.html#resize-after-losetup</id>
 <title>使用原檔案的空間壓縮檔案而不佔用額外空間</title>
 <published>2020-10-18T08:14:25.252Z</published>
@@ -1459,151 +1540,7 @@ adb 指令也都不需要使用 torsocks；
 <category term="javascript"/>
 <category term="linux"/>
 <category term="shell"/>
-<content type="html">&lt;h1 id=&quot;簡單將-node.js-或其它腳本語言的函數包裝成執行檔&quot;&gt;簡單將 node.js 或其它腳本語言的函數包裝成執行檔&lt;/h1&gt;
-&lt;p&gt;有時一些 npm 的套件沒有提供命令列的呼叫介面，
-或是想用的功能在 node.js 裡就能做到，
-懶的另外用 apt 裝可執行檔的程式。
-這時就能用 node 的 &lt;code&gt;-e&lt;/code&gt; 選項直接執行一小段程式，
-可以簡單直接把參數放到指令裡，或透過 argv 傳，
-使用上還可以把整段程式設成 alias 或者寫成 shell script。
-這種用法也可以適用於 python perl 等其它直譯式語言。&lt;/p&gt;
-&lt;h2 id=&quot;前言&quot;&gt;前言&lt;/h2&gt;
-&lt;p&gt;以前用 fedora 23 lxde 時有支程式可以轉各類編碼，
-像 base64、xml entities、urlencode 等。
-但我忘了那工具叫什麼名字，只記得他是用子命令的方式呼叫，
-像是跳脫 xml 就是 &lt;code&gt;xxxencoder xml &amp;lt; article.txt&lt;/code&gt; ，
-之後 &lt;code&gt;&amp;lt;&amp;gt;&amp;amp;&lt;/code&gt; 就會被取代成 &lt;code&gt;&amp;amp;lt;&lt;/code&gt; &lt;code&gt;&amp;amp;gt;&lt;/code&gt; &lt;code&gt;&amp;amp;amp;&lt;/code&gt; 。&lt;/p&gt;
-&lt;p&gt;之後換到 debian 偶爾需要跳脫時，
-沒有現成的工具在手邊就不太方便。
-雖然也可以裝專門的 apt 套件，
-但總覺得為了這麼簡單的事額外裝套件有點蠢，
-只要開 node.js 或是在瀏覽器的開發者工具，
-呼叫 &lt;code&gt;encodeURIComponent&lt;/code&gt; 即可以用百分號編碼，
-可是每次都要這樣開又很麻煩。&lt;/p&gt;
-&lt;h2 id=&quot;用-shebang-和腳本語言解決&quot;&gt;用 shebang 和腳本語言解決&lt;/h2&gt;
-&lt;p&gt;後來就寫了簡單的 node.js 腳本 &lt;a href=&quot;https://github.com/gholk/loco/blob/f67abd2/bin/urlencode.js&quot;&gt;urlencode&lt;/a&gt; ，
-呼叫 js 內建的函數來編碼 url。
-但發現這樣寫一寫其實程式量還不少，要 30 行多。&lt;/p&gt;
-&lt;p&gt;一方面是我特別寫成物件導向，
-加上還要處理命令列選項，所以程式稍微多了一點。
-另一個問題是 node.js 在讀取標準輸入上不太方便，
-只能用事件驅動的方式讀資料。&lt;/p&gt;
-&lt;p&gt;node.js 為了支援 shebang，
-特別允許在程式的第一行有 &lt;code&gt;#!&lt;/code&gt; 開頭。
-而其它腳本語言，多半將 &lt;code&gt;#&lt;/code&gt; 號做為註解，
-而能直接忽略 shebang。&lt;/p&gt;
-&lt;p&gt;例如 awk 就可以用 shebang 化身為可執行檔，
-除了用 &lt;code&gt;awk -f&lt;/code&gt; 指定從檔案裡讀取程式執行外，
-也可以加上執行權限與 shebang 直接執行；
-&lt;a href=&quot;https://github.com/gholk/loco/blob/f67abd2/gnss/nmea-to-tsv.awk&quot;&gt;可以參考我 github 上的 awk 程式&lt;/a&gt; 。&lt;/p&gt;
-&lt;h2 id=&quot;用-one-liner-解決&quot;&gt;用 one liner 解決&lt;/h2&gt;
-&lt;p&gt;一些程式語言有 one liner 的設計，
-除了叫出 repl 從 stdin 打程式外，
-可以把程式用 &lt;code&gt;-e&lt;/code&gt; 選項傳入直接執行，
-就像直接呼叫一個小工具一樣，
-可以用來在 shell 裡做 shell 缺少的數學計算。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;a=16
-b=9
-perl -e &amp;quot;print $a/$b&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;或者也有本身就是設計來做 one liner 的工具，如 sed awk。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;sed &amp;apos;s/&amp;amp;/\&amp;amp;amp;/g; s/&amp;lt;/\&amp;amp;lt;/g; s/&amp;gt;/\&amp;amp;gt;/g;&amp;apos; &amp;lt; article.txt
-awk &amp;apos;BEGIN {print 16/9}&amp;apos;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;這些 one liner 雖然寫起來不長，
-但首先要是對該語言夠熟悉才有能力使用。
-而且一般語言寫 one liner 不太方便，
-像 c 或 java 根本不能想像寫成 one liner，
-比較適合的像是 sed awk，通用的程式語言則有 perl。&lt;/p&gt;
-&lt;p&gt;perl 語言設計上包含了大量的簡寫、省略、特殊符號，
-使得 perl 成為最適合寫 one liner 的語言。
-&lt;a href=&quot;https://gist.github.com/joyrexus/7328094&quot;&gt;網路上有不少 perl one liner 的範例&lt;/a&gt;，
-對於懶得學 sed awk 的人，可以選擇只學 perl 一個當二個打。&lt;/p&gt;
-&lt;h2 id=&quot;讀參數、環境變數、標準輸入&quot;&gt;讀參數、環境變數、標準輸入&lt;/h2&gt;
-&lt;p&gt;前面的用法大多是把變數用 shell 的變數代換，
-用雙引號直接嵌在要執行的程式碼內。
-但這種作法的缺點是要擔心特殊字元的跳脫，
-還有把資料和程式混在一起。
-其實多數直譯器，只要不是從 stdin 輸入程式，
-都可以像一般寫程式讀 stdin、參數。
-如果要傳參數，各語言有自己的習慣，
-以 node.js 來說，就是有 &lt;code&gt;-e&lt;/code&gt; 選項的話，其它就會被視為參數。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ node -e &amp;apos;console.log(process.argv)&amp;apos; hello world &amp;quot;$PWD&amp;quot; &amp;apos;by by&amp;apos;
-[ &amp;apos;/usr/bin/node&amp;apos;, &amp;apos;hello&amp;apos;, &amp;apos;world&amp;apos;, &amp;apos;/home/gholk&amp;apos;, &amp;apos;by by&amp;apos; ]
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;例如如果想傳一個陣列到程式裡，
-那一般內建的字串傳就要想辦法先把資料格式化成該語言的陣列寫法。
-如果用參數傳就比較簡單，因為參數在 shell 已經都分割好了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ node -p &amp;apos;process.argv.slice(1).sort()&amp;apos; hello world &amp;quot;$PWD&amp;quot; &amp;apos;by by&amp;apos;
-[ &amp;apos;/home/gholk&amp;apos;, &amp;apos;by by&amp;apos;, &amp;apos;hello&amp;apos;, &amp;apos;world&amp;apos; ]
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;存成腳本&quot;&gt;存成腳本&lt;/h2&gt;
-&lt;p&gt;這些 one liner 雖然寫起來不長，但每次都要重新打一邊也是很麻煩。
-因此有些人會放到 bashrc 的 alias 或 function，比較不會忘記。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;alias urlencode=&amp;quot;node -p \&amp;quot;encodeURIComponent(process.argv.slice(1).join(&amp;apos; &amp;apos;))\&amp;quot;&amp;quot;
 
-urldecode() {
-    node -p &amp;quot;encodeURIComponent(process.argv.slice(1).join(&amp;apos; &amp;apos;))&amp;quot; &amp;quot;$@&amp;quot;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;甚至一些比較少用或比較長的 one liner，就直接寫成一個腳本，
-可以用前面提過的 &lt;a href=&quot;#用-shebang-和腳本語言解決&quot;&gt;shebang&lt;/a&gt; ，
-不適合 shebang 的，則可以用 shell 包裝。
-總之就是把可以重覆使用的程式記錄起來，之後才不會忘記。
-所以 linux 用久了，累積出一個充滿自己寫的腳本的
-&lt;code&gt;~/.local/bin&lt;/code&gt; 資料夾也是很正常的事。&lt;/p&gt;
-&lt;h2 id=&quot;使用-shell-包裝&quot;&gt;使用 shell 包裝&lt;/h2&gt;
-&lt;p&gt;有些程式不適合使用 shebang，也可以改成寫 shell 腳本，
-再在腳本裡呼叫程式傳入程式碼。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;#!/bin/sh
-node -p &amp;quot;encodeURIComponent(process.argv.slice(1).join(&amp;apos; &amp;apos;))&amp;quot; &amp;quot;$@&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;一些程式能力不足的 dsl 會用這種做法，
-例如 gnuplot 如果要使用其語言完成參數解析、邏輯處理、計算等工作可能有困難，
-所以不會用 &lt;code&gt;#!/usr/bin/gnuplot&lt;/code&gt; 這種寫法。
-因此常和 shell 搭配使用，甚至使用 awk 對輸入做預處理，
-如 &lt;a href=&quot;https://github.com/GHolk/loco/blob/aca8fac/gnss/sar-spatial-temporal-baseline.sh&quot;&gt;我幾個月前寫的 gnuplot 和 awk 合作的腳本&lt;/a&gt; ，
-與其看成 gnuplot 腳本，也能看成 awk 腳本。&lt;/p&gt;
-&lt;p&gt;另一項理由是方便。
-如 node.js 要處理標準輸入較麻煩，需要使用到事件導向的函數，
-直接以 shell 負責讀取標準輸入，再以參數傳入會較方便。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;#!/bin/sh
-if [ $# -eq 0 ]
-then data=&amp;quot;$(cat)&amp;quot;
-else data=&amp;quot;$*&amp;quot;
-fi
-
-node -e &amp;apos;require(&amp;quot;qrcode-terminal&amp;quot;).generate(process.argv[1], {small:true}))&amp;apos; \
-    -- &amp;quot;$data&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;例如以上是呼叫 qrcode-terminal 這項 npm 套件來產生 qrcode 的腳本，
-雖然該套件也有提供可執行的腳本，但並不支援 small 選項，
-因此只能寫一段簡單的程式來載入該套件，
-並依需求客制化選項產生 qrcode。&lt;/p&gt;
-&lt;h2 id=&quot;套件提供的主程式&quot;&gt;套件提供的主程式&lt;/h2&gt;
-&lt;p&gt;npm 的設計上是一個套件可以包含可執行檔，
-在安裝時會裝到資料夾的 &lt;code&gt;node_modules/.bin&lt;/code&gt; 或是 &lt;code&gt;~/.local/bin&lt;/code&gt; 。
-但 python 的做法則是，一個模組除了直接載入外，
-如果用 &lt;code&gt;-m&lt;/code&gt; 選項加上模組名稱，即可以直接執行該檔案，
-而在程式內部則可以用 &lt;code&gt;__name__ == &amp;apos;__main__&amp;apos;&lt;/code&gt; 來判斷
-此腳本目前是作為模組被載入或被執行。&lt;/p&gt;
-&lt;p&gt;因此在程式撰寫上，可以把函式庫和主程式腳本寫在同一支程式裡。
-在執行期間再判斷目前程式是被載入或被執行，
-若是被執行就表現出命令列程式的行為，
-否則就只提供函數，不執行具體行為。&lt;/p&gt;
-&lt;p&gt;node.js 雖然也能用 &lt;code&gt;require.main == module&lt;/code&gt; 
-來判斷目前腳本是被載入或是被執行，卻缺少 python 的 &lt;code&gt;-m&lt;/code&gt; 選項。
-雖然有 &lt;code&gt;-r&lt;/code&gt; 選項，但僅具備事先載入的功能，
-而不能將模組作為主程式執行。&lt;/p&gt;
-&lt;p&gt;舊有的 npm 中，全域安裝的程式會直接寫入使用者指定的路徑，
-一般也會在 PATH 裡，沒什麼問題。
-但安裝在專案目錄下的套件會放在 &lt;code&gt;node_modules/.bin&lt;/code&gt; 裡，
-要執行起來稍嫌麻煩，
-唯一比較方便的做法是 &lt;code&gt;$(npm bin)/script-name&lt;/code&gt; ，
-或直接寫路徑 &lt;code&gt;node_modules/.bin/script-name&lt;/code&gt; 。
-而新版的 npm 則多出了 npx 這支程式，
-可以直接寫成 &lt;code&gt;npx script-name&lt;/code&gt; 。&lt;/p&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/linux-wrap-node-js-in-shell.html</id>
 <title>簡單將 node.js 或其它腳本語言的函數包裝成執行檔</title>

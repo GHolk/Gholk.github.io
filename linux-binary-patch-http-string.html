@@ -1,0 +1,99 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2020-10-18T10:03:04.787Z">
+<meta name="keywords" property="og:article:tag" content="gnss,study,nctu">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="linux-gzip-inplace-overwrite.html" title="使用原檔案的空間壓縮檔案而不佔用額外空間">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>修改二進位執行檔中的 http 請求標頭字串</title>
+</head>
+<body>
+<main><h1 id="修改二進位執行檔中的-http-請求標頭字串">修改二進位執行檔中的 http 請求標頭字串</h1>
+<p>教授計劃中有和廠商買了樹莓派 gnss 接收儀，
+但他們提供的程式有錯，
+送出的 http request 格式錯誤，使伺服器無法處理。
+後來發現可以直接修改執行檔中的字串，
+在不改變字串長度的情況下，把空格從開頭移到字位，
+就讓 http 標頭格式正確了。</p>
+<p>廠商提供了在樹莓派中的 rtk 定位程式，
+能將即時的定位成果座標傳到廠商的伺服器，就能顯示在網頁上。
+同時也能將接收儀收到的 gnss 訊號，回傳到設定的 ip。</p>
+<p>但幾次程式都有 bug：
+一次是類似 http 的協議 ntrip 中的標頭錯誤，
+少一個回車字元多一個 r 字元；
+一次是 http 標頭的格式錯誤，開頭多了一個空白。</p>
+<p>後來我發現其實一些字串格式問題的 bug 可以直接改執行檔中的字串。
+像是用 vi 直接編輯二進位執行檔的話，
+如果字串是寫死的字面量，就可以直接在檔案中找到。
+c 語言中字串是用 null 結尾來辨認，
+但似乎因為編譯成執行檔後，程式中各字串的位置是寫死的，
+所以如果一個字串增長了，那後面的資料的位置就會變，
+程式就找不到資料。
+所以我要做的，就是在想辦法在不改變整體字串長度的條件下，
+讓字串內容能被 http 伺服器解析。</p>
+<h2 id="http-標頭缺少空行的-bug">http 標頭缺少空行的 bug</h2>
+<p>第一個是一個 http 標頭缺少空行的 bug，
+我猜應該是原本想寫 c 風格的跳脫字元：</p>
+<pre><code>GET /NCTU HTTP/1.0\r
+User-Agent: NTRIP raspberry pi\r
+\r
+</code></pre><p>結果漏了一個反斜線之類的，
+送出的 http request 就沒有空行，
+原本是空行的位置多了 r 字元。</p>
+<pre><code>GET /NCTU HTTP/1.0\r
+User-Agent: NTRIP raspberry pi\r
+r
+</code></pre><p>因為不用特殊程式，終端機輸出不會顯示出回車字元，
+所以我一開始沒有猜到 r 是回車字元，
+只是想不知道為什麼 http 中的空行變成一個 r 字元。</p>
+<p>這個 bug 我沒有 monkey patch，
+因為我到下一個 bug 才想到可以這樣改。</p>
+<h2 id="開頭多了空白的-bug">開頭多了空白的 bug</h2>
+<p>第二個 bug 是送出的 http request 中一個標頭，
+行首多了一個空白。</p>
+<p>以下為了方便 debug 把回車符寫成 <code>\r</code> ，
+而換行符仍然是換行符，http 規定行尾要是 <code>\r\n</code> ，
+所以顯示就會變成 <code>\r</code> 是一行最後一個字元。</p>
+<p>原本是：</p>
+<pre><code>GET / HTTP/1.1\r
+Connection: close\r
+\r
+</code></pre><p>但我猜程式裡寫成：</p>
+<pre><code>GET / HTTP/1.1\r
+ Connection: close \r
+\r
+</code></pre><p>不知道那個詭異的前後空格是怎麼回事，
+總之他們的 asp 就不能解讀，就無法收到座標。</p>
+<p>後來試了把行首的空格移到行尾，就能成功解析了。
+本來還煩惱很久，不知道 asp 到底允許 http header 哪裡有空格，
+不知道刪掉後的字元要補在哪裡。
+也許可以把多出來的部份放結尾，然後填成 null？</p>
+<h2 id="asp-的附檔名">asp 的附檔名</h2>
+<p>我在 debug 第一個 bug 時，
+仔細看還發現他們送的 http request 是送到 <code>*.ashx</code> 。
+本來還以為是他們是副檔名寫錯才無法回傳，
+就改成 aspx，後來才找到原來 asp 也有副檔為是 ashx 的。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

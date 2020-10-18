@@ -84,6 +84,7 @@ linux 中可以用 dd 達到這種功能，
 <pre><code class="lang-sh">loop_device=$(losetup --show --find file)
 gzip -c $loop_device &gt; $loop_device
 losetup --detach $loop_device
+truncate -s $size file
 </code></pre>
 </main>
 

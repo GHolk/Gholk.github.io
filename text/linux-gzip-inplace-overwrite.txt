@@ -73,6 +73,7 @@ linux 下可以用 losetup 指令，把檔案映射成 block device；
 loop_device=$(losetup --show --find file)
 gzip -c $loop_device > $loop_device
 losetup --detach $loop_device
+truncate -s $size file
 ```
 
 #linux

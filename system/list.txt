@@ -311,3 +311,4 @@ gnss-rtklib-str2str-stream-server.html
 gnss-rtklib-str2str-stream-usage.html
 linux-wrap-node-js-in-shell.html
 android-adb-tor-howto.html
+linux-gzip-inplace-overwrite.html

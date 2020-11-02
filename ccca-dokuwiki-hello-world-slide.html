@@ -117,9 +117,19 @@ function scrollToNextSlide() {
 <li>其它平台只作為宣傳管道</li>
 <li>可以用轉貼、自動發布的方式方便管理</li>
 </ul>
-<h2 id="無法互通的多個私人平台">無法互通的多個私人平台</h2>
+<h2 id="無法互通的-web-平台">無法互通的 web 平台</h2>
 <ul>
-<li>Facebook 掘起後，web 逐漸往多個無法互通的平台發展。</li>
+<li>在論壇出現前，不同網站間的溝通成本很大，
+只有如留言板裡留網址或直接發 email 私下溝通。</li>
+<li>論壇出現後，單一平台內的距離下降，但不同平台間還是很大。</li>
+<li>有倒模論壇讓架站權力分散，使論壇能以城邦式發展。</li>
+<li>沒有單一論壇能獨大。</li>
+</ul>
+<h3 id="社群網站出現後">社群網站出現後</h3>
+<ul>
+<li>Facebook 掘起後，開始出現能涵蓋所有人的大平台。</li>
+<li>單一平台內的傳播門檻遠低於平台間，
+且平台規模的明顯優勢，相對競爭下其它平台逐漸沒落。</li>
 <li>資訊只在單一平台上流通，facebook 內外成為二個無法溝通的世界。</li>
 <li>facebook twitter discord telegram line，都是一個個獨立的世界。</li>
 <li>且平台多為公司所有</li>
@@ -181,12 +191,12 @@ function scrollToNextSlide() {
 <ul>
 <li>要寫很多 code</li>
 <li>自由度最高，想要什麼功能都可以，只是要自己寫。</li>
-<li>適合對網站有很多需求的人，像很要求板面、多層式下拉選單、特殊功能者。</li>
+<li>適合對網站有很多定制功能的人，像很要求版面、多層式下拉選單、特殊功能者。</li>
 </ul>
 <h3 id="blog-特色">blog 特色</h3>
 <ul>
-<li>管理介面有善，適合內容間不需要互連的獨立文章。</li>
-<li>板面固定，就是規劃好的文章列表、分類、首頁。</li>
+<li>管理介面友善，適合內容間不需要互連的獨立文章。</li>
+<li>版面固定，就是規劃好的文章列表、分類、首頁。</li>
 <li>比較接近內容發布中心，而不適合用來管理文件。</li>
 </ul>
 <h3 id="wiki-特色">wiki 特色</h3>
@@ -204,8 +214,8 @@ function scrollToNextSlide() {
 <h3 id="自幹程式的問題">自幹程式的問題</h3>
 <ul>
 <li>沒有人想維護；時過境遷後，程式如何使用也成為問題。</li>
-<li>wiki 的特色是可以用來管理文件，適合把使用說明也寫進 wiki 裡。</li>
-<li>甚至可以把程式的原始碼也托管在 wiki 上，畢竟 wiki 有基本的版本管理功能。</li>
+<li>blog 或 wiki 使用現有的系統的話，跟著更新即可，不會有太大問題。</li>
+<li>但社團自己加的功能，要自己想辦法 rebase 到下一個版本上。</li>
 </ul>
 <h3 id="wiki-的多重角色">wiki 的多重角色</h3>
 <ul>
@@ -216,10 +226,20 @@ function scrollToNextSlide() {
 </ul>
 </li>
 </ul>
+<h3 id="在-wiki-上托管文件或程式">在 wiki 上托管文件或程式</h3>
+<ul>
+<li>wiki 的特色是可以用來管理文件，適合把使用說明也寫進 wiki 裡。</li>
+<li>甚至可以把程式的原始碼也托管在 wiki 上，畢竟 wiki 有基本的版本管理功能。</li>
+<li>像是在 bbs 上用 bbslua 寫小程式，而不是把程式寫在 bbs 的 c 原始碼內。
+而且 wiki 還可以管理版本。</li>
+</ul>
 <h3 id="參考資料">參考資料</h3>
 <ul>
 <li><a href="https://caslab.ee.ncku.edu.tw/dokuwiki/why_wiki">為什麼要用 wiki</a></li>
-<li><a href="https://stackoverflow.com/questions/226132/what-are-the-differences-between-a-wiki-and-a-cms">wiki vs cms</a> 。blog 可以稱作一種 <abbr title="content management system">內容管理系統</abbr> ，但也有較正式的、有複雜權限管理的提供給公司內部使用的商用系統。</li>
+<li><a href="https://stackoverflow.com/questions/226132/what-are-the-differences-between-a-wiki-and-a-cms">wiki vs cms</a> ，
+blog 可以稱作一種
+<abbr title="content management system">內容管理系統</abbr> ，
+但也有較正式的、有複雜權限管理的提供給公司內部使用的商用系統。</li>
 <li><a href="https://www.cyut.edu.tw/~ckhung/g/ofset/post.php?id=105c">wiki 作為雲端系統</a></li>
 </ul>
 <h2 id="dokuwiki-使用說明">dokuwiki 使用說明</h2>
@@ -227,6 +247,14 @@ function scrollToNextSlide() {
 <li><a href="http://ccca.tw">ccca wiki</a> 為半開放 wiki，特定內容只對特定使用者開放。</li>
 <li>編輯使用 dokuwiki 的純文字語法，類似 mediawiki。</li>
 <li>歡迎所有社員、非社員註冊使用。</li>
+</ul>
+<h3 id="選擇-dokuwiki-的原因">選擇 dokuwiki 的原因</h3>
+<ul>
+<li>我就爛不會資料庫，而且我不覺得應該要用資料庫，
+所以偏好使用檔案系統的 wiki。</li>
+<li>本來還希望用 git base wiki，但 dokuwiki 已滿足大部份需求。</li>
+<li>CamelCase suck</li>
+<li>當時試了幾款，做了一些比較： <a href="https://ccca.tw/%E8%A9%A6%E7%8E%A9wiki">試玩 wiki</a></li>
 </ul>
 <h3 id="使用者與權限">使用者與權限</h3>
 <ul>
@@ -237,7 +265,7 @@ function scrollToNextSlide() {
 <h3 id="命名空間">命名空間</h3>
 <ul>
 <li>命名空間以 <code>:</code> 分隔， <a href="https://ccca.tw/?do=index">這是 wiki 上所有頁面</a> 。</li>
-<li>user: 使用者的個人頁面。</li>
+<li><a href="http://ccca.tw/user:gholk">user:gholk</a> 使用者的個人頁面。</li>
 <li><a href="http://ccca.tw/talk:">talk:</a> 用於留言、討論。</li>
 <li>playground: 用於測試各類語法。</li>
 <li><a href="http://ccca.tw/社課:">社課:</a> 社課公告於此。</li>
@@ -246,7 +274,9 @@ function scrollToNextSlide() {
 <h3 id="語法">語法</h3>
 <ul>
 <li><code>====== 標題 ======</code> ，六個是一級標題。
-和 markdown 相反，等號越少越小。</li>
+和 markdown 相反，等號越少越小。
+用 <code>alt-shift-1</code> 來輸入比較好記，
+1-6 為各級標題，不用數半天。</li>
 <li><code>**粗體**</code> <code>//斜體//</code> <code>__底線__</code> <code>&apos;&apos;等寬字體&apos;&apos;</code></li>
 <li><code>[[頁面名稱|顯示名稱]]</code></li>
 <li><a href="http://ccca.tw/wiki:syntax">所有語法</a></li>
@@ -359,7 +389,8 @@ ln -s ../data/pages/admin/interwiki.txt interwiki.conf
 </code></pre><h3 id="格式化設定檔的魔術">格式化設定檔的魔術</h3>
 <ul>
 <li>但 dokuwiki 只會把 <a href="https://ccca.tw/admin:interwiki">interwiki 頁面</a> 
-當作普通的頁面，格式應該會亂掉。（換行被刪掉，並嘗試解析檔案內的 wiki 語法。）</li>
+當作普通的頁面，格式應該會亂掉。
+（換行被刪掉，並嘗試解析檔案內的 wiki 語法。）</li>
 <li>用 <code>&lt;code&gt;</code> 把整個檔案包起來，可以讓排版出來的結果比較好看。</li>
 <li>但 interwiki 設定檔解析時看到 <code>&lt;code&gt;</code> 會報錯。</li>
 <li>把 <code>&lt;code&gt;</code> 放在 interwiki 的 <code>#</code> 註解後面。</li>
@@ -382,7 +413,8 @@ alert(&apos;hello world!&apos;)
 </code></pre><h3 id="interwiki-圖標的魔術">interwiki 圖標的魔術</h3>
 <ul>
 <li>interwiki 連結前會顯示一個小小圖標，可以自訂不同簡寫對應的圖標。</li>
-<li>將與簡寫同名的圖片上傳到 <a href="https://ccca.tw/admin:interwiki-icon:"><code>admin:interwiki-icon:</code> 命名空間</a> 即可。</li>
+<li>將與簡寫同名的圖片上傳到 
+<a href="https://ccca.tw/admin:interwiki-icon:"><code>admin:interwiki-icon:</code> 命名空間</a> 即可。</li>
 <li>因為檔案系統上 <code>lib/images/interwiki</code> 為
 <code>data/media/admin/interwiki-icon</code> 的符號連結。</li>
 </ul>
@@ -401,6 +433,7 @@ alert(&apos;hello world!&apos;)
 <ul>
 <li>將 wiki 的設定檔移到 wiki 內本身的過程，
 類似於編譯器 <abbr title="bootstrap">自舉</abbr> 的過程。</li>
+<li>其它類似的概念還有 git 的自我托管或 lisp 的 <a href="http://zh.wikipedia.org/wiki/%E5%90%8C%E5%83%8F%E6%80%A7">同像性</a> 語法等。</li>
 <li>設定檔會佔據一些命名空間，類似
 <abbr title="convention over configuration">慣例優先設定</abbr>  。</li>
 </ul>
@@ -409,6 +442,24 @@ alert(&apos;hello world!&apos;)
 <li><a href="https://ccca.tw/admin:todo">想做的事很多</a> ，有空的時間很少。</li>
 <li>社團需要一個一起發展的專案來凝聚。</li>
 <li>這個網站到底有沒有人要用？沒人用的話，我玩這麼多也是白費。</li>
+</ul>
+<h3 id="客制化與可攜性的矛盾">客制化與可攜性的矛盾</h3>
+<ul>
+<li>在玩 dokuwiki 的時候，用一些 hack 的方式加了很多有趣的功能，
+但這些功能都是日後維護時的負擔。</li>
+<li><a href="https://medium.com/@p5d12000/%E5%B7%A5%E7%A8%8B%E5%B8%AB%E6%87%89%E8%A9%B2%E6%94%BE%E5%BF%83%E5%A4%A7%E8%86%BD%E5%9C%B0%E5%89%B5%E9%80%A0%E6%8A%80%E8%A1%93%E8%B2%A0%E5%82%B5-a8022d85810">但身為工程師，應該要勇敢的創造技術負債</a> ，
+社團內本來就應該要一起做一些好玩的事，互相折騰；
+幫學弟妹創造邊幹古邊維護寫出來後就沒人敢動的 legacy code 的機會。</li>
+</ul>
+<h2 id="社團與機器">社團與機器</h2>
+<ul>
+<li>一個社團，一座 BBS，一台 server。</li>
+<li>類似大型機時代，圍繞一部 unix 主機建立的社群。</li>
+<li>在雲端資源盛行的現今，每個人都在天上飛，
+似乎也沒有存在社團的必要了。<ul>
+<li>但 <a href="https://sitcon.org/2020/agenda/e95daf27-43b9-49b5-9e4b-7f543f19251b">ccns 仍努力蓋出了機房</a>，值得嘉獎。</li>
+</ul>
+</li>
 </ul>
 </main>
 

@@ -85,8 +85,17 @@ function scrollToNextSlide() {
 * 其它平台只作為宣傳管道
 * 可以用轉貼、自動發布的方式方便管理
 
-## 無法互通的多個私人平台
-* Facebook 掘起後，web 逐漸往多個無法互通的平台發展。
+## 無法互通的 web 平台
+* 在論壇出現前，不同網站間的溝通成本很大，
+  只有如留言板裡留網址或直接發 email 私下溝通。
+* 論壇出現後，單一平台內的距離下降，但不同平台間還是很大。
+* 有倒模論壇讓架站權力分散，使論壇能以城邦式發展。
+* 沒有單一論壇能獨大。
+
+### 社群網站出現後
+* Facebook 掘起後，開始出現能涵蓋所有人的大平台。
+* 單一平台內的傳播門檻遠低於平台間，
+  且平台規模的明顯優勢，相對競爭下其它平台逐漸沒落。
 * 資訊只在單一平台上流通，facebook 內外成為二個無法溝通的世界。
 * facebook twitter discord telegram line，都是一個個獨立的世界。
 * 且平台多為公司所有
@@ -139,11 +148,11 @@ function scrollToNextSlide() {
 ### 完全自己寫
 * 要寫很多 code
 * 自由度最高，想要什麼功能都可以，只是要自己寫。
-* 適合對網站有很多需求的人，像很要求板面、多層式下拉選單、特殊功能者。
+* 適合對網站有很多定制功能的人，像很要求版面、多層式下拉選單、特殊功能者。
 
 ### blog 特色
-* 管理介面有善，適合內容間不需要互連的獨立文章。
-* 板面固定，就是規劃好的文章列表、分類、首頁。
+* 管理介面友善，適合內容間不需要互連的獨立文章。
+* 版面固定，就是規劃好的文章列表、分類、首頁。
 * 比較接近內容發布中心，而不適合用來管理文件。
 
 ### wiki 特色
@@ -158,8 +167,9 @@ function scrollToNextSlide() {
 
 ### 自幹程式的問題
 * 沒有人想維護；時過境遷後，程式如何使用也成為問題。
-* wiki 的特色是可以用來管理文件，適合把使用說明也寫進 wiki 裡。
-* 甚至可以把程式的原始碼也托管在 wiki 上，畢竟 wiki 有基本的版本管理功能。
+* blog 或 wiki 使用現有的系統的話，跟著更新即可，不會有太大問題。
+* 但社團自己加的功能，要自己想辦法 rebase 到下一個版本上。
+
 
 ### wiki 的多重角色
 * 記錄社團的文件：有哪些 server、社辦使用公約、社團組織架構。
@@ -171,9 +181,18 @@ function scrollToNextSlide() {
 [大聊天室計劃]: http://ccca.tw/聊天室#大聊天室計劃
 [gamer rss php]: https://github.com/wsmwason/gamer-to-rss
 
+### 在 wiki 上托管文件或程式
+* wiki 的特色是可以用來管理文件，適合把使用說明也寫進 wiki 裡。
+* 甚至可以把程式的原始碼也托管在 wiki 上，畢竟 wiki 有基本的版本管理功能。
+* 像是在 bbs 上用 bbslua 寫小程式，而不是把程式寫在 bbs 的 c 原始碼內。
+  而且 wiki 還可以管理版本。
+
 ### 參考資料
 * [為什麼要用 wiki]
-* [wiki vs cms] 。blog 可以稱作一種 <abbr title="content management system">內容管理系統</abbr> ，但也有較正式的、有複雜權限管理的提供給公司內部使用的商用系統。
+* [wiki vs cms] ，
+  blog 可以稱作一種
+  <abbr title="content management system">內容管理系統</abbr> ，
+  但也有較正式的、有複雜權限管理的提供給公司內部使用的商用系統。
 * [wiki 作為雲端系統]
 
 [為什麼要用 wiki]: https://caslab.ee.ncku.edu.tw/dokuwiki/why_wiki
@@ -187,6 +206,15 @@ function scrollToNextSlide() {
 
 [ccca wiki]: http://ccca.tw
 
+### 選擇 dokuwiki 的原因
+* 我就爛不會資料庫，而且我不覺得應該要用資料庫，
+  所以偏好使用檔案系統的 wiki。
+* 本來還希望用 git base wiki，但 dokuwiki 已滿足大部份需求。
+* CamelCase suck
+* 當時試了幾款，做了一些比較： [試玩 wiki]
+
+[試玩 wiki]: https://ccca.tw/%E8%A9%A6%E7%8E%A9wiki
+
 ### 使用者與權限
 * 未註冊者只能瀏覽與編輯 `talk:` 命名空間下的頁面。
 * 有社員 `officer` 、系統管理者 `admin` 二個群組。
@@ -194,12 +222,13 @@ function scrollToNextSlide() {
 
 ### 命名空間
 * 命名空間以 `:` 分隔， [這是 wiki 上所有頁面][all page] 。
-* user: 使用者的個人頁面。
+* [user:gholk] 使用者的個人頁面。
 * [talk:] 用於留言、討論。
 * playground: 用於測試各類語法。
 * [社課:] 社課公告於此。
 * [社務:] 社團內部文件，只開放社員瀏覽。
 
+[user:gholk]: http://ccca.tw/user:gholk
 [talk:]: http://ccca.tw/talk:
 [社課:]: http://ccca.tw/社課:
 [社務:]: http://ccca.tw/社務:
@@ -208,6 +237,8 @@ function scrollToNextSlide() {
 ### 語法
 * `====== 標題 ======` ，六個是一級標題。
   和 markdown 相反，等號越少越小。
+  用 `alt-shift-1` 來輸入比較好記，
+  1-6 為各級標題，不用數半天。
 * `**粗體**` `//斜體//` `__底線__` `''等寬字體''`
 * `[[頁面名稱|顯示名稱]]`
 * [所有語法][all syntax]
@@ -346,7 +377,8 @@ ln -s ../data/pages/admin/interwiki.txt interwiki.conf
 
 ### 格式化設定檔的魔術
 * 但 dokuwiki 只會把 [interwiki 頁面][ccca interwiki] 
-  當作普通的頁面，格式應該會亂掉。（換行被刪掉，並嘗試解析檔案內的 wiki 語法。）
+  當作普通的頁面，格式應該會亂掉。
+  （換行被刪掉，並嘗試解析檔案內的 wiki 語法。）
 * 用 `<code>` 把整個檔案包起來，可以讓排版出來的結果比較好看。
 * 但 interwiki 設定檔解析時看到 `<code>` 會報錯。
 * 把 `<code>` 放在 interwiki 的 `#` 註解後面。
@@ -377,7 +409,8 @@ alert('hello world!')
 
 ### interwiki 圖標的魔術
 * interwiki 連結前會顯示一個小小圖標，可以自訂不同簡寫對應的圖標。
-* 將與簡寫同名的圖片上傳到 [`admin:interwiki-icon:` 命名空間][interwiki icon] 即可。
+* 將與簡寫同名的圖片上傳到 
+  [`admin:interwiki-icon:` 命名空間][interwiki icon] 即可。
 * 因為檔案系統上 `lib/images/interwiki` 為
   `data/media/admin/interwiki-icon` 的符號連結。
 
@@ -399,6 +432,7 @@ alert('hello world!')
 ### bootstrap
 * 將 wiki 的設定檔移到 wiki 內本身的過程，
   類似於編譯器 <abbr title="bootstrap">自舉</abbr> 的過程。
+* 其它類似的概念還有 git 的自我托管或 lisp 的 [[同像性]] 語法等。
 * 設定檔會佔據一些命名空間，類似
   <abbr title="convention over configuration">慣例優先設定</abbr>  。
 
@@ -409,7 +443,25 @@ alert('hello world!')
 
 [ccca todo]: https://ccca.tw/admin:todo
 
-##ccca
-##nctu
-##wiki
-##slide
+### 客制化與可攜性的矛盾
+* 在玩 dokuwiki 的時候，用一些 hack 的方式加了很多有趣的功能，
+  但這些功能都是日後維護時的負擔。
+* [但身為工程師，應該要勇敢的創造技術負債][programmer bullshit] ，
+  社團內本來就應該要一起做一些好玩的事，互相折騰；
+  幫學弟妹創造邊幹古邊維護寫出來後就沒人敢動的 legacy code 的機會。
+
+[programmer bullshit]: https://medium.com/@p5d12000/%E5%B7%A5%E7%A8%8B%E5%B8%AB%E6%87%89%E8%A9%B2%E6%94%BE%E5%BF%83%E5%A4%A7%E8%86%BD%E5%9C%B0%E5%89%B5%E9%80%A0%E6%8A%80%E8%A1%93%E8%B2%A0%E5%82%B5-a8022d85810
+
+## 社團與機器
+* 一個社團，一座 BBS，一台 server。
+* 類似大型機時代，圍繞一部 unix 主機建立的社群。
+* 在雲端資源盛行的現今，每個人都在天上飛，
+  似乎也沒有存在社團的必要了。
+  - 但 [ccns 仍努力蓋出了機房][ccns server]，值得嘉獎。
+
+[ccns server]: https://sitcon.org/2020/agenda/e95daf27-43b9-49b5-9e4b-7f543f19251b
+
+#ccca
+#nctu
+#wiki
+#slide

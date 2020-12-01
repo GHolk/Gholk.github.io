@@ -313,3 +313,4 @@ linux-wrap-node-js-in-shell.html
 android-adb-tor-howto.html
 linux-gzip-inplace-overwrite.html
 linux-binary-patch-http-string.html
+shell-file-descriptor-eval.html

@@ -1,0 +1,169 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2020-12-01T11:08:00.812Z">
+<meta name="keywords" property="og:article:tag" content="linux,shell">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="linux-binary-patch-http-string.html" title="修改二進位執行檔中的 http 請求標頭字串">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>在 shell 中管理檔案描述符</title>
+</head>
+<body>
+<main><h1 id="在-shell-中管理檔案描述符">在 shell 中管理檔案描述符</h1>
+<p>linux shell 中可以使用 0 到 9 的 file descriptor
+檔案描述符來控制程式的輸入與輸出，但一些使用並不好理解。
+例如重導向的順序不好理解，要將 fd 存在變數時得用到 eval，
+或要測試一個 fd 有無被佔用時，只能直接嘗試重導向檢查有無錯誤。</p>
+<p>shell 中執行程式時，會讓程式繼承
+shell 本身的標準輸入、輸出、錯誤輸出三個 fd。
+如執行腳本時，輸出可能被導向檔案，輸入被導向另一支程式等。
+另外，也可以在執行時手動指定導向的目標，
+fd 中 0 1 2 分別為標準輸入、輸出、錯誤輸出。</p>
+<h2 id="fd-重導向的順序">fd 重導向的順序</h2>
+<p>fd 的結構為一個陣列，不同的索引中的內容為指向不同輸出的指標。
+shell 中使用 <code>2&gt;&amp;1</code> 來表示將原本輸出到 stdout 的導向 stderr，
+在對陣列的操作上，代表將原本在陣列位置 1 的指標拷貝到 2，
+與語法上的 2 1 順序看來是相反的。
+故程式向 2 寫入時，寫入的目標和向 1 寫入是相同的。</p>
+<p>所以如果要同時導向 stdout stderr 到一檔案時，
+寫法是 <code>find 1&gt;find.log 2&gt;&amp;1</code> ，會先將 1 指向檔案，
+然後把 1 的檔案指標拷到 2，讓 2 也指向同一個檔案。
+如果寫成 <code>find 2&gt;&amp;1 1&gt;find.log</code> ，
+就會變成 stderr 指到 stdout，但 stdout 指到檔案。</p>
+<h2 id="重導向的目標">重導向的目標</h2>
+<p>重導向時，若是要導向到檔案，可以直接寫 <code>1&gt;filename</code> ，
+若是要重導向到描述符，則必須在數字前加上 <code>&amp;</code> 如 <code>2&gt;&amp;1</code> ，防止與檔名混淆。
+但重導向的來源 fd，則是不必加 <code>&amp;</code> 的。</p>
+<p>同時，在使用 <code>&gt;</code> 導向時，若是導向的來源為 stdout 1，
+則 1 可以省略不寫；使用 <code>&lt;</code> 導向 stdin 時也是同樣可以省略 0。
+可能是因為這是最常見的用法，
+或者是用數字代表 fd 的寫法是後來才添加的功能。</p>
+<h2 id="exec-的用法">exec 的用法</h2>
+<p>在 shell 中除了預設的 fd 0 1 2，還有 3 到 9 可以用，
+可以使用 exec 將 fd 對應到某一檔案。</p>
+<pre><code class="lang-sh">exec 2&gt;error.log
+# following command stderr will send to error.log
+</code></pre>
+<p>exec 可以將操作 shell 自身的 fd 對應表格，
+前述在指令後重導向的作法，只對該指令有效，
+而 exec 則是改變 shell 自身的對應表格，
+對 exec 後執行的所有命令都有效。</p>
+<p>若是要短暫重導向，可以預先將 stderr 備份到另一 fd，事後再回復。
+最後的 <code>&amp;-</code> 則是關閉該 fd 的意思。</p>
+<pre><code class="lang-sh">exec 3&gt;&amp;2 # backup stderr to 3
+exec 2&gt;error.log
+
+# command send stderr to error.log
+
+exec 2&gt;&amp;3 # recover stderr
+exec 3&gt;&amp;- # close 3
+</code></pre>
+<p>或者也可以將命令寫在子 shell 中，再在子 shell 中重導向，
+子 shell 的重導向並不會影響父 shell 的狀態。</p>
+<pre><code class="lang-sh">(
+    exec 2&gt;error.log
+    # following command send stderr to error.log
+)
+# command still send stderr to stderr
+</code></pre>
+<p>又或者，既然已經開子 shell 了，那直接重導向子 shell 的輸出即可：</p>
+<pre><code class="lang-sh">(
+    # command send stderr to error.log
+) 2&gt;error.log
+</code></pre>
+<h2 id="將-fd-存成變數">將 fd 存成變數</h2>
+<p>shell 內建的 fd 有 0-9 供取用，是一種暫存器概念的設計，
+基於 unix process 對 file descriptor 的抽像，幾乎全無包裝。
+雖然暫存器是十分古老且見常的設計，
+如 vi 也使用暫存器的概念，提供 26 個不同字母的暫存器作為剪貼簿使用，
+但在寫程式時，我們還是比較喜歡以變數的方式儲存開啟的檔案，再多疊一層抽像。</p>
+<pre><code class="lang-sh">stderr=2
+echo warning &gt;&amp;$stderr
+</code></pre>
+<p>在一般命令使用重導向時，可以直接將 fd 的數字存到變數內，
+並在 <code>&amp;</code> 後面使用該變數。
+但若是要在 <code>&gt;</code> 前面使用變數時，卻會出現問題，
+可能是 shell 的變數展開是在解析重導向的左值前進行的吧。
+所以要開檔時不能這樣寫：</p>
+<pre><code class="lang-sh">log=3
+exec $log&gt;file.log
+</code></pre>
+<p>只能直接把變數寫死，或者是用 shell 的 eval 命令，
+可以在解析指令前多展開一次變數：</p>
+<pre><code class="lang-sh">log_fd=3
+log_path=my.log
+eval &quot;exec $log_fd&gt;$log_path&quot;
+</code></pre>
+<h2 id="測試-fd-是否已開啟">測試 fd 是否已開啟</h2>
+<p>把 fd 存成變數，最主要的目的是防止用到其它設定開到的 fd。
+shell 沒有提供方法來判斷有哪些 fd，又指向哪些目標。
+一個做法是從 linux kernel 提供的 <code>/proc/self/fd</code> 來找，
+或者用 <code>/proc/$$/fd</code> ，或者 <code>/dev/fd</code> 。
+但這不是 shell 的功能，所以如果到沒提供 <code>/proc</code> 的系統就不管用了。</p>
+<p>另一個做法是直接寫入該 fd 看看，如果 fd 不存在，就會報錯。
+但隨便寫垃圾到別人開的 fd 也不太對，
+所以我的想法是嘗試寫入一個空字串。</p>
+<pre><code class="lang-sh">fd_test=3
+printf &apos;&apos; &gt;&amp;$fd_test
+</code></pre>
+<p>除了 printf，當然也有很多指令是不輸出東西的，都可以拿來用，
+例如 <code>echo -n</code> 、 <code>true</code> 、 <code>:</code> 。
+或者用一個讀取 0 byte 的程式：</p>
+<pre><code class="lang-sh">head -c 0 &lt;&amp;$fd_test
+</code></pre>
+<p>之後就可以寫出一個函數，可以用來測試該 fd 存不存在，
+因為如果 fd 不存在會報錯，所以可以再把 stderr 指到 <code>/dev/null</code> 。</p>
+<pre><code class="lang-sh">fd_is_open() { 
+    local fd=$1
+    ( true 1&gt;&amp;$fd ) 2&gt;/dev/null
+}
+fd_is_open 0
+fd_is_open 1
+fd_is_open 3
+</code></pre>
+<h2 id="找出空的-fd">找出空的 fd</h2>
+<p>之後就可以更進一步，寫出一個函數來找空的 fd：</p>
+<pre><code class="lang-sh">fd_first_free() {
+    local fd
+    if [ $# -gt 0 ]
+    then fd=$1
+    else fd=0
+    fi
+
+    while fd_is_open $fd
+    do fd=$((fd+1))
+    done
+
+    echo $fd
+}
+</code></pre>
+<p>找空的 fd 並開檔：</p>
+<pre><code class="lang-sh">file=my.log
+fd=`fd_first_free`
+eval &quot;exec $fd&gt;$file&quot;
+
+echo start executing &gt;&amp;$fd
+</code></pre>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

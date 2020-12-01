@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2020-11-02T14:15:16.565Z</updated>
+  <updated>2020-12-01T11:08:24.181Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,154 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/shell-file-descriptor-eval.html</id>
+<title>在 shell 中管理檔案描述符</title>
+<published>2020-12-01T11:08:00.812Z</published>
+<updated>2020-12-01T11:08:24.163Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/shell-file-descriptor-eval.html"/>
+<summary type="html">linux shell 中可以使用 0 到 9 的 file descriptor
+檔案描述符來控制程式的輸入與輸出，但一些使用並不好理解。
+例如重導向的順序不好理解，要將 fd 存在變數時得用到 eval，
+或要測試一個 fd 有無被佔用時，只能直接嘗試重導向檢查有無錯誤。</summary>
+<category term="linux"/>
+<category term="shell"/>
+<content type="html">&lt;h1 id=&quot;在-shell-中管理檔案描述符&quot;&gt;在 shell 中管理檔案描述符&lt;/h1&gt;
+&lt;p&gt;linux shell 中可以使用 0 到 9 的 file descriptor
+檔案描述符來控制程式的輸入與輸出，但一些使用並不好理解。
+例如重導向的順序不好理解，要將 fd 存在變數時得用到 eval，
+或要測試一個 fd 有無被佔用時，只能直接嘗試重導向檢查有無錯誤。&lt;/p&gt;
+&lt;p&gt;shell 中執行程式時，會讓程式繼承
+shell 本身的標準輸入、輸出、錯誤輸出三個 fd。
+如執行腳本時，輸出可能被導向檔案，輸入被導向另一支程式等。
+另外，也可以在執行時手動指定導向的目標，
+fd 中 0 1 2 分別為標準輸入、輸出、錯誤輸出。&lt;/p&gt;
+&lt;h2 id=&quot;fd-重導向的順序&quot;&gt;fd 重導向的順序&lt;/h2&gt;
+&lt;p&gt;fd 的結構為一個陣列，不同的索引中的內容為指向不同輸出的指標。
+shell 中使用 &lt;code&gt;2&amp;gt;&amp;amp;1&lt;/code&gt; 來表示將原本輸出到 stdout 的導向 stderr，
+在對陣列的操作上，代表將原本在陣列位置 1 的指標拷貝到 2，
+與語法上的 2 1 順序看來是相反的。
+故程式向 2 寫入時，寫入的目標和向 1 寫入是相同的。&lt;/p&gt;
+&lt;p&gt;所以如果要同時導向 stdout stderr 到一檔案時，
+寫法是 &lt;code&gt;find 1&amp;gt;find.log 2&amp;gt;&amp;amp;1&lt;/code&gt; ，會先將 1 指向檔案，
+然後把 1 的檔案指標拷到 2，讓 2 也指向同一個檔案。
+如果寫成 &lt;code&gt;find 2&amp;gt;&amp;amp;1 1&amp;gt;find.log&lt;/code&gt; ，
+就會變成 stderr 指到 stdout，但 stdout 指到檔案。&lt;/p&gt;
+&lt;h2 id=&quot;重導向的目標&quot;&gt;重導向的目標&lt;/h2&gt;
+&lt;p&gt;重導向時，若是要導向到檔案，可以直接寫 &lt;code&gt;1&amp;gt;filename&lt;/code&gt; ，
+若是要重導向到描述符，則必須在數字前加上 &lt;code&gt;&amp;amp;&lt;/code&gt; 如 &lt;code&gt;2&amp;gt;&amp;amp;1&lt;/code&gt; ，防止與檔名混淆。
+但重導向的來源 fd，則是不必加 &lt;code&gt;&amp;amp;&lt;/code&gt; 的。&lt;/p&gt;
+&lt;p&gt;同時，在使用 &lt;code&gt;&amp;gt;&lt;/code&gt; 導向時，若是導向的來源為 stdout 1，
+則 1 可以省略不寫；使用 &lt;code&gt;&amp;lt;&lt;/code&gt; 導向 stdin 時也是同樣可以省略 0。
+可能是因為這是最常見的用法，
+或者是用數字代表 fd 的寫法是後來才添加的功能。&lt;/p&gt;
+&lt;h2 id=&quot;exec-的用法&quot;&gt;exec 的用法&lt;/h2&gt;
+&lt;p&gt;在 shell 中除了預設的 fd 0 1 2，還有 3 到 9 可以用，
+可以使用 exec 將 fd 對應到某一檔案。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;exec 2&amp;gt;error.log
+# following command stderr will send to error.log
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;exec 可以將操作 shell 自身的 fd 對應表格，
+前述在指令後重導向的作法，只對該指令有效，
+而 exec 則是改變 shell 自身的對應表格，
+對 exec 後執行的所有命令都有效。&lt;/p&gt;
+&lt;p&gt;若是要短暫重導向，可以預先將 stderr 備份到另一 fd，事後再回復。
+最後的 &lt;code&gt;&amp;amp;-&lt;/code&gt; 則是關閉該 fd 的意思。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;exec 3&amp;gt;&amp;amp;2 # backup stderr to 3
+exec 2&amp;gt;error.log
+
+# command send stderr to error.log
+
+exec 2&amp;gt;&amp;amp;3 # recover stderr
+exec 3&amp;gt;&amp;amp;- # close 3
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;或者也可以將命令寫在子 shell 中，再在子 shell 中重導向，
+子 shell 的重導向並不會影響父 shell 的狀態。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;(
+    exec 2&amp;gt;error.log
+    # following command send stderr to error.log
+)
+# command still send stderr to stderr
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;又或者，既然已經開子 shell 了，那直接重導向子 shell 的輸出即可：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;(
+    # command send stderr to error.log
+) 2&amp;gt;error.log
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;將-fd-存成變數&quot;&gt;將 fd 存成變數&lt;/h2&gt;
+&lt;p&gt;shell 內建的 fd 有 0-9 供取用，是一種暫存器概念的設計，
+基於 unix process 對 file descriptor 的抽像，幾乎全無包裝。
+雖然暫存器是十分古老且見常的設計，
+如 vi 也使用暫存器的概念，提供 26 個不同字母的暫存器作為剪貼簿使用，
+但在寫程式時，我們還是比較喜歡以變數的方式儲存開啟的檔案，再多疊一層抽像。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;stderr=2
+echo warning &amp;gt;&amp;amp;$stderr
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;在一般命令使用重導向時，可以直接將 fd 的數字存到變數內，
+並在 &lt;code&gt;&amp;amp;&lt;/code&gt; 後面使用該變數。
+但若是要在 &lt;code&gt;&amp;gt;&lt;/code&gt; 前面使用變數時，卻會出現問題，
+可能是 shell 的變數展開是在解析重導向的左值前進行的吧。
+所以要開檔時不能這樣寫：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;log=3
+exec $log&amp;gt;file.log
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;只能直接把變數寫死，或者是用 shell 的 eval 命令，
+可以在解析指令前多展開一次變數：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;log_fd=3
+log_path=my.log
+eval &amp;quot;exec $log_fd&amp;gt;$log_path&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;測試-fd-是否已開啟&quot;&gt;測試 fd 是否已開啟&lt;/h2&gt;
+&lt;p&gt;把 fd 存成變數，最主要的目的是防止用到其它設定開到的 fd。
+shell 沒有提供方法來判斷有哪些 fd，又指向哪些目標。
+一個做法是從 linux kernel 提供的 &lt;code&gt;/proc/self/fd&lt;/code&gt; 來找，
+或者用 &lt;code&gt;/proc/$$/fd&lt;/code&gt; ，或者 &lt;code&gt;/dev/fd&lt;/code&gt; 。
+但這不是 shell 的功能，所以如果到沒提供 &lt;code&gt;/proc&lt;/code&gt; 的系統就不管用了。&lt;/p&gt;
+&lt;p&gt;另一個做法是直接寫入該 fd 看看，如果 fd 不存在，就會報錯。
+但隨便寫垃圾到別人開的 fd 也不太對，
+所以我的想法是嘗試寫入一個空字串。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;fd_test=3
+printf &amp;apos;&amp;apos; &amp;gt;&amp;amp;$fd_test
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;除了 printf，當然也有很多指令是不輸出東西的，都可以拿來用，
+例如 &lt;code&gt;echo -n&lt;/code&gt; 、 &lt;code&gt;true&lt;/code&gt; 、 &lt;code&gt;:&lt;/code&gt; 。
+或者用一個讀取 0 byte 的程式：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;head -c 0 &amp;lt;&amp;amp;$fd_test
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;之後就可以寫出一個函數，可以用來測試該 fd 存不存在，
+因為如果 fd 不存在會報錯，所以可以再把 stderr 指到 &lt;code&gt;/dev/null&lt;/code&gt; 。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;fd_is_open() { 
+    local fd=$1
+    ( true 1&amp;gt;&amp;amp;$fd ) 2&amp;gt;/dev/null
+}
+fd_is_open 0
+fd_is_open 1
+fd_is_open 3
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;找出空的-fd&quot;&gt;找出空的 fd&lt;/h2&gt;
+&lt;p&gt;之後就可以更進一步，寫出一個函數來找空的 fd：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;fd_first_free() {
+    local fd
+    if [ $# -gt 0 ]
+    then fd=$1
+    else fd=0
+    fi
+
+    while fd_is_open $fd
+    do fd=$((fd+1))
+    done
+
+    echo $fd
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;找空的 fd 並開檔：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;file=my.log
+fd=`fd_first_free`
+eval &amp;quot;exec $fd&amp;gt;$file&amp;quot;
+
+echo start executing &amp;gt;&amp;amp;$fd
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/ccca-dokuwiki-hello-world-slide.html#社團與機器</id>
 <title>CCCA dokuwiki 雜談</title>
 <published>2020-01-13T05:11:28.684Z</published>
@@ -1733,137 +1881,7 @@ adb 指令也都不需要使用 torsocks；
 <category term="android"/>
 <category term="adb"/>
 <category term="tor"/>
-<content type="html">&lt;h1 id=&quot;使用-adb-經-tor-網路連上具有洋蒽網址的-android&quot;&gt;使用 adb 經 tor 網路連上具有洋蒽網址的 android&lt;/h1&gt;
-&lt;p&gt;tor 除了用來隱藏真實 ip，
-還有一個好用的功能是能直接連線到無公網 ip 的裝置。
-因此手機裝好 tor 後，無論有無公網 ip、使用行動網路或 wifi，
-都可以在手機上開 vnc、sftp、adb over tcp 等服務，
-在電腦上使用 torsocks 包裝程式後直接連線到手機。
-但使用 adb 連線時，因為 PC 端 adb 程式的設計，
-使用上需要將 daemon 丟到 tor 內，但 client 則需要在 tor 外。&lt;/p&gt;
-&lt;h2 id=&quot;tor-簡介&quot;&gt;tor 簡介&lt;/h2&gt;
-&lt;p&gt;tor 最主要的功能是隱藏自己的 ip 位址，
-經由 tor 連線到其它伺服器時，
-對方無法看到你的真實位址，而是會看到 tor 出口的位址。&lt;/p&gt;
-&lt;p&gt;同時若是將伺服器架在 tor 網路內，
-則連線上的客戶端也不知道伺服器的 ip，
-連線時是使用 tor 軟體產生的 &lt;code&gt;*.onion&lt;/code&gt; 洋蒽地址，
-來讓客戶端能連上伺服器。
-tor 地址還有一個特性，也就是無論是否有公網 ip，
-都可以產生洋蒽地址，讓其它使用者直接連線。&lt;/p&gt;
-&lt;h2 id=&quot;tor-on-android&quot;&gt;tor on android&lt;/h2&gt;
-&lt;p&gt;在 android 上有 orbot 這款 tor 官方的 app 可以使用，
-執行後可以讓特定 app 的連線都走 tor，
-或使用 vpn 模式讓整支手機的連線都經由 tor。&lt;/p&gt;
-&lt;p&gt;某些需要連線的 app，如我用的 ssh 的 connect bot vx，
-是用來連線 ssh server 的，如果他經由 tor 連線，
-則連線的域名也可以是洋蒽地址；
-那就可以用來連到沒有公網 ip 的電腦。&lt;/p&gt;
-&lt;h2 id=&quot;android-tor-service&quot;&gt;android tor service&lt;/h2&gt;
-&lt;p&gt;orbot 同時也提供產生洋蒽地址的功能，
-使用其中的 onion services &amp;gt; hosted services，
-即可產生供外部連入的洋蒽地址。
-orbot 的 ui 設計是一個地址只對應一個本機的連接埠，
-可能是因為安全考量，這樣就不會讓人發現多個服務都在同一個地址上&lt;/p&gt;
-&lt;p&gt;（雖然一個洋蒽地址理論上是對應到一支 ip，
-通常是設成自己的 ip，也就是 127.0.0.1，
-一支 ip 則可以有 65536 個埠，但開放是選擇性的，
-一般只會開要架設的服務用到的埠。）&lt;/p&gt;
-&lt;p&gt;如果你的 android 有 &lt;a href=&quot;adb-over-wifi.html&quot;&gt;經由網路讓 adb 連入的功能&lt;/a&gt; ，
-那你就可以開 adb 用的 5555 埠；
-ftp 通常會用 2121，因為開 21 要 root；
-sftp 常用 2222，vnc 5900 等。&lt;/p&gt;
-&lt;p&gt;開好後，就可以用其它裝置經由 tor，
-以洋蒽地址連上你的 android 上的對應連接埠。
-以 linux 上來說，會使用 torsocks 這支程式
-來包裝對應的 client 程式。&lt;/p&gt;
-&lt;p&gt;例如要使用 tor 連上 sftp：
-（這洋蒽位址是假的，不用嘗試。）&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# connect to sftp
-android_ip=192.168.0.1
-sftp -P 2222 android@$android_ip
 
-# connect sftp via tor
-android_tor_address=6jazqa4obmpudf6qxs46gzqgt2ckb356rticws4d4gv4lsqk2fz7b47f.onion
-torsocks sftp -P 2222 android@$android_tor_address
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;這種做法的優勢是，多數這些經由網路的服務，
-都需要 android 手機的 ip。
-但多數時候 android 手機都是經由行動網路上網，
-拿到的都是浮動 ip 甚至虛擬 ip，
-浮動 ip 有時會被電信商以防火牆擋住，而虛擬 ip 則根本無法連線。
-故只有在使用 wifi 時，或是以手機分享熱點時，
-手機才會和 PC 在同一區網，也才能以虛擬 ip 連入。&lt;/p&gt;
-&lt;p&gt;但使用 tor 時無論 ip 為何，只要能接觸網路網路，
-都可以經由同一組洋蒽地址連入。
-所以就算是使用行動網路，
-開啟 tor 後即可以以電腦經 adb，
-或其它需要 android ip 的軟體連上 android。&lt;/p&gt;
-&lt;h2 id=&quot;PC-端-adb-的設計&quot;&gt;PC 端 adb 的設計&lt;/h2&gt;
-&lt;p&gt;adb 連線的問題是在 PC 這端的 adb 程式上。
-adb 設計上都是走 tcp 連線，就算是經由 usb 將 android 連上 pc，
-adb 也是在 usb 上用 tcp 和 android 連線。&lt;/p&gt;
-&lt;p&gt;而 PC 上的 adb 設計成 daemon 和 client 二部份，
-daemon 在後台執行，保持和 android 的連線，
-而執行 adb 指定時，則是啟動 adb client 和 daemon 連線；
-而這 client 和 daemon 間，同樣是以 tcp 連線。
-使用上 adb client 執行時，如果沒有發現 adb daemon，
-則會自動啟動一支 daemon。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ adb devices
-List of devices attached
-* daemon not running; starting now at tcp:5037
-* daemon started successfully
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;pc-端-adb-連線的問題&quot;&gt;pc 端 adb 連線的問題&lt;/h2&gt;
-&lt;p&gt;adb client 與 daemon 連線是，是連到 localhost &lt;code&gt;127.0.0.1:*&lt;/code&gt; ，
-但 tor 預設是不允許連線到 localhost 的：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ torsocks nc localhost 5566
-1600064227 WARNING torsocks[15253]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
-localhost [127.0.0.1] 5566 (?) : Operation not permitted
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;而且實際上在和手機連線的是 adb daemon，
-所以單純讓 client 跑在 tor 是沒有用的，
-要讓 daemon 跑在 tor 裡，
-daemon 才能連上 android 的洋蒽地址。
-而 client 則不能跑在 tor 裡，不然會不能和 localhost 的 daemon 連線。&lt;/p&gt;
-&lt;h2 id=&quot;使用-adb-經-tor-連線的方式&quot;&gt;使用 adb 經 tor 連線的方式&lt;/h2&gt;
-&lt;p&gt;首先先檢查有沒有已經執行中的 adb daemon，如果有就把他終止。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ pgrep --list-full --full adb
-14748 adb -L tcp:5037 fork-server server --reply-fd 4                          
-~ $ kill 14748
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;再來，就得啟動一支在 tor 內的 daemon，
-因為 adb man-page 裡沒寫怎麼以 daemon 方式執行，
-我就直接用 adb 會自動啟動的特性，
-以及子程序會繼承父程序的環境變數，
-啟動一支在 tor 裡的子程序，讓 client fork 出的 daemon，
-也位在 tor 裡，之後經該 daemon 的連線就都會走 tor 了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ torsocks adb devices # fork daemon from process inside tor
-List of devices attached
-1600065838 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
-1600065838 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
-* daemon not running; starting now at tcp:5037
-* daemon started successfully
-1600065841 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
-1600065841 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
-* daemon still not running
-error: cannot connect to daemon at tcp:5037: Operation not permitted
-~ $ adb devices
-List of devices attached
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;雖然啟動 daemon 後有跳錯誤，
-那是因為 client 發現 daemon 不存在，
-先啟動 daemon 後 client 再繼續原本的指令 devices，
-但因為 client 也在 tor 裡，所以不能與 localhost 連線，就報錯了。
-之後 daemon 也的確有成功啟動，
-不使用 torsocks 啟動的 client 也能成功與 daemon 連線。&lt;/p&gt;
-&lt;p&gt;之後與 tor 中的 android 連線時，
-adb 指令也都不需要使用 torsocks；
-因為 adb daemon 已經在 tor 中執行了，
-所以與經 daemon 的 client 也都能使用洋蒽位址。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;adb connect 6jazqa4obmpudf6qxs46gzqgt2ckb356rticws4d4gv4lsqk2fz7b47f.onion
-&lt;/code&gt;&lt;/pre&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/adb-over-wifi.html</id>
 <title>透過 wifi 執行 adb</title>

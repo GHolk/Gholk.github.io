@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2020-12-01T11:08:24.181Z</updated>
+  <updated>2020-12-01T12:41:22.992Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,49 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/shell-awk-time-zone-utc.html</id>
+<title>使用 awk 處理時間的時區問題</title>
+<published>2020-12-01T12:41:08.017Z</published>
+<updated>2020-12-01T12:41:22.972Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/shell-awk-time-zone-utc.html"/>
+<summary type="html">gnu awk 有提供時間處理函數，
+可以把解析並把時間字串轉成其它格式，像轉成 unix 秒做計算。
+但 awk 預設是將時間依本機的時區解析，
+如果要解析 utc 或其它時區，
+那可以設定環境變數 TZ，設 &lt;code&gt;TZ=utc&lt;/code&gt; 即可。</summary>
+<category term="linux"/>
+<category term="awk"/>
+<category term="時間"/>
+<content type="html">&lt;h1 id=&quot;使用-awk-處理時間的時區問題&quot;&gt;使用 awk 處理時間的時區問題&lt;/h1&gt;
+&lt;p&gt;gnu awk 有提供時間處理函數，
+可以把解析並把時間字串轉成其它格式，像轉成 unix 秒做計算。
+但 awk 預設是將時間依本機的時區解析，
+如果要解析 utc 或其它時區，
+那可以設定環境變數 TZ，設 &lt;code&gt;TZ=utc&lt;/code&gt; 即可。&lt;/p&gt;
+&lt;p&gt;gnu awk 有提供 mktime 函數，可以解析常見的年月日格式。
+雖然輸入格式蠻爛的，用空格分割的字串： &lt;code&gt;%Y %m %d %H %M %S&lt;/code&gt; 。
+awk 手冊裡寫 mktime 的回傳值是 timestamp，
+但測試大概是整數，可以直接加減沒問題。
+或者就用 strftime，格式指定 unix time &lt;code&gt;%s&lt;/code&gt; ，
+雖然結果是字串，但 awk 是不區分字串和數字的。&lt;/p&gt;
+&lt;p&gt;但解析時會把時間套用本機的時區，然後再轉成 utc 時區的 unix time。
+所以 &lt;code&gt;2000 01 01 00 00 00&lt;/code&gt; 在台灣東 8 區解析，
+以 unix time 表示是 946656000，
+將此 unix time 表示為 utc 時間則會變成 &lt;code&gt;1999 12 31 16 00 00&lt;/code&gt; 。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ date -Is -d @946656000
+2000-01-01T00:00:00+08:00
+~ $ date --utc -Is -d @946656000 
+1999-12-31T16:00:00+00:00
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;google 了怎麼解決，發現許多 gnu 程式都會吃 &lt;code&gt;TZ&lt;/code&gt; 環境變數來決定時區。
+（雖然 linux 下程式多半不會靠這個環境變數。）
+該環境變數好像和 &lt;code&gt;time.h&lt;/code&gt; 有關，可以參考手冊 &lt;code&gt;tzname(3)&lt;/code&gt; 。
+總之就是，設定 &lt;code&gt;TZ=UTC&lt;/code&gt; 就可以讓時間是 utc。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;TZ=UTC awk # some code
+env TZ=UTC awk # use env
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/shell-file-descriptor-eval.html</id>
 <title>在 shell 中管理檔案描述符</title>
 <published>2020-12-01T11:08:00.812Z</published>
@@ -1676,195 +1719,7 @@ sftp 則是 sftp 的地址，
 <category term="android"/>
 <category term="adb"/>
 <category term="tor"/>
-<content type="html">&lt;h1 id=&quot;使用-adb-經-tor-網路連上具有洋蒽網址的-android&quot;&gt;使用 adb 經 tor 網路連上具有洋蒽網址的 android&lt;/h1&gt;
-&lt;p&gt;tor 除了用來隱藏真實 ip，
-還有一個好用的功能是能直接連線到無公網 ip 的裝置。
-因此手機裝好 tor 後，無論有無公網 ip、使用行動網路或 wifi，
-都可以在手機上開 vnc、sftp、adb over tcp 等服務，
-在電腦上使用 torsocks 包裝程式後直接連線到手機。
-但使用 adb 連線時，因為 PC 端 adb 程式的設計，
-使用上需要將 daemon 丟到 tor 內，但 client 則需要在 tor 外。&lt;/p&gt;
-&lt;h2 id=&quot;tor-簡介&quot;&gt;tor 簡介&lt;/h2&gt;
-&lt;p&gt;tor 最主要的功能是隱藏自己的 ip 位址，
-經由 tor 連線到其它伺服器時，
-對方無法看到你的真實位址，而是會看到 tor 出口的位址。&lt;/p&gt;
-&lt;p&gt;同時若是將伺服器架在 tor 網路內，
-則連線上的客戶端也不知道伺服器的 ip，
-連線時是使用 tor 軟體產生的 &lt;code&gt;*.onion&lt;/code&gt; 洋蒽地址，
-來讓客戶端能連上伺服器。
-tor 地址還有一個特性，也就是無論是否有公網 ip，
-都可以產生洋蒽地址，讓其它使用者直接連線。&lt;/p&gt;
-&lt;h2 id=&quot;tor-on-android&quot;&gt;tor on android&lt;/h2&gt;
-&lt;p&gt;在 android 上有 orbot 這款 tor 官方的 app 可以使用，
-執行後可以讓特定 app 的連線都走 tor，
-或使用 vpn 模式讓整支手機的連線都經由 tor。&lt;/p&gt;
-&lt;p&gt;某些需要連線的 app，如我用的 ssh 的 connect bot vx，
-是用來連線 ssh server 的，如果他經由 tor 連線，
-則連線的域名也可以是洋蒽地址；
-那就可以用來連到沒有公網 ip 的電腦。&lt;/p&gt;
-&lt;h2 id=&quot;android-tor-service&quot;&gt;android tor service&lt;/h2&gt;
-&lt;p&gt;orbot 同時也提供產生洋蒽地址的功能，
-使用其中的 onion services &amp;gt; hosted services，
-即可產生供外部連入的洋蒽地址，
-詳細的說明可以看 &lt;a href=&quot;https://tor.stackexchange.com/a/14611&quot;&gt;這篇 stackexchange 上的回答&lt;/a&gt; 。
-orbot 的 ui 設計是一個地址只對應一個本機的連接埠，
-可能是因為安全考量，這樣就不會讓人發現多個服務都在同一個地址上&lt;/p&gt;
-&lt;p&gt;（雖然一個洋蒽地址理論上是對應到一支 ip，
-通常是設成自己的 ip，也就是 127.0.0.1，
-一支 ip 則可以有 65536 個埠，但開放是選擇性的，
-一般只會開要架設的服務用到的埠。）&lt;/p&gt;
-&lt;p&gt;如果你的 android 有 &lt;a href=&quot;adb-over-wifi.html&quot;&gt;經由網路讓 adb 連入的功能&lt;/a&gt; ，
-那你就可以開 adb 用的 5555 埠；
-ftp 通常會用 2121，因為開 21 要 root；
-sftp 常用 2222，vnc 5900 等。&lt;/p&gt;
-&lt;p&gt;開好後，就可以用其它裝置經由 tor，
-以洋蒽地址連上你的 android 上的對應連接埠。
-以 linux 上來說，會使用 torsocks 這支程式
-來包裝對應的 client 程式。&lt;/p&gt;
-&lt;p&gt;例如要使用 tor 連上 sftp：
-（這洋蒽位址是假的，不用嘗試。）&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# connect to sftp
-android_ip=192.168.0.1
-sftp -P 2222 android@$android_ip
 
-# connect sftp via tor
-android_tor_address=6jazqa4obmpudf6qxs46gzqgt2ckb356rticws4d4gv4lsqk2fz7b47f.onion
-torsocks sftp -P 2222 android@$android_tor_address
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;這種做法的優勢是，多數這些經由網路的服務，
-都需要 android 手機的 ip。
-但多數時候 android 手機都是經由行動網路上網，
-拿到的都是浮動 ip 甚至虛擬 ip，
-浮動 ip 有時會被電信商以防火牆擋住，而虛擬 ip 則根本無法連線。
-故只有在使用 wifi 時，或是以手機分享熱點時，
-手機才會和 PC 在同一區網，也才能以虛擬 ip 連入。&lt;/p&gt;
-&lt;p&gt;但使用 tor 時無論 ip 為何，只要能接觸網路網路，
-都可以經由同一組洋蒽地址連入。
-所以就算是使用行動網路，
-開啟 tor 後即可以以電腦經 adb，
-或其它需要 android ip 的軟體連上 android。&lt;/p&gt;
-&lt;h3 id=&quot;讓一個-tor-service-對應多個-port&quot;&gt;讓一個 tor service 對應多個 port&lt;/h3&gt;
-&lt;p&gt;orbot 預設的一個洋蒽地址對應一個埠的缺點是，
-如果你要連 adb 得用 adb 的埠的地址，
-sftp 則是 sftp 的地址，
-會有很多組地址要切來切去，很不方便。&lt;/p&gt;
-&lt;p&gt;我在單純用來直接連線而沒有匿蹤需求時，
-都是用同一組 tor 地址開多個埠，
-這樣就只要記一組，雖然還是不太方便。
-地址和主機的對應我是記在 &lt;code&gt;ssh_config&lt;/code&gt; 裡，
-反正多數工作用 ssh 都能達成，如果其它服務要用，
-就用 &lt;code&gt;grep -C 2 onion .ssh/config&lt;/code&gt; 查。
-如果有其它更方便的作法，請推薦給我。&lt;/p&gt;
-&lt;p&gt;要在 orbot 上讓一個地址開多個埠，
-我是用 orbot 設定裡的進階功能，
-Torrc Custom Config，可以自己輸入 torrc 的設定。
-所以就用該功能建立一個 hidden service 和儲存路徑就可以了。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;HiddenServiceDir /sdcard/my-tor-service
-HiddenServicePort 2222
-HiddenServicePort 5555
-HiddenServicePort 5900
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;之後依 tor 的運作模式，洋蒽地址就會在 tor 執行後儲存在
-&lt;code&gt;/sdcard/my-tor-service/hostname&lt;/code&gt; 這個檔案裡。
-但 tor 似乎會檢查該目錄的存取權限，
-如果該目錄不是只有擁有者可讀的權限 &lt;code&gt;rwx------&lt;/code&gt; ，
-在執行時就會報錯。
-（雖然第一次建立目錄時不會報錯，
-但第二次啟動時要讀取目錄裡既有的資料就會報錯。）&lt;/p&gt;
-&lt;p&gt;偏偏 android 手機中， &lt;code&gt;/sdcard&lt;/code&gt; 的檔案系統是 fat，
-無法儲存權限和所有者資訊，
-所以不能把 &lt;code&gt;HiddenServiceDir&lt;/code&gt; 指到 sdcard 裡的路徑。&lt;/p&gt;
-&lt;p&gt;但 android 手機裡，除了 &lt;code&gt;/sdcard&lt;/code&gt; 外我們能動的地方實在是不多，
-大概只有 &lt;code&gt;/data&lt;/code&gt; 比較適合存資料，
-可是 data 分割一般需要 root 才能讀取。
-如果你有 root 的話，可以直接指到 &lt;code&gt;/data/local/my-tor-service&lt;/code&gt; ，
-啟動一次產生資料夾後，用 su 切到 root
-&lt;code&gt;cat /data/local/my-tor-service/hostname&lt;/code&gt; 看路徑。&lt;/p&gt;
-&lt;p&gt;沒有 root 的話，可以用一個比較 hack 的方式：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;在 torrc custom config 裡把 hidden service 的路徑
-指到 &lt;code&gt;/data/data/org.torproject.android/files/hidden_services/hs5566&lt;/code&gt; ，
-然後看你要開幾個 port 都可以。&lt;/li&gt;
-&lt;li&gt;連接一次 tor 網路，啟動時就會建立出 hs5566 這個資料夾和內部的設定。&lt;/li&gt;
-&lt;li&gt;然後斷線，再用 orbot 內建的功能建立一個 5566 port 的 hidden service。
-依 orbot 的設計，啟動時 tor 會把 5566 port 的設定存到
-&lt;code&gt;/data/data/org.torproject.android/files/hidden_services/hs5566&lt;/code&gt; 路徑。&lt;/li&gt;
-&lt;li&gt;再連接一次 tor，這次應該會失敗，因為二個服務指向同一個資料夾，但沒關係。&lt;/li&gt;
-&lt;li&gt;可以關閉 tor 了，這時再去 orbot 建立 service 的 ui 裡看，
-5566 port 的 service 就會顯示出一串較長的 tor 第三版本地址，
-就是你寫在 torrc custom config 裡的那個 service 的地址。&lt;/li&gt;
-&lt;li&gt;之後就把 orbot ui 裡該 5566 port 的 service 取消勾選不要啟動，
-以後啟動 tor 網路後就能用該地址連上 android 了。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;這個做法的缺點就是，我不保證他能運作多久。
-反觀用 root 不只能拿到 hostname，還可以把整個 tor service 複製出來
-&lt;code&gt;cp -r /data/local/my-tor-service /sdcard/my-tor-service&lt;/code&gt; ，
-備份裡面的 secret key 和 public key，
-之後整個資料夾丟到另一個裝置上，用另一個 tor 一樣跑的起來。&lt;/p&gt;
-&lt;h2 id=&quot;PC-端-adb-的設計&quot;&gt;PC 端 adb 的設計&lt;/h2&gt;
-&lt;p&gt;adb 連線的問題是在 PC 這端的 adb 程式上。
-adb 設計上都是走 tcp 連線，就算是經由 usb 將 android 連上 pc，
-adb 也是在 usb 上用 tcp 和 android 連線。&lt;/p&gt;
-&lt;p&gt;而 PC 上的 adb 設計成 daemon 和 client 二部份，
-daemon 在後台執行，保持和 android 的連線，
-而執行 adb 指定時，則是啟動 adb client 和 daemon 連線；
-而這 client 和 daemon 間，同樣是以 tcp 連線。
-使用上 adb client 執行時，如果沒有發現 adb daemon，
-則會自動啟動一支 daemon。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ adb devices
-List of devices attached
-* daemon not running; starting now at tcp:5037
-* daemon started successfully
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;pc-端-adb-連線的問題&quot;&gt;pc 端 adb 連線的問題&lt;/h2&gt;
-&lt;p&gt;adb client 與 daemon 連線是，是連到 localhost &lt;code&gt;127.0.0.1:*&lt;/code&gt; ，
-但 tor 預設是不允許連線到 localhost 的：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ torsocks nc localhost 5566
-1600064227 WARNING torsocks[15253]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
-localhost [127.0.0.1] 5566 (?) : Operation not permitted
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;而且實際上在和手機連線的是 adb daemon，
-所以單純讓 client 跑在 tor 是沒有用的，
-要讓 daemon 跑在 tor 裡，
-daemon 才能連上 android 的洋蒽地址。
-而 client 則不能跑在 tor 裡，不然會不能和 localhost 的 daemon 連線。&lt;/p&gt;
-&lt;h2 id=&quot;使用-adb-經-tor-連線的方式&quot;&gt;使用 adb 經 tor 連線的方式&lt;/h2&gt;
-&lt;p&gt;首先先檢查有沒有已經執行中的 adb daemon，如果有就把他終止。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ pgrep --list-full --full adb
-14748 adb -L tcp:5037 fork-server server --reply-fd 4                          
-~ $ kill 14748
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;再來，就得啟動一支在 tor 內的 daemon，
-因為 adb man-page 裡沒寫怎麼以 daemon 方式執行，
-我就直接用 adb 會自動啟動的特性，
-以及子程序會繼承父程序的環境變數，
-啟動一支在 tor 裡的子程序，讓 client fork 出的 daemon，
-也位在 tor 裡，之後經該 daemon 的連線就都會走 tor 了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ torsocks adb devices # fork daemon from process inside tor
-List of devices attached
-1600065838 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
-1600065838 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
-* daemon not running; starting now at tcp:5037
-* daemon started successfully
-1600065841 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
-1600065841 WARNING torsocks[16243]: [connect] Connection to a local address are denied since it might be a TCP DNS query to a local DNS server. Rejecting it for safety reasons. (in tsocks_connect() at connect.c:193)
-* daemon still not running
-error: cannot connect to daemon at tcp:5037: Operation not permitted
-~ $ adb devices
-List of devices attached
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;雖然啟動 daemon 後有跳錯誤，
-那是因為 client 發現 daemon 不存在，
-先啟動 daemon 後 client 再繼續原本的指令 devices，
-但因為 client 也在 tor 裡，所以不能與 localhost 連線，就報錯了。
-之後 daemon 也的確有成功啟動，
-不使用 torsocks 啟動的 client 也能成功與 daemon 連線。&lt;/p&gt;
-&lt;p&gt;之後與 tor 中的 android 連線時，
-adb 指令也都不需要使用 torsocks；
-因為 adb daemon 已經在 tor 中執行了，
-所以與經 daemon 的 client 也都能使用洋蒽位址。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;adb connect 6jazqa4obmpudf6qxs46gzqgt2ckb356rticws4d4gv4lsqk2fz7b47f.onion
-&lt;/code&gt;&lt;/pre&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/android-adb-tor-howto.html</id>
 <title>使用 adb 經 tor 網路連上具有洋蒽網址的 android</title>

@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2020-12-01T12:41:22.992Z</updated>
+  <updated>2020-12-02T09:21:06.145Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,57 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/shell-awk-time-zone-utc.html#time-zone-offset</id>
+<title>使用 awk 處理時間的時區問題</title>
+<published>2020-12-01T12:41:08.017Z</published>
+<updated>2020-12-02T09:21:06.132Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/shell-awk-time-zone-utc.html#time-zone-offset"/>
+<summary type="html">&lt;pre class=&quot;diff&quot;&gt;@@ -34,6 +34,9 @@ TZ=UTC awk # some code
+ env TZ=UTC awk # use env
+ ```
+ 
++至於如果要處理時區偏移，
++awk 似乎沒有加減時區的功能，我是直接加減 `n*3600` 。
++
+ #linux
+ #awk
+ #時間
+&lt;/pre&gt;</summary>
+<category term="linux"/>
+<category term="awk"/>
+<category term="時間"/>
+<content type="html">&lt;h1 id=&quot;使用-awk-處理時間的時區問題&quot;&gt;使用 awk 處理時間的時區問題&lt;/h1&gt;
+&lt;p&gt;gnu awk 有提供時間處理函數，
+可以把解析並把時間字串轉成其它格式，像轉成 unix 秒做計算。
+但 awk 預設是將時間依本機的時區解析，
+如果要解析 utc 或其它時區，
+那可以設定環境變數 TZ，設 &lt;code&gt;TZ=utc&lt;/code&gt; 即可。&lt;/p&gt;
+&lt;p&gt;gnu awk 有提供 mktime 函數，可以解析常見的年月日格式。
+雖然輸入格式蠻爛的，用空格分割的字串： &lt;code&gt;%Y %m %d %H %M %S&lt;/code&gt; 。
+awk 手冊裡寫 mktime 的回傳值是 timestamp，
+但測試大概是整數，可以直接加減沒問題。
+或者就用 strftime，格式指定 unix time &lt;code&gt;%s&lt;/code&gt; ，
+雖然結果是字串，但 awk 是不區分字串和數字的。&lt;/p&gt;
+&lt;p&gt;但解析時會把時間套用本機的時區，然後再轉成 utc 時區的 unix time。
+所以 &lt;code&gt;2000 01 01 00 00 00&lt;/code&gt; 在台灣東 8 區解析，
+以 unix time 表示是 946656000，
+將此 unix time 表示為 utc 時間則會變成 &lt;code&gt;1999 12 31 16 00 00&lt;/code&gt; 。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ date -Is -d @946656000
+2000-01-01T00:00:00+08:00
+~ $ date --utc -Is -d @946656000 
+1999-12-31T16:00:00+00:00
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;google 了怎麼解決，發現許多 gnu 程式都會吃 &lt;code&gt;TZ&lt;/code&gt; 環境變數來決定時區。
+（雖然 linux 下程式多半不會靠這個環境變數。）
+該環境變數好像和 &lt;code&gt;time.h&lt;/code&gt; 有關，可以參考手冊 &lt;code&gt;tzname(3)&lt;/code&gt; 。
+總之就是，設定 &lt;code&gt;TZ=UTC&lt;/code&gt; 就可以讓時間是 utc。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;TZ=UTC awk # some code
+env TZ=UTC awk # use env
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;至於如果要處理時區偏移，
+awk 似乎沒有加減時區的功能，我是直接加減 &lt;code&gt;n*3600&lt;/code&gt; 。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/shell-awk-time-zone-utc.html</id>
 <title>使用 awk 處理時間的時區問題</title>
 <published>2020-12-01T12:41:08.017Z</published>
@@ -1417,292 +1468,7 @@ d.reduce((c,a) =&amp;gt; c+Number(a.correct), 0)/d.length
 <category term="javascript"/>
 <category term="async"/>
 <category term="library"/>
-<content type="html">&lt;h1 id=&quot;用-generator-實作-async-await&quot;&gt;用 generator 實作 async await&lt;/h1&gt;
-&lt;p&gt;generator 除了配合 iterator protocol，
-在執行中中斷後回傳值，還具有協程的功能，
-在中斷繼續後傳入變數。
-所以其實 async await 關鍵字並不是必須的，
-只要有 generator 即可實作出 async 函數。&lt;/p&gt;
-&lt;h2 id=&quot;巨集實作-async&quot;&gt;巨集實作 async&lt;/h2&gt;
-&lt;p&gt;以前還以為 async await 是單純的巨集，
-且不懂 generator 的功能。
-殊不知 generator 其實是實作 async 的關鍵，
-因為單純的巨集展開不能在迴圈內展開，
-所以實作 async await generator 是必要的。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;async function foo() {
-  const a = await b
-  console.log(await a)
-}
 
-function foo() {
-  return b.then(b_a$ =&amp;gt; {
-    const a = b_a$      // 原本的 const a = await b
-    return a.then(a_c$ =&amp;gt; {
-      console.log(a_c$) // 原本的 console.log(await a)
-    })
-  })
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;因為一個帶 await 的函數，
-實際上可以展開成將 await 後的表達式，
-呼叫 then 方法後，將原本的 await 和表達式，
-換成型參的名字。
-如果要得到 promise，就記得回傳。&lt;/p&gt;
-&lt;p&gt;這個做法應該是從 &lt;a href=&quot;https://www.sweetjs.org/&quot;&gt;sweet.js&lt;/a&gt; 看來的，
-sweet.js 是一個以 js 實作 js 巨集的套件，
-但現在找不到比較官方的文章介紹
-怎麼用 sweet.js 實作 async 和 await，
-有一個 &lt;a href=&quot;https://github.com/jayphelps/sweet-async-await&quot;&gt;說明比較完整的是一個 github repository readme&lt;/a&gt; ，
-另一個是 &lt;a href=&quot;https://khamidou.com/programming/await-statement-in-javascript.html&quot;&gt;部落格，但就用了 sweet.js 的語法&lt;/a&gt; ，
-第一眼會看不懂，而且似乎只是 pseudo code。&lt;/p&gt;
-&lt;p&gt;但事情沒有那麼簡單，以上的改寫只在單純序列執行時辦得到，
-如果在 for while if else 的 code block 中使用 await，
-就不能這樣改寫。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;async function foo() {
-  let response
-  for (const url of list) {
-    response = await fetch(url)
-    if (response.ok) break
-  }
-  return response
-}
-function foo() {
-  let response
-  for (const url of list) {
-    fetch(url).then(f_r$ =&amp;gt; {
-      response = f_r$
-      if (response.ok) break // 在另一個函數內用 break 報錯
-    })
-  }
-  return response // 因為 then 是非同步，到這裡 then 還沒執行，所以回傳 undefined
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;generator-實作-async&quot;&gt;generator 實作 async&lt;/h2&gt;
-&lt;p&gt;這裡用 generator 實作會方便很多，
-因為 generator 會在每次碰到 yield 時中斷，
-等待 next 被呼叫時再繼續。
-因此 generator 搭配 promise 或 callback，
-都能實作類似 async await 的函數。&lt;/p&gt;
-&lt;p&gt;generator 執行後會回傳尚未開始執行的物件，
-呼叫其 next 方法，可以繼續執行到下一個 yield 為止，
-並以 yield 後的表達式為返回值。
-若呼叫 next 方法時傳入參數，
-則 generator 內的 yield 就會有返回值。
-例如 &lt;code&gt;const a = yield &amp;apos;hello world&amp;apos;&lt;/code&gt; ，
-則 &lt;code&gt;run.next() == &amp;apos;hello world&amp;apos;&lt;/code&gt; ，再接著
-&lt;code&gt;run.next(&amp;apos;bye&amp;apos;)&lt;/code&gt; 後 a 就會被初始化為 &lt;code&gt;&amp;apos;bye&amp;apos;&lt;/code&gt; 。&lt;/p&gt;
-&lt;h3 id=&quot;用遞迴執行-generator-模擬-async&quot;&gt;用遞迴執行 generator 模擬 async&lt;/h3&gt;
-&lt;script&gt;
-function runAsync(generator, ...argument) {
-    return new Promise((resolve, reject) =&gt; {
-        const run = generator(...argument)
-        const result = run.next()
-        runNext(result.value, result.done)
-
-        function runNext(value, done) {
-            if (done) resolve(value)
-            else if (!value) {
-                const result = run.next(value)
-                runNext(result.value, result.done)
-            }
-            else if (typeof value.then == &apos;function&apos;) {
-                value.then(value =&gt; {
-                    const result = run.next(value)
-                    runNext(result.value, result.done)
-                }).catch(error =&gt; {
-                    let result
-                    let isError = false
-                    try {
-                        result = run.throw(error)
-                    }
-                    catch (generatorError) {
-                        isError = true
-                        result = generatorError
-                    }
-                    if (isError) reject(result)
-                    else runNext(result.value, result.done)
-                })
-            }
-            else {
-                const result = run.next(value)
-                runNext(result.value, result.done)
-            }
-        }
-    })
-}
-&lt;/script&gt;
-
-&lt;p&gt;運用這點，我們只要每次 yield 一個 promise，
-然後不馬上執行 next，而是在 promise.then 後取得結果後，
-再執行 next： &lt;code&gt;promise.then(value =&amp;gt; run.next(value))&lt;/code&gt; ，
-即可達到類似 async 的結果。&lt;/p&gt;
-&lt;p&gt;再加上 &lt;code&gt;run.throw()&lt;/code&gt; 方法，
-可以在 generator 函數中的 yield 位置拋出異常，
-就能在 promise 被 reject 後將錯誤 throw 回 generator 函數中。&lt;/p&gt;
-&lt;p&gt;總之就是可以寫出一個函數，
-自動執行用 generator 撰寫的 async function。
-而更可以把這個直接當作函數的方法，
-也就是相對於增加一種 async 語法，
-其實為 generator 增加一個 method 就夠了。
-原本是宣告後執行 &lt;code&gt;async function foo() {}()&lt;/code&gt; ，
-變成宣告 generator function 後呼叫 async 方法執行
-&lt;code&gt;async function foo(){}.async(&amp;apos;hello world&amp;apos;)&lt;/code&gt; 。&lt;/p&gt;
-&lt;h3 id=&quot;為-Function-物件或-GeneratorFunction-物件增加方法&quot;&gt;為 Function 物件或 GeneratorFunction 物件增加方法&lt;/h3&gt;
-&lt;p&gt;javascript 中 function 也是物作，
-所有 function 都從 &lt;code&gt;Function.prototype&lt;/code&gt; 上繼承方法，
-所以只要 patch Function.prototype 
-或 GeneratorFunction.prototype，
-就可以對所有 generator 函數呼叫該方法。&lt;/p&gt;
-&lt;script&gt;
-Function.prototype.async = function () {
-  return runAsync(this, ...arguments)
-}
-
-// 或是 patch 在 GeneratorFunction 上，因為他不是全域變數，比較麻煩。
-function patchGeneratorFunction() {
-  function *generator() {}
-  const GeneratorFunction = generator.constructor
-  GeneratorFunction.prototype.async = function () {
-    return runAsync(this, ...arguments)
-  }
-}
-&lt;/script&gt;
-
-&lt;h3 id=&quot;呼叫-generator-函數的-async-方法&quot;&gt;呼叫 generator 函數的 async 方法&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;function *generatorCrawler(url) {
-  const response = yield fetch(url)
-  const html = yield response.text()
-  const domParser = new DOMParser()
-  const dom = domParser.parseFromString(html, &amp;apos;text/html&amp;apos;)
-  const allAnchor = dom.querySelectorAll(&amp;apos;a&amp;apos;)
-  return Array.from(allAnchor).map(a =&amp;gt; a.href)
-}
-generatorCrawler.async(&amp;apos;http://google.com.tw/&amp;apos;).then(console.log)
-
-// 等價於
-
-async function asyncCrawler(url) {
-  const response = await fetch(url)
-  const html = await response.text()
-  const domParser = new DOMParser()
-  const dom = domParser.parseFromString(html, &amp;apos;text/html&amp;apos;)
-  const allAnchor = dom.querySelectorAll(&amp;apos;a&amp;apos;)
-  return Array.from(allAnchor).map(a =&amp;gt; a.href)
-}
-asyncCrawler(&amp;apos;http://tw.yahoo.com/&amp;apos;).then(console.log)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;使用-callback-的-async-generator&quot;&gt;使用 callback 的 async generator&lt;/h2&gt;
-&lt;p&gt;其實不一定要用 promise，用 callback 更簡單好用，
-因為 callback 只要無腦把 callback 丟進去就好了，
-不用處理 thenable 的問題。
-另外這裡指定在 callback 中傳入的第一個參數為 error，第二個參數才是值。&lt;/p&gt;
-&lt;script&gt;
-function runCallback(generator, ...argument) {
-    return callback =&gt; {
-        const run = generator(argument)
-        tryRun(&apos;next&apos;)
-
-        function dealCallback(value, done) {
-            if (done) {
-                const error = null
-                callback(error, vallue)
-            }
-            else if (typeof value == &apos;function&apos;) {
-                const callback = value
-                callback((error, value) =&gt; {
-                    if (error) tryRun(&apos;throw&apos;, error)
-                    else tryRun(&apos;next&apos;, value)
-                })
-            }
-            else tryRun(&apos;next&apos;, value)
-        }
-        function tryRun(todo, value) {
-            let isError = false
-            let result
-            try {
-                result = run[todo](value)
-            }
-            catch (runError) {
-                isError = true
-                result = runError
-            }
-            if (isError) reject(result)
-            else runNext(result.value, result.done)
-        }
-    }
-}
-&lt;/script&gt;
-
-&lt;p&gt;只是一般的 callback 型式函數並不是只有單參數回呼函數，
-需要在呼叫時指定參數外，同時傳入回呼函數。
-但在 runCallback 中，我們只傳入回呼函數一個參數，
-所以在使用 callback style 中，
-我們需要手動把多參數的 callback 包成單參數的 callback。
-至於要怎麼包，可以用高階函數也就是返回函數的函數，
-或用 bind，bind 除了綁定函數的 this 外，
-還有一個綁定數個參數的功能。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;function johnSay(string) {
-  console.log(&amp;apos;John: &amp;apos;, string)
-}
-const johnSay = console.log.bind(console, &amp;apos;John: &amp;apos;)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;包裝-node.js-的-callback-style-為例&quot;&gt;包裝 node.js 的 callback style 為例&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;// 用 bind 指定參數
-const readListFile = fs.readFile.bind(fs, &amp;apos;list.txt&amp;apos;, &amp;apos;utf8&amp;apos;)
-// 用閉包高階函數指定參數
-function readFile(filename) {
-  return callback =&amp;gt; fs.readFile(filename, &amp;apos;utf8&amp;apos;, callback)
-}
-
-function *readAllFile() {
-  const listFile = yield readListFile
-  const list = listFile.split(/\n/g)
-  const fileList = []
-  for (const filename of list) {
-    const file = yield readFile(filename)
-    // 或是 const file = yield fs.readFile.bind(fs, filename, &amp;apos;utf8&amp;apos;)
-    fileList.push(file)
-  }
-  return fileList
-}
-
-// 我實作的 callback style 的 generator 一定要傳入 callback 才會執行
-const readAllFileThen = runCallback(readAllFile)
-// 所以這裡要傳入 callback 才會開始動
-readAllFileThen((fileList) =&amp;gt; console.log(fileList.length))
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;用 callback 搭配 generator 的作法還有另一個問題，
-就是容易實作出 lazy 的版本。
-預設 promise 在 new 時就會執行，
-也就是 promise 就算不被 then 也會執行，
-但 callback 則是你不傳入回呼函數就不會真正執行。
-而且 callback 也不像 promise 能接多個 then 事件，
-每傳入一次 callback 就會執行一次，每次都是新的值，
-不像 promise 執行完後會把值保存起來。&lt;/p&gt;
-&lt;p&gt;最後在實作 runCallback 中，
-我有把回傳結果也包成單一參數的 callback，
-這樣就能在另一個 generator 中被 await。
-但如上所述，callback style 要把 callback 傳入後才會執行，
-所以也要傳參數給他才會開始執行。
-（有些人會多做些手腳，確保 callback 只會執行一次，
-甚至讓 callback 可以先執行。）&lt;/p&gt;
-&lt;h3 id=&quot;重寫的優美物件導向版本&quot;&gt;重寫的優美物件導向版本&lt;/h3&gt;
-&lt;p&gt;自己無聊 &lt;a href=&quot;https://gist.github.com/GHolk/202183dda46475cc43756080ed149871&quot;&gt;重寫了一個 generator 的執行器&lt;/a&gt; ，
-對應 promise 和 callback 都有一個。
-本文內的執行器有點 bug，
-就是 generator 直接拋出錯誤會死掉，
-而不是 reject promise 或傳 error 到 callback 裡。
-然後還抽象化了一堆介面，
-讓實作實例時只要定義關鍵幾個方法即可。
-因為太過抽象化太噁心了，第一眼反而看不太懂，就不直接放了。&lt;/p&gt;
-&lt;p&gt;聽說有一個 javascript 的非同步 library co.js，
-以前好像是用 generator 做的，也能搭配 callback style。
-（他們稱單參 callback 的函數為 thunk。）
-不過現在大家都用 async 了，
-加上 js 的使用者好像普遍水，
-知道 generator 和 async 關係的人也不多。
-這種特殊的作法，也就鮮為人知了。&lt;/p&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/android-adb-tor-howto.html#讓一個-tor-service-對應多個-port</id>
 <title>使用 adb 經 tor 網路連上具有洋蒽網址的 android</title>

@@ -53,6 +53,8 @@ awk 手冊裡寫 mktime 的回傳值是 timestamp，
 <pre><code class="lang-sh">TZ=UTC awk # some code
 env TZ=UTC awk # use env
 </code></pre>
+<p>至於如果要處理時區偏移，
+awk 似乎沒有加減時區的功能，我是直接加減 <code>n*3600</code> 。</p>
 </main>
 
 <script defer src="ext/meta-meta.js"></script>

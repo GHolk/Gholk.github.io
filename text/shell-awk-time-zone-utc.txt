@@ -34,6 +34,9 @@ TZ=UTC awk # some code
 env TZ=UTC awk # use env
 ```
 
+至於如果要處理時區偏移，
+awk 似乎沒有加減時區的功能，我是直接加減 `n*3600` 。
+
 #linux
 #awk
 #時間

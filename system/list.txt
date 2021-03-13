@@ -315,3 +315,4 @@ linux-gzip-inplace-overwrite.html
 linux-binary-patch-http-string.html
 shell-file-descriptor-eval.html
 shell-awk-time-zone-utc.html
+tor-dns-howto.html

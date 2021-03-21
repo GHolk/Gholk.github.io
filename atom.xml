@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2021-03-13T06:12:07.672Z</updated>
+  <updated>2021-03-21T03:34:59.377Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,169 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/shell-interact-dangle-program.html#fx-修改現有腳本後執行</id>
+<title>在 shell 中編程</title>
+<published>2019-05-20T04:58:06.412Z</published>
+<updated>2021-03-21T03:34:59.362Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/shell-interact-dangle-program.html#fx-修改現有腳本後執行"/>
+<summary type="html">
+fx 改成使用暫存檔不再依賴 vipe，加了傳入參數和讀取剪貼簿的功能。
+也說明 fc 的編輯器運作方式，不能隨意暫停或切換目標檔案。</summary>
+<category term="shell"/>
+<category term="linux"/>
+<category term="github"/>
+<category term="自製"/>
+<content type="html">&lt;h1 id=&quot;在-shell-中編程&quot;&gt;在 shell 中編程&lt;/h1&gt;
+&lt;p&gt;雖然 shell 中有基礎的 for while 等用來批次處理的語法，
+但在寫較大規模的腳本時，編輯器還是較方便，
+但編輯器就得存成獨立的腳本，寫完要執行或要再改就較不方便。
+其實結合 bash 中的 fc，
+readline 中的 edit-and-execute-command、
+reverse-search-history 就能在互動式的 shell 中很方便的編輯腳本。
+我為了方便持久保存腳本，依據現有 fc 的功能 &lt;a href=&quot;https://github.com/GHolk/loco/blob/b2d8d26b4a4c3b5c4dfe2e62ff33dbb997f15e72/bash_function#L205&quot;&gt;自製了一個 fx&lt;/a&gt; ，
+可以改寫現有腳本後在目前 shell 中執行，
+並可以從 history 中呼叫。&lt;/p&gt;
+&lt;h2 id=&quot;簡單的重用腳本&quot;&gt;簡單的重用腳本&lt;/h2&gt;
+&lt;p&gt;現在在整理資料，會需要大量用到 shell，
+有時寫了一二個大的迴圈來批次處理，
+又串了好幾個 awk sed cut paste。
+如果存成腳本，因為每次處理的細節很多不一樣，
+要重用一定要大規模改寫；
+但改寫後存檔執行 debug 又很麻煩，
+不如直接用 C-r 從歷史抓出來，直接改寫細節直接執行。&lt;/p&gt;
+&lt;p&gt;但歷史記錄久了還是會不見，而且在 shell 中的編輯，
+要改一二處還算方便，但腳本一長、要改的地方一多，
+在 shell 中編輯就很麻煩。
+而且迴圈或多行命令在歷史中都會被壓成一行用分號隔開，
+在 shell 中行數超過一行就會折成多行，
+就會很難閱讀、編輯。
+於是有了研究怎麼讓自己在 shell 中比較好過的想法。&lt;/p&gt;
+&lt;h2 id=&quot;基礎的-shell-功能&quot;&gt;基礎的 shell 功能&lt;/h2&gt;
+&lt;p&gt;先來講解一次快捷鍵。
+shell 中最簡單的功能就是上下，
+對應到 ctrl 就是 C-p C-n，可以一次看一個歷史命令。&lt;/p&gt;
+&lt;p&gt;如果要快速搜尋 &lt;code&gt;reverse-search-history&lt;/code&gt; 
+快捷鍵是 C-r，可以用字串直接搜尋類似的命令；
+其中 C-r 後打了字串，如果不對，
+可以繼續輸入更完整的，或是再按一次 C-r 跳下一個類似的。
+如果看到想要的，可以直接 Enter 執行；
+或是按 C-e C-b C-f 之類任何移動的命令，
+就會把該命令放到目前編輯區，並跟據命令移動游標。
+如果 C-r 按了一輪都沒有想要的，
+可以直接 C-c 跳出歷史搜尋介面。&lt;/p&gt;
+&lt;h2 id=&quot;在-shell-中叫出編輯器&quot;&gt;在 shell 中叫出編輯器&lt;/h2&gt;
+&lt;p&gt;fc 則是另一個少人知道的 bash 功能，
+最簡單就是你打了一個超長的迴圈腳本，
+按了 enter 發現不小心打錯開始噴 error，
+趕快按 C-c 跳出來。
+這時候不用按 C-p 叫回上一個命令，在命令列苦苦編輯；
+直接打 fc 就能叫出你的 editor，
+在其中編輯上一個命令， &lt;code&gt;:wq&lt;/code&gt; 後執行。&lt;/p&gt;
+&lt;p&gt;fc 還有一些進階功能，像直接指定取代上一行的某字串，
+或是用數字跳到指定的歷史、用字串搜尋。
+但我認為 fc 指定歷史的方式太反人類了，
+誰會記得錯的是前幾個？
+而且我做錯事後通常會 ls 看一下現在狀況，
+而且我的 PS1 在命令報錯後會顯示紅字，
+看來超礙眼我都會多按幾次 enter 讓他消失。
+所以歷史的數字常會比我估的多一或二。&lt;/p&gt;
+&lt;p&gt;這時就要來介紹另一個 readline 的功能
+&lt;code&gt;edit-and-execute-command&lt;/code&gt; ，
+快捷鍵是 C-x C-e，類似 fc 可以叫出編輯器，
+但是直接把目前編輯區的內容放到編輯器裡。
+所以就不用再用 fc 記那些麻煩的參數，
+直接 C-b 選到想編輯的，或 C-r 搜出對應的，
+然後 C-x C-e 進編輯器就好了。&lt;/p&gt;
+&lt;p&gt;在編輯器可以正常使用多數編輯器的功能，
+例如在 vi 中可以用 &lt;code&gt;:r&lt;/code&gt; 讀檔案，
+用 &lt;code&gt;:tabe&lt;/code&gt; 開分頁從其它檔案剪貼內容。
+要注意指令不是在存檔後執行，而是在離開編輯器時執行，
+所以不能編輯到一半按 C-z 去做其它事。&lt;/p&gt;
+&lt;p&gt;編輯的運作是會把先把要編輯的內容存到 &lt;code&gt;/tmp&lt;/code&gt; 中的一個暫存檔，
+然後依你的 EDITOR 或 VISUAL 變數用對應的編輯器開啟該檔案，
+最後在你退出編輯器時執行該檔案內容。
+所以如果不想執行任何指令，不能直接 &lt;code&gt;:wq!&lt;/code&gt; ，
+這樣只是直接執行上一次存檔前，也就是檔案建立時的內容，
+而是要把編輯區清空再 &lt;code&gt;:wq&lt;/code&gt; ，才會把檔案清空。
+另外如果你用了 vi 的 &lt;code&gt;:e&lt;/code&gt; 或 &lt;code&gt;:sav&lt;/code&gt; 之類切換編輯的檔案的指令，
+那編輯器的內容會和將要執行的內容不同。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;其實這篇文章到這裡就可以完了，
+C-r 加上 C-x C-e 已經夠好用了。
+但還有自幹的 fx 和組合多個命令的小技巧，
+再撐一小段吧。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;組合多個命令&quot;&gt;組合多個命令&lt;/h2&gt;
+&lt;p&gt;有時打完很長一串指令，想要改輸入的檔案，
+對多個檔案都跑一次，並把結果統一 pipe 出來，
+看要是寫入檔案或丟到 less 看。
+如果 C-p 只能叫出上一條，改了名字也只能執行一次；
+這時就就要用到命令群組的功能。&lt;/p&gt;
+&lt;p&gt;之前有提過 &lt;a href=&quot;shell-script-skill-fifo.html#%E7%94%A8%20head%20truncat%20stream&quot;&gt;命令群組&lt;/a&gt; ，
+可以把幾個命令包起來，把他們的輸入或輸出合併。
+這裡就用類似的作法，同時利用 bash 的特性：
+在括號沒閉合時不會執行命令。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;先用 C-p 叫回要改的命令，再 C-a 移到行首加一個 &lt;code&gt;(&lt;/code&gt; 後按 enter。&lt;/li&gt;
+&lt;li&gt;這時因為括號沒閉合，shell 會跳出 PS2 等你繼續輸入。&lt;/li&gt;
+&lt;li&gt;在 PS2 下仍可以和 readline 互動，按二次 C-p 就能叫回原始的命令來改。&lt;/li&gt;
+&lt;li&gt;最後改好了閉合括號，看要 pipe 給 less 還是輸出都行。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~/Downloads/sbas:$ datamash mean 3 pstdev 3 &amp;lt; PGMVS_333.enh
+92.59441828168  0.75874830879182
+~/Downloads/sbas:$ datamash mean 3 pstdev 3 &amp;lt; arrowGOLD333_GGA.enh
+92.691800785004 0.49780662429745
+~/Downloads/sbas:$ datamash mean 1 pstdev 1 mean 2 pstdev 2 mean 3 pstdev 3 &amp;lt; PGMVS_333.enh                                                                     
+339277.53154386 0.25192874487642        -4181376.9902047        0.4160031737548192.59441828168  0.75874830879182
+~/Downloads/sbas:$ ( datamash mean 1 pstdev 1 mean 2 pstdev 2 mean 3 pstdev 3 &amp;lt; PGMVS_333.enh                                                                   
+&amp;gt; datamash mean 1 pstdev 1 mean 2 pstdev 2 mean 3 pstdev 3 &amp;lt; arrowGOLD333_GGA.enh
+&amp;gt; ) | less
+339277.53154386 0.25192874487642        -4181376.9902047        0.41600317375481        92.59441828168  0.75874830879182
+339277.7144999  0.21652884473733        -4181376.9958047        0.32255802936327        92.691800785004 0.49780662429745
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;fx-修改現有腳本後執行&quot;&gt;fx 修改現有腳本後執行&lt;/h2&gt;
+&lt;p&gt;最後就是這篇文章的重頭戲， &lt;a href=&quot;https://github.com/GHolk/loco/blob/b2d8d26b4a4c3b5c4dfe2e62ff33dbb997f15e72/bash_function#L205&quot;&gt;我自己寫的 fx 腳本&lt;/a&gt; ，
+主要用途是擴展 fc 的使用範圍。
+fc 和本文上述的內容，都只適用在編輯現有的歷史上，
+如果是想要從存檔的腳本編輯，就只能走老路，
+開編輯器後改好存檔，再手動執行，
+或是用 c-x c-e 叫出編輯器後，用 &lt;code&gt;:r some-script.sh&lt;/code&gt; 把檔案讀進來。&lt;/p&gt;
+&lt;p&gt;所以我寫了一個腳本 &lt;a href=&quot;https://github.com/GHolk/loco/blob/b2d8d26b4a4c3b5c4dfe2e62ff33dbb997f15e72/bash_function#L205&quot;&gt;fx&lt;/a&gt; ，能用類似 fc 的作法編輯現有腳本並執行，
+而且結果會存到歷史記錄，如果不小心打錯，
+只要 C-p 就能叫回來改，C-x C-e 就再回到編輯器大改。
+如果要存成新檔，在 fx 開啟的編輯器裡也可以方便的 &lt;code&gt;:w new-script&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;我的 fx 用法很簡單，就直接 &lt;code&gt;fx some-script.sh&lt;/code&gt; 就可以了，
+腳本可以直接指定檔案路徑，或會從 PATH 中搜尋。
+之後會把檔案複製到 &lt;code&gt;/tmp&lt;/code&gt; ，
+開啟 shell 中預設的編輯器編輯，原本的檔案不會改變，
+編輯完後存檔離開，就會把該暫存檔的內容在目前 shell 內執行。&lt;/p&gt;
+&lt;p&gt;同時，因為在目前 shell 執行的話，
+腳本內宣告的變數會遺留到 shell 裡，
+所以我在複製腳本時，會自動在首尾加上 &lt;code&gt;()&lt;/code&gt; ，
+把整個腳本包在子 shell 中就不會汙染到 shell 了。
+如果希望留下變數，就自己再把括號刪掉就好了。&lt;/p&gt;
+&lt;p&gt;然後我還做了不只是腳本，如果 fx 指定的名稱是 bash function，
+那就會變成編輯該函數內容，如果是 alias 也是。
+只是函數和別名就不會用括號包在子 shell，
+因為多數時候要改函數或別名，就是要直接覆寫舊函數；
+不然也能在子 shell 中把函數名改掉，定義成新的函數。&lt;/p&gt;
+&lt;p&gt;如果 fx 執行時沒有加參數，就會改成編輯剪貼簿內容。
+如果 fx 接到多於一個參數，會把後面的參數也一起丟到編輯器裡，
+依不同類型的指令以不同方式傳如參數；
+例如如果 fx 用來編輯檔案，
+那傳入參數的方式就是編輯器中檔案開頭加上 &lt;code&gt;set -- arg1 arg2&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;最後，fx 目前是 bash function，沒有寫成獨立的腳本。
+因為如果寫成獨立的腳本，那在編輯既有函數時，
+就會在另一個 shell 執行，也不會留在原本 shell 內。
+所以得要用 function 才能改變原本的 shell。&lt;/p&gt;
+&lt;p&gt;本來想再擴充 fx，能依不同的 shebang 自動判斷要用哪個直譯器，
+但後來想想這就真得搶了 ide 的工作了。
+支援 shell script 是因為在 shell 中使用的就是 shell script，
+如果其它語言應該直接用編輯器開來改，
+也不會像 shell script 會有用完即丟的特性，
+能在 history 中叫出也沒什麼用。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/tor-dns-howto.html</id>
 <title>使用 tor 代理 dns 查詢</title>
 <published>2021-03-13T05:41:04.908Z</published>
@@ -1279,67 +1442,7 @@ in-place 是指直接改變部份原有檔案內容，如 rsync 有類似的功�
 使得程式可以 in-place 部份覆寫原有檔案的內容。</summary>
 <category term="linux"/>
 <category term="shell"/>
-<content type="html">&lt;h1 id=&quot;使用原檔案的空間壓縮檔案而不佔用額外空間&quot;&gt;使用原檔案的空間壓縮檔案而不佔用額外空間&lt;/h1&gt;
-&lt;p&gt;標題想講的是使用 gzip 或其它壓縮程式時 in-place 壓縮，
-in-place 是指直接改變部份原有檔案內容，如 rsync 有類似的功能。
-因為壓縮時輸入的速度理論上會大於輸出，
-所以理論上能夠使用 in-place，但 gzip 本身沒有實作此一功能。
-配合外部工具的話，可以使用 dd 或者將檔案映射為塊裝置，
-使得程式可以 in-place 部份覆寫原有檔案的內容。&lt;/p&gt;
-&lt;h2 id=&quot;理論上使用-gzip-in-place-壓縮&quot;&gt;理論上使用 gzip in-place 壓縮&lt;/h2&gt;
-&lt;p&gt;假設壓縮時 gzip 先讀入了檔案開頭的 N byte，
-接著將 N byte 壓縮為 M byte，預期 M 會小於 N。
-因此此時可以將壓縮後的 M byte 從檔案的開頭寫入，
-而不影響 gzip 將要讀取的 N byte 後的資料。&lt;/p&gt;
-&lt;p&gt;這種策略稱為 in-place，也就是在程式轉換檔案格式時，
-直接將結果寫入原有檔案中，不佔用額外空間。
-但壞處是寫入過程如果出錯，檔案會卡在一半被覆寫的狀態難以復原。&lt;/p&gt;
-&lt;h2 id=&quot;讓-gzip-in-place-寫入&quot;&gt;讓 gzip in-place 寫入&lt;/h2&gt;
-&lt;p&gt;gzip 預設壓縮或解壓縮後會刪除原檔案，
-但由於壓縮結束前不會刪除原檔案，
-故執行時還是會佔用原檔案大小加上壓縮後大小的空間，
-對於壓縮映像檔等較大檔案時是很大的負擔。&lt;/p&gt;
-&lt;p&gt;gzip 或 bzip xz 7z 等壓縮工具，都沒有內建提供 in-place 功能，
-可能也是因為壓縮時不能夠保證輸出一定小於輸入，
-因此想了一些方式讓 gzip 可以達到 in-place。&lt;/p&gt;
-&lt;p&gt;其中的關鍵在於，多數程式在寫入檔案時，若是檔案存在，
-多是如同 shell 的重導向符 &lt;code&gt;&amp;gt;&lt;/code&gt; ，直接清空原檔案後寫入；
-要不就是像 &lt;code&gt;&amp;gt;&amp;gt;&lt;/code&gt; 是附加在原檔案後面。
-清空原檔案的問題是，會造成原檔案的內容不能被讀取，
-和 in-place 要求的只寫入部份資料不同。&lt;/p&gt;
-&lt;p&gt;要以此類方式寫入，以 c 語言來說可以以 fseek 之類，
-移動寫入指標的位置來改變寫入的方式。
-linux 中可以用 dd 達到這種功能，
-如果使用 &lt;code&gt;conv=notrunc&lt;/code&gt; 寫入模式，就只會覆蓋寫入部份的資料，
-同時可以用 seek 來指定從檔案的特定位置開始寫入。&lt;/p&gt;
-&lt;h2 id=&quot;gzip-與-dd-in-place-的指令&quot;&gt;gzip 與 dd in-place 的指令&lt;/h2&gt;
-&lt;p&gt;所以使用 gzip 搭配 dd 可以寫成以下的 in-place 指令，
-其中 dd 的其它選項可以自己搭配，一般 bs 太小或太大都不宜，
-會讓整體寫作速度變慢。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;gzip --stdout file | dd conv=notrunc of=file
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;之後可以再用 &lt;code&gt;truncate -s $size file&lt;/code&gt;
-把壓縮檔後沒有刪掉的原始檔案內容刪掉；
-至於壓縮檔有多大，則可以用 dd 結束時輸出的摘要看輸出了多少 byte。&lt;/p&gt;
-&lt;h2 id=&quot;覆寫原始檔案的缺點&quot;&gt;覆寫原始檔案的缺點&lt;/h2&gt;
-&lt;p&gt;使用 dd 與 gzip 缺點是，dd 並不知道事實上 gzip 讀到哪，
-所以可能會寫入到 gzip 還沒讀到的地方，就會造成整個過程錯誤。
-整個過程只是因為壓縮後的成果比較小，才不會有問題。&lt;/p&gt;
-&lt;p&gt;例如若是原本的檔案已經壓縮過，又或原本的檔案過於隨機難以壓縮，
-那輸出就不一定會比輸入小，就會有問題。
-理論上如果 gzip 可以控制讀取和寫入的速度，
-就能達到沒有問題的 in-place 寫入。&lt;/p&gt;
-&lt;h2 id=&quot;使用-block-device-的覆寫特性&quot;&gt;使用 block device 的覆寫特性&lt;/h2&gt;
-&lt;p&gt;除了 dd，另一種方式是使用 block device，
-預設寫入是 no truncate 模式。
-所以只要把檔案當成塊裝置寫入，就可以簡單達成 in-place 寫入。&lt;/p&gt;
-&lt;p&gt;linux 下可以用 losetup 指令，把檔案映射成 block device；
-之後對 block device 用重導向符時，就會使用 no truncate 模式。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;loop_device=$(losetup --show --find file)
-gzip -c $loop_device &amp;gt; $loop_device
-losetup --detach $loop_device
-&lt;/code&gt;&lt;/pre&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/android-adb-tor-howto.html#使用-adb-經-tor-連線的方式</id>
 <title>使用 adb 經 tor 網路連上具有洋蒽網址的 android</title>

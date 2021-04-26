@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2021-04-11T06:48:10.038Z</updated>
+  <updated>2021-04-26T12:35:57.301Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,67 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/android-messenger-lite-chinese-search-comma.html</id>
+<title>android messenger lite 無法搜尋中文使用者名稱</title>
+<published>2021-04-26T12:35:05.221Z</published>
+<updated>2021-04-26T12:35:57.275Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/android-messenger-lite-chinese-search-comma.html"/>
+<summary type="html">這問題蠻久了。一二年前用 messenger lite 時，
+就發現要搜尋中文人名時，只會跳出無關的結果。
+後來發現在中文字外再輸入一個半形逗號就可以搜出東西了，
+我通常是打完人名前幾個字，再打一個半形逗號。
+過了幾年這 bug 還是沒修，google 一下也沒人寫類似的文章，
+就寫出來供其它碰到相同問題的人參考。</summary>
+<category term="facebook"/>
+<category term="im"/>
+<category term="社群網站"/>
+<category term="android"/>
+<category term="bug"/>
+<content type="html">&lt;h1 id=&quot;android-messenger-lite-無法搜尋中文使用者名稱&quot;&gt;android messenger lite 無法搜尋中文使用者名稱&lt;/h1&gt;
+&lt;p&gt;這問題蠻久了。一二年前用 messenger lite 時，
+就發現要搜尋中文人名時，只會跳出無關的結果。
+後來發現在中文字外再輸入一個半形逗號就可以搜出東西了，
+我通常是打完人名前幾個字，再打一個半形逗號。
+過了幾年這 bug 還是沒修，google 一下也沒人寫類似的文章，
+就寫出來供其它碰到相同問題的人參考。&lt;/p&gt;
+&lt;p&gt;因為不喜歡 fb，
+和一堆比誰更肥的 im app，像 line、messenger，
+所以手機換 atom 後，看到 fb 有出 messenger lite，
+就打算只裝 lite。
+更早期時 fb app 內還可以開訊息頁面，
+就必要性來說不一定要裝 messenger，
+但後來 fb 為了強推 messenger，
+就限制 fb app 內不能開 messenger。&lt;/p&gt;
+&lt;p&gt;關於 messenger，還有一些有趣的事，
+以前 fb 的訊息系統還可以和 email 互通，
+不知道有沒有和 xmpp 通就是了。
+另外以前 fb 也有 rss 功能，可以用 rss 接通知。
+但那都是很久以前的事，大概 10 年前吧，
+後來 fb 的黑客精神漸漸淡去，都改掉了。&lt;/p&gt;
+&lt;p&gt;回到 lite，所以後來為了訊息功能，
+就半妥協的裝了 messenger lite。
+但那時就發現 lite 發訊息的功能有問題，
+無法在通訊錄中用中文搜尋使用者。
+也就是點右下角的加號發訊息時搜尋收件人的介面，
+在搜尋欄裡輸入中文人名找不到人。
+或是在主畫面切到中間通訊錄分頁後，
+上面的搜尋欄搜尋也是一樣。&lt;/p&gt;
+&lt;p&gt;接著我就亂試，打英文結果有效，
+一開始懷疑是全形字元不能正確觸發搜尋，
+就打中文再英文，結果可以觸發搜尋了，
+但搜不到東西；因為沒有人名字是英文混中文的。
+接著就試空白或其它半形字元，
+因為記得 google 之類的搜尋功能會把特殊符號自動忽略，
+結果試出來在中文字混半形逗號結果比較好。
+使用上就是在字串結果加上半形逗號即可，
+例如要搜梁詠琪，可以打 &lt;code&gt;梁詠,&lt;/code&gt; 就搜的到東西了。&lt;/p&gt;
+&lt;p&gt;我覺得比較奇怪的是，這問題超久了，但都沒有修，
+我 google 網路上也沒有其它類似的文章在提。
+總之反正我很閒，就寫一篇文章來造福大眾。
+另外也順便用 messenger lite 內的回報功能回報此問題，
+所以搞不好過幾周就修好了，文章就沒用了。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/farewell-bedroom-office-chair-study.html#加入椅子的照片</id>
 <title>再會臥室的電腦椅</title>
 <published>2021-03-21T07:53:16.444Z</published>
@@ -1010,443 +1071,7 @@ echo start executing &amp;gt;&amp;amp;$fd
 <category term="nctu"/>
 <category term="wiki"/>
 <category term="slide"/>
-<content type="html">&lt;h1 id=&quot;CCCA-dokuwiki-雜談&quot;&gt;CCCA dokuwiki 雜談&lt;/h1&gt;
-&lt;p&gt;wiki 是通常執行於 world wide web 上的多人協作文件管理系統。
-其中 dokuwiki 是基於 php 與檔案系統的輕量級 wiki，
-在安裝、客制化、維護上門檻都較低，
-因此選擇 dokuwiki 作為本社團的網站。
-社課上將介紹 &lt;a href=&quot;http://ccca.tw&quot;&gt;社團的 wiki 網站&lt;/a&gt; 、wiki 相比 CMS 的優勢，
-以及如何站在 dokuwiki 的肩膀上，以 html php 開發新功能。 &lt;/p&gt;
-&lt;h2 id=&quot;簡報程式&quot;&gt;簡報程式&lt;/h2&gt;
-&lt;script&gt;
-function toggleSlideMode() {
-  document.body.classList.toggle(&apos;white-black-slide&apos;)
-}
-&lt;/script&gt;
 
-&lt;style contenteditable=&quot;true&quot;&gt;
-body.white-black-slide {
-  font-size: 250%;
-  color: white;
-  background: black;
-}
-.white-black-slide a {
-  color: cyan;
-}
-.white-black-slide hr,
-.white-black-slide h2,
-.white-black-slide h3 {
-  margin-top: 3em;
-}
-&lt;/style&gt;
-
-&lt;button onclick=&quot;toggleSlideMode()&quot;&gt;切換簡報模式&lt;/button&gt;
-
-&lt;script&gt;
-function scrollToNextSlide() {
-  const allSlide = document.querySelectorAll(&apos;hr,h2,h3&apos;)
-  const windowTop = window.scrollY
-  for (const slide of allSlide) {
-    if (slide.offsetTop &gt; windowTop) {
-      scrollTo(0, slide.offsetTop + 1)
-      break
-    }
-  }
-}
-&lt;/script&gt;
-
-&lt;style&gt;
-:this + button {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  margin: 1em;
-}
-&lt;/style&gt;
-
-&lt;button onclick=&quot;scrollToNextSlide()&quot;&gt;下一頁&lt;/button&gt;
-
-&lt;h2 id=&quot;資訊自主&quot;&gt;資訊自主&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;身為一個資訊社團，有自己的網站是很重要的。&lt;/li&gt;
-&lt;li&gt;代表你的資料，不會被平台 &lt;strong&gt;綁&lt;/strong&gt; 住。&lt;/li&gt;
-&lt;li&gt;不讓企業掌握個人資訊。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;免費網站的問題&quot;&gt;免費網站的問題&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;你的內容、上傳的資料，都只在該網站上散布&lt;/li&gt;
-&lt;li&gt;只能寄居在該網站上&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;搬遷問題&quot;&gt;搬遷問題&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;如何讓你的受眾知道，網址換位址了？&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;公告：網站由 fb.me/xxxx 搬遷到 t.co/xxxx&lt;/em&gt;&lt;/li&gt;
-&lt;li&gt;祈禱使用者會自己 &lt;s&gt;通靈&lt;/s&gt; google 到新網站&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;根本性的解決辦法&quot;&gt;根本性的解決辦法&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;買一個域名，付錢，確保這個網址永遠連到你的網站。&lt;/li&gt;
-&lt;li&gt;背後的 ip 可以換&lt;/li&gt;
-&lt;li&gt;甚至可以托管到 blogspot 這類可以自訂域名的網站&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;域名是唯一的識別符號&quot;&gt;域名是唯一的識別符號&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;只有域名是最通用的識別符號，不依賴於平台&lt;/li&gt;
-&lt;li&gt;可以印在名片上、寫在書上&lt;/li&gt;
-&lt;li&gt;平台會倒、會搬家，只有域名可以由自己完全掌控&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;平台只作為宣傳管道&quot;&gt;平台只作為宣傳管道&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;平台是不穩定性的，內容可能遺失&lt;/li&gt;
-&lt;li&gt;內容必定發布在自己可以完控制的域名下&lt;/li&gt;
-&lt;li&gt;其它平台只作為宣傳管道&lt;/li&gt;
-&lt;li&gt;可以用轉貼、自動發布的方式方便管理&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;無法互通的-web-平台&quot;&gt;無法互通的 web 平台&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;在論壇出現前，不同網站間的溝通成本很大，
-只有如留言板裡留網址或直接發 email 私下溝通。&lt;/li&gt;
-&lt;li&gt;論壇出現後，單一平台內的距離下降，但不同平台間還是很大。&lt;/li&gt;
-&lt;li&gt;有倒模論壇讓架站權力分散，使論壇能以城邦式發展。&lt;/li&gt;
-&lt;li&gt;沒有單一論壇能獨大。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;社群網站出現後&quot;&gt;社群網站出現後&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;Facebook 掘起後，開始出現能涵蓋所有人的大平台。&lt;/li&gt;
-&lt;li&gt;單一平台內的傳播門檻遠低於平台間，
-且平台規模的明顯優勢，相對競爭下其它平台逐漸沒落。&lt;/li&gt;
-&lt;li&gt;資訊只在單一平台上流通，facebook 內外成為二個無法溝通的世界。&lt;/li&gt;
-&lt;li&gt;facebook twitter discord telegram line，都是一個個獨立的世界。&lt;/li&gt;
-&lt;li&gt;且平台多為公司所有&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;開放的意義&quot;&gt;開放的意義&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;要自己架一個有 facebook 功能的網站，只是技術問題。&lt;/li&gt;
-&lt;li&gt;但該由誰來管理這個平台？&lt;/li&gt;
-&lt;li&gt;就算原始碼是開放的，但就算架起了第二個網站，
-你的網站和我的網站還是無法互通，只會形成更小的社群，
-以社交網站來看是沒有意義的。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;聯邦制的服務&quot;&gt;聯邦制的服務&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;聯邦或說 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E4%BA%92%E8%81%AF&quot;&gt;互聯&lt;/a&gt; ，是指多個伺服器之間的使用者，仍可以彼此溝通。&lt;/li&gt;
-&lt;li&gt;不同的 email 服務提供者的帳號，仍可以互相寄信。&lt;/li&gt;
-&lt;li&gt;任何人都可以自己架自己的 email server。&lt;/li&gt;
-&lt;li&gt;其它還有 &lt;a href=&quot;http://zh.wikipedia.org/wiki/IRC&quot;&gt;IRC&lt;/a&gt; 、 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E6%96%B0%E8%81%9E%E7%BE%A4%E7%B5%84&quot;&gt;新聞群組&lt;/a&gt; 、
-早期台灣 bbs 的看板間轉信功能都屬於這類聯邦制的服務。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;web-的原始聯邦&quot;&gt;web 的原始聯邦&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;整個 world wide web 算是一種廣義的聯邦制，以網頁中的超連結互聯。&lt;/li&gt;
-&lt;li&gt;原始的消息發送協議 &lt;a href=&quot;http://zh.wikipedia.org/wiki/RSS&quot;&gt;RSS&lt;/a&gt; 。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;動態網頁後的世界&quot;&gt;動態網頁後的世界&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;很快有人發明了動態網頁，留言板、討論區。這時候 RSS 還足夠運作。&lt;/li&gt;
-&lt;li&gt;但多數都是相對封閉的。就算可以用網址互連，
-但無法在一個論壇回覆另一個論壇的文章。（想想 bbs 的轉信）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;封閉的社群網路&quot;&gt;封閉的社群網路&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;到最後的終極形態，如 facebook 般的社群網路。
-在內部提供完美的消息發送功能。&lt;/li&gt;
-&lt;li&gt;內部基於動態網頁技術提供消息發送，不再需要原始的 RSS 了。&lt;/li&gt;
-&lt;li&gt;且自身的規模，不再需要與外部合作。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;聯邦制的社群網路&quot;&gt;聯邦制的社群網路&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;有沒有可能建造一個，類似 email 的分散式的 facebook？&lt;/li&gt;
-&lt;li&gt;在不同伺服器上，仍可以像在同一個平台上，互相分享、留言？&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://zh.wikipedia.org/wiki/%E5%88%86%E6%95%A3%E5%BC%8F%E7%A4%BE%E4%BA%A4%E7%B6%B2%E8%B7%AF&quot;&gt;分散式社交網路&lt;/a&gt; ： &lt;a href=&quot;http://zh.wikipedia.org/wiki/GNU_social&quot;&gt;GNU social&lt;/a&gt; 、 &lt;a href=&quot;http://zh.wikipedia.org/wiki/Mastodon&quot;&gt;Mastodon&lt;/a&gt; 。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;小結&quot;&gt;小結&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;聯邦式的社群網路，雖然可以自己架，但維護成本可能太高。&lt;/li&gt;
-&lt;li&gt;學校的資訊社團，可能是合適的大小。&lt;/li&gt;
-&lt;li&gt;我混了二個學校，卻還是只在空話。&lt;/li&gt;
-&lt;li&gt;主要還是要有人用。 &lt;s&gt;你就是沒有人&lt;/s&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;為什麼選擇-wiki&quot;&gt;為什麼選擇 wiki&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;從頭刻網站太累了，就算用框架也很沒必要。&lt;/li&gt;
-&lt;li&gt;專門的管理系統如 moodle 太複雜。&lt;/li&gt;
-&lt;li&gt;blog 和 wiki 是較好的選擇。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;完全自己寫&quot;&gt;完全自己寫&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;要寫很多 code&lt;/li&gt;
-&lt;li&gt;自由度最高，想要什麼功能都可以，只是要自己寫。&lt;/li&gt;
-&lt;li&gt;適合對網站有很多定制功能的人，像很要求版面、多層式下拉選單、特殊功能者。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;blog-特色&quot;&gt;blog 特色&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;管理介面友善，適合內容間不需要互連的獨立文章。&lt;/li&gt;
-&lt;li&gt;版面固定，就是規劃好的文章列表、分類、首頁。&lt;/li&gt;
-&lt;li&gt;比較接近內容發布中心，而不適合用來管理文件。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;wiki-特色&quot;&gt;wiki 特色&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;容易客制化，用 wiki 語法，不動到後端的程式也可以改很多東西。&lt;/li&gt;
-&lt;li&gt;wiki 語法讓使用者能專注在內容而非樣式。&lt;/li&gt;
-&lt;li&gt;適合多人協作，內建版本管理。&lt;/li&gt;
-&lt;li&gt;適合有一定技術能力的社團。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;依附於系統下&quot;&gt;依附於系統下&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;完全自己寫是很累的，就算用框架也是。&lt;/li&gt;
-&lt;li&gt;使用現有的 blog 或其它系統，在上面改出自己想要的功能比較快。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;自幹程式的問題&quot;&gt;自幹程式的問題&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;沒有人想維護；時過境遷後，程式如何使用也成為問題。&lt;/li&gt;
-&lt;li&gt;blog 或 wiki 使用現有的系統的話，跟著更新即可，不會有太大問題。&lt;/li&gt;
-&lt;li&gt;但社團自己加的功能，要自己想辦法 rebase 到下一個版本上。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;wiki-的多重角色&quot;&gt;wiki 的多重角色&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;記錄社團的文件：有哪些 server、社辦使用公約、社團組織架構。&lt;/li&gt;
-&lt;li&gt;當作社團網站：把社團的活動、成果記錄在上面。&lt;/li&gt;
-&lt;li&gt;當公用 server：可以把自己想要的功能、程式在上面跑。&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://ccca.tw/playground:test-bookmarklet-js&quot;&gt;托管 javascript 小書籤程式&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;在-wiki-上托管文件或程式&quot;&gt;在 wiki 上托管文件或程式&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;wiki 的特色是可以用來管理文件，適合把使用說明也寫進 wiki 裡。&lt;/li&gt;
-&lt;li&gt;甚至可以把程式的原始碼也托管在 wiki 上，畢竟 wiki 有基本的版本管理功能。&lt;/li&gt;
-&lt;li&gt;像是在 bbs 上用 bbslua 寫小程式，而不是把程式寫在 bbs 的 c 原始碼內。
-而且 wiki 還可以管理版本。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;參考資料&quot;&gt;參考資料&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://caslab.ee.ncku.edu.tw/dokuwiki/why_wiki&quot;&gt;為什麼要用 wiki&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://stackoverflow.com/questions/226132/what-are-the-differences-between-a-wiki-and-a-cms&quot;&gt;wiki vs cms&lt;/a&gt; ，
-blog 可以稱作一種
-&lt;abbr title=&quot;content management system&quot;&gt;內容管理系統&lt;/abbr&gt; ，
-但也有較正式的、有複雜權限管理的提供給公司內部使用的商用系統。&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.cyut.edu.tw/~ckhung/g/ofset/post.php?id=105c&quot;&gt;wiki 作為雲端系統&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;dokuwiki-使用說明&quot;&gt;dokuwiki 使用說明&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://ccca.tw&quot;&gt;ccca wiki&lt;/a&gt; 為半開放 wiki，特定內容只對特定使用者開放。&lt;/li&gt;
-&lt;li&gt;編輯使用 dokuwiki 的純文字語法，類似 mediawiki。&lt;/li&gt;
-&lt;li&gt;歡迎所有社員、非社員註冊使用。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;選擇-dokuwiki-的原因&quot;&gt;選擇 dokuwiki 的原因&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;我就爛不會資料庫，而且我不覺得應該要用資料庫，
-所以偏好使用檔案系統的 wiki。&lt;/li&gt;
-&lt;li&gt;本來還希望用 git base wiki，但 dokuwiki 已滿足大部份需求。&lt;/li&gt;
-&lt;li&gt;CamelCase suck&lt;/li&gt;
-&lt;li&gt;當時試了幾款，做了一些比較： &lt;a href=&quot;https://ccca.tw/%E8%A9%A6%E7%8E%A9wiki&quot;&gt;試玩 wiki&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;使用者與權限&quot;&gt;使用者與權限&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;未註冊者只能瀏覽與編輯 &lt;code&gt;talk:&lt;/code&gt; 命名空間下的頁面。&lt;/li&gt;
-&lt;li&gt;有社員 &lt;code&gt;officer&lt;/code&gt; 、系統管理者 &lt;code&gt;admin&lt;/code&gt; 二個群組。&lt;/li&gt;
-&lt;li&gt;僅有 &lt;code&gt;officer&lt;/code&gt; 群組能編輯 html js 語法。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;命名空間&quot;&gt;命名空間&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;命名空間以 &lt;code&gt;:&lt;/code&gt; 分隔， &lt;a href=&quot;https://ccca.tw/?do=index&quot;&gt;這是 wiki 上所有頁面&lt;/a&gt; 。&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://ccca.tw/user:gholk&quot;&gt;user:gholk&lt;/a&gt; 使用者的個人頁面。&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://ccca.tw/talk:&quot;&gt;talk:&lt;/a&gt; 用於留言、討論。&lt;/li&gt;
-&lt;li&gt;playground: 用於測試各類語法。&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://ccca.tw/社課:&quot;&gt;社課:&lt;/a&gt; 社課公告於此。&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://ccca.tw/社務:&quot;&gt;社務:&lt;/a&gt; 社團內部文件，只開放社員瀏覽。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;語法&quot;&gt;語法&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;====== 標題 ======&lt;/code&gt; ，六個是一級標題。
-和 markdown 相反，等號越少越小。
-用 &lt;code&gt;alt-shift-1&lt;/code&gt; 來輸入比較好記，
-1-6 為各級標題，不用數半天。&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;**粗體**&lt;/code&gt; &lt;code&gt;//斜體//&lt;/code&gt; &lt;code&gt;__底線__&lt;/code&gt; &lt;code&gt;&amp;apos;&amp;apos;等寬字體&amp;apos;&amp;apos;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;[[頁面名稱|顯示名稱]]&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://ccca.tw/wiki:syntax&quot;&gt;所有語法&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;  * 無序清單
-    * 第二層
-  - 有序清單
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;&amp;gt; 引用
-&amp;gt;&amp;gt; 第二層引用
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;引用檔案。
-圖片會顯示，影片、音樂會播放，
-檔案會變成可下載連結。
-
-{{image.png}}
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;code block
-
-&amp;lt;code javascript&amp;gt;
-alert(&amp;apos;hello world!&amp;apos;)
-&amp;lt;/code&amp;gt;
-
-downloadable code block
-
-&amp;lt;file javascript hello-world.js&amp;gt;
-alert(&amp;apos;hello wrold!&amp;apos;)
-&amp;lt;/file&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;內嵌-html&quot;&gt;內嵌 html&lt;/h2&gt;
-&lt;p&gt;可以嵌入 html，也就可以嵌入 javascript。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;hello button
-
-&amp;lt;html&amp;gt;
-&amp;lt;button onclick=&amp;quot;hello()&amp;quot;&amp;gt;hello wrold!&amp;lt;/button&amp;gt;
-&amp;lt;script&amp;gt;
-    function hello() {
-        alert(&amp;apos;hello world!&amp;apos;)
-    }
-&amp;lt;/script&amp;gt;
-&amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;javascript-的風險&quot;&gt;javascript 的風險&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;javascript 可以存取 cookie，cookie 含有登入資訊。&lt;/li&gt;
-&lt;li&gt;如果允許任何人寫 js，只要在頁面插一段程式
-把 cookie 用 ajax 發出去，點開該頁面的人的帳號就被盜走了。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;dokuwiki-對-html-的管理&quot;&gt;dokuwiki 對 html 的管理&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;wiki 有一個選項可以設定是否允許 html，只能全域允許或禁止。&lt;/li&gt;
-&lt;li&gt;我改了一點原始碼，讓 dokuwiki 在儲存編輯前檢察內容有沒有 html，
-如果使用者在 &lt;code&gt;$config[&amp;quot;htmlok_user&amp;quot;]&lt;/code&gt; 裡就可以使用 html。&lt;/li&gt;
-&lt;li&gt;本 wiki 只有屬於 officer 群組的人可以編輯含有 html 的頁面。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;include-外掛&quot;&gt;include 外掛&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;dokuwiki 有豐富的 &lt;a href=&quot;https://www.dokuwiki.org/plugins&quot;&gt;外掛系統&lt;/a&gt; ，
-可以加入自訂語法、快速編輯功能、自製 api。&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.dokuwiki.org/plugin:include&quot;&gt;include&lt;/a&gt; 這個外掛，可以用語法引用另一個頁面的內容。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;===== 聯絡我們 =====
-{{page&amp;gt;聊天室}}
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;用-include-引用-javascript&quot;&gt;用 include 引用 javascript&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;如果程式想要可以複用，可以寫成單獨的頁面，在想用的頁面裡 include。&lt;/li&gt;
-&lt;li&gt;含有 html 的頁面不能被一般人編輯，
-如果想要讓一般人可以編輯，可以把 js 寫在另外的頁面，
-再用 include 抓進來，這樣該頁面只有 include 語法沒有 html，
-就可以被一般人編輯。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;dokuwiki-api&quot;&gt;dokuwiki api&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://www.dokuwiki.org/devel:xmlrpc&quot;&gt;dokuwiki 提供 xml-rpc api&lt;/a&gt; ，
-可以以 ajax 呼叫， 用來做快速編輯等功能。&lt;/li&gt;
-&lt;li&gt;用 xml-rpc 的函式庫呼叫會比較方便。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;使用範例&quot;&gt;使用範例&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://ccca.tw/talk:&quot;&gt;快速留言板&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://ccca.tw/playground:test-bookmarklet-js&quot;&gt;小書籤發布&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;以-wiki-管理設定檔&quot;&gt;以 wiki 管理設定檔&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;dokuwiki 有一些設定檔是要手動編輯的。&lt;/li&gt;
-&lt;li&gt;那為什麼不能直接像編輯一個 wiki 頁面一樣，直接編輯它呢？&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;wiki-的-logo&quot;&gt;wiki 的 logo&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;許多人裝好 dokuwiki 後，第一件事就是換上自家的 logo。&lt;/li&gt;
-&lt;li&gt;如何更換 wiki 的 logo？
-&lt;a href=&quot;https://www.dokuwiki.org/template:dokuwiki#changing_the_logo&quot;&gt;以預設的模版 dokuwiki 來說，只要把圖片上傳為 &lt;code&gt;wiki:logo.png&lt;/code&gt; 即可。&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;這是一種以 wiki 來管理 wiki 自身的風格。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;interwiki-簡寫功能&quot;&gt;interwiki 簡寫功能&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;interwiki 是一種在 wiki 中定義網址簡寫的功能。&lt;/li&gt;
-&lt;li&gt;在 &lt;code&gt;conf/interwiki.conf&lt;/code&gt; 中定義 &lt;code&gt;doku https://www.dokuwiki.org/{NAME}&lt;/code&gt; ，&lt;/li&gt;
-&lt;li&gt;之後只要寫 &lt;code&gt;[[doku&amp;gt;install]]&lt;/code&gt; ，
-即可解析為連到 &lt;a href=&quot;https://www.dokuwiki.org/install&quot;&gt;https://www.dokuwiki.org/install&lt;/a&gt; 的連結。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;檔案系統的魔術&quot;&gt;檔案系統的魔術&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;能不能像 wiki:logo 一樣，可以直接把新設定檔當作一個文字檔上傳？
-或直接 &lt;a href=&quot;https://ccca.tw/admin:interwiki&quot;&gt;當成一個頁面編輯&lt;/a&gt; ？&lt;/li&gt;
-&lt;li&gt;由於 dokuwiki 的頁面資料是直接以文字檔的形式儲存在檔案系統，而不是資料庫，
-所以只要直接把 &lt;code&gt;conf/interwiki.conf&lt;/code&gt; 設成符號連結，連到該頁面的檔案即可。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;cd conf/interwiki.conf
-ln -s ../data/pages/admin/interwiki.txt interwiki.conf
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;格式化設定檔的魔術&quot;&gt;格式化設定檔的魔術&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;但 dokuwiki 只會把 &lt;a href=&quot;https://ccca.tw/admin:interwiki&quot;&gt;interwiki 頁面&lt;/a&gt; 
-當作普通的頁面，格式應該會亂掉。
-（換行被刪掉，並嘗試解析檔案內的 wiki 語法。）&lt;/li&gt;
-&lt;li&gt;用 &lt;code&gt;&amp;lt;code&amp;gt;&lt;/code&gt; 把整個檔案包起來，可以讓排版出來的結果比較好看。&lt;/li&gt;
-&lt;li&gt;但 interwiki 設定檔解析時看到 &lt;code&gt;&amp;lt;code&amp;gt;&lt;/code&gt; 會報錯。&lt;/li&gt;
-&lt;li&gt;把 &lt;code&gt;&amp;lt;code&amp;gt;&lt;/code&gt; 放在 interwiki 的 &lt;code&gt;#&lt;/code&gt; 註解後面。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;# this is interwiki config file
-# &amp;lt;code&amp;gt;
-fb        https://www.facebook.com/{NAME}
-tg        https://t.me/{NAME}
-github    http://github.com/{NAME}
-# &amp;lt;/code&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;p&gt;類似早年 css 和 javascript 內嵌在 html 中的作法，
-在不同語言間互相用註解跳脫彼此看不懂的內容。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;lt;script&amp;gt;
-// &amp;lt;!--
-alert(&amp;apos;hello world!&amp;apos;)
-// --&amp;gt;
-&amp;lt;/script&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;interwiki-圖標的魔術&quot;&gt;interwiki 圖標的魔術&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;interwiki 連結前會顯示一個小小圖標，可以自訂不同簡寫對應的圖標。&lt;/li&gt;
-&lt;li&gt;將與簡寫同名的圖片上傳到 
-&lt;a href=&quot;https://ccca.tw/admin:interwiki-icon:&quot;&gt;&lt;code&gt;admin:interwiki-icon:&lt;/code&gt; 命名空間&lt;/a&gt; 即可。&lt;/li&gt;
-&lt;li&gt;因為檔案系統上 &lt;code&gt;lib/images/interwiki&lt;/code&gt; 為
-&lt;code&gt;data/media/admin/interwiki-icon&lt;/code&gt; 的符號連結。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;userstyle.css&quot;&gt;userstyle.css&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;dokuwiki 允許管理者編輯 userstyle.css userscript.js，&lt;/li&gt;
-&lt;li&gt;一樣 &lt;a href=&quot;https://ccca.tw/admin:userstyle.css&quot;&gt;將 userstyle.css 設為頁面的連結&lt;/a&gt; 。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;反方向的跳脫&quot;&gt;反方向的跳脫&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://ccca.tw/admin:bookmarkletify&quot;&gt;admin:bookmarkletify&lt;/a&gt; 是另一種反向跳脫，
-讀取頁面中的小書籤程式碼並做成小書籤。&lt;/li&gt;
-&lt;li&gt;把文件和程式寫在一起，並互相關，類似 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E6%96%87%E5%AD%B8%E7%B7%A8%E7%A8%8B&quot;&gt;文學編程&lt;/a&gt; 。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;bootstrap&quot;&gt;bootstrap&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;將 wiki 的設定檔移到 wiki 內本身的過程，
-類似於編譯器 &lt;abbr title=&quot;bootstrap&quot;&gt;自舉&lt;/abbr&gt; 的過程。&lt;/li&gt;
-&lt;li&gt;其它類似的概念還有 git 的自我托管或 lisp 的 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E5%90%8C%E5%83%8F%E6%80%A7&quot;&gt;同像性&lt;/a&gt; 語法等。&lt;/li&gt;
-&lt;li&gt;設定檔會佔據一些命名空間，類似
-&lt;abbr title=&quot;convention over configuration&quot;&gt;慣例優先設定&lt;/abbr&gt;  。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;wiki-todo&quot;&gt;wiki todo&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://ccca.tw/admin:todo&quot;&gt;想做的事很多&lt;/a&gt; ，有空的時間很少。&lt;/li&gt;
-&lt;li&gt;社團需要一個一起發展的專案來凝聚。&lt;/li&gt;
-&lt;li&gt;這個網站到底有沒有人要用？沒人用的話，我玩這麼多也是白費。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;客制化與可攜性的矛盾&quot;&gt;客制化與可攜性的矛盾&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;在玩 dokuwiki 的時候，用一些 hack 的方式加了很多有趣的功能，
-但這些功能都是日後維護時的負擔。&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://medium.com/@p5d12000/%E5%B7%A5%E7%A8%8B%E5%B8%AB%E6%87%89%E8%A9%B2%E6%94%BE%E5%BF%83%E5%A4%A7%E8%86%BD%E5%9C%B0%E5%89%B5%E9%80%A0%E6%8A%80%E8%A1%93%E8%B2%A0%E5%82%B5-a8022d85810&quot;&gt;但身為工程師，應該要勇敢的創造技術負債&lt;/a&gt; ，
-社團內本來就應該要一起做一些好玩的事，互相折騰；
-幫學弟妹創造邊幹古邊維護寫出來後就沒人敢動的 legacy code 的機會。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;社團與機器&quot;&gt;社團與機器&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;一個社團，一座 BBS，一台 server。&lt;/li&gt;
-&lt;li&gt;類似大型機時代，圍繞一部 unix 主機建立的社群。&lt;/li&gt;
-&lt;li&gt;在雲端資源盛行的現今，每個人都在天上飛，
-似乎也沒有存在社團的必要了。&lt;ul&gt;
-&lt;li&gt;但 &lt;a href=&quot;https://sitcon.org/2020/agenda/e95daf27-43b9-49b5-9e4b-7f543f19251b&quot;&gt;ccns 仍努力蓋出了機房&lt;/a&gt;，值得嘉獎。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/linux-binary-patch-http-string.html#fix-some-typo</id>
 <title>修改二進位執行檔中的 http 請求標頭字串</title>

@@ -1,0 +1,100 @@
+# 用 steam 的 proton 執行 windows exe
+偶爾會用 wine 在 linux 下跑 exe 玩遊戲，但相容性還是有些問題。
+steam 之前為了推 steam linux，
+在 wine 之上改良了一個 proton，相容性好很多，適合拿來玩遊戲。
+我是裝 steam for linux 後，再用 steam 裝了 proton。
+如果想不透過 steam 用 proton 跑 exe 檔案，
+可以直接執行 proton 執行檔：
+`"~/.steam/steam/steamapps/common/Proton 5.13/proton" run game.exe` ，
+另外要再設一個環境變數 `STEAM_COMPAT_DATA_PATH` 
+指定 proton 存資料的資料夾。
+
+wine 是在類 unix 下對 windows 程式的相容層，
+簡單來說就是能在 linux 下執行 exe 檔的一支程式。
+但 wine 還是有許多大大小小 bug，
+不是每個程式都能順利執行，
+可能執行時出狀況，或根本執行不了閃退，
+有時也需要依程式調整不同的參數讓不同程式可以順利執行。
+
+在電腦的一大需求 **玩遊戲** 中，
+由於遊戲多半只會發布 windows 版本，
+wine 也常用來在 linux 下執行 windows 遊戲。
+為了玩遊戲，人的潛能是無限的；
+PlayOnLinux 即是基於 wine，
+提供了一套社群維護的對不同程式的設定參數，
+讓在 linux 上玩遊戲可以更簡單。
+
+proton 則是 steam 公司之前推 steam os linux 作業系統時，
+希望能在 linux 上玩 windows 遊戲，
+開發的 wine 分支，專注在遊戲的相容性。
+[使用上一般是在 steam for linux 中安裝 proton][enable proton] ，
+之後 steam 上原本只能在 windows 中執行的遊戲，
+即可也在 linux 中以 proton 執行。
+
+[enable proton]: https://linuxconfig.org/how-to-install-and-use-steam-play-on-linux
+
+但啟動 steam 中的遊戲都是在 steam 介面進行，
+所以我們不會知道遊戲執行檔放在哪，
+或是 proton 如何參與執行遊戲的過程。
+如果要繞過 steam，直接用 steam 裝好的 proton 執行 exe 檔案，
+[我在 reddit 上有找到一份回答][proton reddit] ，
+之後又自己修改了一下。
+
+[proton reddit]: https://www.reddit.com/r/linux_gaming/comments/9cssr1/is_it_possible_to_run_proton_manually/
+
+基本上就是先找到自己的 proton 路徑，
+以我 debian 是 `~/.steam/steam/steamapps/common/Proton 5.13/proton` 。
+proton 是一支用 python 寫的包裝腳本，
+有不同的子命令，要啟動遊戲要用 run 命令；
+像 wine 啟動遊戲是 `wine game.exe` ，
+proton 則是 `proton run game.exe` 。
+
+此外直接執行多半會出錯，
+因為還需要指定 proton 執行的函式庫和資料的路徑，
+對 wine 來說就是 `~/.wine` 裡的資料，
+而 steam 的遊戲依不同的 id 存在 `~/.steam/steam/steamapps/compatdata` 。
+指定方式是用環境變數 `STEAM_COMPAT_DATA_PATH` 的傳遞。
+另外如果是指定空目錄，proton 就會自己初始化該目錄。
+遊戲執行時，所看到的 c 槽就是在該目錄裡，所以遊戲存檔也會在裡面。
+
+我整理了一個 [proton-auto 腳本][proton auto] ，
+用法就是 `proton-auto game.exe` ，
+會使用名為 `proton-compat-data` 的目錄存資料。
+此外也可以手動指定目錄 `proton-auto my-compat-data game.exe` 。
+
+[proton auto]: https://github.com/GHolk/loco/blob/a8f6a9f452b369cf5a9d185af6744fba00ffbbb0/bin/proton-auto.sh
+
+目前比較不滿意是每個遊戲都建立一份資料的話，其實蠻佔空間的，
+一個 compat data 會佔 100MB 左右，
+儘管內容多半是相同的 dll 函式庫或其它 exe，
+反正就是 c 槽的基礎 windows 系統。
+有一個想法是用 overlayfs 重覆使用同一個基礎 c 槽，
+只記錄不同的部份就好。
+基礎的 c 槽資料似乎是在 `~/.steam/steam/steamapps/common/Proton 5.13/dist/share/default_pfx/drive_c` ，
+範例用法大概如下：
+
+```sh
+mkdir -p overlay/{write,work}
+mkdir -p proton-compat-data/pfx
+sudo mount -t overlay overlay -o lowerdir="$HOME/.steam/steam/steamapps/common/Proton 5.13/dist/share/default_pfx",upperdir=$PWD/overlay/write,workdir=$PWD/overlay/work proton-compat-data/pfx
+proton-auto proton-compat-data game.exe
+sudo umount proton-compat-data/pfx
+```
+
+有個問題是裡面的相對連結果會壞掉。
+建立 pfx 時某些檔案是用相對符號連結做的，而不是真的複製。
+所以用 overlayfs 把整個目錄掛載過來後，相對連結就會壞掉，
+原本 `..` 可以指到 proton 中上一層的內容，
+現在就變成指到所在目錄的內容。
+
+可能要做一個所有內容都是實際檔案的 c 槽當 overlayfs 的 base。
+不然就是乾脆不要用 overlayfs，
+因為既然已經有用不少符號連結，那佔用空間應該有減少很多了，
+（實際還是有 100MB。）
+剩的可能是 steam 評估不適合用符號連結的檔案，
+可能會被修改之類的；總之我只是瞎猜。
+
+#linux
+#wine
+#遊戲
+#shell

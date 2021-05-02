@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2021-04-26T12:35:57.301Z</updated>
+  <updated>2021-05-02T12:59:27.872Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,103 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/linux-proton-wine-outside-steam.html</id>
+<title>用 steam 的 proton 執行 windows exe</title>
+<published>2021-05-02T12:54:19.989Z</published>
+<updated>2021-05-02T12:59:27.858Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/linux-proton-wine-outside-steam.html"/>
+<summary type="html">偶爾會用 wine 在 linux 下跑 exe 玩遊戲，但相容性還是有些問題。
+steam 之前為了推 steam linux，
+在 wine 之上改良了一個 proton，相容性好很多，適合拿來玩遊戲。
+我是裝 steam for linux 後，再用 steam 裝了 proton。
+如果想不透過 steam 用 proton 跑 exe 檔案，
+可以直接執行 proton 執行檔：
+&lt;code&gt;&amp;quot;~/.steam/steam/steamapps/common/Proton 5.13/proton&amp;quot; run game.exe&lt;/code&gt; ，
+另外要再設一個環境變數 &lt;code&gt;STEAM_COMPAT_DATA_PATH&lt;/code&gt; 
+指定 proton 存資料的資料夾。</summary>
+<category term="linux"/>
+<category term="wine"/>
+<category term="遊戲"/>
+<category term="shell"/>
+<content type="html">&lt;h1 id=&quot;用-steam-的-proton-執行-windows-exe&quot;&gt;用 steam 的 proton 執行 windows exe&lt;/h1&gt;
+&lt;p&gt;偶爾會用 wine 在 linux 下跑 exe 玩遊戲，但相容性還是有些問題。
+steam 之前為了推 steam linux，
+在 wine 之上改良了一個 proton，相容性好很多，適合拿來玩遊戲。
+我是裝 steam for linux 後，再用 steam 裝了 proton。
+如果想不透過 steam 用 proton 跑 exe 檔案，
+可以直接執行 proton 執行檔：
+&lt;code&gt;&amp;quot;~/.steam/steam/steamapps/common/Proton 5.13/proton&amp;quot; run game.exe&lt;/code&gt; ，
+另外要再設一個環境變數 &lt;code&gt;STEAM_COMPAT_DATA_PATH&lt;/code&gt; 
+指定 proton 存資料的資料夾。&lt;/p&gt;
+&lt;p&gt;wine 是在類 unix 下對 windows 程式的相容層，
+簡單來說就是能在 linux 下執行 exe 檔的一支程式。
+但 wine 還是有許多大大小小 bug，
+不是每個程式都能順利執行，
+可能執行時出狀況，或根本執行不了閃退，
+有時也需要依程式調整不同的參數讓不同程式可以順利執行。&lt;/p&gt;
+&lt;p&gt;在電腦的一大需求 &lt;strong&gt;玩遊戲&lt;/strong&gt; 中，
+由於遊戲多半只會發布 windows 版本，
+wine 也常用來在 linux 下執行 windows 遊戲。
+為了玩遊戲，人的潛能是無限的；
+PlayOnLinux 即是基於 wine，
+提供了一套社群維護的對不同程式的設定參數，
+讓在 linux 上玩遊戲可以更簡單。&lt;/p&gt;
+&lt;p&gt;proton 則是 steam 公司之前推 steam os linux 作業系統時，
+希望能在 linux 上玩 windows 遊戲，
+開發的 wine 分支，專注在遊戲的相容性。
+&lt;a href=&quot;https://linuxconfig.org/how-to-install-and-use-steam-play-on-linux&quot;&gt;使用上一般是在 steam for linux 中安裝 proton&lt;/a&gt; ，
+之後 steam 上原本只能在 windows 中執行的遊戲，
+即可也在 linux 中以 proton 執行。&lt;/p&gt;
+&lt;p&gt;但啟動 steam 中的遊戲都是在 steam 介面進行，
+所以我們不會知道遊戲執行檔放在哪，
+或是 proton 如何參與執行遊戲的過程。
+如果要繞過 steam，直接用 steam 裝好的 proton 執行 exe 檔案，
+&lt;a href=&quot;https://www.reddit.com/r/linux_gaming/comments/9cssr1/is_it_possible_to_run_proton_manually/&quot;&gt;我在 reddit 上有找到一份回答&lt;/a&gt; ，
+之後又自己修改了一下。&lt;/p&gt;
+&lt;p&gt;基本上就是先找到自己的 proton 路徑，
+以我 debian 是 &lt;code&gt;~/.steam/steam/steamapps/common/Proton 5.13/proton&lt;/code&gt; 。
+proton 是一支用 python 寫的包裝腳本，
+有不同的子命令，要啟動遊戲要用 run 命令；
+像 wine 啟動遊戲是 &lt;code&gt;wine game.exe&lt;/code&gt; ，
+proton 則是 &lt;code&gt;proton run game.exe&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;此外直接執行多半會出錯，
+因為還需要指定 proton 執行的函式庫和資料的路徑，
+對 wine 來說就是 &lt;code&gt;~/.wine&lt;/code&gt; 裡的資料，
+而 steam 的遊戲依不同的 id 存在 &lt;code&gt;~/.steam/steam/steamapps/compatdata&lt;/code&gt; 。
+指定方式是用環境變數 &lt;code&gt;STEAM_COMPAT_DATA_PATH&lt;/code&gt; 的傳遞。
+另外如果是指定空目錄，proton 就會自己初始化該目錄。
+遊戲執行時，所看到的 c 槽就是在該目錄裡，所以遊戲存檔也會在裡面。&lt;/p&gt;
+&lt;p&gt;我整理了一個 &lt;a href=&quot;https://github.com/GHolk/loco/blob/a8f6a9f452b369cf5a9d185af6744fba00ffbbb0/bin/proton-auto.sh&quot;&gt;proton-auto 腳本&lt;/a&gt; ，
+用法就是 &lt;code&gt;proton-auto game.exe&lt;/code&gt; ，
+會使用名為 &lt;code&gt;proton-compat-data&lt;/code&gt; 的目錄存資料。
+此外也可以手動指定目錄 &lt;code&gt;proton-auto my-compat-data game.exe&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;目前比較不滿意是每個遊戲都建立一份資料的話，其實蠻佔空間的，
+一個 compat data 會佔 100MB 左右，
+儘管內容多半是相同的 dll 函式庫或其它 exe，
+反正就是 c 槽的基礎 windows 系統。
+有一個想法是用 overlayfs 重覆使用同一個基礎 c 槽，
+只記錄不同的部份就好。
+基礎的 c 槽資料似乎是在 &lt;code&gt;~/.steam/steam/steamapps/common/Proton 5.13/dist/share/default_pfx/drive_c&lt;/code&gt; ，
+範例用法大概如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;mkdir -p overlay/{write,work}
+mkdir -p proton-compat-data/pfx
+sudo mount -t overlay overlay -o lowerdir=&amp;quot;$HOME/.steam/steam/steamapps/common/Proton 5.13/dist/share/default_pfx&amp;quot;,upperdir=$PWD/overlay/write,workdir=$PWD/overlay/work proton-compat-data/pfx
+proton-auto proton-compat-data game.exe
+sudo umount proton-compat-data/pfx
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;有個問題是裡面的相對連結果會壞掉。
+建立 pfx 時某些檔案是用相對符號連結做的，而不是真的複製。
+所以用 overlayfs 把整個目錄掛載過來後，相對連結就會壞掉，
+原本 &lt;code&gt;..&lt;/code&gt; 可以指到 proton 中上一層的內容，
+現在就變成指到所在目錄的內容。&lt;/p&gt;
+&lt;p&gt;可能要做一個所有內容都是實際檔案的 c 槽當 overlayfs 的 base。
+不然就是乾脆不要用 overlayfs，
+因為既然已經有用不少符號連結，那佔用空間應該有減少很多了，
+（實際還是有 100MB。）
+剩的可能是 steam 評估不適合用符號連結的檔案，
+可能會被修改之類的；總之我只是瞎猜。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/android-messenger-lite-chinese-search-comma.html</id>
 <title>android messenger lite 無法搜尋中文使用者名稱</title>
 <published>2021-04-26T12:35:05.221Z</published>
@@ -923,142 +1020,7 @@ env TZ=UTC awk # use env
 或要測試一個 fd 有無被佔用時，只能直接嘗試重導向檢查有無錯誤。</summary>
 <category term="linux"/>
 <category term="shell"/>
-<content type="html">&lt;h1 id=&quot;在-shell-中管理檔案描述符&quot;&gt;在 shell 中管理檔案描述符&lt;/h1&gt;
-&lt;p&gt;linux shell 中可以使用 0 到 9 的 file descriptor
-檔案描述符來控制程式的輸入與輸出，但一些使用並不好理解。
-例如重導向的順序不好理解，要將 fd 存在變數時得用到 eval，
-或要測試一個 fd 有無被佔用時，只能直接嘗試重導向檢查有無錯誤。&lt;/p&gt;
-&lt;p&gt;shell 中執行程式時，會讓程式繼承
-shell 本身的標準輸入、輸出、錯誤輸出三個 fd。
-如執行腳本時，輸出可能被導向檔案，輸入被導向另一支程式等。
-另外，也可以在執行時手動指定導向的目標，
-fd 中 0 1 2 分別為標準輸入、輸出、錯誤輸出。&lt;/p&gt;
-&lt;h2 id=&quot;fd-重導向的順序&quot;&gt;fd 重導向的順序&lt;/h2&gt;
-&lt;p&gt;fd 的結構為一個陣列，不同的索引中的內容為指向不同輸出的指標。
-shell 中使用 &lt;code&gt;2&amp;gt;&amp;amp;1&lt;/code&gt; 來表示將原本輸出到 stdout 的導向 stderr，
-在對陣列的操作上，代表將原本在陣列位置 1 的指標拷貝到 2，
-與語法上的 2 1 順序看來是相反的。
-故程式向 2 寫入時，寫入的目標和向 1 寫入是相同的。&lt;/p&gt;
-&lt;p&gt;所以如果要同時導向 stdout stderr 到一檔案時，
-寫法是 &lt;code&gt;find 1&amp;gt;find.log 2&amp;gt;&amp;amp;1&lt;/code&gt; ，會先將 1 指向檔案，
-然後把 1 的檔案指標拷到 2，讓 2 也指向同一個檔案。
-如果寫成 &lt;code&gt;find 2&amp;gt;&amp;amp;1 1&amp;gt;find.log&lt;/code&gt; ，
-就會變成 stderr 指到 stdout，但 stdout 指到檔案。&lt;/p&gt;
-&lt;h2 id=&quot;重導向的目標&quot;&gt;重導向的目標&lt;/h2&gt;
-&lt;p&gt;重導向時，若是要導向到檔案，可以直接寫 &lt;code&gt;1&amp;gt;filename&lt;/code&gt; ，
-若是要重導向到描述符，則必須在數字前加上 &lt;code&gt;&amp;amp;&lt;/code&gt; 如 &lt;code&gt;2&amp;gt;&amp;amp;1&lt;/code&gt; ，防止與檔名混淆。
-但重導向的來源 fd，則是不必加 &lt;code&gt;&amp;amp;&lt;/code&gt; 的。&lt;/p&gt;
-&lt;p&gt;同時，在使用 &lt;code&gt;&amp;gt;&lt;/code&gt; 導向時，若是導向的來源為 stdout 1，
-則 1 可以省略不寫；使用 &lt;code&gt;&amp;lt;&lt;/code&gt; 導向 stdin 時也是同樣可以省略 0。
-可能是因為這是最常見的用法，
-或者是用數字代表 fd 的寫法是後來才添加的功能。&lt;/p&gt;
-&lt;h2 id=&quot;exec-的用法&quot;&gt;exec 的用法&lt;/h2&gt;
-&lt;p&gt;在 shell 中除了預設的 fd 0 1 2，還有 3 到 9 可以用，
-可以使用 exec 將 fd 對應到某一檔案。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;exec 2&amp;gt;error.log
-# following command stderr will send to error.log
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;exec 可以將操作 shell 自身的 fd 對應表格，
-前述在指令後重導向的作法，只對該指令有效，
-而 exec 則是改變 shell 自身的對應表格，
-對 exec 後執行的所有命令都有效。&lt;/p&gt;
-&lt;p&gt;若是要短暫重導向，可以預先將 stderr 備份到另一 fd，事後再回復。
-最後的 &lt;code&gt;&amp;amp;-&lt;/code&gt; 則是關閉該 fd 的意思。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;exec 3&amp;gt;&amp;amp;2 # backup stderr to 3
-exec 2&amp;gt;error.log
 
-# command send stderr to error.log
-
-exec 2&amp;gt;&amp;amp;3 # recover stderr
-exec 3&amp;gt;&amp;amp;- # close 3
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;或者也可以將命令寫在子 shell 中，再在子 shell 中重導向，
-子 shell 的重導向並不會影響父 shell 的狀態。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;(
-    exec 2&amp;gt;error.log
-    # following command send stderr to error.log
-)
-# command still send stderr to stderr
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;又或者，既然已經開子 shell 了，那直接重導向子 shell 的輸出即可：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;(
-    # command send stderr to error.log
-) 2&amp;gt;error.log
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;將-fd-存成變數&quot;&gt;將 fd 存成變數&lt;/h2&gt;
-&lt;p&gt;shell 內建的 fd 有 0-9 供取用，是一種暫存器概念的設計，
-基於 unix process 對 file descriptor 的抽像，幾乎全無包裝。
-雖然暫存器是十分古老且見常的設計，
-如 vi 也使用暫存器的概念，提供 26 個不同字母的暫存器作為剪貼簿使用，
-但在寫程式時，我們還是比較喜歡以變數的方式儲存開啟的檔案，再多疊一層抽像。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;stderr=2
-echo warning &amp;gt;&amp;amp;$stderr
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;在一般命令使用重導向時，可以直接將 fd 的數字存到變數內，
-並在 &lt;code&gt;&amp;amp;&lt;/code&gt; 後面使用該變數。
-但若是要在 &lt;code&gt;&amp;gt;&lt;/code&gt; 前面使用變數時，卻會出現問題，
-可能是 shell 的變數展開是在解析重導向的左值前進行的吧。
-所以要開檔時不能這樣寫：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;log=3
-exec $log&amp;gt;file.log
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;只能直接把變數寫死，或者是用 shell 的 eval 命令，
-可以在解析指令前多展開一次變數：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;log_fd=3
-log_path=my.log
-eval &amp;quot;exec $log_fd&amp;gt;$log_path&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;測試-fd-是否已開啟&quot;&gt;測試 fd 是否已開啟&lt;/h2&gt;
-&lt;p&gt;把 fd 存成變數，最主要的目的是防止用到其它設定開到的 fd。
-shell 沒有提供方法來判斷有哪些 fd，又指向哪些目標。
-一個做法是從 linux kernel 提供的 &lt;code&gt;/proc/self/fd&lt;/code&gt; 來找，
-或者用 &lt;code&gt;/proc/$$/fd&lt;/code&gt; ，或者 &lt;code&gt;/dev/fd&lt;/code&gt; 。
-但這不是 shell 的功能，所以如果到沒提供 &lt;code&gt;/proc&lt;/code&gt; 的系統就不管用了。&lt;/p&gt;
-&lt;p&gt;另一個做法是直接寫入該 fd 看看，如果 fd 不存在，就會報錯。
-但隨便寫垃圾到別人開的 fd 也不太對，
-所以我的想法是嘗試寫入一個空字串。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;fd_test=3
-printf &amp;apos;&amp;apos; &amp;gt;&amp;amp;$fd_test
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;除了 printf，當然也有很多指令是不輸出東西的，都可以拿來用，
-例如 &lt;code&gt;echo -n&lt;/code&gt; 、 &lt;code&gt;true&lt;/code&gt; 、 &lt;code&gt;:&lt;/code&gt; 。
-或者用一個讀取 0 byte 的程式：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;head -c 0 &amp;lt;&amp;amp;$fd_test
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;之後就可以寫出一個函數，可以用來測試該 fd 存不存在，
-因為如果 fd 不存在會報錯，所以可以再把 stderr 指到 &lt;code&gt;/dev/null&lt;/code&gt; 。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;fd_is_open() { 
-    local fd=$1
-    ( true 1&amp;gt;&amp;amp;$fd ) 2&amp;gt;/dev/null
-}
-fd_is_open 0
-fd_is_open 1
-fd_is_open 3
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;找出空的-fd&quot;&gt;找出空的 fd&lt;/h2&gt;
-&lt;p&gt;之後就可以更進一步，寫出一個函數來找空的 fd：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;fd_first_free() {
-    local fd
-    if [ $# -gt 0 ]
-    then fd=$1
-    else fd=0
-    fi
-
-    while fd_is_open $fd
-    do fd=$((fd+1))
-    done
-
-    echo $fd
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;找空的 fd 並開檔：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;file=my.log
-fd=`fd_first_free`
-eval &amp;quot;exec $fd&amp;gt;$file&amp;quot;
-
-echo start executing &amp;gt;&amp;amp;$fd
-&lt;/code&gt;&lt;/pre&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/ccca-dokuwiki-hello-world-slide.html#社團與機器</id>
 <title>CCCA dokuwiki 雜談</title>

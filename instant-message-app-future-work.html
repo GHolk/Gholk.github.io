@@ -1,0 +1,417 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2021-05-15T08:59:56.062Z">
+<meta name="keywords" property="og:article:tag" content="im,android,手機,web,自由軟體,gnu,tor,聯邦制">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="linux-proton-wine-outside-steam.html" title="用 steam 的 proton 執行 windows exe">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>對下一代即時通訊系統的想像</title>
+</head>
+<body>
+<main><h1 id="對下一代即時通訊系統的想像">對下一代即時通訊系統的想像</h1>
+<p>現代智慧型手機上的即時通訊軟體都有許多體制上的缺陷，
+包含不自由、不安全、侵犯隱私、依賴中心伺服器等。
+自由軟體界蠻重視這些議題，也都有提出對應的解決方法，
+本文介紹我自己的理解與對應的軟體。</p>
+<script src="ext/toc.js"></script>
+
+<h2 id="不只要自由軟體">不只要自由軟體</h2>
+<p>要實現自由的即時通訊軟體
+<abbr title="instant message">im</abbr>，
+其實不只是開放原始碼那麼簡單。
+自由軟體不只是開放原始碼，
+而是要可以被修改、重新發布、任意使用。
+對 im 來說不是單純在不同電腦上安裝就好，
+還要考慮多數 im 其實還需要有一個伺服器。</p>
+<p>現代的網路環境多數已經不是固定 ip，
+甚至不是公網 ip 在防火牆後。
+所以一般 im 各 client 都還需要藉助中心伺服器彼此溝通，
+否則無從得知對方的 ip 為何，相較上一次連線是否有更換。
+加上許多功能，例如顯示對方是否上線，
+和暫存未被成功接收的訊息，由中心伺服器實現較方便，
+所以多數 im 都會有中心伺服器。</p>
+<h2 id="聯邦制">聯邦制</h2>
+<p>所以中心伺服器的原始碼也同樣要公開，
+重發布過的 client 也要能使用自行架設的伺服器，
+確保使用者有原始碼即可重新打造整個系統，
+無需依賴原本的中心伺服器。
+但這裡出現了有趣的問題，
+使用不同中心伺服器的使用者，是否能互相溝通？</p>
+<p>直覺來看是不行，就像 line 和 whatsapp 之間，
+是使用不同的伺服器，那也當然不能互聯。
+但這樣每重發布一次，都只能在同一伺服器間通話，
+感覺很沒意義；因此出現所謂聯邦制的架構。</p>
+<p>聯邦制的意義在於，每個人可以架自己的伺服器，
+同時不同伺服器上的使用者仍可以互連。
+通常這類會由社群定義出統一的協議，
+之後伺服器與客戶端就可以自由發展。
+這類架構知名的案例有 email、irc、新聞群組，
+和 mastodon 的 open social。</p>
+<h3 id="聯邦制起源">聯邦制起源</h3>
+<p>早期的 email 只能在單一主機上的不同使用者互相寄信，
+因為以前是大型主機，可能會連不同的終端機，
+終端機可能會拉線到不同的房間，或走電話線到另一市區。
+所以同一台主機的使用者不一定會很接近，
+email 就是不同終端機間使用者溝通的方式。</p>
+<p>之後網路發展時，有一段時間 email 是直接遠端登入，
+去修改對方家目錄下的信箱檔 mbox。
+後來統一出 smtp 協議，讓不同伺服器的使用者可以互相寄信。
+因此，任何使用者，可以任意選擇自己想使用的 email 平台，
+不同平台上的使用者也可以互相寄信。</p>
+<h3 id="聯邦制相對現代平台的反思">聯邦制相對現代平台的反思</h3>
+<p>早期網路發展時，很重視這類分散式的系統，
+其它案例有 news server 新聞群組、<abbr title="網路中繼聊天">irc</abbr> ，
+server 間會互相交換訊息。
+較現代的案例 gnu social 提出的 open social 協議，
+可以說是對抗現代社群平台壟斷的旗誌。</p>
+<p>對現代人來說，fb 上只能追縱其它人的 fb，
+如果你想關注的人在 twitter，
+那你只能註冊一個 twitter 來追蹤他。
+更不用講其它 vocus、medium、patron 平台，
+每個平台都有自己的追蹤方式，
+最基本就登入 web 介面會有通知，好的會寄 email。</p>
+<p>你能想像你可以在 fb 上追縱 vocus 的作者發布的文章嗎？
+那你能想像為什麼許多平台，都可以用 email 訂閱嗎？
+因為 email 定義了一個標準的格式。
+如果為傳送通知定義一個統一的協定，
+讓 fb 上可以追縱 twitter，甚至追蹤 vocus medium？
+這個協定就是 open social。</p>
+<p>同理也可以套用在現代的 im 上，
+我們希望，在不同的平台上，仍可以互相傳送訊息；
+就像不同 email 平台上仍可以互相寄信一樣。</p>
+<p>但這類聯邦制的協議，相對於中心式的 im，
+從 client 到註冊到 server 一手包，
+要考慮到由誰來架設管理 server，以及常見的 server 的開放程度。
+許多自由軟體會用開放原始碼，但提供付費的 server 托管，
+或付費才能在他們的 server 上註冊使用。
+因此，我理想中的聯邦制，是由各小型的社團會各自維護自己的伺服器，
+有限度的開放使用。</p>
+<h3 id="email">email</h3>
+<p>聯邦制的訊息，最古老的就是 email；
+但 email 比較習慣用作非即時的溝通。
+比較有趣是 <a href="https://jpmobile.pixnet.net/blog/post/31131722">日本的 email 曾被用來代替手機簡訊</a> ，
+在功能型手機時代，每個手機門號都會對應一個 email 地址，
+手機內會由代理商提供可以收發 email 的程式。</p>
+<p>由於 email 比用字計價的簡訊便宜，且可以內嵌圖片等多媒體內容，
+所以日本多數都是用 email 而少用簡訊。
+以前日系動畫常看到角色們的手機收到簡訊，
+有一個 <em>無題</em> 的欄位，
+即是發送 email 時不輸入標題導致顯示為沒有題目，
+但不知道和 komica、2ch 的那個無題有沒有關係就是了。</p>
+<p>email 的註冊就不用說，大家應該都很熟悉，
+大的網路公司會提供免費的 email 註冊服務。
+以前還會有很緊的空間限制，現在都放到很鬆，
+因為巨頭發現可以從信箱裡挖個人資料出來賣錢。
+以前空間小時，還會有人習慣把信收到自己的電腦來，
+後來大部份都是用 web 介面在收信，就信全部丟雲端了。</p>
+<h3 id="irc">irc</h3>
+<p>後來的例子 irc 就是可以用來聊天的即時訊息了。
+irc 比較像是聊天室，而不是簡訊，
+架構類似以前的即時通，但因為 irc 協議公開本身也夠流行，
+會有許多不同的 server client 實作。
+明確區分會有上下線狀態，離線後就不會收到通知。</p>
+<p>但 <a href="https://www.ifanr.com/1005291">傳統的 irc 不適合在手機的網路條件下使用</a> ，
+主要因為 irc 是保持長時間的 tcp 連線來收發訊息，
+在手機上網路可能會在基地台、wifi 間不斷切換，
+難以如同桌上型電腦維持長時間穩定的連線，
+造成伺服器頻繁處理超時斷線負的擔與不良的使用體驗。
+因此讓手機上的 im 出現一段真空期，
+使 whatsapp line 等軟體有機會掘起佔領市場。</p>
+<p>irc 歷經這段挑戰，也有提出新版的協議，但如同前文中所述，
+這類開放社群維護的協議改版效率一直很差。
+但我一直不是 irc 使用者，目前也不知道成果如何。</p>
+<p>irc 的性質比較開放，相比 email 和其它系統，
+甚至沒有 <strong>註冊</strong> 這件事，只要連進去就可以直接聊天。
+現在有一個像註冊的手續是可以固定自己的名字，
+因為 irc 中每個人可以自己設定要什麼名字，
+<em>欸名字可以自己取欸！</em>後來才出現用有管理權限的 bot
+管理哪些名字不能被隨意設定避免冒用。</p>
+<h3 id="現代的聯邦即時通訊系統">現代的聯邦即時通訊系統</h3>
+<p>既 irc 後我知道有二款這類聯邦制的協議，
+分別是 2010 年左右的 <a href="http://zh.wikipedia.org/wiki/xmpp">xmpp</a> 和智慧型手機時代的 <a href="http://zh.wikipedia.org/wiki/matrix">matrix</a> 。
+另外還有一類用來傳送語音的網路電話協議 sip。</p>
+<h3 id="xmpp">xmpp</h3>
+<p>xmpp 是基於 xml 的訊息傳送，
+類似 email 每個人會在一個伺服器上註冊，
+用 <code>username@server.ip</code> 的格式，
+要通訊時也是需要知道對方的完整地址。
+這協議蠻老了，很早期有流行過一段時間，
+google talk 即是基於這款協議的產品。</p>
+<p>xmpp 是基於 xml 的協議，
+對大檔案的傳輸只能編碼為 base64 不太便利，
+且不支援音訊的傳輸。
+後來 google 提出的 xmpp 擴充版 jingle 協議，
+使用 rtp 協議來傳送音訊來實現。</p>
+<p>現在雖然 google talk 收掉了，
+仍有不少 xmpp server client 運作中。
+現代比較流行的是用 web rtc 來傳送 p2p 音訊，
+web rtc 和 rtp 都有一定的 nat 穿透能力。</p>
+<p>xmpp 的問題是很多功能是以擴充的方式實現的。
+xmpp 基金會發布的一系列 XEP 文件，
+定義了 xmpp 的許多擴充功能，例如群組對話如何實現，
+加密、語音通話、傳送訊息時對方不在線如何處理。
+各 server client 間會有各自支援的擴充，
+因此不同 client 間可能不相容而有些功能不能運作。
+對架設 server 的人也很傷腦筋，要考慮各功能的相容性。
+總之，這是一個雜亂、帶有歷史包袱的系统，
+詳細的入門可以參考 <a href="https://newtoypia.blogspot.com/2015/09/xmpp.html">貴哥幾年前的 xmpp 介紹</a>。</p>
+<p>xmpp 的服務提供者比較多元，大部份都需要制式的註冊，
+有些則採收費制來維持運作。
+如 android 上著名的 app <a href="https://play.google.com/store/apps/details?id=eu.siacs.conversations">conversation</a>，
+app 作者自己就有一個收費制的伺服器，（前二個月可以免費使用，）
+直接幫自己的伺服器打廣告。</p>
+<h3 id="matrix">matrix</h3>
+<p>matrix 比較簡單，他宣稱就是要開發一個
+足夠 <strong>現代</strong> 的聯邦制即時通訊系統，
+從現代的 im 中吸取經驗與優勢，
+並且沒有 xmpp 那一堆歷史包袱。</p>
+<p>matrix 借鑑的對象主要是 slack 和 irc，
+相較 xmpp，matrix 標榜 <em>現代</em> ，
+像歷史記錄儲存、跨裝置同步訊息等都有考慮。
+規格書是用 json 和 http 作為通訊手段，
+並且 matrix 十分考慮瀏覽器的相容性，
+所以 matrix 可以有所謂的 <em>純前端</em> client。</p>
+<p>目前我正在嘗試架一個社團的 matrix server，
+之後再來寫一篇文章分享。</p>
+<h2 id="點對點加密">點對點加密</h2>
+<p><abbr title="end to end encrypt">e2ee</abbr>
+指的是訊息在傳出自己手機前就加密，到收件者裝置上才解密，
+代表伺服器端及中間的所有網路服務商，都無法窺探訊息內容。
+從最早的代表性加密軟體 pgp，常配合 email 使用；
+到現代一些支援 e2e 加密的 im 出現後，
+各大既有的商業 im 也漸漸支援此功能了。
+目前 telegram 需要自行開啟，line 和 whats app 似乎也可以開啟。
+irc 絕對是沒有的，irc 的本質是聊天室類似論壇，
+而不是一對一聊天；某些 irc 還會每月把訊息打包存檔供下載。</p>
+<p>由此可以發現點對點加密和群組聊天的歷史記錄有本質上的互斥。
+e2e encrypt 中應該只有彼此能解密訊息，
+所以伺服器是不會幫你存歷史訊息的，因為存了也看不懂。
+就算可以存加密的訊息，但若未來金鑰流出還是會有危險。
+因此 e2e encrypt 中，訊息一般只會留在彼此的手機中。
+在群組聊天中啟用 e2e，則會用每個成員的金鑰都加密過一次再傳出，
+而過去的歷史訊息在加密時，沒有用後加入者的金鑰，所以無法看到歷史訊息。</p>
+<p>xmpp 的 e2e 加密是以擴充的方式實現的，但也因此有些實作不同的問題。
+matrix 則是在公開頻道無法啟用 e2e 加密功能，
+新進者也因此能看到歷史訊息。
+而加密頻道的歷史訊息，matrix 則是會在伺服器端存加密的訊息，
+而金鑰仍存在使用者端，只有新加入者無法看到歷史訊息的問題。</p>
+<h2 id="去中心化的點對點溝通">去中心化的點對點溝通</h2>
+<p>點對點加密是要讓中心伺服器無法窺看訊息內容，
+主要是現今多數架構都需要有一個中心伺服器，
+無論是聯邦制或一般的唯一中心制。
+如果在通訊架構上能免去中心伺服器，
+讓所有通訊都是直接點對點，就能直接省去這一大堆問題。</p>
+<p>現今要直接點對點，主要的問題是大量的防火牆，
+與 ip 地址不足而使用 nat 及虛擬 ip。
+例如我的行動網路所拿到的就是虛擬 ip。
+因此要實現直接的點對點通訊，
+大部份需要另外實現一套 p2p 的通訊架構，
+例如 bit torrent 類的 p2p 網路。</p>
+<p>現今我所知道 p2p 的 im，有 briar 與 session 二種。
+<a href="https://briarproject.org">briar</a> 是走 tor <a href="http://zh.wikipedia.org/wiki/%E6%B4%8B%E8%92%BD%E7%B6%B2%E8%B7%AF">洋蒽網路</a> 的 im，
+因為 tor 的特性讓所有節點可以直接點對點確認。
+<a href="https://getsession.org">session</a> 則是去掉中心伺服器版本的 <a href="https://signal.org">signal</a>，
+據 <a href="https://www.reddit.com/r/privacytoolsIO/comments/f3oasn/session_a_signal_protocol_fork_with_decentralized/">reddit 上的說明</a> ，就是用區塊鏈取代掉 signal 的中心伺服器，
+也無需再綁定電話號碼註冊。</p>
+<p>tor 是用來匿蹤的 p2p 網路，也就是暗網所用的網路，
+除了匿蹤外，還有個特性是每一個洋蒽地址都是可以被直接連線的，
+不管原本是不是在 nat 內。
+因此 tor 有一個功能就是用來讓個人能架不需要申請固定 ip 的伺服器，
+像 <a href="https://blog.gslin.org/archives/2014/03/29/4428/%E6%9E%B6%E8%A8%AD-tor-%E7%9A%84-hidden-service/">gslin 在太陽花學運時就有提過用來放會被 youtube 下架的警察施暴影片</a> 。
+應用在 im 上只要打開連接埠，
+就是可以讓二個節點直接溝通無論有沒有 nat。</p>
+<h3 id="briar">briar</h3>
+<p>briar 即是直接在 app 裡開 tor 節點，因此開著時會有點耗電，
+個人的邀請連結是長的像 tor 網址的東西。
+另外 briar 還提供了群組聊天、開放式的群聊（稱為論壇）、
+開放式的個人公告（稱為 blog）等功能。
+所有訊息是用金鑰加密後存在本機，
+在開機後需要輸入密碼解鎖 briar，才能瀏覽與發送訊息。
+如果金鑰丟了，訊息就全都沒了，
+同時也沒有跨裝置的同步功能，每個裝置是獨一無二的 id。
+（就像 ssh-key 不會傳出本機一樣。）</p>
+<p>這類直接 p2p 的軟體會有一個問題，
+他需要雙方都上線才能傳送訊息，
+因為訊息是連到對方機器直接送過去，如果連不到就沒得談。
+根據官網的說明，briar 傳送訊息時如果對方不在線，
+會在自己的 briar 裡暫存起來，隔一段時間就嘗試重傳，
+一直到超過期限刪除。
+如果需要一直開著 briar，
+尤其 briar 又會開著 tor 網路，會比較耗電。</p>
+<p>briar 還有個問題，目前 pc 端軟體還沒正式釋出，
+但我有看到消息了，一個叫 <a href="https://nico.dorfbrunnen.eu/posts/2020/briar-alpha/">Briar GTK</a> 的 linux 軟體，
+似乎有人包了 <a href="https://www.publish0x.com/fav/privacy-how-to-install-and-run-briar-in-linux-mint-xvreqod?a=WZdP83ydKg&amp;tid=briar">flatpak 版本的 briar gtk</a> 。
+這東西可以期待，如果未來沒辦法維持 matrix.ccns.io，
+比起 session 我會用 briar。
+因為 session 會用到加密貨幣，所消耗的電力太大，
+對全球暖化是個負擔。</p>
+<h3 id="session">session</h3>
+<p>關於 session，原名好像叫 loki messenger，
+reddit 上那篇文章總結成 signal + 門羅幣 + tor。
+signal 是安全性很高的 e2ee，但使用中心伺服器；
+門羅幣是標榜不歡迎礦機，設計上需要用 cpu 採的加密貨幣，
+因為不歡迎礦機，社區的自治很活躍，難以被礦廠壟斷；
+tor 上面介紹過了。
+但除此之外我也不是很清楚。</p>
+<p>signal 是早期著名的 e2ee app，
+但和 telegram 一樣都因為要綁電話號碼為人垢病。
+此外也需要中心伺服器，但只做基本的建立通訊用，
+不會存對話資料。</p>
+<p>session 就是把 signal 的中心伺服器用 oxen 區塊鏈取代，
+tor 的部份就不清楚了。
+缺點應該就是用區塊鏈支持，所以會耗一堆電在算沒有意義的資料，
+所以我不喜歡。</p>
+<h2 id="歷史訊息">歷史訊息</h2>
+<p>回到伺服器該不該保存歷史訊息的問題，
+xmpp 和早期的 email 很明顯是不保存的那派，
+因為他們是負責傳遞，就像簡訊和電信商的關係。
+p2p 的 im 就不用說，根本沒有中心伺服器可以幫你存。
+matrix 則是另一派，matrix 可能認知到現代人有多看重聊天記錄，
+因此身會一個現代的聊天軟體，幫使用者保存聊天記錄是必要的，
+例如 slack discord。（line whatsapp：耳朵怎麼癢癢的？）</p>
+<p>某些 irc 頻道則是繼承到郵件群組的傳統，
+會用機器人存檔歷史聊天記錄，例如 wikipedia 的 irc，
+就像一些學術組織會存檔郵件群組的歷史訊息一樣。
+其它大部份 irc 還是屬於單純的即時聊天，
+你在線就看的到，不在線就看不到，
+server 只負責把訊息轉給 client，想記錄就自己寫 bot。</p>
+<h2 id="離線與訊息處理">離線與訊息處理</h2>
+<p>現在能稱霸市場的主流 im，在訊息暫存上都做的不錯；
+意思是如果收件人斷線，line 的訊息還是會暫存在伺服器上，
+對方再上線時就能收到，不會因為下線就掉訊息。
+當然 line 的訊息是有保存期限的，等太久就會刪掉，
+就像 line 傳的檔案也是有一個下載期限。</p>
+<p>irc 就完全沒有所謂離線的通知。
+離線就離線了，別人沒辦法傳訊息給你，
+這段期間的群聊你也看不到，再上線後也不會收到通知。
+因此 irc 出現一類雲端輔助的 client，
+會實際在另一台 server 上持續接收 irc 的訊息，
+在手機端開啟 app 實際上只是連去 server 上
+把接到的訊息拿來讀而已，也就不會漏訊息。</p>
+<p>xmpp 應該和 line 類似，有固定容量和期限的離線暫存；
+matrix 應該都是會存的伺服器上的，但私人的會有 e2e 加密。
+p2p 系列的就都幾乎沒有。
+briar 是前面講的土砲本機重傳，
+session 我看官網上 faq 寫區塊鏈伺服器端會有一個暫存機制，
+但也是一定期間而已。</p>
+<p>而這類非傳統中心式的 im，還都會碰到一個需要維護連線的問題。
+如 <a href="https://www.ifanr.com/1005291">霍炬這篇文章中所說</a> ，
+早期 iphone 甚至不允許背景 tcp 連線，
+就算 android 可以，但也少有 app 用，因為會很耗電。
+如 matrix 的半官方 client element，
+就發布了使用純 tcp 連線及 google cloud messaging framework 的版本，
+<a href="https://matrix.org/faq/#i-installed-element-via-f-droid%2C-why-is-it-draining-my-battery%3F">使用 tcp 的就會比較耗電</a>。</p>
+<h2 id="bluetooth-mesh">bluetooth mesh</h2>
+<p>最後再來講幾樣比較有趣的議題，像是如何抵抗政府管制造成的斷網。
+有個 app 叫 <a href="https://bridgefy.me/">bridgefy</a>，可以在沒有行動網路或 wifi 的情況下，
+用人群的 android 的藍牙來組成網路傳遞訊息。
+類似的概念還有 <a href="https://blog.gslin.org/archives/2019/06/06/9026/apple-%E6%96%B0%E7%9A%84%E3%80%8Cfind-my%E3%80%8D%E5%B8%B6%E4%BE%86%E7%9A%84%E9%9A%B1%E7%A7%81%E5%95%8F%E9%A1%8C/">apple 幾年前推出的 find my device</a>，
+和最近的進化版吵很兇的 air tag，
+是用 apple 的裝置組成藍牙網路，就算離線也能使用。</p>
+<p>bridgefy 的設計是每個人都有 android，
+如果人群不中斷的話，可以一個連一個組成不小的網路了，
+至少傳個幾條街沒問題，那這些人就可以互為中繼協助傳訊息；
+當然要建立在每個人都有裝 bridgefy 的情況下。
+但其實 bridgefy 還有內建一些限制，
+像訊息只能被 relay 一次，所以傳遞距離應該只有 100 公尺左右，
+可能是怕被用來 ddos 或大量浪費頻寬。</p>
+<p>apple 的 find my device 是利用 iphone 內建的藍牙 beacon，
+當其它 apple 裝置偵測到時，如果其它裝置有網路連線及 gps，
+就會把自己的座標回傳給 apple；
+注意其它有連網的裝置會回傳，所以遺失裝置離線也沒關係。
+現在則更進化出 air tag，可以直接追蹤一顆標籤。
+apple 的好處是 apple 裝置都是 apple 說了算，
+裡面的功能使用者自己幾乎是關不掉的，除非你 JB 越獄。
+所以 apple 可以很強硬的推這些功能，只要使用 apple 的裝置夠多，
+利用這些運作中的裝置，彼此就能直接組成網路，互相轉發訊息。</p>
+<h2 id="橋接不同的通訊軟體">橋接不同的通訊軟體</h2>
+<p>也是在近年，因為不同的 im 大量增加，
+出現許多來將訊息從一平台轉發到另一平台的程式。
+早期很知名的轉發程式就是，微軟 MSN 的殺手鐧，
+讓 msn 的使用者能和 AOL 的使用者對話，
+也就是注名的 <a href="https://nplusonemag.com/issue-19/essays/chat-wars/">即時通大戰</a> （ <a href="http://rayer.logdown.com/posts/195203-translation-chat-wars-1">未完成的譯文</a> ）。</p>
+<p>後來許多 im 在發展時，都意識到要能和其它既有軟體的使用者對話，
+所以多數開源的 im 系統發展時，
+都會伴隨一些聊天機器人程式來轉接來自其它平台的對話。
+功能最全面的大概是 <a href="https://github.com/42wim/matterbridge/">matterbridge</a> ，
+來自一間專門抄其它成功產品成開源專案的公司 mattermost，
+支援的平台超多，主要是供其核心產品 <a href="https://github.com/mattermost/mattermost-server/">mattermost</a>，
+一個開源版的 slack 使用。
+之前我是用來橋接 discord 和 telegram。</p>
+<p><a href="https://matrix.org/bridges/">matrix 現在也有不少橋接用的程式</a>，
+但多是橋接二種不同軟體，不像 matterbridge 是八爪章魚，
+一支程式就能轉發一堆協定。</p>
+<p>mattermost 的缺點大概就他不是聯邦制的系統，
+而是單純一個個可以自己架設的孤島，
+就像不且的 slack server 間也不能互相通訊，
+遠不如 discord 方便。</p>
+<h2 id="監聽權">監聽權</h2>
+<p>最後談了那麼多安全，談到點對點加密，
+回顧密碼學發展時的 <a href="http://zh.wikipedia.org/wiki/%E5%AF%86%E7%A2%BC%E6%88%B0%E7%88%AD">密碼戰爭</a> ，
+其實點對點的強加密技術很長一段時間是存在爭議的。
+你的祕密通訊自由不是絕對的，
+法律上可以允許司法機關依法申請監聽電話、檢查信件。
+那為什麼 im 可以使用無法被監聽的 e2ee？</p>
+<p>近年的 im 漸漸取代的電話的功能，在點對點加密技術下，
+甚至 im 服務商本身都無法監看訊息記錄，
+為執法機關帶來新的挑戰，
+因此一些國家開始重新審視這類點對點加密技術。
+例如 911 事件，就為催生了美國可以以安全為由，
+進入私人公司的伺服器；
+<a href="https://techcrunch.com/2020/11/09/whats-all-this-about-europe-wanting-crypto-backdoors/">歐洲近年逐漸增加的恐怖攻擊，也讓歐盟面臨點對點加密的問題</a>，
+另外也有被用作 <a href="https://www.ithome.com.tw/news/138630">犯罪工具的加密通訊解決方案公司，被警察機關的駭客攻擊的新聞</a>。</p>
+<p>對照下，密碼戰爭時像 tls 這類技術，就對執法機關是比較友好的，
+因為有一個根證書可以用來管理。
+政府在必要時，可以透過根證書來影響加密系統的運作。
+當然，平時根證書也必須管理好自己的證書。</p>
+<h2 id="總結">總結</h2>
+<p>一個現代的 im，我認為需要以下幾點，其中幾點可能會互斥。
+各位可以自行檢驗哪些軟體有具備以下功能，或缺少的。</p>
+<ul>
+<li>跨平台，如果這點也要列的話；一些需要電話號碼的 im 可能會因此出問題。</li>
+<li>最基本的 client 和 server 間通訊必須加密</li>
+<li>e2ee 功能也是必要的，可能不需要全面 e2ee。</li>
+<li>不依賴電話號碼，奇怪的是很多系統都仍以電話號碼作為識別碼。</li>
+<li>自由軟體，這很大程度必須和聯邦制或是 p2p 結合，
+當然也有例外如 signal 或 wire 這類，伺服器開源但仍中心。</li>
+<li>p2p 非必要，但可以免去中心伺服器的依賴，減少風險。</li>
+<li>藍牙構成的分散式網路是一個有趣的想法，但有一些困難需要客服。</li>
+</ul>
+<p>在訊息上的介面及功能，可能就和 slack 或 discord 借鑑，
+我認為這二者都做的很不錯了，至少比 messenger line 要好的多。
+briar 也很有趣，不只作為 im，也利用 p2p 的特性，把手伸向 blog 市場。
+line 的那個記事本真的是，明顯把手伸出聊天領域了，
+也讓 line 更肥大了。</p>
+<p>目前我認為 signal、telegram、wire 等系統明顯出局，
+因為他們是中心化的；
+比較合適的系統至少要是聯邦制或 p2p，如下：</p>
+<ul>
+<li>聯邦制：matrix、xmpp 都很 ok，但 matrix 比較現代，適合組織使用。</li>
+<li>briar，如果桌面版能順利釋出的話。
+但很明顯這東西不能在 iphone 上用，因為 ios 的限制 tor 應該沒辦法動。</li>
+<li>session，如果不在意挖礦的問題的話，我想是不錯的系統。</li>
+</ul>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "description": "git base static blog",
   "dependencies": {
-    "cheerio": "git+https://github.com/GHolk/cheerio.git",
+    "cheerio": "git+https://github.com/GHolk/cheerio.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",

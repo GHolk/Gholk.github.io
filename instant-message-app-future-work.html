@@ -190,6 +190,13 @@ app 作者自己就有一個收費制的伺服器，（前二個月可以免費�
 所以 matrix 可以有所謂的 <em>純前端</em> client。</p>
 <p>目前我正在嘗試架一個社團的 matrix server，
 之後再來寫一篇文章分享。</p>
+<h3 id="sip">sip</h3>
+<p><a href="http://zh.wikipedia.org/wiki/%E5%B0%8D%E8%A9%B1%E5%95%9F%E5%8B%95%E5%8D%94%E5%AE%9A">sip</a> 我沒碰過，但似乎是個用來語音通話的協定，
+<a href="https://newtoypia.blogspot.com/search/label/VoIP">貴哥有幾篇文章在介紹 sip</a>，但他後來似乎轉投 xmpp？
+和 xmpp 類似，同為有一定年代的協議，
+也都需要找一個伺服器來註冊使用。
+但 sip 主要是用來語音通話，而 xmpp 則是傳送文字訊息，
+但後來二者都有互相發展對方的功能，sip 現在應該也可以傳送文字訊息了。</p>
 <h2 id="點對點加密">點對點加密</h2>
 <p><abbr title="end to end encrypt">e2ee</abbr>
 指的是訊息在傳出自己手機前就加密，到收件者裝置上才解密，
@@ -318,8 +325,11 @@ session 我看官網上 faq 寫區塊鏈伺服器端會有一個暫存機制，
 如 matrix 的半官方 client element，
 就發布了使用純 tcp 連線及 google cloud messaging framework 的版本，
 <a href="https://matrix.org/faq/#i-installed-element-via-f-droid%2C-why-is-it-draining-my-battery%3F">使用 tcp 的就會比較耗電</a>。</p>
-<h2 id="bluetooth-mesh">bluetooth mesh</h2>
-<p>最後再來講幾樣比較有趣的議題，像是如何抵抗政府管制造成的斷網。
+<h2 id="其它議題">其它議題</h2>
+<p>最後再來講幾樣比較有趣的議題，像是斷網下仍可運作的藍牙 p2p 網路，
+橋接不同 im 的 bot，與政府監聽的權力及祕密通訊自由。</p>
+<h3 id="藍牙-p2p-網路">藍牙 p2p 網路</h3>
+<p>如何抵抗政府管制造成的斷網。
 有個 app 叫 <a href="https://bridgefy.me/">bridgefy</a>，可以在沒有行動網路或 wifi 的情況下，
 用人群的 android 的藍牙來組成網路傳遞訊息。
 類似的概念還有 <a href="https://blog.gslin.org/archives/2019/06/06/9026/apple-%E6%96%B0%E7%9A%84%E3%80%8Cfind-my%E3%80%8D%E5%B8%B6%E4%BE%86%E7%9A%84%E9%9A%B1%E7%A7%81%E5%95%8F%E9%A1%8C/">apple 幾年前推出的 find my device</a>，
@@ -341,7 +351,7 @@ apple 的好處是 apple 裝置都是 apple 說了算，
 裡面的功能使用者自己幾乎是關不掉的，除非你 JB 越獄。
 所以 apple 可以很強硬的推這些功能，只要使用 apple 的裝置夠多，
 利用這些運作中的裝置，彼此就能直接組成網路，互相轉發訊息。</p>
-<h2 id="橋接不同的通訊軟體">橋接不同的通訊軟體</h2>
+<h3 id="橋接不同的通訊軟體">橋接不同的通訊軟體</h3>
 <p>也是在近年，因為不同的 im 大量增加，
 出現許多來將訊息從一平台轉發到另一平台的程式。
 早期很知名的轉發程式就是，微軟 MSN 的殺手鐧，
@@ -362,7 +372,7 @@ apple 的好處是 apple 裝置都是 apple 說了算，
 而是單純一個個可以自己架設的孤島，
 就像不且的 slack server 間也不能互相通訊，
 遠不如 discord 方便。</p>
-<h2 id="監聽權">監聽權</h2>
+<h3 id="監聽權">監聽權</h3>
 <p>最後談了那麼多安全，談到點對點加密，
 回顧密碼學發展時的 <a href="http://zh.wikipedia.org/wiki/%E5%AF%86%E7%A2%BC%E6%88%B0%E7%88%AD">密碼戰爭</a> ，
 其實點對點的強加密技術很長一段時間是存在爭議的。

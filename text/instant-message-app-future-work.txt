@@ -200,6 +200,16 @@ matrix 借鑑的對象主要是 slack 和 irc，
 目前我正在嘗試架一個社團的 matrix server，
 之後再來寫一篇文章分享。
 
+### sip
+[[對話啟動協定|sip]] 我沒碰過，但似乎是個用來語音通話的協定，
+[貴哥有幾篇文章在介紹 sip][newtoypia sip]，但他後來似乎轉投 xmpp？
+和 xmpp 類似，同為有一定年代的協議，
+也都需要找一個伺服器來註冊使用。
+但 sip 主要是用來語音通話，而 xmpp 則是傳送文字訊息，
+但後來二者都有互相發展對方的功能，sip 現在應該也可以傳送文字訊息了。
+
+[newtoypia sip]: https://newtoypia.blogspot.com/search/label/VoIP
+
 ## 點對點加密
 <abbr title="end to end encrypt">e2ee</abbr>
 指的是訊息在傳出自己手機前就加密，到收件者裝置上才解密，
@@ -359,8 +369,12 @@ session 我看官網上 faq 寫區塊鏈伺服器端會有一個暫存機制，
 
 [element drain battery]: https://matrix.org/faq/#i-installed-element-via-f-droid%2C-why-is-it-draining-my-battery%3F
 
-## bluetooth mesh
-最後再來講幾樣比較有趣的議題，像是如何抵抗政府管制造成的斷網。
+## 其它議題
+最後再來講幾樣比較有趣的議題，像是斷網下仍可運作的藍牙 p2p 網路，
+橋接不同 im 的 bot，與政府監聽的權力及祕密通訊自由。
+
+### 藍牙 p2p 網路
+如何抵抗政府管制造成的斷網。
 有個 app 叫 [bridgefy]，可以在沒有行動網路或 wifi 的情況下，
 用人群的 android 的藍牙來組成網路傳遞訊息。
 類似的概念還有 [apple 幾年前推出的 find my device][find my device gslin]，
@@ -389,7 +403,7 @@ apple 的好處是 apple 裝置都是 apple 說了算，
 所以 apple 可以很強硬的推這些功能，只要使用 apple 的裝置夠多，
 利用這些運作中的裝置，彼此就能直接組成網路，互相轉發訊息。
 
-## 橋接不同的通訊軟體
+### 橋接不同的通訊軟體
 也是在近年，因為不同的 im 大量增加，
 出現許多來將訊息從一平台轉發到另一平台的程式。
 早期很知名的轉發程式就是，微軟 MSN 的殺手鐧，
@@ -422,7 +436,7 @@ mattermost 的缺點大概就他不是聯邦制的系統，
 就像不且的 slack server 間也不能互相通訊，
 遠不如 discord 方便。
 
-## 監聽權
+### 監聽權
 最後談了那麼多安全，談到點對點加密，
 回顧密碼學發展時的 [[密碼戰爭]] ，
 其實點對點的強加密技術很長一段時間是存在爭議的。

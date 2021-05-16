@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2021-05-15T12:28:05.040Z</updated>
+  <updated>2021-05-16T13:45:06.761Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,52 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/android-clip-stack-open-source-story.html</id>
+<title>android app Clip-Stack 的開源故事</title>
+<published>2021-05-16T13:37:53.777Z</published>
+<updated>2021-05-16T13:45:06.750Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/android-clip-stack-open-source-story.html"/>
+<summary type="html">把原本打在臉書的文章搬運來 blog。
+這是一個開源的 android 剪貼簿管理 app &lt;a href=&quot;https://f-droid.org/en/packages/com.catchingnow.tinyclipboardmanager/&quot;&gt;Clip-Stack&lt;/a&gt; 的簡單故事：
+一個設計的不錯的 app，被 copy cat 抄去 play store 上架放廣告，
+讓原作者心灰意冷不再開源。
+但舊版 f-droid 上的 app 還是可以動，可以繼續用。</summary>
+<category term="android"/>
+<category term="剪貼簿"/>
+<category term="中國"/>
+<category term="自由軟體"/>
+<content type="html">&lt;h1 id=&quot;android-app-Clip-Stack-的開源故事&quot;&gt;android app Clip-Stack 的開源故事&lt;/h1&gt;
+&lt;p&gt;把原本打在臉書的文章搬運來 blog。
+這是一個開源的 android 剪貼簿管理 app &lt;a href=&quot;https://f-droid.org/en/packages/com.catchingnow.tinyclipboardmanager/&quot;&gt;Clip-Stack&lt;/a&gt; 的簡單故事：
+一個設計的不錯的 app，被 copy cat 抄去 play store 上架放廣告，
+讓原作者心灰意冷不再開源。
+但舊版 f-droid 上的 app 還是可以動，可以繼續用。&lt;/p&gt;
+&lt;p&gt;之前在三星手機上有內建功能可以直接看剪貼簿歷史，感覺蠻方便的；
+加上最近實聯制可能要常填姓名和手機的表單，
+所以想找個管理 android 剪貼簿的 app，用來貼上基本資料。
+（還是這種情況應該要用瀏覽器自動填入功能？）
+但因為剪貼簿資料蠻敏感的，所以只打算找開源的 app，
+在 f-droid 上搜尋 clipboard 和 history，
+竟然只看到一款 Clip-Stack，但標註為 deprecate。&lt;/p&gt;
+&lt;p&gt;實際裝了之後還不錯用，也沒什麼問題，
+但當然還是要關心一下為什麼 deprecate，免得被陰都不知道。
+&lt;a href=&quot;https://github.com/heruoxin/Clip-Stack/blob/0096776/README.md#%E4%B8%BA%E4%BB%80%E4%B9%88&quot;&gt;github readme 上就有&lt;/a&gt;，
+作者說因為一堆 copy cat，
+把這款 app 加上廣告拿掉授權上架到 play store 上，
+還來發 issue 問為什麼編譯不過，讓他感到心灰意冷。
+所以後來的更新就不再開源了，f-droid 上的 1.5.0 是最後一個開源版本，
+&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.catchingnow.tinyclipboardmanager&quot;&gt;後續未開源的版本可以在 play store&lt;/a&gt; 上找到。
+真是個悲傷的故事。&lt;/p&gt;
+&lt;p&gt;然後 reddit 上也有起爭議，
+&lt;a href=&quot;https://www.reddit.com/r/androidapps/comments/ashth6/clip_stack_on_the_android_store_is_not_open/&quot;&gt;有人公審說你不開源了就不該再標註開源&lt;/a&gt; ，
+後來作者本人也有來留言哭哭，也撤掉了開源的文字。&lt;/p&gt;
+&lt;p&gt;總之 deprecate 的版本在我的 android 9 上還能動，
+用起來也沒什麼問題，所以就先這樣吧。
+比較尷尬就 app 是中國人做的，但開源就還好。&lt;/p&gt;
+&lt;p&gt;另外這 app 迴響還真的不錯，&lt;a href=&quot;https://www.playpcesor.com/2015/06/app-clip-stack.html&quot;&gt;電腦玩物還特別介紹過&lt;/a&gt; ，
+我也覺得蠻不錯的。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/instant-message-app-future-work.html#sip</id>
 <title>對下一代即時通訊系統的想像</title>
 <published>2021-05-15T08:59:56.062Z</published>
@@ -2735,148 +2781,7 @@ tor 網路具有代理 dns 查詢的功能，能夠將 dns 查詢流量去識別
 <category term="android"/>
 <category term="linux"/>
 <category term="教學"/>
-<content type="html">&lt;h1 id=&quot;使用-tor-代理-dns-查詢&quot;&gt;使用 tor 代理 dns 查詢&lt;/h1&gt;
-&lt;p&gt;近年大眾開始關心明文 dns 查詢時造成的隱私洩露問題，
-tor 網路具有代理 dns 查詢的功能，能夠將 dns 查詢流量去識別化。
-但由於權限問題，有時這個 tor dns 沒辦法開在 dns 慣例的 53 埠，
-在 android 上可以藉由 &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.frostnerd.dnschanger&quot;&gt;DNSChanger&lt;/a&gt; 修改 dns server 為 localhost:5353，
-而 debian 上我還沒找到方法讓系統走非標準埠，
-所以作法是直接讓 tor 開在 53。&lt;/p&gt;
-&lt;h2 id=&quot;更換-dns-服務的原因&quot;&gt;更換 dns 服務的原因&lt;/h2&gt;
-&lt;p&gt;最早的時代，大家多使用 ISP 提供的 dns，
-因為 isp 不容易死，且多有不差的速度。
-但大概十年前左右，（我也不是很確定。）
-開始吹起一波選用更快的 dns 的風潮，
-許多新 dns 服務商出現，宣稱可以提供更快的 dns 查詢速度；
-從而加速從點下超連結到實際顯示網頁的過程。
-我印象中 google 大概是那時候推出 8.8.8.8 的 dns 服務的。&lt;/p&gt;
-&lt;p&gt;在這之後吹起的則是隱私風潮，
-google 無孔不入的廣告追蹤能力，使得網民開始關心個資洩露問題。
-如果使用 isp 的 dns 服務，isp 本來就可以看到你的查詢記錄，
-但就算使用第三方 dns 服務，由於 dns 查詢還是會經由 isp 的機房，
-且 dns 為明文，isp 甚至是路由上的節點，都能分析封包內容來追縱使用者。
-所以為了解決明文 dns 查詢被 isp 用作流量分析與追蹤使用者的問題，
-cloudflare、google 等公司開始推出加密的 dns 查詢服務，
-加密的 dns 封包即無法被 ISP 監聽分析。&lt;/p&gt;
-&lt;p&gt;但我認為這只是將資訊洩露的對象，
-從傳統的 ISP dns server 換成網路巨頭而已；
-網路巨頭還是能記錄下查詢者的 ip 查詢過哪些域名，
-雖然成本與門檻較傳統 isp 高，但我相信網路巨頭公司的技術能力足夠。&lt;/p&gt;
-&lt;p&gt;要防止洩露，還是要用匿蹤，
-使用 tor 網路代理 dns 查詢我認為是較好的方案。
-tor 的去識別化能力，讓人難以從流量追縱到使用者。&lt;/p&gt;
-&lt;h2 id=&quot;tor-dns-的缺陷&quot;&gt;tor dns 的缺陷&lt;/h2&gt;
-&lt;p&gt;據我所知，tor 代理 dns 查詢時，
-會將查詢的請求由該次連線選定的出口，
-送出到該出口使用的 dns 伺服器，再將查詢結果送回查詢者。
-這種作法會讓在台灣的使用者，
-拿到的可能是荷蘭 isp dns 的記錄，造成 CDN 運作困難。&lt;/p&gt;
-&lt;p&gt;cdn 原理，是在不同地區將同一域名對應到不同 ip，
-從而讓使用者連線時可以連到較接近的 ip，而加快傳送速度。
-使用 tor 代理 dns 查詢後，
-拿到的不一定是同一地區的 dns server 提供的結果，
-所以可能會造成電腦連線到較遠的伺服器 ip 取得內容。&lt;/p&gt;
-&lt;p&gt;同時 tor 代理的查詢，只會回傳目標域名的 ip，
-不管該域名是 A 或者是 CNAME，
-而 txt 或 sshfp 之類的記錄則不能查詢。&lt;/p&gt;
-&lt;p&gt;另外 tor 代理由於是走 tor，
-解析域名的速度相對單純的 udp 理所當然會慢很多，
-再加上 cdn 可能無法正常加速，就會讓整體速度下降；
-雖然還是會比所有流量都走 tor 要快很多。&lt;/p&gt;
-&lt;h2 id=&quot;tor-daemon-dns-服務&quot;&gt;tor daemon dns 服務&lt;/h2&gt;
-&lt;p&gt;tor 代理 dns 查詢的方式，是 daemon 會扮演 dns server，
-開一個 port 提供 dns 查詢服務。
-要讓 daemon 提供 dns 服務，
-在 torrc 中 &lt;code&gt;DNSPort&lt;/code&gt; 選項設定要監聽的埠即可。
-dns 慣例上是走 53，而 tor 的 dns 預設似乎是使用 5353。
-在 android 上則是在 orbot 的設定中設定 tor dns port 即可，
-原本該選項內容是 auto，但 auto 好像會出錯，
-好像只能輸入數字，我是用 5400。&lt;/p&gt;
-&lt;h2 id=&quot;測試非標準埠的-dns-服務&quot;&gt;測試非標準埠的 dns 服務&lt;/h2&gt;
-&lt;p&gt;啟動後可以用 dig 或 host 來測試是否正常。
-dig 可以用 &lt;code&gt;-p&lt;/code&gt; 選項設定使用的埠，
-但 host 與許多其它程式都不支援使用 53 以外的埠，
-可能是 dns 作為網路中的基礎建設已經太基本了，
-很少人會想去打 dns 的主意，
-所以多數都直接使用 isp 或 dhcp 給的，當然是使用標準埠。&lt;/p&gt;
-&lt;p&gt;如果要手動測，可以自己用 &lt;code&gt;nc -u localhost 5353&lt;/code&gt; 丟 query。
-可以自己生出二進位的 dns query，
-但我比較爛，不想研究 dns 的協議格式，
-所以是直接用 nc 聽 53 埠，再用 host 查本機，
-就可以 dump 出 dns query 的資料內容。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;sudo timeout 5 nc -lup 53 &amp;gt;dns-query &amp;lt;/dev/null &amp;amp;
-sleep 1
-host google.com localhost
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;這裡的 nc 要加 timeout 是因為 nc 在處理 udp 時，
-似乎不會自己結束；好像也有 &lt;code&gt;-q&lt;/code&gt; 或 &lt;code&gt;-w&lt;/code&gt; 選項可以用，
-但我記得 nc 有分 traditional bsd 等版本，
-選項好像有所差異，所以統一用 timeout 比較簡單。&lt;/p&gt;
-&lt;p&gt;再來把 query 丟到 dns server 就可以拿到結果：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;timeout 5 nc -u localhost 53 &amp;lt; dns-query &amp;gt; dns-response
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;要從二進位結果中看出 ip，
-我是用 dd 從對應位置取出資料，再用 od 把二進位轉成十進位。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;~ $ dd bs=1 skip=40 count=4 dns-query | od -t u1
-0000000 172 217  27 142
-记录了 4+0 的读入
-记录了 4+0 的写出
-0000004
-4 bytes copied, 0.00795557 s, 0.5 kB/s
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;那對應的 ip 就是 172.217.27.142。&lt;/p&gt;
-&lt;p&gt;如果你的電腦沒裝 host dig nslookup，
-這裡也直接提供一個查詢 google.com 的 dns-query 內容，
-也就是中間那段 16 進位數字，
-而 &lt;code&gt;xxd -r&lt;/code&gt; 可以把 16 進位 ascii 反向轉回 16 進位。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;xxd -r &amp;lt;&amp;lt;DNS | timeout 5 nc -u localhost 5353 \
-| dd bs=1 skip=40 count=4 | od -t u1
 
-00000000: e6e2 0100 0001 0000 0000 0000 0667 6f6f  .............goo
-00000010: 676c 6503 636f 6d00 0001 0001            gle.com.....
-
-DNS
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;不知道 dns query 內容有沒有日期或 ip，
-如果有的話上面那段可能不適用於其它人，
-總之先這樣吧。&lt;/p&gt;
-&lt;h2 id=&quot;在-linux-使用非標準埠的-dns-服務&quot;&gt;在 linux 使用非標準埠的 dns 服務&lt;/h2&gt;
-&lt;p&gt;多數 linux 是使用 &lt;code&gt;/etc/resolv.conf&lt;/code&gt; 來設定 dns server，
-但這個設定檔不支援修改使用的埠，只能另外想辦法。
-我有想到二種作法，一是直接把 tor 的 dns
-開在 localhost:53，我目前就是這樣做。&lt;/p&gt;
-&lt;p&gt;二是開一個代理的 dns server，
-該 server 連到 localhost:5353，再開在其它的 53 埠。
-我記得 systemd 有一支 systemd-resolved.service，
-就是一個 dns 暫存程式，把該 service 設定成從 localhost:53 拿資料即可。
-ubuntu 似乎是預設開啟的，會開在 127.0.0.53:53。&lt;/p&gt;
-&lt;p&gt;另外也要注意如果使用 network manager 或 systemd，
-他們可能會自動修改 resolv.conf，
-那就不能單純修改 resolv.conf，而要看 resolv.conf 是由哪支程式管理。&lt;/p&gt;
-&lt;h2 id=&quot;在-android-使用非標準埠的-dns-服務&quot;&gt;在 android 使用非標準埠的 dns 服務&lt;/h2&gt;
-&lt;p&gt;android 在 wifi 的設定中，把 ip 由 dhcp 改成手動靜態 ip，
-就可以手動改 dns，但和 resolv.conf 一樣只能改 ip。
-所以需要用類似 vpn 的作法代理，想辦法讓系統用上非標準埠的 dns。
-我後來是找到一支 app &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.frostnerd.dnschanger&quot;&gt;DNSChanger&lt;/a&gt; 可以做到，
-而且也是 open source 的軟體，不怕被動手腳。&lt;/p&gt;
-&lt;p&gt;dns changer 中，要設把 dns 設成 localhost 5400 需要改一些設定。
-先在左側的側邊欄中進入設定 setting，
-最底部有一個 advanced setting，點進去後要先打開 enable 開關，
-之後即可開啟允許把 dns 設成 127.0.0.1 或 ipv6 的 &lt;code&gt;::1&lt;/code&gt; 的選項，
-和允許客製化連接埠的選項。&lt;/p&gt;
-&lt;p&gt;之後在 app 主畫面，即可把 dns 修改成 127.0.0.1:5400 或 &lt;code&gt;::1:5400&lt;/code&gt; ，
-設好後點主畫面的 start 即可開啟，
-第一次啟動時 dns changer 會要求 vpn 的權限，
-應該是因為他改 dns 的作法我猜是直接修改 dns query 的 udp 封包，
-所以需要 vpn 去修改網路封包的權限。
-把 orbot 也開啟後，即可在左側側邊欄的 dns query 中測試，
-可以明顯感受到 tor dns 較慢的速度。&lt;/p&gt;
-&lt;p&gt;dns changer 有一個可以放在通知欄的 tilt 小工具，
-可以顯示並快速切換 dns。
-但那個小工具在開機時會異常，
-要手動啟動 dns changer 一次後顯示的狀態才會正確，
-所以我後來都是直接打開 app 改。&lt;/p&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/secret-reader.html#allow-pgp-key-without-password</id>
 <title>解密閱讀器</title>

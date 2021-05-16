@@ -1,0 +1,49 @@
+# android app Clip-Stack 的開源故事
+把原本打在臉書的文章搬運來 blog。
+這是一個開源的 android 剪貼簿管理 app [Clip-Stack] 的簡單故事：
+一個設計的不錯的 app，被 copy cat 抄去 play store 上架放廣告，
+讓原作者心灰意冷不再開源。
+但舊版 f-droid 上的 app 還是可以動，可以繼續用。
+
+之前在三星手機上有內建功能可以直接看剪貼簿歷史，感覺蠻方便的；
+加上最近實聯制可能要常填姓名和手機的表單，
+所以想找個管理 android 剪貼簿的 app，用來貼上基本資料。
+（還是這種情況應該要用瀏覽器自動填入功能？）
+但因為剪貼簿資料蠻敏感的，所以只打算找開源的 app，
+在 f-droid 上搜尋 clipboard 和 history，
+竟然只看到一款 Clip-Stack，但標註為 deprecate。
+
+[Clip-Stack]: https://f-droid.org/en/packages/com.catchingnow.tinyclipboardmanager/
+
+實際裝了之後還不錯用，也沒什麼問題，
+但當然還是要關心一下為什麼 deprecate，免得被陰都不知道。
+[github readme 上就有][deprecate]，
+作者說因為一堆 copy cat，
+把這款 app 加上廣告拿掉授權上架到 play store 上，
+還來發 issue 問為什麼編譯不過，讓他感到心灰意冷。
+所以後來的更新就不再開源了，f-droid 上的 1.5.0 是最後一個開源版本，
+[後續未開源的版本可以在 play store][play store] 上找到。
+真是個悲傷的故事。
+
+[deprecate]: https://github.com/heruoxin/Clip-Stack/blob/0096776/README.md#%E4%B8%BA%E4%BB%80%E4%B9%88
+[play store]: https://play.google.com/store/apps/details?id=com.catchingnow.tinyclipboardmanager
+
+然後 reddit 上也有起爭議，
+[有人公審說你不開源了就不該再標註開源][reddit] ，
+後來作者本人也有來留言哭哭，也撤掉了開源的文字。
+
+[reddit]: https://www.reddit.com/r/androidapps/comments/ashth6/clip_stack_on_the_android_store_is_not_open/
+
+總之 deprecate 的版本在我的 android 9 上還能動，
+用起來也沒什麼問題，所以就先這樣吧。
+比較尷尬就 app 是中國人做的，但開源就還好。
+
+另外這 app 迴響還真的不錯，[電腦玩物還特別介紹過][playpc] ，
+我也覺得蠻不錯的。
+
+[playpc]: https://www.playpcesor.com/2015/06/app-clip-stack.html
+
+#android
+#剪貼簿
+#中國
+#自由軟體

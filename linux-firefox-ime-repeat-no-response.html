@@ -1,0 +1,100 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2021-06-03T15:09:56.974Z">
+<meta name="keywords" property="og:article:tag" content="linux,輸入法,gui,x-window,firefox">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="android-clip-stack-open-source-story.html" title="android app Clip-Stack 的開源故事">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>firefox 中輸入法導致的無法長按連續輸入與關閉視窗後鍵盤無反應的問題</title>
+</head>
+<body>
+<main><h1 id="firefox-中輸入法導致的無法長按連續輸入與關閉視窗後鍵盤無反應的問題">firefox 中輸入法導致的無法長按連續輸入與關閉視窗後鍵盤無反應的問題</h1>
+<p>大概是一年前升到 debian buster 後，但其實不確定時間，因為很久了。
+發現 firefox 中鍵盤難以用長按連續輸入，
+長按時會跳很慢，大概一二秒才會出一個字。
+同時還有另一個問題，是關閉 firefox 後焦點換到其它視窗後，
+鍵盤會無法輸入。
+這二個是輸入法造成的問題，我把 scim 換成 gcin，
+再多裝上 gcin-gtk3-immodule 後就好了。</p>
+<h2 id="問題發生">問題發生</h2>
+<p>一年前碩二，正在被論文與指導教授摧殘，所以沒管那麼多；
+升級後沒什麼大問題，就繼續用了。
+後來才發現有二個小問題，也不確定是不是一起出現的，
+確切的出現時間也不確定。</p>
+<ol>
+<li><p>在 firefox 中長按鍵盤會無法連續輸入，
+嚴格來說還是可以，只是會 1 2 秒才出一個字；
+只能自己快速連按。</p>
+</li>
+<li><p>關閉 firefox 後，視窗焦點自動轉到其它視窗時，
+鍵盤會無法輸入。
+應該說英文字無反應，還是可以按 alt-tab 切換視窗，
+切換後就會有反應了。</p>
+</li>
+</ol>
+<p>一開始只注意到問題 2，因為連續輸入的場合其實不多，
+1 是很後面才發現。
+其實不是大問題，所以一直沒去理它，最近才解決。
+一開始只專注搜尋 2，就一直沒有結果，
+後來打算解決 1 時，找到 <a href="https://liumang.info/2019/12/gcin/">一篇 liumang 提到 gcin 的類似問題</a> ，
+想到自己電腦上也有裝 gcin，就拿來試試看。</p>
+<h2 id="嘗試-gcin">嘗試 gcin</h2>
+<p>我自己的 gcin 是很久以前裝了，
+後來某次想說試試 xfce 預設輸入法 scim 也不錯，
+就換成 scim 了。
+（因為我是用自己客制化的泰瑞倉頡輸入法，
+只要是能匯入自定義表格的輸入法，對我來說都差不多。
+但現在預設好像換成 fcitx 了。） 
+現在 gcin 在 buster 是 2.8.8 版，
+liumang 提到更新可以解決是更到 2.8.9，
+於是我先去看 <a href="http://hyperrate.com/gcin-source/Changelog.html">gcin change log</a> 看有沒有提到是修正了什麼。
+結果 change log 直接跳過 2.8.8。</p>
+<p>只好直接嘗試，切成 gcin 檢查有沒有此一問題，
+至少可以先確定我碰到的是不是同一個問題，
+因為我原本是用 scim。
+結果還是碰到同樣的問題。</p>
+<p>debian 要切輸入法，系統是提供一個叫 <code>im-config(8)</code> 的程式，
+會自動去改 <code>~/.xinputrc</code> ，內容就是在啟動 x windows session 時，
+要啟動哪個 im 的腳本。
+該腳本似乎和 <code>/etc/X11/xinit/xinputrc</code> 有關，
+應該是 x 啟動中某個腳本會定義 run_im 函數，
+然後就會去 source <code>~/.xinputrc</code> ，讓它決定實際要啟動哪個輸入法。
+改完後登出再登入 xsession 即可使用新的輸入法。</p>
+<p>結果我啟動 gcin 後，才發現我也有此一問題。
+正考慮要不要去裝 2.8.9，讀 gcin 的安裝指南時，
+看到 debian gcin 被拆成幾個套件，
+發現其中 gcin-gtk3-immodule 這個包沒有被安裝，
+於是就自己手動裝裝看。
+結果裝起來後，問題就解決了。
+看來應該是 firefox 是 gtk3，而原本系統只有 gtk2 的，
+fallback 時造成這些問題。</p>
+<p>之前用 scim 的方向去找時，
+也有看到 <a href="https://github.com/scim-im/scim/issues/29">問題 2 的 issue</a>，
+但沒有詳細看，因為那個問題影響沒有很大，
+連續輸入比較重要。
+後來看到那篇中文的就直接去試了，
+也不知道 scim issue 裡的解法有沒有效。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

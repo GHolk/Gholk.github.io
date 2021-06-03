@@ -1,0 +1,83 @@
+# firefox 中輸入法導致的無法長按連續輸入與關閉視窗後鍵盤無反應的問題
+大概是一年前升到 debian buster 後，但其實不確定時間，因為很久了。
+發現 firefox 中鍵盤難以用長按連續輸入，
+長按時會跳很慢，大概一二秒才會出一個字。
+同時還有另一個問題，是關閉 firefox 後焦點換到其它視窗後，
+鍵盤會無法輸入。
+這二個是輸入法造成的問題，我把 scim 換成 gcin，
+再多裝上 gcin-gtk3-immodule 後就好了。
+
+## 問題發生
+一年前碩二，正在被論文與指導教授摧殘，所以沒管那麼多；
+升級後沒什麼大問題，就繼續用了。
+後來才發現有二個小問題，也不確定是不是一起出現的，
+確切的出現時間也不確定。
+
+ 1. 在 firefox 中長按鍵盤會無法連續輸入，
+    嚴格來說還是可以，只是會 1 2 秒才出一個字；
+    只能自己快速連按。
+    
+ 2. 關閉 firefox 後，視窗焦點自動轉到其它視窗時，
+    鍵盤會無法輸入。
+    應該說英文字無反應，還是可以按 alt-tab 切換視窗，
+    切換後就會有反應了。
+
+一開始只注意到問題 2，因為連續輸入的場合其實不多，
+1 是很後面才發現。
+其實不是大問題，所以一直沒去理它，最近才解決。
+一開始只專注搜尋 2，就一直沒有結果，
+後來打算解決 1 時，找到 [一篇 liumang 提到 gcin 的類似問題][gcin repeat] ，
+想到自己電腦上也有裝 gcin，就拿來試試看。
+
+[gcin repeat]: https://liumang.info/2019/12/gcin/
+
+## 嘗試 gcin
+我自己的 gcin 是很久以前裝了，
+後來某次想說試試 xfce 預設輸入法 scim 也不錯，
+就換成 scim 了。
+（因為我是用自己客制化的泰瑞倉頡輸入法，
+只要是能匯入自定義表格的輸入法，對我來說都差不多。
+但現在預設好像換成 fcitx 了。） 
+現在 gcin 在 buster 是 2.8.8 版，
+liumang 提到更新可以解決是更到 2.8.9，
+於是我先去看 [gcin change log] 看有沒有提到是修正了什麼。
+結果 change log 直接跳過 2.8.8。
+
+[gcin change log]: http://hyperrate.com/gcin-source/Changelog.html
+
+只好直接嘗試，切成 gcin 檢查有沒有此一問題，
+至少可以先確定我碰到的是不是同一個問題，
+因為我原本是用 scim。
+結果還是碰到同樣的問題。
+
+debian 要切輸入法，系統是提供一個叫 `im-config(8)` 的程式，
+會自動去改 `~/.xinputrc` ，內容就是在啟動 x windows session 時，
+要啟動哪個 im 的腳本。
+該腳本似乎和 `/etc/X11/xinit/xinputrc` 有關，
+應該是 x 啟動中某個腳本會定義 run_im 函數，
+然後就會去 source `~/.xinputrc` ，讓它決定實際要啟動哪個輸入法。
+改完後登出再登入 xsession 即可使用新的輸入法。
+
+結果我啟動 gcin 後，才發現我也有此一問題。
+正考慮要不要去裝 2.8.9，讀 gcin 的安裝指南時，
+看到 debian gcin 被拆成幾個套件，
+發現其中 gcin-gtk3-immodule 這個包沒有被安裝，
+於是就自己手動裝裝看。
+結果裝起來後，問題就解決了。
+看來應該是 firefox 是 gtk3，而原本系統只有 gtk2 的，
+fallback 時造成這些問題。
+
+之前用 scim 的方向去找時，
+也有看到 [問題 2 的 issue][scim switch window]，
+但沒有詳細看，因為那個問題影響沒有很大，
+連續輸入比較重要。
+後來看到那篇中文的就直接去試了，
+也不知道 scim issue 裡的解法有沒有效。
+
+[scim switch window]: https://github.com/scim-im/scim/issues/29
+
+#linux
+#輸入法
+#gui
+#x-window
+#firefox

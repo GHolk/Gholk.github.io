@@ -322,3 +322,4 @@ android-messenger-lite-chinese-search-comma.html
 linux-proton-wine-outside-steam.html
 instant-message-app-future-work.html
 android-clip-stack-open-source-story.html
+linux-firefox-ime-repeat-no-response.html

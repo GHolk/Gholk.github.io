@@ -1,0 +1,175 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2021-06-04T13:44:43.447Z">
+<meta name="keywords" property="og:article:tag" content="game,linux,android,adb,shell">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="linux-firefox-ime-repeat-no-response.html" title="firefox 中輸入法導致的無法長按連續輸入與關閉視窗後鍵盤無反應的問題">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>從舊手機備份中拷貝遊戲的存檔</title>
+</head>
+<body>
+<main><h1 id="從舊手機備份中拷貝遊戲的存檔">從舊手機備份中拷貝遊戲的存檔</h1>
+<p>最近比較閒，把一些以前玩過的 android 遊戲裝回來玩。
+很多遊戲都沒有內建存檔轉移機制，所以以前玩的進度沒了。
+只好自立自強從以前手機的備份映象檔中，
+找回以前遊戲的存檔，放到現在手機的資料目錄中。
+這些操作用 root 可以簡單做到，
+或用 adb backup 搭配 adb backup extractor 也可以。</p>
+<h2 id="老遊戲">老遊戲</h2>
+<p>最近比較有閒時間來玩遊戲，但個人偏好一些老遊戲，
+這些遊戲都沒有備份機制，所以得自己想辦法：</p>
+<ul>
+<li>nimble quest</li>
+<li><a href="twewy-solo-remix-gamer.html">美麗新世界</a></li>
+<li>pumpkins vs monsters</li>
+<li>vector fighter</li>
+</ul>
+<p>這些遊戲和多數 app 一樣，
+都是直接把存檔放在 <code>/data/data/</code> 裡，
+也沒提供存檔轉移機制。</p>
+<h2 id="手動複製存檔">手動複製存檔</h2>
+<p>每個 app 都有自己唯一的 id，
+可以打開 app 後進 android shell 用 top 查，
+像 <code>adb shell top</code> ，看佔 cpu 最高的第一個 app 多半就是了。
+如果名字太長可以看第一欄的 pid，用 <code>ps -f -ww 1234</code> 查程式全名。
+之後該程式的資料就會存在 <code>/data/data/com.nimblebit.nimblequest/</code> 裡。</p>
+<p>不想這麼麻煩也可以直接從 play store 的網址看。
+例如 nimble quest 是 <a href="https://play.google.com/store/apps/details?id=com.nimblebit.nimblequest">https://play.google.com/store/apps/details?id=com.nimblebit.nimblequest</a> ，
+網址 querystring 的 id 參數就是 app 的 id。
+當然，已經被下架的 app 就不適用此方法了。</p>
+<p>所以只要找到該資料夾裡哪個檔案是存檔，
+然後複製到新裝置上即可。
+但對使用者來說，不允許存取 <code>/data</code> 下的資料，
+除非你有 root，取得 root 權限後就可以整個系統隨你逛了。</p>
+<p>如果有 root，直接進去找出存檔是哪個檔，
+複製出來，再傳到新手機，複製到對應的位置蓋掉原本的存檔即可。
+例如 nimble quest 的存檔是：
+<code>/data/data/com.nimblebit.nimblequest/shared_prefs/com.nimblebit.nimblequest.xml</code>
+，把舊的蓋掉就好了。
+甚至因為他是明文 xml，可以直接改內容，
+當然我是不鼓勵這種破壞遊戲體驗的作法。</p>
+<p>另外蓋掉時，要注意不要直接用 cp 或 mv 蓋掉，
+因為從 sdcard 複製到系統的 data 裡面時，權限可能會錯；
+android 裡每個 app 都有自己的 uid gid，
+存檔的權限不對的話，app 可能會無法讀取、寫入存檔。
+建議是用修改的方式，像用 <code>cat /sdcard/com.nimblebit.nimblequest.xml &gt; /data/data/com.nimblebit.nimblequest/shared_prefs/com.nimblebit.nimblequest.xml</code> 。</p>
+<h2 id="用-android-內建的備份功能-adb-backup">用 android 內建的備份功能 adb backup</h2>
+<p>這是不需要 root 的作法，但需要在電腦裝 adb 與 java 執行環境
+（不需要 android 開發環境）。
+android 有一個用 adb 執行的備份功能，可以備份和還原 app 的資料；
+再加上另一支 java 程式 <a href="https://github.com/nelenkov/android-backup-extractor/">android backup extractor</a>，可以讀取和製做備份檔。
+我是參考一篇 <a href="https://home.gamer.com.tw/creationDetail.php?sn=4003591">巴哈 alexkeroro 小屋的文章</a> 。</p>
+<p>將手機和電腦連上， <code>adb devices</code> 讀得到後，
+一樣先找到 app 的 id，
+輸入 <code>adb backup -f my-backup.ab -noshared -noapk -noobb com.nimblebit.nimblequest</code> ，
+之後 android 手機會跳出畫面向你確認，
+並要求輸入密碼加密備份檔。
+之後會產生一個名為 my-backup.ab 的備份檔，
+其中不含有 app 的 apk 和 obb 資料。</p>
+<p>如果想把 apk 和 obb 也包在備份檔裡，
+就把 <code>-noapk</code> <code>-noobb</code> 改成 <code>-apk</code> <code>-obb</code> 。
+如果想一次備份多個也可以，就把想備份的 app 名稱列在後面即可；
+如果想備份所有 app 資料，也可以簡單用 <code>-all</code> 參數：
+<code>adb backup -f all-backup.ab -noshared -noapk -noobb -all</code> 。
+另外備份的密碼請記得，忘了沒人救的了你，
+如果你根本不想加密，可以輸入 0 之類的，至少不會忘記。</p>
+<p>之後去下載 android backup extractor，
+<a href="https://github.com/nelenkov/android-backup-extractor/releases">編譯好可以直接用 jre 執行的 jar 檔案可以在 release 找到</a>。
+下載下來後可以用 <code>java -jar abe.jar</code> 執行，
+會列出簡短的使用說明。
+我們首先要把 my-backup.ab 轉換成一般壓縮軟體可以讀的格式：
+<code>java -jar abe.jar unpack my-backup.ab my-backup.tar 0</code> ，
+可以把密碼為 0 的 my-backup.ab 檔案轉換成沒加密的 my-backup.tar 檔案。
+如果你的密碼有特殊字元如空白，請自己加上雙引號。</p>
+<p>解壓後看到的會和手機內的 data 格式不太一樣，
+會是 <code>apps/com.nimblebit.nimblequest/</code> ，
+然後會有 apk 和 data 內的資料等。
+data 內的資料，如 <code>shared_prefs</code> 會變成 <code>sp</code> ，
+files 變成 f 之類的，子資料夾中的其它檔名就還是一樣。
+在修改時一樣要注意保留權限，
+但如果是 windows 我不知道會發生什麼事。</p>
+<p>之後包回去不是單純用 tar 再壓回去就好，
+因為 android backup 對 tar 內的格式要求很高，
+像不能包到父資料夾，順序也不能亂，
+如果只是簡單包回去很容易壞掉。
+可以參考 <a href="https://github.com/nelenkov/android-backup-extractor#packing-tar-archives">android backup extractor 的說明</a> ，
+最保險的作法是參考原本的 tar 來包：</p>
+<pre><code class="lang-sh">tar --list --file my-backup.tar |
+    tar --files-from - --create --file new-backup.tar
+</code></pre>
+<p>包好後就可以用 pack 打包回去：
+<code>java -jar abe.jar pack new-backup.tar new-backup.ab</code> ，
+打包時可以不設密碼，要設一樣打在最後面。
+然後用 <code>adb restore new-backup.ab</code> 就可以了。</p>
+<h2 id="從-recovery-備份的映象檔還原">從 recovery 備份的映象檔還原</h2>
+<p>但我以前的手機多半是刷成磚了或是電池壞了，
+所以也沒辦法用 adb 備份。
+但我有留當時刷機前備份的映象檔，
+就拿出來看能不能找出當時的存檔。</p>
+<p>找了三台手機的備份，第一台是六年前的 zenfone 4，
+第二台是紅米，備份都是直接一個 tar，很好處理。
+可惜那台手機我沒有裝 pumpkins vs monsters，
+所以沒救。
+比較有趣是，可能因為 fat32 檔案大小不能超過 4G，
+所以該 tar 都有切成幾個，
+在解壓時要用 cat 連接起來：
+<code>cat data.tar.? | tar -t &gt; file.list</code> 。</p>
+<p>再往前翻，是 sone ericsson w8，
+這台就比較有趣，當初是用 xrecovery 備份的，
+備份檔真的是映象檔。
+本來預期應該是 ext2 之類的，
+但 <code>file(1)</code>竟然不認識：</p>
+<pre><code class="lang-term">$ file data.img 
+data.img: data
+</code></pre>
+<p>本以為涼了，碰到 xrecovery 的專有格式。
+但還是多少 google 一下 xrecovery data.img format 之類的關鍵字，
+才發現早期的 android 似乎不是用 ext2，
+而是一個稱 yaffs 的檔案系統。
+用 apt 找一下，還給我找到了可以用的工具 unyaffs，
+於是就解開來壓縮，拿到 data 分區裡的資料了。</p>
+<h2 id="pumpkins-vs-monsters">pumpkins vs monsters</h2>
+<p>pumpkins vs monsters 的存檔是放在
+<code>/data/data/com.RunnerGames.game.PumpkinsVsMonster_AD/files/Pumpkins01.ini</code> ，
+而且是個二進位檔，
+這裡就放上我目前的存檔十六進位碼，
+用 <code>xxd -p -r</code> 就可以複原回二進位格式了。</p>
+<pre><code class="lang-sh">e90300000101014a0000001c690200190000001800000019000000020000
+00020000000200000002000000020000000200000001000000000000000c
+000000080000000700000001000000000000000000000000000000000000
+000000000000000000000000000000000000000000000000000000000000
+00000000040000001000000005000000000b000000cb0000000f000000
+</code></pre>
+<p>這個存檔是打完所有基本關卡，
+剩萬聖節的特別關卡還沒過。
+不過我記得當年是有全破的，用炸藥炸一炸就過了。
+而且這個存檔的錢是超多，因為原本很堅持不用炸藥，
+但後來面不用炸藥實在太難，所以還是用了。</p>
+<p>我後來用的 <a href="android-atom-tip.html">atom</a> 螢幕有點小，
+造成雙擊來消除南瓜的判定很難達成，
+所以我幾乎無法消除南瓜。
+這樣用一點炸藥來通關應該還好吧。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

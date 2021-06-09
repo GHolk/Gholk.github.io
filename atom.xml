@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2021-06-04T15:20:45.122Z</updated>
+  <updated>2021-06-09T10:53:12.846Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,457 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/ccns-matrix-synapse-install-note.html</id>
+<title>ccns matrix 安裝筆記</title>
+<published>2021-06-09T10:50:54.151Z</published>
+<updated>2021-06-09T10:53:12.822Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/ccns-matrix-synapse-install-note.html"/>
+<summary type="html">在 ccns 的 pve 上開 ubuntu 容器，
+裝 matrix-synapse 的記錄文件，
+安裝過程參考 &lt;a href=&quot;https://github.com/matrix-org/synapse/blob/a888cbdd314a84cbb477e5b04bd27b7053f08495/INSTALL.md&quot;&gt;官方的安裝說明&lt;/a&gt; 。
+最後再裝上 mx-puppet-discord 橋接 discord 與 matrix 訊息。
+目標是建立一個 discord 的替代方案。
+如果想建立自己的 matrix，可以先看看 &lt;a href=&quot;ccns-matrix-luser-review.html&quot;&gt;另一篇 matrix 使用心得&lt;/a&gt;，
+先確認功能符不符合自己的要求。</summary>
+<category term="linux"/>
+<category term="ccns"/>
+<category term="im"/>
+<category term="matrix"/>
+<category term="自由軟體"/>
+<category term="教學"/>
+<content type="html">&lt;h1 id=&quot;ccns-matrix-安裝筆記&quot;&gt;ccns matrix 安裝筆記&lt;/h1&gt;
+&lt;p&gt;在 ccns 的 pve 上開 ubuntu 容器，
+裝 matrix-synapse 的記錄文件，
+安裝過程參考 &lt;a href=&quot;https://github.com/matrix-org/synapse/blob/a888cbdd314a84cbb477e5b04bd27b7053f08495/INSTALL.md&quot;&gt;官方的安裝說明&lt;/a&gt; 。
+最後再裝上 mx-puppet-discord 橋接 discord 與 matrix 訊息。
+目標是建立一個 discord 的替代方案。
+如果想建立自己的 matrix，可以先看看 &lt;a href=&quot;ccns-matrix-luser-review.html&quot;&gt;另一篇 matrix 使用心得&lt;/a&gt;，
+先確認功能符不符合自己的要求。&lt;/p&gt;
+&lt;p&gt;matrix 是通訊協定與基金會名稱，
+matrix 基金會實作的伺服器端軟體為 &lt;a href=&quot;https://github.com/matrix-org/synapse&quot;&gt;synapse&lt;/a&gt; ，
+客戶端軟體舊稱為 riot，後改名為 &lt;a href=&quot;https://element.io&quot;&gt;element&lt;/a&gt; 。&lt;/p&gt;
+&lt;h2 id=&quot;使用說明&quot;&gt;使用說明&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;最基本可以使用 &lt;a href=&quot;https://app.element.io&quot;&gt;element 的 web 版&lt;/a&gt; 登入，
+要裝桌面版或 android 版也可以。&lt;/li&gt;
+&lt;li&gt;登入時 homeserver 輸入 matrix.ccns.io，帳號密碼同 ccns ldap 服務 。&lt;/li&gt;
+&lt;li&gt;server 名稱為 ccns.io，使用者全名為 &lt;code&gt;@your-name:ccns.io&lt;/code&gt; ，
+頻道全名為 &lt;code&gt;#channel-name:ccns.io&lt;/code&gt; ，
+matrix 通用短連結為 &lt;a href=&quot;mailto:https://matrix.to/#/@gholk:ccns.io&quot;&gt;https://matrix.to/#/@gholk:ccns.io&lt;/a&gt; 。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;synapse-安裝&quot;&gt;synapse 安裝&lt;/h2&gt;
+&lt;p&gt;debian/ubuntu 都可以用 apt 裝，建議用 matrix 的 repository。&lt;/p&gt;
+&lt;h3 id=&quot;相依軟體&quot;&gt;相依軟體&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;postgreSQL: 可以用 ubuntu 官方的套件，如果只是測試用可以用 sqlite。&lt;/li&gt;
+&lt;li&gt;python: 用 matrix.org 提供的第三方 repository，
+直接裝好對應的 python 版本。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;安裝&quot;&gt;安裝&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;wget https://packages.matrix.org/debian/matrix-org-archive-keyring.gpg
+cp matrix-org-archive-keyring.gpg /usr/share/keyrings/
+echo deb [signed-by=/usr/share/keyrings/matrix-org-archive-keyring.gpg] https://packages.matrix.org/debian/ $(lsb_release --codename --short) main &amp;gt; /etc/apt/source.list.d/matrix-org.list
+apt update
+apt install matrix-synapse-py3
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;安裝時會問 server name，填 ccns.io。
+裝好後會自動建立 systemd service，如果有開起來先關掉，
+因為預設是用 sqlite 當資料庫，
+我們要換成 postgresql。&lt;/p&gt;
+&lt;h3 id=&quot;postgresql&quot;&gt;postgresql&lt;/h3&gt;
+&lt;p&gt;參考 &lt;a href=&quot;https://github.com/matrix-org/synapse/blob/a888cbdd314a84cbb477e5b04bd27b7053f08495/docs/postgres.md&quot;&gt;synapse 官方的 postgresql 設定文件&lt;/a&gt; 。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;apt install postgresql # 用 ubuntu 裝 synapse 時會自己裝 libpq5，不用像文件自己裝
+sudo -iu postgres &amp;lt;&amp;lt;POSTGRES
+
+# 以下指令在 postgresql 使用者下執行，
+# 不確定在 root 下執行可不可以。
+createuser --pwprompt synapse_user # 密碼之後要寫到 matrix 的 config 裡
+
+# 進入 sql 介面
+# 輸入以下指令建立表格
+psql &amp;lt;&amp;lt;PSQL
+CREATE DATABASE synapse
+ ENCODING &amp;apos;UTF8&amp;apos;
+ LC_COLLATE=&amp;apos;C&amp;apos;
+ LC_CTYPE=&amp;apos;C&amp;apos;
+ template=template0
+ OWNER synapse_user;
+
+PSQL
+
+POSTGRES
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;最後可能需要修改 &lt;code&gt;/etc/postgresql/12/main/pg_hba.conf&lt;/code&gt;
+讓 synapse 能連線到 postgresql，
+ubuntu 預設允許 localhost 的連線。&lt;/p&gt;
+&lt;p&gt;同時也要修改 &lt;code&gt;/etc/matrix-synapse/homeserver.yaml&lt;/code&gt; 的 database 設定，
+預設是 &lt;code&gt;database.name: sqlite3&lt;/code&gt; ，改成 &lt;code&gt;database.name: psycopg2&lt;/code&gt; ，
+再填入剛才建立的 &lt;code&gt;synapse_user&lt;/code&gt; 的密碼來登入。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-yaml&quot;&gt;database:
+  name: psycopg2
+  args:
+    user: synapse_user
+    password: &amp;quot;**you can&amp;apos;t see me**&amp;quot;
+    database: synapse
+    host: localhost
+    cp_min: 5
+    cp_max: 10
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;synapse-config&quot;&gt;synapse config&lt;/h2&gt;
+&lt;p&gt;現在要來改設定檔了，主要有 &lt;code&gt;/etc/matrix-synapse/homeserver.yaml&lt;/code&gt;
+和 &lt;code&gt;/etc/matrix-synapse/conf.d/*.yaml&lt;/code&gt; 二個地方，
+格式同 yaml， &lt;code&gt;#&lt;/code&gt; 開頭是註解。&lt;/p&gt;
+&lt;h3 id=&quot;well-known-uri&quot;&gt;well known uri&lt;/h3&gt;
+&lt;p&gt;一開始會看到 homeserver.yaml 的 &lt;code&gt;server_name&lt;/code&gt; 被註解掉，
+因為照 debian 的習慣在你安裝時問 &lt;code&gt;server_name&lt;/code&gt; 了，
+已經存在 conf.d/server_name.yaml。&lt;/p&gt;
+&lt;p&gt;這裡的 &lt;code&gt;server_name&lt;/code&gt; 是供其它 matrix server 辨識的 &lt;code&gt;server_name&lt;/code&gt;，
+也就是如果在其它 server 上的使用者如在 matrix.org 上註冊的 r2，
+要和本機器上註冊的 gholk 聯絡，就是要本機的 &lt;code&gt;server_name&lt;/code&gt; ccns.io，
+輸入 &lt;code&gt;@gholk:ccns.io&lt;/code&gt; 來和 gholk 聯絡，
+而不管這台 server 實際上域名是 matrix.ccns.io。&lt;/p&gt;
+&lt;p&gt;可以這樣設是因為 &lt;a href=&quot;https://github.com/matrix-org/synapse/blob/a888cbdd314a84cbb477e5b04bd27b7053f08495/docs/delegate.md&quot;&gt;delegation&lt;/a&gt; 的機制，
+好處有可以用短一點的伺服器名，和可以分散流量。
+有點像 email 上 gmail 都是 &lt;code&gt;username@gmail.com&lt;/code&gt; ，
+但實際上 google 的伺服器不是擺在 gmail.com 這個域名，
+而是用 mx dns 記錄來指向實際的域名。&lt;/p&gt;
+&lt;p&gt;matrix 有 well known uri 和 dns srv record 二種作法，
+而 ccns 則是用 well-known uri，
+也就是當你傳訊息到 &lt;code&gt;*:ccns.io&lt;/code&gt; 時，
+你的 matrix server 要負責把訊息傳到對方的伺服器，
+他會先檢查有沒有 srv 記錄，沒有會再向 ccns.io 這個域名請求
+&lt;code&gt;https://ccns.io/.well-known/matrix/server&lt;/code&gt; ，
+如果這個 json 存在，就會以該 json 中的
+&lt;code&gt;[&amp;quot;m.homeserver&amp;quot;][&amp;quot;base_url&amp;quot;]&lt;/code&gt; 這個欄位的 url，
+作為 ccns.io 這個伺服器名的實際網址。
+如果該網址是 30X 的重導向，server 應該要跟隨此網址。
+最後如果該檔案不存在，就會直接將 ccns.io 視為實際網址。&lt;/p&gt;
+&lt;p&gt;所以再來要新增 &lt;code&gt;https://ccns.io/.well-known/matrix/server&lt;/code&gt; 這個檔案，
+ccns.io 是轉址到 www.ccns.io 的 github-page ccns.github.io 的 cname，
+因此在 &lt;a href=&quot;https://github.com/ccns/ccns.github.io&quot;&gt;ccns/ccns.github.io&lt;/a&gt; 這個 github repo &lt;a href=&quot;https://github.com/ccns/ccns.github.io/commits/main/.well-known/matrix/server&quot;&gt;新增 &lt;code&gt;.well-known/matrix/server&lt;/code&gt; 檔案即可&lt;/a&gt; 。
+預設是走 8448 port，但因為我們設 reverse proxy 的機器有防火牆，
+為了方便我就改 443。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-json&quot;&gt;{&amp;quot;m.server&amp;quot;:&amp;quot;matrix.ccns.io:443&amp;quot;}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;public url 則設成 &lt;code&gt;https://matrix.ccns.io&lt;/code&gt; ，
+這條 url 是用來在 client 登入時使用的。
+依 matrix 規格實作的 client，輸入所在的 server 的 url 時要輸入這條。
+這條和上面的 server name 一樣可以 delegation，
+網址是 &lt;code&gt;/.well-known/matrix/client&lt;/code&gt; ，
+但規範此網址需要有 &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS&quot;&gt;cors&lt;/a&gt; header 好讓 web 前端的 client 能連線，
+同時因為考慮瀏覽器前端的限制較多，不能有重導向；
+最後前端當然沒有發 dns 的能力，
+所以只能用 well-known 而不支援 dns srv 紀錄來重導向。&lt;/p&gt;
+&lt;p&gt;雖然所有 github-page 都有 cors header &lt;code&gt;access-control-allow-origin: *&lt;/code&gt; ，
+（github 真的心臟很大顆。）
+但因為 github-page 的機制，
+ccns.io 所有 http 路徑都 301 轉址到 www.ccns.io 的域名，
+且該轉址的 301 response 沒有 cors header，
+所以前端 client 會死在這裡。
+因此我們不能用 ccns.io 當作前端登入時的名稱，
+只好直接用 matrix.ccns.io。&lt;/p&gt;
+&lt;p&gt;matrix 在 server 與 client
+各規範了類似卻不同的 delegation 方式實在不是很優雅，
+但也是為了幫純前端的 client 考慮。&lt;/p&gt;
+&lt;p&gt;總結 ccns 的 matrix 有二個 server name，
+matrix.ccns.io 與 ccns.io，使用上也很好區分，
+只有要登入時要填 matrix.ccns.io，
+其它在提及使用者 &lt;code&gt;@*:ccns.io&lt;/code&gt; 、頻道 &lt;code&gt;#*:ccns.io&lt;/code&gt; 都是用短的 ccns.io 即可。
+我考慮在提及時用 &lt;code&gt;@*:matrix.ccns.io&lt;/code&gt; 會太長，
+很不方便，就還是設了短的 ccns.io，雖然不太統一，也就這樣了。&lt;/p&gt;
+&lt;h3 id=&quot;synapse-開放的埠&quot;&gt;synapse 開放的埠&lt;/h3&gt;
+&lt;p&gt;再來可以直接跳到 config 的 listen 部份，
+因為 ccns 有 reverse proxy server，
+所以 synapse 端只要設好 http port，也不需設定 tls，
+讓 reverse proxy 處理即可。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-yaml&quot;&gt;listen:
+  - port: 8008
+    tls: false
+    type: http
+    x_forwarded: true
+    # default bind to all
+    #bind_addresses: [&amp;apos;::1&amp;apos;, &amp;apos;127.0.0.1&amp;apos;]                                      
+
+    resources:
+      - names: [client, federation]                        
+        compress: false
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;預設是 8008 http 和 8448 https，
+但因為 reverse proxy 會處理 https，
+所以只開 https 即可。
+因為都是開在 1000 以上的埠，不需要用 root 執行，
+所以 systemd 的 service 裡是用一個 matrix-synapse 的帳號來執行。&lt;/p&gt;
+&lt;p&gt;如果要用內建的 tls 功能的話，要注意一般 tls 憑證需要有 root 權限才能讀取。
+之前我是用 &lt;code&gt;setfacl --modify matrix-synapse:r /etc/letsencrypt/live/$domain_name/fullchain.pem&lt;/code&gt; ，
+再把對目錄的進入權限打開 &lt;code&gt;setfacl --recursive --modify matrix-synapse:rx /etc/letsencrypt/{live,archive}&lt;/code&gt; 。
+不過 pve 的 lxc 似乎不一定有 acl。&lt;/p&gt;
+&lt;h3 id=&quot;nginx-reverse-proxy&quot;&gt;nginx reverse proxy&lt;/h3&gt;
+&lt;p&gt;reverse proxy 的 config synapse 的文件都給的很詳細，
+去找 &lt;a href=&quot;https://github.com/matrix-org/synapse/blob/a888cbdd314a84cbb477e5b04bd27b7053f08495/docs/reverse_proxy.md#nginx&quot;&gt;nginx 的範例&lt;/a&gt; 抄一抄就好了。
+但我看 reverse-proxy.ccns.internal 裡的其它 reverse proxy config，
+像 &lt;code&gt;/etc/nginx/conf.d/md.ccns.moe.conf&lt;/code&gt; ，
+有點不太一樣，像會多設一個 &lt;code&gt;X-Real-IP&lt;/code&gt; 的 http header。&lt;/p&gt;
+&lt;h3 id=&quot;ldap-登入&quot;&gt;ldap 登入&lt;/h3&gt;
+&lt;p&gt;讓社員可以用 ccns 的 ldap 功能登入，
+synapse 裝好就就有附帶 ldap 模組了。
+我不懂 ldap，所以以下設定我也不太懂，
+本社的 ldap 是不對外開放的，要用來驗證登入要先要開一個可以登入的帳號，
+之後把該帳號密碼寫在 &lt;code&gt;bind_dn&lt;/code&gt; &lt;code&gt;bind_password&lt;/code&gt; 裡。&lt;/p&gt;
+&lt;p&gt;ldap 的路徑順序是有意義的，
+階層和 domain name 一樣是反著寫，之間用逗號分隔。
+最底層都是用 dc 代表網域名，cn 是 common name。
+base 那欄大概就是登入時在 ldap.ccns.io
+下的頂級 common name users 中驗證該帳號密碼。&lt;/p&gt;
+&lt;p&gt;有人說 cn 不是唯一的，不建議用來當 uid，
+建議改用 samaccountname，
+但我看社團其它人也都用 cn，就這樣吧。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-yaml&quot;&gt;password_providers:
+    # Example config for an LDAP auth provider
+    - module: &amp;quot;ldap_auth_provider.LdapAuthProvider&amp;quot;
+      config:
+        enabled: true
+        uri: &amp;quot;ldaps://your.url&amp;quot;
+        start_tls: true
+        base: &amp;quot;cn=club,dc=xxxxx,dc=xxx&amp;quot;
+        attributes:
+           uid: &amp;quot;cn&amp;quot;
+           mail: &amp;quot;email&amp;quot;
+           name: &amp;quot;givenName&amp;quot;
+        bind_dn: &amp;quot;uid=matrix-app,cn=club,dc=xxxxx,dc=xxx&amp;quot;
+        bind_password: &amp;quot;**you can&amp;apos;t see me**&amp;quot;
+        filter: &amp;quot;(objectClass=posixAccount)&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;systemctl start matrix-synapse
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;bot&quot;&gt;bot&lt;/h2&gt;
+&lt;p&gt;前面作完 matrix 就可以動了，
+也可以用 ccns 的 ldap 帳號登入了。
+再來要做的事是把 ccns 的 discord 上的訊息，
+用機器人轉送到 matrix 上的同樣頻道。&lt;/p&gt;
+&lt;p&gt;據 &lt;a href=&quot;https://matrix.org/bridges/&quot;&gt;matrix 官方的 bridge 介紹頁&lt;/a&gt; ，
+discord 有二款 bridge 分別是 mx-puppet-discord 和 matrix-appservice-discord。
+matrix-appservice-discord 似乎不能 bridge 所有頻道，
+所以我選擇 &lt;a href=&quot;https://github.com/matrix-discord/mx-puppet-discord&quot;&gt;mx-puppet-discord&lt;/a&gt; 來橋接 discord 和 matrix。
+因為我的目的是想把 discord 整個換成 matrix，
+而不是像 telegram 的 bridge 那樣，只把 general 搬過去。
+mx-puppet-discord 還有個功能是，可以在建立、刪除 discord 頻道時，
+在 matrix 也進行相同的操作。&lt;/p&gt;
+&lt;p&gt;其實還有另一個選擇是 &lt;a href=&quot;https://github.com/42wim/matterbridge/&quot;&gt;matterbridge&lt;/a&gt; 這個八爪章魚，支援最多平台的 bridge。
+用 go 語言寫的，直接下載一個靜態連結執行檔就可以動了，
+matterbridge 是寫設定檔控制要橋接哪些頻道，
+而 mx-puppet-discord 則是用對聊天機器下指令的方式控制。&lt;/p&gt;
+&lt;h3 id=&quot;mx-puppet-bridge-安裝&quot;&gt;mx-puppet-bridge 安裝&lt;/h3&gt;
+&lt;p&gt;安裝和設定我是參考 &lt;a href=&quot;https://github.com/matrix-discord/mx-puppet-discord/tree/c17384a&quot;&gt;mx-puppet-discord 的 README.md&lt;/a&gt; 。&lt;/p&gt;
+&lt;h4 id=&quot;相依套件&quot;&gt;相依套件&lt;/h4&gt;
+&lt;p&gt;這是用 node js 寫的，所以請先裝好 node.js 和 npm 全家桶，
+同時因為 npm install 時某些套件會用到 git url，
+所以也要裝 git，最後因為某些 npm 套件用到 sqlite，
+需要用 node-gyp，所以 gcc 和 make 也要裝起來。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;apt install build-essential git
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&quot;安裝&quot;&gt;安裝&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-shell&quot;&gt;git clone https://github.com/matrix-discord/mx-puppet-discord
+cd mx-puppet-discord
+npm install
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;mx-puppet-discord-設定&quot;&gt;mx-puppet-discord 設定&lt;/h3&gt;
+&lt;h4 id=&quot;mx-puppet-discord-設定檔&quot;&gt;mx-puppet-discord 設定檔&lt;/h4&gt;
+&lt;p&gt;直接貼 &lt;code&gt;diff -u sample.config.yaml config.yaml&lt;/code&gt; 的結果：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-diff&quot;&gt;--- sample.config.yaml    2021-05-17 07:50:26.635416325 +0000
++++ config.yaml    2021-05-18 15:42:43.195383396 +0000
+@@ -7,10 +7,10 @@
+   bindAddress: localhost
+
+   # Public domain of the homeserver
+-  domain: matrix.org
++  domain: ccns.io
+
+   # Reachable URL of the Matrix homeserver
+-  homeserverUrl: https://matrix.org
++  homeserverUrl: https://matrix.ccns.io
+
+   # Optionally specify a different media URL used for the media store
+   #
+@@ -36,7 +36,7 @@
+   displayname: Discord Puppet Bridge
+
+   # Avatar URL of the bridge bot
+-  #avatarUrl: mxc://example.com/abcdef12345
++  avatarUrl: mxc://ccns.io/ztBApnmUJETzBSYuRkOmqNgo
+
+   # Whether to create groups for each Discord Server
+   #
+@@ -46,7 +46,7 @@
+
+ presence:
+   # Bridge Discord online/offline status
+-  enabled: true
++  enabled: false
+
+   # How often to send status to the homeserver in milliseconds
+   interval: 500
+@@ -58,7 +58,7 @@
+     #- &amp;quot;@user:server\\.com&amp;quot;
+
+     # Allow users on a specific homeserver
+-    - &amp;quot;@.*:server\\.com&amp;quot;
++    - &amp;quot;@.*:ccns\\.io&amp;quot;
+
+     # Allow anyone
+     #- &amp;quot;.*&amp;quot;
+@@ -78,7 +78,7 @@
+   #
+   # Same format as in provisioning
+   whitelist:
+-    - &amp;quot;@.*:yourserver\\.com&amp;quot;
++    - &amp;quot;.*&amp;quot;
+
+   #blacklist:
+     #- &amp;quot;@user:yourserver\\.com&amp;quot;
+@@ -88,7 +88,7 @@
+   #
+   # Same format as in provisioning
+   whitelist:
+-    - &amp;quot;@.*:server\\.com&amp;quot;
++    - &amp;quot;@.*:ccns\\.io&amp;quot;
+
+   #blacklist:
+     #- &amp;quot;@user:server\\.com&amp;quot;
+@@ -145,12 +145,12 @@
+   # with username &amp;quot;user&amp;quot;, password &amp;quot;pass&amp;quot;, host &amp;quot;localhost&amp;quot; and database name &amp;quot;dbname&amp;quot;.
+   #
+   # Modify each value as necessary
+-  #connString: &amp;quot;postgres://user:pass@localhost/dbname?sslmode=disable&amp;quot;
++  connString: &amp;quot;postgres://bridge-discord-matrix:password@localhost/bridge_discord_matrix?sslmode=disable&amp;quot;
+
+   # Use SQLite3 as a database backend
+   #
+   # The name of the database file
+-  filename: database.db
++  #filename: database.db
+
+ limits:
+   # Up to how many users should be auto-joined on room creation? -1 to disable
+@@ -169,7 +169,7 @@
+   #
+   # Allowed values starting with most verbose:
+   # silly, verbose, info, warn, error
+-  console: info
++  console: error
+
+   # Date and time formatting
+   lineDateFormat: MMM-D HH:mm:ss.SSS
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;domain 是 well-known url，homeserverurl 是登入用的，要加 matrix。&lt;/li&gt;
+&lt;li&gt;avartarUrl 可設可不設，我是把圖片在和 bot 的對話，就可以用 dev tool 看到 mxc url。&lt;/li&gt;
+&lt;li&gt;上下線狀態為了減少伺服器負擔我就關掉了，因為我們的 discord server 人有點多。&lt;/li&gt;
+&lt;li&gt;provisioning, relay, selfService 三個 whitelist：&lt;ul&gt;
+&lt;li&gt;relay 是指誰可以加入 bridge 的頻道發言，並被 bridge 到 discord 上。&lt;/li&gt;
+&lt;li&gt;另外二個可能是誰能對 bot 下指令&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;database 那裡，要新建一個資料庫，然後把對應有存取權限的帳號密碼打上去。
+文件裡也沒寫要怎麼建，我就照著 synapse 的建法，
+建立一個 bridge 用的帳號，和對應的資料庫。
+connString 的內容中 user 和 dbname，
+要換成對應的使用者帳號和資料庫名稱。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-shell=&quot;&gt;# 先用 sudo -su postgres 切換為 postgres 的 uid
+createuser --pwprompt bridge-discord-matrix
+# 進入 sql 介面後輸入以下指令
+psql &amp;lt;&amp;lt;PSQL
+CREATE DATABASE bridge_discord_matrix
+ ENCODING &amp;apos;UTF8&amp;apos;
+ LC_COLLATE=&amp;apos;C&amp;apos;
+ LC_CTYPE=&amp;apos;C&amp;apos;
+ template=template0
+ OWNER &amp;quot;bridge-discord-matrix&amp;quot;;
+
+PSQL
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;另外，synapse 的設定檔要允許建立頻道：
+&lt;code&gt;enable_group_creation: true&lt;/code&gt; 。&lt;/p&gt;
+&lt;h4 id=&quot;產生-appservice-註冊檔&quot;&gt;產生 appservice 註冊檔&lt;/h4&gt;
+&lt;p&gt;appservice 有點像是擴充元件，是 synapse 和其它程式互動時，
+其它程式向 synapse 註冊的方式。
+下面這個指令會產生一個 appservice 註冊檔案 &lt;code&gt;discord-registration.yaml&lt;/code&gt; ，
+在 synapse 設定檔中載入這個檔案後，
+此 mx-puppet-discord 即可和該 synapse 連接互動。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-shell=&quot;&gt;npm run start -- -r -c config.yaml -f discord-registration-puppet.yaml
+sudo cp discord-registration-puppet.yaml /etc/matrix-synapse
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;之後在 &lt;code&gt;/etc/matrix-synapse/homeserver.yaml&lt;/code&gt; 
+或其它 synapse 設定檔中，指定要載入此 appservice 檔即可，
+我是建議放到 &lt;code&gt;/etc/matrix-synapse&lt;/code&gt; 下，
+把 owner 改成 root，比較安全，比較不容易被亂改。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-yaml&quot;&gt;# A list of application service config files to use
+#
+app_service_config_files:
+  - /etc/matrix-synapse/discord-registration-puppet.yaml
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;要寫絕對路徑是因為 config file 的路徑似乎是相對於 cwd，
+以 debian 裝的 synapse 來說，cwd 是 &lt;code&gt;/var/lib/matrix-synapse&lt;/code&gt; ，
+寫在 systemd.service 裡的。&lt;/p&gt;
+&lt;h4 id=&quot;啟動&quot;&gt;啟動&lt;/h4&gt;
+&lt;p&gt;對，就可以啟動了 &lt;code&gt;npm start&lt;/code&gt; 。
+加入 discord bot token 是用 bot 的指令做，
+但加入 matrix 的 app service 是要寫設定檔，我不知道為什麼。&lt;/p&gt;
+&lt;p&gt;可以用 &lt;code&gt;nohup npm start &amp;gt;/dev/null 2&amp;gt;&amp;amp;1 &amp;amp;&lt;/code&gt; 來在背景執行，
+預設 log 除了 stdout，也會寫入在 cwd 下。&lt;/p&gt;
+&lt;p&gt;傳私人訊息給 &lt;code&gt;@_discordpuppet_bot:ccns.io&lt;/code&gt; 就可以下指令了，
+可以先用 &lt;code&gt;help&lt;/code&gt; 看有哪些哪些指令，
+&lt;code&gt;help xx-command&lt;/code&gt; 可以看指令格式。&lt;/p&gt;
+&lt;h4 id=&quot;discord-bot&quot;&gt;discord bot&lt;/h4&gt;
+&lt;p&gt;在 &lt;a href=&quot;https://discord.com/developers/&quot;&gt;discord developer&lt;/a&gt; 建立一個 bridge 用應用程式，再在應用程式下建立一個 bot，
+把 bot 邀請到 discord 伺服器裡，要是 server owner。
+邀請時用這個連結： &lt;a href=&quot;https://discord.com/oauth2/authorize?client_id=123456789012345678&amp;amp;scope=bot&amp;amp;permissions=607250432&quot;&gt;https://discord.com/oauth2/authorize?client_id=123456789012345678&amp;amp;scope=bot&amp;amp;permissions=607250432&lt;/a&gt; ，
+把 client id 改成應用程式的 id，
+&lt;a href=&quot;https://github.com/Half-Shot/matrix-appservice-discord/blob/0803376/src/util.ts#L109&quot;&gt;permissions 是我從另一個專案抄過來的&lt;/a&gt; 。&lt;/p&gt;
+&lt;p&gt;然後在 discord developer 網站裡把 bot token 複製下來，
+在 matrix 上傳訊息給 bot： &lt;code&gt;link bot your.token-here&lt;/code&gt; ，
+就連結成功了。&lt;/p&gt;
+&lt;h4 id=&quot;連結頻道&quot;&gt;連結頻道&lt;/h4&gt;
+&lt;p&gt;用 help 可以看 bot 的指令，
+先把 discord bot 的 token 傳過去：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;link bot your.token
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;puppet id 似乎是對應一個 discord bot。
+先設定 bridge 時的模式，讓 bridge 的頻道為公開，不然預設是加密；
+matrix 預設保護隱私的作法有時也很傷腦筋。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# see puppet id
+list
+# if puppet id is 1
+# relay mode mean not only message but also author are bridge
+settype 1 relay
+# first 1 is puppet id, and second 1 is true
+bridgeall 1 1
+setispublic 1 1
+setisglobalnamespace 1 1
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;而一個 bot 可以加入多個 discord server
+（在 api 中稱 server 為 guild），
+用 listguilds 看該 bot 加入了哪些 guild，
+之後就 bridge 了。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;# list server(guild) which discord bot join
+listguilds 1
+# if discord guild id is 330361502643257345
+bridgeguild 1 123455555555555555
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;bridge 後頻道的地址會很長一串很醜，
+可以進頻道管理選單裡新增其它地址，一個頻道可以有多個地址，
+但要是該頻道的管理員才行。
+預設 bridge 過來的頻道只有該 bot 是管理員，
+要用 adminme 指令把自己加為管理員。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;adminme #_discordpuppet__330361736932884482:ccns.io
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;bridge 來一堆頻道後，要一一加入很麻煩，
+可以向 bot 傳 joinentireguild 指令，
+讓 bot 自動向你發邀請。
+如果覺得要一一確認邀請很麻煩，
+可以在個人設定裡 security 頁面好像可以一次同意所有邀請。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;joinentireguild 1 330361502643257345
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;如果想知道怎麼用指令打 http request
+用 restfull api 一次全部改名和修正頻道權限，
+請參考下一篇 &lt;a href=&quot;ccns-matrix-luser-review.html&quot;&gt;matrix review&lt;/a&gt;。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/android-copy-game-save-data.html</id>
 <title>從舊手機備份中拷貝遊戲的存檔</title>
 <published>2021-06-04T13:44:43.447Z</published>
@@ -2677,106 +3128,7 @@ bios 沒顯示可以從 usb 開機，但確實是可以，
 <category term="linux"/>
 <category term="開機碟"/>
 <category term="overlayfs"/>
-<content type="html">&lt;h1 id=&quot;老筆電從-usb-開機時使用-usb-3.0-與-cd-fs-的問題&quot;&gt;老筆電從 usb 開機時使用 usb 3.0 與 cd fs 的問題&lt;/h1&gt;
-&lt;p&gt;試著把家裡一台老筆電 acer travel mate 4000 開機，
-想開機成 linux 作業系統。
-bios 沒顯示可以從 usb 開機，但確實是可以，
-只是他開機時不認 cd fs 格式的隨身碟，只認 mbr；
-而且不能是 usb 3.0 的隨身碟。
-後來就用了 i386 的 antix 開機成功。&lt;/p&gt;
-&lt;h2 id=&quot;生出一台光碟機&quot;&gt;生出一台光碟機&lt;/h2&gt;
-&lt;p&gt;事件起因是需要讀光碟，
-一開始想法是弄一個外接光碟機，
-本來拆了一台桌機的 sata 光碟機，
-再用 sata 轉 usb 的轉接頭，接到筆電上，
-結果筆電讀不到光碟機。&lt;/p&gt;
-&lt;p&gt;筆電讀到時都是顯示為 &lt;code&gt;/dev/sd?&lt;/code&gt; ，
-但光碟機應該是 &lt;code&gt;/dev/sr?&lt;/code&gt; ，我猜是轉接頭的問題。
-可能一種轉接頭只能對應一種裝置，
-因為用 lsusb 時會看到該 usb 是何種裝置，
-而那個種類可能是寫死在轉接頭裡的。
-而我當時買的是對應硬碟的，所以電腦會認成硬碟，
-把光碟機當硬碟來讀來就會出錯。&lt;/p&gt;
-&lt;p&gt;問了 &lt;a href=&quot;http://ccns.io&quot;&gt;ccns&lt;/a&gt; 的朋友，說可能是電壓不足，
-因為筆電的電壓可能不能供應桌機的；
-但我按退片鍵是可以退片的。
-總之我就想到另一條路，用筆電的光碟機去試。&lt;/p&gt;
-&lt;p&gt;想起家裡有一台老筆電 acer travel mate 4000 有光碟機，於是就翻出來用。
-本來拆到一半拆不掉，翻維護手冊才發現拆光碟機要拆到鍵盤，
-覺得太麻煩了，就試著直接開機，如果可以開機，
-就用隨身碟開進 linux，再用 linux 來讀光碟。
-（因為我想要完整拷一張光碟，而不只是讀出裡面的資料。）&lt;/p&gt;
-&lt;h2 id=&quot;開機進-linux&quot;&gt;開機進 linux&lt;/h2&gt;
-&lt;p&gt;這台是小時候買的，那時候還拿來打楓之谷。
-家裡電腦都是超舊的 32 位元的，有 windows 7 也有 xp。
-只有後來升大學後買的電腦比較新，也就都是 64 位元。&lt;/p&gt;
-&lt;p&gt;本來還不確定能不能用 usb 開機，
-因為我聽說以前電腦都是光碟開機，
-只有比較新的有隨身碟開機的功能。
-看了 bios 裡面只有 hdd cd floppy 三種選項，
-本來想沒救了，但還是姑且一試插著開機碟，
-結果竟然可以；原來隨身碟會顯示在 hdd 下面。&lt;/p&gt;
-&lt;p&gt;但按 F12 進開機選單時，所有 hdd 都在同一個選項下，
-包括內建的硬碟和外接的隨身碟，
-不能選要用哪個開，要改得要按 F2 進 bios，
-按 F5 F6 調硬碟的開機順序。&lt;/p&gt;
-&lt;h3 id=&quot;開機光碟-cd-fs-格式的問題&quot;&gt;開機光碟 cd fs 格式的問題&lt;/h3&gt;
-&lt;p&gt;於是就隨便拿了一顆隨身碟來開機，因為 cpu 是 32 位元，
-就拿了 &lt;a href=&quot;http://newtoypia.blogspot.com/&quot;&gt;玩具烏托邦&lt;/a&gt; 的 &lt;a href=&quot;https://newtoypia.blogspot.com/2014/09/chinese-finnix.html&quot;&gt;finnix&lt;/a&gt; 來用，
-這張映像檔有 32 也有 64 位元，
-而且用來救援的 os，相容性應該不錯。&lt;/p&gt;
-&lt;p&gt;結果開機後開機碟的 boot loader isolinux
-一直顯示 operating system not found，
-我也不知道怎魔回事，一開始還以為是筆電不支援隨身碟開機。
-後來死馬當活馬醫，隨便換一顆 ubuntu 64 位元的，竟然就可以了；
-只是會顯示該 cpu 為 32 位元，無法開機。&lt;/p&gt;
-&lt;p&gt;檢查了二個隨身碟有什麼不同，
-這二顆都是用 &lt;code&gt;cat cdrom.iso &amp;gt; /dev/sdz&lt;/code&gt; 做的，
-結果發現用 file 檢查映像檔時，顯示的訊息不太一樣：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ $ file finnix-ckhung16c.iso ubuntu-18.04-desktop-amd64.iso 
-finnix-ckhung16c.iso:           ISO 9660 CD-ROM filesystem data &amp;apos;Finnix 110&amp;apos; (bootable)
-ubuntu-18.04-desktop-amd64.iso: DOS/MBR boot sector; partition 2 : ID=0xef, start-CHS (0x3ff,254,63), end-CHS (0x3ff,254,63), startsector 3672780, 4672 sectors
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;finnix 的檔案開頭是 32kb 的 null，而 ubuntu 開頭有東西。
-所以 finnix 的檔案就是 cd 映像檔沒錯，
-但 ubuntu 似乎是一個 mbr 分割的硬碟的映像檔。
-（可是我掛載 ubuntu 映像檔時，
-也是用 cd 的格式去掛載，這我就無法解釋了。）&lt;/p&gt;
-&lt;p&gt;所以我推測是該筆電用隨身碟開機時，是只把隨身碟當硬碟來讀
-所以如果是 cd 格式會開不起來。
-我知道 ubuntu 和 debian 的開機碟映像檔都是 mbr 格式，
-finnix 可能因為本來是設計來燒成 cd 的，所以就是 cd 格式。&lt;/p&gt;
-&lt;p&gt;另一可能是下載時，其實 ubuntu 也有分很多版本，
-有 cd dvd usb，可能是 finnix 是 cd only 的，
-而一般隨身碟要用 hybird image，同時是 mbr 也是 cd 的。&lt;/p&gt;
-&lt;h3 id=&quot;antix-與切割開機碟&quot;&gt;antix 與切割開機碟&lt;/h3&gt;
-&lt;p&gt;我後來是用 antix，這款號稱設計給老舊機器的發行版，
-選了他的 i386 full 版本。
-antix 的開機選項蠻多的，開機選單也很華麗，
-可以選視窗管理程式、解析度、是否要存檔，
-但倒是沒有像 finnix 把不同位元放在一起，
-可能是會讓空間變二倍吧。&lt;/p&gt;
-&lt;p&gt;antix 還有一個功能是能在隨身碟上永久使用；
-用 overlay fs 技術加上 loop device，
-先建一個大檔案，把該檔案掛載成塊裝置，
-之後格式化為作業系統，再用 overlay fs
-在原本唯讀的開機碟系統上疊一個可寫的檔案系統。&lt;/p&gt;
-&lt;p&gt;而且由於 antix 才 1G 多，隨身碟後面還有空間，
-可以用 fdisk 再切出新分割，把檔案系統映象檔丟在上面即可；
-甚至是直接把該分割掛載成 home。
-這種作法似乎是從 puppy linux 開始流行的，
-只要帶著一顆隨身碟，全世界的電腦都可以是我的電腦。
-後來一些可以裝在隨身碟的輕量 linux 都會加這功能。&lt;/p&gt;
-&lt;p&gt;如果再把加密的技術應用上去，加密檔案系統的映像，
-那就和 tails 的作法有點像。
-每次開機後要先解密映像才會看到資料，
-不然只是一個空的作業系統。&lt;/p&gt;
-&lt;h3 id=&quot;usb-3.0-的問題&quot;&gt;usb 3.0 的問題&lt;/h3&gt;
-&lt;p&gt;另一個問題是我用另一顆 usb 3.0 的隨身碟會無法開機，
-我猜是該 bios 可能不能用 usb 3.0 開機，但進作業系統後，
-無論是 linux 還是 xp 都可以讀到 usb 3.0 的內容。
-所以可能是無法開機的問題而已。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/farewell-bedroom-office-chair-study.html</id>
 <title>再會臥室的電腦椅</title>

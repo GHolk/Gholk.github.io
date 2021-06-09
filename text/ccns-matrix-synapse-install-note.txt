@@ -1,0 +1,550 @@
+# ccns matrix 安裝筆記
+在 ccns 的 pve 上開 ubuntu 容器，
+裝 matrix-synapse 的記錄文件，
+安裝過程參考 [官方的安裝說明] 。
+最後再裝上 mx-puppet-discord 橋接 discord 與 matrix 訊息。
+目標是建立一個 discord 的替代方案。
+如果想建立自己的 matrix，可以先看看 [另一篇 matrix 使用心得][matrix review]，
+先確認功能符不符合自己的要求。
+
+[matrix review]: ccns-matrix-luser-review.html
+[官方的安裝說明]: https://github.com/matrix-org/synapse/blob/a888cbdd314a84cbb477e5b04bd27b7053f08495/INSTALL.md
+
+matrix 是通訊協定與基金會名稱，
+matrix 基金會實作的伺服器端軟體為 [synapse] ，
+客戶端軟體舊稱為 riot，後改名為 [element] 。
+
+[element]: https://element.io
+[synapse]: https://github.com/matrix-org/synapse
+
+## 使用說明
+* 最基本可以使用 [element 的 web 版][element web app] 登入，
+  要裝桌面版或 android 版也可以。
+* 登入時 homeserver 輸入 matrix.ccns.io，帳號密碼同 ccns ldap 服務 。
+* server 名稱為 ccns.io，使用者全名為 `@your-name:ccns.io` ，
+  頻道全名為 `#channel-name:ccns.io` ，
+  matrix 通用短連結為 <https://matrix.to/#/@gholk:ccns.io> 。
+
+[element web app]: https://app.element.io
+
+
+## synapse 安裝
+debian/ubuntu 都可以用 apt 裝，建議用 matrix 的 repository。
+
+### 相依軟體
+* postgreSQL: 可以用 ubuntu 官方的套件，如果只是測試用可以用 sqlite。
+* python: 用 matrix.org 提供的第三方 repository，
+  直接裝好對應的 python 版本。
+
+### 安裝
+```shell
+wget https://packages.matrix.org/debian/matrix-org-archive-keyring.gpg
+cp matrix-org-archive-keyring.gpg /usr/share/keyrings/
+echo deb [signed-by=/usr/share/keyrings/matrix-org-archive-keyring.gpg] https://packages.matrix.org/debian/ $(lsb_release --codename --short) main > /etc/apt/source.list.d/matrix-org.list
+apt update
+apt install matrix-synapse-py3
+```
+
+安裝時會問 server name，填 ccns.io。
+裝好後會自動建立 systemd service，如果有開起來先關掉，
+因為預設是用 sqlite 當資料庫，
+我們要換成 postgresql。
+
+### postgresql
+參考 [synapse 官方的 postgresql 設定文件](https://github.com/matrix-org/synapse/blob/a888cbdd314a84cbb477e5b04bd27b7053f08495/docs/postgres.md) 。
+
+```shell
+apt install postgresql # 用 ubuntu 裝 synapse 時會自己裝 libpq5，不用像文件自己裝
+sudo -iu postgres <<POSTGRES
+
+# 以下指令在 postgresql 使用者下執行，
+# 不確定在 root 下執行可不可以。
+createuser --pwprompt synapse_user # 密碼之後要寫到 matrix 的 config 裡
+
+# 進入 sql 介面
+# 輸入以下指令建立表格
+psql <<PSQL
+CREATE DATABASE synapse
+ ENCODING 'UTF8'
+ LC_COLLATE='C'
+ LC_CTYPE='C'
+ template=template0
+ OWNER synapse_user;
+
+PSQL
+
+POSTGRES
+```
+
+最後可能需要修改 `/etc/postgresql/12/main/pg_hba.conf`
+讓 synapse 能連線到 postgresql，
+ubuntu 預設允許 localhost 的連線。
+
+同時也要修改 `/etc/matrix-synapse/homeserver.yaml` 的 database 設定，
+預設是 `database.name: sqlite3` ，改成 `database.name: psycopg2` ，
+再填入剛才建立的 `synapse_user` 的密碼來登入。
+
+```yaml
+database:
+  name: psycopg2
+  args:
+    user: synapse_user
+    password: "**you can't see me**"
+    database: synapse
+    host: localhost
+    cp_min: 5
+    cp_max: 10
+```
+
+## synapse config
+現在要來改設定檔了，主要有 `/etc/matrix-synapse/homeserver.yaml`
+和 `/etc/matrix-synapse/conf.d/*.yaml` 二個地方，
+格式同 yaml， `#` 開頭是註解。
+
+### well known uri
+一開始會看到 homeserver.yaml 的 `server_name` 被註解掉，
+因為照 debian 的習慣在你安裝時問 `server_name` 了，
+已經存在 conf.d/server_name.yaml。
+
+這裡的 `server_name` 是供其它 matrix server 辨識的 `server_name`，
+也就是如果在其它 server 上的使用者如在 matrix.org 上註冊的 r2，
+要和本機器上註冊的 gholk 聯絡，就是要本機的 `server_name` ccns.io，
+輸入 `@gholk:ccns.io` 來和 gholk 聯絡，
+而不管這台 server 實際上域名是 matrix.ccns.io。
+
+可以這樣設是因為 [delegation] 的機制，
+好處有可以用短一點的伺服器名，和可以分散流量。
+有點像 email 上 gmail 都是 `username@gmail.com` ，
+但實際上 google 的伺服器不是擺在 gmail.com 這個域名，
+而是用 mx dns 記錄來指向實際的域名。
+
+matrix 有 well known uri 和 dns srv record 二種作法，
+而 ccns 則是用 well-known uri，
+也就是當你傳訊息到 `*:ccns.io` 時，
+你的 matrix server 要負責把訊息傳到對方的伺服器，
+他會先檢查有沒有 srv 記錄，沒有會再向 ccns.io 這個域名請求
+`https://ccns.io/.well-known/matrix/server` ，
+如果這個 json 存在，就會以該 json 中的
+`["m.homeserver"]["base_url"]` 這個欄位的 url，
+作為 ccns.io 這個伺服器名的實際網址。
+如果該網址是 30X 的重導向，server 應該要跟隨此網址。
+最後如果該檔案不存在，就會直接將 ccns.io 視為實際網址。
+
+所以再來要新增 `https://ccns.io/.well-known/matrix/server` 這個檔案，
+ccns.io 是轉址到 www.ccns.io 的 github-page ccns.github.io 的 cname，
+因此在 [ccns/ccns.github.io] 這個 github repo [新增 `.well-known/matrix/server` 檔案即可][git add well-known] 。
+預設是走 8448 port，但因為我們設 reverse proxy 的機器有防火牆，
+為了方便我就改 443。
+
+```json
+{"m.server":"matrix.ccns.io:443"}
+```
+
+[ccns/ccns.github.io]: https://github.com/ccns/ccns.github.io
+[git add well-known]: https://github.com/ccns/ccns.github.io/commits/main/.well-known/matrix/server
+[delegation]: https://github.com/matrix-org/synapse/blob/a888cbdd314a84cbb477e5b04bd27b7053f08495/docs/delegate.md
+
+public url 則設成 `https://matrix.ccns.io` ，
+這條 url 是用來在 client 登入時使用的。
+依 matrix 規格實作的 client，輸入所在的 server 的 url 時要輸入這條。
+這條和上面的 server name 一樣可以 delegation，
+網址是 `/.well-known/matrix/client` ，
+但規範此網址需要有 [cors] header 好讓 web 前端的 client 能連線，
+同時因為考慮瀏覽器前端的限制較多，不能有重導向；
+最後前端當然沒有發 dns 的能力，
+所以只能用 well-known 而不支援 dns srv 紀錄來重導向。
+
+[cors]: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+
+雖然所有 github-page 都有 cors header `access-control-allow-origin: *` ，
+（github 真的心臟很大顆。）
+但因為 github-page 的機制，
+ccns.io 所有 http 路徑都 301 轉址到 www.ccns.io 的域名，
+且該轉址的 301 response 沒有 cors header，
+所以前端 client 會死在這裡。
+因此我們不能用 ccns.io 當作前端登入時的名稱，
+只好直接用 matrix.ccns.io。
+
+matrix 在 server 與 client
+各規範了類似卻不同的 delegation 方式實在不是很優雅，
+但也是為了幫純前端的 client 考慮。
+
+總結 ccns 的 matrix 有二個 server name，
+matrix.ccns.io 與 ccns.io，使用上也很好區分，
+只有要登入時要填 matrix.ccns.io，
+其它在提及使用者 `@*:ccns.io` 、頻道 `#*:ccns.io` 都是用短的 ccns.io 即可。
+我考慮在提及時用 `@*:matrix.ccns.io` 會太長，
+很不方便，就還是設了短的 ccns.io，雖然不太統一，也就這樣了。
+
+### synapse 開放的埠
+再來可以直接跳到 config 的 listen 部份，
+因為 ccns 有 reverse proxy server，
+所以 synapse 端只要設好 http port，也不需設定 tls，
+讓 reverse proxy 處理即可。
+
+```yaml
+listen:
+  - port: 8008
+    tls: false
+    type: http
+    x_forwarded: true
+    # default bind to all
+    #bind_addresses: ['::1', '127.0.0.1']                                      
+
+    resources:
+      - names: [client, federation]                        
+        compress: false
+```
+
+預設是 8008 http 和 8448 https，
+但因為 reverse proxy 會處理 https，
+所以只開 https 即可。
+因為都是開在 1000 以上的埠，不需要用 root 執行，
+所以 systemd 的 service 裡是用一個 matrix-synapse 的帳號來執行。
+
+如果要用內建的 tls 功能的話，要注意一般 tls 憑證需要有 root 權限才能讀取。
+之前我是用 `setfacl --modify matrix-synapse:r /etc/letsencrypt/live/$domain_name/fullchain.pem` ，
+再把對目錄的進入權限打開 `setfacl --recursive --modify matrix-synapse:rx /etc/letsencrypt/{live,archive}` 。
+不過 pve 的 lxc 似乎不一定有 acl。
+
+### nginx reverse proxy
+reverse proxy 的 config synapse 的文件都給的很詳細，
+去找 [nginx 的範例][nginx synapse] 抄一抄就好了。
+但我看 reverse-proxy.ccns.internal 裡的其它 reverse proxy config，
+像 `/etc/nginx/conf.d/md.ccns.moe.conf` ，
+有點不太一樣，像會多設一個 `X-Real-IP` 的 http header。
+
+[nginx synapse]: https://github.com/matrix-org/synapse/blob/a888cbdd314a84cbb477e5b04bd27b7053f08495/docs/reverse_proxy.md#nginx
+
+### ldap 登入
+讓社員可以用 ccns 的 ldap 功能登入，
+synapse 裝好就就有附帶 ldap 模組了。
+我不懂 ldap，所以以下設定我也不太懂，
+本社的 ldap 是不對外開放的，要用來驗證登入要先要開一個可以登入的帳號，
+之後把該帳號密碼寫在 `bind_dn` `bind_password` 裡。
+
+ldap 的路徑順序是有意義的，
+階層和 domain name 一樣是反著寫，之間用逗號分隔。
+最底層都是用 dc 代表網域名，cn 是 common name。
+base 那欄大概就是登入時在 ldap.ccns.io
+下的頂級 common name users 中驗證該帳號密碼。
+
+有人說 cn 不是唯一的，不建議用來當 uid，
+建議改用 samaccountname，
+但我看社團其它人也都用 cn，就這樣吧。
+
+```yaml
+password_providers:
+    # Example config for an LDAP auth provider
+    - module: "ldap_auth_provider.LdapAuthProvider"
+      config:
+        enabled: true
+        uri: "ldaps://your.url"
+        start_tls: true
+        base: "cn=club,dc=xxxxx,dc=xxx"
+        attributes:
+           uid: "cn"
+           mail: "email"
+           name: "givenName"
+        bind_dn: "uid=matrix-app,cn=club,dc=xxxxx,dc=xxx"
+        bind_password: "**you can't see me**"
+        filter: "(objectClass=posixAccount)"
+```
+
+```sh
+systemctl start matrix-synapse
+```
+
+## bot
+前面作完 matrix 就可以動了，
+也可以用 ccns 的 ldap 帳號登入了。
+再來要做的事是把 ccns 的 discord 上的訊息，
+用機器人轉送到 matrix 上的同樣頻道。
+
+據 [matrix 官方的 bridge 介紹頁][matrix bridge] ，
+discord 有二款 bridge 分別是 mx-puppet-discord 和 matrix-appservice-discord。
+matrix-appservice-discord 似乎不能 bridge 所有頻道，
+所以我選擇 [mx-puppet-discord] 來橋接 discord 和 matrix。
+因為我的目的是想把 discord 整個換成 matrix，
+而不是像 telegram 的 bridge 那樣，只把 general 搬過去。
+mx-puppet-discord 還有個功能是，可以在建立、刪除 discord 頻道時，
+在 matrix 也進行相同的操作。
+
+[matrix bridge]: https://matrix.org/bridges/
+[mx-puppet-discord]: https://github.com/matrix-discord/mx-puppet-discord
+
+其實還有另一個選擇是 [matterbridge] 這個八爪章魚，支援最多平台的 bridge。
+用 go 語言寫的，直接下載一個靜態連結執行檔就可以動了，
+matterbridge 是寫設定檔控制要橋接哪些頻道，
+而 mx-puppet-discord 則是用對聊天機器下指令的方式控制。
+
+[matterbridge]: https://github.com/42wim/matterbridge/
+
+### mx-puppet-bridge 安裝
+安裝和設定我是參考 [mx-puppet-discord 的 README.md][mx-puppet-discord install] 。
+
+#### 相依套件
+這是用 node js 寫的，所以請先裝好 node.js 和 npm 全家桶，
+同時因為 npm install 時某些套件會用到 git url，
+所以也要裝 git，最後因為某些 npm 套件用到 sqlite，
+需要用 node-gyp，所以 gcc 和 make 也要裝起來。
+
+```shell
+apt install build-essential git
+```
+
+#### 安裝
+
+```shell
+git clone https://github.com/matrix-discord/mx-puppet-discord
+cd mx-puppet-discord
+npm install
+```
+
+[mx-puppet-discord install]: https://github.com/matrix-discord/mx-puppet-discord/tree/c17384a
+
+
+### mx-puppet-discord 設定
+#### mx-puppet-discord 設定檔
+直接貼 `diff -u sample.config.yaml config.yaml` 的結果：
+
+```diff
+--- sample.config.yaml	2021-05-17 07:50:26.635416325 +0000
++++ config.yaml	2021-05-18 15:42:43.195383396 +0000
+@@ -7,10 +7,10 @@
+   bindAddress: localhost
+ 
+   # Public domain of the homeserver
+-  domain: matrix.org
++  domain: ccns.io
+ 
+   # Reachable URL of the Matrix homeserver
+-  homeserverUrl: https://matrix.org
++  homeserverUrl: https://matrix.ccns.io
+ 
+   # Optionally specify a different media URL used for the media store
+   #
+@@ -36,7 +36,7 @@
+   displayname: Discord Puppet Bridge
+ 
+   # Avatar URL of the bridge bot
+-  #avatarUrl: mxc://example.com/abcdef12345
++  avatarUrl: mxc://ccns.io/ztBApnmUJETzBSYuRkOmqNgo
+ 
+   # Whether to create groups for each Discord Server
+   #
+@@ -46,7 +46,7 @@
+ 
+ presence:
+   # Bridge Discord online/offline status
+-  enabled: true
++  enabled: false
+ 
+   # How often to send status to the homeserver in milliseconds
+   interval: 500
+@@ -58,7 +58,7 @@
+     #- "@user:server\\.com"
+ 
+     # Allow users on a specific homeserver
+-    - "@.*:server\\.com"
++    - "@.*:ccns\\.io"
+ 
+     # Allow anyone
+     #- ".*"
+@@ -78,7 +78,7 @@
+   #
+   # Same format as in provisioning
+   whitelist:
+-    - "@.*:yourserver\\.com"
++    - ".*"
+ 
+   #blacklist:
+     #- "@user:yourserver\\.com"
+@@ -88,7 +88,7 @@
+   #
+   # Same format as in provisioning
+   whitelist:
+-    - "@.*:server\\.com"
++    - "@.*:ccns\\.io"
+ 
+   #blacklist:
+     #- "@user:server\\.com"
+@@ -145,12 +145,12 @@
+   # with username "user", password "pass", host "localhost" and database name "dbname".
+   #
+   # Modify each value as necessary
+-  #connString: "postgres://user:pass@localhost/dbname?sslmode=disable"
++  connString: "postgres://bridge-discord-matrix:password@localhost/bridge_discord_matrix?sslmode=disable"
+ 
+   # Use SQLite3 as a database backend
+   #
+   # The name of the database file
+-  filename: database.db
++  #filename: database.db
+ 
+ limits:
+   # Up to how many users should be auto-joined on room creation? -1 to disable
+@@ -169,7 +169,7 @@
+   #
+   # Allowed values starting with most verbose:
+   # silly, verbose, info, warn, error
+-  console: info
++  console: error
+ 
+   # Date and time formatting
+   lineDateFormat: MMM-D HH:mm:ss.SSS
+```
+
+* domain 是 well-known url，homeserverurl 是登入用的，要加 matrix。
+* avartarUrl 可設可不設，我是把圖片在和 bot 的對話，就可以用 dev tool 看到 mxc url。
+* 上下線狀態為了減少伺服器負擔我就關掉了，因為我們的 discord server 人有點多。
+* provisioning, relay, selfService 三個 whitelist：
+    * relay 是指誰可以加入 bridge 的頻道發言，並被 bridge 到 discord 上。
+    * 另外二個可能是誰能對 bot 下指令
+
+database 那裡，要新建一個資料庫，然後把對應有存取權限的帳號密碼打上去。
+文件裡也沒寫要怎麼建，我就照著 synapse 的建法，
+建立一個 bridge 用的帳號，和對應的資料庫。
+connString 的內容中 user 和 dbname，
+要換成對應的使用者帳號和資料庫名稱。
+
+```shell=
+# 先用 sudo -su postgres 切換為 postgres 的 uid
+createuser --pwprompt bridge-discord-matrix
+# 進入 sql 介面後輸入以下指令
+psql <<PSQL
+CREATE DATABASE bridge_discord_matrix
+ ENCODING 'UTF8'
+ LC_COLLATE='C'
+ LC_CTYPE='C'
+ template=template0
+ OWNER "bridge-discord-matrix";
+
+PSQL
+```
+
+另外，synapse 的設定檔要允許建立頻道：
+`enable_group_creation: true` 。
+
+
+#### 產生 appservice 註冊檔
+appservice 有點像是擴充元件，是 synapse 和其它程式互動時，
+其它程式向 synapse 註冊的方式。
+下面這個指令會產生一個 appservice 註冊檔案 `discord-registration.yaml` ，
+在 synapse 設定檔中載入這個檔案後，
+此 mx-puppet-discord 即可和該 synapse 連接互動。
+
+```shell=
+npm run start -- -r -c config.yaml -f discord-registration-puppet.yaml
+sudo cp discord-registration-puppet.yaml /etc/matrix-synapse
+```
+
+之後在 `/etc/matrix-synapse/homeserver.yaml` 
+或其它 synapse 設定檔中，指定要載入此 appservice 檔即可，
+我是建議放到 `/etc/matrix-synapse` 下，
+把 owner 改成 root，比較安全，比較不容易被亂改。
+
+```yaml
+# A list of application service config files to use
+#
+app_service_config_files:
+  - /etc/matrix-synapse/discord-registration-puppet.yaml
+```
+
+要寫絕對路徑是因為 config file 的路徑似乎是相對於 cwd，
+以 debian 裝的 synapse 來說，cwd 是 `/var/lib/matrix-synapse` ，
+寫在 systemd.service 裡的。
+
+#### 啟動
+對，就可以啟動了 `npm start` 。
+加入 discord bot token 是用 bot 的指令做，
+但加入 matrix 的 app service 是要寫設定檔，我不知道為什麼。
+
+可以用 `nohup npm start >/dev/null 2>&1 &` 來在背景執行，
+預設 log 除了 stdout，也會寫入在 cwd 下。
+
+傳私人訊息給 `@_discordpuppet_bot:ccns.io` 就可以下指令了，
+可以先用 `help` 看有哪些哪些指令，
+`help xx-command` 可以看指令格式。
+
+#### discord bot
+在 [discord developer] 建立一個 bridge 用應用程式，再在應用程式下建立一個 bot，
+把 bot 邀請到 discord 伺服器裡，要是 server owner。
+邀請時用這個連結： <https://discord.com/oauth2/authorize?client_id=123456789012345678&scope=bot&permissions=607250432> ，
+把 client id 改成應用程式的 id，
+[permissions 是我從另一個專案抄過來的][matrix discord appservice permission] 。
+
+[discord developer]: https://discord.com/developers/
+[matrix discord appservice permission]: https://github.com/Half-Shot/matrix-appservice-discord/blob/0803376/src/util.ts#L109
+
+然後在 discord developer 網站裡把 bot token 複製下來，
+在 matrix 上傳訊息給 bot： `link bot your.token-here` ，
+就連結成功了。
+
+#### 連結頻道
+用 help 可以看 bot 的指令，
+先把 discord bot 的 token 傳過去：
+
+```
+link bot your.token
+```
+
+puppet id 似乎是對應一個 discord bot。
+先設定 bridge 時的模式，讓 bridge 的頻道為公開，不然預設是加密；
+matrix 預設保護隱私的作法有時也很傷腦筋。
+
+```
+# see puppet id
+list
+# if puppet id is 1
+# relay mode mean not only message but also author are bridge
+settype 1 relay
+# first 1 is puppet id, and second 1 is true
+bridgeall 1 1
+setispublic 1 1
+setisglobalnamespace 1 1
+```
+
+而一個 bot 可以加入多個 discord server
+（在 api 中稱 server 為 guild），
+用 listguilds 看該 bot 加入了哪些 guild，
+之後就 bridge 了。
+
+```
+# list server(guild) which discord bot join
+listguilds 1
+# if discord guild id is 330361502643257345
+bridgeguild 1 123455555555555555
+```
+
+bridge 後頻道的地址會很長一串很醜，
+可以進頻道管理選單裡新增其它地址，一個頻道可以有多個地址，
+但要是該頻道的管理員才行。
+預設 bridge 過來的頻道只有該 bot 是管理員，
+要用 adminme 指令把自己加為管理員。
+
+```
+adminme #_discordpuppet__330361736932884482:ccns.io
+```
+
+bridge 來一堆頻道後，要一一加入很麻煩，
+可以向 bot 傳 joinentireguild 指令，
+讓 bot 自動向你發邀請。
+如果覺得要一一確認邀請很麻煩，
+可以在個人設定裡 security 頁面好像可以一次同意所有邀請。
+
+```
+joinentireguild 1 330361502643257345
+```
+
+如果想知道怎麼用指令打 http request
+用 restfull api 一次全部改名和修正頻道權限，
+請參考下一篇 [matrix review]。
+
+
+#linux
+#ccns
+#im
+#matrix
+#自由軟體
+#教學

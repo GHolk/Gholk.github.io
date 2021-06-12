@@ -1,0 +1,268 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2021-06-12T07:37:23.755Z">
+<meta name="keywords" property="og:article:tag" content="discord,matrix,im,shell,linux,心得">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="ccns-matrix-synapse-install-note.html" title="ccns matrix 安裝筆記">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>matrix 菜鳥使用心得</title>
+</head>
+<body>
+<main><h1 id="matrix-菜鳥使用心得">matrix 菜鳥使用心得</h1>
+<p>一直想架一個自由的即時通訊軟體，
+之前 <a href="instant-message-app-future-work.html">大概研究了幾個自由的 im</a> ，
+最後因為有社團的資源可以蹭，所以架了聯邦制的 im matrix。
+matrix 在架構上介於 discord（或 slack）與 irc 的中間，
+但因為聯邦制和注重隱私，又多了一些不便。
+加上很多功能還在開發中，會少一些功能，需要手動操作。
+目前要直接從 discord 搬過來 matrix 會不太方便。
+本文介紹了 matrix 的基本概念、使用經驗、與 discord 的比較，
+最後是如何以 restful api 管理伺服器。</p>
+<h2 id="matrix-命名空間">matrix 命名空間</h2>
+<p>matrix 是所謂聯邦制，在不同 server 上註冊的使用者可以互相溝通。
+所有的資源都是掛在某一個 server 下，
+包括使用者、頻道、頻道群組（像 discord 的 server 或說 guild），
+但使用者仍可存取不同的 server 上的資源。</p>
+<p>matrix 上的名稱建構方式，像是 irc 和 twitter 的綜合版，
+再加上用冒號來後綴伺服器名來達成，
+在同一個伺服器上則可以省去後綴的伺服器名。</p>
+<p>伺服器名即是域名，例如 ccns 的伺服器名是 <code>ccns.io</code> ，
+那建立在 <code>ccns.io</code> 上的 general 頻道完整名稱即寫成 <code>#general:ccns.io</code> 。
+而註冊在 ccns 上的使用者 gholk 即是 <code>@gholk:ccns.io</code> 。
+和 xmpp 使用的 email 風格名稱 <code>gholk@ccns.io</code> 不太一樣。</p>
+<h2 id="頻道">頻道</h2>
+<p><abbr title="room">頻道</abbr>也就是群組聊天，是聊天的基本單位；
+可以是一對一，也可以是多對一；
+可以是公開，也可以是私密或端對端加密。
+頻道也可以有地址，有地址的頻道方可以用井號加伺服器名的方式表示，
+這類有地址的頻道就比較像 irc discord 或 telegram 上的頻道。
+當然，伺服器管理者可以直接管理地址，
+或控制是否允許使用者建立具有地址的頻道。
+不然註冊像 <code>#admin:ccns.io</code> 之類的頻道會讓管理者很困擾。</p>
+<p>在地址之外，也可以有單純用來顯示的頻道名稱。
+其它像一對一的聊天，或是加了多個人的群聊，
+預設是沒有地址也沒有名稱的，也是預設加密的。
+名稱和地址可以事後再加上，但加密是不能解除。
+這關係到所有加密的是端對端加密，
+伺服器上保存的只是加密的資料，
+所以沒辦法做到解除加密的操作。</p>
+<p>頻道的公開程度可以有三種，
+可被搜尋與加入、可用連結加入、需要被邀請才能加入。
+和加密的選項是獨立的。</p>
+<p>一個頻道也可以有多個地址，
+雖然我想不到這功能有什麼應用。
+目前我們的 discord bridge bot
+會自動用 discord 的頻道 id 來當作頻道的地址，
+如果我們想把 discord 上的 general 也當作 matrix 的 general，
+就必須要在 id 之外再加上額外的地址 general。</p>
+<h2 id="頻道權限">頻道權限</h2>
+<p>頻道的權限是用分數決定的。
+最高分者是是管理者，可以有絕對的權限，預設建立者是 100 分。
+每個人可以調整較低分者的權限，最高到和自己同分為止。</p>
+<p>每人預設是 0 分，moderator 是 50 分，admin 是 100 分，
+頻道設定裡可以調不同的操作需要哪種身份，
+像只有 admin 能 invite 或 moderator 可以刪文之類的。</p>
+<p>admin 可以把人升到 admin，但 admin 之間不能互踢之類的。
+此外 matrix 目前也沒有跨頻道的權限管理機制，
+唯一比較像跨頻道的一個是 server admin 可以直接把人加入或踼出頻道，
+且也可以把人直接升為頻道管理員。</p>
+<h2 id="頻道群組">頻道群組</h2>
+<p>有個東西叫 community，有點像 discord 上的 server，
+可以把幾個頻道放到同一個群組裡。
+群組是用加號開頭，可以有 avatar、html 的介紹。
+使用者只要點選群組的圖示，就可以看到所有群組裡的頻道。
+但也就這樣而已。</p>
+<p>沒有權限管理，沒有頻道管理，沒有命名空間管理。
+各頻道間還是幾乎獨立，沒辦法一次加入所有頻道，
+沒辦法把一人指定為所有頻道的管理員，
+也不能統一管理所有頻道的公開、加密程度。
+而且沒有命名空間管理，所以例如 <a href="https://matrix.to/#/+free-rms:matrix.org">+free-rms:matrix.org</a> 群組，
+裡面有 press random general 等頻道，如果他們都要有地址，
+只能叫 <code>#free-rms-press:matrix.org</code> <code>#free-rms-random:matrix.org</code>
+<code>#free-rms:matrix.org</code> ，
+至於為什麼沒有 <code>#free-rms-general:matrix.org</code> ，
+因為 general 即是通用的頻道，自然可以省去地址裡的 general。</p>
+<p>不過這很大程度是因為 community 還是個開發中的功能。
+在一開始，這個功能叫 group，現在叫 community。
+未來應該會多出一個叫 space 的功能，取代現有的 community，
+很有可能，因為現在已經在 beta 了。
+只能希望未來這功能會好用一點，像把上面的幾點都改善一下。
+而且這功能現在還缺少一些基本的 api，像不能改地址，
+也沒有增加除了 creator 外的 admin 的功能。</p>
+<p><a href="https://matrix.org/blog/2021/05/17/the-matrix-space-beta">space 似乎比較神奇，他是一種可以巢狀的頻道</a>，
+主要開發的原因是官方發現他們在實作 group 時，
+幾乎要把現有的頻道功能重複實現一遍，
+像權限管理、邀請之類的，他們覺得很沒意義。
+所以他們新增了一種特殊的可以巢狀的頻道，
+然後重用頻道現有的權限管理等 api。</p>
+<h2 id="discord-與-slack-的概觀">discord 與 slack 的概觀</h2>
+<p>再來是與時下最強群聊軟體沒有之一的 discord 的類比。
+以經營組織來說，discord 的確是很強的平台，
+當初的 <a href="https://www.ccns.io">ccns</a> 也是搬到 discord 上後慢慢累積起凝聚力的。</p>
+<p>discord 或 slack 都繼承自 irc 的伺服器概念，
+一個組織會有一個伺服器，一個伺服器下可以有多個頻道，
+同一個伺服器內的管理者是同一群人。
+但又和 irc 那種限於頻道內的自治不同，
+在不同的 irc 伺服器間，同一個頻道的訊息是會互相轉發的，
+而且 irc 管理者也不太會管理到頻道內的事。</p>
+<p>在此之外，discord 和 slack 又有一些差別，
+slack 不同的伺服器間幾乎是完全獨立的，
+在每個伺服器都需要重新註冊一遍，
+從不同伺服器使用不同的域名就可以大概看出來。
+（如 <a href="https://g0v.slack.com">https://g0v.slack.com</a> 或 <a href="https://ccca.slack.com">https://ccca.slack.com</a> 。）
+且不同的伺服器需要在獨立的分頁運作，
+不同伺服器的使用者當然也不可能互相溝通。
+slack 唯一統一的就是應用程式，或說擴充功能的介面和商店。</p>
+<p>而 discord 則較開放。
+所謂的伺服器，比較像一個組織，
+不知道程式中還是不是對應到一個伺服器。
+使用者加入的所有的伺服器，都一樣掛在 discord.com 這個域名下。
+（以前是 discordapp.com，後來可能有錢了，把 discord.com 買回來了。）
+不同伺服器都有同一個 web 介面中展示，
+不同伺服器中的帳號也是統一的，只需要在 discord 註冊一次，
+使用者間也可以互相溝通。</p>
+<p>slack 可能想製造一種感覺，聊天伺服器的確是由該組織建立的，
+是一個內部架設供內部使用的工具，而 slack 只是提供托管伺服器平台。
+所以使用者當然需要獨立註冊。
+而我猜 discord 則單純認為統一註冊比較簡單而已，
+當然可能也考慮了使用者情境。
+discord 最早是供遊戲使用的聊天平台，
+所以很多人可能只是從某個遊戲得知 discord 這個平台，
+上面有一些資訊，所以來到這裡。
+然後如果還需要註冊才能進入，那可能就會有一大半放棄了，
+（相比多數不需登入的 web 上的攻略。）
+所以開放了允許訪客的功能。
+整體比 slack 要 <strong>開放</strong> 很多。</p>
+<h2 id="discord-與-matrix-的比較">discord 與 matrix 的比較</h2>
+<p>matrix 中有二種功能可以和 discord 的 server 中類比，
+一是用實際一部 matrix server，二是用 matrix 中的 community 功能；
+但其實二者都不太像。</p>
+<p>先前說過，matrix 上允許頻道的自治，
+雖然 server admin 能直接把人新增為頻道的 admin，
+但頻道內的 admin 還是和 server 的 admin 獨立的。
+每個頻道有自己的管理者，最多只能做到同一群人建立的頻道中，
+都由同一群人來擔任管理者，但還是需要一一指派。
+不像 discord 內，可以直接在 server 中把人劃為不同的階級，
+依階級對不同頻道有不同的存取權。</p>
+<p>matrix 中的 community 可以用來組織頻道，
+但尚不包含統一管理權限的功能。
+而且組織事實上是與頻道的管理無關的，
+任何人都可以建立組織，將任意的頻道加入自己有管理權限的組織中，
+無論在該頻道中是為管理員。
+（但如果要建立具有地址的組織，
+就得看 server admin 是否開放這項功能，和建立具名頻道一樣。）
+所以組織目前比較像是建立了個人用的對該頻道的 <em>捷徑</em> ，
+而不是像 discord 中頻道必定隸屬 server 的階層式關係。</p>
+<p>而且詳細來看，在 server 下 discord 還有一層
+<abbr title="category">頻道群組</abbr> ，
+其實那層也是關鍵，因為可以把幾個內部頻道放一起設定權限，
+而不用一個個單獨設。
+其實如果用 matrix server 對比 disocrd server，
+那 category 就是類比到 community，
+但偏偏 community 又做的比較像 server。
+（都是在左側側邊欄的小圈圈。）</p>
+<p>如果用命名空間來看，要類比 discord 上的 server，
+還是用一座 matrix server 比較適合。
+以命名空間來說，某個 server 下的某個頻道，
+套在 discord 和 matrix 上都是正確的。
+category 和 community 就暫時忽略吧。</p>
+<p>matrix 也有把 discord 的 reaction 功能抄過來。
+但 bridge 時有二個問題，
+一是 bot 沒辦法把 matrix 的 reaction 傳到 discord 上，
+因為 discord bot 只有一個，沒辦法傳遞多個 emoji。
+而 bridge 則會用建立人頭帳號的方把 discord 上的帳號 bridge 到 matrix，
+所以可以用同樣的人頭做出和 discord 上同樣的反應。
+另一個比較麻煩的是我們的 discord server 有大量的 costum reaction，
+matrix 規格現在還不支援。
+bridge 會把 costum reaction 的圖片存到 matrix 上，
+然後用 mxc 的連結網址當作 reaction name 來對訊息做 react。
+但目前 element 還不會把 mxc reaction 顯示成圖片，
+就只會看到一串網址。</p>
+<h2 id="server-client-與-federation-溝通">server client 與 federation 溝通</h2>
+<p>matrix 是聯邦式的架構，而不是 p2p，
+所以和 xmpp 類似，所有資訊都是透過自己的 server 進行，
+而不會發生客戶端直接連到對方伺服器的情況。
+例如我 <code>@gholk:ccns.io</code> 想傳訊息到 <code>#free-rms:matrix.org</code> 這個頻道，
+那我在客戶端操作後，客戶端會把要求傳給我的伺服器，
+我的伺服器 ccns.io 會去向 matrix.org 發起連線傳送訊息。</p>
+<h3 id="server-端的代理機制">server 端的代理機制</h3>
+<p>但因為 matrix 有設計 <a href="https://github.com/matrix-org/synapse/blob/a888cbdd314a84cbb477e5b04bd27b7053f08495/docs/delegate.m">delegation</a> 機制，
+可以讓 server 可以用比較好看的網域名稱，
+<a href="ccns-matrix-synapse-install-note.html">前一篇安裝教學也有稍微提到</a>。
+所以要傳訊息給 matrix.org 時，
+會先查 matrix.org 這個名字的 matrix 通訊歸誰管：</p>
+<ol>
+<li><p>查 <code>_matrix._tcp.matrix.org</code> 這個域名的 dns srv 記錄，
+代表要和 matrix.org 以 matrix 協議通訊時，實際負責的是哪個伺服器：
+<code>host -t SRV _matrix._tcp.matrix.org</code> 。</p>
+</li>
+<li><p>如果沒有查到，那接著就會嘗試用連到
+ <a href="http://matrix.org/.well-known/matrix/server">http://matrix.org/.well-known/matrix/server</a> ，
+ 看該 json 檔案有沒有指定 matrix 由哪個伺服器負責。
+ 如果該位址是重導向，則會跟隨重導向。</p>
+</li>
+<li><p>如果也沒查到，最後就會直接把該網址當作 matrix server 連線。</p>
+</li>
+</ol>
+<p>所以當你發訊息到 <code>*:matrix.org</code> 時，
+依 dns srv 記錄可以看到，
+實際上負責 matrix.org 域名的 matrix server 是 
+<code>matrix-federation.matrix.org.cdn.cloudflare.net</code> 。
+而 ccns.io 時，則是 <a href="https://ccns.io/.well-known/matrix/server">https://ccns.io/.well-known/matrix/server</a>
+會轉址到 <a href="http://www.ccns.io/.well-known/matrix/server">http://www.ccns.io/.well-known/matrix/server</a> ，
+json 內容即是指定到 matrix.ccns.io:443 <code>{&quot;m.server&quot;:&quot;matrix.ccns.io:443&quot;}</code> 。</p>
+<h3 id="client-端代理機制">client 端代理機制</h3>
+<p>上述的傳訊息，是由客戶端發請求給自己的伺服器端，
+自己的伺服器端再去找訊息的收件人是在哪個伺服器上。
+但客戶端要如何傳送此一請求給自己的伺服器呢？
+同樣有類似的代理機制，但又不太一樣。</p>
+<p>例如以 <code>@gholk:ccns.io</code> 的身份登入時，
+客戶端一樣會去找 ccns.io 這個名稱的伺服器在哪。
+但依規範不會檢查 dns，只會檢查 <a href="https://ccns.io/.well-known/matrix/client">https://ccns.io/.well-known/matrix/client</a> ，
+因為 matrix 在定規範時考量到想設計出 <em>純前端</em> client，
+所以不會定瀏覽器前端用 javascript 做不到的事。
+前端 javascript 不能查 dns，甚至要發 http request 到其它域名，
+都需要 cors 標頭，所以 client 代理機制還要求
+well known 網址需要有 cors header，
+而且轉址的 30X 回覆本身也需要有 cors header。</p>
+<p>但因為我們社團 ccns.io 是架在 github page 上，
+而 github page 會把 ccns.io 所有網址都用 301 轉址到 www.ccns.io，
+且該轉址到目前為止是沒有 cors 的。
+所以很明顯，要用客戶端登入 ccns.io 時，
+伺服器不能只打 ccns.io，不然客戶端看不到
+<a href="https://ccns.io/.well-known/matrix/client">https://ccns.io/.well-known/matrix/client</a> ，
+就不會去找 matrix.ccns.io，而會直接把請求發到 ccns.io，
+然後就無法登入。
+因此要在客戶端登入時，只能直接打 matrix.ccns.io。</p>
+<h2 id="取消隱藏-community">取消隱藏 community</h2>
+<p>這是比較蠢的小事，有關 element ui 設計的問題。
+一次點了 ccns community 的三個點的更多符號，
+按了 hide 把 community 隱藏了，
+然後就不知道怎麼讓該 community 顯示回來。
+後來找了很久才找到，要點 community 最下面的 <code>+</code> 新增 community，
+然後中間欄的下方會顯示 <em>Your Communities</em> ，
+把要加回去的 community icon 拖拉到最左側的 community 欄即可。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

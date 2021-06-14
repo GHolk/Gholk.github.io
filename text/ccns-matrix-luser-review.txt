@@ -11,6 +11,8 @@ matrix 在架構上介於 discord（或 slack）與 irc 的中間，
 
 [future im]: instant-message-app-future-work.html
 
+<script src="ext/toc.js"></script>
+
 ## matrix 命名空間
 matrix 是所謂聯邦制，在不同 server 上註冊的使用者可以互相溝通。
 所有的資源都是掛在某一個 server 下，
@@ -218,7 +220,7 @@ matrix 是聯邦式的架構，而不是 p2p，
 會先查 matrix.org 這個名字的 matrix 通訊歸誰管：
 
 [delegation]: https://github.com/matrix-org/synapse/blob/a888cbdd314a84cbb477e5b04bd27b7053f08495/docs/delegate.m
-[delegation gholk]: ccns-matrix-synapse-install-note.html
+[delegation gholk]: ccns-matrix-synapse-install-note.html#well-known-uri
 
  1. 查 `_matrix._tcp.matrix.org` 這個域名的 dns srv 記錄，
     代表要和 matrix.org 以 matrix 協議通訊時，實際負責的是哪個伺服器：
@@ -265,7 +267,7 @@ well known 網址需要有 cors header，
 然後就無法登入。
 因此要在客戶端登入時，只能直接打 matrix.ccns.io。
 
-## 取消隱藏 community
+## element 中取消隱藏 community
 這是比較蠢的小事，有關 element ui 設計的問題。
 一次點了 ccns community 的三個點的更多符號，
 按了 hide 把 community 隱藏了，
@@ -274,6 +276,297 @@ well known 網址需要有 cors header，
 然後中間欄的下方會顯示 *Your Communities* ，
 把要加回去的 community icon 拖拉到最左側的 community 欄即可。
 
+## matrix 金鑰與訊息的儲存
+matrix 使用金鑰來驗證身份，client 第一次登入時會產生金鑰，
+使用者可以選擇將金鑰備份到 matrix server（在以密碼加密的情況下），
+或只存在本機。金鑰以 48 個大小寫英數字混合組成，
+如果金鑰沒有備份到伺服器端，則遺失金鑰沒有人能救的了你；
+當然遺失密碼也是一樣。
+
+matrix 中所有訊息都存在伺服器端，
+加密頻道中訊息是以 e2e 加密的型式儲存的，
+所以伺服器存的是加密過的訊息，
+伺服器自己也無法解讀，故在搜尋訊息上會不太方便。
+
+另外還有在使用另一台裝置登入時，會需要驗證該登入；
+可以用金鑰驗證或用已登入的裝置驗證，
+主要就是把金鑰傳到另一台裝置上，讓另一台裝置也能解讀 e2e 訊息。
+此步驟可以確保帳號後的使用者是持有同一份金鑰的使用者，
+就算伺服器的管理者接管了你的帳號，但他也不會有你的金鑰，
+所以其它人也會發現這個人不一樣了。
+
+一些細節可以參考 [element 對密碼和金鑰的說明](https://element.io/help)
+中 End-to-end encryption 的章節。
+
+## mx-puppet-discord 的權限管理
+預設 mx-puppet-discord 預設橋接過來後，
+是用 discord 的 server id 和 guild id 組成一個很醜的頻道地址，
+像原本 discord 上的 general 會變成 
+`#_discordpuppet__330361736932884482:ccns.io` ；
+然後權限會是只有被邀請者才能加入。
+至少要調這二個部份，讓原本在 discord 公開的頻道一樣是公開，
+然後有一個好看一點的地址，像原本的 general 就一樣叫 general 就好。
+
+mx-puppet-discord 橋接過來後，
+預設只有 mx-puppet-discord bot 自己是頻道管理者，
+但有提供一個叫 `adminme #channel_id:server_name` 的指令，
+讓 bot 把使用者在某個頻道調整為管理者；
+但這個指令當然設定橋接的那個使用者能用。
+要所以要調整的方式：
+
+ 1. 先傳送訊息給 bot 
+    `adminme #_discordpuppet__330361736932884482:ccns.io` ，
+    讓他把使用者調成 admin。
+
+ 2. 之後去該頻道的設定頁，新增 local address，
+    除了原本的一長串 discord id 地址外，
+    再增加和頻道同名的地址。
+
+ 3. 修改設定讓所有人都可以加入。
+
+因為 matrix 不像 discord 可以一次設定整個分類或 server 中所有頻道的權限，
+所以用 mx-puppet-discord 橋接，自動建立了一堆頻道後，
+要一一調整設定其實蠻麻煩的。
+
+由於我們 discord 上有十幾個頻道，
+要一個個點顯然不切實際，所以只好自己看 matrix restful api，
+用 wget 和 shell 腳本來一次處理完。
+
+## 使用 shell 腳本批次處理頻道權限
+matrix 幾乎所有 api 都是 restful，
+可以發 http request 來達成那類修改權限和名稱的操作。
+但首先需要是該頻道的 admin，
+不知道把頻道 id 一一複製下來再一次貼給 bot 可不可以。
+（後來試了似乎是不行。）
+
+### 取得登入後的 token
+這類 api 最簡單的驗證方式是用 token，
+也就是用 client 登入後，會取得一個 token，
+把 client 端已經取得的 token，直接放在 http header 裡，
+matrix 就會認得了。
+matrix 官方有建議 client 應該要設計一個 ui，
+能使用者看到目前使用的 token，
+也就能配合其它工具 debug 或 -做壞事- 管理 server。
+
+以 element 來說，可以點選左上角的使用者帳號選單，
+開啟個人設定，在 help 分頁裡有一個展開符號可以顯示 access token，
+token 應該是英數字和底線組成。
+取得之後，把 token 放在要發的 http request `Authorization` header 裡，
+加上一個 bearer 前綴：
+
+```sh
+wget --header "Authorization: Bearer $token" $request
+curl --header "Authorization: Bearer $token" $request
+```
+
+如果在 production 環境上，預設可能只有 wget，
+wget 有用的選項是 `wget -q --server-response` ，
+可以把 http 回應的標頭一起顯示。
+
+### matrix api
+首先需要取得所有頻道的列表，
+當然要先加入所有 bridge 過來的頻道，
+以 mx-puppet-bridge 來說可以用 `joinentireguild` 指令
+來讓 bot 對自己發出邀請加入所有 bridge 的頻道，
+但這個指令只有當初設定 bridge 的人可以用。
+之後可以在個人設定裡找到一個選項，是一次同意所有邀請。
+這部份可以參見 [matrix 安裝中的 bot 連結頻道章節](ccns-matrix-synapse-install-note.html#連結頻道) 。
+
+之後就能用 matrix api 取得所有頻道列表了，指令如下。
+其中 token 是上面取得的登入取得的 token，
+返回內容是一個 json。
+所以可以先準備個 jq，或直接用 python 或 node js 來解析也可以。
+
+```sh
+curl --header  "Authorization: Bearer $token"  \
+    https://matrix.ccns.io/_matrix/client/r0/joined_rooms
+```
+
+返回 json 的 `joined_rooms` 屬性是加入的頻道 id 列表，
+id 是 matrix 在內部用於唯一識別頻道的，
+我們還需要取得各頻道的名稱，然後為該頻道加上同名的地址，
+與調整權限讓所有使用者可以加入。
+更多 api 可以參考 [matrix 官方的規格文件][matric spec] 。
+
+[matric spec]: https://matrix.org/docs/spec/client_server/r0.6.1
+
+#### 取得頻道屬性
+取得頻道所有屬性的 api 是 state，
+但可能會返回太多內容，像每個成員的名稱、icon。
+
+```sh
+curl -H "Authorization: Bearer $token" \
+    https://matrix.ccns.io/_matrix/client/r0/rooms/$id/state
+```
+
+如果不想取回太多東西，
+可以在 state 後面加上想取回的事件的類型：
+`https://matrix.ccns.io/_matrix/client/r0/rooms/$id/state/m.room.name` ，
+本文會用到的大概有 `m.room.name` `m.room.guest_access` 
+`m.room.join_rules` `m.room.canonical_alias` 。
+
+#### 增加頻道的地址
+我們要先把 room name 取回，然後加為地址，也就是 alias：
+
+```sh
+json=$(curl -H "Authorization: Bearer $token" \
+    https://matrix.ccns.io/_matrix/client/r0/rooms/$id/state/m.room.name)
+name=$(node -p "($json).name")
+curl -X put -H "Authorization: Bearer $token" \
+        https://matrix.ccns.io/_matrix/client/r0/rooms/$id/aliases/$name
+```
+
+#### 把頻道改為任何人可加入
+因為用 wget 每次都打一堆選項很麻煩，
+所以這裡用一個 alias 把選項塞在一起。
+還有因為在 bash 裡打 json 很麻煩，
+所以用 node 包裝了一個小工具，可以簡單生成 json；
+只要寫單純的 javascript object，就會轉成有雙引號的 json。
+如果要比較正式的工具，可以用 [jo] ，
+或是可以到 github 用我自己寫的 [jc 完整版] 。
+
+[jo]: https://jpmens.net/2016/03/05/a-shell-command-to-create-json-jo/
+[jc 完整版]: https://github.com/gholk/loco/blob/db6a8a687836c8e0df95db57b9c0fc331e15eb0e/bin/jc.sh
+
+```sh
+alias www='wget -q --server-response -O -'
+jc() {
+    node --print "JSON.stringify({$1}, null, '  ')"
+}
+
+www --method put --body-data "$(jc "join_rule:'public'")" \
+    --header  "Authorization: Bearer $token" \
+    https://matrix.ccns.io/_matrix/client/r0/rooms/$id/state/m.room.join_rules/
+www --method put --body-data "$(jc 'guest_access:"can_join"')" \
+    --header  "Authorization: Bearer $token" \
+    http://localhost:8008/_matrix/client/r0/rooms/$id/state/m.room.guest_access/
+```
+
+#### 邀請使用者加入頻道
+user 是使用者的完整地址。
+
+```sh
+# example:
+# user=@gholk:ccns.io
+curl -H "Authorization: Bearer $token" \
+    -H 'content-type: application/json' \
+    --data "$(jc "user_id:'$user'")" \
+    https://matrix.ccns.io/_matrix/client/r0/rooms/$id/invite
+```
+
+#### 使用者自行要求加入
+這 api 只能用來加入公開頻道，
+私人頻道一定要有人邀請。
+
+```sh
+curl -H "Authorization: Bearer $token" \
+    -H 'content-type: application/json' \
+    --data '{}' \
+    https://matrix.ccns.io/_matrix/client/r0/join/$room
+```
+
+
+### 有 server admin 權限的情況下
+如果有 server 的 admin 權限，
+也就在安裝 synapse 時建立的特殊 admin user，
+就能用 synapse 的 admin api 直接把人升為 admin。
+如果沒有，在有 server 的 root 權限的話也能直接建立一個：
+
+```sh
+sudo -su matrix-synapse <<MATRIX
+cd /opt/venvs/matrix-synapse
+. bin/activate
+register_new_matrix_user --admin \
+    --config /etc/matrix-synapse/homeserver.yaml \
+    --user root --password my-password
+    https://matrix.ccns.io
+
+MATRIX
+```
+
+之後使用 admin 的流程也是相同，
+用 client 登入後，把 token 複製出來用 curl 或 wget 發。
+admin 權限能直接把任意使用者升為頻道的 admin。
+但這類使用 server admin 的 api，
+還沒標準化為 matrix 的一部份，是 synapse 限定的：
+
+```sh
+wget -O - -q --server-response \
+    --post-data "$(jc "user_id:'$user'")" \
+    --header  "Authorization: Bearer $token_admin"  \
+    https://matrix.ccns.io/_synapse/admin/v1/rooms/$id/make_room_admin
+```
+
+#### 直接取得所有頻道資料
+此外，server admin 能直接取得所有頻道的資料，
+但 matrix.ccns 上的 `_synapse` 路徑我是鎖起來的，
+不能從外網存取，所以得直接登入 matrix.ccns 上，
+然後找找 localhost。
+
+```sh
+wget -O - -q --server-response \
+    --header  "Authorization: Bearer $token_admin"  \
+    http://localhost:8008/_synapse/admin/v1/rooms
+```
+
+#### 新增頻道管理員
+該使用者需要在頻道內：
+
+```sh
+www --post-data "$(jc "user_id:'$user'")" \
+    --header "Authorization: Bearer $token_root" \
+    "http://localhost:8008/_synapse/admin/v1/rooms/$id/make_room_admin"
+```
+
+
+## 讓使用者在註冊後自動加入頻道
+修改 `/etc/matrix-synapse/homeserver.yaml` ，
+我是加在 `/etc/matrix-synapse/auto_join_rooms.yaml` ，
+以 ccns 來說預設有以下頻道，
+這樣註冊後就會自動加入這些頻道了。
+
+```yaml
+auto_join_rooms:
+  - "#acgn:ccns.io"
+  - "#ani-platform:ccns.io"
+  - "#bbs-dev:ccns.io"
+  - "#bbs-dev-notify:ccns.io"
+  - "#blockchain:ccns.io"
+  - "#book:ccns.io"
+  - "#bot-commands:ccns.io"
+  - "#bullshit:ccns.io"
+  - "#channel-request:ccns.io"
+  - "#computer-system:ccns.io"
+  - "#cryptocurrency:ccns.io"
+  - "#emoji-request:ccns.io"
+  - "#food:ccns.io"
+  - "#game-design:ccns.io"
+  - "#general:ccns.io"
+  - "#general-english:ccns.io"
+  - "#git:ccns.io"
+  - "#hydra-command:ccns.io"
+  - "#hydra-song-requests:ccns.io"
+  - "#machine-learning:ccns.io"
+  - "#math:ccns.io"
+  - "#minecraft-chat:ccns.io"
+  - "#music:ccns.io"
+  - "#programming-contest:ccns.io"
+  - "#radio:ccns.io"
+  - "#robotics:ccns.io"
+  - "#security:ccns.io"
+  - "#service-status:ccns.io"
+  - "#software-develop:ccns.io"
+  - "#stonk:ccns.io"
+  - "#study-group:ccns.io"
+  - "#sysadmin:ccns.io"
+  - "#vim:ccns.io"
+  - "#vscode:ccns.io"
+  - "#vtuber:ccns.io"
+  - "#vtuber-notify:ccns.io"
+  - "#web-develop:ccns.io"
+  - "#welcome:ccns.io"
+  - "#announcement:ccns.io"
+```
 
 #discord
 #matrix

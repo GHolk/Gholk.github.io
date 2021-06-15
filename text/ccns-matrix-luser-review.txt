@@ -197,12 +197,38 @@ matrix 也有把 discord 的 reaction 功能抄過來。
 因為 discord bot 只有一個，沒辦法傳遞多個 emoji。
 而 bridge 則會用建立人頭帳號的方把 discord 上的帳號 bridge 到 matrix，
 所以可以用同樣的人頭做出和 discord 上同樣的反應。
+
 另一個比較麻煩的是我們的 discord server 有大量的 costum reaction，
 matrix 規格現在還不支援。
 bridge 會把 costum reaction 的圖片存到 matrix 上，
 然後用 mxc 的連結網址當作 reaction name 來對訊息做 react。
 但目前 element 還不會把 mxc reaction 顯示成圖片，
 就只會看到一串網址。
+
+## 顯示 custom reaction 的油猴腳本
+如上所述，因為我們 discord 伺服器的自訂 reaction 有點多，
+加上很多人會用按 reaction 取代傳訊息，
+所以有時在 matrix 上看到訊息下有 5、6 個人反應，
+但只看 mxc 的 hash 看不出來是在按什麼意思的，就很不方便。
+
+於是就簡單寫了一個 [油猴腳本來顯示自訂的反應][user js] ，
+只要每次 dom 改變時，
+就檢查有沒有 reaction 的文字內容是 mxc url，
+有的話就把 mxc 換成對應的圖片。
+
+[user js]: https://gist.github.com/GHolk/231019cee4b11318aeaf7f3394bc08a6
+
+用 mxc 取得圖片的 api [可以在 server-client 規範裡找到][media api]。
+監聽 dom 改變的 api，
+我是參考另一支 user script [google open in new tab]。
+當初是想改掉 google 搜尋結果中，按右鍵複製網址時，
+只會複製到 google 的重導向的網址的問題。
+但原本那支太笨重了，我也不需要在新分頁開啟的功能，
+就自己改寫了比較 [簡短的版本][google search unredirect]。
+
+[media api]: https://matrix.org/docs/spec/client_server/latest#get-matrix-media-r0-thumbnail-servername-mediaid
+[google open in new tab]: https://github.com/li-zyang/zScripts/tree/master/Google-open-in-new-tab
+[google search unredirect]: https://gist.github.com/GHolk/bcd03fbb3d22685bfc9657d5c9059ce8
 
 ## server client 與 federation 溝通
 matrix 是聯邦式的架構，而不是 p2p，

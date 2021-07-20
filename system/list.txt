@@ -326,3 +326,4 @@ linux-firefox-ime-repeat-no-response.html
 android-copy-game-save-data.html
 ccns-matrix-synapse-install-note.html
 ccns-matrix-luser-review.html
+linux-lvm-raid-1-builtin-boot.html

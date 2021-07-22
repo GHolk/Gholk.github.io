@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2021-07-22T13:52:47.125Z</updated>
+  <updated>2021-07-22T15:51:58.073Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,214 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/batch-qrcode-generate.html#顯示-qr-code-文字內容</id>
+<title>將檔案編碼為 QR code 的工具</title>
+<published>2021-07-22T06:23:31.453Z</published>
+<updated>2021-07-22T15:51:58.062Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/batch-qrcode-generate.html#顯示-qr-code-文字內容"/>
+<summary type="html">
+在原本的 qr code 下方再加上 qr code 的文字內容，
+可以用來找出漏掃的 qr code 。
+並加上切換顯示省略與完整內容的功能。</summary>
+<category term="qr-code"/>
+<category term="tool"/>
+<category term="js"/>
+<category term="web"/>
+<category term="手機"/>
+<content type="html">&lt;h1 id=&quot;將檔案編碼為-QR-code-的工具&quot;&gt;將檔案編碼為 QR code 的工具&lt;/h1&gt;
+&lt;p&gt;本程式可以將字串分割編碼為 qr code，供連續掃描後合併回檔案。
+因為之前開了個腦洞，在想要如何寄紙本加密信件，
+加密我的想法就只有 pgp，然後再加一個把數位資料轉紙本的方式
+印出來後用 ocr 好像不太準確，且 ocr 對一般人不夠普及。
+後來就想到編碼成 qr code，配合一些 app 有連續掃描功能，
+掃完後再匯出，於是就這樣成了。&lt;/p&gt;
+&lt;p&gt;qr code 可以很大，但問題是手機的鏡頭沒有那麼大和清晰。
+雖然理論上也可以用掃描器掃描後再用電腦去判讀，
+但一樣有技術不夠普及，對一般使用者不友善的問題。
+所以要把資料拆成多個 qr code，
+再借助另一項某些 qr code 掃描器的功能，連續掃描。&lt;/p&gt;
+&lt;p&gt;以我用的 qr code 掃描器 &lt;a href=&quot;https://play.google.com/store/apps/details?id=de.markusfisch.android.binaryeye&quot;&gt;binary eye&lt;/a&gt; 來說，
+就是開啟連續掃描功能，然後掃完後進到歷史記錄，
+選擇匯出掃描記錄即可。
+掃描記錄可以是 csv 或 json，總之都是用 linux 可以簡單處理的格式。&lt;/p&gt;
+&lt;p&gt;資料格式的話，我不確定 qr code 能不能塞二進位資料，
+但我不想給自己找麻煩，還得找一款能讀取二進位的 qr code scaner，
+所以最簡單的方式就是先用 base64 編碼資料。
+因為 linux base64 工具默認會自己切割資料了，
+但如果用我原本的想法 64 個字元切成一個 qr code，
+加上換行符字數變奇數，qr code 就會斷在奇怪的地方，
+所以後來加了一個用換行切割的功能。&lt;/p&gt;
+&lt;p&gt;我掃描時碰到幾個問題，第一個是如果照常規排版每行由左到右，
+掃完一行時換行可能會亂掉，而且也沒效率，應該要用 s 型的排列。
+所以我加了個簡單的 s 型排版功能，但也把版型固定成四欄。&lt;/p&gt;
+&lt;p&gt;再來是有時可能會漏掃或重復掃，應該要加個 checksum 機制。
+我後來幫每個 qr code 標了編號，
+應該就不會亂掉了，最後總數也可以用來驗證。
+之後我又幫每個 qr code 下面標上內容字串，
+可以用來找出哪個漏掃。&lt;/p&gt;
+&lt;p&gt;但最後還有個問題是瀏覽器印出來時，
+某些 qr code 可能被分頁切斷。
+我試了 css 的 &lt;code&gt;page-break: avoid&lt;/code&gt; ，但 chromium 還是會切斷，
+無論我的 qr code 是用 img 或 canvas。
+目前只確定 firefox 是可以用的，chromium 就再等等吧。&lt;/p&gt;
+&lt;form&gt;
+&lt;label&gt;
+&lt;h2&gt;原始資料&lt;/h2&gt;
+&lt;textarea name=&quot;text-data&quot;&gt;&lt;/textarea&gt;&lt;/label&gt;
+&lt;label&gt;&lt;input name=&quot;snake-render&quot; onchange=&quot;qrcodeBatcher.handleStyleCheckbox(this)&quot; data-style-name=&quot;snake&quot; type=&quot;checkbox&quot;&gt;S 型排列 qr code&lt;/label&gt;
+&lt;label&gt;&lt;input name=&quot;split-by-newline&quot; type=&quot;checkbox&quot;&gt;依換行分割字串&lt;/label&gt;
+&lt;label&gt;&lt;input name=&quot;show-text-data&quot; type=&quot;checkbox&quot; checked=&quot;true&quot; onchange=&quot;qrcodeBatcher.handleStyleCheckbox(this)&quot; data-style-name=&quot;ellipsis&quot;&gt;顯示省略版字串&lt;/label&gt;
+&lt;button type=&quot;button&quot; onclick=&quot;qrcodeBatcher.handleEncode()&quot;&gt;encode&lt;/button&gt;
+&lt;label&gt;
+&lt;h2&gt;QR code&lt;/h2&gt;
+&lt;output name=&quot;qr-code-area&quot; class=&quot;ellipsis&quot;&gt;&lt;/output&gt;&lt;/label&gt;
+&lt;/form&gt;
+
+&lt;style&gt;
+form &gt; * {
+    display: block;
+}
+form textarea {
+    width: 100%;
+    min-height: 16em;
+}
+output .item {
+    box-sizing: border-box;
+    width: 25%;
+    float: left;
+    counter-increment: image-counter;
+    border: solid 1px;
+}
+.item img, .item canvas {
+    width: 80%;
+    display: block;
+    margin: 1em auto;
+}
+.item .subtitle {
+    margin: 0 1em;
+    height: 15em;
+}
+.ellipsis .item .subtitle {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: auto;
+}
+output .item::after {
+    content: counter(image-counter);
+    display: block;
+    padding: 0.2em;
+    text-align: right;
+}
+output.snake .item:nth-child(8n+1),
+output.snake .item:nth-child(8n+2),
+output.snake .item:nth-child(8n+3),
+output.snake .item:nth-child(8n+4) {
+    float: left;
+    clear: right;
+}
+output.snake .item:nth-child(8n+5),
+output.snake .item:nth-child(8n+6),
+output.snake .item:nth-child(8n+7),
+output.snake .item:nth-child(8n) {
+    float: right;
+    clear: left;
+}
+output:after {
+    content: &apos; &apos;;
+    clear: both;
+    display: block;
+}
+
+@media print {
+    output .item, output .item * {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+    footer {
+        display: block;
+        clear: both;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+}
+&lt;/style&gt;
+
+&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js&quot;&gt;&lt;/script&gt;
+
+&lt;script&gt;
+    var qrcodeBatcher = {
+        qrious: new QRious(),
+        form: document.getElementsByTagName(&apos;form&apos;)[0],
+        getFormNode(name) {
+            return this.form.elements[name]
+        },
+        handleTextInput() {
+            const textarea = this.getFormNode(&apos;text-data&apos;)
+            textarea.style.height = textarea.scrollHeight + &apos;px&apos;
+        },
+        handleStyleCheckbox(node) {
+            const output = this.getFormNode(&apos;qr-code-area&apos;)
+            if (node.checked) {
+                output.classList.add(node.dataset.styleName)
+            }
+            else output.classList.remove(node.dataset.styleName)
+        },
+        *segmentText64(text) {
+            let i = 0
+            const n = 64
+            do {
+                yield text.slice(i, i+n)
+                i += n
+            }
+            while (i &lt; text.length)
+        },
+        segmentText(text = this.getFormNode(&apos;text-data&apos;).value) {
+            if (this.getFormNode(&apos;split-by-newline&apos;).checked) {
+                return text.split(/\n/)
+            }
+            else return this.segmentText64(text)
+        },
+        handleEncode() {
+            this.getFormNode(&apos;qr-code-area&apos;).textContent = &apos;&apos;
+            for (const seg of this.segmentText()) {
+                console.debug(&apos;seg: &apos;, seg)
+                const canvas = this.textToCanvas(seg)
+                this.renderImage(canvas, seg)
+                // const url = this.textToDataUrl(seg)
+                // const image = document.createElement(&apos;img&apos;)
+                // image.src = url
+                // this.renderImage(image)
+            }
+        },
+        renderImage(node, segment) {
+            const output = this.getFormNode(&apos;qr-code-area&apos;)
+            const item = document.createElement(&apos;div&apos;)
+            item.className = &apos;item&apos;
+            item.appendChild(node)
+            const subtitle = document.createElement(&apos;div&apos;)
+            subtitle.className = &apos;subtitle&apos;
+            subtitle.textContent = segment
+            item.appendChild(subtitle)
+            output.appendChild(item)
+        },
+        textToCanvas(text) {
+            const qrcode = new QRious({value: text})
+            return qrcode.canvas
+        },
+        textToDataUrl(text) {
+            this.qrious.value = text
+            return this.qrious.toDataURL()
+        },
+        textToGoogleImageUrl(text) {
+            const url = encodeURIComponent(text)
+            const qrcodeUrl = `http://chart.googleapis.com/chart?chs=150x150&amp;cht=qr&amp;chl=${url}`
+            return qrcodeUrl
+        }
+    }
+&lt;/script&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/batch-qrcode-generate.html</id>
 <title>將檔案編碼為 QR code 的工具</title>
 <published>2021-07-22T06:23:31.453Z</published>
@@ -2622,37 +2830,7 @@ fallback 時造成這些問題。&lt;/p&gt;
 <category term="剪貼簿"/>
 <category term="中國"/>
 <category term="自由軟體"/>
-<content type="html">&lt;h1 id=&quot;android-app-Clip-Stack-的開源故事&quot;&gt;android app Clip-Stack 的開源故事&lt;/h1&gt;
-&lt;p&gt;把原本打在臉書的文章搬運來 blog。
-這是一個開源的 android 剪貼簿管理 app &lt;a href=&quot;https://f-droid.org/en/packages/com.catchingnow.tinyclipboardmanager/&quot;&gt;Clip-Stack&lt;/a&gt; 的簡單故事：
-一個設計的不錯的 app，被 copy cat 抄去 play store 上架放廣告，
-讓原作者心灰意冷不再開源。
-但舊版 f-droid 上的 app 還是可以動，可以繼續用。&lt;/p&gt;
-&lt;p&gt;之前在三星手機上有內建功能可以直接看剪貼簿歷史，感覺蠻方便的；
-加上最近實聯制可能要常填姓名和手機的表單，
-所以想找個管理 android 剪貼簿的 app，用來貼上基本資料。
-（還是這種情況應該要用瀏覽器自動填入功能？）
-但因為剪貼簿資料蠻敏感的，所以只打算找開源的 app，
-在 f-droid 上搜尋 clipboard 和 history，
-竟然只看到一款 Clip-Stack，但標註為 deprecate。&lt;/p&gt;
-&lt;p&gt;實際裝了之後還不錯用，也沒什麼問題，
-但當然還是要關心一下為什麼 deprecate，免得被陰都不知道。
-&lt;a href=&quot;https://github.com/heruoxin/Clip-Stack/blob/0096776/README.md#%E4%B8%BA%E4%BB%80%E4%B9%88&quot;&gt;github readme 上就有&lt;/a&gt;，
-作者說因為一堆 copy cat，
-把這款 app 加上廣告拿掉授權上架到 play store 上，
-還來發 issue 問為什麼編譯不過，讓他感到心灰意冷。
-所以後來的更新就不再開源了，f-droid 上的 1.5.0 是最後一個開源版本，
-&lt;a href=&quot;https://play.google.com/store/apps/details?id=com.catchingnow.tinyclipboardmanager&quot;&gt;後續未開源的版本可以在 play store&lt;/a&gt; 上找到。
-真是個悲傷的故事。&lt;/p&gt;
-&lt;p&gt;然後 reddit 上也有起爭議，
-&lt;a href=&quot;https://www.reddit.com/r/androidapps/comments/ashth6/clip_stack_on_the_android_store_is_not_open/&quot;&gt;有人公審說你不開源了就不該再標註開源&lt;/a&gt; ，
-後來作者本人也有來留言哭哭，也撤掉了開源的文字。&lt;/p&gt;
-&lt;p&gt;總之 deprecate 的版本在我的 android 9 上還能動，
-用起來也沒什麼問題，所以就先這樣吧。
-比較尷尬就 app 是中國人做的，但開源就還好。&lt;/p&gt;
-&lt;p&gt;另外這 app 迴響還真的不錯，&lt;a href=&quot;https://www.playpcesor.com/2015/06/app-clip-stack.html&quot;&gt;電腦玩物還特別介紹過&lt;/a&gt; ，
-我也覺得蠻不錯的。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/instant-message-app-future-work.html#sip</id>
 <title>對下一代即時通訊系統的想像</title>

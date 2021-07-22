@@ -54,7 +54,7 @@
 <p>再來是有時可能會漏掃或重復掃，應該要加個 checksum 機制。
 我後來幫每個 qr code 標了編號，
 應該就不會亂掉了，最後總數也可以用來驗證。
-可能之後再幫每個 qr code 下面標上內容字串，
+之後我又幫每個 qr code 下面標上內容字串，
 可以用來找出哪個漏掃。</p>
 <p>但最後還有個問題是瀏覽器印出來時，
 某些 qr code 可能被分頁切斷。
@@ -62,11 +62,16 @@
 無論我的 qr code 是用 img 或 canvas。
 目前只確定 firefox 是可以用的，chromium 就再等等吧。</p>
 <form>
-<textarea name="text-data"></textarea>
-<label><input name="snake-render" onchange="qrcodeBatcher.handleSnakeRender()" type="checkbox">S 型排列 qr code</label>
+<label>
+<h2>原始資料</h2>
+<textarea name="text-data"></textarea></label>
+<label><input name="snake-render" onchange="qrcodeBatcher.handleStyleCheckbox(this)" data-style-name="snake" type="checkbox">S 型排列 qr code</label>
 <label><input name="split-by-newline" type="checkbox">依換行分割字串</label>
+<label><input name="show-text-data" type="checkbox" checked="true" onchange="qrcodeBatcher.handleStyleCheckbox(this)" data-style-name="ellipsis">顯示省略版字串</label>
 <button type="button" onclick="qrcodeBatcher.handleEncode()">encode</button>
-<output name="qr-code-area"></output>
+<label>
+<h2>QR code</h2>
+<output name="qr-code-area" class="ellipsis"></output></label>
 </form>
 
 <style>
@@ -75,7 +80,7 @@ form > * {
 }
 form textarea {
     width: 100%;
-    height: 16em;
+    min-height: 16em;
 }
 output .item {
     box-sizing: border-box;
@@ -88,6 +93,16 @@ output .item {
     width: 80%;
     display: block;
     margin: 1em auto;
+}
+.item .subtitle {
+    margin: 0 1em;
+    height: 15em;
+}
+.ellipsis .item .subtitle {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: auto;
 }
 output .item::after {
     content: counter(image-counter);
@@ -138,12 +153,16 @@ output:after {
         getFormNode(name) {
             return this.form.elements[name]
         },
-        handleSnakeRender() {
+        handleTextInput() {
+            const textarea = this.getFormNode('text-data')
+            textarea.style.height = textarea.scrollHeight + 'px'
+        },
+        handleStyleCheckbox(node) {
             const output = this.getFormNode('qr-code-area')
-            if (this.getFormNode('snake-render').checked) {
-                output.classList.add('snake')
+            if (node.checked) {
+                output.classList.add(node.dataset.styleName)
             }
-            else output.classList.remove('snake')
+            else output.classList.remove(node.dataset.styleName)
         },
         *segmentText64(text) {
             let i = 0
@@ -165,18 +184,22 @@ output:after {
             for (const seg of this.segmentText()) {
                 console.debug('seg: ', seg)
                 const canvas = this.textToCanvas(seg)
-                this.renderImage(canvas)
+                this.renderImage(canvas, seg)
                 // const url = this.textToDataUrl(seg)
                 // const image = document.createElement('img')
                 // image.src = url
                 // this.renderImage(image)
             }
         },
-        renderImage(node) {
+        renderImage(node, segment) {
             const output = this.getFormNode('qr-code-area')
             const item = document.createElement('div')
             item.className = 'item'
             item.appendChild(node)
+            const subtitle = document.createElement('div')
+            subtitle.className = 'subtitle'
+            subtitle.textContent = segment
+            item.appendChild(subtitle)
             output.appendChild(item)
         },
         textToCanvas(text) {

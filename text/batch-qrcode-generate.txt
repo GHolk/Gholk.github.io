@@ -1,0 +1,186 @@
+# 將檔案編碼為 QR code 的工具
+本程式可以將字串分割編碼為 qr code，供連續掃描後合併回檔案。
+因為之前開了個腦洞，在想要如何寄紙本加密信件，
+加密我的想法就只有 pgp，然後再加一個把數位資料轉紙本的方式
+印出來後用 ocr 好像不太準確，且 ocr 對一般人不夠普及。
+後來就想到編碼成 qr code，配合一些 app 有連續掃描功能，
+掃完後再匯出，於是就這樣成了。
+
+qr code 可以很大，但問題是手機的鏡頭沒有那麼大和清晰。
+雖然理論上也可以用掃描器掃描後再用電腦去判讀，
+但一樣有技術不夠普及，對一般使用者不友善的問題。
+所以要把資料拆成多個 qr code，
+再借助另一項某些 qr code 掃描器的功能，連續掃描。
+
+以我用的 qr code 掃描器 [binary eye] 來說，
+就是開啟連續掃描功能，然後掃完後進到歷史記錄，
+選擇匯出掃描記錄即可。
+掃描記錄可以是 csv 或 json，總之都是用 linux 可以簡單處理的格式。
+
+[binary eye]: https://play.google.com/store/apps/details?id=de.markusfisch.android.binaryeye
+
+資料格式的話，我不確定 qr code 能不能塞二進位資料，
+但我不想給自己找麻煩，還得找一款能讀取二進位的 qr code scaner，
+所以最簡單的方式就是先用 base64 編碼資料。
+因為 linux base64 工具默認會自己切割資料了，
+但如果用我原本的想法 64 個字元切成一個 qr code，
+加上換行符字數變奇數，qr code 就會斷在奇怪的地方，
+所以後來加了一個用換行切割的功能。
+
+我掃描時碰到幾個問題，第一個是如果照常規排版每行由左到右，
+掃完一行時換行可能會亂掉，而且也沒效率，應該要用 s 型的排列。
+所以我加了個簡單的 s 型排版功能，但也把版型固定成四欄。
+
+再來是有時可能會漏掃或重復掃，應該要加個 checksum 機制。
+我後來幫每個 qr code 標了編號，
+應該就不會亂掉了，最後總數也可以用來驗證。
+可能之後再幫每個 qr code 下面標上內容字串，
+可以用來找出哪個漏掃。
+
+但最後還有個問題是瀏覽器印出來時，
+某些 qr code 可能被分頁切斷。
+我試了 css 的 `page-break: avoid` ，但 chromium 還是會切斷，
+無論我的 qr code 是用 img 或 canvas。
+目前只確定 firefox 是可以用的，chromium 就再等等吧。
+
+<form>
+<textarea name="text-data"></textarea>
+<label><input name="snake-render" 
+    onchange="qrcodeBatcher.handleSnakeRender()" 
+    type="checkbox">S 型排列 qr code</label>
+<label><input name="split-by-newline" type="checkbox">依換行分割字串</label>
+<button type="button" onclick="qrcodeBatcher.handleEncode()">encode</button>
+<output name="qr-code-area"></output>
+</form>
+
+<style>
+form > * {
+    display: block;
+}
+form textarea {
+    width: 100%;
+    height: 16em;
+}
+output .item {
+    box-sizing: border-box;
+    width: 25%;
+    float: left;
+    counter-increment: image-counter;
+    border: solid 1px;
+}
+.item img, .item canvas {
+    width: 80%;
+    display: block;
+    margin: 1em auto;
+}
+output .item::after {
+    content: counter(image-counter);
+    display: block;
+    padding: 0.2em;
+    text-align: right;
+}
+output.snake .item:nth-child(8n+1),
+output.snake .item:nth-child(8n+2),
+output.snake .item:nth-child(8n+3),
+output.snake .item:nth-child(8n+4) {
+    float: left;
+    clear: right;
+}
+output.snake .item:nth-child(8n+5),
+output.snake .item:nth-child(8n+6),
+output.snake .item:nth-child(8n+7),
+output.snake .item:nth-child(8n) {
+    float: right;
+    clear: left;
+}
+output:after {
+    content: ' ';
+    clear: both;
+    display: block;
+}
+
+@media print {
+    output .item, output .item * {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+    footer {
+        display: block;
+        clear: both;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+
+<script>
+    var qrcodeBatcher = {
+        qrious: new QRious(),
+        form: document.getElementsByTagName('form')[0],
+        getFormNode(name) {
+            return this.form.elements[name]
+        },
+        handleSnakeRender() {
+            const output = this.getFormNode('qr-code-area')
+            if (this.getFormNode('snake-render').checked) {
+                output.classList.add('snake')
+            }
+            else output.classList.remove('snake')
+        },
+        *segmentText64(text) {
+            let i = 0
+            const n = 64
+            do {
+                yield text.slice(i, i+n)
+                i += n
+            }
+            while (i < text.length)
+        },
+        segmentText(text = this.getFormNode('text-data').value) {
+            if (this.getFormNode('split-by-newline').checked) {
+                return text.split(/\n/)
+            }
+            else return this.segmentText64(text)
+        },
+        handleEncode() {
+            this.getFormNode('qr-code-area').textContent = ''
+            for (const seg of this.segmentText()) {
+                console.debug('seg: ', seg)
+                const canvas = this.textToCanvas(seg)
+                this.renderImage(canvas)
+                // const url = this.textToDataUrl(seg)
+                // const image = document.createElement('img')
+                // image.src = url
+                // this.renderImage(image)
+            }
+        },
+        renderImage(node) {
+            const output = this.getFormNode('qr-code-area')
+            const item = document.createElement('div')
+            item.className = 'item'
+            item.appendChild(node)
+            output.appendChild(item)
+        },
+        textToCanvas(text) {
+            const qrcode = new QRious({value: text})
+            return qrcode.canvas
+        },
+        textToDataUrl(text) {
+            this.qrious.value = text
+            return this.qrious.toDataURL()
+        },
+        textToGoogleImageUrl(text) {
+            const url = encodeURIComponent(text)
+            const qrcodeUrl = `http://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=${url}`
+            return qrcodeUrl
+        }
+    }
+</script>
+
+#qr-code
+#tool
+#js
+#web
+#手機

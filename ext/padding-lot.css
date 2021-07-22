@@ -3,24 +3,6 @@
     display: none;
 }
 
-@media print {
-    .browser-only {
-        display: none;
-    }
-    .print-only {
-        display: initial;
-    }
-    dl.print-only, figure.print-only {
-        display: block;
-    }
-    script, style {
-        display: none;
-    }
-    #disqus_thread {
-        display: none;
-    }
-}
-
 .url-qrcode {
     float: right;
 }
@@ -237,4 +219,22 @@ main pre > code.lang-wrap {
 
 summary {
     margin: 1em;
+}
+
+@media print {
+    .browser-only {
+        display: none;
+    }
+    .print-only {
+        display: initial;
+    }
+    dl.print-only, figure.print-only {
+        display: block;
+    }
+    script, style {
+        display: none;
+    }
+    #disqus_thread {
+        display: none;
+    }
 }

@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2021-07-22T15:51:58.073Z</updated>
+  <updated>2021-07-27T11:54:18.488Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,95 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/android-app-finder-sms-locate-device.html</id>
+<title>用 app finder 透過簡訊以 GPS 定位遺失的手機</title>
+<published>2021-07-27T11:50:57.164Z</published>
+<updated>2021-07-27T11:54:18.477Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/android-app-finder-sms-locate-device.html"/>
+<summary type="html">google android 手機有一個功能，可以看到同一帳號下的手機 GPS 位置。
+如果不想依靠 google 服務，或不想把自己的座標傳給 google 知道，
+有人開發了可以達端取得裝置定位結果的 app，
+方式就是用手機上最基本且通用的簡訊功能。
+例如 &lt;a href=&quot;https://f-droid.org/packages/ru.seva.finder&quot;&gt;finder&lt;/a&gt; 只要設好白名單，
+用白名單中的號碼傳有關鍵字的簡訊給手機，
+手機就會回傳 gps 定位的位置。</summary>
+<category term="android"/>
+<category term="gnss"/>
+<category term="im"/>
+<content type="html">&lt;h1 id=&quot;用-app-finder-透過簡訊以-GPS-定位遺失的手機&quot;&gt;用 app finder 透過簡訊以 GPS 定位遺失的手機&lt;/h1&gt;
+&lt;p&gt;google android 手機有一個功能，可以看到同一帳號下的手機 GPS 位置。
+如果不想依靠 google 服務，或不想把自己的座標傳給 google 知道，
+有人開發了可以達端取得裝置定位結果的 app，
+方式就是用手機上最基本且通用的簡訊功能。
+例如 &lt;a href=&quot;https://f-droid.org/packages/ru.seva.finder&quot;&gt;finder&lt;/a&gt; 只要設好白名單，
+用白名單中的號碼傳有關鍵字的簡訊給手機，
+手機就會回傳 gps 定位的位置。&lt;/p&gt;
+&lt;p&gt;其實這類遠端定位手機的功能，
+最重要的是要如何把定位結果回傳給不在手機旁的使用者。
+google 這類大公司，android 是自行開發的，
+裡面要塞什麼程式都可以。
+google 自己再做一個平台，存這些定位資料供同一帳號的使用者存取。&lt;/p&gt;
+&lt;p&gt;但這類功能要由第三方實作就比較困難，
+因為要架一個網站存這些資料有難度，而且還要使用者信任你。
+而且這類使用者，應該也不會想用這種上傳自己定位資料的方式達成。
+另外一種方式就是讓手機在接到指令時，回傳自己的座標，
+關鍵就變成回傳的管道。&lt;/p&gt;
+&lt;h2 id=&quot;通訊管道&quot;&gt;通訊管道&lt;/h2&gt;
+&lt;p&gt;因為手機網路的特性多半都不是固定公網 ip，
+直接溝通就變得很麻煩。
+雖然說手機上有很多即時通訊軟體，
+但要把整個系統依賴在一款通訊軟體上還是不好，
+而且 im 並沒有真正統一，且多數普及的 im 都是商業公司把持，
+不會允許使用者自定義這類接到訊息時做出動作的功能。
+加上每個人慣用的 im 也不同，所以其實綁在 im 有困難。&lt;/p&gt;
+&lt;p&gt;手機上有一個優勢，不管是什麼手機，
+都有基本的打電話和收發簡訊的功能，
+而且 android 系統的特性，這種基本的功能都會做成 api，
+讓 app 可以存取簡訊功能。
+所以簡訊可以說是最基本的每台手機都有的功能，
+用來當通訊管道倒是夠用。&lt;/p&gt;
+&lt;h2 id=&quot;finder-運作方式&quot;&gt;finder 運作方式&lt;/h2&gt;
+&lt;p&gt;這個 app 會在收到簡訊時檢查內容，如果內容是 &lt;code&gt;gps_search&lt;/code&gt; ，
+就會把 gps 定位結果傳送回簡訊發訊人。
+為了防止被無關的人亂傳訊息，還有白名單功能，
+可以設定只回應特定號碼的訊息。
+另外也可以更改關鍵字內容，改成只有自己知道的關鍵字。&lt;/p&gt;
+&lt;p&gt;此外也加了更多相關功能，例如 android 4.4 以上，
+能讓 app 能管理 gps 的開關。
+還有能回傳周圍的 wifi 熱點名稱，能在收到指令時關始響鈴等。
+&lt;a href=&quot;https://github.com/Seva-coder/Finder#activate-location-automatically&quot;&gt;如果要讓 app 能開啟 gps，要用 adb 去手動允許權限&lt;/a&gt;，
+也就是用 adb 開啟 shell 後，下指令：
+&lt;code&gt;pm grant ru.seva.finder android.permission.WRITE_SECURE_SETTINGS&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;另及因為要手動發特定格式的簡訊很麻煩，
+所以 app 裡也做了能發該格式簡訊的功能，
+收到回傳的 gps 座標時，也能顯示在地圖上方便尋找。
+（當然是 open street map。）&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/Seva-coder/Finder#why-app-absent-in-google-play&quot;&gt;這個 app 目前只在 f-droid 上架&lt;/a&gt;，
+以前有在 google play 上架過；
+但後來 play store 的政策，只允許簡訊收發 app 存取簡訊權限，
+而不允許其它無關的 app 使用簡訊權限，
+所以這類用簡訊達成功能的 app 不能在 play store 上架。&lt;/p&gt;
+&lt;h2 id=&quot;使用者界面&quot;&gt;使用者界面&lt;/h2&gt;
+&lt;p&gt;app 開啟後，下半會分為二個欄位，
+右邊會列出允許發送定位請求到這台手機的門號，
+按最上方的 add new phone 可以把門號加到白名單裡。
+點下方加入的手機號碼，則可以主動發出 gps 位置或是發出 wifi 名稱。
+另外有一個 tracker 功能，可以用來主動定期發出 gps 位置，
+但這功能不能遠端啟用，不知道為什麼會這樣設計。&lt;/p&gt;
+&lt;p&gt;左邊的欄位則是用來發簡訊用的，
+你可以把把你加為白名單的手機放在這裡，
+然後點擊該門號就會出現發出 gps wifi 請求簡訊的選單。
+當然，不一定要用這個 app 裡的選單發，
+直接用簡訊 app 發也可以。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;settings 裡可以改能否遠端開啟 gps，能否主動響鈴等。&lt;/li&gt;
+&lt;li&gt;history 可以看 app 發送過的簡訊記錄。&lt;/li&gt;
+&lt;li&gt;open sms 則可以用來顯示簡訊歷史記錄中含有 gps 座標資料的簡訊。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;最後，如果要測試功能正不正常，
+可以發簡訊給自己來測試，但簡訊是要錢的。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/batch-qrcode-generate.html#顯示-qr-code-文字內容</id>
 <title>將檔案編碼為 QR code 的工具</title>
 <published>2021-07-22T06:23:31.453Z</published>
@@ -2748,73 +2837,7 @@ data.img: data
 <category term="gui"/>
 <category term="x-window"/>
 <category term="firefox"/>
-<content type="html">&lt;h1 id=&quot;firefox-中輸入法導致的無法長按連續輸入與關閉視窗後鍵盤無反應的問題&quot;&gt;firefox 中輸入法導致的無法長按連續輸入與關閉視窗後鍵盤無反應的問題&lt;/h1&gt;
-&lt;p&gt;大概是一年前升到 debian buster 後，但其實不確定時間，因為很久了。
-發現 firefox 中鍵盤難以用長按連續輸入，
-長按時會跳很慢，大概一二秒才會出一個字。
-同時還有另一個問題，是關閉 firefox 後焦點換到其它視窗後，
-鍵盤會無法輸入。
-這二個是輸入法造成的問題，我把 scim 換成 gcin，
-再多裝上 gcin-gtk3-immodule 後就好了。&lt;/p&gt;
-&lt;h2 id=&quot;問題發生&quot;&gt;問題發生&lt;/h2&gt;
-&lt;p&gt;一年前碩二，正在被論文與指導教授摧殘，所以沒管那麼多；
-升級後沒什麼大問題，就繼續用了。
-後來才發現有二個小問題，也不確定是不是一起出現的，
-確切的出現時間也不確定。&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;在 firefox 中長按鍵盤會無法連續輸入，
-嚴格來說還是可以，只是會 1 2 秒才出一個字；
-只能自己快速連按。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;關閉 firefox 後，視窗焦點自動轉到其它視窗時，
-鍵盤會無法輸入。
-應該說英文字無反應，還是可以按 alt-tab 切換視窗，
-切換後就會有反應了。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;一開始只注意到問題 2，因為連續輸入的場合其實不多，
-1 是很後面才發現。
-其實不是大問題，所以一直沒去理它，最近才解決。
-一開始只專注搜尋 2，就一直沒有結果，
-後來打算解決 1 時，找到 &lt;a href=&quot;https://liumang.info/2019/12/gcin/&quot;&gt;一篇 liumang 提到 gcin 的類似問題&lt;/a&gt; ，
-想到自己電腦上也有裝 gcin，就拿來試試看。&lt;/p&gt;
-&lt;h2 id=&quot;嘗試-gcin&quot;&gt;嘗試 gcin&lt;/h2&gt;
-&lt;p&gt;我自己的 gcin 是很久以前裝了，
-後來某次想說試試 xfce 預設輸入法 scim 也不錯，
-就換成 scim 了。
-（因為我是用自己客制化的泰瑞倉頡輸入法，
-只要是能匯入自定義表格的輸入法，對我來說都差不多。
-但現在預設好像換成 fcitx 了。） 
-現在 gcin 在 buster 是 2.8.8 版，
-liumang 提到更新可以解決是更到 2.8.9，
-於是我先去看 &lt;a href=&quot;http://hyperrate.com/gcin-source/Changelog.html&quot;&gt;gcin change log&lt;/a&gt; 看有沒有提到是修正了什麼。
-結果 change log 直接跳過 2.8.8。&lt;/p&gt;
-&lt;p&gt;只好直接嘗試，切成 gcin 檢查有沒有此一問題，
-至少可以先確定我碰到的是不是同一個問題，
-因為我原本是用 scim。
-結果還是碰到同樣的問題。&lt;/p&gt;
-&lt;p&gt;debian 要切輸入法，系統是提供一個叫 &lt;code&gt;im-config(8)&lt;/code&gt; 的程式，
-會自動去改 &lt;code&gt;~/.xinputrc&lt;/code&gt; ，內容就是在啟動 x windows session 時，
-要啟動哪個 im 的腳本。
-該腳本似乎和 &lt;code&gt;/etc/X11/xinit/xinputrc&lt;/code&gt; 有關，
-應該是 x 啟動中某個腳本會定義 run_im 函數，
-然後就會去 source &lt;code&gt;~/.xinputrc&lt;/code&gt; ，讓它決定實際要啟動哪個輸入法。
-改完後登出再登入 xsession 即可使用新的輸入法。&lt;/p&gt;
-&lt;p&gt;結果我啟動 gcin 後，才發現我也有此一問題。
-正考慮要不要去裝 2.8.9，讀 gcin 的安裝指南時，
-看到 debian gcin 被拆成幾個套件，
-發現其中 gcin-gtk3-immodule 這個包沒有被安裝，
-於是就自己手動裝裝看。
-結果裝起來後，問題就解決了。
-看來應該是 firefox 是 gtk3，而原本系統只有 gtk2 的，
-fallback 時造成這些問題。&lt;/p&gt;
-&lt;p&gt;之前用 scim 的方向去找時，
-也有看到 &lt;a href=&quot;https://github.com/scim-im/scim/issues/29&quot;&gt;問題 2 的 issue&lt;/a&gt;，
-但沒有詳細看，因為那個問題影響沒有很大，
-連續輸入比較重要。
-後來看到那篇中文的就直接去試了，
-也不知道 scim issue 裡的解法有沒有效。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/android-clip-stack-open-source-story.html</id>
 <title>android app Clip-Stack 的開源故事</title>

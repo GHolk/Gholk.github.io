@@ -25,7 +25,7 @@
 <title>linux 下連接 l2tp vpn</title>
 </head>
 <body>
-<main><h1 id="linux 下連接 l2tp vpn">linux 下連接 l2tp vpn</h1>
+<main><h1 id="linux-下連接-l2tp-vpn">linux 下連接 l2tp vpn</h1>
 <p><a href="https://www.ccns.io/">CCNS</a> 在機房架了 l2tp 的 vpn server，
 最近覺得有點需要，就查了一下怎麼在 linux 下連 l2tp vpn。
 發現自己手動設定蠻麻煩的，用 network manager 管理比較簡單，
@@ -40,7 +40,7 @@
 就把 l2tp server 架到機房去，變 ccns 共用 vpn。
 一開始剛架好時試了，手動設定一直失敗，
 今天心血來潮，又嘗試終於成功連上了。</p>
-<h2 id="l2tp 手動設定">l2tp 手動設定</h2>
+<h2 id="l2tp-手動設定">l2tp 手動設定</h2>
 <p>手動設定就是裝 xl2tpd 寫 config，
 就會多出一個 ppp 網路裝置，
 要自己用 route 把封包導過去。
@@ -63,7 +63,7 @@
 但我的版本應該是 <code>ipsec up my-l2tp</code> ，
 翻了整篇手冊頁想破頭，
 還是不確定 auto 和 add 到底要對應到哪個命令。</p>
-<h2 id="network manager 介面">network manager 介面</h2>
+<h2 id="network-manager-介面">network manager 介面</h2>
 <p>試幾次 xl2tp 都連不上，看到 network manager 有個外掛
 <a href="https://github.com/nm-l2tp/network-manager-l2tp/wiki/Prebuilt-Packages">network manager l2tp</a> 能在圖型介面上
 直接連上 l2tp vpn，就抱著姑且一試的心態試了。
@@ -77,7 +77,7 @@
 在 debian stretch 也能用，但文內的版本是 1.2.8，
 現在 sid 已經更新到 1.2.10，
 試了現在的 1.2.10，和 ubuntu 一樣有介面但不能連。</p>
-<h2 id="舊 debian archieve">舊 debian archieve</h2>
+<h2 id="舊-debian-archieve">舊 debian archieve</h2>
 <p>後來直接問部落格作者，看他有沒有留當時的 deb 包。
 他簡介還蠻有趣的，是 linux user 和 <a href="http://zh.wikipedia.org/wiki/%E7%81%AB%E8%85%BF%E6%97%8F">火腿族</a> ，
 目前主要掛在 <a href="http://zh.wikipedia.org/wiki/mastodon">mastodon</a> 上，
@@ -109,12 +109,18 @@ install_and_mark() {
     apt install ./network-manager-l2tp_1.2.8-2_amd64.deb
     apt-mark auto network-manager-l2tp-gnome
 }
-</code></pre><h2 id="l2tp ipsec 連線設定">l2tp ipsec 連線設定</h2>
+</code></pre><h2 id="l2tp-ipsec-連線設定">l2tp ipsec 連線設定</h2>
 <p>網愛社的人的用法是設 l2tp 的帳號密碼，
 ipsec 則是用一個 pre share key，也和密碼差不多。
 其它欄位都留空。（server 網址當然不能留空，
 在 network manager 介面裡，看要打 domain name 或 ip 都可以。）
 詳情可以看 <a href="https://github.com/hwdsl2/setup-ipsec-vpn/blob/master/docs/clients.md#linux">一開始提到那篇 github 連接 l2tp 的教學。</a></p>
+<h2 id="debian-buster-更新">debian buster 更新</h2>
+<p>debian buster 有收錄 network-manager-l2tp-gnome 了，
+安裝後可以直接在 gui 中設定 l2tp client。
+ipsec 的設定一樣照上面那篇 github 教學，
+phase 1 algorithm 要設 <code>aes128-sha1-modp2048</code>，
+phase 2 <code>aes128-sha1</code> 。</p>
 </main>
 
 <script defer src="ext/meta-meta.js"></script>

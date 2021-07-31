@@ -118,6 +118,13 @@ ipsec 則是用一個 pre share key，也和密碼差不多。
 
 [l2tp github nm-l2tp]: https://github.com/hwdsl2/setup-ipsec-vpn/blob/master/docs/clients.md#linux
 
+## debian buster 更新
+debian buster 有收錄 network-manager-l2tp-gnome 了，
+安裝後可以直接在 gui 中設定 l2tp client。
+ipsec 的設定一樣照上面那篇 github 教學，
+phase 1 algorithm 要設 `aes128-sha1-modp2048`，
+phase 2 `aes128-sha1` 。
+
 #linux
 #debian
 #vpn

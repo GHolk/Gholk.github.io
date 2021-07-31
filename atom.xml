@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2021-07-27T11:54:18.488Z</updated>
+  <updated>2021-07-31T13:23:47.841Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,68 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/contact.html</id>
+<title>聯絡我</title>
+<published>2021-07-31T13:13:44.474Z</published>
+<updated>2021-07-31T13:23:47.828Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/contact.html"/>
+<summary type="html">個人聯絡資訊。
+一般來說，聯絡到我後你會需要證明自己的確是那個人，
+除非你已經在我的通訊錄裡。</summary>
+<category term="blog"/>
+<category term="email"/>
+<category term="im"/>
+<content type="html">&lt;h1 id=&quot;聯絡我&quot;&gt;聯絡我&lt;/h1&gt;
+&lt;p&gt;個人聯絡資訊。
+一般來說，聯絡到我後你會需要證明自己的確是那個人，
+除非你已經在我的通訊錄裡。&lt;/p&gt;
+&lt;h2 id=&quot;即時通訊&quot;&gt;即時通訊&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://t.me/gold_holk&quot;&gt;telegram&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://matrix.to/#/@ccns.io:gholk&quot;&gt;matrix&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;email&quot;&gt;email&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;mailto:gholk@disroot.org&quot;&gt;gholk@disroot.org&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-pgp&quot;&gt;-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+mQENBFhA1HoBCADvadS3ZjC/tCL1RbHmjTPUn1F11P3WX59TvhSYBrCj885qeDNH
+ErS+ECfdfbUifxrfSdsxrXaW6+9eF9q+lonCXXwLCpMYf833bWbrcsMYMaLC0awP
+hso8zAA76EyKNnvz/UbYmV+RjZpOpx/GRI6HgJI5+rnV32sv04fTJXUf1CH8XRkX
+3A9GrvCv1tO9DLlB9dmNec3lLJFk7RgLR4pd9yRi0xQpOEyFEZdNEncvNoALXCtP
+QzUlb0nx5hsBOoy0S7ufRtnrxeVd2lehCe8u7cLAtW4k+fkI5YSnwGk8NvPw74De
+dlt2YmfVuc16CRtY3eppUZRv00kqXWplhLXPABEBAAG0UmdvbGQgaG9sayAobGlu
+dXggdXNlciwgYW1hdGV1ciB3ZWIgZGV2ZWxvcGVyLCBnZW9tYXRpY3MgbWFqb3Ip
+IDxnaG9sa0BkaXNyb290Lm9yZz6JAVQEEwEKAD4WIQRea6Fa8+rxcn7S0XyYyWQp
+yLcR3gUCYMNiFwIbLwUJCW6p6QULCQgHAgYVCgkICwIEFgIDAQIeAQIXgAAKCRCY
+yWQpyLcR3m1UB/9jCKD9xouNLTbWTrw1+me3r3ch8T8GzhCdML0DwF++gr7SBy6z
+AtO+4ZgQRa9HRTpNcZtuX+Gbuo5Xys5K58E/wXel+rdpN+lcyjymamxbt5j9ZxLj
+ERDDtPXuXQMS2RmAqGqYiFWJPbPjgytwXNKhO+pQLV2mZ63/730HZ7qJdHcVn1oK
+vjdZfSTRCbEUyPLSu+at6vxlKynISX73tb/K+uMxnTkMzavfYiCSTY6nG/6Tij/u
+PWO1/UGxSmqVzlUWhBicYvHuRnSEs6pO4ZYaIiYsMs7cdXCIFjhrqL9ntu2m3OP1
+EzZ0gTAPQZTot5WhftB8cJLOWoDRpMW2q1h8uQENBFhA1HoBCACuYp7XkJBsRJKg
+fXZYB69/P9JM3vjRHQ4hyea97LaoWulYczmhOHHvq9PEloZykCk1SjtXzGtMinrE
+AtYQm7mt+V6bSHSkJrItmv9lBDhj+JuDiI5K817iUawYFkW+Vt+m4gsaGy/06QSc
+CFHFSqEU5Du1hjgTuEdxOWW/PUapiMHPpO7srnXMoHbosJ4R8Pd1cag0S34PAkcp
+yk8oC8QDl9PTby4/vo161W1TQX/YGu+BuWLQbTWHBN2wr+rfCoxP5Nhh3vHl9iPV
+Ty3QWG2rQeiTi74P9Dh4uCNP+Pvm01mH5XrUpT24MCWlIWiALVvyQTP1KeL9Vvuy
+LJ8iR+zHABEBAAGJAlsEGAEKACYCGy4WIQRea6Fa8+rxcn7S0XyYyWQpyLcR3gUC
+X85LAgUJCW6qCAEpwF0gBBkBAgAGBQJYQNR6AAoJEFsAF9EOR12V2hMH/iGnzIe+
+c0Ul7xEZFxXcmPrF4jRol/XayyPyHhs0QlCS8T4bJRLWHVG8F8qyKj4QPkWTHnpj
+c4yXgxyKe+n01zki4dHMu0LWmGFiDmfucVHG1J2K++SyLt5eoogutvgwByDeL43B
+Bot+lvk1XZfWNcZ6SkqwC/IqgE986G5D26ku4gLSOlrrWcn2s+HwrgSUMva7fNEo
+bVDurM6n/rgBf+id66lkkZjgC7++22I034xhTS7uH1e+uhed8g+dmVdLUDjsVzqv
+tEUVE7fUMmUmUkd0ljlSMwueJRm4LtE8zhvTXjULQNANLpDFw85FBolaVQB72kOI
+1Z4oGFR1/ZWfYncJEJjJZCnItxHeMVcH/0aFQpYhGhTKS4zQtQTLo281hG1B/i9O
+ZGymqYXu3fXUBA81xJZfBZmXWDxuAUph+6oAfjL16UzuxfwaE2V5gwzXeFFhHmFY
+apzMQEyQg6DxziZB3FQyy28TZ/5m9iVTu9S5ll+5Xf5AI4tqhR/0uxG+D9erlU12
+0vCpN28oE0oAMup5ltFbr6VtgmCgH295d7s99UcHVKU5r73r7R1Nl9zcjBBVqb5b
+BrOrQydHu6H2qccacByoweQF+YEhTh8Ro5bf/BsnreDg7q3f6ZlaF/ozeq3vItPh
+j7jlvAHZpAahMNwLcUJE5fDGZFJc7oxXPgQ/vfQTycnhjxCWqjl1qcE=
+=58+3
+-----END PGP PUBLIC KEY BLOCK-----
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/android-app-finder-sms-locate-device.html</id>
 <title>用 app finder 透過簡訊以 GPS 定位遺失的手機</title>
 <published>2021-07-27T11:50:57.164Z</published>
@@ -2677,148 +2739,7 @@ bridgeguild 1 123455555555555555
 <category term="android"/>
 <category term="adb"/>
 <category term="shell"/>
-<content type="html">&lt;h1 id=&quot;從舊手機備份中拷貝遊戲的存檔&quot;&gt;從舊手機備份中拷貝遊戲的存檔&lt;/h1&gt;
-&lt;p&gt;最近比較閒，把一些以前玩過的 android 遊戲裝回來玩。
-很多遊戲都沒有內建存檔轉移機制，所以以前玩的進度沒了。
-只好自立自強從以前手機的備份映象檔中，
-找回以前遊戲的存檔，放到現在手機的資料目錄中。
-這些操作用 root 可以簡單做到，
-或用 adb backup 搭配 adb backup extractor 也可以。&lt;/p&gt;
-&lt;h2 id=&quot;老遊戲&quot;&gt;老遊戲&lt;/h2&gt;
-&lt;p&gt;最近比較有閒時間來玩遊戲，但個人偏好一些老遊戲，
-這些遊戲都沒有備份機制，所以得自己想辦法：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;nimble quest&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;twewy-solo-remix-gamer.html&quot;&gt;美麗新世界&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;pumpkins vs monsters&lt;/li&gt;
-&lt;li&gt;vector fighter&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;這些遊戲和多數 app 一樣，
-都是直接把存檔放在 &lt;code&gt;/data/data/&lt;/code&gt; 裡，
-也沒提供存檔轉移機制。&lt;/p&gt;
-&lt;h2 id=&quot;手動複製存檔&quot;&gt;手動複製存檔&lt;/h2&gt;
-&lt;p&gt;每個 app 都有自己唯一的 id，
-可以打開 app 後進 android shell 用 top 查，
-像 &lt;code&gt;adb shell top&lt;/code&gt; ，看佔 cpu 最高的第一個 app 多半就是了。
-如果名字太長可以看第一欄的 pid，用 &lt;code&gt;ps -f -ww 1234&lt;/code&gt; 查程式全名。
-之後該程式的資料就會存在 &lt;code&gt;/data/data/com.nimblebit.nimblequest/&lt;/code&gt; 裡。&lt;/p&gt;
-&lt;p&gt;不想這麼麻煩也可以直接從 play store 的網址看。
-例如 nimble quest 是 &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.nimblebit.nimblequest&quot;&gt;https://play.google.com/store/apps/details?id=com.nimblebit.nimblequest&lt;/a&gt; ，
-網址 querystring 的 id 參數就是 app 的 id。
-當然，已經被下架的 app 就不適用此方法了。&lt;/p&gt;
-&lt;p&gt;所以只要找到該資料夾裡哪個檔案是存檔，
-然後複製到新裝置上即可。
-但對使用者來說，不允許存取 &lt;code&gt;/data&lt;/code&gt; 下的資料，
-除非你有 root，取得 root 權限後就可以整個系統隨你逛了。&lt;/p&gt;
-&lt;p&gt;如果有 root，直接進去找出存檔是哪個檔，
-複製出來，再傳到新手機，複製到對應的位置蓋掉原本的存檔即可。
-例如 nimble quest 的存檔是：
-&lt;code&gt;/data/data/com.nimblebit.nimblequest/shared_prefs/com.nimblebit.nimblequest.xml&lt;/code&gt;
-，把舊的蓋掉就好了。
-甚至因為他是明文 xml，可以直接改內容，
-當然我是不鼓勵這種破壞遊戲體驗的作法。&lt;/p&gt;
-&lt;p&gt;另外蓋掉時，要注意不要直接用 cp 或 mv 蓋掉，
-因為從 sdcard 複製到系統的 data 裡面時，權限可能會錯；
-android 裡每個 app 都有自己的 uid gid，
-存檔的權限不對的話，app 可能會無法讀取、寫入存檔。
-建議是用修改的方式，像用 &lt;code&gt;cat /sdcard/com.nimblebit.nimblequest.xml &amp;gt; /data/data/com.nimblebit.nimblequest/shared_prefs/com.nimblebit.nimblequest.xml&lt;/code&gt; 。&lt;/p&gt;
-&lt;h2 id=&quot;用-android-內建的備份功能-adb-backup&quot;&gt;用 android 內建的備份功能 adb backup&lt;/h2&gt;
-&lt;p&gt;這是不需要 root 的作法，但需要在電腦裝 adb 與 java 執行環境
-（不需要 android 開發環境）。
-android 有一個用 adb 執行的備份功能，可以備份和還原 app 的資料；
-再加上另一支 java 程式 &lt;a href=&quot;https://github.com/nelenkov/android-backup-extractor/&quot;&gt;android backup extractor&lt;/a&gt;，可以讀取和製做備份檔。
-我是參考一篇 &lt;a href=&quot;https://home.gamer.com.tw/creationDetail.php?sn=4003591&quot;&gt;巴哈 alexkeroro 小屋的文章&lt;/a&gt; 。&lt;/p&gt;
-&lt;p&gt;將手機和電腦連上， &lt;code&gt;adb devices&lt;/code&gt; 讀得到後，
-一樣先找到 app 的 id，
-輸入 &lt;code&gt;adb backup -f my-backup.ab -noshared -noapk -noobb com.nimblebit.nimblequest&lt;/code&gt; ，
-之後 android 手機會跳出畫面向你確認，
-並要求輸入密碼加密備份檔。
-之後會產生一個名為 my-backup.ab 的備份檔，
-其中不含有 app 的 apk 和 obb 資料。&lt;/p&gt;
-&lt;p&gt;如果想把 apk 和 obb 也包在備份檔裡，
-就把 &lt;code&gt;-noapk&lt;/code&gt; &lt;code&gt;-noobb&lt;/code&gt; 改成 &lt;code&gt;-apk&lt;/code&gt; &lt;code&gt;-obb&lt;/code&gt; 。
-如果想一次備份多個也可以，就把想備份的 app 名稱列在後面即可；
-如果想備份所有 app 資料，也可以簡單用 &lt;code&gt;-all&lt;/code&gt; 參數：
-&lt;code&gt;adb backup -f all-backup.ab -noshared -noapk -noobb -all&lt;/code&gt; 。
-另外備份的密碼請記得，忘了沒人救的了你，
-如果你根本不想加密，可以輸入 0 之類的，至少不會忘記。&lt;/p&gt;
-&lt;p&gt;之後去下載 android backup extractor，
-&lt;a href=&quot;https://github.com/nelenkov/android-backup-extractor/releases&quot;&gt;編譯好可以直接用 jre 執行的 jar 檔案可以在 release 找到&lt;/a&gt;。
-下載下來後可以用 &lt;code&gt;java -jar abe.jar&lt;/code&gt; 執行，
-會列出簡短的使用說明。
-我們首先要把 my-backup.ab 轉換成一般壓縮軟體可以讀的格式：
-&lt;code&gt;java -jar abe.jar unpack my-backup.ab my-backup.tar 0&lt;/code&gt; ，
-可以把密碼為 0 的 my-backup.ab 檔案轉換成沒加密的 my-backup.tar 檔案。
-如果你的密碼有特殊字元如空白，請自己加上雙引號。&lt;/p&gt;
-&lt;p&gt;解壓後看到的會和手機內的 data 格式不太一樣，
-會是 &lt;code&gt;apps/com.nimblebit.nimblequest/&lt;/code&gt; ，
-然後會有 apk 和 data 內的資料等。
-data 內的資料，如 &lt;code&gt;shared_prefs&lt;/code&gt; 會變成 &lt;code&gt;sp&lt;/code&gt; ，
-files 變成 f 之類的，子資料夾中的其它檔名就還是一樣。
-在修改時一樣要注意保留權限，
-但如果是 windows 我不知道會發生什麼事。&lt;/p&gt;
-&lt;p&gt;之後包回去不是單純用 tar 再壓回去就好，
-因為 android backup 對 tar 內的格式要求很高，
-像不能包到父資料夾，順序也不能亂，
-如果只是簡單包回去很容易壞掉。
-可以參考 &lt;a href=&quot;https://github.com/nelenkov/android-backup-extractor#packing-tar-archives&quot;&gt;android backup extractor 的說明&lt;/a&gt; ，
-最保險的作法是參考原本的 tar 來包：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;tar --list --file my-backup.tar |
-    tar --files-from - --create --file new-backup.tar
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;包好後就可以用 pack 打包回去：
-&lt;code&gt;java -jar abe.jar pack new-backup.tar new-backup.ab&lt;/code&gt; ，
-打包時可以不設密碼，要設一樣打在最後面。
-然後用 &lt;code&gt;adb restore new-backup.ab&lt;/code&gt; 就可以了。&lt;/p&gt;
-&lt;h2 id=&quot;從-recovery-備份的映象檔還原&quot;&gt;從 recovery 備份的映象檔還原&lt;/h2&gt;
-&lt;p&gt;但我以前的手機多半是刷成磚了或是電池壞了，
-所以也沒辦法用 adb 備份。
-但我有留當時刷機前備份的映象檔，
-就拿出來看能不能找出當時的存檔。&lt;/p&gt;
-&lt;p&gt;找了三台手機的備份，第一台是六年前的 zenfone 4，
-第二台是紅米，備份都是直接一個 tar，很好處理。
-可惜那台手機我沒有裝 pumpkins vs monsters，
-所以沒救。
-比較有趣是，可能因為 fat32 檔案大小不能超過 4G，
-所以該 tar 都有切成幾個，
-在解壓時要用 cat 連接起來：
-&lt;code&gt;cat data.tar.? | tar -t &amp;gt; file.list&lt;/code&gt; 。&lt;/p&gt;
-&lt;p&gt;再往前翻，是 sone ericsson w8，
-這台就比較有趣，當初是用 xrecovery 備份的，
-備份檔真的是映象檔。
-本來預期應該是 ext2 之類的，
-但 &lt;code&gt;file(1)&lt;/code&gt;竟然不認識：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;$ file data.img 
-data.img: data
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;本以為涼了，碰到 xrecovery 的專有格式。
-但還是多少 google 一下 xrecovery data.img format 之類的關鍵字，
-才發現早期的 android 似乎不是用 ext2，
-而是一個稱 yaffs 的檔案系統。
-用 apt 找一下，還給我找到了可以用的工具 unyaffs，
-於是就解開來壓縮，拿到 data 分區裡的資料了。&lt;/p&gt;
-&lt;h2 id=&quot;pumpkins-vs-monsters&quot;&gt;pumpkins vs monsters&lt;/h2&gt;
-&lt;p&gt;pumpkins vs monsters 的存檔是放在
-&lt;code&gt;/data/data/com.RunnerGames.game.PumpkinsVsMonster_AD/files/Pumpkins01.ini&lt;/code&gt; ，
-而且是個二進位檔，
-這裡就放上我目前的存檔十六進位碼，
-用 &lt;code&gt;xxd -p -r&lt;/code&gt; 就可以複原回二進位格式了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;e90300000101014a0000001c690200190000001800000019000000020000
-00020000000200000002000000020000000200000001000000000000000c
-000000080000000700000001000000000000000000000000000000000000
-000000000000000000000000000000000000000000000000000000000000
-00000000040000001000000005000000000b000000cb0000000f000000
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;這個存檔是打完所有基本關卡，
-剩萬聖節的特別關卡還沒過。
-不過我記得當年是有全破的，用炸藥炸一炸就過了。
-而且這個存檔的錢是超多，因為原本很堅持不用炸藥，
-但後來面不用炸藥實在太難，所以還是用了。&lt;/p&gt;
-&lt;p&gt;我後來用的 &lt;a href=&quot;android-atom-tip.html&quot;&gt;atom&lt;/a&gt; 螢幕有點小，
-造成雙擊來消除南瓜的判定很難達成，
-所以我幾乎無法消除南瓜。
-這樣用一點炸藥來通關應該還好吧。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/linux-firefox-ime-repeat-no-response.html</id>
 <title>firefox 中輸入法導致的無法長按連續輸入與關閉視窗後鍵盤無反應的問題</title>

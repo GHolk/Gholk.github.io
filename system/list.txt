@@ -330,3 +330,4 @@ linux-lvm-raid-1-builtin-boot.html
 batch-qrcode-generate.html
 android-app-finder-sms-locate-device.html
 contact.html
+javascript-pipe-method-and-inherit-constructor.html

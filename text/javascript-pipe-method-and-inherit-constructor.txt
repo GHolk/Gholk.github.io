@@ -1,0 +1,348 @@
+# javascript 中用方法實現管道與繞過繼承建構子的限制
+記錄幾個以前想到的有趣 js 用法。
+包括因為管道運算符一直沒出，用原型鏈達成的管道方法，
+也順便探討一下多層呼叫函數的方式，與其它語言中的作法。
+另一個和 js 的物件導向有關，
+也就是把建構函數寫在方法裡，讓繼承時更有彈性。
+
+## 管道運算符與方法
+js 很早就有說要出管道運算符，
+可以解決多層呼叫難以閱讀的問題，
+把 `a(b(c(d)))` 寫成 `d |> c |> b |> a` 。
+一些函數式的 js 函式庫也多會實作類似的功能，
+但可能會用 compose 而不是 pipe：
+`(a ． b ． c)(d)` 。
+
+### 其它語言的解決方式
+其它 js 的衍生語言，
+像 coffee script 就有對應的解決方法。
+coffee script 中函數呼叫可以省略括號，
+所以可以寫成 `console.log 'hello world'` ，
+前面的例子就變成 `a b c d` ，
+雖然看起來有點奇怪，但至少乾淨很多。
+如果要多個參數如 `a(b, c(d(e), f))` ，
+則是寫成 `a b, (c (d e), f)` ，
+不過 coffee script 也是接受 js 的用括號呼叫的寫法的，
+直接寫成 `a(b, c d(e), f )` 也是可以。
+而 live script 則是定義了 pipe 運算子。
+
+對比之下 haskell 一樣呼叫函數不用括號，
+但執行順序是 curry， `a b c d` 會變成 `a(b,c,d)` 。
+要巢狀呼叫要嘛用括號改變優先順序： `a (b (c d))` ，
+不然就是用 compose `(a . b . c) d` 。
+haskell 似乎沒有 pipe。
+
+### 用方法模擬管道運算符
+其實 js 中就有一個很類似的東西： **原型鏈** 。
+例如在使用 array 處理資料時，
+常看到的 map filter reduce 寫法，
+或者是 promise 的 then 串接。
+那能不能把這類操作擴增到所有 js 變數上呢？
+
+```js
+list.map(x => x * 6 + 3)
+    .filter(x => x % 2 == 0)
+    .forEach(x => console.log(x))
+```
+
+```js
+fetch(url).then(response => response.text())
+    .then(text => console.log(text))
+```
+
+這類操作會在 promise 或 array 上存在，
+是因為他們都是某種容器，含有某個值的容器。
+那如果用類似的作法來為 js 的數字實作一個 pipe 方法，
+是不是可以達成類似上述的鏈的功能？
+
+```js
+Number.prototype.pipe = function (f) {
+    return f(this)
+}
+let x = 7
+x.pipe(x => x + 3).pipe(y => y * 6)
+```
+
+接下來，再利用 js 的一項特性，所有東西都是物件，
+例如 Number 是一種 Object，
+也就是說可以在數字存取物件上定義的方法。
+同理來說 String Boolean 也是，
+更不用說 Array Map Set 等，甚至瀏覽器中的 dom 也是，
+只要把 pipe 方法定義在 Object 上，
+那幾乎所有 js 的變數都可以存取了。
+
+```js
+console.assert(typeof Number.prototype == 'object')
+console.assert(
+    typeof Number.prototype.hasOwnProperty == 'function'
+)
+Object.prototype.pipe = function (f) {
+    return f(this)
+}
+'hello world'.pipe(console.log)
+// [String: 'hello world']
+```
+
+### 原始類型與物件
+疑？是不是看到奇怪的東西了？
+那個奇怪的 String 是怎麼回事？
+其實我也不是很清楚，
+但似乎關係到 js 對原始類型的處理方式。
+js 中建立物件的方式是用 new 如 `new Object()`，
+但原始類型不能用 new，否則會造出奇怪的東西，
+就像這樣子。
+
+```js
+let n = 0
+let new_n = new Number()
+console.assert(typeof n == 'number')
+console.assert(typeof new_n == 'object')
+```
+
+前面的 Number.pipe 可以正確執行，
+是因為 js 內的自動轉型，
+對物件使用數學計算時，會嘗試把物件轉為數字，
+於是就成功了。
+只有在 console.log 時會不小心露出馬腳。
+
+如果有人也嘗試自己 patch 過 js 基本類型，
+可能會發現類似的問題；也可能不會，因為有自動轉型。
+可能是 js 在以原始類型為 this 呼叫函數時，會先裝箱成物件。
+
+```js
+function showType() {
+    return [typeof this, this]
+}
+let [type, x] = showType.call('abc')
+console.assert(type == 'object')
+console.assert(x !== 'abc')
+
+String.prototype.showType = showType
+'abc'.showType()
+```
+
+詳細原理我也不清楚，但原始類型還有另一項特徵，
+不能擁有自己的屬性。
+js 的物件只要沒有被 `Object.freeze` ，
+都可以在任何候新增屬性。
+原始類型則不能新增自己的屬性，
+但 new 出來的原始類型物件就可以。
+而在呼叫方法的時候，可能被當作屬性處理了。
+
+```js
+let x = 3
+x.foo = true
+console.assert(x.hasOwnProperty('foo') == false)
+
+let xo = new Number(3)
+xo.foo = true
+console.assert(xo.hasOwnProperty('foo'))
+```
+
+### 原始類型拆箱
+其實解法也很簡單，只要在 pipe 方法中，
+檢查一下物件是不是 Number String Boolean 這三類物件就好了，
+我們可以用物件的 constructor 屬性來得知他是由哪個建構函數建構的。
+最後，要取得物件對應的原始值，則可以用 `.valueOf()` 達成。
+
+```js
+Object.prototype.pipe = function (fn, ...arg) {
+    let originValue
+    switch (this.constructor) {
+    case String:
+    case Number:
+    case Boolean:
+        originValue = this.valueOf()
+        break
+    default:
+        originValue = this
+    }
+
+    if (typeof fn == 'function') {
+        return fn(originValue, ...arg)
+    }
+    else {
+        return fn.reduce((value, f) => f(value), originValue)
+    }
+}
+```
+
+這個函數是幾年前寫的，當初還預想了像 bind 或 call 那樣，
+可以把給函數的參數放在參數列表裡傳入。
+另外如果要 pipe 多次，與其呼叫多次 pipe，
+可以直接把函數寫成陣列傳入。
+
+```js
+let x = 3
+x.pipe([
+    a => a+3,
+    b => b*2,
+    c => c-1,
+    console.log
+])
+```
+
+
+### 不能用 pipe 方法的場合
+js 中雖然原始類型也是物件，連 true 和 false 都是，
+但有二種東西不是物件，null 和 undefined。
+雖然 `typeof null === 'object'` ，
+但這二種值是不能存取屬性的，會噴錯。
+
+```js
+let xn = null
+xn.pipe(console.log)
+
+let xu = undefined
+xu.pipe(console.log)
+```
+
+所要呼叫 `x.pipe(f)` 前要先確保 x 不是 null 也不是 undefined。
+這點其實可以透過 optional chain 達成：
+`x?.pipe(f)` ，如果 x 是 null 或 undefined，
+那就會直接回傳 undefined。
+
+### js 管道運算符細節
+但其實 pipe 方法還有一些明顯的缺點，像是傳入物件的方法時 this 會遺失，
+這是 js 傳入方法時的常見問題了，只能用箭頭函數或是 bind 來避免。
+上文中的 `x.pipe(console.log)` 之所以可以成立，
+是因為無數人已經碰過 console.log 這個問題，
+所以 console.log 早就可以不用綁在 console 上呼叫了。
+
+但如果是新定義的 [管道運算符] `|>` ，
+就可以直接規定管道中的 this 不會丟失，
+規定 `x |> other.method` 等價於 `other.method(x)` 。
+甚至還可以把最潮的 async/await 放進去，
+規定 `x |> await other.method |> console.log`
+等價於 `console.log(await other.method(x))` ，
+不然原本依運算的優先等級來看，
+會變成 `console.log((await other.method)(x))` 。
+
+[管道運算符]: https://www.bookstack.cn/read/es6-3rd/spilt.4.docs-proposals.md
+
+### 傳遞 this 的管道運算符
+其它同時也有一些有趣的運算符在討論，像是 [雙冒號運算符] `::` ，
+效果像是反過來的 `Function.prototype.call` ，
+例如 `object::func(a,b)` 等價於 `func.call(object, a, b)` 。
+應用除了方便匯入一些用到 this 的函式庫，
+也有類似管道的用法：
+
+```js
+function fibo() {
+    [this.x, this.y] = [this.y, this.x+this.y]
+}
+
+let fibo2 = ({x: 0, y: 1})::fibo()::fibo()
+console.assert(fibo2.x == 1)
+console.assert(fibo2.y == 2)
+```
+
+[雙冒號運算符]: https://www.bookstack.cn/read/es6-3rd/spilt.7.docs-proposals.md
+
+這個運算符就比較適合用 method 實作，
+一樣實作在 Object.prototype 上就可以了。
+
+```js
+Object.prototype.call = function (f, ...args) {
+    return f.call(this, ...args)
+}
+let fibo2 = ({x: 0, y: 1}).call(fibo).call(fibo)
+```
+
+當然，運算符還有一些特殊規則，
+像不呼叫的話就會變成 bind，
+`let barBind = foo::bar` 同義於 `let barBind = bar.bind(foo)` 。
+
+不過 bind 也可以用方法實作就是了：
+
+```js
+Object.prototype.bind = function (f, ...args) {
+    return f.bind(this, ...args)
+}
+```
+
+## 更彈性繼承建構子函數的方式
+js 的物件在 es6 中有了正式的繼承方式 class extends。
+es6 的 class 在繼承中可以用 super 存取父元素的方法，
+在重寫子元素方法時，可以據此修改呼叫的參數，
+或加工原本方法的回傳值。
+但如果要重寫建構子 ，則重寫的 constructor 一定要呼叫 super，
+且不能在呼叫 super 前存取 this；這就變得有點麻煩。
+像是想在物件初始化前先做一些前置步驟。
+
+```js
+class Bar extends Foo {
+    constructor(a) {
+        // 一定要呼叫 super，且不能在呼叫父建構子前存取 this
+        super(a+1, a+3)
+        this.c = a
+    }
+    method(x) {
+        // 可以使用 super.method 呼叫父物件版本的方法
+        const parent = super.method(x+1, x+2)
+        return parent * x
+    }
+}
+```
+
+js 的物件導向中，
+所謂的類別其實只是一個帶有 prototype 的函數，
+而物件則是在使用 new 關鍵字呼叫函數時產生的。
+所以無論如何都是一個獨立的一個新函數，
+呼叫父類別的建構函數是完全可選的。
+
+[在以前的時代如果要繼承][heir old] ，
+就直接把 prototype 設成某個父類實例，
+或是設成 `Object.create(Parent.prototype)` 。
+如果要改寫建構子，
+大部份是在建構子中用 `Parent.call(this, ...arguments)` 
+這種奇怪的方式呼叫。
+
+[heir old]: https://www.muji.dev/2020/01/05/iron30-22/
+
+因此如果要規避必須呼叫 super 的麻煩，
+有個比較 hacky 的技巧，
+就是不要把程式放到 constructor 裡，
+而是塞在另一個方法裡，像 init 或乾脆叫 `_constructor` 。
+然後在 constructor 中就只做一件事，呼叫該方法。
+
+```js
+class Foo {
+    constructor(...args) {
+        this.init(...args)
+    }
+    init() {
+        this.foo = true
+    }
+}
+```
+
+在子類如果要魔改的話，直接改在 init 方法上即可。
+因為在改寫方法時，不需要規守建構子中必須先呼叫 super 的規範。
+再加上把收到的所有參數都原封不動傳入 init，
+就能在 init 裡做完所有事。
+事實上，唯一能在 constructor 裡能做而 method 不行的，
+就是 return 一個新物件取代 this，但如果都用了 extends，
+應該不會用到這功能。
+
+```js
+class Bar extends Foo {
+    init(a, b) {
+        this.bar = true
+        super.init(a, b+1)
+        this.foo = false
+    }
+}
+```
+
+因為重新定義 constructor，直接延用父類的就好，
+所以子類不需要定義自己的 constructor。
+也可以很自由的在任何時候，在原方法呼叫前、中、後，
+對 this 做其它操作，
+而不被 constructor 中須要先呼叫 super 的規則限制。
+
+#javascript
+#物件導向
+#程式語言
+#函數
+

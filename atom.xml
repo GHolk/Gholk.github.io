@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2021-07-31T13:43:08.001Z</updated>
+  <updated>2021-08-05T08:10:27.368Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,299 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/javascript-pipe-method-and-inherit-constructor.html</id>
+<title>javascript 中用方法實現管道與繞過繼承建構子的限制</title>
+<published>2021-08-05T08:10:02.236Z</published>
+<updated>2021-08-05T08:10:27.355Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/javascript-pipe-method-and-inherit-constructor.html"/>
+<summary type="html">記錄幾個以前想到的有趣 js 用法。
+包括因為管道運算符一直沒出，用原型鏈達成的管道方法，
+也順便探討一下多層呼叫函數的方式，與其它語言中的作法。
+另一個和 js 的物件導向有關，
+也就是把建構函數寫在方法裡，讓繼承時更有彈性。</summary>
+<category term="javascript"/>
+<category term="物件導向"/>
+<category term="程式語言"/>
+<category term="函數"/>
+<content type="html">&lt;h1 id=&quot;javascript-中用方法實現管道與繞過繼承建構子的限制&quot;&gt;javascript 中用方法實現管道與繞過繼承建構子的限制&lt;/h1&gt;
+&lt;p&gt;記錄幾個以前想到的有趣 js 用法。
+包括因為管道運算符一直沒出，用原型鏈達成的管道方法，
+也順便探討一下多層呼叫函數的方式，與其它語言中的作法。
+另一個和 js 的物件導向有關，
+也就是把建構函數寫在方法裡，讓繼承時更有彈性。&lt;/p&gt;
+&lt;h2 id=&quot;管道運算符與方法&quot;&gt;管道運算符與方法&lt;/h2&gt;
+&lt;p&gt;js 很早就有說要出管道運算符，
+可以解決多層呼叫難以閱讀的問題，
+把 &lt;code&gt;a(b(c(d)))&lt;/code&gt; 寫成 &lt;code&gt;d |&amp;gt; c |&amp;gt; b |&amp;gt; a&lt;/code&gt; 。
+一些函數式的 js 函式庫也多會實作類似的功能，
+但可能會用 compose 而不是 pipe：
+&lt;code&gt;(a ． b ． c)(d)&lt;/code&gt; 。&lt;/p&gt;
+&lt;h3 id=&quot;其它語言的解決方式&quot;&gt;其它語言的解決方式&lt;/h3&gt;
+&lt;p&gt;其它 js 的衍生語言，
+像 coffee script 就有對應的解決方法。
+coffee script 中函數呼叫可以省略括號，
+所以可以寫成 &lt;code&gt;console.log &amp;apos;hello world&amp;apos;&lt;/code&gt; ，
+前面的例子就變成 &lt;code&gt;a b c d&lt;/code&gt; ，
+雖然看起來有點奇怪，但至少乾淨很多。
+如果要多個參數如 &lt;code&gt;a(b, c(d(e), f))&lt;/code&gt; ，
+則是寫成 &lt;code&gt;a b, (c (d e), f)&lt;/code&gt; ，
+不過 coffee script 也是接受 js 的用括號呼叫的寫法的，
+直接寫成 &lt;code&gt;a(b, c d(e), f )&lt;/code&gt; 也是可以。
+而 live script 則是定義了 pipe 運算子。&lt;/p&gt;
+&lt;p&gt;對比之下 haskell 一樣呼叫函數不用括號，
+但執行順序是 curry， &lt;code&gt;a b c d&lt;/code&gt; 會變成 &lt;code&gt;a(b,c,d)&lt;/code&gt; 。
+要巢狀呼叫要嘛用括號改變優先順序： &lt;code&gt;a (b (c d))&lt;/code&gt; ，
+不然就是用 compose &lt;code&gt;(a . b . c) d&lt;/code&gt; 。
+haskell 似乎沒有 pipe。&lt;/p&gt;
+&lt;h3 id=&quot;用方法模擬管道運算符&quot;&gt;用方法模擬管道運算符&lt;/h3&gt;
+&lt;p&gt;其實 js 中就有一個很類似的東西： &lt;strong&gt;原型鏈&lt;/strong&gt; 。
+例如在使用 array 處理資料時，
+常看到的 map filter reduce 寫法，
+或者是 promise 的 then 串接。
+那能不能把這類操作擴增到所有 js 變數上呢？&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;list.map(x =&amp;gt; x * 6 + 3)
+    .filter(x =&amp;gt; x % 2 == 0)
+    .forEach(x =&amp;gt; console.log(x))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;fetch(url).then(response =&amp;gt; response.text())
+    .then(text =&amp;gt; console.log(text))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;這類操作會在 promise 或 array 上存在，
+是因為他們都是某種容器，含有某個值的容器。
+那如果用類似的作法來為 js 的數字實作一個 pipe 方法，
+是不是可以達成類似上述的鏈的功能？&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;Number.prototype.pipe = function (f) {
+    return f(this)
+}
+let x = 7
+x.pipe(x =&amp;gt; x + 3).pipe(y =&amp;gt; y * 6)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;接下來，再利用 js 的一項特性，所有東西都是物件，
+例如 Number 是一種 Object，
+也就是說可以在數字存取物件上定義的方法。
+同理來說 String Boolean 也是，
+更不用說 Array Map Set 等，甚至瀏覽器中的 dom 也是，
+只要把 pipe 方法定義在 Object 上，
+那幾乎所有 js 的變數都可以存取了。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;console.assert(typeof Number.prototype == &amp;apos;object&amp;apos;)
+console.assert(
+    typeof Number.prototype.hasOwnProperty == &amp;apos;function&amp;apos;
+)
+Object.prototype.pipe = function (f) {
+    return f(this)
+}
+&amp;apos;hello world&amp;apos;.pipe(console.log)
+// [String: &amp;apos;hello world&amp;apos;]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;原始類型與物件&quot;&gt;原始類型與物件&lt;/h3&gt;
+&lt;p&gt;疑？是不是看到奇怪的東西了？
+那個奇怪的 String 是怎麼回事？
+其實我也不是很清楚，
+但似乎關係到 js 對原始類型的處理方式。
+js 中建立物件的方式是用 new 如 &lt;code&gt;new Object()&lt;/code&gt;，
+但原始類型不能用 new，否則會造出奇怪的東西，
+就像這樣子。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;let n = 0
+let new_n = new Number()
+console.assert(typeof n == &amp;apos;number&amp;apos;)
+console.assert(typeof new_n == &amp;apos;object&amp;apos;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;前面的 Number.pipe 可以正確執行，
+是因為 js 內的自動轉型，
+對物件使用數學計算時，會嘗試把物件轉為數字，
+於是就成功了。
+只有在 console.log 時會不小心露出馬腳。&lt;/p&gt;
+&lt;p&gt;如果有人也嘗試自己 patch 過 js 基本類型，
+可能會發現類似的問題；也可能不會，因為有自動轉型。
+可能是 js 在以原始類型為 this 呼叫函數時，會先裝箱成物件。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;function showType() {
+    return [typeof this, this]
+}
+let [type, x] = showType.call(&amp;apos;abc&amp;apos;)
+console.assert(type == &amp;apos;object&amp;apos;)
+console.assert(x !== &amp;apos;abc&amp;apos;)
+
+String.prototype.showType = showType
+&amp;apos;abc&amp;apos;.showType()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;詳細原理我也不清楚，但原始類型還有另一項特徵，
+不能擁有自己的屬性。
+js 的物件只要沒有被 &lt;code&gt;Object.freeze&lt;/code&gt; ，
+都可以在任何候新增屬性。
+原始類型則不能新增自己的屬性，
+但 new 出來的原始類型物件就可以。
+而在呼叫方法的時候，可能被當作屬性處理了。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;let x = 3
+x.foo = true
+console.assert(x.hasOwnProperty(&amp;apos;foo&amp;apos;) == false)
+
+let xo = new Number(3)
+xo.foo = true
+console.assert(xo.hasOwnProperty(&amp;apos;foo&amp;apos;))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;原始類型拆箱&quot;&gt;原始類型拆箱&lt;/h3&gt;
+&lt;p&gt;其實解法也很簡單，只要在 pipe 方法中，
+檢查一下物件是不是 Number String Boolean 這三類物件就好了，
+我們可以用物件的 constructor 屬性來得知他是由哪個建構函數建構的。
+最後，要取得物件對應的原始值，則可以用 &lt;code&gt;.valueOf()&lt;/code&gt; 達成。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;Object.prototype.pipe = function (fn, ...arg) {
+    let originValue
+    switch (this.constructor) {
+    case String:
+    case Number:
+    case Boolean:
+        originValue = this.valueOf()
+        break
+    default:
+        originValue = this
+    }
+
+    if (typeof fn == &amp;apos;function&amp;apos;) {
+        return fn(originValue, ...arg)
+    }
+    else {
+        return fn.reduce((value, f) =&amp;gt; f(value), originValue)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;這個函數是幾年前寫的，當初還預想了像 bind 或 call 那樣，
+可以把給函數的參數放在參數列表裡傳入。
+另外如果要 pipe 多次，與其呼叫多次 pipe，
+可以直接把函數寫成陣列傳入。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;let x = 3
+x.pipe([
+    a =&amp;gt; a+3,
+    b =&amp;gt; b*2,
+    c =&amp;gt; c-1,
+    console.log
+])
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;不能用-pipe-方法的場合&quot;&gt;不能用 pipe 方法的場合&lt;/h3&gt;
+&lt;p&gt;js 中雖然原始類型也是物件，連 true 和 false 都是，
+但有二種東西不是物件，null 和 undefined。
+雖然 &lt;code&gt;typeof null === &amp;apos;object&amp;apos;&lt;/code&gt; ，
+但這二種值是不能存取屬性的，會噴錯。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;let xn = null
+xn.pipe(console.log)
+
+let xu = undefined
+xu.pipe(console.log)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;所要呼叫 &lt;code&gt;x.pipe(f)&lt;/code&gt; 前要先確保 x 不是 null 也不是 undefined。
+這點其實可以透過 optional chain 達成：
+&lt;code&gt;x?.pipe(f)&lt;/code&gt; ，如果 x 是 null 或 undefined，
+那就會直接回傳 undefined。&lt;/p&gt;
+&lt;h3 id=&quot;js-管道運算符細節&quot;&gt;js 管道運算符細節&lt;/h3&gt;
+&lt;p&gt;但其實 pipe 方法還有一些明顯的缺點，像是傳入物件的方法時 this 會遺失，
+這是 js 傳入方法時的常見問題了，只能用箭頭函數或是 bind 來避免。
+上文中的 &lt;code&gt;x.pipe(console.log)&lt;/code&gt; 之所以可以成立，
+是因為無數人已經碰過 console.log 這個問題，
+所以 console.log 早就可以不用綁在 console 上呼叫了。&lt;/p&gt;
+&lt;p&gt;但如果是新定義的 &lt;a href=&quot;https://www.bookstack.cn/read/es6-3rd/spilt.4.docs-proposals.md&quot;&gt;管道運算符&lt;/a&gt; &lt;code&gt;|&amp;gt;&lt;/code&gt; ，
+就可以直接規定管道中的 this 不會丟失，
+規定 &lt;code&gt;x |&amp;gt; other.method&lt;/code&gt; 等價於 &lt;code&gt;other.method(x)&lt;/code&gt; 。
+甚至還可以把最潮的 async/await 放進去，
+規定 &lt;code&gt;x |&amp;gt; await other.method |&amp;gt; console.log&lt;/code&gt;
+等價於 &lt;code&gt;console.log(await other.method(x))&lt;/code&gt; ，
+不然原本依運算的優先等級來看，
+會變成 &lt;code&gt;console.log((await other.method)(x))&lt;/code&gt; 。&lt;/p&gt;
+&lt;h3 id=&quot;傳遞-this-的管道運算符&quot;&gt;傳遞 this 的管道運算符&lt;/h3&gt;
+&lt;p&gt;其它同時也有一些有趣的運算符在討論，像是 &lt;a href=&quot;https://www.bookstack.cn/read/es6-3rd/spilt.7.docs-proposals.md&quot;&gt;雙冒號運算符&lt;/a&gt; &lt;code&gt;::&lt;/code&gt; ，
+效果像是反過來的 &lt;code&gt;Function.prototype.call&lt;/code&gt; ，
+例如 &lt;code&gt;object::func(a,b)&lt;/code&gt; 等價於 &lt;code&gt;func.call(object, a, b)&lt;/code&gt; 。
+應用除了方便匯入一些用到 this 的函式庫，
+也有類似管道的用法：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;function fibo() {
+    [this.x, this.y] = [this.y, this.x+this.y]
+}
+
+let fibo2 = ({x: 0, y: 1})::fibo()::fibo()
+console.assert(fibo2.x == 1)
+console.assert(fibo2.y == 2)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;這個運算符就比較適合用 method 實作，
+一樣實作在 Object.prototype 上就可以了。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;Object.prototype.call = function (f, ...args) {
+    return f.call(this, ...args)
+}
+let fibo2 = ({x: 0, y: 1}).call(fibo).call(fibo)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;當然，運算符還有一些特殊規則，
+像不呼叫的話就會變成 bind，
+&lt;code&gt;let barBind = foo::bar&lt;/code&gt; 同義於 &lt;code&gt;let barBind = bar.bind(foo)&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;不過 bind 也可以用方法實作就是了：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;Object.prototype.bind = function (f, ...args) {
+    return f.bind(this, ...args)
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;更彈性繼承建構子函數的方式&quot;&gt;更彈性繼承建構子函數的方式&lt;/h2&gt;
+&lt;p&gt;js 的物件在 es6 中有了正式的繼承方式 class extends。
+es6 的 class 在繼承中可以用 super 存取父元素的方法，
+在重寫子元素方法時，可以據此修改呼叫的參數，
+或加工原本方法的回傳值。
+但如果要重寫建構子 ，則重寫的 constructor 一定要呼叫 super，
+且不能在呼叫 super 前存取 this；這就變得有點麻煩。
+像是想在物件初始化前先做一些前置步驟。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;class Bar extends Foo {
+    constructor(a) {
+        // 一定要呼叫 super，且不能在呼叫父建構子前存取 this
+        super(a+1, a+3)
+        this.c = a
+    }
+    method(x) {
+        // 可以使用 super.method 呼叫父物件版本的方法
+        const parent = super.method(x+1, x+2)
+        return parent * x
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;js 的物件導向中，
+所謂的類別其實只是一個帶有 prototype 的函數，
+而物件則是在使用 new 關鍵字呼叫函數時產生的。
+所以無論如何都是一個獨立的一個新函數，
+呼叫父類別的建構函數是完全可選的。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.muji.dev/2020/01/05/iron30-22/&quot;&gt;在以前的時代如果要繼承&lt;/a&gt; ，
+就直接把 prototype 設成某個父類實例，
+或是設成 &lt;code&gt;Object.create(Parent.prototype)&lt;/code&gt; 。
+如果要改寫建構子，
+大部份是在建構子中用 &lt;code&gt;Parent.call(this, ...arguments)&lt;/code&gt; 
+這種奇怪的方式呼叫。&lt;/p&gt;
+&lt;p&gt;因此如果要規避必須呼叫 super 的麻煩，
+有個比較 hacky 的技巧，
+就是不要把程式放到 constructor 裡，
+而是塞在另一個方法裡，像 init 或乾脆叫 &lt;code&gt;_constructor&lt;/code&gt; 。
+然後在 constructor 中就只做一件事，呼叫該方法。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;class Foo {
+    constructor(...args) {
+        this.init(...args)
+    }
+    init() {
+        this.foo = true
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;在子類如果要魔改的話，直接改在 init 方法上即可。
+因為在改寫方法時，不需要規守建構子中必須先呼叫 super 的規範。
+再加上把收到的所有參數都原封不動傳入 init，
+就能在 init 裡做完所有事。
+事實上，唯一能在 constructor 裡能做而 method 不行的，
+就是 return 一個新物件取代 this，但如果都用了 extends，
+應該不會用到這功能。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;class Bar extends Foo {
+    init(a, b) {
+        this.bar = true
+        super.init(a, b+1)
+        this.foo = false
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;因為重新定義 constructor，直接延用父類的就好，
+所以子類不需要定義自己的 constructor。
+也可以很自由的在任何時候，在原方法呼叫前、中、後，
+對 this 做其它操作，
+而不被 constructor 中須要先呼叫 super 的規則限制。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/linux-l2tp-vpn-debian-stretch.html#debian-buster-更新</id>
 <title>linux 下連接 l2tp vpn</title>
 <published>2019-01-04T17:35:53.804Z</published>
@@ -2158,241 +2451,7 @@ matrix 在架構上介於 discord（或 slack）與 irc 的中間，
 <category term="shell"/>
 <category term="linux"/>
 <category term="心得"/>
-<content type="html">&lt;h1 id=&quot;matrix-菜鳥使用心得&quot;&gt;matrix 菜鳥使用心得&lt;/h1&gt;
-&lt;p&gt;一直想架一個自由的即時通訊軟體，
-之前 &lt;a href=&quot;instant-message-app-future-work.html&quot;&gt;大概研究了幾個自由的 im&lt;/a&gt; ，
-最後因為有社團的資源可以蹭，所以架了聯邦制的 im matrix。
-matrix 在架構上介於 discord（或 slack）與 irc 的中間，
-但因為聯邦制和注重隱私，又多了一些不便。
-加上很多功能還在開發中，會少一些功能，需要手動操作。
-目前要直接從 discord 搬過來 matrix 會不太方便。
-本文介紹了 matrix 的基本概念、使用經驗、與 discord 的比較，
-最後是如何以 restful api 管理伺服器。&lt;/p&gt;
-&lt;h2 id=&quot;matrix-命名空間&quot;&gt;matrix 命名空間&lt;/h2&gt;
-&lt;p&gt;matrix 是所謂聯邦制，在不同 server 上註冊的使用者可以互相溝通。
-所有的資源都是掛在某一個 server 下，
-包括使用者、頻道、頻道群組（像 discord 的 server 或說 guild），
-但使用者仍可存取不同的 server 上的資源。&lt;/p&gt;
-&lt;p&gt;matrix 上的名稱建構方式，像是 irc 和 twitter 的綜合版，
-再加上用冒號來後綴伺服器名來達成，
-在同一個伺服器上則可以省去後綴的伺服器名。&lt;/p&gt;
-&lt;p&gt;伺服器名即是域名，例如 ccns 的伺服器名是 &lt;code&gt;ccns.io&lt;/code&gt; ，
-那建立在 &lt;code&gt;ccns.io&lt;/code&gt; 上的 general 頻道完整名稱即寫成 &lt;code&gt;#general:ccns.io&lt;/code&gt; 。
-而註冊在 ccns 上的使用者 gholk 即是 &lt;code&gt;@gholk:ccns.io&lt;/code&gt; 。
-和 xmpp 使用的 email 風格名稱 &lt;code&gt;gholk@ccns.io&lt;/code&gt; 不太一樣。&lt;/p&gt;
-&lt;h2 id=&quot;頻道&quot;&gt;頻道&lt;/h2&gt;
-&lt;p&gt;&lt;abbr title=&quot;room&quot;&gt;頻道&lt;/abbr&gt;也就是群組聊天，是聊天的基本單位；
-可以是一對一，也可以是多對一；
-可以是公開，也可以是私密或端對端加密。
-頻道也可以有地址，有地址的頻道方可以用井號加伺服器名的方式表示，
-這類有地址的頻道就比較像 irc discord 或 telegram 上的頻道。
-當然，伺服器管理者可以直接管理地址，
-或控制是否允許使用者建立具有地址的頻道。
-不然註冊像 &lt;code&gt;#admin:ccns.io&lt;/code&gt; 之類的頻道會讓管理者很困擾。&lt;/p&gt;
-&lt;p&gt;在地址之外，也可以有單純用來顯示的頻道名稱。
-其它像一對一的聊天，或是加了多個人的群聊，
-預設是沒有地址也沒有名稱的，也是預設加密的。
-名稱和地址可以事後再加上，但加密是不能解除。
-這關係到所有加密的是端對端加密，
-伺服器上保存的只是加密的資料，
-所以沒辦法做到解除加密的操作。&lt;/p&gt;
-&lt;p&gt;頻道的公開程度可以有三種，
-可被搜尋與加入、可用連結加入、需要被邀請才能加入。
-和加密的選項是獨立的。&lt;/p&gt;
-&lt;p&gt;一個頻道也可以有多個地址，
-雖然我想不到這功能有什麼應用。
-目前我們的 discord bridge bot
-會自動用 discord 的頻道 id 來當作頻道的地址，
-如果我們想把 discord 上的 general 也當作 matrix 的 general，
-就必須要在 id 之外再加上額外的地址 general。&lt;/p&gt;
-&lt;h2 id=&quot;頻道權限&quot;&gt;頻道權限&lt;/h2&gt;
-&lt;p&gt;頻道的權限是用分數決定的。
-最高分者是是管理者，可以有絕對的權限，預設建立者是 100 分。
-每個人可以調整較低分者的權限，最高到和自己同分為止。&lt;/p&gt;
-&lt;p&gt;每人預設是 0 分，moderator 是 50 分，admin 是 100 分，
-頻道設定裡可以調不同的操作需要哪種身份，
-像只有 admin 能 invite 或 moderator 可以刪文之類的。&lt;/p&gt;
-&lt;p&gt;admin 可以把人升到 admin，但 admin 之間不能互踢之類的。
-此外 matrix 目前也沒有跨頻道的權限管理機制，
-唯一比較像跨頻道的一個是 server admin 可以直接把人加入或踼出頻道，
-且也可以把人直接升為頻道管理員。&lt;/p&gt;
-&lt;h2 id=&quot;頻道群組&quot;&gt;頻道群組&lt;/h2&gt;
-&lt;p&gt;有個東西叫 community，有點像 discord 上的 server，
-可以把幾個頻道放到同一個群組裡。
-群組是用加號開頭，可以有 avatar、html 的介紹。
-使用者只要點選群組的圖示，就可以看到所有群組裡的頻道。
-但也就這樣而已。&lt;/p&gt;
-&lt;p&gt;沒有權限管理，沒有頻道管理，沒有命名空間管理。
-各頻道間還是幾乎獨立，沒辦法一次加入所有頻道，
-沒辦法把一人指定為所有頻道的管理員，
-也不能統一管理所有頻道的公開、加密程度。
-而且沒有命名空間管理，所以例如 &lt;a href=&quot;https://matrix.to/#/+free-rms:matrix.org&quot;&gt;+free-rms:matrix.org&lt;/a&gt; 群組，
-裡面有 press random general 等頻道，如果他們都要有地址，
-只能叫 &lt;code&gt;#free-rms-press:matrix.org&lt;/code&gt; &lt;code&gt;#free-rms-random:matrix.org&lt;/code&gt;
-&lt;code&gt;#free-rms:matrix.org&lt;/code&gt; ，
-至於為什麼沒有 &lt;code&gt;#free-rms-general:matrix.org&lt;/code&gt; ，
-因為 general 即是通用的頻道，自然可以省去地址裡的 general。&lt;/p&gt;
-&lt;p&gt;不過這很大程度是因為 community 還是個開發中的功能。
-在一開始，這個功能叫 group，現在叫 community。
-未來應該會多出一個叫 space 的功能，取代現有的 community，
-很有可能，因為現在已經在 beta 了。
-只能希望未來這功能會好用一點，像把上面的幾點都改善一下。
-而且這功能現在還缺少一些基本的 api，像不能改地址，
-也沒有增加除了 creator 外的 admin 的功能。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://matrix.org/blog/2021/05/17/the-matrix-space-beta&quot;&gt;space 似乎比較神奇，他是一種可以巢狀的頻道&lt;/a&gt;，
-主要開發的原因是官方發現他們在實作 group 時，
-幾乎要把現有的頻道功能重複實現一遍，
-像權限管理、邀請之類的，他們覺得很沒意義。
-所以他們新增了一種特殊的可以巢狀的頻道，
-然後重用頻道現有的權限管理等 api。&lt;/p&gt;
-&lt;h2 id=&quot;discord-與-slack-的概觀&quot;&gt;discord 與 slack 的概觀&lt;/h2&gt;
-&lt;p&gt;再來是與時下最強群聊軟體沒有之一的 discord 的類比。
-以經營組織來說，discord 的確是很強的平台，
-當初的 &lt;a href=&quot;https://www.ccns.io&quot;&gt;ccns&lt;/a&gt; 也是搬到 discord 上後慢慢累積起凝聚力的。&lt;/p&gt;
-&lt;p&gt;discord 或 slack 都繼承自 irc 的伺服器概念，
-一個組織會有一個伺服器，一個伺服器下可以有多個頻道，
-同一個伺服器內的管理者是同一群人。
-但又和 irc 那種限於頻道內的自治不同，
-在不同的 irc 伺服器間，同一個頻道的訊息是會互相轉發的，
-而且 irc 管理者也不太會管理到頻道內的事。&lt;/p&gt;
-&lt;p&gt;在此之外，discord 和 slack 又有一些差別，
-slack 不同的伺服器間幾乎是完全獨立的，
-在每個伺服器都需要重新註冊一遍，
-從不同伺服器使用不同的域名就可以大概看出來。
-（如 &lt;a href=&quot;https://g0v.slack.com&quot;&gt;https://g0v.slack.com&lt;/a&gt; 或 &lt;a href=&quot;https://ccca.slack.com&quot;&gt;https://ccca.slack.com&lt;/a&gt; 。）
-且不同的伺服器需要在獨立的分頁運作，
-不同伺服器的使用者當然也不可能互相溝通。
-slack 唯一統一的就是應用程式，或說擴充功能的介面和商店。&lt;/p&gt;
-&lt;p&gt;而 discord 則較開放。
-所謂的伺服器，比較像一個組織，
-不知道程式中還是不是對應到一個伺服器。
-使用者加入的所有的伺服器，都一樣掛在 discord.com 這個域名下。
-（以前是 discordapp.com，後來可能有錢了，把 discord.com 買回來了。）
-不同伺服器都有同一個 web 介面中展示，
-不同伺服器中的帳號也是統一的，只需要在 discord 註冊一次，
-使用者間也可以互相溝通。&lt;/p&gt;
-&lt;p&gt;slack 可能想製造一種感覺，聊天伺服器的確是由該組織建立的，
-是一個內部架設供內部使用的工具，而 slack 只是提供托管伺服器平台。
-所以使用者當然需要獨立註冊。
-而我猜 discord 則單純認為統一註冊比較簡單而已，
-當然可能也考慮了使用者情境。
-discord 最早是供遊戲使用的聊天平台，
-所以很多人可能只是從某個遊戲得知 discord 這個平台，
-上面有一些資訊，所以來到這裡。
-然後如果還需要註冊才能進入，那可能就會有一大半放棄了，
-（相比多數不需登入的 web 上的攻略。）
-所以開放了允許訪客的功能。
-整體比 slack 要 &lt;strong&gt;開放&lt;/strong&gt; 很多。&lt;/p&gt;
-&lt;h2 id=&quot;discord-與-matrix-的比較&quot;&gt;discord 與 matrix 的比較&lt;/h2&gt;
-&lt;p&gt;matrix 中有二種功能可以和 discord 的 server 中類比，
-一是用實際一部 matrix server，二是用 matrix 中的 community 功能；
-但其實二者都不太像。&lt;/p&gt;
-&lt;p&gt;先前說過，matrix 上允許頻道的自治，
-雖然 server admin 能直接把人新增為頻道的 admin，
-但頻道內的 admin 還是和 server 的 admin 獨立的。
-每個頻道有自己的管理者，最多只能做到同一群人建立的頻道中，
-都由同一群人來擔任管理者，但還是需要一一指派。
-不像 discord 內，可以直接在 server 中把人劃為不同的階級，
-依階級對不同頻道有不同的存取權。&lt;/p&gt;
-&lt;p&gt;matrix 中的 community 可以用來組織頻道，
-但尚不包含統一管理權限的功能。
-而且組織事實上是與頻道的管理無關的，
-任何人都可以建立組織，將任意的頻道加入自己有管理權限的組織中，
-無論在該頻道中是為管理員。
-（但如果要建立具有地址的組織，
-就得看 server admin 是否開放這項功能，和建立具名頻道一樣。）
-所以組織目前比較像是建立了個人用的對該頻道的 &lt;em&gt;捷徑&lt;/em&gt; ，
-而不是像 discord 中頻道必定隸屬 server 的階層式關係。&lt;/p&gt;
-&lt;p&gt;而且詳細來看，在 server 下 discord 還有一層
-&lt;abbr title=&quot;category&quot;&gt;頻道群組&lt;/abbr&gt; ，
-其實那層也是關鍵，因為可以把幾個內部頻道放一起設定權限，
-而不用一個個單獨設。
-其實如果用 matrix server 對比 disocrd server，
-那 category 就是類比到 community，
-但偏偏 community 又做的比較像 server。
-（都是在左側側邊欄的小圈圈。）&lt;/p&gt;
-&lt;p&gt;如果用命名空間來看，要類比 discord 上的 server，
-還是用一座 matrix server 比較適合。
-以命名空間來說，某個 server 下的某個頻道，
-套在 discord 和 matrix 上都是正確的。
-category 和 community 就暫時忽略吧。&lt;/p&gt;
-&lt;p&gt;matrix 也有把 discord 的 reaction 功能抄過來。
-但 bridge 時有二個問題，
-一是 bot 沒辦法把 matrix 的 reaction 傳到 discord 上，
-因為 discord bot 只有一個，沒辦法傳遞多個 emoji。
-而 bridge 則會用建立人頭帳號的方把 discord 上的帳號 bridge 到 matrix，
-所以可以用同樣的人頭做出和 discord 上同樣的反應。
-另一個比較麻煩的是我們的 discord server 有大量的 costum reaction，
-matrix 規格現在還不支援。
-bridge 會把 costum reaction 的圖片存到 matrix 上，
-然後用 mxc 的連結網址當作 reaction name 來對訊息做 react。
-但目前 element 還不會把 mxc reaction 顯示成圖片，
-就只會看到一串網址。&lt;/p&gt;
-&lt;h2 id=&quot;server-client-與-federation-溝通&quot;&gt;server client 與 federation 溝通&lt;/h2&gt;
-&lt;p&gt;matrix 是聯邦式的架構，而不是 p2p，
-所以和 xmpp 類似，所有資訊都是透過自己的 server 進行，
-而不會發生客戶端直接連到對方伺服器的情況。
-例如我 &lt;code&gt;@gholk:ccns.io&lt;/code&gt; 想傳訊息到 &lt;code&gt;#free-rms:matrix.org&lt;/code&gt; 這個頻道，
-那我在客戶端操作後，客戶端會把要求傳給我的伺服器，
-我的伺服器 ccns.io 會去向 matrix.org 發起連線傳送訊息。&lt;/p&gt;
-&lt;h3 id=&quot;server-端的代理機制&quot;&gt;server 端的代理機制&lt;/h3&gt;
-&lt;p&gt;但因為 matrix 有設計 &lt;a href=&quot;https://github.com/matrix-org/synapse/blob/a888cbdd314a84cbb477e5b04bd27b7053f08495/docs/delegate.m&quot;&gt;delegation&lt;/a&gt; 機制，
-可以讓 server 可以用比較好看的網域名稱，
-&lt;a href=&quot;ccns-matrix-synapse-install-note.html&quot;&gt;前一篇安裝教學也有稍微提到&lt;/a&gt;。
-所以要傳訊息給 matrix.org 時，
-會先查 matrix.org 這個名字的 matrix 通訊歸誰管：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;查 &lt;code&gt;_matrix._tcp.matrix.org&lt;/code&gt; 這個域名的 dns srv 記錄，
-代表要和 matrix.org 以 matrix 協議通訊時，實際負責的是哪個伺服器：
-&lt;code&gt;host -t SRV _matrix._tcp.matrix.org&lt;/code&gt; 。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;如果沒有查到，那接著就會嘗試用連到
- &lt;a href=&quot;http://matrix.org/.well-known/matrix/server&quot;&gt;http://matrix.org/.well-known/matrix/server&lt;/a&gt; ，
- 看該 json 檔案有沒有指定 matrix 由哪個伺服器負責。
- 如果該位址是重導向，則會跟隨重導向。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;如果也沒查到，最後就會直接把該網址當作 matrix server 連線。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;所以當你發訊息到 &lt;code&gt;*:matrix.org&lt;/code&gt; 時，
-依 dns srv 記錄可以看到，
-實際上負責 matrix.org 域名的 matrix server 是 
-&lt;code&gt;matrix-federation.matrix.org.cdn.cloudflare.net&lt;/code&gt; 。
-而 ccns.io 時，則是 &lt;a href=&quot;https://ccns.io/.well-known/matrix/server&quot;&gt;https://ccns.io/.well-known/matrix/server&lt;/a&gt;
-會轉址到 &lt;a href=&quot;http://www.ccns.io/.well-known/matrix/server&quot;&gt;http://www.ccns.io/.well-known/matrix/server&lt;/a&gt; ，
-json 內容即是指定到 matrix.ccns.io:443 &lt;code&gt;{&amp;quot;m.server&amp;quot;:&amp;quot;matrix.ccns.io:443&amp;quot;}&lt;/code&gt; 。&lt;/p&gt;
-&lt;h3 id=&quot;client-端代理機制&quot;&gt;client 端代理機制&lt;/h3&gt;
-&lt;p&gt;上述的傳訊息，是由客戶端發請求給自己的伺服器端，
-自己的伺服器端再去找訊息的收件人是在哪個伺服器上。
-但客戶端要如何傳送此一請求給自己的伺服器呢？
-同樣有類似的代理機制，但又不太一樣。&lt;/p&gt;
-&lt;p&gt;例如以 &lt;code&gt;@gholk:ccns.io&lt;/code&gt; 的身份登入時，
-客戶端一樣會去找 ccns.io 這個名稱的伺服器在哪。
-但依規範不會檢查 dns，只會檢查 &lt;a href=&quot;https://ccns.io/.well-known/matrix/client&quot;&gt;https://ccns.io/.well-known/matrix/client&lt;/a&gt; ，
-因為 matrix 在定規範時考量到想設計出 &lt;em&gt;純前端&lt;/em&gt; client，
-所以不會定瀏覽器前端用 javascript 做不到的事。
-前端 javascript 不能查 dns，甚至要發 http request 到其它域名，
-都需要 cors 標頭，所以 client 代理機制還要求
-well known 網址需要有 cors header，
-而且轉址的 30X 回覆本身也需要有 cors header。&lt;/p&gt;
-&lt;p&gt;但因為我們社團 ccns.io 是架在 github page 上，
-而 github page 會把 ccns.io 所有網址都用 301 轉址到 www.ccns.io，
-且該轉址到目前為止是沒有 cors 的。
-所以很明顯，要用客戶端登入 ccns.io 時，
-伺服器不能只打 ccns.io，不然客戶端看不到
-&lt;a href=&quot;https://ccns.io/.well-known/matrix/client&quot;&gt;https://ccns.io/.well-known/matrix/client&lt;/a&gt; ，
-就不會去找 matrix.ccns.io，而會直接把請求發到 ccns.io，
-然後就無法登入。
-因此要在客戶端登入時，只能直接打 matrix.ccns.io。&lt;/p&gt;
-&lt;h2 id=&quot;取消隱藏-community&quot;&gt;取消隱藏 community&lt;/h2&gt;
-&lt;p&gt;這是比較蠢的小事，有關 element ui 設計的問題。
-一次點了 ccns community 的三個點的更多符號，
-按了 hide 把 community 隱藏了，
-然後就不知道怎麼讓該 community 顯示回來。
-後來找了很久才找到，要點 community 最下面的 &lt;code&gt;+&lt;/code&gt; 新增 community，
-然後中間欄的下方會顯示 &lt;em&gt;Your Communities&lt;/em&gt; ，
-把要加回去的 community icon 拖拉到最左側的 community 欄即可。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/ccns-matrix-synapse-install-note.html</id>
 <title>ccns matrix 安裝筆記</title>

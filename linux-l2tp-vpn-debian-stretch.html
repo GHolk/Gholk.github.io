@@ -30,8 +30,8 @@
 最近覺得有點需要，就查了一下怎麼在 linux 下連 l2tp vpn。
 發現自己手動設定蠻麻煩的，用 network manager 管理比較簡單，
 <a href="https://github.com/nm-l2tp/network-manager-l2tp/wiki/Prebuilt-Packages#debian">但 network manager l2tp 的外掛目前只發行在 debian sid</a> ，
-又不想手動編譯；google 發現 [有人成功在 stretch 裡
-裝 debian sid 裡舊的版本，是可以運作的][l2tp cross sid] ，
+又不想手動編譯；google 發現 <a href="https://thomask.sdf.org/blog/2018/01/16/l2tp-vpn-networkmanager-debian-stretch.html">有人成功在 stretch 裡
+裝 debian sid 裡舊的版本，是可以運作的</a> ，
 就試成功了。</p>
 <p>以前有 ssh 登入權限的時候，會用 ccns 機房的機器當 ssh 跳板上 ptt：
 <code>ssh -J lab.ccns.ncku.edu.tw bbsu@ptt.cc</code> 。
@@ -114,11 +114,11 @@ install_and_mark() {
 ipsec 則是用一個 pre share key，也和密碼差不多。
 其它欄位都留空。（server 網址當然不能留空，
 在 network manager 介面裡，看要打 domain name 或 ip 都可以。）
-詳情可以看 <a href="https://github.com/hwdsl2/setup-ipsec-vpn/blob/master/docs/clients.md#linux">一開始提到那篇 github 連接 l2tp 的教學。</a></p>
+詳情可以看 <a href="https://github.com/hwdsl2/setup-ipsec-vpn/blob/6aa15b8a21e96c497608d4e19de5bb9a35e151b8/docs/clients.md#ubuntu-linux">一開始提到那篇 github 連接 l2tp 的教學。</a></p>
 <h2 id="debian-buster-更新">debian buster 更新</h2>
 <p>debian buster 有收錄 network-manager-l2tp-gnome 了，
 安裝後可以直接在 gui 中設定 l2tp client。
-ipsec 的設定一樣照上面那篇 github 教學，
+ipsec 的設定一樣照 <a href="https://github.com/hwdsl2/setup-ipsec-vpn/blob/6aa15b8a21e96c497608d4e19de5bb9a35e151b8/docs/clients.md#ubuntu-linux">上面那篇 github 教學</a> ，
 phase 1 algorithm 要設 <code>aes128-sha1-modp2048</code>，
 phase 2 <code>aes128-sha1</code> 。</p>
 </main>

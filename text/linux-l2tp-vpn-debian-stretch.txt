@@ -4,7 +4,7 @@
 發現自己手動設定蠻麻煩的，用 network manager 管理比較簡單，
 [但 network manager l2tp 的外掛目前只發行在 debian sid][l2tp sid only] ，
 又不想手動編譯；google 發現 [有人成功在 stretch 裡
-裝 debian sid 裡舊的版本，是可以運作的][l2tp cross sid] ，
+裝 debian sid 裡舊的版本，是可以運作的][l2tp blog deb] ，
 就試成功了。
 
 [CCNS]: https://www.ccns.io/
@@ -116,12 +116,12 @@ ipsec 則是用一個 pre share key，也和密碼差不多。
 在 network manager 介面裡，看要打 domain name 或 ip 都可以。）
 詳情可以看 [一開始提到那篇 github 連接 l2tp 的教學。][l2tp github nm-l2tp]
 
-[l2tp github nm-l2tp]: https://github.com/hwdsl2/setup-ipsec-vpn/blob/master/docs/clients.md#linux
+[l2tp github nm-l2tp]: https://github.com/hwdsl2/setup-ipsec-vpn/blob/6aa15b8a21e96c497608d4e19de5bb9a35e151b8/docs/clients.md#ubuntu-linux
 
 ## debian buster 更新
 debian buster 有收錄 network-manager-l2tp-gnome 了，
 安裝後可以直接在 gui 中設定 l2tp client。
-ipsec 的設定一樣照上面那篇 github 教學，
+ipsec 的設定一樣照 [上面那篇 github 教學][l2tp github nm-l2tp] ，
 phase 1 algorithm 要設 `aes128-sha1-modp2048`，
 phase 2 `aes128-sha1` 。
 

@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2021-08-05T08:10:27.368Z</updated>
+  <updated>2021-08-14T11:28:12.144Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,130 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/git-criticism-like-fat.html</id>
+<title>對 git 過於肥大及其它一些批評</title>
+<published>2021-08-14T11:19:57.093Z</published>
+<updated>2021-08-14T11:28:12.133Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/git-criticism-like-fat.html"/>
+<summary type="html">很久以前在學習程式時，考量過要學哪一款版本控制軟體。
+那時本來知道 mercurial，又多做了一些研究。
+現在則是因為看了網路上一些對 git 的批評，
+主要是過於肥大，以及不適合在生產環境使用。
+我知道的其它替代品有 fossil、bazaar。</summary>
+<category term="linux"/>
+<category term="shell"/>
+<category term="git"/>
+<category term="版本"/>
+<category term="思辨"/>
+<content type="html">&lt;h1 id=&quot;對-git-過於肥大及其它一些批評&quot;&gt;對 git 過於肥大及其它一些批評&lt;/h1&gt;
+&lt;p&gt;很久以前在學習程式時，考量過要學哪一款版本控制軟體。
+那時本來知道 mercurial，又多做了一些研究。
+現在則是因為看了網路上一些對 git 的批評，
+主要是過於肥大，以及不適合在生產環境使用。
+我知道的其它替代品有 fossil、bazaar。&lt;/p&gt;
+&lt;p&gt;看過一些對 git 的批評：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;過於肥大&lt;/li&gt;
+&lt;li&gt;介面不友善&lt;/li&gt;
+&lt;li&gt;分支氾濫&lt;/li&gt;
+&lt;li&gt;提交缺乏系統&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;個人認為比較無法改變的就是過於肥大；
+介面不友善可以藉由學習改善，所以本文跳過不講。
+分支我認為可能可以用標籤改善，
+提交可能用結構化的提交訊息或直接 rebase 整理提交。&lt;/p&gt;
+&lt;h2 id=&quot;肥大&quot;&gt;肥大&lt;/h2&gt;
+&lt;p&gt;之前架 server 時，就考慮過要不要裝 git，
+因為安裝時看到一堆相依性其實很可怕。
+至少包括 curl gnutls perl，
+雖然 debian 自帶的 apt 多半已經把 perl 裝好了；
+但 curl 的相依性也是很可怕。&lt;/p&gt;
+&lt;p&gt;git 本身就自帶了一堆可能整個 project 用不到二次的指令，
+可以用 &lt;code&gt;dpkg -L git-man | grep man1&lt;/code&gt; 
+看有哪些指令是根本沒用過或八成用不到的。
+不過這可能是所有軟體的通病，依據二八法則，
+日常使用的八成功能，分布在最常用到的二成指令上。
+像那些 mail 有關的指令，台灣應該很少人會用 git 內建的功能發 mail 了。&lt;/p&gt;
+&lt;p&gt;就像之前用 npm 裝相依套件時的感想，
+一個不小心如果套件用到 c 語言來寫核心功能，
+node-gyp 還得要把 gcc make 工具鏈也裝起來才能動。
+我說那個在生產環境上裝 gcc 是不是搞錯了什麼，
+加上 node 的交叉編譯系統又不是很好用。&lt;/p&gt;
+&lt;p&gt;一個版本控制系統，應該是考量在在生產環境的佈署，
+安裝要精簡，像 fossil 這種單一執行檔就很適合；
+雖然 git 好像也是單一執行檔，然後配一大堆 shell script 組合起來的。
+但考慮到對 posix shell 的相依性，
+像在 windows 裝 git 竟然還得把 bash 一起裝起來。&lt;/p&gt;
+&lt;h3 id=&quot;關於肥大的改進方式&quot;&gt;關於肥大的改進方式&lt;/h3&gt;
+&lt;p&gt;以下是理論解法，並未查證可行性。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;找找看 git 有沒有精簡安裝版&lt;/li&gt;
+&lt;li&gt;找找看有沒有和 git 相容的輕量版非官方實作&lt;/li&gt;
+&lt;li&gt;找找看有沒有輕量版本控制軟體和 git 相容&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;分支氾濫&quot;&gt;分支氾濫&lt;/h2&gt;
+&lt;p&gt;基本的 git flow，也就是要新增功能就開新分支，
+做完後再合併回 master。
+但合併後慣例上分支就會刪掉，否則久了會堆積一堆分支。
+但這樣分支也變得廉價不好追蹤。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://stackoverflow.com/questions/1307114/how-can-i-archive-git-branches&quot;&gt;也有人問過如何封存分支之類的問題。&lt;/a&gt;
+一個做法是用 tag，可以把 tag 命名為 &lt;code&gt;archive/name&lt;/code&gt; 之類的。
+但 archive 還是會在 &lt;code&gt;git tag -l&lt;/code&gt; 時顯示，
+久了還是會有一大堆東西。
+不過一般用來標示版本的做法也是一樣，所以好像沒差。
+那能不能讓分支也當作沒差呢？
+只能說，是風格的問題了。&lt;/p&gt;
+&lt;h2 id=&quot;提交缺乏組織&quot;&gt;提交缺乏組織&lt;/h2&gt;
+&lt;p&gt;如 git flow 描述，在一個分支中，提交可能都是針對某一功能的，
+那有時單個提交是看不出意義的。
+在合併回主分支時，卻只會看到一個個分散的提交。
+其中缺少了一個組織方法，把一群提交組織在一起成群組。&lt;/p&gt;
+&lt;p&gt;有個做法是用 rebase，把這些提交合併為一個大提交，
+但合併時這些提交個自的資訊又會因此遺失。
+我不確定有沒有軟體能解決這個問題，
+一個做法是在提交標題加上分類或標籤，用來組織提交。&lt;/p&gt;
+&lt;h2 id=&quot;自描述的提交&quot;&gt;自描述的提交&lt;/h2&gt;
+&lt;p&gt;這算是一個功能建議。
+有時候某些修改是自描述 (self describe) 的，
+也就是無需說明，直接看 diff 就知道為什麼要這麼改。
+如果要在提交訊息裡說明，就像是提 diff 的結果抄一遍，
+放到 commit message 裡。&lt;/p&gt;
+&lt;p&gt;我一向是很討厭這種重複記錄的做法。
+像是 git commit 有記錄時間了，
+所以不需要在寫 commit message 時再寫一次時間。
+對 diff 也是一樣，我不喜歡在 commit message 裡，
+把用 git diff 可以看到的東西再重複一邊。&lt;/p&gt;
+&lt;p&gt;之前意識到這個問題，是在寫 wiki 時。
+wiki 也有提交訊息這種東西，而且很重要。
+本來因為不想重複記錄，所以提交訊息都寫得很簡略。
+但之前用的 dokuwiki 的版控系統，只會顯示每個提交的標題，
+如果寫得很簡略，就根本看不出來每個提交改了什麼，
+當時的想法是寫一個自行產生提交訊息的腳本。&lt;/p&gt;
+&lt;p&gt;所以後來 git 的話我至少會把提交訊息寫到能看出這個提交在幹麻。
+這樣發布新版本時，寫 changelog 比較方便，
+git log 再修一修補充細節即可。&lt;/p&gt;
+&lt;h2 id=&quot;其它軟體&quot;&gt;其它軟體&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://fossil-scm.org&quot;&gt;fossil&lt;/a&gt; 是一個蠻神奇的軟體，是sqlite的作者寫的。
+fossil是一個單一執行檔，結合版本控制、issue追蹤、文件管理功能。
+還有web ui，issue追蹤和文件管理就可以透過web ui實現，
+web還有論壇、聊天室功能。
+所以一個fossil，不只是單純的版本控制，也可以用來當作項目的網站。
+當然可以想見，版本控制和這些全部功能都是透過sqlite的資料庫實現的。
+只能說sqlite的作者D. Richard Hipp是奇人一個。&lt;/p&gt;
+&lt;p&gt;bazaar和mercurial就沒有研究了，所以也不做評論。&lt;/p&gt;
+&lt;h2 id=&quot;反思&quot;&gt;反思&lt;/h2&gt;
+&lt;p&gt;你真得需要一個精簡的 git 嗎？
+因為需要在生產環境使用 git，所以想要有一個輕量化的 git。
+但在生產環境使用版本控制軟體是合理的做法嗎？
+除了下載對應版本的程式，其實版本控制軟體在生產環境是不會用到的。
+下載這部份，其實 github 可以直接下載 zip 下來解壓縮；
+而且使用版本控制軟體來發布到生產環境也怪怪的，
+理論上可以用 ftp 推上去，或就用 http 下載。&lt;/p&gt;
+&lt;p&gt;使用 git 的場景應該是在開發環境，那肥大其實沒有什麼影響。
+開發環境裝個 gcc make autoconf 應該都算正常，
+如果連 ide 都裝起來了，那根本不會在意一個 git 的大小。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/javascript-pipe-method-and-inherit-constructor.html</id>
 <title>javascript 中用方法實現管道與繞過繼承建構子的限制</title>
 <published>2021-08-05T08:10:02.236Z</published>
@@ -1956,480 +2080,7 @@ admin 權限能直接把任意使用者升為頻道的 admin。
 <category term="shell"/>
 <category term="linux"/>
 <category term="心得"/>
-<content type="html">&lt;h1 id=&quot;matrix-菜鳥使用心得&quot;&gt;matrix 菜鳥使用心得&lt;/h1&gt;
-&lt;p&gt;一直想架一個自由的即時通訊軟體，
-之前 &lt;a href=&quot;instant-message-app-future-work.html&quot;&gt;大概研究了幾個自由的 im&lt;/a&gt; ，
-最後因為有社團的資源可以蹭，所以架了聯邦制的 im matrix。
-matrix 在架構上介於 discord（或 slack）與 irc 的中間，
-但因為聯邦制和注重隱私，又多了一些不便。
-加上很多功能還在開發中，會少一些功能，需要手動操作。
-目前要直接從 discord 搬過來 matrix 會不太方便。
-本文介紹了 matrix 的基本概念、使用經驗、與 discord 的比較，
-最後是如何以 restful api 管理伺服器。&lt;/p&gt;
-&lt;script src=&quot;ext/toc.js&quot;&gt;&lt;/script&gt;
 
-&lt;h2 id=&quot;matrix-命名空間&quot;&gt;matrix 命名空間&lt;/h2&gt;
-&lt;p&gt;matrix 是所謂聯邦制，在不同 server 上註冊的使用者可以互相溝通。
-所有的資源都是掛在某一個 server 下，
-包括使用者、頻道、頻道群組（像 discord 的 server 或說 guild），
-但使用者仍可存取不同的 server 上的資源。&lt;/p&gt;
-&lt;p&gt;matrix 上的名稱建構方式，像是 irc 和 twitter 的綜合版，
-再加上用冒號來後綴伺服器名來達成，
-在同一個伺服器上則可以省去後綴的伺服器名。&lt;/p&gt;
-&lt;p&gt;伺服器名即是域名，例如 ccns 的伺服器名是 &lt;code&gt;ccns.io&lt;/code&gt; ，
-那建立在 &lt;code&gt;ccns.io&lt;/code&gt; 上的 general 頻道完整名稱即寫成 &lt;code&gt;#general:ccns.io&lt;/code&gt; 。
-而註冊在 ccns 上的使用者 gholk 即是 &lt;code&gt;@gholk:ccns.io&lt;/code&gt; 。
-和 xmpp 使用的 email 風格名稱 &lt;code&gt;gholk@ccns.io&lt;/code&gt; 不太一樣。&lt;/p&gt;
-&lt;h2 id=&quot;頻道&quot;&gt;頻道&lt;/h2&gt;
-&lt;p&gt;&lt;abbr title=&quot;room&quot;&gt;頻道&lt;/abbr&gt;也就是群組聊天，是聊天的基本單位；
-可以是一對一，也可以是多對一；
-可以是公開，也可以是私密或端對端加密。
-頻道也可以有地址，有地址的頻道方可以用井號加伺服器名的方式表示，
-這類有地址的頻道就比較像 irc discord 或 telegram 上的頻道。
-當然，伺服器管理者可以直接管理地址，
-或控制是否允許使用者建立具有地址的頻道。
-不然註冊像 &lt;code&gt;#admin:ccns.io&lt;/code&gt; 之類的頻道會讓管理者很困擾。&lt;/p&gt;
-&lt;p&gt;在地址之外，也可以有單純用來顯示的頻道名稱。
-其它像一對一的聊天，或是加了多個人的群聊，
-預設是沒有地址也沒有名稱的，也是預設加密的。
-名稱和地址可以事後再加上，但加密是不能解除。
-這關係到所有加密的是端對端加密，
-伺服器上保存的只是加密的資料，
-所以沒辦法做到解除加密的操作。&lt;/p&gt;
-&lt;p&gt;頻道的公開程度可以有三種，
-可被搜尋與加入、可用連結加入、需要被邀請才能加入。
-和加密的選項是獨立的。&lt;/p&gt;
-&lt;p&gt;一個頻道也可以有多個地址，
-雖然我想不到這功能有什麼應用。
-目前我們的 discord bridge bot
-會自動用 discord 的頻道 id 來當作頻道的地址，
-如果我們想把 discord 上的 general 也當作 matrix 的 general，
-就必須要在 id 之外再加上額外的地址 general。&lt;/p&gt;
-&lt;h2 id=&quot;頻道權限&quot;&gt;頻道權限&lt;/h2&gt;
-&lt;p&gt;頻道的權限是用分數決定的。
-最高分者是是管理者，可以有絕對的權限，預設建立者是 100 分。
-每個人可以調整較低分者的權限，最高到和自己同分為止。&lt;/p&gt;
-&lt;p&gt;每人預設是 0 分，moderator 是 50 分，admin 是 100 分，
-頻道設定裡可以調不同的操作需要哪種身份，
-像只有 admin 能 invite 或 moderator 可以刪文之類的。&lt;/p&gt;
-&lt;p&gt;admin 可以把人升到 admin，但 admin 之間不能互踢之類的。
-此外 matrix 目前也沒有跨頻道的權限管理機制，
-唯一比較像跨頻道的一個是 server admin 可以直接把人加入或踼出頻道，
-且也可以把人直接升為頻道管理員。&lt;/p&gt;
-&lt;h2 id=&quot;頻道群組&quot;&gt;頻道群組&lt;/h2&gt;
-&lt;p&gt;有個東西叫 community，有點像 discord 上的 server，
-可以把幾個頻道放到同一個群組裡。
-群組是用加號開頭，可以有 avatar、html 的介紹。
-使用者只要點選群組的圖示，就可以看到所有群組裡的頻道。
-但也就這樣而已。&lt;/p&gt;
-&lt;p&gt;沒有權限管理，沒有頻道管理，沒有命名空間管理。
-各頻道間還是幾乎獨立，沒辦法一次加入所有頻道，
-沒辦法把一人指定為所有頻道的管理員，
-也不能統一管理所有頻道的公開、加密程度。
-而且沒有命名空間管理，所以例如 &lt;a href=&quot;https://matrix.to/#/+free-rms:matrix.org&quot;&gt;+free-rms:matrix.org&lt;/a&gt; 群組，
-裡面有 press random general 等頻道，如果他們都要有地址，
-只能叫 &lt;code&gt;#free-rms-press:matrix.org&lt;/code&gt; &lt;code&gt;#free-rms-random:matrix.org&lt;/code&gt;
-&lt;code&gt;#free-rms:matrix.org&lt;/code&gt; ，
-至於為什麼沒有 &lt;code&gt;#free-rms-general:matrix.org&lt;/code&gt; ，
-因為 general 即是通用的頻道，自然可以省去地址裡的 general。&lt;/p&gt;
-&lt;p&gt;不過這很大程度是因為 community 還是個開發中的功能。
-在一開始，這個功能叫 group，現在叫 community。
-未來應該會多出一個叫 space 的功能，取代現有的 community，
-很有可能，因為現在已經在 beta 了。
-只能希望未來這功能會好用一點，像把上面的幾點都改善一下。
-而且這功能現在還缺少一些基本的 api，像不能改地址，
-也沒有增加除了 creator 外的 admin 的功能。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://matrix.org/blog/2021/05/17/the-matrix-space-beta&quot;&gt;space 似乎比較神奇，他是一種可以巢狀的頻道&lt;/a&gt;，
-主要開發的原因是官方發現他們在實作 group 時，
-幾乎要把現有的頻道功能重複實現一遍，
-像權限管理、邀請之類的，他們覺得很沒意義。
-所以他們新增了一種特殊的可以巢狀的頻道，
-然後重用頻道現有的權限管理等 api。&lt;/p&gt;
-&lt;h2 id=&quot;discord-與-slack-的概觀&quot;&gt;discord 與 slack 的概觀&lt;/h2&gt;
-&lt;p&gt;再來是與時下最強群聊軟體沒有之一的 discord 的類比。
-以經營組織來說，discord 的確是很強的平台，
-當初的 &lt;a href=&quot;https://www.ccns.io&quot;&gt;ccns&lt;/a&gt; 也是搬到 discord 上後慢慢累積起凝聚力的。&lt;/p&gt;
-&lt;p&gt;discord 或 slack 都繼承自 irc 的伺服器概念，
-一個組織會有一個伺服器，一個伺服器下可以有多個頻道，
-同一個伺服器內的管理者是同一群人。
-但又和 irc 那種限於頻道內的自治不同，
-在不同的 irc 伺服器間，同一個頻道的訊息是會互相轉發的，
-而且 irc 管理者也不太會管理到頻道內的事。&lt;/p&gt;
-&lt;p&gt;在此之外，discord 和 slack 又有一些差別，
-slack 不同的伺服器間幾乎是完全獨立的，
-在每個伺服器都需要重新註冊一遍，
-從不同伺服器使用不同的域名就可以大概看出來。
-（如 &lt;a href=&quot;https://g0v.slack.com&quot;&gt;https://g0v.slack.com&lt;/a&gt; 或 &lt;a href=&quot;https://ccca.slack.com&quot;&gt;https://ccca.slack.com&lt;/a&gt; 。）
-且不同的伺服器需要在獨立的分頁運作，
-不同伺服器的使用者當然也不可能互相溝通。
-slack 唯一統一的就是應用程式，或說擴充功能的介面和商店。&lt;/p&gt;
-&lt;p&gt;而 discord 則較開放。
-所謂的伺服器，比較像一個組織，
-不知道程式中還是不是對應到一個伺服器。
-使用者加入的所有的伺服器，都一樣掛在 discord.com 這個域名下。
-（以前是 discordapp.com，後來可能有錢了，把 discord.com 買回來了。）
-不同伺服器都有同一個 web 介面中展示，
-不同伺服器中的帳號也是統一的，只需要在 discord 註冊一次，
-使用者間也可以互相溝通。&lt;/p&gt;
-&lt;p&gt;slack 可能想製造一種感覺，聊天伺服器的確是由該組織建立的，
-是一個內部架設供內部使用的工具，而 slack 只是提供托管伺服器平台。
-所以使用者當然需要獨立註冊。
-而我猜 discord 則單純認為統一註冊比較簡單而已，
-當然可能也考慮了使用者情境。
-discord 最早是供遊戲使用的聊天平台，
-所以很多人可能只是從某個遊戲得知 discord 這個平台，
-上面有一些資訊，所以來到這裡。
-然後如果還需要註冊才能進入，那可能就會有一大半放棄了，
-（相比多數不需登入的 web 上的攻略。）
-所以開放了允許訪客的功能。
-整體比 slack 要 &lt;strong&gt;開放&lt;/strong&gt; 很多。&lt;/p&gt;
-&lt;h2 id=&quot;discord-與-matrix-的比較&quot;&gt;discord 與 matrix 的比較&lt;/h2&gt;
-&lt;p&gt;matrix 中有二種功能可以和 discord 的 server 中類比，
-一是用實際一部 matrix server，二是用 matrix 中的 community 功能；
-但其實二者都不太像。&lt;/p&gt;
-&lt;p&gt;先前說過，matrix 上允許頻道的自治，
-雖然 server admin 能直接把人新增為頻道的 admin，
-但頻道內的 admin 還是和 server 的 admin 獨立的。
-每個頻道有自己的管理者，最多只能做到同一群人建立的頻道中，
-都由同一群人來擔任管理者，但還是需要一一指派。
-不像 discord 內，可以直接在 server 中把人劃為不同的階級，
-依階級對不同頻道有不同的存取權。&lt;/p&gt;
-&lt;p&gt;matrix 中的 community 可以用來組織頻道，
-但尚不包含統一管理權限的功能。
-而且組織事實上是與頻道的管理無關的，
-任何人都可以建立組織，將任意的頻道加入自己有管理權限的組織中，
-無論在該頻道中是為管理員。
-（但如果要建立具有地址的組織，
-就得看 server admin 是否開放這項功能，和建立具名頻道一樣。）
-所以組織目前比較像是建立了個人用的對該頻道的 &lt;em&gt;捷徑&lt;/em&gt; ，
-而不是像 discord 中頻道必定隸屬 server 的階層式關係。&lt;/p&gt;
-&lt;p&gt;而且詳細來看，在 server 下 discord 還有一層
-&lt;abbr title=&quot;category&quot;&gt;頻道群組&lt;/abbr&gt; ，
-其實那層也是關鍵，因為可以把幾個內部頻道放一起設定權限，
-而不用一個個單獨設。
-其實如果用 matrix server 對比 disocrd server，
-那 category 就是類比到 community，
-但偏偏 community 又做的比較像 server。
-（都是在左側側邊欄的小圈圈。）&lt;/p&gt;
-&lt;p&gt;如果用命名空間來看，要類比 discord 上的 server，
-還是用一座 matrix server 比較適合。
-以命名空間來說，某個 server 下的某個頻道，
-套在 discord 和 matrix 上都是正確的。
-category 和 community 就暫時忽略吧。&lt;/p&gt;
-&lt;p&gt;matrix 也有把 discord 的 reaction 功能抄過來。
-但 bridge 時有二個問題，
-一是 bot 沒辦法把 matrix 的 reaction 傳到 discord 上，
-因為 discord bot 只有一個，沒辦法傳遞多個 emoji。
-而 bridge 則會用建立人頭帳號的方把 discord 上的帳號 bridge 到 matrix，
-所以可以用同樣的人頭做出和 discord 上同樣的反應。
-另一個比較麻煩的是我們的 discord server 有大量的 costum reaction，
-matrix 規格現在還不支援。
-bridge 會把 costum reaction 的圖片存到 matrix 上，
-然後用 mxc 的連結網址當作 reaction name 來對訊息做 react。
-但目前 element 還不會把 mxc reaction 顯示成圖片，
-就只會看到一串網址。&lt;/p&gt;
-&lt;h2 id=&quot;server-client-與-federation-溝通&quot;&gt;server client 與 federation 溝通&lt;/h2&gt;
-&lt;p&gt;matrix 是聯邦式的架構，而不是 p2p，
-所以和 xmpp 類似，所有資訊都是透過自己的 server 進行，
-而不會發生客戶端直接連到對方伺服器的情況。
-例如我 &lt;code&gt;@gholk:ccns.io&lt;/code&gt; 想傳訊息到 &lt;code&gt;#free-rms:matrix.org&lt;/code&gt; 這個頻道，
-那我在客戶端操作後，客戶端會把要求傳給我的伺服器，
-我的伺服器 ccns.io 會去向 matrix.org 發起連線傳送訊息。&lt;/p&gt;
-&lt;h3 id=&quot;server-端的代理機制&quot;&gt;server 端的代理機制&lt;/h3&gt;
-&lt;p&gt;但因為 matrix 有設計 &lt;a href=&quot;https://github.com/matrix-org/synapse/blob/a888cbdd314a84cbb477e5b04bd27b7053f08495/docs/delegate.m&quot;&gt;delegation&lt;/a&gt; 機制，
-可以讓 server 可以用比較好看的網域名稱，
-&lt;a href=&quot;ccns-matrix-synapse-install-note.html#well-known-uri&quot;&gt;前一篇安裝教學也有稍微提到&lt;/a&gt;。
-所以要傳訊息給 matrix.org 時，
-會先查 matrix.org 這個名字的 matrix 通訊歸誰管：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;查 &lt;code&gt;_matrix._tcp.matrix.org&lt;/code&gt; 這個域名的 dns srv 記錄，
-代表要和 matrix.org 以 matrix 協議通訊時，實際負責的是哪個伺服器：
-&lt;code&gt;host -t SRV _matrix._tcp.matrix.org&lt;/code&gt; 。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;如果沒有查到，那接著就會嘗試用連到
- &lt;a href=&quot;http://matrix.org/.well-known/matrix/server&quot;&gt;http://matrix.org/.well-known/matrix/server&lt;/a&gt; ，
- 看該 json 檔案有沒有指定 matrix 由哪個伺服器負責。
- 如果該位址是重導向，則會跟隨重導向。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;如果也沒查到，最後就會直接把該網址當作 matrix server 連線。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;所以當你發訊息到 &lt;code&gt;*:matrix.org&lt;/code&gt; 時，
-依 dns srv 記錄可以看到，
-實際上負責 matrix.org 域名的 matrix server 是 
-&lt;code&gt;matrix-federation.matrix.org.cdn.cloudflare.net&lt;/code&gt; 。
-而 ccns.io 時，則是 &lt;a href=&quot;https://ccns.io/.well-known/matrix/server&quot;&gt;https://ccns.io/.well-known/matrix/server&lt;/a&gt;
-會轉址到 &lt;a href=&quot;http://www.ccns.io/.well-known/matrix/server&quot;&gt;http://www.ccns.io/.well-known/matrix/server&lt;/a&gt; ，
-json 內容即是指定到 matrix.ccns.io:443 &lt;code&gt;{&amp;quot;m.server&amp;quot;:&amp;quot;matrix.ccns.io:443&amp;quot;}&lt;/code&gt; 。&lt;/p&gt;
-&lt;h3 id=&quot;client-端代理機制&quot;&gt;client 端代理機制&lt;/h3&gt;
-&lt;p&gt;上述的傳訊息，是由客戶端發請求給自己的伺服器端，
-自己的伺服器端再去找訊息的收件人是在哪個伺服器上。
-但客戶端要如何傳送此一請求給自己的伺服器呢？
-同樣有類似的代理機制，但又不太一樣。&lt;/p&gt;
-&lt;p&gt;例如以 &lt;code&gt;@gholk:ccns.io&lt;/code&gt; 的身份登入時，
-客戶端一樣會去找 ccns.io 這個名稱的伺服器在哪。
-但依規範不會檢查 dns，只會檢查 &lt;a href=&quot;https://ccns.io/.well-known/matrix/client&quot;&gt;https://ccns.io/.well-known/matrix/client&lt;/a&gt; ，
-因為 matrix 在定規範時考量到想設計出 &lt;em&gt;純前端&lt;/em&gt; client，
-所以不會定瀏覽器前端用 javascript 做不到的事。
-前端 javascript 不能查 dns，甚至要發 http request 到其它域名，
-都需要 cors 標頭，所以 client 代理機制還要求
-well known 網址需要有 cors header，
-而且轉址的 30X 回覆本身也需要有 cors header。&lt;/p&gt;
-&lt;p&gt;但因為我們社團 ccns.io 是架在 github page 上，
-而 github page 會把 ccns.io 所有網址都用 301 轉址到 www.ccns.io，
-且該轉址到目前為止是沒有 cors 的。
-所以很明顯，要用客戶端登入 ccns.io 時，
-伺服器不能只打 ccns.io，不然客戶端看不到
-&lt;a href=&quot;https://ccns.io/.well-known/matrix/client&quot;&gt;https://ccns.io/.well-known/matrix/client&lt;/a&gt; ，
-就不會去找 matrix.ccns.io，而會直接把請求發到 ccns.io，
-然後就無法登入。
-因此要在客戶端登入時，只能直接打 matrix.ccns.io。&lt;/p&gt;
-&lt;h2 id=&quot;element-中取消隱藏-community&quot;&gt;element 中取消隱藏 community&lt;/h2&gt;
-&lt;p&gt;這是比較蠢的小事，有關 element ui 設計的問題。
-一次點了 ccns community 的三個點的更多符號，
-按了 hide 把 community 隱藏了，
-然後就不知道怎麼讓該 community 顯示回來。
-後來找了很久才找到，要點 community 最下面的 &lt;code&gt;+&lt;/code&gt; 新增 community，
-然後中間欄的下方會顯示 &lt;em&gt;Your Communities&lt;/em&gt; ，
-把要加回去的 community icon 拖拉到最左側的 community 欄即可。&lt;/p&gt;
-&lt;h2 id=&quot;matrix-金鑰與訊息的儲存&quot;&gt;matrix 金鑰與訊息的儲存&lt;/h2&gt;
-&lt;p&gt;matrix 使用金鑰來驗證身份，client 第一次登入時會產生金鑰，
-使用者可以選擇將金鑰備份到 matrix server（在以密碼加密的情況下），
-或只存在本機。金鑰以 48 個大小寫英數字混合組成，
-如果金鑰沒有備份到伺服器端，則遺失金鑰沒有人能救的了你；
-當然遺失密碼也是一樣。&lt;/p&gt;
-&lt;p&gt;matrix 中所有訊息都存在伺服器端，
-加密頻道中訊息是以 e2e 加密的型式儲存的，
-所以伺服器存的是加密過的訊息，
-伺服器自己也無法解讀，故在搜尋訊息上會不太方便。&lt;/p&gt;
-&lt;p&gt;另外還有在使用另一台裝置登入時，會需要驗證該登入；
-可以用金鑰驗證或用已登入的裝置驗證，
-主要就是把金鑰傳到另一台裝置上，讓另一台裝置也能解讀 e2e 訊息。
-此步驟可以確保帳號後的使用者是持有同一份金鑰的使用者，
-就算伺服器的管理者接管了你的帳號，但他也不會有你的金鑰，
-所以其它人也會發現這個人不一樣了。&lt;/p&gt;
-&lt;p&gt;一些細節可以參考 &lt;a href=&quot;https://element.io/help&quot;&gt;element 對密碼和金鑰的說明&lt;/a&gt;
-中 End-to-end encryption 的章節。&lt;/p&gt;
-&lt;h2 id=&quot;mx-puppet-discord-的權限管理&quot;&gt;mx-puppet-discord 的權限管理&lt;/h2&gt;
-&lt;p&gt;預設 mx-puppet-discord 預設橋接過來後，
-是用 discord 的 server id 和 guild id 組成一個很醜的頻道地址，
-像原本 discord 上的 general 會變成 
-&lt;code&gt;#_discordpuppet__330361736932884482:ccns.io&lt;/code&gt; ；
-然後權限會是只有被邀請者才能加入。
-至少要調這二個部份，讓原本在 discord 公開的頻道一樣是公開，
-然後有一個好看一點的地址，像原本的 general 就一樣叫 general 就好。&lt;/p&gt;
-&lt;p&gt;mx-puppet-discord 橋接過來後，
-預設只有 mx-puppet-discord bot 自己是頻道管理者，
-但有提供一個叫 &lt;code&gt;adminme #channel_id:server_name&lt;/code&gt; 的指令，
-讓 bot 把使用者在某個頻道調整為管理者；
-但這個指令當然設定橋接的那個使用者能用。
-要所以要調整的方式：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;先傳送訊息給 bot 
-&lt;code&gt;adminme #_discordpuppet__330361736932884482:ccns.io&lt;/code&gt; ，
-讓他把使用者調成 admin。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;之後去該頻道的設定頁，新增 local address，
-除了原本的一長串 discord id 地址外，
-再增加和頻道同名的地址。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;修改設定讓所有人都可以加入。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;因為 matrix 不像 discord 可以一次設定整個分類或 server 中所有頻道的權限，
-所以用 mx-puppet-discord 橋接，自動建立了一堆頻道後，
-要一一調整設定其實蠻麻煩的。&lt;/p&gt;
-&lt;p&gt;由於我們 discord 上有十幾個頻道，
-要一個個點顯然不切實際，所以只好自己看 matrix restful api，
-用 wget 和 shell 腳本來一次處理完。&lt;/p&gt;
-&lt;h2 id=&quot;使用-shell-腳本批次處理頻道權限&quot;&gt;使用 shell 腳本批次處理頻道權限&lt;/h2&gt;
-&lt;p&gt;matrix 幾乎所有 api 都是 restful，
-可以發 http request 來達成那類修改權限和名稱的操作。
-但首先需要是該頻道的 admin，
-不知道把頻道 id 一一複製下來再一次貼給 bot 可不可以。
-（後來試了似乎是不行。）&lt;/p&gt;
-&lt;h3 id=&quot;取得登入後的-token&quot;&gt;取得登入後的 token&lt;/h3&gt;
-&lt;p&gt;這類 api 最簡單的驗證方式是用 token，
-也就是用 client 登入後，會取得一個 token，
-把 client 端已經取得的 token，直接放在 http header 裡，
-matrix 就會認得了。
-matrix 官方有建議 client 應該要設計一個 ui，
-能使用者看到目前使用的 token，
-也就能配合其它工具 debug 或 &lt;s&gt;做壞事&lt;/s&gt; 管理 server。&lt;/p&gt;
-&lt;p&gt;以 element 來說，可以點選左上角的使用者帳號選單，
-開啟個人設定，在 help 分頁裡有一個展開符號可以顯示 access token，
-token 應該是英數字和底線組成。
-取得之後，把 token 放在要發的 http request &lt;code&gt;Authorization&lt;/code&gt; header 裡，
-加上一個 bearer 前綴：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;wget --header &amp;quot;Authorization: Bearer $token&amp;quot; $request
-curl --header &amp;quot;Authorization: Bearer $token&amp;quot; $request
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;如果在 production 環境上，預設可能只有 wget，
-wget 有用的選項是 &lt;code&gt;wget -q --server-response&lt;/code&gt; ，
-可以把 http 回應的標頭一起顯示。&lt;/p&gt;
-&lt;h3 id=&quot;matrix-api&quot;&gt;matrix api&lt;/h3&gt;
-&lt;p&gt;首先需要取得所有頻道的列表，
-當然要先加入所有 bridge 過來的頻道，
-以 mx-puppet-bridge 來說可以用 &lt;code&gt;joinentireguild&lt;/code&gt; 指令
-來讓 bot 對自己發出邀請加入所有 bridge 的頻道，
-但這個指令只有當初設定 bridge 的人可以用。
-之後可以在個人設定裡找到一個選項，是一次同意所有邀請。
-這部份可以參見 &lt;a href=&quot;ccns-matrix-synapse-install-note.html#連結頻道&quot;&gt;matrix 安裝中的 bot 連結頻道章節&lt;/a&gt; 。&lt;/p&gt;
-&lt;p&gt;之後就能用 matrix api 取得所有頻道列表了，指令如下。
-其中 token 是上面取得的登入取得的 token，
-返回內容是一個 json。
-所以可以先準備個 jq，或直接用 python 或 node js 來解析也可以。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;curl --header  &amp;quot;Authorization: Bearer $token&amp;quot;  \
-    https://matrix.ccns.io/_matrix/client/r0/joined_rooms
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;返回 json 的 &lt;code&gt;joined_rooms&lt;/code&gt; 屬性是加入的頻道 id 列表，
-id 是 matrix 在內部用於唯一識別頻道的，
-我們還需要取得各頻道的名稱，然後為該頻道加上同名的地址，
-與調整權限讓所有使用者可以加入。
-更多 api 可以參考 &lt;a href=&quot;https://matrix.org/docs/spec/client_server/r0.6.1&quot;&gt;matrix 官方的規格文件&lt;/a&gt; 。&lt;/p&gt;
-&lt;h4 id=&quot;取得頻道屬性&quot;&gt;取得頻道屬性&lt;/h4&gt;
-&lt;p&gt;取得頻道所有屬性的 api 是 state，
-但可能會返回太多內容，像每個成員的名稱、icon。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;curl -H &amp;quot;Authorization: Bearer $token&amp;quot; \
-    https://matrix.ccns.io/_matrix/client/r0/rooms/$id/state
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;如果不想取回太多東西，
-可以在 state 後面加上想取回的事件的類型：
-&lt;code&gt;https://matrix.ccns.io/_matrix/client/r0/rooms/$id/state/m.room.name&lt;/code&gt; ，
-本文會用到的大概有 &lt;code&gt;m.room.name&lt;/code&gt; &lt;code&gt;m.room.guest_access&lt;/code&gt; 
-&lt;code&gt;m.room.join_rules&lt;/code&gt; &lt;code&gt;m.room.canonical_alias&lt;/code&gt; 。&lt;/p&gt;
-&lt;h4 id=&quot;增加頻道的地址&quot;&gt;增加頻道的地址&lt;/h4&gt;
-&lt;p&gt;我們要先把 room name 取回，然後加為地址，也就是 alias：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;json=$(curl -H &amp;quot;Authorization: Bearer $token&amp;quot; \
-    https://matrix.ccns.io/_matrix/client/r0/rooms/$id/state/m.room.name)
-name=$(node -p &amp;quot;($json).name&amp;quot;)
-curl -X put -H &amp;quot;Authorization: Bearer $token&amp;quot; \
-        https://matrix.ccns.io/_matrix/client/r0/rooms/$id/aliases/$name
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h4 id=&quot;把頻道改為任何人可加入&quot;&gt;把頻道改為任何人可加入&lt;/h4&gt;
-&lt;p&gt;因為用 wget 每次都打一堆選項很麻煩，
-所以這裡用一個 alias 把選項塞在一起。
-還有因為在 bash 裡打 json 很麻煩，
-所以用 node 包裝了一個小工具，可以簡單生成 json；
-只要寫單純的 javascript object，就會轉成有雙引號的 json。
-如果要比較正式的工具，可以用 &lt;a href=&quot;https://jpmens.net/2016/03/05/a-shell-command-to-create-json-jo/&quot;&gt;jo&lt;/a&gt; ，
-或是可以到 github 用我自己寫的 &lt;a href=&quot;https://github.com/gholk/loco/blob/db6a8a687836c8e0df95db57b9c0fc331e15eb0e/bin/jc.sh&quot;&gt;jc 完整版&lt;/a&gt; 。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;alias www=&amp;apos;wget -q --server-response -O -&amp;apos;
-jc() {
-    node --print &amp;quot;JSON.stringify({$1}, null, &amp;apos;  &amp;apos;)&amp;quot;
-}
-
-www --method put --body-data &amp;quot;$(jc &amp;quot;join_rule:&amp;apos;public&amp;apos;&amp;quot;)&amp;quot; \
-    --header  &amp;quot;Authorization: Bearer $token&amp;quot; \
-    https://matrix.ccns.io/_matrix/client/r0/rooms/$id/state/m.room.join_rules/
-www --method put --body-data &amp;quot;$(jc &amp;apos;guest_access:&amp;quot;can_join&amp;quot;&amp;apos;)&amp;quot; \
-    --header  &amp;quot;Authorization: Bearer $token&amp;quot; \
-    http://localhost:8008/_matrix/client/r0/rooms/$id/state/m.room.guest_access/
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h4 id=&quot;邀請使用者加入頻道&quot;&gt;邀請使用者加入頻道&lt;/h4&gt;
-&lt;p&gt;user 是使用者的完整地址。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;# example:
-# user=@gholk:ccns.io
-curl -H &amp;quot;Authorization: Bearer $token&amp;quot; \
-    -H &amp;apos;content-type: application/json&amp;apos; \
-    --data &amp;quot;$(jc &amp;quot;user_id:&amp;apos;$user&amp;apos;&amp;quot;)&amp;quot; \
-    https://matrix.ccns.io/_matrix/client/r0/rooms/$id/invite
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h4 id=&quot;使用者自行要求加入&quot;&gt;使用者自行要求加入&lt;/h4&gt;
-&lt;p&gt;這 api 只能用來加入公開頻道，
-私人頻道一定要有人邀請。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;curl -H &amp;quot;Authorization: Bearer $token&amp;quot; \
-    -H &amp;apos;content-type: application/json&amp;apos; \
-    --data &amp;apos;{}&amp;apos; \
-    https://matrix.ccns.io/_matrix/client/r0/join/$room
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;有-server-admin-權限的情況下&quot;&gt;有 server admin 權限的情況下&lt;/h3&gt;
-&lt;p&gt;如果有 server 的 admin 權限，
-也就在安裝 synapse 時建立的特殊 admin user，
-就能用 synapse 的 admin api 直接把人升為 admin。
-如果沒有，在有 server 的 root 權限的話也能直接建立一個：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;sudo -su matrix-synapse &amp;lt;&amp;lt;MATRIX
-cd /opt/venvs/matrix-synapse
-. bin/activate
-register_new_matrix_user --admin \
-    --config /etc/matrix-synapse/homeserver.yaml \
-    --user root --password my-password
-    https://matrix.ccns.io
-
-MATRIX
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;之後使用 admin 的流程也是相同，
-用 client 登入後，把 token 複製出來用 curl 或 wget 發。
-admin 權限能直接把任意使用者升為頻道的 admin。
-但這類使用 server admin 的 api，
-還沒標準化為 matrix 的一部份，是 synapse 限定的：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;wget -O - -q --server-response \
-    --post-data &amp;quot;$(jc &amp;quot;user_id:&amp;apos;$user&amp;apos;&amp;quot;)&amp;quot; \
-    --header  &amp;quot;Authorization: Bearer $token_admin&amp;quot;  \
-    https://matrix.ccns.io/_synapse/admin/v1/rooms/$id/make_room_admin
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h4 id=&quot;直接取得所有頻道資料&quot;&gt;直接取得所有頻道資料&lt;/h4&gt;
-&lt;p&gt;此外，server admin 能直接取得所有頻道的資料，
-但 matrix.ccns 上的 &lt;code&gt;_synapse&lt;/code&gt; 路徑我是鎖起來的，
-不能從外網存取，所以得直接登入 matrix.ccns 上，
-然後找找 localhost。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;wget -O - -q --server-response \
-    --header  &amp;quot;Authorization: Bearer $token_admin&amp;quot;  \
-    http://localhost:8008/_synapse/admin/v1/rooms
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h4 id=&quot;新增頻道管理員&quot;&gt;新增頻道管理員&lt;/h4&gt;
-&lt;p&gt;該使用者需要在頻道內：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;www --post-data &amp;quot;$(jc &amp;quot;user_id:&amp;apos;$user&amp;apos;&amp;quot;)&amp;quot; \
-    --header &amp;quot;Authorization: Bearer $token_root&amp;quot; \
-    &amp;quot;http://localhost:8008/_synapse/admin/v1/rooms/$id/make_room_admin&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;讓使用者在註冊後自動加入頻道&quot;&gt;讓使用者在註冊後自動加入頻道&lt;/h2&gt;
-&lt;p&gt;修改 &lt;code&gt;/etc/matrix-synapse/homeserver.yaml&lt;/code&gt; ，
-我是加在 &lt;code&gt;/etc/matrix-synapse/auto_join_rooms.yaml&lt;/code&gt; ，
-以 ccns 來說預設有以下頻道，
-這樣註冊後就會自動加入這些頻道了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-yaml&quot;&gt;auto_join_rooms:
-  - &amp;quot;#acgn:ccns.io&amp;quot;
-  - &amp;quot;#ani-platform:ccns.io&amp;quot;
-  - &amp;quot;#bbs-dev:ccns.io&amp;quot;
-  - &amp;quot;#bbs-dev-notify:ccns.io&amp;quot;
-  - &amp;quot;#blockchain:ccns.io&amp;quot;
-  - &amp;quot;#book:ccns.io&amp;quot;
-  - &amp;quot;#bot-commands:ccns.io&amp;quot;
-  - &amp;quot;#bullshit:ccns.io&amp;quot;
-  - &amp;quot;#channel-request:ccns.io&amp;quot;
-  - &amp;quot;#computer-system:ccns.io&amp;quot;
-  - &amp;quot;#cryptocurrency:ccns.io&amp;quot;
-  - &amp;quot;#emoji-request:ccns.io&amp;quot;
-  - &amp;quot;#food:ccns.io&amp;quot;
-  - &amp;quot;#game-design:ccns.io&amp;quot;
-  - &amp;quot;#general:ccns.io&amp;quot;
-  - &amp;quot;#general-english:ccns.io&amp;quot;
-  - &amp;quot;#git:ccns.io&amp;quot;
-  - &amp;quot;#hydra-command:ccns.io&amp;quot;
-  - &amp;quot;#hydra-song-requests:ccns.io&amp;quot;
-  - &amp;quot;#machine-learning:ccns.io&amp;quot;
-  - &amp;quot;#math:ccns.io&amp;quot;
-  - &amp;quot;#minecraft-chat:ccns.io&amp;quot;
-  - &amp;quot;#music:ccns.io&amp;quot;
-  - &amp;quot;#programming-contest:ccns.io&amp;quot;
-  - &amp;quot;#radio:ccns.io&amp;quot;
-  - &amp;quot;#robotics:ccns.io&amp;quot;
-  - &amp;quot;#security:ccns.io&amp;quot;
-  - &amp;quot;#service-status:ccns.io&amp;quot;
-  - &amp;quot;#software-develop:ccns.io&amp;quot;
-  - &amp;quot;#stonk:ccns.io&amp;quot;
-  - &amp;quot;#study-group:ccns.io&amp;quot;
-  - &amp;quot;#sysadmin:ccns.io&amp;quot;
-  - &amp;quot;#vim:ccns.io&amp;quot;
-  - &amp;quot;#vscode:ccns.io&amp;quot;
-  - &amp;quot;#vtuber:ccns.io&amp;quot;
-  - &amp;quot;#vtuber-notify:ccns.io&amp;quot;
-  - &amp;quot;#web-develop:ccns.io&amp;quot;
-  - &amp;quot;#welcome:ccns.io&amp;quot;
-  - &amp;quot;#announcement:ccns.io&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/ccns-matrix-luser-review.html</id>
 <title>matrix 菜鳥使用心得</title>

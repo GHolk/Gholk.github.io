@@ -1,0 +1,141 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2021-08-14T11:19:57.093Z">
+<meta name="keywords" property="og:article:tag" content="linux,shell,git,版本,思辨">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="javascript-pipe-method-and-inherit-constructor.html" title="javascript 中用方法實現管道與繞過繼承建構子的限制">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>對 git 過於肥大及其它一些批評</title>
+</head>
+<body>
+<main><h1 id="對-git-過於肥大及其它一些批評">對 git 過於肥大及其它一些批評</h1>
+<p>很久以前在學習程式時，考量過要學哪一款版本控制軟體。
+那時本來知道 mercurial，又多做了一些研究。
+現在則是因為看了網路上一些對 git 的批評，
+主要是過於肥大，以及不適合在生產環境使用。
+我知道的其它替代品有 fossil、bazaar。</p>
+<p>看過一些對 git 的批評：</p>
+<ul>
+<li>過於肥大</li>
+<li>介面不友善</li>
+<li>分支氾濫</li>
+<li>提交缺乏系統</li>
+</ul>
+<p>個人認為比較無法改變的就是過於肥大；
+介面不友善可以藉由學習改善，所以本文跳過不講。
+分支我認為可能可以用標籤改善，
+提交可能用結構化的提交訊息或直接 rebase 整理提交。</p>
+<h2 id="肥大">肥大</h2>
+<p>之前架 server 時，就考慮過要不要裝 git，
+因為安裝時看到一堆相依性其實很可怕。
+至少包括 curl gnutls perl，
+雖然 debian 自帶的 apt 多半已經把 perl 裝好了；
+但 curl 的相依性也是很可怕。</p>
+<p>git 本身就自帶了一堆可能整個 project 用不到二次的指令，
+可以用 <code>dpkg -L git-man | grep man1</code> 
+看有哪些指令是根本沒用過或八成用不到的。
+不過這可能是所有軟體的通病，依據二八法則，
+日常使用的八成功能，分布在最常用到的二成指令上。
+像那些 mail 有關的指令，台灣應該很少人會用 git 內建的功能發 mail 了。</p>
+<p>就像之前用 npm 裝相依套件時的感想，
+一個不小心如果套件用到 c 語言來寫核心功能，
+node-gyp 還得要把 gcc make 工具鏈也裝起來才能動。
+我說那個在生產環境上裝 gcc 是不是搞錯了什麼，
+加上 node 的交叉編譯系統又不是很好用。</p>
+<p>一個版本控制系統，應該是考量在在生產環境的佈署，
+安裝要精簡，像 fossil 這種單一執行檔就很適合；
+雖然 git 好像也是單一執行檔，然後配一大堆 shell script 組合起來的。
+但考慮到對 posix shell 的相依性，
+像在 windows 裝 git 竟然還得把 bash 一起裝起來。</p>
+<h3 id="關於肥大的改進方式">關於肥大的改進方式</h3>
+<p>以下是理論解法，並未查證可行性。</p>
+<ol>
+<li>找找看 git 有沒有精簡安裝版</li>
+<li>找找看有沒有和 git 相容的輕量版非官方實作</li>
+<li>找找看有沒有輕量版本控制軟體和 git 相容</li>
+</ol>
+<h2 id="分支氾濫">分支氾濫</h2>
+<p>基本的 git flow，也就是要新增功能就開新分支，
+做完後再合併回 master。
+但合併後慣例上分支就會刪掉，否則久了會堆積一堆分支。
+但這樣分支也變得廉價不好追蹤。</p>
+<p><a href="https://stackoverflow.com/questions/1307114/how-can-i-archive-git-branches">也有人問過如何封存分支之類的問題。</a>
+一個做法是用 tag，可以把 tag 命名為 <code>archive/name</code> 之類的。
+但 archive 還是會在 <code>git tag -l</code> 時顯示，
+久了還是會有一大堆東西。
+不過一般用來標示版本的做法也是一樣，所以好像沒差。
+那能不能讓分支也當作沒差呢？
+只能說，是風格的問題了。</p>
+<h2 id="提交缺乏組織">提交缺乏組織</h2>
+<p>如 git flow 描述，在一個分支中，提交可能都是針對某一功能的，
+那有時單個提交是看不出意義的。
+在合併回主分支時，卻只會看到一個個分散的提交。
+其中缺少了一個組織方法，把一群提交組織在一起成群組。</p>
+<p>有個做法是用 rebase，把這些提交合併為一個大提交，
+但合併時這些提交個自的資訊又會因此遺失。
+我不確定有沒有軟體能解決這個問題，
+一個做法是在提交標題加上分類或標籤，用來組織提交。</p>
+<h2 id="自描述的提交">自描述的提交</h2>
+<p>這算是一個功能建議。
+有時候某些修改是自描述 (self describe) 的，
+也就是無需說明，直接看 diff 就知道為什麼要這麼改。
+如果要在提交訊息裡說明，就像是提 diff 的結果抄一遍，
+放到 commit message 裡。</p>
+<p>我一向是很討厭這種重複記錄的做法。
+像是 git commit 有記錄時間了，
+所以不需要在寫 commit message 時再寫一次時間。
+對 diff 也是一樣，我不喜歡在 commit message 裡，
+把用 git diff 可以看到的東西再重複一邊。</p>
+<p>之前意識到這個問題，是在寫 wiki 時。
+wiki 也有提交訊息這種東西，而且很重要。
+本來因為不想重複記錄，所以提交訊息都寫得很簡略。
+但之前用的 dokuwiki 的版控系統，只會顯示每個提交的標題，
+如果寫得很簡略，就根本看不出來每個提交改了什麼，
+當時的想法是寫一個自行產生提交訊息的腳本。</p>
+<p>所以後來 git 的話我至少會把提交訊息寫到能看出這個提交在幹麻。
+這樣發布新版本時，寫 changelog 比較方便，
+git log 再修一修補充細節即可。</p>
+<h2 id="其它軟體">其它軟體</h2>
+<p><a href="https://fossil-scm.org">fossil</a> 是一個蠻神奇的軟體，是sqlite的作者寫的。
+fossil是一個單一執行檔，結合版本控制、issue追蹤、文件管理功能。
+還有web ui，issue追蹤和文件管理就可以透過web ui實現，
+web還有論壇、聊天室功能。
+所以一個fossil，不只是單純的版本控制，也可以用來當作項目的網站。
+當然可以想見，版本控制和這些全部功能都是透過sqlite的資料庫實現的。
+只能說sqlite的作者D. Richard Hipp是奇人一個。</p>
+<p>bazaar和mercurial就沒有研究了，所以也不做評論。</p>
+<h2 id="反思">反思</h2>
+<p>你真得需要一個精簡的 git 嗎？
+因為需要在生產環境使用 git，所以想要有一個輕量化的 git。
+但在生產環境使用版本控制軟體是合理的做法嗎？
+除了下載對應版本的程式，其實版本控制軟體在生產環境是不會用到的。
+下載這部份，其實 github 可以直接下載 zip 下來解壓縮；
+而且使用版本控制軟體來發布到生產環境也怪怪的，
+理論上可以用 ftp 推上去，或就用 http 下載。</p>
+<p>使用 git 的場景應該是在開發環境，那肥大其實沒有什麼影響。
+開發環境裝個 gcc make autoconf 應該都算正常，
+如果連 ide 都裝起來了，那根本不會在意一個 git 的大小。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

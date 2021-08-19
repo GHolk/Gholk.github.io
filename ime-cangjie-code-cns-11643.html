@@ -1,0 +1,178 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2021-08-19T08:56:34.999Z">
+<meta name="keywords" property="og:article:tag" content="shell,ime,倉頡">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href>
+<link rel="prev" type="text/html" href="git-criticism-like-fat.html" title="對 git 過於肥大及其它一些批評">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>使用 CNS 11643 全字庫字形屬性資料輔助修改倉頡字根定義</title>
+</head>
+<body>
+<main><h1 id="使用-CNS-11643-全字庫字形屬性資料輔助修改倉頡字根定義">使用 CNS 11643 全字庫字形屬性資料輔助修改倉頡字根定義</h1>
+<p>CNS 11643 中文標準交換碼又稱全字庫，
+是台灣政府訂定的中文字集，其有自己的字型與編碼，
+編碼也與後來發展的 unicode 不同。
+全字庫有釋出字形屬性資料，也就是一個漢字由哪些部件組成的資料。
+在修改倉頡字根時，可以據此找出哪些字含有哪些部件，
+如找出所有帶有 <code>羽</code> 的中文字，並修改其編碼。</p>
+<h2 id="重定義倉頡字根">重定義倉頡字根</h2>
+<p>倉頡中的 <code>羽</code> 是拆成 <code>尸一尸戈一</code> 。
+如果是完整的拆解，應該是 <code>尸戈一尸戈一</code> ，
+但因為字根省略規則，字首只取首尾二碼，字身則全取，
+所以變成 <code>尸一尸戈一</code> 。</p>
+<p>在倉頡中某些二點的字形可以拆成 <code>卜</code> ，
+例如 <code>斗</code> 可以拆成 <code>卜十</code> ，
+但看來倉頡三代中 <code>羽</code> 的二點不在這個範圍內。</p>
+<p>由於省略規則，羽在擔任字首、次字首、第三個字身等時候，
+會被拆成 <code>尸一</code> <code>尸一一</code> 等我覺得很奇怪的拆法，
+對此我很不滿；我認為應該要拆成 <code>尸卜</code> 才對。</p>
+<h2 id="自定義輸入法對照表">自定義輸入法對照表</h2>
+<p>某些輸入法允許使用者自行定義編碼，
+可以讓使用者自己客制化輸入哪些字根會輸出哪些字。
+如果用倉頡這種拆字輸入法，就可以自己修改哪些字根可以出哪些字。
+例如我可以把 <code>栩</code> 從 <code>木尸一一</code> 改成 <code>木尸卜卜</code> ；
+或是直接依據其它東西，像把 <code>貓</code> 定義成 <code>金日廿</code> ，
+因為這三個字剛好是 <code>cat</code> 的對應按鍵。</p>
+<p>相對於注音，不知道為什麼很少這樣做。
+可能因為注音的重碼率太高，多半得搭配智慧選字，
+所以輸入法引擎會對注音輸入做很多黑魔法，
+不是簡單一張字根對照表能解決的。
+拆字的輸入法都是直接出字，少數情況才要選字。</p>
+<p>關於表格的格式，很久以前台灣的輸入法界還很繁榮的時候，
+弄出了一個副檔名 cin 的格式，讓各輸入法引擎能匯入各種輸入法。
+我知道至少 open vanilla、奇摩輸入法、gcin 都是這個格式。
+雖然各引撆可能會有自定義的選項。
+這種格式的來源，可能是中文 linux 發行版 CLE 中的 xcin 輸入法。
+後來的 <a href="https://github.com/openvanilla/openvanilla/blob/5fb5295/CinHowTo.markdown">open vanilla</a> 、 <a href="https://web.archive.org/web/20061010001027/cle.linux.org.tw/xcin/xcin/2.5.2/Cin.html">xim</a> 、 <a href="https://github.com/google/jscin/blob/3069ba4/docs/cin.txt">jscin</a>，
+都有 cin 格式的說明文件。</p>
+<p>網路上可以找到一些輸入法的 cin 表格，
+我自己也有做一份 <a href="https://github.com/GHolk/loco/blob/15eaf700446c9b3b9397d5e323a5871959cba8af/supcj.cin">supcj.cin</a> 供個人使用。
+格式就是用 <code>%</code> 定義特殊指令，
+字根與字的對應則是用空格分隔，一行一組。</p>
+<p>以 gcin 來說，就是用 gcin2tab，
+把 cin 檔案轉成 gcin 使用的 gtab 檔，
+然後丟到 <code>/usr/share/gcin/table/</code> ，
+再在 gtab.list 裡加入檔名就可以了。
+所以如果想加字，例如讓 cat 對應成貓，
+就在 supcj.cin 中加入這行：
+<code>cat 貓</code> ，再重新產生表格即可。</p>
+<p>在 windows xp 也有一個工具叫通用輸入法編輯工具，
+<a href="http://jdev.tw/blog/74">可以讓使用者以文字格式匯入表格，然後產生輸入法。</a>
+不過在 windows 8 後架構改變，
+<a href="https://terryhung.pixnet.net/blog/post/35522920">這個工具產生的輸入法在一些新版程式不能動，也不再內建這個工具。</a>
+（ <a href="http://jdev.tw/blog/2564/universal-ime-windows-64-bit">所以很多人從 xp 把輸入法編輯工具的 exe 檔複製過去。</a> ）</p>
+<p>所以，當時較通用格式有二種，
+windows 的通用輸入法編輯工具的格式，和 cin 的格式。
+不過後來不在這個時空背景下的輸入法，
+也就是 2000 年左右的台灣，就會定義自己的格式，
+例如中國開發的 scim，非中文國家的 ibus，
+或是完全生在新時代的 pime。</p>
+<p>不過說是重新定義，反正也是大同小異，
+像 scim 就是改用 tab 來分隔字根和字，
+用等號定義參數，註解要用三個井號。
+以會寫程式的來說，要修改都不是什麼難事，
+pime 雖然改用 json 來當表格，
+但也提供了一個轉換程式把 cin 轉換過去。</p>
+<h2 id="人力找出含有特定字根的字">人力找出含有特定字根的字</h2>
+<p>要重定義羽和弱的編碼，首先就要找出所有帶該字形的字，
+但單純從倉頡的對應來看其實不太準。
+如第一節所述，因為倉頡的省略規則，
+同一個部件羽，可能是尸一、尸一一、尸一尸戈一，
+甚至如果羽是最後一個字身，又有超過三個字首，那羽就會被編為 <code>一</code> 。
+同樣的，如果編碼中含有尸一，也不一定代表該字含有羽，
+例如 <code>刁</code> 這個字也可以拆成 <code>尸一</code> 。</p>
+<p>一開始我想那就找出所有帶有尸一的字再人力過濾，
+反正應該不會太多。
+結果蠻多的，如果把罕用字都算進來的話大約有 1000 個字。
+後來去掉 unicode cjk 擴展平面 A B C D，
+就大概少了一半，但還是有大約一半是誤判不含羽的字。
+自己肉眼判斷，但後來發現誤判率超高，
+我挑剩字裡大概還有一成是漏挑的。</p>
+<p>後來想想這樣不行，何況還有漏挑的；
+剛好看到 gcin 論壇 <a href="http://hyperrate.com/thread.php?tid=34912">有人分享了 cns 中文標準交換碼的開放政府資料</a> ，
+含有每個字由哪些部件組成的資料，
+於是就拿來用了。</p>
+<h2 id="使用全字庫漢字部件屬性資料篩選字根">使用全字庫漢字部件屬性資料篩選字根</h2>
+<p>全字庫的開放資料我是在上面
+<a href="https://data.gov.tw/dataset/5961">論壇裡提供的 data.gov 連結</a> 下載的。
+下載 zip 解壓縮後，會用到的有 MapingTable/Unicode Properties 二個資料夾。</p>
+<p>例如我們要找羽這個部件，首先因為全字庫有自己的編碼，
+要找出羽的全字庫編碼。
+想偷懶可以去 <a href="https://www.cns11643.gov.tw/searchQ.jsp?ID=0">全字庫網站查</a> ；
+不然就是 <code>echo -n 羽 | iconv -t UTF-32BE | xxd -p</code> ，
+然後用 unicode 碼在 <code>MapingTable/CNS2UNICODE_Unicode BMP.txt</code> 裡查。
+例如羽 unicode 是 7FBD，
+就 <code>grep 7FBD MapingTables/Unicode/CNS2UNICODE_Unicode*</code> ，
+可以查到羽的全字庫編碼是 <code>1-4851</code>。</p>
+<p><code>MapingTables/Unicode/CNS2UNICODE_Unicode*</code> 
+的格式即是用 tab 分隔，第一欄是全字庫編碼，
+第二欄是 unicode 編碼。
+其中 BMP 是對應到 unicode 的基本平面，2 15 則是第 2 和 15。</p>
+<p>然後用 <code>1-4851</code> 去 Properties/CNS_component.txt 裡查：
+<code>grep 1-4851 Properties/CNS_component.txt</code> ，
+可以找到羽是由 415 這個單獨部件組成的；
+所以可以判斷羽在全字庫中是視為一個部件存在。
+接著就找出所有帶用 415 這個部件的字：
+<code>awk &apos;($2 ~ 415) {print &quot;^&quot; $1}&apos; Properties/CNS_component.txt &gt; 415.txt</code> ，
+然後把查出來的全字庫編碼對應回 unicode：
+<code>grep -f 415.txt &apos;MappingTables/Unicode/CNS2UNICODE_Unicode BMP.txt&apos; &gt; u.txt</code> ，
+最後再把 unicode 編碼轉回 utf8：
+<code>awk &apos;{print $2, &quot;000a&quot;}&apos; u.txt | xxd -p -r | iconv -f UTF-16BE</code> 。</p>
+<p><code>Properties/CNS_component.txt</code> 的格式一樣是 tab 分隔，
+第一欄全字庫編碼，第二欄是用逗號分隔的部件列表，
+部件是用十進位數字表示。
+想知道哪個數字是哪個部件，
+可以在 <code>Properties/CNS_component_word.zip</code> 裡的圖片看；
+在 zip 裡放 zip，政府單位不意外。
+或是也可以直接看那個字長什麼樣子去判斷，
+或找只含有那個部件的字。</p>
+<p>如果要找 2 15 平面的話，因為前面的指令，
+是利用 utf 16 如果一個字可以用 2 byte 表示，就可以直接用 2 byte 表示。
+所以才能直接轉成二進位再轉到 utf 16。
+另外要指定 be 是要讓位元組順序不要反過來，不然 7FBD 會變成 BD7F。
+如果 2 15 平面則會超過 2 byte，可以改成用 utf 32，
+但要在前面補 0 補到八個 16 進位數字，也就是 4 byte。
+2 15 平面的字幾乎用不到，而且量還不少，所以我就沒有處理。
+如果要處理的話指令如下：</p>
+<pre><code class="lang-sh">awk &apos;($2 ~ 415) {print &quot;^&quot; $1}&apos; Properties/CNS_component.txt  |
+    grep -h -f - MapingTables/Unicode/CNS2UNICODE_Unicode\ [12]* |
+    awk &apos;{printf &quot;000%s0000000a&quot;, $2}&apos; |
+    xxd -p -r | iconv -f UTF-32BE
+</code></pre>
+<p>這樣找出來的字都可以確定有羽這個部件，也可以確定沒有漏。
+關於弱就少很多，就算把 2 15 都算進去，也不到 200 個。</p>
+<h2 id="修改倉頡編碼">修改倉頡編碼</h2>
+<p>再來就是要把編碼修正。
+由於字首字身的省略規則不一樣，所以只能一個個看。
+我認為比較快的做法是，挑出所有的 <code>一</code> 字根，
+然後標記其中不需要被取代為 <code>卜</code> 的，其它就全部取代。
+我的做法是用 vi 搜尋 <code>一</code> 字根對應的 <code>m</code> 字母，
+如果 m 不是屬於該字中的羽的一部份，
+就用 vi 的 <code>r.</code> 指令把 m 取代為 <code>z</code> （倉頡中幾乎用不到 z），
+然後按 <code>n</code> 搜尋下一個 m，
+下一個開始就可以把 <code>r.</code> 簡化成 <code>.</code> ，直接重複上一個動作。
+最後再用 <code>sed &apos;s/m/y/g; s/z/m/g&apos;</code> 把所有 <code>一</code> 改成 <code>卜</code> 把 <code>z</code> 改回 <code>一</code> 。</p>
+</main>
+
+<script defer src="ext/meta-meta.js"></script>
+<script defer data-lazy src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+</body></html>

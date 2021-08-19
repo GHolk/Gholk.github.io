@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2021-08-14T12:04:04.157Z</updated>
+  <updated>2021-08-19T09:16:49.334Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,166 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/ime-cangjie-code-cns-11643.html</id>
+<title>使用 CNS 11643 全字庫字形屬性資料輔助修改倉頡字根定義</title>
+<published>2021-08-19T08:56:34.999Z</published>
+<updated>2021-08-19T09:16:49.320Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/ime-cangjie-code-cns-11643.html"/>
+<summary type="html">CNS 11643 中文標準交換碼又稱全字庫，
+是台灣政府訂定的中文字集，其有自己的字型與編碼，
+編碼也與後來發展的 unicode 不同。
+全字庫有釋出字形屬性資料，也就是一個漢字由哪些部件組成的資料。
+在修改倉頡字根時，可以據此找出哪些字含有哪些部件，
+如找出所有帶有 &lt;code&gt;羽&lt;/code&gt; 的中文字，並修改其編碼。</summary>
+<category term="shell"/>
+<category term="ime"/>
+<category term="倉頡"/>
+<content type="html">&lt;h1 id=&quot;使用-CNS-11643-全字庫字形屬性資料輔助修改倉頡字根定義&quot;&gt;使用 CNS 11643 全字庫字形屬性資料輔助修改倉頡字根定義&lt;/h1&gt;
+&lt;p&gt;CNS 11643 中文標準交換碼又稱全字庫，
+是台灣政府訂定的中文字集，其有自己的字型與編碼，
+編碼也與後來發展的 unicode 不同。
+全字庫有釋出字形屬性資料，也就是一個漢字由哪些部件組成的資料。
+在修改倉頡字根時，可以據此找出哪些字含有哪些部件，
+如找出所有帶有 &lt;code&gt;羽&lt;/code&gt; 的中文字，並修改其編碼。&lt;/p&gt;
+&lt;h2 id=&quot;重定義倉頡字根&quot;&gt;重定義倉頡字根&lt;/h2&gt;
+&lt;p&gt;倉頡中的 &lt;code&gt;羽&lt;/code&gt; 是拆成 &lt;code&gt;尸一尸戈一&lt;/code&gt; 。
+如果是完整的拆解，應該是 &lt;code&gt;尸戈一尸戈一&lt;/code&gt; ，
+但因為字根省略規則，字首只取首尾二碼，字身則全取，
+所以變成 &lt;code&gt;尸一尸戈一&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;在倉頡中某些二點的字形可以拆成 &lt;code&gt;卜&lt;/code&gt; ，
+例如 &lt;code&gt;斗&lt;/code&gt; 可以拆成 &lt;code&gt;卜十&lt;/code&gt; ，
+但看來倉頡三代中 &lt;code&gt;羽&lt;/code&gt; 的二點不在這個範圍內。&lt;/p&gt;
+&lt;p&gt;由於省略規則，羽在擔任字首、次字首、第三個字身等時候，
+會被拆成 &lt;code&gt;尸一&lt;/code&gt; &lt;code&gt;尸一一&lt;/code&gt; 等我覺得很奇怪的拆法，
+對此我很不滿；我認為應該要拆成 &lt;code&gt;尸卜&lt;/code&gt; 才對。&lt;/p&gt;
+&lt;h2 id=&quot;自定義輸入法對照表&quot;&gt;自定義輸入法對照表&lt;/h2&gt;
+&lt;p&gt;某些輸入法允許使用者自行定義編碼，
+可以讓使用者自己客制化輸入哪些字根會輸出哪些字。
+如果用倉頡這種拆字輸入法，就可以自己修改哪些字根可以出哪些字。
+例如我可以把 &lt;code&gt;栩&lt;/code&gt; 從 &lt;code&gt;木尸一一&lt;/code&gt; 改成 &lt;code&gt;木尸卜卜&lt;/code&gt; ；
+或是直接依據其它東西，像把 &lt;code&gt;貓&lt;/code&gt; 定義成 &lt;code&gt;金日廿&lt;/code&gt; ，
+因為這三個字剛好是 &lt;code&gt;cat&lt;/code&gt; 的對應按鍵。&lt;/p&gt;
+&lt;p&gt;相對於注音，不知道為什麼很少這樣做。
+可能因為注音的重碼率太高，多半得搭配智慧選字，
+所以輸入法引擎會對注音輸入做很多黑魔法，
+不是簡單一張字根對照表能解決的。
+拆字的輸入法都是直接出字，少數情況才要選字。&lt;/p&gt;
+&lt;p&gt;關於表格的格式，很久以前台灣的輸入法界還很繁榮的時候，
+弄出了一個副檔名 cin 的格式，讓各輸入法引擎能匯入各種輸入法。
+我知道至少 open vanilla、奇摩輸入法、gcin 都是這個格式。
+雖然各引撆可能會有自定義的選項。
+這種格式的來源，可能是中文 linux 發行版 CLE 中的 xcin 輸入法。
+後來的 &lt;a href=&quot;https://github.com/openvanilla/openvanilla/blob/5fb5295/CinHowTo.markdown&quot;&gt;open vanilla&lt;/a&gt; 、 &lt;a href=&quot;https://web.archive.org/web/20061010001027/cle.linux.org.tw/xcin/xcin/2.5.2/Cin.html&quot;&gt;xim&lt;/a&gt; 、 &lt;a href=&quot;https://github.com/google/jscin/blob/3069ba4/docs/cin.txt&quot;&gt;jscin&lt;/a&gt;，
+都有 cin 格式的說明文件。&lt;/p&gt;
+&lt;p&gt;網路上可以找到一些輸入法的 cin 表格，
+我自己也有做一份 &lt;a href=&quot;https://github.com/GHolk/loco/blob/15eaf700446c9b3b9397d5e323a5871959cba8af/supcj.cin&quot;&gt;supcj.cin&lt;/a&gt; 供個人使用。
+格式就是用 &lt;code&gt;%&lt;/code&gt; 定義特殊指令，
+字根與字的對應則是用空格分隔，一行一組。&lt;/p&gt;
+&lt;p&gt;以 gcin 來說，就是用 gcin2tab，
+把 cin 檔案轉成 gcin 使用的 gtab 檔，
+然後丟到 &lt;code&gt;/usr/share/gcin/table/&lt;/code&gt; ，
+再在 gtab.list 裡加入檔名就可以了。
+所以如果想加字，例如讓 cat 對應成貓，
+就在 supcj.cin 中加入這行：
+&lt;code&gt;cat 貓&lt;/code&gt; ，再重新產生表格即可。&lt;/p&gt;
+&lt;p&gt;在 windows xp 也有一個工具叫通用輸入法編輯工具，
+&lt;a href=&quot;http://jdev.tw/blog/74&quot;&gt;可以讓使用者以文字格式匯入表格，然後產生輸入法。&lt;/a&gt;
+不過在 windows 8 後架構改變，
+&lt;a href=&quot;https://terryhung.pixnet.net/blog/post/35522920&quot;&gt;這個工具產生的輸入法在一些新版程式不能動，也不再內建這個工具。&lt;/a&gt;
+（ &lt;a href=&quot;http://jdev.tw/blog/2564/universal-ime-windows-64-bit&quot;&gt;所以很多人從 xp 把輸入法編輯工具的 exe 檔複製過去。&lt;/a&gt; ）&lt;/p&gt;
+&lt;p&gt;所以，當時較通用格式有二種，
+windows 的通用輸入法編輯工具的格式，和 cin 的格式。
+不過後來不在這個時空背景下的輸入法，
+也就是 2000 年左右的台灣，就會定義自己的格式，
+例如中國開發的 scim，非中文國家的 ibus，
+或是完全生在新時代的 pime。&lt;/p&gt;
+&lt;p&gt;不過說是重新定義，反正也是大同小異，
+像 scim 就是改用 tab 來分隔字根和字，
+用等號定義參數，註解要用三個井號。
+以會寫程式的來說，要修改都不是什麼難事，
+pime 雖然改用 json 來當表格，
+但也提供了一個轉換程式把 cin 轉換過去。&lt;/p&gt;
+&lt;h2 id=&quot;人力找出含有特定字根的字&quot;&gt;人力找出含有特定字根的字&lt;/h2&gt;
+&lt;p&gt;要重定義羽和弱的編碼，首先就要找出所有帶該字形的字，
+但單純從倉頡的對應來看其實不太準。
+如第一節所述，因為倉頡的省略規則，
+同一個部件羽，可能是尸一、尸一一、尸一尸戈一，
+甚至如果羽是最後一個字身，又有超過三個字首，那羽就會被編為 &lt;code&gt;一&lt;/code&gt; 。
+同樣的，如果編碼中含有尸一，也不一定代表該字含有羽，
+例如 &lt;code&gt;刁&lt;/code&gt; 這個字也可以拆成 &lt;code&gt;尸一&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;一開始我想那就找出所有帶有尸一的字再人力過濾，
+反正應該不會太多。
+結果蠻多的，如果把罕用字都算進來的話大約有 1000 個字。
+後來去掉 unicode cjk 擴展平面 A B C D，
+就大概少了一半，但還是有大約一半是誤判不含羽的字。
+自己肉眼判斷，但後來發現誤判率超高，
+我挑剩字裡大概還有一成是漏挑的。&lt;/p&gt;
+&lt;p&gt;後來想想這樣不行，何況還有漏挑的；
+剛好看到 gcin 論壇 &lt;a href=&quot;http://hyperrate.com/thread.php?tid=34912&quot;&gt;有人分享了 cns 中文標準交換碼的開放政府資料&lt;/a&gt; ，
+含有每個字由哪些部件組成的資料，
+於是就拿來用了。&lt;/p&gt;
+&lt;h2 id=&quot;使用全字庫漢字部件屬性資料篩選字根&quot;&gt;使用全字庫漢字部件屬性資料篩選字根&lt;/h2&gt;
+&lt;p&gt;全字庫的開放資料我是在上面
+&lt;a href=&quot;https://data.gov.tw/dataset/5961&quot;&gt;論壇裡提供的 data.gov 連結&lt;/a&gt; 下載的。
+下載 zip 解壓縮後，會用到的有 MapingTable/Unicode Properties 二個資料夾。&lt;/p&gt;
+&lt;p&gt;例如我們要找羽這個部件，首先因為全字庫有自己的編碼，
+要找出羽的全字庫編碼。
+想偷懶可以去 &lt;a href=&quot;https://www.cns11643.gov.tw/searchQ.jsp?ID=0&quot;&gt;全字庫網站查&lt;/a&gt; ；
+不然就是 &lt;code&gt;echo -n 羽 | iconv -t UTF-32BE | xxd -p&lt;/code&gt; ，
+然後用 unicode 碼在 &lt;code&gt;MapingTable/CNS2UNICODE_Unicode BMP.txt&lt;/code&gt; 裡查。
+例如羽 unicode 是 7FBD，
+就 &lt;code&gt;grep 7FBD MapingTables/Unicode/CNS2UNICODE_Unicode*&lt;/code&gt; ，
+可以查到羽的全字庫編碼是 &lt;code&gt;1-4851&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;MapingTables/Unicode/CNS2UNICODE_Unicode*&lt;/code&gt; 
+的格式即是用 tab 分隔，第一欄是全字庫編碼，
+第二欄是 unicode 編碼。
+其中 BMP 是對應到 unicode 的基本平面，2 15 則是第 2 和 15。&lt;/p&gt;
+&lt;p&gt;然後用 &lt;code&gt;1-4851&lt;/code&gt; 去 Properties/CNS_component.txt 裡查：
+&lt;code&gt;grep 1-4851 Properties/CNS_component.txt&lt;/code&gt; ，
+可以找到羽是由 415 這個單獨部件組成的；
+所以可以判斷羽在全字庫中是視為一個部件存在。
+接著就找出所有帶用 415 這個部件的字：
+&lt;code&gt;awk &amp;apos;($2 ~ 415) {print &amp;quot;^&amp;quot; $1}&amp;apos; Properties/CNS_component.txt &amp;gt; 415.txt&lt;/code&gt; ，
+然後把查出來的全字庫編碼對應回 unicode：
+&lt;code&gt;grep -f 415.txt &amp;apos;MappingTables/Unicode/CNS2UNICODE_Unicode BMP.txt&amp;apos; &amp;gt; u.txt&lt;/code&gt; ，
+最後再把 unicode 編碼轉回 utf8：
+&lt;code&gt;awk &amp;apos;{print $2, &amp;quot;000a&amp;quot;}&amp;apos; u.txt | xxd -p -r | iconv -f UTF-16BE&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Properties/CNS_component.txt&lt;/code&gt; 的格式一樣是 tab 分隔，
+第一欄全字庫編碼，第二欄是用逗號分隔的部件列表，
+部件是用十進位數字表示。
+想知道哪個數字是哪個部件，
+可以在 &lt;code&gt;Properties/CNS_component_word.zip&lt;/code&gt; 裡的圖片看；
+在 zip 裡放 zip，政府單位不意外。
+或是也可以直接看那個字長什麼樣子去判斷，
+或找只含有那個部件的字。&lt;/p&gt;
+&lt;p&gt;如果要找 2 15 平面的話，因為前面的指令，
+是利用 utf 16 如果一個字可以用 2 byte 表示，就可以直接用 2 byte 表示。
+所以才能直接轉成二進位再轉到 utf 16。
+另外要指定 be 是要讓位元組順序不要反過來，不然 7FBD 會變成 BD7F。
+如果 2 15 平面則會超過 2 byte，可以改成用 utf 32，
+但要在前面補 0 補到八個 16 進位數字，也就是 4 byte。
+2 15 平面的字幾乎用不到，而且量還不少，所以我就沒有處理。
+如果要處理的話指令如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;awk &amp;apos;($2 ~ 415) {print &amp;quot;^&amp;quot; $1}&amp;apos; Properties/CNS_component.txt  |
+    grep -h -f - MapingTables/Unicode/CNS2UNICODE_Unicode\ [12]* |
+    awk &amp;apos;{printf &amp;quot;000%s0000000a&amp;quot;, $2}&amp;apos; |
+    xxd -p -r | iconv -f UTF-32BE
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;這樣找出來的字都可以確定有羽這個部件，也可以確定沒有漏。
+關於弱就少很多，就算把 2 15 都算進去，也不到 200 個。&lt;/p&gt;
+&lt;h2 id=&quot;修改倉頡編碼&quot;&gt;修改倉頡編碼&lt;/h2&gt;
+&lt;p&gt;再來就是要把編碼修正。
+由於字首字身的省略規則不一樣，所以只能一個個看。
+我認為比較快的做法是，挑出所有的 &lt;code&gt;一&lt;/code&gt; 字根，
+然後標記其中不需要被取代為 &lt;code&gt;卜&lt;/code&gt; 的，其它就全部取代。
+我的做法是用 vi 搜尋 &lt;code&gt;一&lt;/code&gt; 字根對應的 &lt;code&gt;m&lt;/code&gt; 字母，
+如果 m 不是屬於該字中的羽的一部份，
+就用 vi 的 &lt;code&gt;r.&lt;/code&gt; 指令把 m 取代為 &lt;code&gt;z&lt;/code&gt; （倉頡中幾乎用不到 z），
+然後按 &lt;code&gt;n&lt;/code&gt; 搜尋下一個 m，
+下一個開始就可以把 &lt;code&gt;r.&lt;/code&gt; 簡化成 &lt;code&gt;.&lt;/code&gt; ，直接重複上一個動作。
+最後再用 &lt;code&gt;sed &amp;apos;s/m/y/g; s/z/m/g&amp;apos;&lt;/code&gt; 把所有 &lt;code&gt;一&lt;/code&gt; 改成 &lt;code&gt;卜&lt;/code&gt; 把 &lt;code&gt;z&lt;/code&gt; 改回 &lt;code&gt;一&lt;/code&gt; 。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/linux-l2tp-vpn-debian-stretch.html#修正-github-文件的連結</id>
 <title>linux 下連接 l2tp vpn</title>
 <published>2019-01-04T17:35:53.804Z</published>
@@ -1436,251 +1596,7 @@ lvm 在 2.02 時加入了內建的 raid 功能，
 <category term="boot"/>
 <category term="grub"/>
 <category term="shell"/>
-<content type="html">&lt;h1 id=&quot;使用-lvm-內建的-raid-1-功能達成硬碟故障時的高可用性&quot;&gt;使用 lvm 內建的 raid 1 功能達成硬碟故障時的高可用性&lt;/h1&gt;
-&lt;p&gt;硬碟是有壽命的消耗品。
-如果不想讓某台電腦因為硬碟故障而遺失資料，
-或需要重建一堆服務，應使用 raid 1 等磁碟陣列技術，
-讓系統在一顆硬碟故障時仍可正常運作。
-lvm 在 2.02 時加入了內建的 raid 功能，
-可以直接使用 lvm 提供的工具建立 raid，
-而無需另外使用 mdadm 等工具手動建立 raid 後再於上層建立 lvm。
-在建立 raid 保證高可用性後，應在每顆硬碟上都安裝一次開機啟動程式，
-保證預設的開機硬碟故障後，另一顆硬碟仍可在不需手動介入情況下正常開機。&lt;/p&gt;
-&lt;script src=&quot;ext/toc.js&quot;&gt;&lt;/script&gt;
 
-&lt;h2 id=&quot;raid-的作法&quot;&gt;raid 的作法&lt;/h2&gt;
-&lt;p&gt;磁碟陣列 raid 有分為在軟體上實作和在硬體上實作。
-身為土砲的自架家機當 server 流派，
-我應該不會去碰到硬體 raid。
-所以本文介紹的是 linux 的軟體 raid。
-另外如果是 zfs 或 btrfs，這類高級檔案系統都是從底層管到頂層，
-有自己內建的 raid 作法，不需要靠 mdadm 或 lvm raid。&lt;/p&gt;
-&lt;p&gt;很早就開始有高可用性的想法，
-雖然實際上只壞掉過一顆沒在用的硬碟，所以也沒掉過資料。
-一開始從鳥哥開始碰 raid，但鳥哥只介紹了 mdadm，
-沒有介紹到 lvm 內建的 raid 功能。
-後來動手測試時才發現 lvm 有內建，
-試了沒什麼問題就轉用 lvm 內建的了。&lt;/p&gt;
-&lt;h2 id=&quot;lvm-概念&quot;&gt;lvm 概念&lt;/h2&gt;
-&lt;p&gt;lvm 分為三層：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;第一層物理卷 &lt;abbr title=&quot;physic volume&quot;&gt;PV&lt;/abbr&gt;，
-對應 linux 中的 &lt;abbr title=&quot;block device&quot;&gt;塊裝置&lt;/abbr&gt; ，
-一般就是整硬碟如 &lt;code&gt;/dev/sda&lt;/code&gt; ，也可以只對應一個分割區 &lt;code&gt;/dev/sda1&lt;/code&gt; 。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;第二層邏輯群組 &lt;abbr title=&quot;volume group&quot;&gt;VG&lt;/abbr&gt; ，
-一個 vg 可以由一個以上的 pv 組成。
-vg 的用途是把儲存的空間和物理上的硬碟解耦，
-從此只需要關心某個 vg 還有多少容量，
-是不是要加新 pv 了。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;第三層邏輯卷 &lt;abbr title=&quot;logical volume&quot;&gt;LV&lt;/abbr&gt;，
-lv 是屬於某個 vg，對外表現為一個正常的塊裝置，
-有在建立時指定的容量，可以被 dd mkfs；
-此外也可以做一些 lvm 的操作，如 &lt;abbr title=&quot;snapshot&quot;&gt;快照&lt;/abbr&gt; 。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;詳細可以去參考 &lt;a href=&quot;http://linux.vbird.org/linux_basic/0420quota.php#lvm&quot;&gt;鳥哥的 lvm 教學&lt;/a&gt;。&lt;/p&gt;
-&lt;h2 id=&quot;建立-lvm&quot;&gt;建立 lvm&lt;/h2&gt;
-&lt;p&gt;建立 lvm 的指令範例：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;把第一顆硬碟和第二顆的第二個分割區格式化為 pv：
-&lt;code&gt;pvcreate /dev/sda /dev/sdb2&lt;/code&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;建立一個 vg，包含這二個 pv：
-&lt;code&gt;vgcreate my-vg /dev/sda /dev/sdb2&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;在開機時，linux kernel 的 lvm 模組會掃描所有塊裝置，
-檢查哪些塊裝置是 pv，然後他們上面有哪些 vg，
-vg 中有哪些 lv，然後建立出 lv 塊裝置介面。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;在 vg 上建立 lv：
-&lt;code&gt;lvcreate --size 10G --name my-root my-vg&lt;/code&gt; ，
-&lt;code&gt;lvcreate --size 10G --name my-home my-vg&lt;/code&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;之後就可以在 lv 上建立檔案系統，安裝作業系統了。
-現在主流的 linux 使用 device mapper，
-會把在 &lt;code&gt;/dev&lt;/code&gt; 下自動建立和 vg 同名的資料夾，
-然後資料夾內自然就是以 lv 名稱為名的塊裝置。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;mkfs -t ext4 /dev/my-vg/my-root&lt;/code&gt; ，
-&lt;code&gt;mkfs -t ext4 /dev/my-vg/my-home&lt;/code&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;在 debian 中 lvm 的指令放在 &lt;code&gt;/sbin&lt;/code&gt; 下面，
-一般 user 的 &lt;code&gt;$PATH&lt;/code&gt; 不一定有包含 sbin，可能要自己加；
-另外多數指令也都要在 root 權限下執行。&lt;/p&gt;
-&lt;h2 id=&quot;使用-lvm-指令&quot;&gt;使用 lvm 指令&lt;/h2&gt;
-&lt;p&gt;lvm 的指令都有對應的 man-page，寫得蠻詳細的，
-但有些內容太多會不好讀。
-lvm 的指令也都很制式的用對應的層級開頭，
-例如想找 lv 相關的指令，就直接打 lv 後按二下 tab 自動補全，
-就會列出多數 lv 相關的指令。&lt;/p&gt;
-&lt;p&gt;如果檢查這些 lvm 指令，會發現他們都是連結到 &lt;code&gt;/sbin/lvm&lt;/code&gt; 的符號連結，
-就像某些 busybox 環境中，各指令都只是符號連結到 busybox 的執行檔，
-busybox 會依據呼叫時的檔名來改變行為。&lt;/p&gt;
-&lt;p&gt;直接執行 lvm 本身，會進入一個 lvm 的互動式環境，
-可以直接執行 lvcreate 等 lvm 指令。
-或是把想執行的指令當作 lvm 的第一個參數，
-如執行 &lt;code&gt;lvm lvresize&lt;/code&gt; 就和直接執行 &lt;code&gt;lvresize&lt;/code&gt; 等價，
-類似的 busybox 也可以用這種方式呼叫。&lt;/p&gt;
-&lt;p&gt;有些比較受限的系統，例如開機失敗時進入的中繼系統 initramfs，
-會只含有 lvm 一個執行檔而不包含那些符號連結，
-也就是沒有 lvresize，
-此時要執行各個 lvm 指令就得用 &lt;code&gt;lvm lvresize&lt;/code&gt; 這種方式。&lt;/p&gt;
-&lt;h2 id=&quot;lvm-的神奇操作&quot;&gt;lvm 的神奇操作&lt;/h2&gt;
-&lt;p&gt;我現在裝系統都會啟用 lvm，方便以後調整分割區容量或換硬碟。&lt;/p&gt;
-&lt;h3 id=&quot;調整分割區大小&quot;&gt;調整分割區大小&lt;/h3&gt;
-&lt;p&gt;我通常都是只有一顆硬碟，又會習慣分 home 和 root 二個分割區。
-所會要用切分割的方式裝。
-那如果之後發現 root 或 home 不夠大要調整就很麻煩。&lt;/p&gt;
-&lt;p&gt;如果是 lvm 可以在系統運作中直接調整大小，
-當然因為 ext4 的限制，只能調大不能調小。
-但如果是解除掛載的離線狀態，就可以調小了。&lt;/p&gt;
-&lt;p&gt;例如把 root 加大 1G，並自動調整檔案系統的大小：
-&lt;code&gt;lvresize --size +1G my-vg/my-root --resizefs&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;不加 &lt;code&gt;--resizefs&lt;/code&gt; 的話，就只會把塊裝置容量變大，
-但其中的檔案系統仍只和建立時的塊裝置一樣大。
-可以用 resize2fs 或對應的工具再調整，
-resize2fs 在不加參數的情況下，
-就是直接把塊裝置中的檔案系統，調整到和塊裝置一樣大。&lt;/p&gt;
-&lt;p&gt;如果要調小，順序要反過來，
-也就是先把檔案系統調小，然後再把塊裝置調小。
-如果直接調小塊裝置的話，檔案系統就會有資料被不見，
-造成檔案系統損毀。
-怕麻煩可以直接用 lvresize 的 &lt;code&gt;--resizefs&lt;/code&gt; 參數，
-lvresize 會自動處理好。&lt;/p&gt;
-&lt;h3 id=&quot;抽換硬碟&quot;&gt;抽換硬碟&lt;/h3&gt;
-&lt;p&gt;如果系統本來在一顆硬碟的 lvm 上，那要換硬碟也很簡單：
-直接把新的硬碟做成 pv 加到 vg 裡，
-然後把 vg 存在原本那顆硬碟 pv 的資料移到新硬碟，
-就能把舊硬碟移出 vg，把硬碟拔走了，
-完全不用碰到 dd 或 mkfs 之類的工具。
-當然，如果原本的開機程式裝在舊硬碟，
-記得得再裝在新硬碟一次。&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;把新硬碟做成 pv： &lt;code&gt;pvcreate /dev/sdb1&lt;/code&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;把 pv 加到現有的 vg： &lt;code&gt;vgextend my-vg /dev/sdb1&lt;/code&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;把 vg 中原本在舊硬碟的資料移走： &lt;code&gt;pvmove /dev/sda1&lt;/code&gt; 。
-pvmove 可以不指定目標，
-總之就是叫 lvm 把存在該 pv 中的資料移到其它 pv。
-在本例中，如果 vg 只有這顆和另一顆新硬碟，
-那當然就是移到新硬碟上。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;把 pv 從 vg 中移除： &lt;code&gt;vgreduce my-vg /dev/sda1&lt;/code&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;如果要把舊硬碟上的 pv 標頭移除： &lt;code&gt;pvremove /dev/sda1&lt;/code&gt;，
-但不是必要，反正之後 mkfs 時也會直接蓋掉。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;這些操作完全可以在開機中進行，在作業系統運作的狀態下，
-你放系統的硬碟就從一顆換到另一顆了，很神奇吧。&lt;/p&gt;
-&lt;h2 id=&quot;lvm-raid&quot;&gt;lvm raid&lt;/h2&gt;
-&lt;p&gt;lvm raid 則是把各種 raid 功能加進到 lvm 中。
-早期 lvm 就有一個 mirror，是用來容錯的鏡像功能，
-和 raid 1 類似，後來 lvm raid 推出後就取代了原本的 mirror 功能。
-但我之前嘗試 lvm raid 1，讀取時似乎沒有加速到 n 倍，
-所以想藉 raid 1 提速兼容錯的使用者可能要考慮。&lt;/p&gt;
-&lt;p&gt;要建立 lvm raid 0 和 1 簡單到不行，
-直接在建立 lv 時把 lv 的類別指定為 raid 0 或 1 即可：
-&lt;code&gt;lvcreate --type raid1 --size 10G --name my-raid1 my-vg&lt;/code&gt; 。
-lvm 會自行找到 vg 中的二個 pv，各吃掉其 10G 來建立一個 10G 的 raid 1，
-可以用 &lt;code&gt;--mirrors $n&lt;/code&gt; 來指定除了原本的一份資料外，要備份幾份。&lt;/p&gt;
-&lt;p&gt;raid0 0 也相同。
-其實 lvm 原本就有一個 stripe 功能了，
-我不確定二個差在哪，都是把資料分別存到不同的 pv 上。
-如果說只是想要 raid 0 的合併容量成一個大硬碟的功能，
-其實 lvm 基本的 lv 就是了，raid 0 只是多了讀寫提速的功能。&lt;/p&gt;
-&lt;p&gt;另外一種作法是把現有的 lv 轉成 raid 1 的 lv：
-&lt;code&gt;lvconvert --type raid1 my-vg/my-home&lt;/code&gt; 。
-lvconvert 是另一個用來轉換 lv 類型的工具，
-他指定 lv 的方式是用 &lt;code&gt;$vg_name/$lv_name&lt;/code&gt; 的格式，
-很多 lvm 工具都會用這類格式。
-在 lvconvert 轉換後，會開始把資料同步到新 mirror 上，
-可以用 lvs 看同步進度。&lt;/p&gt;
-&lt;p&gt;改成 raid 後，要更新 grub 和 initramfs，
-但其實我不確定是不是必要。
-grub 就 update-grub 再 grub-install 就好，
-但可能要 &lt;a href=&quot;#grub-開機流程&quot;&gt;注意開機磁區的空間夠不夠&lt;/a&gt;。&lt;/p&gt;
-&lt;p&gt;之前碰過開機時的 initramfs 系統不能讀取 lvm raid 的問題。
-更新 initramfs 就 &lt;code&gt;update-initramfs -u -k all&lt;/code&gt; ，
-但如果更新後仍不能開機，可能是 raid 模組沒有加進去，&lt;/p&gt;
-&lt;p&gt;initramfs 我也不確定需不需要手動加入 raid 1 的模組。
-&lt;a href=&quot;https://www.ptt.cc/bbs/Linux/M.1605875548.A.AB5.html&quot;&gt;之前裝的使用 lvm raid 1 的系統有出現過一個奇怪的問題&lt;/a&gt; ，
-開機後卡在 initramfs 階段，無法進入正常系統。
-後來發現是 initramfs 中沒有包含到 raid 1 需要的模組，
-手動在 &lt;code&gt;/etc/initramfs-tools/modules&lt;/code&gt; 中加入需要的模組即可。
-因為不確定需要哪些，我後來就全加：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;printf &amp;apos;%s\n&amp;apos; xor async_tx raid6_pq \
-        async_xor async_pq async_memcpy async_raid6_recov \
-        md_mod raid1 raid456 dm_raid dm_log dm_region_hash dm_mirror lvm \
-        &amp;gt;&amp;gt; /etc/initramfs-tools/modules
-update-initramfs -k all -u
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;raid1 類型的 lv，可以試著關機把其中一顆 pv 硬碟拔掉，
-再開機仍可以正常讀取；此時就只剩一顆硬碟。
-我不確定能不能直接移除仍在使用中的 pv 來測試容錯能力，
-像 mdadm 可以用 &lt;code&gt;--fail&lt;/code&gt; 來手動標記一顆硬碟為不使用，
-但有看到 pvremove 一個 &lt;code&gt;-ff&lt;/code&gt; 選項，似乎可以用來強制移除仍在使用的 pv。&lt;/p&gt;
-&lt;p&gt;如果要再加新硬碟： &lt;code&gt;lvconvert --mirror +1 my-vg/my-home&lt;/code&gt; 。&lt;/p&gt;
-&lt;h2 id=&quot;grub&quot;&gt;grub&lt;/h2&gt;
-&lt;p&gt;另外一項很重要的就是開機硬碟設定，
-raid 可以容錯後，還要可以正常開機，
-因為現代電腦的開機是由硬碟起始位置資料去引導的，
-而這部份 lvm 管不到，除非用硬體 raid 不然應該都不行。
-所以除了讓硬碟容錯，系統資料不會損壞，
-還要讓各硬碟都可以用來開機。&lt;/p&gt;
-&lt;h3 id=&quot;grub-開機流程&quot;&gt;grub 開機流程&lt;/h3&gt;
-&lt;p&gt;現代的 linux 可以不需要設置 boot 分區，
-就算 root 在 lvm 中也可以直接開機，
-因為現在的 grub 有 lvm 模組，可以讀取 lvm 的內容，
-但如果是 legacy bios 的話，硬碟開頭要預留足夠的空間塞 grub。&lt;/p&gt;
-&lt;p&gt;legacy bios 下 grub 的載入分二步，
-第一步從硬碟開頭的開機引導程式開始執行，
-這部份要找到 linux 中的 grub 資料夾如 &lt;code&gt;/boot/grub&lt;/code&gt; ，
-載入 grub.cfg 等檔案。
-第二部就是依 grub.cfg 執行，載入各種模組，然後開機。&lt;/p&gt;
-&lt;p&gt;所以第一步中，開機引導程式要有掛載該檔案系統的能力。
-如果 boot 分割或 boot 所在分割像 root 是 ext2 系列，
-那難度要求不高，硬碟在第一個分割區前只要留 &lt;code&gt;512 * 64 = 32Ki&lt;/code&gt; 就夠了。
-但如果 boot 所在的分割是 lvm，就需要把 lvm 模組也塞在引導磁區，
-那 64 sector 就會不夠大，所以開頭要留 &lt;code&gt;512 * 2048 = 1024Ki&lt;/code&gt; 。&lt;/p&gt;
-&lt;p&gt;印象中在網路上看到，早期 grub 會將壓縮後的 grub 尺寸壓在 32Ki 以下，
-才能塞進常見的 64 個磁區的預留空間。
-但我用 ubuntu 18 和 debian buster 後的版本，64 磁區好像會不夠。
-總之就這樣，細節我也不是很了解。&lt;/p&gt;
-&lt;p&gt;如果是 uefi 的話，問題就變成 efi 分區要夠大，
-但通常是夠的，應該不會有 efi 分區不到 1M。&lt;/p&gt;
-&lt;h3 id=&quot;分割硬碟&quot;&gt;分割硬碟&lt;/h3&gt;
-&lt;p&gt;以前我們習慣用 mbr 或 gpt 把硬碟切成不同塊裝置使用。
-但上面的 lvm 可以發現，
-其實可以不用切直接把整顆硬碟都劃給 lvm 當 pv 用。
-但把整顆硬碟做成 pv 會發現，沒地方可以放 grub 或其它引導磁區了！&lt;/p&gt;
-&lt;p&gt;所以除非你不打算用這顆硬碟開機，不然無論是 legacy bios，
-或是 efi 都要有分割表的存在。
-保險的做法是一樣做分割表，然後只切一個分割區，把該分割區劃成 pv。
-如果是 legacy bios，如上一節所述，
-就得確定第一個分割前要留 2048 個磁區，
-efi 則是要多劃一個 efi 分區。&lt;/p&gt;
-&lt;h3 id=&quot;在各硬碟都安裝-grub&quot;&gt;在各硬碟都安裝 grub&lt;/h3&gt;
-&lt;p&gt;如果是 legacy bios，就確保各硬碟開頭的留空都有 2048 磁區就好了，
-然後 &lt;code&gt;grub-install --target i386-pc /dev/sda&lt;/code&gt; ，sdb 也一樣做一次。
-開機順序則是在 bios 裡設定。&lt;/p&gt;
-&lt;p&gt;如果是 uefi，則要在二顆硬碟都做一個 efi 分區，
-總之就是一個 fat 格式的檔案系統，幾百 M 就夠了。
-然後分割區標籤設成 EF，如果是 fdisk 就是用 t 命令，編碼是 ef。
-如果硬碟的分割表是 mbr，那 efi 分割要是主要分割區，gpt 就沒差。&lt;/p&gt;
-&lt;p&gt;然後把 efi 掛載到隨便一個地方，例如 mnt 好了：
-&lt;code&gt;grub-install --target x86_64-efi --efi-directory /mnt&lt;/code&gt; ，
-如果有二顆硬碟，就得在二顆硬碟的 efi 分區都做一次。
-efi 的安裝，說實在就是把 efi 格式的開機程式，
-放到 efi 分區中的對應目錄下。&lt;/p&gt;
-&lt;p&gt;至於安裝好後，真正決定開機順序是由主機板上的 efi 儲存的，和硬碟無關。
-grub-install 會直接把裝上去的 grub 設為預設開機項目，
-如果要手動調整二顆硬碟要誰先誰後，
-可以用 linux 中的 efibootmgr 調整，
-或是電腦的 efi shell 也有可能提供介面供使用者調整。&lt;/p&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/ccns-matrix-luser-review.html#顯示-custom-reaction-的油猴腳本</id>
 <title>matrix 菜鳥使用心得</title>

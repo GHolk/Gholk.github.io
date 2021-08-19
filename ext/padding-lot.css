@@ -38,6 +38,12 @@ blockquote {
     border-left: solid 0.5em #BBB;
 }
 
+code {
+    border: 1px solid;
+    padding: 0 0.3em;
+    font-size: smaller;
+}
+
 main pre > code {
     display: block;
     padding: 1em;

@@ -1,0 +1,285 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2021-09-02T09:36:56.007Z">
+<meta name="keywords" property="og:article:tag" content="linux,編輯器,emacs,vim,evil,shell,巨集">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="ime-cangjie-code-cns-11643.html" title="使用 CNS 11643 全字庫字形屬性資料輔助修改倉頡字根定義">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>將打包或編譯腳本內嵌在原始碼檔案的註解內</title>
+</head>
+<body>
+<main><h1 id="將打包或編譯腳本內嵌在原始碼檔案的註解內">將打包或編譯腳本內嵌在原始碼檔案的註解內</h1>
+<p>有時寫一些簡單的腳本，在發布時需要做簡單的打包或編譯。
+獨立寫一個 makefile 太麻煩，因為變成要維護二個檔案。
+我想到一個做法是把編譯的腳本，用註解寫在原始碼裡，
+然後可以在編輯器裡定義一個巨集，
+呼叫時就找到該註解並執行，完成打包或編譯動作。
+個人的使用場景有，自動在 makefile 裡跳脫 shell 腳本，
+還有自動壓縮 html 裡 script 標籤的內容。</p>
+<h2 id="跳脫-makefile-的-shell-腳本">跳脫 makefile 的 shell 腳本</h2>
+<p>最早的情境是寫 makefile 時，bash 腳本會變得很醜；
+因為要處理 <code>$</code> 的跳脫，多行時還要加分號，
+並用反斜線跳脫換行，寫起來很醜也不好寫。
+之前就想了一個做法，在其它地方寫好後，
+再用腳本把原始碼跳脫後塞回 makefile 裡。
+簡單的跳脫方式： <code>sed 's#\$#$$#g; s#$# \\#'</code> 。</p>
+<p>但要維護獨立一個檔案又很麻煩，
+不如直接把所有腳本寫到另一個 sh 檔裡。
+所以我後來就把原始的 sh 用註解放在同一個檔案裡，
+每次修改後，再呼叫跳脫的指令，
+把跳脫的結果貼回實際要執行的地方。</p>
+<p>如果這個過程可以自動化，
+像是直接在編輯器裡定義一個巨集，
+會找到註解起來的原始碼，去掉註解再跳脫，
+最後取代舊版本的部份，好像很方便。</p>
+<p>但如果是把巨集定義在編輯器 rc 裡，終究不方便。
+首先可能每個檔案會有不同的跳脫格式，
+要處理細節也不同。
+那就必須為每種不同的檔案定義一個巨集，就很不方便。</p>
+<p>如果可以把巨集的定義也寫在檔案裡，
+然後在編輯器裡直接執行檔案裡寫好的巨集，
+就會方便很多。
+例如 vi 裡可以用 <code>@</code> 執行在某個暫存器裡的巨集，
+所以可以把編譯指令寫在註解裡，
+然後 <code>y$</code> 複製後，用 <code>@"</code> 執行；
+甚至定義快捷鍵 <code>map g@ y$@"</code> ，然後用 <code>g@</code> 二鍵執行。</p>
+<pre><code class="lang-makefile"># jy}P}j!2}sed '/^test:/ { G; s/^test:\n/test:/; s/\n$//; s/\\$//; q }; s/^\# /\t/; s/\$/$$/g; /./ s/$/ ; \\/; H; d'
+
+# n=0
+# for i in `seq 10`
+# do
+#   echo $i
+#   n=$((n+1))
+# done
+# echo $n
+
+test:
+</code></pre>
+<p>因為我對 vi 巨集說實在沒有很熟，
+所以上面的巨集主要是靠 sed 在處理文字。
+而且最後還有手動按 enter 才能執行 sed，
+也就是不能處理巨集中需要換行的問題。
+如果對 vi 熟的使用者，應該可以寫得比我好。</p>
+<p>如果是 emacs 的話，可以做的事就更多了，
+emacs 有個很方便的功能是 <code>C-x C-e</code> ，
+可以直接執行游標所在處的 emacs lisp，
+而所有 emacs 功能都是由 emacs lisp 組成的，
+所以能做的事更多。</p>
+<pre><code class="lang-makefile"># (let ((start) (end) (origin))  "
+#  " (search-forward-regexp "\n\n") (setf start (point-marker)) "
+#  " (search-forward-regexp "\n\n") (goto-char (- (point) 2)) "
+#  " (setf end (point-marker)) "
+#  " (setf origin (buffer-substring start end)) "
+#  " (replace-regexp "^# ?" "\t" nil start end) "
+#  " (replace-string "\n" "; \\\n" nil start end) "
+#  " (goto-char (1+ (marker-position end))) (search-forward "\n\n")  "
+#  " (kill-region end (point)) (insert "\n\n") "
+#  " (goto-char start) (insert origin "\n\ntest:\n"))
+
+# n=0
+# for i in `seq 10`
+# do
+#   echo i is $i
+#   n=$((n+1))
+# done
+
+test:
+    n=0; \
+    for i in `seq 10`; \
+    do; \
+      echo i is $i; \
+      n=$((n+1)); \
+    done
+</code></pre>
+<p>結果寫完後發現 emacs lisp 少了一些庫，
+不能簡單的達成 vi 裡可以一鍵完成的操作，
+所以一些移動寫起來很麻煩。
+（一開始還因為寫不出來差點讓本文難產。）
+其中比較有趣的是如何處理行首的井號，
+我是用雙引號括起來讓他變成字串，
+對字串求值不會有任何副作用，所以就沒事了。</p>
+<h2 id="emacs-巨集功能">emacs 巨集功能</h2>
+<p>後來找到了 emacs 的 kbd macro 功能，
+雖然和 evil 有點相性不佳，但勉強堪用。
+emacs 可以用 <code>start-kbd-macro</code> <code>C-x C-(</code> 來記錄巨集。
+（和 bash 的一樣，但應該超少人知道 bash 有這個功能。）
+emacs 的巨集不會存在暫存器裡，
+錄製後是存在 <code>last-kbd-macro</code> 這個變數裡。
+如果不把該巨集命名，存成一個命令，
+錄下一個巨集時原本存的巨集就會被蓋掉。
+另外有一個功能是把現存的巨集或是命名的巨集以 elisp 印出來，
+之後就可以把巨集存到 <code>.emacs</code> 或 <code>.emacs.d/init.el</code> 裡，
+供日後使用。</p>
+<p>evil 也在 emacs 的巨集上實現了 vi 的巨集介面，
+所以用 q 定義的巨集一樣是 emacs 巨集，
+只是儲存位置變為 register。
+vi 裡可以直接指定暫存器，把巨集印出來；
+但 emacs 裡的巨集可能不是單純的字串，
+如果巨集中有 enter 或 backspace 等操作，
+那就會有符號而不只有字元；而無法用 evil 的 paste 功能貼上。
+（emacs 的字串是由字元組成的 array，巨集則是由操作按鍵組成的 array，
+但這個按鍵如果是 enter 或 backspace，那就不是由字元表示，
+而是由 lisp symbol 表示；含有 symbol 的 array 就不是字串了。）</p>
+<p>所以為了方便起見，我寫了一個 advice，
+在呼叫 <code>evil-paste-after</code> 也就是小寫的 p 命令時，
+先檢查 register 的內容。
+如果存的是巨集，就以 lisp 表達式貼上，
+否則就用原本的 paste 函數貼上。</p>
+<pre><code class="lang-elisp">(defun evil-paste-kbd-macro-advice (&amp;rest argv)
+  "make evil paste kbd-macro if register content is a macro.
+this function check whether content macro by:
+ 1. equal to `last-kbd-macro'
+ 2. is a vector but not string
+ 3. contain unprintable character"
+  (if (and (&gt;= (length argv) 2)
+           (second argv))
+      (let* ((register (second argv))
+             (register-pair (assoc register register-alist))
+             (content (if register-pair (cdr register-pair))))
+        (if (and content
+                 (or (eq last-kbd-macro content)
+                     (vectorp content)
+                     (string-match "[^\t[:print:]\n\r]" content)))
+            (let ((last-kbd-macro content))
+              (forward-line)
+              (beginning-of-line)
+              (insert-kbd-macro '##)
+              (forward-line -2)
+              (search-forward "setq last-kbd-macro")
+              (replace-match "execute-kbd-macro")
+              t)))))
+(advice-add 'evil-paste-after :before-until
+            'evil-paste-kbd-macro-advice)
+</code></pre>
+<p>把 macro 存到檔案裡的命令是 <code>insert-kbd-macro</code> ，
+會在游標處插入一段定義該巨集的 lisp 程式，像下面那樣。
+在 emacs lisp 中，字元和整數是一樣的，
+但字元除了直接用 ascii 十進位或其它進位表示，
+也可以用問號開頭，代表字元字面量。
+所以 <code>?A</code> 也就是 <code>65</code> 也就是 <code>#x41</code> 。</p>
+<pre><code class="lang-elisp">;; 存成名為 my-nonsense-macro 的巨集
+(fset 'my-nonsense-macro
+   [?j ?V ?j ?j ?j ?j ?j ?: ?s ?/ ?# backspace ?^ ?# ?  ?/ ?\\ ?t ?/ ?g return ?\{ ?j ?V ?\} ?k ?: ?s ?/ ?$ ?/ ?\; ?  ?\\ ?\\ ?/ return ?D])
+
+;; 存為最後錄置的巨集
+(setq last-kbd-macro
+   [?/ ?f ?o return ?/ ?f ?o return ?/ ?l ?l ?i ?n ?u ?x return ?/ backspace ?\{ ?/ ?l ?i ?n ?u ?x return ?n ?A ?w ?\C-z ?x])
+
+;; 執行最後錄置的巨集
+(execute-kbd-macro last-kbd-macro)
+
+;; 執行命名巨集
+(execute-kbd-macro (symbol-function 'my-nonsense-macro))
+
+;; 執行巨集字面量
+(execute-kbd-macro [?/ ?f ?o return ?/ ?f ?o return ?/ ?l ?l ?i ?n ?u ?x return ?/ backspace ?\{ ?/ ?l ?i ?n ?u ?x return ?n ?A ?w ?\C-z ?x])
+</code></pre>
+<h2 id="壓縮-html-裡的-javascript">壓縮 html 裡的 javascript</h2>
+<p>另一個應用案例是，壓縮 html 裡的 javascript。
+有時寫一些一頁式的工具網頁，為了方便，
+會把 javascript 全部寫在 html 裡的 script 標籤裡。</p>
+<p>這時候就可以定義一個巨集，來自動找到 html 裡的 script 標籤，
+然後呼叫 uglifyjs 來壓縮 javascript。
+像下面這個巨集，就是找到 script tag，
+然後對內容呼叫 uglifyjs，最後複製所有內容到剪貼簿，
+再還原 javascript 回未壓縮的狀況。</p>
+<pre><code class="lang-html">&lt;!-- compress javascript macro
+(execute-kbd-macro
+   [?\} ?/ ?s ?c ?r ?i ?p ?t return ?j ?V ?/ ?s ?c ?r ?i ?p ?t return ?k ?! ?u ?g ?l ?i ?f ?y ?j ?s return ?g ?g ?\} ?y ?G ?u ?g ?g])
+--&gt;
+
+&lt;div&gt;some html&lt;/div&gt;
+
+&lt;style&gt;
+/* some css */
+&lt;/style&gt;
+
+&lt;script&gt;
+// some javascript
+alert('hello world!')
+&lt;/script&gt;
+</code></pre>
+<h2 id="內嵌腳本的風險">內嵌腳本的風險</h2>
+<p>以上這些腳本在 vi 中都要手動複製後才能執行，
+emacs 比較簡單，有一個 <code>c-x c-e</code> 的快捷鍵可以一鍵執行。
+事實上，emacs 也有更誇張的，
+直接將某種特定的語法顯示為按鍵甚至輸入框，
+可以和文件中的程式互動。（應該可以吧，org-mode 的話。）</p>
+<p>這種程度有點像 html 了，只是顯示上還是由 emacs 中定義的程式來控制。
+像和 emacs 深度整合的 texinfo 手冊格式，
+可以想像成包含了超連結功能的 man-page，
+在 emacs 中就可以 <em>點擊</em> 手冊中的超連結，到其它檔案。</p>
+<p>emacs 內建的 help 功能也類似：
+help 函數時會顯示函數的說明、形式參數名稱、定義該函數的檔案的超連結；
+如果函數有被加上 hook、advice、alias，也會一併顯示。
+help 變數時一樣會則會顯示變數的說明和檔案，此外還會顯示變數的值。
+後來發展的 customize 系統，更可以直接在輸入框中修改變數，
+也可以有像 html 表單那樣的 radio 單選值，
+或是可以有多個 key value 的值。</p>
+<p>所以對使用者來說，完全可以設定 emacs，
+讓 emacs 讀到某種語法時，顯示出可以點擊的按鈕，
+讓我們寫好的巨集可以點擊執行；甚至自動執行。
+但這也產生一個風險，也就是十幾年前流行過的 word <a href="http://zh.wikipedia.org/wiki/%E5%B7%A8%E9%9B%86%E7%97%85%E6%AF%92">巨集病毒</a> 。
+如果一開啟文件，就自動執行了文件中的腳本，
+然後腳本開始亂刪你的文件就很可怕了。
+點擊執行時，一定要確認腳本是可信任的。</p>
+<h2 id="emacs-vim-python-的格式指定標頭">emacs vim python 的格式指定標頭</h2>
+<p>這種一開檔就執行的腳本，其實有類似的東西，
+就是一些編輯器會用來指定檔案編碼的 <a href="http://zh.wikipedia.org/wiki/%E9%AD%94%E8%A1%93%E6%95%B8%E5%AD%97_(%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88)">魔術數字 (程式設計)</a> ，
+或是用來指定語法高亮。
+其實就可以想像成在開檔執行的程式。
+在 emacs 中稱為 <a href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Specifying-File-Variables.html">file variable</a> ，vim 中稱為 <a href="http://vimdoc.sourceforge.net/htmldoc/options.html#modeline">modeline</a> ，
+後來被 python 抄去指定檔案的編碼。</p>
+<p>像 emacs 和 python 都認得的，用來指定編碼的語法：</p>
+<pre><code class="lang-python"># -*- coding: utf-8 -*-
+</code></pre>
+<p>vim 的用來指定語法高亮和一些格式：</p>
+<pre><code class="lang-python">/* vim: set fdm=expr fde=getline(v\:lnum)=~'{'?'&gt;1'\:'1': */
+</code></pre>
+<p>emacs 的：</p>
+<pre><code>;; -*- mode: Lisp; fill-column: 75; comment-column: 50; -*-
+</code></pre><p>但這些東西都有一些安全疑慮，
+例如之前 vim 就有相關的漏洞被回報過，
+搜尋 <em>vim modeline vulnerability</em> 就會有一些案例。
+emacs 也是，有所謂的不安全的 eval 語法，
+在開檔時會主動詢問是否要求值。</p>
+<p>這種語法可以算是內嵌腳本在檔案中的另一種形式。
+像 emacs 就可以指定在檔案中執行 compile 命令時要呼叫的程式，
+<a href="https://www.emacswiki.org/emacs/CompileCommand">emacswiki 上也有範例</a>
+是指定編輯 crontab 檔案後，就讓 crontab 載入。</p>
+<pre><code class="lang-sh"> # -*- compile-command: "crontab ~/.crontab" -*-
+</code></pre>
+<p>但字串是直接被當作 shell script 呼叫，不能用執行 emacs lisp。
+如果要執行 elisp，要改成放 lisp 表達式，
+呼叫 compile 時就會對表達式求值，
+然後把求值結果當作 shell script 執行。
+但開檔時 emacs 會詢問你是否要信任檔案中指定的表達式，
+防止執行到惡意程式。
+範例像下面這樣：</p>
+<pre><code class="lang-html">&lt;!-- -*- compile-command: (prog1 "echo done" (execute-kbd-macro [?\} ?/ ?s ?c ?r ?i ?p ?t return ?j ?V ?/ ?s ?c ?r ?i ?p ?t return ?k ?! ?u ?g ?l ?i ?f ?y ?j ?s return ?g ?g ?\} ?y ?G ?u ?g ?g])) -*-
+</code></pre>
+</main>
+
+<script defer="" src="ext/meta-meta.js"></script>
+<script defer="" data-lazy="" src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+
+</body></html>

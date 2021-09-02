@@ -333,3 +333,4 @@ contact.html
 javascript-pipe-method-and-inherit-constructor.html
 git-criticism-like-fat.html
 ime-cangjie-code-cns-11643.html
+build-script-embed-in-comment.html

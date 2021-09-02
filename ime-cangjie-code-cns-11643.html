@@ -11,7 +11,7 @@
 <meta name="keywords" property="og:article:tag" content="shell,ime,倉頡">
 <link rel="index" type="text/html" href="index.html" title="首頁">
 <link rel="start" type="text/html" href="index.html" title="首頁">
-<link rel="next" type="text/html" href>
+<link rel="next" type="text/html" href="build-script-embed-in-comment.html" title="將打包或編譯腳本內嵌在原始碼檔案的註解內">
 <link rel="prev" type="text/html" href="git-criticism-like-fat.html" title="對 git 過於肥大及其它一些批評">
 
 <!-- 和網頁位置有關 -->
@@ -130,11 +130,11 @@ pime 雖然改用 json 來當表格，
 可以找到羽是由 415 這個單獨部件組成的；
 所以可以判斷羽在全字庫中是視為一個部件存在。
 接著就找出所有帶用 415 這個部件的字：
-<code>awk &apos;($2 ~ 415) {print &quot;^&quot; $1}&apos; Properties/CNS_component.txt &gt; 415.txt</code> ，
+<code>awk '($2 ~ 415) {print "^" $1}' Properties/CNS_component.txt &gt; 415.txt</code> ，
 然後把查出來的全字庫編碼對應回 unicode：
-<code>grep -f 415.txt &apos;MappingTables/Unicode/CNS2UNICODE_Unicode BMP.txt&apos; &gt; u.txt</code> ，
+<code>grep -f 415.txt 'MappingTables/Unicode/CNS2UNICODE_Unicode BMP.txt' &gt; u.txt</code> ，
 最後再把 unicode 編碼轉回 utf8：
-<code>awk &apos;{print $2, &quot;000a&quot;}&apos; u.txt | xxd -p -r | iconv -f UTF-16BE</code> 。</p>
+<code>awk '{print $2, "000a"}' u.txt | xxd -p -r | iconv -f UTF-16BE</code> 。</p>
 <p><code>Properties/CNS_component.txt</code> 的格式一樣是 tab 分隔，
 第一欄全字庫編碼，第二欄是用逗號分隔的部件列表，
 部件是用十進位數字表示。
@@ -151,9 +151,9 @@ pime 雖然改用 json 來當表格，
 但要在前面補 0 補到八個 16 進位數字，也就是 4 byte。
 2 15 平面的字幾乎用不到，而且量還不少，所以我就沒有處理。
 如果要處理的話指令如下：</p>
-<pre><code class="lang-sh">awk &apos;($2 ~ 415) {print &quot;^&quot; $1}&apos; Properties/CNS_component.txt  |
+<pre><code class="lang-sh">awk '($2 ~ 415) {print "^" $1}' Properties/CNS_component.txt  |
     grep -h -f - MapingTables/Unicode/CNS2UNICODE_Unicode\ [12]* |
-    awk &apos;{printf &quot;000%s0000000a&quot;, $2}&apos; |
+    awk '{printf "000%s0000000a", $2}' |
     xxd -p -r | iconv -f UTF-32BE
 </code></pre>
 <p>這樣找出來的字都可以確定有羽這個部件，也可以確定沒有漏。
@@ -168,11 +168,12 @@ pime 雖然改用 json 來當表格，
 就用 vi 的 <code>r.</code> 指令把 m 取代為 <code>z</code> （倉頡中幾乎用不到 z），
 然後按 <code>n</code> 搜尋下一個 m，
 下一個開始就可以把 <code>r.</code> 簡化成 <code>.</code> ，直接重複上一個動作。
-最後再用 <code>sed &apos;s/m/y/g; s/z/m/g&apos;</code> 把所有 <code>一</code> 改成 <code>卜</code> 把 <code>z</code> 改回 <code>一</code> 。</p>
+最後再用 <code>sed 's/m/y/g; s/z/m/g'</code> 把所有 <code>一</code> 改成 <code>卜</code> 把 <code>z</code> 改回 <code>一</code> 。</p>
 </main>
 
-<script defer src="ext/meta-meta.js"></script>
-<script defer data-lazy src="ext/load-disqus.js"></script>
+<script defer="" src="ext/meta-meta.js"></script>
+<script defer="" data-lazy="" src="ext/load-disqus.js"></script>
 <script>autoLoader.autoLoad()</script>
+
 
 </body></html>

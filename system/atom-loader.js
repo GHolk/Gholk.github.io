@@ -16,6 +16,12 @@ class AtomLoader {
     removeOldContent(count = 10) {
         this.selector('content').slice(10).remove()
     }
+    decodeEntities(string) {
+        return string.replace(
+            /&#x[0-9A-F]{2,8};/g,
+            e => String.fromCodePoint(parseInt(e.slice(3, -1), 16))
+        )
+    }
     write() {
         const current = new Date()
         this.selector('feed > updated:first-of-type')
@@ -23,7 +29,7 @@ class AtomLoader {
         this.removeOldContent()
         fs.writeFileSync(
             this.path,
-            this.selector.html(),
+            this.decodeEntities(this.selector.html()),
             'utf8'
         )
     }

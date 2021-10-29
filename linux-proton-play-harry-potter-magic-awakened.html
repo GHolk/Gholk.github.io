@@ -1,0 +1,182 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2021-10-29T09:03:07.912Z">
+<meta name="keywords" property="og:article:tag" content="遊戲,奇幻,魔法,哈利波特,linux,proton,wine,windows">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="build-script-embed-in-comment.html" title="將打包或編譯腳本內嵌在原始碼檔案的註解內">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>用 proton 在 linux 下玩哈利波特：魔法覺醒</title>
+</head>
+<body>
+<main><h1 id="用-proton-在-linux-下玩哈利波特：魔法覺醒">用 proton 在 linux 下玩哈利波特：魔法覺醒</h1>
+<p>上個月中國網易合作開發的哈利波特魔法覺醒遊戲推出了，
+看起來做得很棒，完全不是免洗手遊，對原作還原度也很高，
+對我這代童年在哈利波特長大的人應該很有吸引力。
+幾周後電腦版也出了，我本來想現在這個遊戲引擎時代，
+這種用遊戲引擎開發的遊戲應該裝起來很簡單。
+結果一開始沒裝起來，折騰半天才想到是要先裝好
+Visual C++ Redistributable， <a href="linux-proton-wine-outside-steam.html">在 proton 下就可以玩了</a> 。</p>
+<h2 id="all-in-one-script">all in one script</h2>
+<p>for those who does not speak chinese but speak bash.</p>
+<pre><code class="lang-sh">wget https://g92.gdl.netease.com/HPMA.rar # 6.7G
+7z x HPMA.rar # 6.8G
+
+export STEAM_COMPAT_DATA_PATH=$HOME/hpma-compat-data
+export STEAM_COMPAT_CLIENT_INSTALL_PATH=$HOME/.steam/steam
+proton_version=6.3
+
+cd hpzs
+# 10G
+"$HOME/.steam/steam/steamapps/common/Proton $proton_version/proton" \
+    run harrypotter_setup.exe
+echo press enter after installation finished
+read x
+cd ..
+
+wget https://aka.ms/vs/16/release/vc_redist.x64.exe
+"$HOME/.steam/steam/steamapps/common/Proton $proton_version/proton" \
+    run vc_redist.x64.exe
+echo press enter after installation finished
+read x
+
+"$HOME/.steam/steam/steamapps/common/Proton $proton_version/proton" \
+    run "C:\Program Files (x86)\HPMA\Launch.exe"
+# do not choose OpenGL in graphic setting; choose direct x 11.
+# opengl will cause chinese font become tofu.
+</code></pre>
+<h2 id="美術風格">美術風格</h2>
+<p>這遊戲對我這代童年在哈利波特長大的人應該很有吸引力，
+遊戲出了後臉書上都出現一堆哈利波特 cosplay 照，
+剛推出時我自己也和朋友去西門町的大型廣告走了一圈。
+遊戲內容也蠻用心的，
+在地圖模式裡可以騎掃把在霍格華茲校園裡自由飛行，
+城堡內部雖然沒有完全內部地圖做出來，
+只有幾個交誼廳、自己寢室的房間，之間也沒有互相連通。</p>
+<p>可能是網易的風格和哈利波特很合吧，
+第五人格的畫風，稍微改一下就很適合哈利波特了。
+雖然這遊戲很明顯有中資問題，但還是真香，
+畢竟是原廠有合作開發，中資問題應該也沒那麼大吧。（自我安慰中。）
+總之等到出事再來抵制應該也不遲。</p>
+<p>還有一個主因是，我覺得遊戲中用卡牌加上拖曳來施法的機制蠻有趣的，
+所以也想入坑玩玩看。
+朋友也有幾個一開始就入坑，然後爬到蠻高段位的，
+看他們雙排一直贏感覺很爽。</p>
+<h2 id="電腦版">電腦版</h2>
+<p>這遊戲一開始只出 android ios 版，
+但因為不是大家手機都很好，
+所以後來很多人都用電腦的手機模擬器玩，像用 bluestack。
+我的手機是夠新跑得動，但螢幕太小字看不清楚，根本沒辦法玩。
+後來網易自己出了 pc 版，檔案超大 8G，就打算裝裝看。</p>
+<p>一開始在 linux 下用 proton 裝一次，但裝完一直開不起來。
+我用 proton 的作法是裝好 steam，
+用 steam 內建的功能裝 proton，
+之後 proton 就會在
+<code>$HOME/.steam/steam/steamapps/common/Proton $version/proton</code> ，
+version 目前最新是 6.3。</p>
+<p>proton 執行時要指定一個當 windows c 槽，放系統函式庫的資料夾，
+用環境變數 <code>STEAM_COMPAT_DATA_PATH</code> 指定，
+然後執行安裝檔 <code>proton run harrypotter_setup.exe</code> 即可。
+安裝檔一共有五個檔案， <code>harrypotter_setup-[1-4].bin</code> 
+和一個 <code>harrypotter_setup.exe</code> ，載下來時是都放在一個 rar 壓縮檔裡。</p>
+<p>例如我解壓縮後的四個檔案放在 <code>~/hpzs</code> ，
+給 proton 當 c 槽的資料夾則是 <code>~/hpma-compat-data</code> ，
+steam 則是安裝在 <code>~/.steam</code> ，proton 版本是 6.3，
+那執行 proton 來安裝的指令就要這樣下：</p>
+<pre><code>cd ~/hpzs
+env STEAM_COMPAT_DATA_PATH=$HOME/hpma-compat-data \
+    STEAM_COMPAT_CLIENT_INSTALL_PATH=$HOME/.steam/steam \
+    "$HOME/.steam/steam/steamapps/common/Proton 6.3/proton" run \
+    harrypotter_setup.exe
+</code></pre><p>安裝後預設是把遊戲裝在 <code>C:\Program Files (x86)\HPMA</code> ，
+也就是 <code>~/hpma-compat-data/pfx/drive_c/Program Files (x86)/HPMA</code> 。
+執行檔是 <code>C:\Program Files (x86)\HPMA\Launch.exe</code>
+裝好要執行的話，可以直接用 windows 風格指定 c 槽路徑：</p>
+<pre><code>env STEAM_COMPAT_DATA_PATH=$HOME/hpma-compat-data \
+    STEAM_COMPAT_CLIENT_INSTALL_PATH=$HOME/.steam/steam \
+    "$HOME/.steam/steam/steamapps/common/Proton 6.3/proton" run \
+    "C:\Program Files (x86)\HPMA\Launch.exe"
+</code></pre><p>但現在還不能跑，因為少了一個 microsoft visual c++ 的函式庫，
+應該跑到出現網易的 logo 後會有錯誤訊息的視窗出現，
+但是亂碼所以我一開始都不知道是什麼意思。
+visual c++ 函式庫可以去 <a href="https://docs.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist">microsoft 網站</a> 下載，
+我是選 x64 那個，或是 <a href="https://aka.ms/vs/16/release/vc_redist.x64.exe">用 exe 檔直接連結</a> 。</p>
+<p>載下來和上面裝遊戲的安裝方式一樣，
+用 proton 指定同一個 c 槽資料夾，
+然後一直下一步就好了。</p>
+<pre><code class="lang-sh">env STEAM_COMPAT_DATA_PATH=$HOME/hpma-compat-data \
+    STEAM_COMPAT_CLIENT_INSTALL_PATH=$HOME/.steam/steam \
+    "$HOME/.steam/steam/steamapps/common/Proton 6.3/proton" run \
+    vc_redist.x64.exe
+</code></pre>
+<p>裝完後理論上就可以開了。
+第一次開可能要更新，檔案還蠻大的。
+更新完後要重開一次，遊戲只會自己關掉，你要手動打開。</p>
+<p>第一次打開後要註冊，可以綁 facebook 或 line，也只有這二種方法。
+遊戲會嘗試打開瀏覽器用 oauth 授權，如果是 windows 會開 edge，
+proton 下會用 linux 預設的瀏覽開；
+如果都沒有也會顯示授權網址，就自己開吧。</p>
+<p>進遊戲之後可以去設定把調顯示設定，
+我筆電沒有很好，所以設 fps 30、畫質低。
+然後有一個可以選底層要用 OpenGL 或 DirectX 11，
+proton 選 opengl 的話（下次重開生效），
+字會變豆腐方塊顯示不出來，所以不要選。</p>
+<p>遊戲安裝檔大小 8G，安裝後 10G。</p>
+<h2 id="安裝撞牆記錄">安裝撞牆記錄</h2>
+<p>一開始裝不起來以為是 proton 的問題，就把塵封已久的 windows 開來裝裝看。
+先用虛擬機試，本以為手機遊戲應該不會太吃效能，搞不好虛擬機就夠用。
+結果手上二個 windows 硬碟的映像檔，一個開不起來一個開得起來。
+開得起來那個效能也嚴重不足，連過場動畫都超頓，
+畫面落後聲音快一半，根本不能玩。
+所以打算雙開機回 windows 玩。</p>
+<p>在 windows 裝時，錯誤訊息是缺少 <code>CONTCTR140.dll</code> 
+和 <code>MSVCP140.dll</code> 二個函式庫。
+先用之前的想法，手動把這二個 dll 抓下來放進 windows system32，
+但還是不行，錯誤訊息變成別的無意義的東西。</p>
+<p>於是去開得起來那台找這二個 dll 是收在哪，
+結果是很檔名很長很奇怪的資料夾，我猜是 windows 內部更新會用的位置，
+所以以為是 windows 版本太舊，就把雙系統 windows 整理一下，
+更新到最新版，edge 也從 ms 自幹換成 blink 底了。
+但還是跳一樣的，缺那二個 dll 的錯誤訊息。</p>
+<p>後來用錯誤訊息去 google，看到一些相關問題，
+提到那二個 dll 是屬於 microsoft visual c++ 的函式庫，
+有些軟體會用到，可以自己手動裝。
+後來仔細想想那台開得起來的映象檔，
+以前的確因為某商業軟體要用，
+就裝過 visual c++ 函式庫，難怪可以動。</p>
+<p>但網易也太雷，在安裝說明寫個要手動裝 visual c++ 函式庫是會死嗎？
+而且好像大家都沒有這個問題？
+我也不知道為什麼，可能是我的 windows 太乾淨吧。</p>
+<p>裝完函式庫就可以玩了。
+之後想到，搞不好 proton 不能玩也是這個原因？
+所以就在 proton 下把函式庫裝起來，結果還真的可以跑了。
+只是效能比在 windows 下還差一點，
+打二對二對戰時，畫面比較花就會 lag。
+後來發現不要邊開著瀏覽器邊玩就好了，可能我的 ram 不夠。</p>
+<p>這遊戲好像是先發布中國版和台灣版，歐美都還沒發布，
+所以之前想找有沒有人用 linux 裝的經驗都找不到。
+reddit 的討論區裡，還有美國人跑來台灣服玩的心得。</p>
+</main>
+
+<script defer="" src="ext/meta-meta.js"></script>
+<script defer="" data-lazy="" src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+
+</body></html>

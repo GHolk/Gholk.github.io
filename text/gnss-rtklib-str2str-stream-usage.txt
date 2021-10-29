@@ -17,7 +17,7 @@ rtklib 中用作資料串流的工具為 gui 介面的 strsvr 與 cli 介面的 
 
 目前我只知道可以用 str2str 和 ser2net 二支程式讀取。
 str2str 要寫到 tcp 串流或檔案都可以，ser2net 就是寫到網路。
-二個都可以雙向溝通，但目前我只有用 ser2net 把 tcp
+二個都可以雙向溝通，但目前我只有用 ser2net 把 tcp 寫回到 serial 過。
 
 另外 serial 裝置要設定 baud，
 裝置的鮑正確才能正常讀取寫入，錯誤的話會讀寫到錯誤的資料。

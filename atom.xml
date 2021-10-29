@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2021-09-02T09:37:51.270Z</updated>
+  <updated>2021-10-29T09:27:37.203Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,175 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/linux-proton-play-harry-potter-magic-awakened.html</id>
+<title>用 proton 在 linux 下玩哈利波特：魔法覺醒</title>
+<published>2021-10-29T09:03:07.912Z</published>
+<updated>2021-10-29T09:27:37.180Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/linux-proton-play-harry-potter-magic-awakened.html"/>
+<summary type="html">上個月中國網易合作開發的哈利波特魔法覺醒遊戲推出了，
+看起來做得很棒，完全不是免洗手遊，對原作還原度也很高，
+對我這代童年在哈利波特長大的人應該很有吸引力。
+幾周後電腦版也出了，我本來想現在這個遊戲引擎時代，
+這種用遊戲引擎開發的遊戲應該裝起來很簡單。
+結果一開始沒裝起來，折騰半天才想到是要先裝好
+Visual C++ Redistributable， &lt;a href=&quot;linux-proton-wine-outside-steam.html&quot;&gt;在 proton 下就可以玩了&lt;/a&gt; 。</summary>
+<category term="遊戲"/>
+<category term="奇幻"/>
+<category term="魔法"/>
+<category term="哈利波特"/>
+<category term="linux"/>
+<category term="proton"/>
+<category term="wine"/>
+<category term="windows"/>
+<content type="html">&lt;h1 id=&quot;用-proton-在-linux-下玩哈利波特：魔法覺醒&quot;&gt;用 proton 在 linux 下玩哈利波特：魔法覺醒&lt;/h1&gt;
+&lt;p&gt;上個月中國網易合作開發的哈利波特魔法覺醒遊戲推出了，
+看起來做得很棒，完全不是免洗手遊，對原作還原度也很高，
+對我這代童年在哈利波特長大的人應該很有吸引力。
+幾周後電腦版也出了，我本來想現在這個遊戲引擎時代，
+這種用遊戲引擎開發的遊戲應該裝起來很簡單。
+結果一開始沒裝起來，折騰半天才想到是要先裝好
+Visual C++ Redistributable， &lt;a href=&quot;linux-proton-wine-outside-steam.html&quot;&gt;在 proton 下就可以玩了&lt;/a&gt; 。&lt;/p&gt;
+&lt;h2 id=&quot;all-in-one-script&quot;&gt;all in one script&lt;/h2&gt;
+&lt;p&gt;for those who does not speak chinese but speak bash.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;wget https://g92.gdl.netease.com/HPMA.rar # 6.7G
+7z x HPMA.rar # 6.8G
+
+export STEAM_COMPAT_DATA_PATH=$HOME/hpma-compat-data
+export STEAM_COMPAT_CLIENT_INSTALL_PATH=$HOME/.steam/steam
+proton_version=6.3
+
+cd hpzs
+# 10G
+&quot;$HOME/.steam/steam/steamapps/common/Proton $proton_version/proton&quot; \
+    run harrypotter_setup.exe
+echo press enter after installation finished
+read x
+cd ..
+
+wget https://aka.ms/vs/16/release/vc_redist.x64.exe
+&quot;$HOME/.steam/steam/steamapps/common/Proton $proton_version/proton&quot; \
+    run vc_redist.x64.exe
+echo press enter after installation finished
+read x
+
+&quot;$HOME/.steam/steam/steamapps/common/Proton $proton_version/proton&quot; \
+    run &quot;C:\Program Files (x86)\HPMA\Launch.exe&quot;
+# do not choose OpenGL in graphic setting; choose direct x 11.
+# opengl will cause chinese font become tofu.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;美術風格&quot;&gt;美術風格&lt;/h2&gt;
+&lt;p&gt;這遊戲對我這代童年在哈利波特長大的人應該很有吸引力，
+遊戲出了後臉書上都出現一堆哈利波特 cosplay 照，
+剛推出時我自己也和朋友去西門町的大型廣告走了一圈。
+遊戲內容也蠻用心的，
+在地圖模式裡可以騎掃把在霍格華茲校園裡自由飛行，
+城堡內部雖然沒有完全內部地圖做出來，
+只有幾個交誼廳、自己寢室的房間，之間也沒有互相連通。&lt;/p&gt;
+&lt;p&gt;可能是網易的風格和哈利波特很合吧，
+第五人格的畫風，稍微改一下就很適合哈利波特了。
+雖然這遊戲很明顯有中資問題，但還是真香，
+畢竟是原廠有合作開發，中資問題應該也沒那麼大吧。（自我安慰中。）
+總之等到出事再來抵制應該也不遲。&lt;/p&gt;
+&lt;p&gt;還有一個主因是，我覺得遊戲中用卡牌加上拖曳來施法的機制蠻有趣的，
+所以也想入坑玩玩看。
+朋友也有幾個一開始就入坑，然後爬到蠻高段位的，
+看他們雙排一直贏感覺很爽。&lt;/p&gt;
+&lt;h2 id=&quot;電腦版&quot;&gt;電腦版&lt;/h2&gt;
+&lt;p&gt;這遊戲一開始只出 android ios 版，
+但因為不是大家手機都很好，
+所以後來很多人都用電腦的手機模擬器玩，像用 bluestack。
+我的手機是夠新跑得動，但螢幕太小字看不清楚，根本沒辦法玩。
+後來網易自己出了 pc 版，檔案超大 8G，就打算裝裝看。&lt;/p&gt;
+&lt;p&gt;一開始在 linux 下用 proton 裝一次，但裝完一直開不起來。
+我用 proton 的作法是裝好 steam，
+用 steam 內建的功能裝 proton，
+之後 proton 就會在
+&lt;code&gt;$HOME/.steam/steam/steamapps/common/Proton $version/proton&lt;/code&gt; ，
+version 目前最新是 6.3。&lt;/p&gt;
+&lt;p&gt;proton 執行時要指定一個當 windows c 槽，放系統函式庫的資料夾，
+用環境變數 &lt;code&gt;STEAM_COMPAT_DATA_PATH&lt;/code&gt; 指定，
+然後執行安裝檔 &lt;code&gt;proton run harrypotter_setup.exe&lt;/code&gt; 即可。
+安裝檔一共有五個檔案， &lt;code&gt;harrypotter_setup-[1-4].bin&lt;/code&gt; 
+和一個 &lt;code&gt;harrypotter_setup.exe&lt;/code&gt; ，載下來時是都放在一個 rar 壓縮檔裡。&lt;/p&gt;
+&lt;p&gt;例如我解壓縮後的四個檔案放在 &lt;code&gt;~/hpzs&lt;/code&gt; ，
+給 proton 當 c 槽的資料夾則是 &lt;code&gt;~/hpma-compat-data&lt;/code&gt; ，
+steam 則是安裝在 &lt;code&gt;~/.steam&lt;/code&gt; ，proton 版本是 6.3，
+那執行 proton 來安裝的指令就要這樣下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cd ~/hpzs
+env STEAM_COMPAT_DATA_PATH=$HOME/hpma-compat-data \
+    STEAM_COMPAT_CLIENT_INSTALL_PATH=$HOME/.steam/steam \
+    &quot;$HOME/.steam/steam/steamapps/common/Proton 6.3/proton&quot; run \
+    harrypotter_setup.exe
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;安裝後預設是把遊戲裝在 &lt;code&gt;C:\Program Files (x86)\HPMA&lt;/code&gt; ，
+也就是 &lt;code&gt;~/hpma-compat-data/pfx/drive_c/Program Files (x86)/HPMA&lt;/code&gt; 。
+執行檔是 &lt;code&gt;C:\Program Files (x86)\HPMA\Launch.exe&lt;/code&gt;
+裝好要執行的話，可以直接用 windows 風格指定 c 槽路徑：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;env STEAM_COMPAT_DATA_PATH=$HOME/hpma-compat-data \
+    STEAM_COMPAT_CLIENT_INSTALL_PATH=$HOME/.steam/steam \
+    &quot;$HOME/.steam/steam/steamapps/common/Proton 6.3/proton&quot; run \
+    &quot;C:\Program Files (x86)\HPMA\Launch.exe&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;但現在還不能跑，因為少了一個 microsoft visual c++ 的函式庫，
+應該跑到出現網易的 logo 後會有錯誤訊息的視窗出現，
+但是亂碼所以我一開始都不知道是什麼意思。
+visual c++ 函式庫可以去 &lt;a href=&quot;https://docs.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist&quot;&gt;microsoft 網站&lt;/a&gt; 下載，
+我是選 x64 那個，或是 &lt;a href=&quot;https://aka.ms/vs/16/release/vc_redist.x64.exe&quot;&gt;用 exe 檔直接連結&lt;/a&gt; 。&lt;/p&gt;
+&lt;p&gt;載下來和上面裝遊戲的安裝方式一樣，
+用 proton 指定同一個 c 槽資料夾，
+然後一直下一步就好了。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;env STEAM_COMPAT_DATA_PATH=$HOME/hpma-compat-data \
+    STEAM_COMPAT_CLIENT_INSTALL_PATH=$HOME/.steam/steam \
+    &quot;$HOME/.steam/steam/steamapps/common/Proton 6.3/proton&quot; run \
+    vc_redist.x64.exe
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;裝完後理論上就可以開了。
+第一次開可能要更新，檔案還蠻大的。
+更新完後要重開一次，遊戲只會自己關掉，你要手動打開。&lt;/p&gt;
+&lt;p&gt;第一次打開後要註冊，可以綁 facebook 或 line，也只有這二種方法。
+遊戲會嘗試打開瀏覽器用 oauth 授權，如果是 windows 會開 edge，
+proton 下會用 linux 預設的瀏覽開；
+如果都沒有也會顯示授權網址，就自己開吧。&lt;/p&gt;
+&lt;p&gt;進遊戲之後可以去設定把調顯示設定，
+我筆電沒有很好，所以設 fps 30、畫質低。
+然後有一個可以選底層要用 OpenGL 或 DirectX 11，
+proton 選 opengl 的話（下次重開生效），
+字會變豆腐方塊顯示不出來，所以不要選。&lt;/p&gt;
+&lt;p&gt;遊戲安裝檔大小 8G，安裝後 10G。&lt;/p&gt;
+&lt;h2 id=&quot;安裝撞牆記錄&quot;&gt;安裝撞牆記錄&lt;/h2&gt;
+&lt;p&gt;一開始裝不起來以為是 proton 的問題，就把塵封已久的 windows 開來裝裝看。
+先用虛擬機試，本以為手機遊戲應該不會太吃效能，搞不好虛擬機就夠用。
+結果手上二個 windows 硬碟的映像檔，一個開不起來一個開得起來。
+開得起來那個效能也嚴重不足，連過場動畫都超頓，
+畫面落後聲音快一半，根本不能玩。
+所以打算雙開機回 windows 玩。&lt;/p&gt;
+&lt;p&gt;在 windows 裝時，錯誤訊息是缺少 &lt;code&gt;CONTCTR140.dll&lt;/code&gt; 
+和 &lt;code&gt;MSVCP140.dll&lt;/code&gt; 二個函式庫。
+先用之前的想法，手動把這二個 dll 抓下來放進 windows system32，
+但還是不行，錯誤訊息變成別的無意義的東西。&lt;/p&gt;
+&lt;p&gt;於是去開得起來那台找這二個 dll 是收在哪，
+結果是很檔名很長很奇怪的資料夾，我猜是 windows 內部更新會用的位置，
+所以以為是 windows 版本太舊，就把雙系統 windows 整理一下，
+更新到最新版，edge 也從 ms 自幹換成 blink 底了。
+但還是跳一樣的，缺那二個 dll 的錯誤訊息。&lt;/p&gt;
+&lt;p&gt;後來用錯誤訊息去 google，看到一些相關問題，
+提到那二個 dll 是屬於 microsoft visual c++ 的函式庫，
+有些軟體會用到，可以自己手動裝。
+後來仔細想想那台開得起來的映象檔，
+以前的確因為某商業軟體要用，
+就裝過 visual c++ 函式庫，難怪可以動。&lt;/p&gt;
+&lt;p&gt;但網易也太雷，在安裝說明寫個要手動裝 visual c++ 函式庫是會死嗎？
+而且好像大家都沒有這個問題？
+我也不知道為什麼，可能是我的 windows 太乾淨吧。&lt;/p&gt;
+&lt;p&gt;裝完函式庫就可以玩了。
+之後想到，搞不好 proton 不能玩也是這個原因？
+所以就在 proton 下把函式庫裝起來，結果還真的可以跑了。
+只是效能比在 windows 下還差一點，
+打二對二對戰時，畫面比較花就會 lag。
+後來發現不要邊開著瀏覽器邊玩就好了，可能我的 ram 不夠。&lt;/p&gt;
+&lt;p&gt;這遊戲好像是先發布中國版和台灣版，歐美都還沒發布，
+所以之前想找有沒有人用 linux 裝的經驗都找不到。
+reddit 的討論區裡，還有美國人跑來台灣服玩的心得。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/build-script-embed-in-comment.html</id>
 <title>將打包或編譯腳本內嵌在原始碼檔案的註解內</title>
 <published>2021-09-02T09:36:56.007Z</published>
@@ -1491,176 +1660,7 @@ output:after {
 <category term="js"/>
 <category term="web"/>
 <category term="手機"/>
-<content type="html">&lt;h1 id=&quot;將檔案編碼為-QR-code-的工具&quot;&gt;將檔案編碼為 QR code 的工具&lt;/h1&gt;
-&lt;p&gt;本程式可以將字串分割編碼為 qr code，供連續掃描後合併回檔案。
-因為之前開了個腦洞，在想要如何寄紙本加密信件，
-加密我的想法就只有 pgp，然後再加一個把數位資料轉紙本的方式
-印出來後用 ocr 好像不太準確，且 ocr 對一般人不夠普及。
-後來就想到編碼成 qr code，配合一些 app 有連續掃描功能，
-掃完後再匯出，於是就這樣成了。&lt;/p&gt;
-&lt;p&gt;qr code 可以很大，但問題是手機的鏡頭沒有那麼大和清晰。
-雖然理論上也可以用掃描器掃描後再用電腦去判讀，
-但一樣有技術不夠普及，對一般使用者不友善的問題。
-所以要把資料拆成多個 qr code，
-再借助另一項某些 qr code 掃描器的功能，連續掃描。&lt;/p&gt;
-&lt;p&gt;以我用的 qr code 掃描器 &lt;a href=&quot;https://play.google.com/store/apps/details?id=de.markusfisch.android.binaryeye&quot;&gt;binary eye&lt;/a&gt; 來說，
-就是開啟連續掃描功能，然後掃完後進到歷史記錄，
-選擇匯出掃描記錄即可。
-掃描記錄可以是 csv 或 json，總之都是用 linux 可以簡單處理的格式。&lt;/p&gt;
-&lt;p&gt;資料格式的話，我不確定 qr code 能不能塞二進位資料，
-但我不想給自己找麻煩，還得找一款能讀取二進位的 qr code scaner，
-所以最簡單的方式就是先用 base64 編碼資料。
-因為 linux base64 工具默認會自己切割資料了，
-但如果用我原本的想法 64 個字元切成一個 qr code，
-加上換行符字數變奇數，qr code 就會斷在奇怪的地方，
-所以後來加了一個用換行切割的功能。&lt;/p&gt;
-&lt;p&gt;我掃描時碰到幾個問題，第一個是如果照常規排版每行由左到右，
-掃完一行時換行可能會亂掉，而且也沒效率，應該要用 s 型的排列。
-所以我加了個簡單的 s 型排版功能，但也把版型固定成四欄。&lt;/p&gt;
-&lt;p&gt;再來是有時可能會漏掃或重復掃，應該要加個 checksum 機制。
-我後來幫每個 qr code 標了編號，
-應該就不會亂掉了，最後總數也可以用來驗證。
-可能之後再幫每個 qr code 下面標上內容字串，
-可以用來找出哪個漏掃。&lt;/p&gt;
-&lt;p&gt;但最後還有個問題是瀏覽器印出來時，
-某些 qr code 可能被分頁切斷。
-我試了 css 的 &lt;code&gt;page-break: avoid&lt;/code&gt; ，但 chromium 還是會切斷，
-無論我的 qr code 是用 img 或 canvas。
-目前只確定 firefox 是可以用的，chromium 就再等等吧。&lt;/p&gt;
-&lt;form&gt;
-&lt;textarea name=&quot;text-data&quot;&gt;&lt;/textarea&gt;
-&lt;label&gt;&lt;input name=&quot;snake-render&quot; onchange=&quot;qrcodeBatcher.handleSnakeRender()&quot; type=&quot;checkbox&quot;&gt;S 型排列 qr code&lt;/label&gt;
-&lt;label&gt;&lt;input name=&quot;split-by-newline&quot; type=&quot;checkbox&quot;&gt;依換行分割字串&lt;/label&gt;
-&lt;button type=&quot;button&quot; onclick=&quot;qrcodeBatcher.handleEncode()&quot;&gt;encode&lt;/button&gt;
-&lt;output name=&quot;qr-code-area&quot;&gt;&lt;/output&gt;
-&lt;/form&gt;
 
-&lt;style&gt;
-form &gt; * {
-    display: block;
-}
-form textarea {
-    width: 100%;
-    height: 16em;
-}
-output .item {
-    box-sizing: border-box;
-    width: 25%;
-    float: left;
-    counter-increment: image-counter;
-    border: solid 1px;
-}
-.item img, .item canvas {
-    width: 80%;
-    display: block;
-    margin: 1em auto;
-}
-output .item::after {
-    content: counter(image-counter);
-    display: block;
-    padding: 0.2em;
-    text-align: right;
-}
-output.snake .item:nth-child(8n+1),
-output.snake .item:nth-child(8n+2),
-output.snake .item:nth-child(8n+3),
-output.snake .item:nth-child(8n+4) {
-    float: left;
-    clear: right;
-}
-output.snake .item:nth-child(8n+5),
-output.snake .item:nth-child(8n+6),
-output.snake .item:nth-child(8n+7),
-output.snake .item:nth-child(8n) {
-    float: right;
-    clear: left;
-}
-output:after {
-    content: &apos; &apos;;
-    clear: both;
-    display: block;
-}
-
-@media print {
-    output .item, output .item * {
-        page-break-inside: avoid;
-        break-inside: avoid;
-    }
-    footer {
-        display: block;
-        clear: both;
-        page-break-inside: avoid;
-        break-inside: avoid;
-    }
-}
-&lt;/style&gt;
-
-&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js&quot;&gt;&lt;/script&gt;
-
-&lt;script&gt;
-    var qrcodeBatcher = {
-        qrious: new QRious(),
-        form: document.getElementsByTagName(&apos;form&apos;)[0],
-        getFormNode(name) {
-            return this.form.elements[name]
-        },
-        handleSnakeRender() {
-            const output = this.getFormNode(&apos;qr-code-area&apos;)
-            if (this.getFormNode(&apos;snake-render&apos;).checked) {
-                output.classList.add(&apos;snake&apos;)
-            }
-            else output.classList.remove(&apos;snake&apos;)
-        },
-        *segmentText64(text) {
-            let i = 0
-            const n = 64
-            do {
-                yield text.slice(i, i+n)
-                i += n
-            }
-            while (i &lt; text.length)
-        },
-        segmentText(text = this.getFormNode(&apos;text-data&apos;).value) {
-            if (this.getFormNode(&apos;split-by-newline&apos;).checked) {
-                return text.split(/\n/)
-            }
-            else return this.segmentText64(text)
-        },
-        handleEncode() {
-            this.getFormNode(&apos;qr-code-area&apos;).textContent = &apos;&apos;
-            for (const seg of this.segmentText()) {
-                console.debug(&apos;seg: &apos;, seg)
-                const canvas = this.textToCanvas(seg)
-                this.renderImage(canvas)
-                // const url = this.textToDataUrl(seg)
-                // const image = document.createElement(&apos;img&apos;)
-                // image.src = url
-                // this.renderImage(image)
-            }
-        },
-        renderImage(node) {
-            const output = this.getFormNode(&apos;qr-code-area&apos;)
-            const item = document.createElement(&apos;div&apos;)
-            item.className = &apos;item&apos;
-            item.appendChild(node)
-            output.appendChild(item)
-        },
-        textToCanvas(text) {
-            const qrcode = new QRious({value: text})
-            return qrcode.canvas
-        },
-        textToDataUrl(text) {
-            this.qrious.value = text
-            return this.qrious.toDataURL()
-        },
-        textToGoogleImageUrl(text) {
-            const url = encodeURIComponent(text)
-            const qrcodeUrl = `http://chart.googleapis.com/chart?chs=150x150&amp;cht=qr&amp;chl=${url}`
-            return qrcodeUrl
-        }
-    }
-&lt;/script&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/secret-reader.html#使用說明及上傳檔案解密的功能</id>
 <title>解密閱讀器</title>

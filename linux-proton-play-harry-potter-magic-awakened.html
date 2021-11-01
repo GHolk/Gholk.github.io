@@ -35,15 +35,15 @@
 Visual C++ Redistributable， <a href="linux-proton-wine-outside-steam.html">在 proton 下就可以玩了</a> 。</p>
 <h2 id="all-in-one-script">all in one script</h2>
 <p>for those who does not speak chinese but speak bash.</p>
-<pre><code class="lang-sh">wget https://g92.gdl.netease.com/HPMA.rar # 6.7G
+<pre><code class="lang-sh">wget https://g92.gdl.netease.com/HPMA.rar # game size 6.7G
 7z x HPMA.rar # 6.8G
 
 export STEAM_COMPAT_DATA_PATH=$HOME/hpma-compat-data
 export STEAM_COMPAT_CLIENT_INSTALL_PATH=$HOME/.steam/steam
 proton_version=6.3
 
-cd hpzs
-# 10G
+cd hpzs # game file directory in rar
+# installation take 10G
 "$HOME/.steam/steam/steamapps/common/Proton $proton_version/proton" \
     run harrypotter_setup.exe
 echo press enter after installation finished
@@ -67,8 +67,8 @@ read x
 剛推出時我自己也和朋友去西門町的大型廣告走了一圈。
 遊戲內容也蠻用心的，
 在地圖模式裡可以騎掃把在霍格華茲校園裡自由飛行，
-城堡內部雖然沒有完全內部地圖做出來，
-只有幾個交誼廳、自己寢室的房間，之間也沒有互相連通。</p>
+城堡內部大多地圖也是可以純用走的走到，只是很容易迷路而已。
+只有少部份地圖只能靠超連結按鈕連進去。</p>
 <p>可能是網易的風格和哈利波特很合吧，
 第五人格的畫風，稍微改一下就很適合哈利波特了。
 雖然這遊戲很明顯有中資問題，但還是真香，

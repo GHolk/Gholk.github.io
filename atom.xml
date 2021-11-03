@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2021-11-01T10:30:17.893Z</updated>
+  <updated>2021-11-03T12:39:04.717Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,159 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/linux-proton-play-epic-twewy.html</id>
+<title>用 proton 在 linux 下開 epic game 中的美麗新世界</title>
+<published>2021-11-03T12:30:09.630Z</published>
+<updated>2021-11-03T12:39:04.697Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/linux-proton-play-epic-twewy.html"/>
+<summary type="html">美麗新世界 &lt;abbr title=&quot;the world end with you&quot;&gt;TWEWY&lt;/abbr&gt;
+是 square enix 過去發表的一款 NDS 遊戲，也是我的童年回憶之一。
+可惜當年叫好不叫座，從此決定只要有機會一定會支持這款遊戲，
+後來遊戲移植 android 時就有買了，也推坑過朋友。
+最近 9 月底出了續作，同時發表在 switch 與 pc 上的 epic 商店。
+本來還想回 windows 玩，但試了 proton 發現開得起來，就用 proton 玩了。
+本文會介紹如何使用 proton 執行 epic store 與 twewy。</summary>
+<category term="linux"/>
+<category term="proton"/>
+<category term="epic"/>
+<category term="game"/>
+<category term="nds"/>
+<category term="wine"/>
+<content type="html">&lt;h1 id=&quot;用-proton-在-linux-下開-epic-game-中的美麗新世界&quot;&gt;用 proton 在 linux 下開 epic game 中的美麗新世界&lt;/h1&gt;
+&lt;p&gt;美麗新世界 &lt;abbr title=&quot;the world end with you&quot;&gt;TWEWY&lt;/abbr&gt;
+是 square enix 過去發表的一款 NDS 遊戲，也是我的童年回憶之一。
+可惜當年叫好不叫座，從此決定只要有機會一定會支持這款遊戲，
+後來遊戲移植 android 時就有買了，也推坑過朋友。
+最近 9 月底出了續作，同時發表在 switch 與 pc 上的 epic 商店。
+本來還想回 windows 玩，但試了 proton 發現開得起來，就用 proton 玩了。
+本文會介紹如何使用 proton 執行 epic store 與 twewy。&lt;/p&gt;
+&lt;p&gt;美麗新世界又譯美妙世界，英文名 the world end with you 簡稱 twewy，
+原作 It&apos;s a wonderful world 因此中文圈又有 IAWW 的簡稱，
+英文圈則是因為 it&apos;s a wonderful world
+和歐威爾的著名的小說美麗新世界撞名，所以改成 the world end with you。&lt;/p&gt;
+&lt;h2 id=&quot;prove-of-concept-script&quot;&gt;prove of concept script&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;mkdir epic
+cd epic
+cp -ar &quot;/mnt/windows/Program Files/Epic Games&quot; epic-windows
+
+export STEAM_COMPAT_CLIENT_INSTALL_PATH=&quot;$HOME/.steam/steam&quot;
+export STEAM_COMPAT_DATA_PATH=&quot;$PWD/epic-proton-compat-data&quot;
+
+# run epic games store
+&quot;$HOME/.steam/steam/steamapps/common/Proton 6.3/proton&quot; run \
+    epic-windows/Launcher/Portal/Binaries/Win64/EpicGamesLauncher.exe -opengl
+
+echo buy and install your game now
+echo and add game to desktop in games library
+echo press enter after finish
+read x
+
+game_url=$(grep -o -m 1 &apos;com.epicgames.launcher://[^ ]*&apos; \
+    proton-compat-data/pfx/drive_c/users/steamuser/AppData/Local/EpicGamesLauncher/Saved/Logs/EpicGamesLauncher.log)
+
+# run game directly
+&quot;$HOME/.steam/steam/steamapps/common/Proton 6.3/proton&quot; run \
+    epic-windows/Launcher/Portal/Binaries/Win64/EpicGamesLauncher.exe $game_url
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;epic-store&quot;&gt;epic store&lt;/h2&gt;
+&lt;p&gt;比較尷尬是我沒有實際在 linux 跑一次安裝 epic store，
+我是在 windows 裝好後，直接把整個安裝的資料夾複製到 linux 下來跑。
+因為跑起來沒什麼問題，就這樣了。
+但執行 epic store 要加上 &lt;code&gt;-opengl&lt;/code&gt; 參數，
+不然在 proton 下畫面會一直閃爍，
+&lt;a href=&quot;https://github.com/doitsujin/dxvk/issues/817#issuecomment-590855216&quot;&gt;閃爍這好像是 electron app 的通病&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;例如安裝在 &lt;code&gt;C:\Program Files\Epic Games&lt;/code&gt; 的話，
+我就是先把整個安裝的資料夾複製出來，
+然後執行資料夾裡的執行檔
+&lt;code&gt;Launcher/Portal/Binaries/Win64/EpicGamesLauncher.exe&lt;/code&gt; 。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;mkdir epic
+cd epic
+cp -ar &quot;/mnt/windows/Program Files/Epic Games&quot; epic-windows
+
+(
+    export STEAM_COMPAT_CLIENT_INSTALL_PATH=&quot;$HOME/.steam/steam&quot;
+    export STEAM_COMPAT_DATA_PATH=&quot;$PWD/epic-proton-compat-data&quot;
+
+    &quot;$HOME/.steam/steam/steamapps/common/Proton 6.3/proton&quot; run \
+        epic-windows/Launcher/Portal/Binaries/Win64/EpicGamesLauncher.exe -opengl
+)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;用了 &lt;code&gt;-opengl&lt;/code&gt; 參數 epic store 跑起來就沒什麼問題了，
+之後就可以正常裝買好的遊戲了。
+遊戲我是在 web 介面裡買的，所以也沒有試過在 electron 裡買。
+裝遊戲的時候下載有點慢，秒速 3MB 而已，網路沒有跑滿。&lt;/p&gt;
+&lt;h2 id=&quot;啟動遊戲&quot;&gt;啟動遊戲&lt;/h2&gt;
+&lt;p&gt;這遊戲啟動比較麻煩，因為有 DRM，所以不能直接啟動，要透過 epic 啟動，
+直接啟動安裝位置的 exe 檔會跳錯誤然後退出，
+然後自動把 epic game 開啟來接 DRM 後重啟一次。
+可以先開 epic 後，在收藏庫裡啟動，但這樣比較麻煩。
+如果要直接用一行命令開啟遊戲，可以先進收藏庫，
+找到想開啟的遊戲，在遊戲下面三個點的按鈕，可以新增捷徑。&lt;/p&gt;
+&lt;p&gt;新增後，如果有在 &lt;code&gt;proton-compat-data/pfx/drive_c/users/steamuser/Desktop&lt;/code&gt;
+裡多出檔案，就去看檔案內容，應該會有一條很長的 url，
+長得像這樣： &lt;code&gt;com.epicgames.launcher://apps/2f686f6d652f67686f6c6b2f6d656469%3A65722f417070446174612f4c6f63616c%3A646174612f7066782f64726976655f63?action=launch&amp;amp;silent=true&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;如果沒有，那只能去翻 &lt;code&gt;proton-compat-data/pfx/drive_c/users/steamuser/AppData/Local/EpicGamesLauncher/Saved/Logs/EpicGamesLauncher.log&lt;/code&gt; ，
+裡面應該也會出現那條 url。
+我猜 windows 的作法，應該是像 android 一樣，
+可以讓程式 &lt;em&gt;註冊&lt;/em&gt; 一種協議。
+只要看到 &lt;code&gt;com.epicgames.launcher://&lt;/code&gt; 開頭的網址，
+就交給 epic games 處理，然後 epic 就會依網址去開對應的遊戲。&lt;/p&gt;
+&lt;p&gt;如果要手動用指令開遊戲，
+我試過可以直接 
+&lt;code&gt;&quot;$HOME/.steam/steam/steamapps/common/Proton 6.3/proton&quot; run com.epicgames.launcher://apps/2f686f6d652f67686f6c6b2f6d656469%3A65722f417070446174612f4c6f63616c%3A646174612f7066782f64726976655f63?action=launch&amp;amp;silent=true&lt;/code&gt;
+（當然是有設二個 proton 環境變數的情況下）。
+但總覺得這樣沒什麼踏實感，所以又多翻了一下 log，
+發現實際上這條 url 會直接當參數傳給 &lt;code&gt;C:\Program File\Launcher\Portal\Binaries\Win64\EpicGamesLauncher.exe&lt;/code&gt; 處理，
+所以我們也可以直接啟動 epic game launcher 時，參數傳入 url 即可。
+這樣 epic game launcher 就只會在背景執行，
+不會跳出商店視窗。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;(
+    export STEAM_COMPAT_CLIENT_INSTALL_PATH=&quot;$HOME/.steam/steam&quot;
+    export STEAM_COMPAT_DATA_PATH=&quot;$PWD/epic-proton-compat-data&quot;
+
+    &quot;$HOME/.steam/steam/steamapps/common/Proton 6.3/proton&quot; run \
+        epic-windows/Launcher/Portal/Binaries/Win64/EpicGamesLauncher.exe \
+        com.epicgames.launcher://apps/2f686f6d652f67686f6c6b2f6d656469%3A65722f417070446174612f4c6f63616c%3A646174612f7066782f64726976655f63?action=launch&amp;amp;silent=true
+)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;初期心得&quot;&gt;初期心得&lt;/h2&gt;
+&lt;p&gt;這遊戲蠻吃記憶體的，我在 linux 上用 proton 跑，會吃到 6G 的 ram。
+但跑起來蠻順的，不會像哈利波特魔法覺醒那樣，吃一堆 gpu 還會頓；
+但還是沒有 tabletop simulator 吃的多。
+（照慣例我用 proton 玩遊戲，都是把特效和 fps 調到最低，避免卡頓。）
+遊戲開頭沒有出現 unity logo，但用 top 會看到有 unity 的程序在跑。&lt;/p&gt;
+&lt;p&gt;遊戲跑得時候會把游標吃掉，游標移進去就移不出來，
+而且把集點移到視窗是不夠的，要把游標移進去點擊後才能用鍵盤操作的。
+遊戲中是鍵盤或搖捍操作，主要有確認鍵和退出鍵，
+其它就 WASD 或方向鍵也可以，但遊戲中移動是 wasd，
+放招則是 IJKL，和 NDS 時同樣風格的把 ABXY 當方向鍵用。
+有個退出鍵介面上寫 sp，我一閞始一直以為是 backspace，
+後來才發現是空白鍵 space，&lt;/p&gt;
+&lt;p&gt;我玩用 wasd 的遊戲都會很不適應，
+因為平常打字時左手三隻手指是放在 sdf 上，
+換到 wasd 就要左移一格，要按其它鍵時肌肉記憶就會不習慣。
+這遊戲問題又更嚴重，因為還多 IJKL，
+要知道在 vim 裡移動是 hjkl 啊！&lt;/p&gt;
+&lt;p&gt;因為我不會日文，所以自然選英文介面，
+配音則可以調要日文還英文。
+遊戲初期遇到的的褐色壯漢，
+日文配音是有點幼的屁孩風格，讓我很出戲，&lt;/p&gt;
+&lt;p&gt;遊戲在設定裡可以調成視窗化，但有時候視窗化會失敗，
+可能是上次遊戲啟動結束後，一起啟動的一些雜七雜八背景程序沒有一起關掉，
+所以第二次啟動時不正常。
+我後來會用 &lt;code&gt;systemd-run --scope&lt;/code&gt; 把啟動的子程序關在一個新的 scope，
+這樣可以用 systemctl status 來列出該 scope，
+比較好掌握哪些程序沒砍掉。&lt;/p&gt;
+&lt;p&gt;這作對我比較不適應的地方，就是主角變成二個很現充的金毛花美男，
+我也不確定這樣的形容正不正確，反正就是很美的男公關氣質。
+可能製作團隊發現原作的目標受眾腐女意外的多，於是……。
+而且開場就把南師猩叫出來露臉了，讓原作粉絲吃好吃滿。&lt;/p&gt;
+&lt;p&gt;之前美麗新世界無印的訪談中，就有說過其實製作是先做美術再想劇情，
+難怪劇情這麼無腦中二，很多難以和現實連接的地方。
+我很喜歡的畫風，也是後來才知道是來自女神異聞錄的。
+總之還是繼續支持吧。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/linux-proton-play-harry-potter-magic-awakened.html#修正城堡內地圖不連通的錯誤敘述與安裝腳本的註解</id>
 <title>用 proton 在 linux 下玩哈利波特：魔法覺醒</title>
 <published>2021-10-29T09:03:07.912Z</published>
@@ -1539,79 +1692,7 @@ j7jlvAHZpAahMNwLcUJE5fDGZFJc7oxXPgQ/vfQTycnhjxCWqjl1qcE=
 <category term="android"/>
 <category term="gnss"/>
 <category term="im"/>
-<content type="html">&lt;h1 id=&quot;用-app-finder-透過簡訊以-GPS-定位遺失的手機&quot;&gt;用 app finder 透過簡訊以 GPS 定位遺失的手機&lt;/h1&gt;
-&lt;p&gt;google android 手機有一個功能，可以看到同一帳號下的手機 GPS 位置。
-如果不想依靠 google 服務，或不想把自己的座標傳給 google 知道，
-有人開發了可以達端取得裝置定位結果的 app，
-方式就是用手機上最基本且通用的簡訊功能。
-例如 &lt;a href=&quot;https://f-droid.org/packages/ru.seva.finder&quot;&gt;finder&lt;/a&gt; 只要設好白名單，
-用白名單中的號碼傳有關鍵字的簡訊給手機，
-手機就會回傳 gps 定位的位置。&lt;/p&gt;
-&lt;p&gt;其實這類遠端定位手機的功能，
-最重要的是要如何把定位結果回傳給不在手機旁的使用者。
-google 這類大公司，android 是自行開發的，
-裡面要塞什麼程式都可以。
-google 自己再做一個平台，存這些定位資料供同一帳號的使用者存取。&lt;/p&gt;
-&lt;p&gt;但這類功能要由第三方實作就比較困難，
-因為要架一個網站存這些資料有難度，而且還要使用者信任你。
-而且這類使用者，應該也不會想用這種上傳自己定位資料的方式達成。
-另外一種方式就是讓手機在接到指令時，回傳自己的座標，
-關鍵就變成回傳的管道。&lt;/p&gt;
-&lt;h2 id=&quot;通訊管道&quot;&gt;通訊管道&lt;/h2&gt;
-&lt;p&gt;因為手機網路的特性多半都不是固定公網 ip，
-直接溝通就變得很麻煩。
-雖然說手機上有很多即時通訊軟體，
-但要把整個系統依賴在一款通訊軟體上還是不好，
-而且 im 並沒有真正統一，且多數普及的 im 都是商業公司把持，
-不會允許使用者自定義這類接到訊息時做出動作的功能。
-加上每個人慣用的 im 也不同，所以其實綁在 im 有困難。&lt;/p&gt;
-&lt;p&gt;手機上有一個優勢，不管是什麼手機，
-都有基本的打電話和收發簡訊的功能，
-而且 android 系統的特性，這種基本的功能都會做成 api，
-讓 app 可以存取簡訊功能。
-所以簡訊可以說是最基本的每台手機都有的功能，
-用來當通訊管道倒是夠用。&lt;/p&gt;
-&lt;h2 id=&quot;finder-運作方式&quot;&gt;finder 運作方式&lt;/h2&gt;
-&lt;p&gt;這個 app 會在收到簡訊時檢查內容，如果內容是 &lt;code&gt;gps_search&lt;/code&gt; ，
-就會把 gps 定位結果傳送回簡訊發訊人。
-為了防止被無關的人亂傳訊息，還有白名單功能，
-可以設定只回應特定號碼的訊息。
-另外也可以更改關鍵字內容，改成只有自己知道的關鍵字。&lt;/p&gt;
-&lt;p&gt;此外也加了更多相關功能，例如 android 4.4 以上，
-能讓 app 能管理 gps 的開關。
-還有能回傳周圍的 wifi 熱點名稱，能在收到指令時關始響鈴等。
-&lt;a href=&quot;https://github.com/Seva-coder/Finder#activate-location-automatically&quot;&gt;如果要讓 app 能開啟 gps，要用 adb 去手動允許權限&lt;/a&gt;，
-也就是用 adb 開啟 shell 後，下指令：
-&lt;code&gt;pm grant ru.seva.finder android.permission.WRITE_SECURE_SETTINGS&lt;/code&gt; 。&lt;/p&gt;
-&lt;p&gt;另及因為要手動發特定格式的簡訊很麻煩，
-所以 app 裡也做了能發該格式簡訊的功能，
-收到回傳的 gps 座標時，也能顯示在地圖上方便尋找。
-（當然是 open street map。）&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://github.com/Seva-coder/Finder#why-app-absent-in-google-play&quot;&gt;這個 app 目前只在 f-droid 上架&lt;/a&gt;，
-以前有在 google play 上架過；
-但後來 play store 的政策，只允許簡訊收發 app 存取簡訊權限，
-而不允許其它無關的 app 使用簡訊權限，
-所以這類用簡訊達成功能的 app 不能在 play store 上架。&lt;/p&gt;
-&lt;h2 id=&quot;使用者界面&quot;&gt;使用者界面&lt;/h2&gt;
-&lt;p&gt;app 開啟後，下半會分為二個欄位，
-右邊會列出允許發送定位請求到這台手機的門號，
-按最上方的 add new phone 可以把門號加到白名單裡。
-點下方加入的手機號碼，則可以主動發出 gps 位置或是發出 wifi 名稱。
-另外有一個 tracker 功能，可以用來主動定期發出 gps 位置，
-但這功能不能遠端啟用，不知道為什麼會這樣設計。&lt;/p&gt;
-&lt;p&gt;左邊的欄位則是用來發簡訊用的，
-你可以把把你加為白名單的手機放在這裡，
-然後點擊該門號就會出現發出 gps wifi 請求簡訊的選單。
-當然，不一定要用這個 app 裡的選單發，
-直接用簡訊 app 發也可以。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;settings 裡可以改能否遠端開啟 gps，能否主動響鈴等。&lt;/li&gt;
-&lt;li&gt;history 可以看 app 發送過的簡訊記錄。&lt;/li&gt;
-&lt;li&gt;open sms 則可以用來顯示簡訊歷史記錄中含有 gps 座標資料的簡訊。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;最後，如果要測試功能正不正常，
-可以發簡訊給自己來測試，但簡訊是要錢的。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/batch-qrcode-generate.html#顯示-qr-code-文字內容</id>
 <title>將檔案編碼為 QR code 的工具</title>

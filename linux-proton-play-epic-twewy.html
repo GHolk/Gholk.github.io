@@ -1,0 +1,169 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2021-11-03T12:30:09.630Z">
+<meta name="keywords" property="og:article:tag" content="linux,proton,epic,game,nds,wine">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="linux-proton-play-harry-potter-magic-awakened.html" title="用 proton 在 linux 下玩哈利波特：魔法覺醒">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>用 proton 在 linux 下開 epic game 中的美麗新世界</title>
+</head>
+<body>
+<main><h1 id="用-proton-在-linux-下開-epic-game-中的美麗新世界">用 proton 在 linux 下開 epic game 中的美麗新世界</h1>
+<p>美麗新世界 <abbr title="the world end with you">TWEWY</abbr>
+是 square enix 過去發表的一款 NDS 遊戲，也是我的童年回憶之一。
+可惜當年叫好不叫座，從此決定只要有機會一定會支持這款遊戲，
+後來遊戲移植 android 時就有買了，也推坑過朋友。
+最近 9 月底出了續作，同時發表在 switch 與 pc 上的 epic 商店。
+本來還想回 windows 玩，但試了 proton 發現開得起來，就用 proton 玩了。
+本文會介紹如何使用 proton 執行 epic store 與 twewy。</p>
+<p>美麗新世界又譯美妙世界，英文名 the world end with you 簡稱 twewy，
+原作 It's a wonderful world 因此中文圈又有 IAWW 的簡稱，
+英文圈則是因為 it's a wonderful world
+和歐威爾的著名的小說美麗新世界撞名，所以改成 the world end with you。</p>
+<h2 id="prove-of-concept-script">prove of concept script</h2>
+<pre><code class="lang-sh">mkdir epic
+cd epic
+cp -ar "/mnt/windows/Program Files/Epic Games" epic-windows
+
+export STEAM_COMPAT_CLIENT_INSTALL_PATH="$HOME/.steam/steam"
+export STEAM_COMPAT_DATA_PATH="$PWD/epic-proton-compat-data"
+
+# run epic games store
+"$HOME/.steam/steam/steamapps/common/Proton 6.3/proton" run \
+    epic-windows/Launcher/Portal/Binaries/Win64/EpicGamesLauncher.exe -opengl
+
+echo buy and install your game now
+echo and add game to desktop in games library
+echo press enter after finish
+read x
+
+game_url=$(grep -o -m 1 'com.epicgames.launcher://[^ ]*' \
+    proton-compat-data/pfx/drive_c/users/steamuser/AppData/Local/EpicGamesLauncher/Saved/Logs/EpicGamesLauncher.log)
+
+# run game directly
+"$HOME/.steam/steam/steamapps/common/Proton 6.3/proton" run \
+    epic-windows/Launcher/Portal/Binaries/Win64/EpicGamesLauncher.exe $game_url
+</code></pre>
+<h2 id="epic-store">epic store</h2>
+<p>比較尷尬是我沒有實際在 linux 跑一次安裝 epic store，
+我是在 windows 裝好後，直接把整個安裝的資料夾複製到 linux 下來跑。
+因為跑起來沒什麼問題，就這樣了。
+但執行 epic store 要加上 <code>-opengl</code> 參數，
+不然在 proton 下畫面會一直閃爍，
+<a href="https://github.com/doitsujin/dxvk/issues/817#issuecomment-590855216">閃爍這好像是 electron app 的通病</a>。</p>
+<p>例如安裝在 <code>C:\Program Files\Epic Games</code> 的話，
+我就是先把整個安裝的資料夾複製出來，
+然後執行資料夾裡的執行檔
+<code>Launcher/Portal/Binaries/Win64/EpicGamesLauncher.exe</code> 。</p>
+<pre><code class="lang-sh">mkdir epic
+cd epic
+cp -ar "/mnt/windows/Program Files/Epic Games" epic-windows
+
+(
+    export STEAM_COMPAT_CLIENT_INSTALL_PATH="$HOME/.steam/steam"
+    export STEAM_COMPAT_DATA_PATH="$PWD/epic-proton-compat-data"
+
+    "$HOME/.steam/steam/steamapps/common/Proton 6.3/proton" run \
+        epic-windows/Launcher/Portal/Binaries/Win64/EpicGamesLauncher.exe -opengl
+)
+</code></pre>
+<p>用了 <code>-opengl</code> 參數 epic store 跑起來就沒什麼問題了，
+之後就可以正常裝買好的遊戲了。
+遊戲我是在 web 介面裡買的，所以也沒有試過在 electron 裡買。
+裝遊戲的時候下載有點慢，秒速 3MB 而已，網路沒有跑滿。</p>
+<h2 id="啟動遊戲">啟動遊戲</h2>
+<p>這遊戲啟動比較麻煩，因為有 DRM，所以不能直接啟動，要透過 epic 啟動，
+直接啟動安裝位置的 exe 檔會跳錯誤然後退出，
+然後自動把 epic game 開啟來接 DRM 後重啟一次。
+可以先開 epic 後，在收藏庫裡啟動，但這樣比較麻煩。
+如果要直接用一行命令開啟遊戲，可以先進收藏庫，
+找到想開啟的遊戲，在遊戲下面三個點的按鈕，可以新增捷徑。</p>
+<p>新增後，如果有在 <code>proton-compat-data/pfx/drive_c/users/steamuser/Desktop</code>
+裡多出檔案，就去看檔案內容，應該會有一條很長的 url，
+長得像這樣： <code>com.epicgames.launcher://apps/2f686f6d652f67686f6c6b2f6d656469%3A65722f417070446174612f4c6f63616c%3A646174612f7066782f64726976655f63?action=launch&amp;silent=true</code> 。</p>
+<p>如果沒有，那只能去翻 <code>proton-compat-data/pfx/drive_c/users/steamuser/AppData/Local/EpicGamesLauncher/Saved/Logs/EpicGamesLauncher.log</code> ，
+裡面應該也會出現那條 url。
+我猜 windows 的作法，應該是像 android 一樣，
+可以讓程式 <em>註冊</em> 一種協議。
+只要看到 <code>com.epicgames.launcher://</code> 開頭的網址，
+就交給 epic games 處理，然後 epic 就會依網址去開對應的遊戲。</p>
+<p>如果要手動用指令開遊戲，
+我試過可以直接 
+<code>"$HOME/.steam/steam/steamapps/common/Proton 6.3/proton" run com.epicgames.launcher://apps/2f686f6d652f67686f6c6b2f6d656469%3A65722f417070446174612f4c6f63616c%3A646174612f7066782f64726976655f63?action=launch&amp;silent=true</code>
+（當然是有設二個 proton 環境變數的情況下）。
+但總覺得這樣沒什麼踏實感，所以又多翻了一下 log，
+發現實際上這條 url 會直接當參數傳給 <code>C:\Program File\Launcher\Portal\Binaries\Win64\EpicGamesLauncher.exe</code> 處理，
+所以我們也可以直接啟動 epic game launcher 時，參數傳入 url 即可。
+這樣 epic game launcher 就只會在背景執行，
+不會跳出商店視窗。</p>
+<pre><code class="lang-sh">(
+    export STEAM_COMPAT_CLIENT_INSTALL_PATH="$HOME/.steam/steam"
+    export STEAM_COMPAT_DATA_PATH="$PWD/epic-proton-compat-data"
+
+    "$HOME/.steam/steam/steamapps/common/Proton 6.3/proton" run \
+        epic-windows/Launcher/Portal/Binaries/Win64/EpicGamesLauncher.exe \
+        com.epicgames.launcher://apps/2f686f6d652f67686f6c6b2f6d656469%3A65722f417070446174612f4c6f63616c%3A646174612f7066782f64726976655f63?action=launch&amp;silent=true
+)
+</code></pre>
+<h2 id="初期心得">初期心得</h2>
+<p>這遊戲蠻吃記憶體的，我在 linux 上用 proton 跑，會吃到 6G 的 ram。
+但跑起來蠻順的，不會像哈利波特魔法覺醒那樣，吃一堆 gpu 還會頓；
+但還是沒有 tabletop simulator 吃的多。
+（照慣例我用 proton 玩遊戲，都是把特效和 fps 調到最低，避免卡頓。）
+遊戲開頭沒有出現 unity logo，但用 top 會看到有 unity 的程序在跑。</p>
+<p>遊戲跑得時候會把游標吃掉，游標移進去就移不出來，
+而且把集點移到視窗是不夠的，要把游標移進去點擊後才能用鍵盤操作的。
+遊戲中是鍵盤或搖捍操作，主要有確認鍵和退出鍵，
+其它就 WASD 或方向鍵也可以，但遊戲中移動是 wasd，
+放招則是 IJKL，和 NDS 時同樣風格的把 ABXY 當方向鍵用。
+有個退出鍵介面上寫 sp，我一閞始一直以為是 backspace，
+後來才發現是空白鍵 space，</p>
+<p>我玩用 wasd 的遊戲都會很不適應，
+因為平常打字時左手三隻手指是放在 sdf 上，
+換到 wasd 就要左移一格，要按其它鍵時肌肉記憶就會不習慣。
+這遊戲問題又更嚴重，因為還多 IJKL，
+要知道在 vim 裡移動是 hjkl 啊！</p>
+<p>因為我不會日文，所以自然選英文介面，
+配音則可以調要日文還英文。
+遊戲初期遇到的的褐色壯漢，
+日文配音是有點幼的屁孩風格，讓我很出戲，</p>
+<p>遊戲在設定裡可以調成視窗化，但有時候視窗化會失敗，
+可能是上次遊戲啟動結束後，一起啟動的一些雜七雜八背景程序沒有一起關掉，
+所以第二次啟動時不正常。
+我後來會用 <code>systemd-run --scope</code> 把啟動的子程序關在一個新的 scope，
+這樣可以用 systemctl status 來列出該 scope，
+比較好掌握哪些程序沒砍掉。</p>
+<p>這作對我比較不適應的地方，就是主角變成二個很現充的金毛花美男，
+我也不確定這樣的形容正不正確，反正就是很美的男公關氣質。
+可能製作團隊發現原作的目標受眾腐女意外的多，於是……。
+而且開場就把南師猩叫出來露臉了，讓原作粉絲吃好吃滿。</p>
+<p>之前美麗新世界無印的訪談中，就有說過其實製作是先做美術再想劇情，
+難怪劇情這麼無腦中二，很多難以和現實連接的地方。
+我很喜歡的畫風，也是後來才知道是來自女神異聞錄的。
+總之還是繼續支持吧。</p>
+</main>
+
+<script defer="" src="ext/meta-meta.js"></script>
+<script defer="" data-lazy="" src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+
+
+</body></html>

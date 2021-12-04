@@ -184,6 +184,45 @@ proton 選 opengl 的話（下次重開生效），
 所以之前想找有沒有人用 linux 裝的經驗都找不到。
 reddit 的討論區裡，還有美國人跑來台灣服玩的心得。
 
+## 用鍵盤玩舞會音樂遊戲時無法一次點二個音符的問題
+這遊戲裡除了決鬥，還有舞會這個簡單的小音樂遊戲。
+在手機上可以直接全螢幕點擊，在電腦版用滑鼠不太好操作，
+所以官方讓電腦版可以用空白鍵直接點擊音符，不用管位置。
+但如果是要同時按下二個音符的場合，就變成要按二下空白鍵。
+如果其它鍵也可以代替空白鍵判定，就可以同時按下二個鍵擊中二個音符了。
+
+隨便 google 了一下 linux 下做不做得到這件事，
+找到 [一則 ask ubuntu 上的回答，看起來用 xmodmap 就行了][ask ubuntu xmodmap] 。
+簡單用 `xmodmap -e 'keycode 54 = space'` 
+就可以把本次 xsession 裡的 keycode 54 換成輸出成空白鍵，
+也就是按 c 鍵也會輸出空白鍵。
+如果要還原，就是 `xmodmap -e 'keycode 54 = c` 。
+
+[ask ubuntu xmodmap]: https://askubuntu.com/a/24930/763777
+
+寫成腳本的話：
+
+```
+#!/bin/sh
+xmodmap -e "keycode 54 = space"
+xmodmap -e "keycode 59 = space"
+xmodmap -e "keycode 58 = space"
+xmodmap -e "keycode 78 = space"
+
+echo "key 'x' 'c' 'm' ',' are mapped to space"
+echo "press enter to recover"
+read wait
+
+xmodmap -e "keycode 54 = c"
+xmodmap -e "keycode 59 = comma"
+xmodmap -e "keycode 58 = m"
+xmodmap -e "keycode 78 = x"
+```
+
+這樣就碰到需要雙手同時按的音符時，
+就可以一次按二個鍵達成。
+windows 下應該也有類似的工具吧，總之我不熟。
+
 #遊戲
 #奇幻
 #魔法

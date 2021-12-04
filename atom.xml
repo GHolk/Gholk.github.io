@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2021-12-01T08:20:12.256Z</updated>
+  <updated>2021-12-04T17:18:24.927Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,213 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/linux-proton-play-harry-potter-magic-awakened.html#用鍵盤玩舞會音樂遊戲時無法一次點二個音符的問題</id>
+<title>用 proton 在 linux 下玩哈利波特：魔法覺醒</title>
+<published>2021-10-29T09:03:07.912Z</published>
+<updated>2021-12-04T17:18:24.906Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/linux-proton-play-harry-potter-magic-awakened.html#用鍵盤玩舞會音樂遊戲時無法一次點二個音符的問題"/>
+<summary type="html">&lt;pre class=&quot;diff&quot;&gt;@@ -184,6 +184,45 @@ proton 選 opengl 的話（下次重開生效），
+ 所以之前想找有沒有人用 linux 裝的經驗都找不到。
+ reddit 的討論區裡，還有美國人跑來台灣服玩的心得。
+ 
++## 用鍵盤玩舞會音樂遊戲時無法一次點二個音符的問題
++這遊戲裡除了決鬥，還有舞會這個簡單的小音樂遊戲。
++在手機上可以直接全螢幕點擊，在電腦版用滑鼠不太好操作，
++所以官方讓電腦版可以用空白鍵直接點擊音符，不用管位置。
++但如果是要同時按下二個音符的場合，就變成要按二下空白鍵。
++如果其它鍵也可以代替空白鍵判定，就可以同時按下二個鍵擊中二個音符了。
++
++隨便 google 了一下 linux 下做不做得到這件事，
++找到 [一則 ask ubuntu 上的回答，看起來用 xmodmap 就行了][ask ubuntu xmodmap] 。
++簡單用 `xmodmap -e &apos;keycode 54 = space&apos;` 
++就可以把本次 xsession 裡的 keycode 54 換成輸出成空白鍵，&lt;/pre&gt;</summary>
+<category term="遊戲"/>
+<category term="奇幻"/>
+<category term="魔法"/>
+<category term="哈利波特"/>
+<category term="linux"/>
+<category term="proton"/>
+<category term="wine"/>
+<category term="windows"/>
+<content type="html">&lt;h1 id=&quot;用-proton-在-linux-下玩哈利波特：魔法覺醒&quot;&gt;用 proton 在 linux 下玩哈利波特：魔法覺醒&lt;/h1&gt;
+&lt;p&gt;上個月中國網易合作開發的哈利波特魔法覺醒遊戲推出了，
+看起來做得很棒，完全不是免洗手遊，對原作還原度也很高，
+對我這代童年在哈利波特長大的人應該很有吸引力。
+幾周後電腦版也出了，我本來想現在這個遊戲引擎時代，
+這種用遊戲引擎開發的遊戲應該裝起來很簡單。
+結果一開始沒裝起來，折騰半天才想到是要先裝好
+Visual C++ Redistributable， &lt;a href=&quot;linux-proton-wine-outside-steam.html&quot;&gt;在 proton 下就可以玩了&lt;/a&gt; 。&lt;/p&gt;
+&lt;h2 id=&quot;all-in-one-script&quot;&gt;all in one script&lt;/h2&gt;
+&lt;p&gt;for those who does not speak chinese but speak bash.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;wget https://g92.gdl.netease.com/HPMA.rar # game size 6.7G
+7z x HPMA.rar # 6.8G
+
+export STEAM_COMPAT_DATA_PATH=$HOME/hpma-compat-data
+export STEAM_COMPAT_CLIENT_INSTALL_PATH=$HOME/.steam/steam
+proton_version=6.3
+
+cd hpzs # game file directory in rar
+# installation take 10G
+&quot;$HOME/.steam/steam/steamapps/common/Proton $proton_version/proton&quot; \
+    run harrypotter_setup.exe
+echo press enter after installation finished
+read x
+cd ..
+
+wget https://aka.ms/vs/16/release/vc_redist.x64.exe
+&quot;$HOME/.steam/steam/steamapps/common/Proton $proton_version/proton&quot; \
+    run vc_redist.x64.exe
+echo press enter after installation finished
+read x
+
+&quot;$HOME/.steam/steam/steamapps/common/Proton $proton_version/proton&quot; \
+    run &quot;C:\Program Files (x86)\HPMA\Launch.exe&quot;
+# do not choose OpenGL in graphic setting; choose direct x 11.
+# opengl will cause chinese font become tofu.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;美術風格&quot;&gt;美術風格&lt;/h2&gt;
+&lt;p&gt;這遊戲對我這代童年在哈利波特長大的人應該很有吸引力，
+遊戲出了後臉書上都出現一堆哈利波特 cosplay 照，
+剛推出時我自己也和朋友去西門町的大型廣告走了一圈。
+遊戲內容也蠻用心的，
+在地圖模式裡可以騎掃把在霍格華茲校園裡自由飛行，
+城堡內部大多地圖也是可以純用走的走到，只是很容易迷路而已。
+只有少部份地圖只能靠超連結按鈕連進去。&lt;/p&gt;
+&lt;p&gt;可能是網易的風格和哈利波特很合吧，
+第五人格的畫風，稍微改一下就很適合哈利波特了。
+雖然這遊戲很明顯有中資問題，但還是真香，
+畢竟是原廠有合作開發，中資問題應該也沒那麼大吧。（自我安慰中。）
+總之等到出事再來抵制應該也不遲。&lt;/p&gt;
+&lt;p&gt;還有一個主因是，我覺得遊戲中用卡牌加上拖曳來施法的機制蠻有趣的，
+所以也想入坑玩玩看。
+朋友也有幾個一開始就入坑，然後爬到蠻高段位的，
+看他們雙排一直贏感覺很爽。&lt;/p&gt;
+&lt;h2 id=&quot;電腦版&quot;&gt;電腦版&lt;/h2&gt;
+&lt;p&gt;這遊戲一開始只出 android ios 版，
+但因為不是大家手機都很好，
+所以後來很多人都用電腦的手機模擬器玩，像用 bluestack。
+我的手機是夠新跑得動，但螢幕太小字看不清楚，根本沒辦法玩。
+後來網易自己出了 pc 版，檔案超大 8G，就打算裝裝看。&lt;/p&gt;
+&lt;p&gt;一開始在 linux 下用 proton 裝一次，但裝完一直開不起來。
+我用 proton 的作法是裝好 steam，
+用 steam 內建的功能裝 proton，
+之後 proton 就會在
+&lt;code&gt;$HOME/.steam/steam/steamapps/common/Proton $version/proton&lt;/code&gt; ，
+version 目前最新是 6.3。&lt;/p&gt;
+&lt;p&gt;proton 執行時要指定一個當 windows c 槽，放系統函式庫的資料夾，
+用環境變數 &lt;code&gt;STEAM_COMPAT_DATA_PATH&lt;/code&gt; 指定，
+然後執行安裝檔 &lt;code&gt;proton run harrypotter_setup.exe&lt;/code&gt; 即可。
+安裝檔一共有五個檔案， &lt;code&gt;harrypotter_setup-[1-4].bin&lt;/code&gt; 
+和一個 &lt;code&gt;harrypotter_setup.exe&lt;/code&gt; ，載下來時是都放在一個 rar 壓縮檔裡。&lt;/p&gt;
+&lt;p&gt;例如我解壓縮後的四個檔案放在 &lt;code&gt;~/hpzs&lt;/code&gt; ，
+給 proton 當 c 槽的資料夾則是 &lt;code&gt;~/hpma-compat-data&lt;/code&gt; ，
+steam 則是安裝在 &lt;code&gt;~/.steam&lt;/code&gt; ，proton 版本是 6.3，
+那執行 proton 來安裝的指令就要這樣下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cd ~/hpzs
+env STEAM_COMPAT_DATA_PATH=$HOME/hpma-compat-data \
+    STEAM_COMPAT_CLIENT_INSTALL_PATH=$HOME/.steam/steam \
+    &quot;$HOME/.steam/steam/steamapps/common/Proton 6.3/proton&quot; run \
+    harrypotter_setup.exe
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;安裝後預設是把遊戲裝在 &lt;code&gt;C:\Program Files (x86)\HPMA&lt;/code&gt; ，
+也就是 &lt;code&gt;~/hpma-compat-data/pfx/drive_c/Program Files (x86)/HPMA&lt;/code&gt; 。
+執行檔是 &lt;code&gt;C:\Program Files (x86)\HPMA\Launch.exe&lt;/code&gt;
+裝好要執行的話，可以直接用 windows 風格指定 c 槽路徑：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;env STEAM_COMPAT_DATA_PATH=$HOME/hpma-compat-data \
+    STEAM_COMPAT_CLIENT_INSTALL_PATH=$HOME/.steam/steam \
+    &quot;$HOME/.steam/steam/steamapps/common/Proton 6.3/proton&quot; run \
+    &quot;C:\Program Files (x86)\HPMA\Launch.exe&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;但現在還不能跑，因為少了一個 microsoft visual c++ 的函式庫，
+應該跑到出現網易的 logo 後會有錯誤訊息的視窗出現，
+但是亂碼所以我一開始都不知道是什麼意思。
+visual c++ 函式庫可以去 &lt;a href=&quot;https://docs.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist&quot;&gt;microsoft 網站&lt;/a&gt; 下載，
+我是選 x64 那個，或是 &lt;a href=&quot;https://aka.ms/vs/16/release/vc_redist.x64.exe&quot;&gt;用 exe 檔直接連結&lt;/a&gt; 。&lt;/p&gt;
+&lt;p&gt;載下來和上面裝遊戲的安裝方式一樣，
+用 proton 指定同一個 c 槽資料夾，
+然後一直下一步就好了。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;env STEAM_COMPAT_DATA_PATH=$HOME/hpma-compat-data \
+    STEAM_COMPAT_CLIENT_INSTALL_PATH=$HOME/.steam/steam \
+    &quot;$HOME/.steam/steam/steamapps/common/Proton 6.3/proton&quot; run \
+    vc_redist.x64.exe
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;裝完後理論上就可以開了。
+第一次開可能要更新，檔案還蠻大的。
+更新完後要重開一次，遊戲只會自己關掉，你要手動打開。&lt;/p&gt;
+&lt;p&gt;第一次打開後要註冊，可以綁 facebook 或 line，也只有這二種方法。
+遊戲會嘗試打開瀏覽器用 oauth 授權，如果是 windows 會開 edge，
+proton 下會用 linux 預設的瀏覽開；
+如果都沒有也會顯示授權網址，就自己開吧。&lt;/p&gt;
+&lt;p&gt;進遊戲之後可以去設定把調顯示設定，
+我筆電沒有很好，所以設 fps 30、畫質低。
+然後有一個可以選底層要用 OpenGL 或 DirectX 11，
+proton 選 opengl 的話（下次重開生效），
+字會變豆腐方塊顯示不出來，所以不要選。&lt;/p&gt;
+&lt;p&gt;遊戲安裝檔大小 8G，安裝後 10G。&lt;/p&gt;
+&lt;h2 id=&quot;安裝撞牆記錄&quot;&gt;安裝撞牆記錄&lt;/h2&gt;
+&lt;p&gt;一開始裝不起來以為是 proton 的問題，就把塵封已久的 windows 開來裝裝看。
+先用虛擬機試，本以為手機遊戲應該不會太吃效能，搞不好虛擬機就夠用。
+結果手上二個 windows 硬碟的映像檔，一個開不起來一個開得起來。
+開得起來那個效能也嚴重不足，連過場動畫都超頓，
+畫面落後聲音快一半，根本不能玩。
+所以打算雙開機回 windows 玩。&lt;/p&gt;
+&lt;p&gt;在 windows 裝時，錯誤訊息是缺少 &lt;code&gt;CONTCTR140.dll&lt;/code&gt; 
+和 &lt;code&gt;MSVCP140.dll&lt;/code&gt; 二個函式庫。
+先用之前的想法，手動把這二個 dll 抓下來放進 windows system32，
+但還是不行，錯誤訊息變成別的無意義的東西。&lt;/p&gt;
+&lt;p&gt;於是去開得起來那台找這二個 dll 是收在哪，
+結果是很檔名很長很奇怪的資料夾，我猜是 windows 內部更新會用的位置，
+所以以為是 windows 版本太舊，就把雙系統 windows 整理一下，
+更新到最新版，edge 也從 ms 自幹換成 blink 底了。
+但還是跳一樣的，缺那二個 dll 的錯誤訊息。&lt;/p&gt;
+&lt;p&gt;後來用錯誤訊息去 google，看到一些相關問題，
+提到那二個 dll 是屬於 microsoft visual c++ 的函式庫，
+有些軟體會用到，可以自己手動裝。
+後來仔細想想那台開得起來的映象檔，
+以前的確因為某商業軟體要用，
+就裝過 visual c++ 函式庫，難怪可以動。&lt;/p&gt;
+&lt;p&gt;但網易也太雷，在安裝說明寫個要手動裝 visual c++ 函式庫是會死嗎？
+而且好像大家都沒有這個問題？
+我也不知道為什麼，可能是我的 windows 太乾淨吧。&lt;/p&gt;
+&lt;p&gt;裝完函式庫就可以玩了。
+之後想到，搞不好 proton 不能玩也是這個原因？
+所以就在 proton 下把函式庫裝起來，結果還真的可以跑了。
+只是效能比在 windows 下還差一點，
+打二對二對戰時，畫面比較花就會 lag。
+後來發現不要邊開著瀏覽器邊玩就好了，可能我的 ram 不夠。&lt;/p&gt;
+&lt;p&gt;這遊戲好像是先發布中國版和台灣版，歐美都還沒發布，
+所以之前想找有沒有人用 linux 裝的經驗都找不到。
+reddit 的討論區裡，還有美國人跑來台灣服玩的心得。&lt;/p&gt;
+&lt;h2 id=&quot;用鍵盤玩舞會音樂遊戲時無法一次點二個音符的問題&quot;&gt;用鍵盤玩舞會音樂遊戲時無法一次點二個音符的問題&lt;/h2&gt;
+&lt;p&gt;這遊戲裡除了決鬥，還有舞會這個簡單的小音樂遊戲。
+在手機上可以直接全螢幕點擊，在電腦版用滑鼠不太好操作，
+所以官方讓電腦版可以用空白鍵直接點擊音符，不用管位置。
+但如果是要同時按下二個音符的場合，就變成要按二下空白鍵。
+如果其它鍵也可以代替空白鍵判定，就可以同時按下二個鍵擊中二個音符了。&lt;/p&gt;
+&lt;p&gt;隨便 google 了一下 linux 下做不做得到這件事，
+找到 &lt;a href=&quot;https://askubuntu.com/a/24930/763777&quot;&gt;一則 ask ubuntu 上的回答，看起來用 xmodmap 就行了&lt;/a&gt; 。
+簡單用 &lt;code&gt;xmodmap -e &apos;keycode 54 = space&apos;&lt;/code&gt; 
+就可以把本次 xsession 裡的 keycode 54 換成輸出成空白鍵，
+也就是按 c 鍵也會輸出空白鍵。
+如果要還原，就是 &lt;code&gt;xmodmap -e &apos;keycode 54 = c&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;寫成腳本的話：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#!/bin/sh
+xmodmap -e &quot;keycode 54 = space&quot;
+xmodmap -e &quot;keycode 59 = space&quot;
+xmodmap -e &quot;keycode 58 = space&quot;
+xmodmap -e &quot;keycode 78 = space&quot;
+
+echo &quot;key &apos;x&apos; &apos;c&apos; &apos;m&apos; &apos;,&apos; are mapped to space&quot;
+echo &quot;press enter to recover&quot;
+read wait
+
+xmodmap -e &quot;keycode 54 = c&quot;
+xmodmap -e &quot;keycode 59 = comma&quot;
+xmodmap -e &quot;keycode 58 = m&quot;
+xmodmap -e &quot;keycode 78 = x&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;這樣就碰到需要雙手同時按的音符時，
+就可以一次按二個鍵達成。
+windows 下應該也有類似的工具吧，總之我不熟。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/game-opus-starsong-bad-end.html</id>
 <title>龍脈常歌的悲劇結尾異見</title>
 <published>2021-12-01T07:49:44.719Z</published>
@@ -1612,103 +1819,7 @@ es6 的 class 在繼承中可以用 super 存取父元素的方法，
 <category term="debian"/>
 <category term="vpn"/>
 <category term="安裝"/>
-<content type="html">&lt;h1 id=&quot;linux-下連接-l2tp-vpn&quot;&gt;linux 下連接 l2tp vpn&lt;/h1&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.ccns.io/&quot;&gt;CCNS&lt;/a&gt; 在機房架了 l2tp 的 vpn server，
-最近覺得有點需要，就查了一下怎麼在 linux 下連 l2tp vpn。
-發現自己手動設定蠻麻煩的，用 network manager 管理比較簡單，
-&lt;a href=&quot;https://github.com/nm-l2tp/network-manager-l2tp/wiki/Prebuilt-Packages#debian&quot;&gt;但 network manager l2tp 的外掛目前只發行在 debian sid&lt;/a&gt; ，
-又不想手動編譯；google 發現 [有人成功在 stretch 裡
-裝 debian sid 裡舊的版本，是可以運作的][l2tp cross sid] ，
-就試成功了。&lt;/p&gt;
-&lt;p&gt;以前有 ssh 登入權限的時候，會用 ccns 機房的機器當 ssh 跳板上 ptt：
-&lt;code&gt;ssh -J lab.ccns.ncku.edu.tw bbsu@ptt.cc&lt;/code&gt; 。
-後來機房大翻修，一些機器也虛擬化，帳號就被洗掉了，也沒再要。
-有個社員自己會用 l2tp 開 vpn，在機房變得很潮後，
-就把 l2tp server 架到機房去，變 ccns 共用 vpn。
-一開始剛架好時試了，手動設定一直失敗，
-今天心血來潮，又嘗試終於成功連上了。&lt;/p&gt;
-&lt;h2 id=&quot;l2tp-手動設定&quot;&gt;l2tp 手動設定&lt;/h2&gt;
-&lt;p&gt;手動設定就是裝 xl2tpd 寫 config，
-就會多出一個 ppp 網路裝置，
-要自己用 route 把封包導過去。
-如果要加密還要裝 openswan 或其它 swan 系列。
-之前試過手動設定失敗， 今天又試第一次還是失敗。&lt;/p&gt;
-&lt;p&gt;我看過幾篇教學，有 &lt;a href=&quot;https://wiki.archlinux.org/index.php/Openswan_L2TP/IPsec_VPN_client_setup&quot;&gt;arch wiki 的&lt;/a&gt;
-也有 &lt;a href=&quot;https://github.com/hwdsl2/setup-ipsec-vpn/blob/master/docs/clients.md#configure-linux-vpn-clients-using-the-command-line&quot;&gt;github 上別人寫的文件&lt;/a&gt; 。
-後來在 github 上那篇又重試了一遍，
-整理重寫了複製貼上的 config 才成功；
-後面那些手動 route 好像也不是那麼難了，
-&lt;code&gt;echo &amp;quot;c my-vpn&amp;quot; &amp;gt; /var/run/xl2tpd/l2tp-control&lt;/code&gt;
-相當於啟動連上 l2tp 並創建一個 ppp 網路裝置，
-之後的 route 就是把預設路由改成該 ppp。&lt;/p&gt;
-&lt;p&gt;一開始我連 l2tp ipsec openswan 之間是什麼關係都沒弄清楚，
-分不清楚教學到底是在教 l2tp client 還是 l2tp server。
-現在裝好了才發現一直卡住的 ipsec 部份，
-其實是加密部份而已，不是必須的。
-另外就是 ipsec 有個雷點，
-幾篇教學是寫 &lt;code&gt;ipsec auto --add my-l2tp&lt;/code&gt; ，
-但我的版本應該是 &lt;code&gt;ipsec up my-l2tp&lt;/code&gt; ，
-翻了整篇手冊頁想破頭，
-還是不確定 auto 和 add 到底要對應到哪個命令。&lt;/p&gt;
-&lt;h2 id=&quot;network-manager-介面&quot;&gt;network manager 介面&lt;/h2&gt;
-&lt;p&gt;試幾次 xl2tp 都連不上，看到 network manager 有個外掛
-&lt;a href=&quot;https://github.com/nm-l2tp/network-manager-l2tp/wiki/Prebuilt-Packages&quot;&gt;network manager l2tp&lt;/a&gt; 能在圖型介面上
-直接連上 l2tp vpn，就抱著姑且一試的心態試了。
-&lt;a href=&quot;https://github.com/nm-l2tp/network-manager-l2tp/wiki/Prebuilt-Packages#debian&quot;&gt;該外掛有提供預編譯好的套件，但 debian stretch 沒有支援，
-只有目前的 sid 未來的 buster 有。&lt;/a&gt;
-但我也懶得自己編譯，要裝的東西太多了，放棄。&lt;/p&gt;
-&lt;p&gt;試著去下載 ubuntu 預編好的 deb 包，直接用 apt 安裝。
-可以開出圖形介面，但連不上。
-又 google 了一下，
-找到 &lt;a href=&quot;https://thomask.sdf.org/blog/2018/01/16/l2tp-vpn-networkmanager-debian-stretch.html&quot;&gt;一篇部落格文章說可以裝 debian sid 的版本&lt;/a&gt; ，
-在 debian stretch 也能用，但文內的版本是 1.2.8，
-現在 sid 已經更新到 1.2.10，
-試了現在的 1.2.10，和 ubuntu 一樣有介面但不能連。&lt;/p&gt;
-&lt;h2 id=&quot;舊-debian-archieve&quot;&gt;舊 debian archieve&lt;/h2&gt;
-&lt;p&gt;後來直接問部落格作者，看他有沒有留當時的 deb 包。
-他簡介還蠻有趣的，是 linux user 和 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E7%81%AB%E8%85%BF%E6%97%8F&quot;&gt;火腿族&lt;/a&gt; ，
-目前主要掛在 &lt;a href=&quot;http://zh.wikipedia.org/wiki/mastodon&quot;&gt;mastodon&lt;/a&gt; 上，
-所以我就開了塵封已久的 g0v 的 mastodon 發訊息給他。
-結果他說也沒在用 vpn 了，傳了一個 &lt;a href=&quot;https://snapshot.debian.org/&quot;&gt;debian snapshot&lt;/a&gt; 的網站給我，
-裡面收錄了所有版本的 debian package，不只是每個 debian 版本，
-連同一 debian 版本中每一次更新都有。
-我就從上面抓了 &lt;a href=&quot;https://snapshot.debian.org/package/network-manager-l2tp/1.2.8-2/&quot;&gt;sid 的 1.2.8-2&lt;/a&gt; 下來裝，就能動了。&lt;/p&gt;
-&lt;p&gt;deb 包就是 apt 在操作的最小單位，每個包會記錄相依的其它包，
-在用 dpkg 安裝時就是檢查有滿足就直接安裝，沒滿足就報錯。
-而 apt 不只可以從倉庫安裝，也可以直接安裝本機的 deb 包，
-只要你傳入的名稱明顯是路徑，像是用 &lt;code&gt;./&lt;/code&gt; 開頭。
-而且 apt 還會幫處理相依性問題，但只會從系統的 apt 設定的網路倉庫抓，
-所以如果是載下來在本機要手動安裝的二個相依的 deb 包，就沒辦法自動安裝。&lt;/p&gt;
-&lt;p&gt;以 network-manager-l2tp 和 network-manager-l2tp-gnome 二個包來說，
-可以先裝被 network-manager-l2tp 相依的 network-manager-l2tp-gnome，
-再裝 network-manager-l2tp，
-之後再把 network-manager-l2tp-gnome 標記為自動安裝，
-未來 apt remove 後 network-manager-l2tp-gnome 也會被標成不需要，
-可以自動刪除。
-或是就在安裝時把所有包的檔名都傳入，
-apt 會檢測到其中數個包相依，就會自動處理相依性。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;install_once() {
-    apt install ./network-manager-l2tp_1.2.8-2_amd64.deb \
-                ./network-manager-l2tp-gnome_1.2.8-2_amd64.deb
-}
-install_and_mark() {
-    apt install ./network-manager-l2tp-gnome_1.2.8-2_amd64.deb
-    apt install ./network-manager-l2tp_1.2.8-2_amd64.deb
-    apt-mark auto network-manager-l2tp-gnome
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;l2tp-ipsec-連線設定&quot;&gt;l2tp ipsec 連線設定&lt;/h2&gt;
-&lt;p&gt;網愛社的人的用法是設 l2tp 的帳號密碼，
-ipsec 則是用一個 pre share key，也和密碼差不多。
-其它欄位都留空。（server 網址當然不能留空，
-在 network manager 介面裡，看要打 domain name 或 ip 都可以。）
-詳情可以看 &lt;a href=&quot;https://github.com/hwdsl2/setup-ipsec-vpn/blob/master/docs/clients.md#linux&quot;&gt;一開始提到那篇 github 連接 l2tp 的教學。&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;debian-buster-更新&quot;&gt;debian buster 更新&lt;/h2&gt;
-&lt;p&gt;debian buster 有收錄 network-manager-l2tp-gnome 了，
-安裝後可以直接在 gui 中設定 l2tp client。
-ipsec 的設定一樣照上面那篇 github 教學，
-phase 1 algorithm 要設 &lt;code&gt;aes128-sha1-modp2048&lt;/code&gt;，
-phase 2 &lt;code&gt;aes128-sha1&lt;/code&gt; 。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/contact.html</id>
 <title>聯絡我</title>

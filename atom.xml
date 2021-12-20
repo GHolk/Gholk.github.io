@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2021-12-20T05:22:10.975Z</updated>
+  <updated>2021-12-20T09:25:03.395Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,92 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/contact.html#remove-matrix-and-update-pgp-expire-time</id>
+<title>聯絡我</title>
+<published>2021-07-31T13:13:44.474Z</published>
+<updated>2021-12-20T09:25:03.373Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/contact.html#remove-matrix-and-update-pgp-expire-time"/>
+<summary type="html">
+ccns matrix 應該要收掉了，暫時用 disroot 提供的 xmpp 擋著。
+pgp 金鑰過期了，延長一年。</summary>
+<category term="blog"/>
+<category term="email"/>
+<category term="im"/>
+<content type="html">&lt;h1 id=&quot;聯絡我&quot;&gt;聯絡我&lt;/h1&gt;
+&lt;p&gt;個人聯絡資訊。
+一般來說，聯絡到我後你會需要證明自己的確是那個人，
+除非你已經在我的通訊錄裡。&lt;/p&gt;
+&lt;h2 id=&quot;即時通訊&quot;&gt;即時通訊&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://t.me/gold_holk&quot;&gt;telegram&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;xmpp:gholk@disroot.org&quot;&gt;xmpp&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;email&quot;&gt;email&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;mailto:gholk@disroot.org&quot;&gt;gholk@disroot.org&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-pgp&quot;&gt;-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+=UUQp
+-----END PGP PUBLIC KEY BLOCK-----
+&lt;/code&gt;&lt;/pre&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/horizontal-wisdom-tooth-remove.html</id>
 <title>郭儒銓牙醫診所水平智齒拔除記</title>
 <published>2021-12-20T05:08:12.401Z</published>
@@ -1575,114 +1661,7 @@ phase 2 &lt;code&gt;aes128-sha1&lt;/code&gt; 。&lt;/p&gt;
 <category term="git"/>
 <category term="版本"/>
 <category term="思辨"/>
-<content type="html">&lt;h1 id=&quot;對-git-過於肥大及其它一些批評&quot;&gt;對 git 過於肥大及其它一些批評&lt;/h1&gt;
-&lt;p&gt;很久以前在學習程式時，考量過要學哪一款版本控制軟體。
-那時本來知道 mercurial，又多做了一些研究。
-現在則是因為看了網路上一些對 git 的批評，
-主要是過於肥大，以及不適合在生產環境使用。
-我知道的其它替代品有 fossil、bazaar。&lt;/p&gt;
-&lt;p&gt;看過一些對 git 的批評：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;過於肥大&lt;/li&gt;
-&lt;li&gt;介面不友善&lt;/li&gt;
-&lt;li&gt;分支氾濫&lt;/li&gt;
-&lt;li&gt;提交缺乏系統&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;個人認為比較無法改變的就是過於肥大；
-介面不友善可以藉由學習改善，所以本文跳過不講。
-分支我認為可能可以用標籤改善，
-提交可能用結構化的提交訊息或直接 rebase 整理提交。&lt;/p&gt;
-&lt;h2 id=&quot;肥大&quot;&gt;肥大&lt;/h2&gt;
-&lt;p&gt;之前架 server 時，就考慮過要不要裝 git，
-因為安裝時看到一堆相依性其實很可怕。
-至少包括 curl gnutls perl，
-雖然 debian 自帶的 apt 多半已經把 perl 裝好了；
-但 curl 的相依性也是很可怕。&lt;/p&gt;
-&lt;p&gt;git 本身就自帶了一堆可能整個 project 用不到二次的指令，
-可以用 &lt;code&gt;dpkg -L git-man | grep man1&lt;/code&gt; 
-看有哪些指令是根本沒用過或八成用不到的。
-不過這可能是所有軟體的通病，依據二八法則，
-日常使用的八成功能，分布在最常用到的二成指令上。
-像那些 mail 有關的指令，台灣應該很少人會用 git 內建的功能發 mail 了。&lt;/p&gt;
-&lt;p&gt;就像之前用 npm 裝相依套件時的感想，
-一個不小心如果套件用到 c 語言來寫核心功能，
-node-gyp 還得要把 gcc make 工具鏈也裝起來才能動。
-我說那個在生產環境上裝 gcc 是不是搞錯了什麼，
-加上 node 的交叉編譯系統又不是很好用。&lt;/p&gt;
-&lt;p&gt;一個版本控制系統，應該是考量在在生產環境的佈署，
-安裝要精簡，像 fossil 這種單一執行檔就很適合；
-雖然 git 好像也是單一執行檔，然後配一大堆 shell script 組合起來的。
-但考慮到對 posix shell 的相依性，
-像在 windows 裝 git 竟然還得把 bash 一起裝起來。&lt;/p&gt;
-&lt;h3 id=&quot;關於肥大的改進方式&quot;&gt;關於肥大的改進方式&lt;/h3&gt;
-&lt;p&gt;以下是理論解法，並未查證可行性。&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;找找看 git 有沒有精簡安裝版&lt;/li&gt;
-&lt;li&gt;找找看有沒有和 git 相容的輕量版非官方實作&lt;/li&gt;
-&lt;li&gt;找找看有沒有輕量版本控制軟體和 git 相容&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&quot;分支氾濫&quot;&gt;分支氾濫&lt;/h2&gt;
-&lt;p&gt;基本的 git flow，也就是要新增功能就開新分支，
-做完後再合併回 master。
-但合併後慣例上分支就會刪掉，否則久了會堆積一堆分支。
-但這樣分支也變得廉價不好追蹤。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://stackoverflow.com/questions/1307114/how-can-i-archive-git-branches&quot;&gt;也有人問過如何封存分支之類的問題。&lt;/a&gt;
-一個做法是用 tag，可以把 tag 命名為 &lt;code&gt;archive/name&lt;/code&gt; 之類的。
-但 archive 還是會在 &lt;code&gt;git tag -l&lt;/code&gt; 時顯示，
-久了還是會有一大堆東西。
-不過一般用來標示版本的做法也是一樣，所以好像沒差。
-那能不能讓分支也當作沒差呢？
-只能說，是風格的問題了。&lt;/p&gt;
-&lt;h2 id=&quot;提交缺乏組織&quot;&gt;提交缺乏組織&lt;/h2&gt;
-&lt;p&gt;如 git flow 描述，在一個分支中，提交可能都是針對某一功能的，
-那有時單個提交是看不出意義的。
-在合併回主分支時，卻只會看到一個個分散的提交。
-其中缺少了一個組織方法，把一群提交組織在一起成群組。&lt;/p&gt;
-&lt;p&gt;有個做法是用 rebase，把這些提交合併為一個大提交，
-但合併時這些提交個自的資訊又會因此遺失。
-我不確定有沒有軟體能解決這個問題，
-一個做法是在提交標題加上分類或標籤，用來組織提交。&lt;/p&gt;
-&lt;h2 id=&quot;自描述的提交&quot;&gt;自描述的提交&lt;/h2&gt;
-&lt;p&gt;這算是一個功能建議。
-有時候某些修改是自描述 (self describe) 的，
-也就是無需說明，直接看 diff 就知道為什麼要這麼改。
-如果要在提交訊息裡說明，就像是提 diff 的結果抄一遍，
-放到 commit message 裡。&lt;/p&gt;
-&lt;p&gt;我一向是很討厭這種重複記錄的做法。
-像是 git commit 有記錄時間了，
-所以不需要在寫 commit message 時再寫一次時間。
-對 diff 也是一樣，我不喜歡在 commit message 裡，
-把用 git diff 可以看到的東西再重複一邊。&lt;/p&gt;
-&lt;p&gt;之前意識到這個問題，是在寫 wiki 時。
-wiki 也有提交訊息這種東西，而且很重要。
-本來因為不想重複記錄，所以提交訊息都寫得很簡略。
-但之前用的 dokuwiki 的版控系統，只會顯示每個提交的標題，
-如果寫得很簡略，就根本看不出來每個提交改了什麼，
-當時的想法是寫一個自行產生提交訊息的腳本。&lt;/p&gt;
-&lt;p&gt;所以後來 git 的話我至少會把提交訊息寫到能看出這個提交在幹麻。
-這樣發布新版本時，寫 changelog 比較方便，
-git log 再修一修補充細節即可。&lt;/p&gt;
-&lt;h2 id=&quot;其它軟體&quot;&gt;其它軟體&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&quot;https://fossil-scm.org&quot;&gt;fossil&lt;/a&gt; 是一個蠻神奇的軟體，是sqlite的作者寫的。
-fossil是一個單一執行檔，結合版本控制、issue追蹤、文件管理功能。
-還有web ui，issue追蹤和文件管理就可以透過web ui實現，
-web還有論壇、聊天室功能。
-所以一個fossil，不只是單純的版本控制，也可以用來當作項目的網站。
-當然可以想見，版本控制和這些全部功能都是透過sqlite的資料庫實現的。
-只能說sqlite的作者D. Richard Hipp是奇人一個。&lt;/p&gt;
-&lt;p&gt;bazaar和mercurial就沒有研究了，所以也不做評論。&lt;/p&gt;
-&lt;h2 id=&quot;反思&quot;&gt;反思&lt;/h2&gt;
-&lt;p&gt;你真得需要一個精簡的 git 嗎？
-因為需要在生產環境使用 git，所以想要有一個輕量化的 git。
-但在生產環境使用版本控制軟體是合理的做法嗎？
-除了下載對應版本的程式，其實版本控制軟體在生產環境是不會用到的。
-下載這部份，其實 github 可以直接下載 zip 下來解壓縮；
-而且使用版本控制軟體來發布到生產環境也怪怪的，
-理論上可以用 ftp 推上去，或就用 http 下載。&lt;/p&gt;
-&lt;p&gt;使用 git 的場景應該是在開發環境，那肥大其實沒有什麼影響。
-開發環境裝個 gcc make autoconf 應該都算正常，
-如果連 ide 都裝起來了，那根本不會在意一個 git 的大小。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/javascript-pipe-method-and-inherit-constructor.html</id>
 <title>javascript 中用方法實現管道與繞過繼承建構子的限制</title>

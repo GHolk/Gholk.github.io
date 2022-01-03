@@ -1,0 +1,527 @@
+# 製作供 linux 使用的存有 live cd 映象檔的救援分割區
+一直覺得 linux 出問題時，需要用隨身碟開機時要插隨身碟很麻煩。
+如果可以把光碟映象檔存到硬碟上，
+然後直接用硬碟裡的光碟開機，就很方便，
+像是在電腦裡多了一個救援磁區。
+後來用 grub 做到了，可以進 grub 開或直接在 uefi 開，
+但啟用 secure boot 的話會必須 hard code 一些路徑。
+
+## lvm 或物理分割區
+一開始做時，有想過是要把光碟放在 lvm 裡建的分割裡，
+還是在 lvm 外面切一個物理分割。
+如果要用來開機的光碟映象夠先進的話，
+技術上是二種都能做到。
+
+本來覺得如果能直接切一個 lv 比較好處理，還可以任意調整大小。
+但後來想到，如果做在 lvm 裡，那 lvm 故障時就進不去了，
+所以後來還是做在 lvm 外面，另外切一個 5G 的大小來放。
+
+流程就是先把 pv 縮小，
+然後用 gdisk 之類的分割工具，把分割區縮小。
+如果工具不支援縮小，那就是把原本的分割刪掉，
+再在同一個位置建一個較小的。
+如果是 gpt 分割表，可能要把新分割的 guid 設的和舊的一樣，
+防止出問題。
+
+```sh
+new_size=180G
+pvresize --setphysicalvolumesize $new_size /dev/sda1
+gdisk /dev/sda
+partprobe /dev/sda
+```
+
+我對換算單位一直很有障礙，會搞不清楚什麼時候用 1024 什麼時候用 1000。
+因為如果搞錯，把物理分割縮得比 pv 實際佔用還小的話，
+pv 資料會遺失很危險。
+所以我通常會把 pv 縮多一點，實際分割縮少一點，
+留個 1G 的空間，最後再用 pvresize 不帶參數的方式，
+自動擴展回符合實際大小。
+
+存放光碟映象檔的分割，我是格式化成 fat，
+用越簡單的格式越好。
+如果想迴避 fat 的 4G 檔案大小上限，用其它也可以，
+但 grub 就要另外載入模組。
+然後就可以把映象檔丟進去了。
+
+## 開機參數
+實際上能不能用映象檔開機成功，
+主要取決於該映象檔中的 initramfs，
+能不能找到映象檔並掛載起來，繼續開機流程。
+
+在 linux 開機流程中，會先載入 kernel 和 initramfs，
+kernel 就是作業系統核心，而 initramfs 則是一個檔案系統，
+包含 shell、各種驅動程式，二個合起來就是一個精簡的作業系統了。
+以下稱這個精簡作業系統為 initramfs。
+
+進入這個精簡的系統後，會解析開機時傳入的參數，執行對應的行為。
+像是以 debian 進入 initramfs 後，
+會依序執行 initramfs 中的幾個腳本，
+包含會掃描硬碟中的 lvm，並掛載到對應位置。
+然後我的 grub 傳的開機參數是 `root=/dev/mapper/mylvm-debian ro` ，
+所以 initramfs 就會找到 mylvm 這個 vg 中的 debian lv，
+並把他當作 root 來開機到實際的作業系統。
+至於 ro 應該是指定一開始先掛載為唯讀 read only 的意思，
+那是預設就有的，所以我也不確定意思。
+
+麻煩的地方是，每個發行版的開機參數不盡相同，
+尤其從光碟開機又要處理更多東西，
+像是要解析光碟的檔案系統 iso9660 (cdfs) 。
+還要考慮現代人喜歡把光碟以檔案儲存在分割區，
+而不是真的光碟的情況或真的開機碟的狀況。
+
+### ubuntu 光碟開機參數
+以 ubuntu 來說，會認 `iso-scan/filename=/myiso/ubuntu.iso` 這個參數。
+進 initramfs 後，ubuntu 光碟會依序把能找到的每個塊裝置，
+像光碟、硬碟、隨身碟都掛載起來，
+檢查該塊裝置中的 `/myiso/ubuntu.iso` 這個檔案，
+是不是 ubuntu 光碟映像檔。
+如果是，就把他掛載起來，然後用光碟內容開機。
+
+當然這是把映象檔存成檔案的狀況；
+如果 ubuntu 進 initramfs 後，
+就找到有某個塊裝置看起就是 ubuntu 光碟或開機隨身碟，
+就會直接用他開機了。
+
+ubuntu live-cd 的開機參數，我一直找不到文件，
+[一則 stackexchange 的問答也是沒有文件][stackexchange ubuntu boot] ，
+只能讀原始碼。
+[ubuntu wiki 上倒是有簡單提到 iso-scan/filename 這個參數可以動][ubuntu boot wiki] 。
+
+[stackexchange ubuntu boot]: https://askubuntu.com/q/644400/763777
+[ubuntu boot wiki]: https://help.ubuntu.com/community/Grub2/ISOBoot/Examples#Ubuntu_ISOs
+
+### finnix 開機參數
+而我用的另一款，專門用來當救援軟體的輕巧 linux finnix，
+則是認 `findiso` 這個參數，
+用法也是和 ubuntu 的 `iso-scan/filename` 一樣，
+寫相對於該塊裝置內檔案系統的路徑。
+
+[finnix 還有一些神奇的開機參數][finnix boot parameter]，
+但因為 finnix 是基於 debian，
+[多數來自 debian 的參數也能動][debian boot parameter] 。
+像 `toram` 參數會把整個系統載入到 ram disk 裡，
+所以開機完後就不用磁碟 io，甚至可以把硬碟拔掉。
+
+[finnix boot parameter]: https://github.com/finnix/finnix-docs/blob/8c0bfa2/kernel-command-line.md
+[debian boot parameter]: https://manpages.debian.org/bullseye/live-boot-doc/live-boot.7.en.html
+
+## 從 grub2 中開機
+前面只提有哪些開機參數，現在要實際介紹開機參數要放在哪裡。
+debian 預設是用 grub2 開機，
+前面說過，linux 開機就是先載入 kernel 和 initramfs，
+進入二者建立的小系統，再在小系統中找到實際的 root 分割後開機進去。
+在 grub2 開機中，要做的事就是指定 kernel 和 initramfs 的檔案，
+還有開機參數。
+
+在開機 grub 選單中，可以按 c 進入指令模式，
+可以用來測試指令。
+或直接把指令寫在 `/boot/grub/grub.cfg` 也可以，
+但 grub.cfg 只是用來測試的，
+執行 `update-grub` 後就會產生新的 grub.cfg 把舊的蓋掉。
+
+### 分割區
+用 ls 可以看到目前有哪些裝置，
+在 grub2 中會以 `(hd0,1)` 的方式，
+表示第一顆硬碟的第 1 個分割。
+用路徑斜線則可以表示分割上檔案系統的檔案 `(hd0,1)/myfile.txt` 。
+例如 `cat (hd0,1)/myfile.txt` ，就可以輸出該檔案的內容。
+lvm 也類似，可以用 `(lvm/myvg-mylv)` 的方式表示某個 lv。
+
+但要一直把括號和裝置名稱很麻煩，
+可以用 `set root=(hd0,1)` 來指定一個 root，
+之後可以直接寫 `cat /myfile.txt` 就好。
+如果要用 uuid 或 label 的方式指定，
+則可以用 search 這個指令。
+例如把 uuid 為 `711ad568f-08ce-4477-b802-ea02f514ebb6` 
+的檔案系統設為 root： `search --fs-uuid --set=root 711ad568f-08ce-4477-b802-ea02f514ebb6`
+檔案系統的 uuid 可以用 blkid 看。
+而 `search --label` 則是用 label 來搜尋。
+
+### 載入 kernel 與 initramfs
+我們首先要找出 kernel 和 initramfs 所在的檔案系統，
+在 debian 中 kernel 的檔案是 `/boot/vmlinuz-*` ，
+而 initramfs 則是 `/boot/initrd.img-*` 。
+在 grub 裡用 linux 這個指令載入 linux kernel 檔案，
+同時一併傳入開機參數。
+再用 initrd 載入 initramfs 檔案。
+載入會停頓一下，之後再用 boot 指令就可以用載入的 kernel initramfs 開機了。
+
+```grub
+search --fs-uuid --set=root 711ad568f-08ce-4477-b802-ea02f514ebb6
+linux /boot/vmlinuz-4.19.0-17-amd64 root=/dev/mapper/myvg-mylv ro
+initrd initrd.img-4.19.0-17-amd64
+boot
+```
+
+可以把以上的指令寫成一個 grub 中可選取的選項，
+用 menuentry 這個關鍵字。
+這樣在 grub 選單中就會出現 *my custom boot option* 這個選項，
+選取後就會執行其中的腳本。
+另外在 menuentry 中，結尾可以不用寫 boot 這個指令，
+預設會自動 boot。
+
+```grub
+menuentry "my custom boot option" {
+    search --fs-uuid --set=root 711ad568f-08ce-4477-b802-ea02f514ebb6
+    linux /boot/vmlinuz-4.19.0-17-amd64 root=/dev/mapper/myvg-mylv ro
+    initrd initrd.img-4.19.0-17-amd64
+}
+```
+
+詳細的 grub 指令，可以在 [grub 的手冊][grub manual] 看。
+
+[grub manual]: https://www.gnu.org/software/grub/manual/grub/html_node/index.html
+
+### 修改自動產生的 grub.cfg
+至今我們都是直接修改 `/boot/grub/grub.cfg` ，
+但在 debian 中，grub.cfg 是由 update-grub 或 grub-mkconfig 產生的，
+我們的修改會被覆蓋掉。
+實際上 update-grub 產生時，
+是執行 `/etc/grub.d` 底下的腳本，來產生 grub.cfg。
+如果所以修改 grub.cfg 的正式流程，就是修改 grub.d 底下的腳本。
+
+依 debian grub 的慣例，自訂的腳本要用 40 以上開頭，
+或直接加到 `40_custom` 裡。
+`40_custom` 是用 exec tail 的做法，
+讓執行該腳本時會直接輸出 tail 後面的內容。
+像我的開頭是長這樣：
+
+```sh
+#!/bin/sh
+exec tail -n +3 $0
+# This file provides an easy way to add custom menu entries.  Simply type the
+# menu entries you want to add after this comment.  Be careful not to change
+# the 'exec tail' line above.
+
+menuentry '[system] shutdown' {
+        halt
+}
+
+menuentry '[system] reboot' {
+        reboot
+}
+
+menuentry '[system] exit grub' {
+        exit
+}
+```
+
+就是加入重開機、關機、離開 grub 用其它選項開機的三個選項。
+前面說的掛載光碟、開機的 grub 腳本，
+就可以直接放在這個檔案裡。
+
+## 從硬碟中的光碟映象檔開機
+但如果要用沒燒成光碟的映象檔開機，
+就得先把映象檔當成一個塊裝置讀取、掛載起來，
+再找到其中的 kernel 和 vmlinuz。
+在 grub 中可以用 loopback 指令把檔案視為塊裝置，
+之後就能用 ls 之類的存取內容了。
+
+```grub
+loopback loop0 (hd0,1)/iso/ubuntu.iso
+ls (loop0)/
+```
+
+一般我會先在 linux 中把映象檔掛載起來，
+找找看他把 kernel 和 initramfs 放在哪個路徑，
+之後就和一般 linux 開機流程一樣載入就好了。
+grub 中只要指定好檔案，就可以開機進 initramfs，
+但 initramfs 找不找得到完整系統就不干 grub 的事了。
+要讓 initramfs 找到系統，得由開機參數指定。
+
+我通常會先把映象檔掛載起來，
+檢查 `/boot/grub/grub.cfg` 或 `/isolinux/*.cfg` ，
+看他的開機參數怎麼寫，多數就直接照抄。
+再去找他的文件，看要從映象檔中開機要加哪些參數。
+
+### ubuntu grub 選單
+ubuntu 光碟的 kernel 和 initramfs 是在 `/casper` 下，
+我的 ubuntu 的 grub 腳本就長這樣：
+
+```grub
+menuentry 'ubuntu 20.04 live cd' {
+        # loopback module does not like tpm
+        # https://askubuntu.com/a/1244886/763777
+        rmmod tpm
+
+        echo mounting loop
+        search --set=root --label MY-LIVE
+        iso_path=/ubuntu-20.04.1-desktop-amd64.iso
+        loopback loop $iso_path
+        set root=(loop)
+
+        echo loading kernel
+        linux /casper/vmlinuz file=/cdrom/preseed/ubuntu.seed maybe-ubiquity iso-scan/filename=$iso_path splash ---
+
+        echo loading initramfs
+        initrd /casper/initrd
+}
+```
+
+其中有 rmmod tpm 是把 grub 中載入的 tpm 模組移除。
+因為 debian 的 tpm 模組有 bug，
+如果不移除，用 loopback 指令會卡住。
+
+### finnix grub 選單
+finnix 的則是在 `/live` 。
+finnix 因為有幾種不同的開機模式，
+我是把掛載的部份抽出來寫成函數，
+在每個選單開頭呼叫即可。
+
+```grub
+function finnix_init {
+        search --label --set=root MY-LIVE
+        # loopback module does not like tpm
+        # https://askubuntu.com/a/1244886/763777
+        rmmod tpm
+        set iso_path=/finnix-123.iso
+        loopback loop $iso_path
+        set root=(loop)
+}
+menuentry "finnix 123 Live system" {
+        finnix_init
+        linux   /live/vmlinuz-5.10.0-8-amd64 boot=live quiet findiso=${iso_path}
+        initrd  /live/initrd.img-5.10.0-8-amd64
+}
+menuentry "finnix 123 Live system (fail-safe mode)" {
+        finnix_init
+        linux   /live/vmlinuz-5.10.0-8-amd64 boot=live components memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=788 findiso=$iso_path
+        initrd  /live/initrd.img-5.10.0-8-amd64
+}
+menuentry "finnix 123 Live system (boot system into ram)" {
+        finnix_init
+        linux /live/vmlinuz-5.10.0-8-amd64 boot=live quiet findiso=${iso_path} toram
+        initrd /live/initrd.img-5.10.0-8-amd64
+}
+```
+
+映象檔的路徑，我是都直接放根目錄，
+反正目前映象檔才幾個而已。
+
+### 非光碟形式發行版
+印像中某些發行版，像 antix，
+可以把整個檔案系統打包成一個 squashfs，
+然後用來開機或移動就很方便。
+要讀寫的話，就用 overlayfs 掛載一個檔案模擬的塊裝置做成的檔案系統，
+這種功能叫做 persistent，讓 live cd 也可以有記憶，
+而不會每次關機後修改都消失。
+
+有一類 linux 就是主打讓使用者安裝在隨身碟裡，
+像 puppy slax 都有類似的功能，antix 也可以。
+就會用到這種功能。
+但我是不太常碰，因為不太有帶著隨身碟開機別的電腦的場景。
+
+## 安裝第二個備援用的 grub
+上面我們的作法是，用原系統原有的 grub，開其它的系統（光碟）。
+但如果原系統的 grub 一起死了呢？
+像我的系統連 grub 是一起放在 lvm 裡，
+所以 lvm 出問題就是一起下去。
+所以要保險一點，就是把切出來的救援用分割裡，
+也安裝一個可獨立運作的 grub。
+
+這裡就要牽扯到如何開機到 grub 的問題了，
+在 uefi 之前的 bios 開機，是以硬碟為單位開機的，
+開機就是讀取硬碟開頭的資料，
+所以一顆硬碟是沒辦法裝二個 grub 的。
+（事實上可以在 grub rescue 裡，載入另一個位置的 grub 主程式，
+但這裡先談可以顯示在 *開機選單* 上的選項。）
+這也是為什麼 grub 會有開機 windows 的能力的原因，
+不然只有一顆硬碟的人，裝了 linux 就不能進 windows 了。
+
+到 uefi 中就可以了。
+uefi 的開機選單是存在主機板上的，叫 NVRAM 儲存空間，
+在 linux 上可以由 `/sys/firmware/efi` 存取。
+除了開機選單，也會存一些開機過程的 log、安全開機的金鑰之類的。
+如果要修改開機選單，可以用 `efibootmgr` 這支程式。
+
+### 使用 uefi 開機
+uefi 所謂的開機，是去執行硬碟中某個分割區的檔案，
+例如 windows 的開機引導程式，或 linux 常用的 grub。
+每個選項會有該分割區的序號和 uuid，
+和開機程式在該分割區內的路徑。
+
+可以用 `efibootmgr -v` 列出目前主機板上存的開機程式：
+
+```term
+~ # efibootmgr -v
+BootCurrent: 0001
+Timeout: 0 seconds
+BootOrder: 0001,0000,0002
+Boot0000* Windows Boot Manager  HD(1,GPT,711ad568f-08ce-4477-b802-ea02f514ebb6,0x800,0x82000)/File(\EFI\Microsoft\Boot\bootmgfw.efi)WINDOWS.........
+Boot0001* debian        HD(1,GPT,711ad568f-08ce-4477-b802-ea02f514ebb6,0x800,0x82000)/File(\EFI\debian\shimx64.efi)
+Boot0002* rescue partition linux live cd        HD(9,GPT,c11d0e29-906e-42d5-9792-343f59005bfa,0x39801000,0xb8500f)/File(\EFI\debian\shimx64.efi)
+```
+
+例如上面的選項就是有 0 1 2 三個系統，
+windows 是位在分割的 uuid 為 711ad568f-08ce-4477-b802-ea02f514ebb6 的第一分割
+裡的 `/EFI/Microsoft/Boot/bootmgfw.efi` 這個檔案，
+debian 則是同一分割的 `/EFI/debian/shimx64.efi` 。
+在 uefi 中，路徑的符號是用反斜線，可能是繼承 dos 的風格。
+最後一個選項 rescue partition linux live cd，
+則是位在第九個分割，路徑一樣為 `/EFI/debian/shimx64.efi` 。
+
+如果要覈對 uuid，可以從 `/dev/disk/by-partuuid` 看，
+看各 uuid 是符號連結到哪一個實際分割區就知道了。
+或是用 gdisk 看， `gdisk /dev/sda` 之後，
+`x` 進專家模式， `i` 選擇對應的分割，
+顯示出來的 `Partition unique GUID` 就是。
+我還沒去研究為什麼會有二個 guid，總之先這樣。
+
+所以如果我們切了一個新的分割 `/dev/sda9` ，
+格式化成 efi 一定認得的 fat，
+然後把開機引導程式裝到 `/EFI/debian/shimx64.efi` ，
+那就可以用 efibootmgr 來新增該程式到開機選單中：
+
+```sh
+efibootmgr --create --label 'my new uefi boot entry' \
+    --disk /dev/sda --part 9 \
+    --loader '\EFI\debian\shimx64.efi'
+```
+
+### 建立 grub 開機引導程式
+在傳統的 bios (i386-pc) 和 uefi 系統中安裝 grub 流程是不同的。
+bios 中，grub 是寫入到硬碟的開頭，所以下 `grub-install` 時參數是硬碟：
+`grub-install --target i386-pc /dev/sda` 。
+寫入硬碟開頭的是 grub 核心，
+其它函式庫則是存在檔案系統上的 `/boot/grub/i386-pc` 。
+開機後核心會去找到檔案系統中的函式庫，
+我猜應該寫入硬碟核心時，
+也會寫入像函式庫所在檔案系統的 uuid 之類的資料，
+核心才知道要去哪裡找，找 lvm 裡或是物理分割。
+找到檔案系統裡的 `/boot/grub` 後，
+就可以載入 grub.cfg，剩下的東西都寫在裡面了。
+
+uefi 的裝法則是如前所述，
+把核心檔案放到 efi 分割裡即可，
+然後在主機板上的 nvram 裡新增這個開機選項，
+函式庫則放在 `/boot/grub/x86_64-efi` 裡。
+
+所以如果要在某個分割裡另外裝一個 uefi grub，
+就是把函式庫、核心檔案都放進該分割裡。
+當然，核心檔案也可以放在原有的 efi 分割裡，
+但這樣原有的 efi 分割掛掉時，就開不了機了。
+（還有另一個重名的問題。）
+然後在開機選單中，新增該分割中的該檔案為一個開機選項。
+
+在安裝上以 efi 分割的慣例，檔案是放在 `/EFI` 下的目錄，
+例如 debian 就是 `/EFI/debian/` 裡面。
+函式庫以 grub 慣例，則是會放在某個根目錄的 `/boot/grub` ，
+或是直接放在 boot 分區。
+
+例如我先掛載救援分區後移動到該目錄下，
+然後指定 `--efi-directory` 要把核心安裝到目錄這個目錄下，
+放 grub 函式庫的則是用 `--boot-directory` 指定。
+`--no-nvram` 則是要 grub-install
+不要自行在 nvram 中新增安裝的檔案為開機選項。
+不新增的原因是 debian 的 grub-install
+預設新增時會把選項直接命名為 debian，會和原本的系統搞混。
+我之後再用 efibootmgr 自己新增該選項，
+要指定的內容就是該分割所在硬碟、分割序號、選單名稱、
+開機程式在該分割中的路徑。
+
+```sh
+grub-install --target x86_64-efi \
+    --efi-directory . --no-nvram \
+    --boot-directory ./boot
+
+efibootmgr --create --disk /dev/sda --part 9 \
+    --label 'rescue partition linux live cd' \
+    --loader '\EFI\debian\shimx64.efi'
+```
+
+### 安全開機與 grub 設定檔路徑的問題
+比較麻煩是 grub 開機檔案是安裝到 `./EFI/debian` 下，
+這是系統的預設路徑，
+但這明明不是開機到 debian 的開機程式，感覺就怪怪的。
+
+其實 grub 有一個選項 `--bootloader-id` ，
+可以直接指定要用 debian 以外的名字安裝，
+這個選項會修改 `./EFI/debian` 的資料夾名稱，
+和安裝到 nvram 裡開機選單的名稱。
+例如以下指令：
+
+```sh
+grub-install --target x86_64-efi \
+    --efi-directory .  \
+    --boot-directory ./boot \
+    --bootloader-id 'my-new-boot-loader'
+```
+
+會把開機程式安裝到 `./EFI/my-new-boot-loader` 資料夾內，
+然後在開機選單裡新增一個名為 `my-new-boot-loader` 的開機選項。
+感覺好像不錯，就不會和系統預設的名稱 debian 搞混了。
+但有個問題是，efi 開機到 grub 後，
+第一件事是讀取 `./EFI/debian/grub.cfg` 這個檔案。
+如果開了 secure boot 安全開機的話，這個路徑是寫死的，
+也就是就算開機檔案裝到 `./EFI/my-new-boot-loader` ，
+開機後還是會去讀 `./EFI/debian/grub.cfg` ，
+而不是 `./EFI/my-new-boot-loader/grub.cfg` 。
+
+主要的原因我猜是，
+安全開機是把 efi 開機檔案用金鑰簽證，
+而 debian 的安全開機的檔案是簽證好的，
+所以不能再修改內容。
+這個問題之前就有人碰過，
+[他是想裝二個版本的 ubuntu，然後想取不同的名字的問題][ubuntu version]。
+
+[ubuntu version]: https://blog.lxgr.net/posts/2015/04/30/grub-efi-multiboot/
+
+所以要嘛關掉安全開機，應該就可以改目錄名稱，
+不然設定檔和開機檔案在不同目錄很奇怪。
+要嘛就繼續用奇怪的資料夾名稱。
+
+grub-install 還有個選項是 `--removable` ，
+是對應另一種特別的 efi 模式，用來製做可開機的隨身碟或隨身硬碟。
+在這種模式下會直接把檔案裝到 `/EFI/BOOT` 下，
+並新增一個 `/EFI/BOOT/BOOTX64.EFI` 。
+efi 系統如果指定用隨身碟機開，因為隨身碟的檔案不會在 nvram 裡，
+所以選單裡通常不會有。
+efi 系統就會檢查有沒有 `/EFI/BOOT/BOOTX64.EFI` ，
+有的話就直接用他開機。
+但在安全開機的情況下，就算用 removable 裝在 boot，
+還是會去讀 `/EFI/debian/grub.cfg` ，所以一樣沒救。
+
+### grub.cfg 載入順序
+之前提過，grub 設定檔是可以指定位置的，
+通常位在 `/boot/grub/grub.cfg` 。
+`/EFI/debian/grub.cfg` 則是開機後第一個載入的檔案，
+該檔案會去找到 `/boot/grub.cfg` 。
+一般自動產生的 `/EFI/debian/grub.cfg` 看起來大概像這樣：
+
+```sh
+search.fs_uuid 0000-FFFF root 
+set prefix=($root)'/boot/grub'
+configfile $prefix/grub.cfg
+```
+
+`0000-FFFF` 即是 grub config 所在的檔案系統的 uuid。
+
+grub 如果找不到 `/EFI/debian/grub.cfg` 的話，
+則是會進到 grub rescue 的命令介面，
+可以手動輸入 grub 指令來載入 config 或直接開機。
+
+至於 `/boot/grub/grub.cfg` 要怎麼產生，
+可以像原本的 debian 系統一樣，用 grub-mkconfig 產生。
+也可以直接手寫，反正也沒幾個光碟，
+只要主要的幾個 menu entry 有寫就好了。
+或是把寫在 `/etc/grub.d/40_custom` 的內容複製過來。
+
+## 結論
+所以現在，我們可以在現有的 grub 掛載 iso 後開機；
+也可以安裝另一個 grub 在另一個分區，
+然後把另一個 grub 加到 uefi 開機選單。
+唯一麻煩的地方是，針對不同的光碟映象檔，
+要人工判斷他的核心路徑和開機參數，
+之後手寫對應的 grub 開機腳本。
+
+另外如果另外裝了第二個 grub，就要維護二份 grub.cfg；
+雖然也可以直接 `/etc/grub.d/40_custom > ./boot/grub/grub.cfg` 。
+
+#grub
+#linux
+#boot
+#uefi
+#開機碟
+#finnix
+#ubuntu
+#debian

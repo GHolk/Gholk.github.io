@@ -338,3 +338,5 @@ linux-proton-play-harry-potter-magic-awakened.html
 linux-proton-play-epic-twewy.html
 game-opus-starsong-bad-end.html
 horizontal-wisdom-tooth-remove.html
+rss-reader-future-work.html
+linux-boot-local-live-cd.html

@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2021-12-20T09:25:03.395Z</updated>
+  <updated>2022-01-03T11:19:51.628Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,453 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/linux-boot-local-live-cd.html</id>
+<title>製作供 linux 使用的存有 live cd 映象檔的救援分割區</title>
+<published>2022-01-03T11:12:32.834Z</published>
+<updated>2022-01-03T11:19:51.604Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/linux-boot-local-live-cd.html"/>
+<summary type="html">一直覺得 linux 出問題時，需要用隨身碟開機時要插隨身碟很麻煩。
+如果可以把光碟映象檔存到硬碟上，
+然後直接用硬碟裡的光碟開機，就很方便，
+像是在電腦裡多了一個救援磁區。
+後來用 grub 做到了，可以進 grub 開或直接在 uefi 開，
+但啟用 secure boot 的話會必須 hard code 一些路徑。</summary>
+<category term="grub"/>
+<category term="linux"/>
+<category term="boot"/>
+<category term="uefi"/>
+<category term="開機碟"/>
+<category term="finnix"/>
+<category term="ubuntu"/>
+<category term="debian"/>
+<content type="html">&lt;h1 id=&quot;製作供-linux-使用的存有-live-cd-映象檔的救援分割區&quot;&gt;製作供 linux 使用的存有 live cd 映象檔的救援分割區&lt;/h1&gt;
+&lt;p&gt;一直覺得 linux 出問題時，需要用隨身碟開機時要插隨身碟很麻煩。
+如果可以把光碟映象檔存到硬碟上，
+然後直接用硬碟裡的光碟開機，就很方便，
+像是在電腦裡多了一個救援磁區。
+後來用 grub 做到了，可以進 grub 開或直接在 uefi 開，
+但啟用 secure boot 的話會必須 hard code 一些路徑。&lt;/p&gt;
+&lt;h2 id=&quot;lvm-或物理分割區&quot;&gt;lvm 或物理分割區&lt;/h2&gt;
+&lt;p&gt;一開始做時，有想過是要把光碟放在 lvm 裡建的分割裡，
+還是在 lvm 外面切一個物理分割。
+如果要用來開機的光碟映象夠先進的話，
+技術上是二種都能做到。&lt;/p&gt;
+&lt;p&gt;本來覺得如果能直接切一個 lv 比較好處理，還可以任意調整大小。
+但後來想到，如果做在 lvm 裡，那 lvm 故障時就進不去了，
+所以後來還是做在 lvm 外面，另外切一個 5G 的大小來放。&lt;/p&gt;
+&lt;p&gt;流程就是先把 pv 縮小，
+然後用 gdisk 之類的分割工具，把分割區縮小。
+如果工具不支援縮小，那就是把原本的分割刪掉，
+再在同一個位置建一個較小的。
+如果是 gpt 分割表，可能要把新分割的 guid 設的和舊的一樣，
+防止出問題。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;new_size=180G
+pvresize --setphysicalvolumesize $new_size /dev/sda1
+gdisk /dev/sda
+partprobe /dev/sda
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;我對換算單位一直很有障礙，會搞不清楚什麼時候用 1024 什麼時候用 1000。
+因為如果搞錯，把物理分割縮得比 pv 實際佔用還小的話，
+pv 資料會遺失很危險。
+所以我通常會把 pv 縮多一點，實際分割縮少一點，
+留個 1G 的空間，最後再用 pvresize 不帶參數的方式，
+自動擴展回符合實際大小。&lt;/p&gt;
+&lt;p&gt;存放光碟映象檔的分割，我是格式化成 fat，
+用越簡單的格式越好。
+如果想迴避 fat 的 4G 檔案大小上限，用其它也可以，
+但 grub 就要另外載入模組。
+然後就可以把映象檔丟進去了。&lt;/p&gt;
+&lt;h2 id=&quot;開機參數&quot;&gt;開機參數&lt;/h2&gt;
+&lt;p&gt;實際上能不能用映象檔開機成功，
+主要取決於該映象檔中的 initramfs，
+能不能找到映象檔並掛載起來，繼續開機流程。&lt;/p&gt;
+&lt;p&gt;在 linux 開機流程中，會先載入 kernel 和 initramfs，
+kernel 就是作業系統核心，而 initramfs 則是一個檔案系統，
+包含 shell、各種驅動程式，二個合起來就是一個精簡的作業系統了。
+以下稱這個精簡作業系統為 initramfs。&lt;/p&gt;
+&lt;p&gt;進入這個精簡的系統後，會解析開機時傳入的參數，執行對應的行為。
+像是以 debian 進入 initramfs 後，
+會依序執行 initramfs 中的幾個腳本，
+包含會掃描硬碟中的 lvm，並掛載到對應位置。
+然後我的 grub 傳的開機參數是 &lt;code&gt;root=/dev/mapper/mylvm-debian ro&lt;/code&gt; ，
+所以 initramfs 就會找到 mylvm 這個 vg 中的 debian lv，
+並把他當作 root 來開機到實際的作業系統。
+至於 ro 應該是指定一開始先掛載為唯讀 read only 的意思，
+那是預設就有的，所以我也不確定意思。&lt;/p&gt;
+&lt;p&gt;麻煩的地方是，每個發行版的開機參數不盡相同，
+尤其從光碟開機又要處理更多東西，
+像是要解析光碟的檔案系統 iso9660 (cdfs) 。
+還要考慮現代人喜歡把光碟以檔案儲存在分割區，
+而不是真的光碟的情況或真的開機碟的狀況。&lt;/p&gt;
+&lt;h3 id=&quot;ubuntu-光碟開機參數&quot;&gt;ubuntu 光碟開機參數&lt;/h3&gt;
+&lt;p&gt;以 ubuntu 來說，會認 &lt;code&gt;iso-scan/filename=/myiso/ubuntu.iso&lt;/code&gt; 這個參數。
+進 initramfs 後，ubuntu 光碟會依序把能找到的每個塊裝置，
+像光碟、硬碟、隨身碟都掛載起來，
+檢查該塊裝置中的 &lt;code&gt;/myiso/ubuntu.iso&lt;/code&gt; 這個檔案，
+是不是 ubuntu 光碟映像檔。
+如果是，就把他掛載起來，然後用光碟內容開機。&lt;/p&gt;
+&lt;p&gt;當然這是把映象檔存成檔案的狀況；
+如果 ubuntu 進 initramfs 後，
+就找到有某個塊裝置看起就是 ubuntu 光碟或開機隨身碟，
+就會直接用他開機了。&lt;/p&gt;
+&lt;p&gt;ubuntu live-cd 的開機參數，我一直找不到文件，
+&lt;a href=&quot;https://askubuntu.com/q/644400/763777&quot;&gt;一則 stackexchange 的問答也是沒有文件&lt;/a&gt; ，
+只能讀原始碼。
+&lt;a href=&quot;https://help.ubuntu.com/community/Grub2/ISOBoot/Examples#Ubuntu_ISOs&quot;&gt;ubuntu wiki 上倒是有簡單提到 iso-scan/filename 這個參數可以動&lt;/a&gt; 。&lt;/p&gt;
+&lt;h3 id=&quot;finnix-開機參數&quot;&gt;finnix 開機參數&lt;/h3&gt;
+&lt;p&gt;而我用的另一款，專門用來當救援軟體的輕巧 linux finnix，
+則是認 &lt;code&gt;findiso&lt;/code&gt; 這個參數，
+用法也是和 ubuntu 的 &lt;code&gt;iso-scan/filename&lt;/code&gt; 一樣，
+寫相對於該塊裝置內檔案系統的路徑。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/finnix/finnix-docs/blob/8c0bfa2/kernel-command-line.md&quot;&gt;finnix 還有一些神奇的開機參數&lt;/a&gt;，
+但因為 finnix 是基於 debian，
+&lt;a href=&quot;https://manpages.debian.org/bullseye/live-boot-doc/live-boot.7.en.html&quot;&gt;多數來自 debian 的參數也能動&lt;/a&gt; 。
+像 &lt;code&gt;toram&lt;/code&gt; 參數會把整個系統載入到 ram disk 裡，
+所以開機完後就不用磁碟 io，甚至可以把硬碟拔掉。&lt;/p&gt;
+&lt;h2 id=&quot;從-grub2-中開機&quot;&gt;從 grub2 中開機&lt;/h2&gt;
+&lt;p&gt;前面只提有哪些開機參數，現在要實際介紹開機參數要放在哪裡。
+debian 預設是用 grub2 開機，
+前面說過，linux 開機就是先載入 kernel 和 initramfs，
+進入二者建立的小系統，再在小系統中找到實際的 root 分割後開機進去。
+在 grub2 開機中，要做的事就是指定 kernel 和 initramfs 的檔案，
+還有開機參數。&lt;/p&gt;
+&lt;p&gt;在開機 grub 選單中，可以按 c 進入指令模式，
+可以用來測試指令。
+或直接把指令寫在 &lt;code&gt;/boot/grub/grub.cfg&lt;/code&gt; 也可以，
+但 grub.cfg 只是用來測試的，
+執行 &lt;code&gt;update-grub&lt;/code&gt; 後就會產生新的 grub.cfg 把舊的蓋掉。&lt;/p&gt;
+&lt;h3 id=&quot;分割區&quot;&gt;分割區&lt;/h3&gt;
+&lt;p&gt;用 ls 可以看到目前有哪些裝置，
+在 grub2 中會以 &lt;code&gt;(hd0,1)&lt;/code&gt; 的方式，
+表示第一顆硬碟的第 1 個分割。
+用路徑斜線則可以表示分割上檔案系統的檔案 &lt;code&gt;(hd0,1)/myfile.txt&lt;/code&gt; 。
+例如 &lt;code&gt;cat (hd0,1)/myfile.txt&lt;/code&gt; ，就可以輸出該檔案的內容。
+lvm 也類似，可以用 &lt;code&gt;(lvm/myvg-mylv)&lt;/code&gt; 的方式表示某個 lv。&lt;/p&gt;
+&lt;p&gt;但要一直把括號和裝置名稱很麻煩，
+可以用 &lt;code&gt;set root=(hd0,1)&lt;/code&gt; 來指定一個 root，
+之後可以直接寫 &lt;code&gt;cat /myfile.txt&lt;/code&gt; 就好。
+如果要用 uuid 或 label 的方式指定，
+則可以用 search 這個指令。
+例如把 uuid 為 &lt;code&gt;711ad568f-08ce-4477-b802-ea02f514ebb6&lt;/code&gt; 
+的檔案系統設為 root： &lt;code&gt;search --fs-uuid --set=root 711ad568f-08ce-4477-b802-ea02f514ebb6&lt;/code&gt;
+檔案系統的 uuid 可以用 blkid 看。
+而 &lt;code&gt;search --label&lt;/code&gt; 則是用 label 來搜尋。&lt;/p&gt;
+&lt;h3 id=&quot;載入-kernel-與-initramfs&quot;&gt;載入 kernel 與 initramfs&lt;/h3&gt;
+&lt;p&gt;我們首先要找出 kernel 和 initramfs 所在的檔案系統，
+在 debian 中 kernel 的檔案是 &lt;code&gt;/boot/vmlinuz-*&lt;/code&gt; ，
+而 initramfs 則是 &lt;code&gt;/boot/initrd.img-*&lt;/code&gt; 。
+在 grub 裡用 linux 這個指令載入 linux kernel 檔案，
+同時一併傳入開機參數。
+再用 initrd 載入 initramfs 檔案。
+載入會停頓一下，之後再用 boot 指令就可以用載入的 kernel initramfs 開機了。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-grub&quot;&gt;search --fs-uuid --set=root 711ad568f-08ce-4477-b802-ea02f514ebb6
+linux /boot/vmlinuz-4.19.0-17-amd64 root=/dev/mapper/myvg-mylv ro
+initrd initrd.img-4.19.0-17-amd64
+boot
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;可以把以上的指令寫成一個 grub 中可選取的選項，
+用 menuentry 這個關鍵字。
+這樣在 grub 選單中就會出現 &lt;em&gt;my custom boot option&lt;/em&gt; 這個選項，
+選取後就會執行其中的腳本。
+另外在 menuentry 中，結尾可以不用寫 boot 這個指令，
+預設會自動 boot。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-grub&quot;&gt;menuentry &quot;my custom boot option&quot; {
+    search --fs-uuid --set=root 711ad568f-08ce-4477-b802-ea02f514ebb6
+    linux /boot/vmlinuz-4.19.0-17-amd64 root=/dev/mapper/myvg-mylv ro
+    initrd initrd.img-4.19.0-17-amd64
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;詳細的 grub 指令，可以在 &lt;a href=&quot;https://www.gnu.org/software/grub/manual/grub/html_node/index.html&quot;&gt;grub 的手冊&lt;/a&gt; 看。&lt;/p&gt;
+&lt;h3 id=&quot;修改自動產生的-grub.cfg&quot;&gt;修改自動產生的 grub.cfg&lt;/h3&gt;
+&lt;p&gt;至今我們都是直接修改 &lt;code&gt;/boot/grub/grub.cfg&lt;/code&gt; ，
+但在 debian 中，grub.cfg 是由 update-grub 或 grub-mkconfig 產生的，
+我們的修改會被覆蓋掉。
+實際上 update-grub 產生時，
+是執行 &lt;code&gt;/etc/grub.d&lt;/code&gt; 底下的腳本，來產生 grub.cfg。
+如果所以修改 grub.cfg 的正式流程，就是修改 grub.d 底下的腳本。&lt;/p&gt;
+&lt;p&gt;依 debian grub 的慣例，自訂的腳本要用 40 以上開頭，
+或直接加到 &lt;code&gt;40_custom&lt;/code&gt; 裡。
+&lt;code&gt;40_custom&lt;/code&gt; 是用 exec tail 的做法，
+讓執行該腳本時會直接輸出 tail 後面的內容。
+像我的開頭是長這樣：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;#!/bin/sh
+exec tail -n +3 $0
+# This file provides an easy way to add custom menu entries.  Simply type the
+# menu entries you want to add after this comment.  Be careful not to change
+# the &apos;exec tail&apos; line above.
+
+menuentry &apos;[system] shutdown&apos; {
+        halt
+}
+
+menuentry &apos;[system] reboot&apos; {
+        reboot
+}
+
+menuentry &apos;[system] exit grub&apos; {
+        exit
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;就是加入重開機、關機、離開 grub 用其它選項開機的三個選項。
+前面說的掛載光碟、開機的 grub 腳本，
+就可以直接放在這個檔案裡。&lt;/p&gt;
+&lt;h2 id=&quot;從硬碟中的光碟映象檔開機&quot;&gt;從硬碟中的光碟映象檔開機&lt;/h2&gt;
+&lt;p&gt;但如果要用沒燒成光碟的映象檔開機，
+就得先把映象檔當成一個塊裝置讀取、掛載起來，
+再找到其中的 kernel 和 vmlinuz。
+在 grub 中可以用 loopback 指令把檔案視為塊裝置，
+之後就能用 ls 之類的存取內容了。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-grub&quot;&gt;loopback loop0 (hd0,1)/iso/ubuntu.iso
+ls (loop0)/
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;一般我會先在 linux 中把映象檔掛載起來，
+找找看他把 kernel 和 initramfs 放在哪個路徑，
+之後就和一般 linux 開機流程一樣載入就好了。
+grub 中只要指定好檔案，就可以開機進 initramfs，
+但 initramfs 找不找得到完整系統就不干 grub 的事了。
+要讓 initramfs 找到系統，得由開機參數指定。&lt;/p&gt;
+&lt;p&gt;我通常會先把映象檔掛載起來，
+檢查 &lt;code&gt;/boot/grub/grub.cfg&lt;/code&gt; 或 &lt;code&gt;/isolinux/*.cfg&lt;/code&gt; ，
+看他的開機參數怎麼寫，多數就直接照抄。
+再去找他的文件，看要從映象檔中開機要加哪些參數。&lt;/p&gt;
+&lt;h3 id=&quot;ubuntu-grub-選單&quot;&gt;ubuntu grub 選單&lt;/h3&gt;
+&lt;p&gt;ubuntu 光碟的 kernel 和 initramfs 是在 &lt;code&gt;/casper&lt;/code&gt; 下，
+我的 ubuntu 的 grub 腳本就長這樣：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-grub&quot;&gt;menuentry &apos;ubuntu 20.04 live cd&apos; {
+        # loopback module does not like tpm
+        # https://askubuntu.com/a/1244886/763777
+        rmmod tpm
+
+        echo mounting loop
+        search --set=root --label MY-LIVE
+        iso_path=/ubuntu-20.04.1-desktop-amd64.iso
+        loopback loop $iso_path
+        set root=(loop)
+
+        echo loading kernel
+        linux /casper/vmlinuz file=/cdrom/preseed/ubuntu.seed maybe-ubiquity iso-scan/filename=$iso_path splash ---
+
+        echo loading initramfs
+        initrd /casper/initrd
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;其中有 rmmod tpm 是把 grub 中載入的 tpm 模組移除。
+因為 debian 的 tpm 模組有 bug，
+如果不移除，用 loopback 指令會卡住。&lt;/p&gt;
+&lt;h3 id=&quot;finnix-grub-選單&quot;&gt;finnix grub 選單&lt;/h3&gt;
+&lt;p&gt;finnix 的則是在 &lt;code&gt;/live&lt;/code&gt; 。
+finnix 因為有幾種不同的開機模式，
+我是把掛載的部份抽出來寫成函數，
+在每個選單開頭呼叫即可。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-grub&quot;&gt;function finnix_init {
+        search --label --set=root MY-LIVE
+        # loopback module does not like tpm
+        # https://askubuntu.com/a/1244886/763777
+        rmmod tpm
+        set iso_path=/finnix-123.iso
+        loopback loop $iso_path
+        set root=(loop)
+}
+menuentry &quot;finnix 123 Live system&quot; {
+        finnix_init
+        linux   /live/vmlinuz-5.10.0-8-amd64 boot=live quiet findiso=${iso_path}
+        initrd  /live/initrd.img-5.10.0-8-amd64
+}
+menuentry &quot;finnix 123 Live system (fail-safe mode)&quot; {
+        finnix_init
+        linux   /live/vmlinuz-5.10.0-8-amd64 boot=live components memtest noapic noapm nodma nomce nolapic nomodeset nosmp nosplash vga=788 findiso=$iso_path
+        initrd  /live/initrd.img-5.10.0-8-amd64
+}
+menuentry &quot;finnix 123 Live system (boot system into ram)&quot; {
+        finnix_init
+        linux /live/vmlinuz-5.10.0-8-amd64 boot=live quiet findiso=${iso_path} toram
+        initrd /live/initrd.img-5.10.0-8-amd64
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;映象檔的路徑，我是都直接放根目錄，
+反正目前映象檔才幾個而已。&lt;/p&gt;
+&lt;h3 id=&quot;非光碟形式發行版&quot;&gt;非光碟形式發行版&lt;/h3&gt;
+&lt;p&gt;印像中某些發行版，像 antix，
+可以把整個檔案系統打包成一個 squashfs，
+然後用來開機或移動就很方便。
+要讀寫的話，就用 overlayfs 掛載一個檔案模擬的塊裝置做成的檔案系統，
+這種功能叫做 persistent，讓 live cd 也可以有記憶，
+而不會每次關機後修改都消失。&lt;/p&gt;
+&lt;p&gt;有一類 linux 就是主打讓使用者安裝在隨身碟裡，
+像 puppy slax 都有類似的功能，antix 也可以。
+就會用到這種功能。
+但我是不太常碰，因為不太有帶著隨身碟開機別的電腦的場景。&lt;/p&gt;
+&lt;h2 id=&quot;安裝第二個備援用的-grub&quot;&gt;安裝第二個備援用的 grub&lt;/h2&gt;
+&lt;p&gt;上面我們的作法是，用原系統原有的 grub，開其它的系統（光碟）。
+但如果原系統的 grub 一起死了呢？
+像我的系統連 grub 是一起放在 lvm 裡，
+所以 lvm 出問題就是一起下去。
+所以要保險一點，就是把切出來的救援用分割裡，
+也安裝一個可獨立運作的 grub。&lt;/p&gt;
+&lt;p&gt;這裡就要牽扯到如何開機到 grub 的問題了，
+在 uefi 之前的 bios 開機，是以硬碟為單位開機的，
+開機就是讀取硬碟開頭的資料，
+所以一顆硬碟是沒辦法裝二個 grub 的。
+（事實上可以在 grub rescue 裡，載入另一個位置的 grub 主程式，
+但這裡先談可以顯示在 &lt;em&gt;開機選單&lt;/em&gt; 上的選項。）
+這也是為什麼 grub 會有開機 windows 的能力的原因，
+不然只有一顆硬碟的人，裝了 linux 就不能進 windows 了。&lt;/p&gt;
+&lt;p&gt;到 uefi 中就可以了。
+uefi 的開機選單是存在主機板上的，叫 NVRAM 儲存空間，
+在 linux 上可以由 &lt;code&gt;/sys/firmware/efi&lt;/code&gt; 存取。
+除了開機選單，也會存一些開機過程的 log、安全開機的金鑰之類的。
+如果要修改開機選單，可以用 &lt;code&gt;efibootmgr&lt;/code&gt; 這支程式。&lt;/p&gt;
+&lt;h3 id=&quot;使用-uefi-開機&quot;&gt;使用 uefi 開機&lt;/h3&gt;
+&lt;p&gt;uefi 所謂的開機，是去執行硬碟中某個分割區的檔案，
+例如 windows 的開機引導程式，或 linux 常用的 grub。
+每個選項會有該分割區的序號和 uuid，
+和開機程式在該分割區內的路徑。&lt;/p&gt;
+&lt;p&gt;可以用 &lt;code&gt;efibootmgr -v&lt;/code&gt; 列出目前主機板上存的開機程式：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;~ # efibootmgr -v
+BootCurrent: 0001
+Timeout: 0 seconds
+BootOrder: 0001,0000,0002
+Boot0000* Windows Boot Manager  HD(1,GPT,711ad568f-08ce-4477-b802-ea02f514ebb6,0x800,0x82000)/File(\EFI\Microsoft\Boot\bootmgfw.efi)WINDOWS.........
+Boot0001* debian        HD(1,GPT,711ad568f-08ce-4477-b802-ea02f514ebb6,0x800,0x82000)/File(\EFI\debian\shimx64.efi)
+Boot0002* rescue partition linux live cd        HD(9,GPT,c11d0e29-906e-42d5-9792-343f59005bfa,0x39801000,0xb8500f)/File(\EFI\debian\shimx64.efi)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;例如上面的選項就是有 0 1 2 三個系統，
+windows 是位在分割的 uuid 為 711ad568f-08ce-4477-b802-ea02f514ebb6 的第一分割
+裡的 &lt;code&gt;/EFI/Microsoft/Boot/bootmgfw.efi&lt;/code&gt; 這個檔案，
+debian 則是同一分割的 &lt;code&gt;/EFI/debian/shimx64.efi&lt;/code&gt; 。
+在 uefi 中，路徑的符號是用反斜線，可能是繼承 dos 的風格。
+最後一個選項 rescue partition linux live cd，
+則是位在第九個分割，路徑一樣為 &lt;code&gt;/EFI/debian/shimx64.efi&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;如果要覈對 uuid，可以從 &lt;code&gt;/dev/disk/by-partuuid&lt;/code&gt; 看，
+看各 uuid 是符號連結到哪一個實際分割區就知道了。
+或是用 gdisk 看， &lt;code&gt;gdisk /dev/sda&lt;/code&gt; 之後，
+&lt;code&gt;x&lt;/code&gt; 進專家模式， &lt;code&gt;i&lt;/code&gt; 選擇對應的分割，
+顯示出來的 &lt;code&gt;Partition unique GUID&lt;/code&gt; 就是。
+我還沒去研究為什麼會有二個 guid，總之先這樣。&lt;/p&gt;
+&lt;p&gt;所以如果我們切了一個新的分割 &lt;code&gt;/dev/sda9&lt;/code&gt; ，
+格式化成 efi 一定認得的 fat，
+然後把開機引導程式裝到 &lt;code&gt;/EFI/debian/shimx64.efi&lt;/code&gt; ，
+那就可以用 efibootmgr 來新增該程式到開機選單中：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;efibootmgr --create --label &apos;my new uefi boot entry&apos; \
+    --disk /dev/sda --part 9 \
+    --loader &apos;\EFI\debian\shimx64.efi&apos;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;建立-grub-開機引導程式&quot;&gt;建立 grub 開機引導程式&lt;/h3&gt;
+&lt;p&gt;在傳統的 bios (i386-pc) 和 uefi 系統中安裝 grub 流程是不同的。
+bios 中，grub 是寫入到硬碟的開頭，所以下 &lt;code&gt;grub-install&lt;/code&gt; 時參數是硬碟：
+&lt;code&gt;grub-install --target i386-pc /dev/sda&lt;/code&gt; 。
+寫入硬碟開頭的是 grub 核心，
+其它函式庫則是存在檔案系統上的 &lt;code&gt;/boot/grub/i386-pc&lt;/code&gt; 。
+開機後核心會去找到檔案系統中的函式庫，
+我猜應該寫入硬碟核心時，
+也會寫入像函式庫所在檔案系統的 uuid 之類的資料，
+核心才知道要去哪裡找，找 lvm 裡或是物理分割。
+找到檔案系統裡的 &lt;code&gt;/boot/grub&lt;/code&gt; 後，
+就可以載入 grub.cfg，剩下的東西都寫在裡面了。&lt;/p&gt;
+&lt;p&gt;uefi 的裝法則是如前所述，
+把核心檔案放到 efi 分割裡即可，
+然後在主機板上的 nvram 裡新增這個開機選項，
+函式庫則放在 &lt;code&gt;/boot/grub/x86_64-efi&lt;/code&gt; 裡。&lt;/p&gt;
+&lt;p&gt;所以如果要在某個分割裡另外裝一個 uefi grub，
+就是把函式庫、核心檔案都放進該分割裡。
+當然，核心檔案也可以放在原有的 efi 分割裡，
+但這樣原有的 efi 分割掛掉時，就開不了機了。
+（還有另一個重名的問題。）
+然後在開機選單中，新增該分割中的該檔案為一個開機選項。&lt;/p&gt;
+&lt;p&gt;在安裝上以 efi 分割的慣例，檔案是放在 &lt;code&gt;/EFI&lt;/code&gt; 下的目錄，
+例如 debian 就是 &lt;code&gt;/EFI/debian/&lt;/code&gt; 裡面。
+函式庫以 grub 慣例，則是會放在某個根目錄的 &lt;code&gt;/boot/grub&lt;/code&gt; ，
+或是直接放在 boot 分區。&lt;/p&gt;
+&lt;p&gt;例如我先掛載救援分區後移動到該目錄下，
+然後指定 &lt;code&gt;--efi-directory&lt;/code&gt; 要把核心安裝到目錄這個目錄下，
+放 grub 函式庫的則是用 &lt;code&gt;--boot-directory&lt;/code&gt; 指定。
+&lt;code&gt;--no-nvram&lt;/code&gt; 則是要 grub-install
+不要自行在 nvram 中新增安裝的檔案為開機選項。
+不新增的原因是 debian 的 grub-install
+預設新增時會把選項直接命名為 debian，會和原本的系統搞混。
+我之後再用 efibootmgr 自己新增該選項，
+要指定的內容就是該分割所在硬碟、分割序號、選單名稱、
+開機程式在該分割中的路徑。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;grub-install --target x86_64-efi \
+    --efi-directory . --no-nvram \
+    --boot-directory ./boot
+
+efibootmgr --create --disk /dev/sda --part 9 \
+    --label &apos;rescue partition linux live cd&apos; \
+    --loader &apos;\EFI\debian\shimx64.efi&apos;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;安全開機與-grub-設定檔路徑的問題&quot;&gt;安全開機與 grub 設定檔路徑的問題&lt;/h3&gt;
+&lt;p&gt;比較麻煩是 grub 開機檔案是安裝到 &lt;code&gt;./EFI/debian&lt;/code&gt; 下，
+這是系統的預設路徑，
+但這明明不是開機到 debian 的開機程式，感覺就怪怪的。&lt;/p&gt;
+&lt;p&gt;其實 grub 有一個選項 &lt;code&gt;--bootloader-id&lt;/code&gt; ，
+可以直接指定要用 debian 以外的名字安裝，
+這個選項會修改 &lt;code&gt;./EFI/debian&lt;/code&gt; 的資料夾名稱，
+和安裝到 nvram 裡開機選單的名稱。
+例如以下指令：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;grub-install --target x86_64-efi \
+    --efi-directory .  \
+    --boot-directory ./boot \
+    --bootloader-id &apos;my-new-boot-loader&apos;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;會把開機程式安裝到 &lt;code&gt;./EFI/my-new-boot-loader&lt;/code&gt; 資料夾內，
+然後在開機選單裡新增一個名為 &lt;code&gt;my-new-boot-loader&lt;/code&gt; 的開機選項。
+感覺好像不錯，就不會和系統預設的名稱 debian 搞混了。
+但有個問題是，efi 開機到 grub 後，
+第一件事是讀取 &lt;code&gt;./EFI/debian/grub.cfg&lt;/code&gt; 這個檔案。
+如果開了 secure boot 安全開機的話，這個路徑是寫死的，
+也就是就算開機檔案裝到 &lt;code&gt;./EFI/my-new-boot-loader&lt;/code&gt; ，
+開機後還是會去讀 &lt;code&gt;./EFI/debian/grub.cfg&lt;/code&gt; ，
+而不是 &lt;code&gt;./EFI/my-new-boot-loader/grub.cfg&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;主要的原因我猜是，
+安全開機是把 efi 開機檔案用金鑰簽證，
+而 debian 的安全開機的檔案是簽證好的，
+所以不能再修改內容。
+這個問題之前就有人碰過，
+&lt;a href=&quot;https://blog.lxgr.net/posts/2015/04/30/grub-efi-multiboot/&quot;&gt;他是想裝二個版本的 ubuntu，然後想取不同的名字的問題&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;所以要嘛關掉安全開機，應該就可以改目錄名稱，
+不然設定檔和開機檔案在不同目錄很奇怪。
+要嘛就繼續用奇怪的資料夾名稱。&lt;/p&gt;
+&lt;p&gt;grub-install 還有個選項是 &lt;code&gt;--removable&lt;/code&gt; ，
+是對應另一種特別的 efi 模式，用來製做可開機的隨身碟或隨身硬碟。
+在這種模式下會直接把檔案裝到 &lt;code&gt;/EFI/BOOT&lt;/code&gt; 下，
+並新增一個 &lt;code&gt;/EFI/BOOT/BOOTX64.EFI&lt;/code&gt; 。
+efi 系統如果指定用隨身碟機開，因為隨身碟的檔案不會在 nvram 裡，
+所以選單裡通常不會有。
+efi 系統就會檢查有沒有 &lt;code&gt;/EFI/BOOT/BOOTX64.EFI&lt;/code&gt; ，
+有的話就直接用他開機。
+但在安全開機的情況下，就算用 removable 裝在 boot，
+還是會去讀 &lt;code&gt;/EFI/debian/grub.cfg&lt;/code&gt; ，所以一樣沒救。&lt;/p&gt;
+&lt;h3 id=&quot;grub.cfg-載入順序&quot;&gt;grub.cfg 載入順序&lt;/h3&gt;
+&lt;p&gt;之前提過，grub 設定檔是可以指定位置的，
+通常位在 &lt;code&gt;/boot/grub/grub.cfg&lt;/code&gt; 。
+&lt;code&gt;/EFI/debian/grub.cfg&lt;/code&gt; 則是開機後第一個載入的檔案，
+該檔案會去找到 &lt;code&gt;/boot/grub.cfg&lt;/code&gt; 。
+一般自動產生的 &lt;code&gt;/EFI/debian/grub.cfg&lt;/code&gt; 看起來大概像這樣：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;search.fs_uuid 0000-FFFF root 
+set prefix=($root)&apos;/boot/grub&apos;
+configfile $prefix/grub.cfg
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;0000-FFFF&lt;/code&gt; 即是 grub config 所在的檔案系統的 uuid。&lt;/p&gt;
+&lt;p&gt;grub 如果找不到 &lt;code&gt;/EFI/debian/grub.cfg&lt;/code&gt; 的話，
+則是會進到 grub rescue 的命令介面，
+可以手動輸入 grub 指令來載入 config 或直接開機。&lt;/p&gt;
+&lt;p&gt;至於 &lt;code&gt;/boot/grub/grub.cfg&lt;/code&gt; 要怎麼產生，
+可以像原本的 debian 系統一樣，用 grub-mkconfig 產生。
+也可以直接手寫，反正也沒幾個光碟，
+只要主要的幾個 menu entry 有寫就好了。
+或是把寫在 &lt;code&gt;/etc/grub.d/40_custom&lt;/code&gt; 的內容複製過來。&lt;/p&gt;
+&lt;h2 id=&quot;結論&quot;&gt;結論&lt;/h2&gt;
+&lt;p&gt;所以現在，我們可以在現有的 grub 掛載 iso 後開機；
+也可以安裝另一個 grub 在另一個分區，
+然後把另一個 grub 加到 uefi 開機選單。
+唯一麻煩的地方是，針對不同的光碟映象檔，
+要人工判斷他的核心路徑和開機參數，
+之後手寫對應的 grub 開機腳本。&lt;/p&gt;
+&lt;p&gt;另外如果另外裝了第二個 grub，就要維護二份 grub.cfg；
+雖然也可以直接 &lt;code&gt;/etc/grub.d/40_custom &amp;gt; ./boot/grub/grub.cfg&lt;/code&gt; 。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/contact.html#remove-matrix-and-update-pgp-expire-time</id>
 <title>聯絡我</title>
 <published>2021-07-31T13:13:44.474Z</published>
@@ -1548,103 +1995,7 @@ pime 雖然改用 json 來當表格，
 <category term="debian"/>
 <category term="vpn"/>
 <category term="安裝"/>
-<content type="html">&lt;h1 id=&quot;linux-下連接-l2tp-vpn&quot;&gt;linux 下連接 l2tp vpn&lt;/h1&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.ccns.io/&quot;&gt;CCNS&lt;/a&gt; 在機房架了 l2tp 的 vpn server，
-最近覺得有點需要，就查了一下怎麼在 linux 下連 l2tp vpn。
-發現自己手動設定蠻麻煩的，用 network manager 管理比較簡單，
-&lt;a href=&quot;https://github.com/nm-l2tp/network-manager-l2tp/wiki/Prebuilt-Packages#debian&quot;&gt;但 network manager l2tp 的外掛目前只發行在 debian sid&lt;/a&gt; ，
-又不想手動編譯；google 發現 &lt;a href=&quot;https://thomask.sdf.org/blog/2018/01/16/l2tp-vpn-networkmanager-debian-stretch.html&quot;&gt;有人成功在 stretch 裡
-裝 debian sid 裡舊的版本，是可以運作的&lt;/a&gt; ，
-就試成功了。&lt;/p&gt;
-&lt;p&gt;以前有 ssh 登入權限的時候，會用 ccns 機房的機器當 ssh 跳板上 ptt：
-&lt;code&gt;ssh -J lab.ccns.ncku.edu.tw bbsu@ptt.cc&lt;/code&gt; 。
-後來機房大翻修，一些機器也虛擬化，帳號就被洗掉了，也沒再要。
-有個社員自己會用 l2tp 開 vpn，在機房變得很潮後，
-就把 l2tp server 架到機房去，變 ccns 共用 vpn。
-一開始剛架好時試了，手動設定一直失敗，
-今天心血來潮，又嘗試終於成功連上了。&lt;/p&gt;
-&lt;h2 id=&quot;l2tp-手動設定&quot;&gt;l2tp 手動設定&lt;/h2&gt;
-&lt;p&gt;手動設定就是裝 xl2tpd 寫 config，
-就會多出一個 ppp 網路裝置，
-要自己用 route 把封包導過去。
-如果要加密還要裝 openswan 或其它 swan 系列。
-之前試過手動設定失敗， 今天又試第一次還是失敗。&lt;/p&gt;
-&lt;p&gt;我看過幾篇教學，有 &lt;a href=&quot;https://wiki.archlinux.org/index.php/Openswan_L2TP/IPsec_VPN_client_setup&quot;&gt;arch wiki 的&lt;/a&gt;
-也有 &lt;a href=&quot;https://github.com/hwdsl2/setup-ipsec-vpn/blob/master/docs/clients.md#configure-linux-vpn-clients-using-the-command-line&quot;&gt;github 上別人寫的文件&lt;/a&gt; 。
-後來在 github 上那篇又重試了一遍，
-整理重寫了複製貼上的 config 才成功；
-後面那些手動 route 好像也不是那麼難了，
-&lt;code&gt;echo &amp;quot;c my-vpn&amp;quot; &amp;gt; /var/run/xl2tpd/l2tp-control&lt;/code&gt;
-相當於啟動連上 l2tp 並創建一個 ppp 網路裝置，
-之後的 route 就是把預設路由改成該 ppp。&lt;/p&gt;
-&lt;p&gt;一開始我連 l2tp ipsec openswan 之間是什麼關係都沒弄清楚，
-分不清楚教學到底是在教 l2tp client 還是 l2tp server。
-現在裝好了才發現一直卡住的 ipsec 部份，
-其實是加密部份而已，不是必須的。
-另外就是 ipsec 有個雷點，
-幾篇教學是寫 &lt;code&gt;ipsec auto --add my-l2tp&lt;/code&gt; ，
-但我的版本應該是 &lt;code&gt;ipsec up my-l2tp&lt;/code&gt; ，
-翻了整篇手冊頁想破頭，
-還是不確定 auto 和 add 到底要對應到哪個命令。&lt;/p&gt;
-&lt;h2 id=&quot;network-manager-介面&quot;&gt;network manager 介面&lt;/h2&gt;
-&lt;p&gt;試幾次 xl2tp 都連不上，看到 network manager 有個外掛
-&lt;a href=&quot;https://github.com/nm-l2tp/network-manager-l2tp/wiki/Prebuilt-Packages&quot;&gt;network manager l2tp&lt;/a&gt; 能在圖型介面上
-直接連上 l2tp vpn，就抱著姑且一試的心態試了。
-&lt;a href=&quot;https://github.com/nm-l2tp/network-manager-l2tp/wiki/Prebuilt-Packages#debian&quot;&gt;該外掛有提供預編譯好的套件，但 debian stretch 沒有支援，
-只有目前的 sid 未來的 buster 有。&lt;/a&gt;
-但我也懶得自己編譯，要裝的東西太多了，放棄。&lt;/p&gt;
-&lt;p&gt;試著去下載 ubuntu 預編好的 deb 包，直接用 apt 安裝。
-可以開出圖形介面，但連不上。
-又 google 了一下，
-找到 &lt;a href=&quot;https://thomask.sdf.org/blog/2018/01/16/l2tp-vpn-networkmanager-debian-stretch.html&quot;&gt;一篇部落格文章說可以裝 debian sid 的版本&lt;/a&gt; ，
-在 debian stretch 也能用，但文內的版本是 1.2.8，
-現在 sid 已經更新到 1.2.10，
-試了現在的 1.2.10，和 ubuntu 一樣有介面但不能連。&lt;/p&gt;
-&lt;h2 id=&quot;舊-debian-archieve&quot;&gt;舊 debian archieve&lt;/h2&gt;
-&lt;p&gt;後來直接問部落格作者，看他有沒有留當時的 deb 包。
-他簡介還蠻有趣的，是 linux user 和 &lt;a href=&quot;http://zh.wikipedia.org/wiki/%E7%81%AB%E8%85%BF%E6%97%8F&quot;&gt;火腿族&lt;/a&gt; ，
-目前主要掛在 &lt;a href=&quot;http://zh.wikipedia.org/wiki/mastodon&quot;&gt;mastodon&lt;/a&gt; 上，
-所以我就開了塵封已久的 g0v 的 mastodon 發訊息給他。
-結果他說也沒在用 vpn 了，傳了一個 &lt;a href=&quot;https://snapshot.debian.org/&quot;&gt;debian snapshot&lt;/a&gt; 的網站給我，
-裡面收錄了所有版本的 debian package，不只是每個 debian 版本，
-連同一 debian 版本中每一次更新都有。
-我就從上面抓了 &lt;a href=&quot;https://snapshot.debian.org/package/network-manager-l2tp/1.2.8-2/&quot;&gt;sid 的 1.2.8-2&lt;/a&gt; 下來裝，就能動了。&lt;/p&gt;
-&lt;p&gt;deb 包就是 apt 在操作的最小單位，每個包會記錄相依的其它包，
-在用 dpkg 安裝時就是檢查有滿足就直接安裝，沒滿足就報錯。
-而 apt 不只可以從倉庫安裝，也可以直接安裝本機的 deb 包，
-只要你傳入的名稱明顯是路徑，像是用 &lt;code&gt;./&lt;/code&gt; 開頭。
-而且 apt 還會幫處理相依性問題，但只會從系統的 apt 設定的網路倉庫抓，
-所以如果是載下來在本機要手動安裝的二個相依的 deb 包，就沒辦法自動安裝。&lt;/p&gt;
-&lt;p&gt;以 network-manager-l2tp 和 network-manager-l2tp-gnome 二個包來說，
-可以先裝被 network-manager-l2tp 相依的 network-manager-l2tp-gnome，
-再裝 network-manager-l2tp，
-之後再把 network-manager-l2tp-gnome 標記為自動安裝，
-未來 apt remove 後 network-manager-l2tp-gnome 也會被標成不需要，
-可以自動刪除。
-或是就在安裝時把所有包的檔名都傳入，
-apt 會檢測到其中數個包相依，就會自動處理相依性。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;install_once() {
-    apt install ./network-manager-l2tp_1.2.8-2_amd64.deb \
-                ./network-manager-l2tp-gnome_1.2.8-2_amd64.deb
-}
-install_and_mark() {
-    apt install ./network-manager-l2tp-gnome_1.2.8-2_amd64.deb
-    apt install ./network-manager-l2tp_1.2.8-2_amd64.deb
-    apt-mark auto network-manager-l2tp-gnome
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;l2tp-ipsec-連線設定&quot;&gt;l2tp ipsec 連線設定&lt;/h2&gt;
-&lt;p&gt;網愛社的人的用法是設 l2tp 的帳號密碼，
-ipsec 則是用一個 pre share key，也和密碼差不多。
-其它欄位都留空。（server 網址當然不能留空，
-在 network manager 介面裡，看要打 domain name 或 ip 都可以。）
-詳情可以看 &lt;a href=&quot;https://github.com/hwdsl2/setup-ipsec-vpn/blob/6aa15b8a21e96c497608d4e19de5bb9a35e151b8/docs/clients.md#ubuntu-linux&quot;&gt;一開始提到那篇 github 連接 l2tp 的教學。&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;debian-buster-更新&quot;&gt;debian buster 更新&lt;/h2&gt;
-&lt;p&gt;debian buster 有收錄 network-manager-l2tp-gnome 了，
-安裝後可以直接在 gui 中設定 l2tp client。
-ipsec 的設定一樣照 &lt;a href=&quot;https://github.com/hwdsl2/setup-ipsec-vpn/blob/6aa15b8a21e96c497608d4e19de5bb9a35e151b8/docs/clients.md#ubuntu-linux&quot;&gt;上面那篇 github 教學&lt;/a&gt; ，
-phase 1 algorithm 要設 &lt;code&gt;aes128-sha1-modp2048&lt;/code&gt;，
-phase 2 &lt;code&gt;aes128-sha1&lt;/code&gt; 。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/git-criticism-like-fat.html</id>
 <title>對 git 過於肥大及其它一些批評</title>

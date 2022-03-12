@@ -343,3 +343,4 @@ linux-boot-local-live-cd.html
 courage-mean-in-digimon.html
 movie-blue-gate-crossing.html
 earphone-line-broken.html
+cd-project-gwent-on-gog-steam.html

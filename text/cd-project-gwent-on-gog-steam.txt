@@ -1,0 +1,52 @@
+# 在 linux 上安裝昆特牌 gwent
+真是太諷刺了 gog，雖然有不少 linux 遊戲，
+但本家 cd-project 的遊戲 <abbr title="gwent">昆特牌</abbr> 
+竟然難以在 linux 上由 gog 安裝，
+網上最推薦的安裝法是直接用 steam 和 proton 玩，
+protondb 上的分數也不錯。
+想用 gog 裝的話，gog 的程式在 wine 下跑起來不太正常，
+導致無法成功安裝昆特牌。
+
+實在太多點可以吐嘈了，這大概也反映了 gog 沒有很成功的原因。
+一開始無意間發現昆特牌遊戲原來 2017 年就出了，就打算裝來玩。
+因為是 cd project 的遊戲，就打算順便支持一下慕名以久的 GoG，
+號稱無 DRM 且也對 linux 友好。
+
+結果在 gog 的網站上，這遊戲沒有下載連結，而是連到 gwent 的網站，
+gwent 的網站用 linux 訪問，則會出現請用 windows pc 下載的提示，
+而不會出現下載連結。
+
+我確認了這遊戲在 linux 上的支援，protondb 是白金，
+就決定載下來然後用 proton 開應該就行了。
+於是就改了 user agent，果然就跳出下載連結了。
+結果載下來的是 gog 本機應用程式的安裝檔，
+好，那個時空背景你要推 gog，所以把昆特牌綁 gog 也可以理解，
+何況 gwent 還是免費遊戲。
+但 gog 不是號稱 DRM free 嗎？還這樣綁本機 client 好像不太對。
+
+但 gog 裝好後，開起來超當，
+裝個 gwent 一直卡在 0%，重開好幾次也裝不好。
+在網上爬文，過程都蠻複雜的，就卡了一天。
+隔天搜到一個 youtube 影片，
+直接在資訊欄位叫人安裝 steam 版用 proton 玩就好了。
+
+> ## [How to Install GWENT on Linux (PlayOnLinux, WINE)][just download on steam]
+> !!! JUST DOWNLOAD THE GAME ON STEAM This tutorial is old. !!!
+
+[just download on steam]: https://www.youtube.com/watch?v=KhBFSgS1Jm8
+
+真是太諷刺了 -紹安- gog，
+主打 DRM free 的商店，竟然不能直接安裝遊戲；
+雖然宣傳 linux friendly，商店中也有不少 linux 遊戲可以裝，
+但 gog 本身的 launcher 卻不能在 linux 上順利執行。
+後來在競爭對手 steam 的商店上架的版本，
+反而是可以在 linux 上順利執行的。
+所以說 cd project，你終究還是要 -回到故鄉- 上架 steam 的。
+
+#遊戲
+#steam
+#linux
+#proton
+#gog
+#cd-project
+#巫師

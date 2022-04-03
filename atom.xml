@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2022-03-12T10:41:05.456Z</updated>
+  <updated>2022-04-03T13:44:17.146Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,221 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/email-thunderbird-unable-localhost.html</id>
+<title>thunderbird 91 移除 movemail 功能後無法收本機 email</title>
+<published>2022-04-01T13:22:44.663Z</published>
+<updated>2022-04-03T13:44:17.120Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/email-thunderbird-unable-localhost.html"/>
+<summary type="html">一陣子沒收到 at 或 crontab 的執行結果的 email，
+才發現 thunderbird 不能收本機的信了，
+收件匣裡的 localhost 消失了。
+查了一下，發現這功能叫 movemail，在 91 版被移除了。
+目前想到的解法是用 &lt;code&gt;$HOME/.forward&lt;/code&gt; 把信直接存到
+&lt;code&gt;~/.thunderbird/abcdefgh.default/Mail/Local Folders/Inbox&lt;/code&gt; ，
+再加上每次刪信後都要 &lt;em&gt;壓實重整&lt;/em&gt; 郵件夾，
+暫時是能擋著用。</summary>
+<category term="firefox"/>
+<category term="email"/>
+<category term="funny"/>
+<category term="linux"/>
+<content type="html">&lt;h1 id=&quot;thunderbird-91-移除-movemail-功能後無法收本機-email&quot;&gt;thunderbird 91 移除 movemail 功能後無法收本機 email&lt;/h1&gt;
+&lt;p&gt;一陣子沒收到 at 或 crontab 的執行結果的 email，
+才發現 thunderbird 不能收本機的信了，
+收件匣裡的 localhost 消失了。
+查了一下，發現這功能叫 movemail，在 91 版被移除了。
+目前想到的解法是用 &lt;code&gt;$HOME/.forward&lt;/code&gt; 把信直接存到
+&lt;code&gt;~/.thunderbird/abcdefgh.default/Mail/Local Folders/Inbox&lt;/code&gt; ，
+再加上每次刪信後都要 &lt;em&gt;壓實重整&lt;/em&gt; 郵件夾，
+暫時是能擋著用。&lt;/p&gt;
+&lt;h2 id=&quot;movemail-的消失&quot;&gt;movemail 的消失&lt;/h2&gt;
+&lt;p&gt;linux 上如果裝了 crontab 或 at，
+大機率會裝一個簡單的 mail server，可以是不連網的，
+只在本機的帳號間和讓程式可以寄通知信給使用者。
+像 crontab 這種定時執行的程式，如果執行結果有輸出，
+就會把內容用 mail 寄給對應的使用者。
+或是 sudo 如果有人打錯密碼太多次也會寄信。&lt;/p&gt;
+&lt;p&gt;大概今年一月，把 debian 升到 bullseye，
+仔細回想大概是那之後就沒有收到 at 或 crontab 的信了。
+我也是隔了幾個月才開始注意這件事，
+畢竟剛升上來時就出了一些小問題，還在忙著解。
+真的發現，則是 apt 一直有更新，
+但都沒看到之前寫的 apt 更新通知腳本的信，
+仔細一檢查才發現原本代表本機的帳號不見了。
+想重開一個，結果建立帳號的介面裡也有建立本機信箱的選項了。&lt;/p&gt;
+&lt;p&gt;大概猜到是 thunderbird 更新拿掉功能，
+就去翻 &lt;a href=&quot;https://www.thunderbird.net/en-US/thunderbird/91.0/releasenotes/&quot;&gt;thunderbird 91 release note&lt;/a&gt; ，
+只看到一個好像有點像的功能移除：
+&lt;em&gt;CHANGED Movemail support removed&lt;/em&gt; 。
+&lt;a href=&quot;https://bugzilla.mozilla.org/show_bug.cgi?id=1625741&quot;&gt;找到 bugzilla 上對應的 movemail 討論&lt;/a&gt; ，
+才知道這東西就是用來收本機郵件的功能。&lt;/p&gt;
+&lt;h2 id=&quot;土砲補救辦法&quot;&gt;土砲補救辦法&lt;/h2&gt;
+&lt;p&gt;thunderbird 的郵件格式現在是 mbox 單一檔案，
+加上同名的附檔名為 msf 的檔案來記錄對每篇郵件的操作。
+所以事實上 unix 裡寄給使用者信，
+位在 &lt;code&gt;/var/mai/$USER&lt;/code&gt; 的 mbox 檔是可以直接給 thunderbird 讀的。
+只要把 mbox 檔放進 &lt;code&gt;~/.thunderbird/*.default/Mail/Local Folders/&lt;/code&gt; 裡，
+thunderbird 就會顯示該 mbox 為郵件資料夾。&lt;/p&gt;
+&lt;p&gt;這裡有二個作法，一是直接 ln 把 &lt;code&gt;/var/mail&lt;/code&gt; 裡的信箱，
+設成 thunderbird 裡的連結，或是反過來。
+另一個是用 unix 下慣用的 &lt;code&gt;$HOME/.forward&lt;/code&gt; ，
+可以讓有來信時，自動存到某一檔案、
+轉寄給其它 email 地址、用管道傳送給另一支程式。&lt;/p&gt;
+&lt;p&gt;只要把 forward 內容一行用 &lt;code&gt;/&lt;/code&gt; 開頭，
+即會視為路徑，並把信件存到該檔案中。
+像直接指定 &lt;code&gt;/home/abcdefgh/.thunderbird/ijklmnop.default/Mail/Local Folders&lt;/code&gt; 
+即可。&lt;/p&gt;
+&lt;p&gt;但這樣有一個問題，如果 mbox 在 thunderbird 外有修改過，
+thunderbird 建立的 msf 內容就會無法和 mbox 對應，
+thunderbird 就會依據現有的 mbox 建立 msf 檔案。
+例如在 thunderbird 中刪除郵件時，
+其實不會真的把郵件從 mbox 裡刪除，只會在 msf 中標記該郵件為已刪除，
+所以 mbox 裡還是找得到那篇郵件。
+當 thunderbird 重建 msf 時，
+之前移除或移動到其它資料夾的郵件就又會出現。&lt;/p&gt;
+&lt;p&gt;要防止此一情況，就得讓 thunderbird 真正把郵件從 mbox 裡刪除。
+thunderbird 在側邊欄的資料夾中按右鍵，
+會有個壓實重整的選項，可用來重整 mbox 檔案，
+把在 msf 中記錄為刪除的郵件從 mbox 中真正刪除。
+所以只要在刪除郵件後，使用壓實重整的功能，將郵件從 mbox 中刪除，
+未來重建 msf 時就不會有已刪除的郵件再出現的問題了。&lt;/p&gt;
+&lt;h3 id=&quot;solution-in-shell-script&quot;&gt;solution in shell script&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;echo $HOME/.thunderbird/*.default/Mail/&apos;Local Folders&apos;/Inbox &amp;gt; $HOME/.forward
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Moreover, everytime you delete/move mail in &lt;code&gt;Local Folders/Inbox&lt;/code&gt;,
+click &lt;code&gt;Compact&lt;/code&gt; in the context menu on the Inbox.&lt;/p&gt;
+&lt;h2 id=&quot;移除-movemail-的討論&quot;&gt;移除 movemail 的討論&lt;/h2&gt;
+&lt;p&gt;功能移除的起因也很有趣，bugzilla 上有人發現某一版本，
+建立 movemail 帳號的選項被移除了。（但 movemail 本身沒有被移除。）
+開發者發現這個 bug 出現好幾個月了，但完全沒有人來抱怨，
+於是他們認定這功能沒人用了，所以決定移除。&lt;/p&gt;
+&lt;p&gt;實際上，多數使用者如 debian user 是使用穩定版本，
+不會看到開發中的 movemail 壞一半的版本。
+所以他們經歷的，就是上一版 78 裡 movemail 是好的，
+然後下一版 91 就被移除了。&lt;/p&gt;
+&lt;p&gt;當然，從開發者的角度和實際使用人數來看，
+linux 使用者約 180000，佔了全體 thunderbird 使用者的 1%，
+而其中只有 2101 個使用了 movemail 功能，
+也只佔了 linux 使用者的 1%。
+當然，這裡可能要考慮有多少人沒開 telemetry，
+所以沒有出現在統計數字裡。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://blog.gslin.org/archives/2021/09/01/10300/&quot;&gt;gslin 之前有轉貼 hacker news 上一篇文章&lt;/a&gt; ，
+大概就是進階使用者都會把隱私加強和防追蹤功能打開，
+所以科技類網站就會有一大部份使用者的行為用 google analysis 抓不到，
+讓 ga 的分析失真。&lt;/p&gt;
+&lt;p&gt;套到 telemetry 上也是類似的效果。
+現在很多軟體都會統計使用者使用各功能的次數，
+然後回報給開發者，這樣的監控統計功能就叫 telemetry。
+但自由軟體使用者，有些不喜歡自己的行為被回報，
+所以軟體中多半也會提供關閉 telemetry 的功能。&lt;/p&gt;
+&lt;p&gt;總之，這功能被拔掉後，就引來了一堆憤怒的使用者到 bugzilla 留言，
+在移除了 movemail 的穩定版在六個月後釋出後。
+&lt;a href=&quot;https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=993526&quot;&gt;同時也有幾個人在 debian bug 上抱怨&lt;/a&gt; ，
+雖然從 thunderbird 開發者提出的 telemetry 資料來看，
+其實人沒有很多。&lt;/p&gt;
+&lt;h2 id=&quot;沒事整天砍功能的-ui-設計師&quot;&gt;沒事整天砍功能的 ui 設計師&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://blog.gslin.org/archives/2022/02/26/10567/i-have-no-capslock-and-i-must-scream/&quot;&gt;之前 gslin 分享了一篇諷刺 ui 設計師根據 telemetry 統計數據砍功能的文章&lt;/a&gt;：
+&lt;a href=&quot;https://memex.marginalia.nu/log/48-i-have-no-capslock.gmi&quot;&gt;I have no capslock and I must scream&lt;/a&gt; 。
+大意就是說 ui 設計師從 telemetry 的報表，
+觀察哪些功能是很少使用的，由此可以精簡軟體的功能。&lt;/p&gt;
+&lt;p&gt;最近 mozilla 也砍了 firefox 一個修改編碼的功能。
+以前可以在 &lt;em&gt;選單列&lt;/em&gt; &amp;gt; &lt;em&gt;檢視&lt;/em&gt; &amp;gt; &lt;em&gt;編碼&lt;/em&gt; 來選擇網頁的編碼，
+現在則是該功能從可選擇的編碼選單，
+簡化成單一個 &lt;em&gt;修複文字編碼&lt;/em&gt; 按鈕。&lt;/p&gt;
+&lt;p&gt;在 bugzilla 上這項 issue 上，
+mozilla 的設計師是給出這功能很少使用的理由，
+而且會有安全疑慮（？）
+可能某些場合會造成腳本執行不正確之類的？&lt;/p&gt;
+&lt;p&gt;很多使用者攻擊，這些設計師整天閒著沒事，
+就四處砍現有功能，宣稱可以讓界面更人性化，
+也為自己創造履歷與 KPI，最後就留下沒人用的軟體拍拍屁股走人。
+把功能和界面改的亂七八糟，然後再問為什麼沒人用，
+又把原因推給舊界面不佳。&lt;/p&gt;
+&lt;h2 id=&quot;瀏覽器應該要容忍編碼不正確嗎&quot;&gt;瀏覽器應該要容忍編碼不正確嗎&lt;/h2&gt;
+&lt;p&gt;在 issue 上也是出現了不少反對者，但 mozilla 還是幹了。
+所以，現在網頁的編碼壞掉，就沒機會自己修改。
+mozilla 給出的說法是，這是網頁開發者的責任，
+編碼設定錯誤的網頁本來就不該正常顯示。
+而且瀏覽器應避免 &lt;a href=&quot;http://www.teagle.top/index.php/archives/192/&quot;&gt;MIME 類型嗅探&lt;/a&gt; ，
+而應該使用 http header 給出的類型，以防止意外執行到惡意腳本。
+這樣來說，修改文字的編碼好像也不一定是 &lt;em&gt;正常使用&lt;/em&gt; 時會用到的功能，
+所以沒有不會很奇怪，chromium 也是已經拔掉編碼修複的功能。&lt;/p&gt;
+&lt;p&gt;從一個角度來看，這些功能是用來 &lt;em&gt;相容&lt;/em&gt; 舊的不標準的網頁。
+隨著 ie 限定網頁的逐步退出舞台，這些不標準的功能，
+像各種專屬 javascript 函數，也早就逐漸移除。
+所以修改編碼，也算是一種相容性的功能，嗎？&lt;/p&gt;
+&lt;p&gt;不過話說回來，現在的問題是要拔掉現有的功能，
+和本來就沒有這項功能是不一樣的。
+既然沒有問題，為什麼要拔掉呢？
+&lt;em&gt;If it ain&apos;t broke, don&apos;t fix it.&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&quot;永遠不要背叛核心用戶&quot;&gt;永遠不要背叛核心用戶&lt;/h2&gt;
+&lt;p&gt;這裡引用一篇中國的文章 &lt;a href=&quot;https://necromanov.wordpress.com/2019/03/10/%E8%BE%90%E5%B0%84%E6%8C%BD%E6%AD%8C%EF%BC%9A%E6%B0%B8%E8%BF%9C%E4%B8%8D%E8%A6%81%E8%83%8C%E5%8F%9B%E4%BD%A0%E7%9A%84%E6%A0%B8%E5%BF%83%E7%94%A8%E6%88%B7/&quot;&gt;輻射挽歌：永遠不要背叛你的核心用戶&lt;/a&gt; ，
+文中提了異塵餘生 76 的失敗，
+來自於錯誤的數據分析，捨棄了最初成功的原因。
+異塵餘生團隊，發現隨著每一代中，
+加入更多 FPS 元素減少 RPG 與劇情元素，遊戲就賣的越好，
+所以 76 成了幾乎沒有 RPG 的一代，最終成了糞作。&lt;/p&gt;
+&lt;p&gt;因為倖存者偏差。
+團隊只看到 FPS 增加 RPG 減少，遊戲就越賣，
+卻沒看到市場上同期遊戲中，滿滿都是 FPS，
+成功的只有那幾款，其它滿滿都是失敗的。
+異塵餘生成功的原因，是因為他的 RPG 元素，
+讓他在 FPS 遊戲中能脫穎而出。
+FPS 是吸引新玩家的元素，但異塵餘生優秀的本質是 RPG 元素。
+所以當 76 整部遊戲幾乎只剩時下最流行的 FPS 類型 PUBG 時，
+她成了一款平凡無奇的作品，不再是異塵餘生。&lt;/p&gt;
+&lt;p&gt;核心用戶是遊戲，最硬核、精通所有功能、
+最 hack、最保守、最難取悅的一群人。
+對異塵餘生來說，是熱愛非線性敘事、大量分支劇情。
+相對於遊戲，什麼是 firefox 的核心用戶在乎的？
+是隱私？是開源？是符合 html 標準？
+我認為很大一個群體是附加元件，
+所以 &lt;a href=&quot;https://yoric.github.io/post/why-did-mozilla-remove-xul-addons/&quot;&gt;firefox 57 捨棄 xul&lt;/a&gt;，就有大量的使用者發出不滿。&lt;/p&gt;
+&lt;p&gt;附加元件的繁盛，背後的價值是駭客精神，
+鼓勵動手修改瀏覽器的功能；更根本的理念，
+是 developer first，從開發者角度思考。
+優質的軟體，成功的關鍵多是 developer first。
+（對 windows 不是在說你，windows 是成功的軟體，但不是優質的軟體。）
+apple 在賈伯斯回歸後推出的 Mac OSX，就是一個優質的系統，
+以更好開發體驗的 unix freebsd 為基礎。&lt;/p&gt;
+&lt;p&gt;開發者本位可能做不出大賣的軟體，
+但開發者知道使用者需要什麼，先有了最核心的開發者，
+才會有核心外圍的高階使用者，才會有一般使用者。
+開發者是社群的骨幹，而健康的社群是軟體發展不可或缺的。&lt;/p&gt;
+&lt;p&gt;台灣知名駭客唐鳳，曾提出 &lt;a href=&quot;https://www.slideshare.net/autang/ofun-optimizing-for-fun&quot;&gt;optimizing for fun&lt;/a&gt; &lt;code&gt;-Ofun&lt;/code&gt; 的概念，
+認為開源專案經營，最重要的目標應該是要提升讓參與者的體驗，
+讓開發者快樂、使用者也快樂。&lt;/p&gt;
+&lt;h2 id=&quot;結論&quot;&gt;結論&lt;/h2&gt;
+&lt;p&gt;對 firefox 而言，許多使用者看重的是豐富的附加功能、高度的可客制化，
+相對 chrome 從一開始就著重於速度，核心客群本來就有區別。
+當 firefox 57 放棄了長久以來的擴充元件系統，
+放下了包衭也放棄了客群，逐漸向 chrome 的高效能和有限的客制化靠攏，
+那只剩下和 chrome 無異的產品。
+背離了核心客群所追求的高度可客制化，
+而追求大眾所需要的效能，這樣的軟體還能成功嗎？&lt;/p&gt;
+&lt;p&gt;回到 thunderbird 移除 movemail 的問題。
+thunderbird 作為現今少數功能豐富完整的圖形介面 email 客戶端，
+也有其長久的歷史發展。
+movemail 的使用者雖然不是多數，但絕對不是外圍使用者；
+movemail 的用例只會在 unix 系統上發生，
+而 unix 系統使用者，應該算核心使用者了吧？
+何況，這些使用者，很可能是從 movemail
+整合進 thunderbird 時就開始使用，
+絕對可以算是長期使用者了。
+（雖然我不是。）&lt;/p&gt;
+&lt;p&gt;軟體界有一句話：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Programming is like sex.
+One mistake and you have to support it for the rest of your life.&lt;/p&gt;
+&lt;p&gt;-- Michael Sinz&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.reddit.com/r/learnprogramming/comments/1v74h4&quot;&gt;https://www.reddit.com/r/learnprogramming/comments/1v74h4&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;只要你加入了一個新功能，很可能就必須終生支持他；
+就像性，一不小心犯錯，就要賠上一輩子。
+套用在 thunderbird movemail 這個功能也類似，
+可能無意間加入的小功能，看起來沒什麼人在用，
+結果移除還是接到這麼多反彈。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/cd-project-gwent-on-gog-steam.html</id>
 <title>在 linux 上安裝昆特牌 gwent</title>
 <published>2022-03-12T10:37:28.118Z</published>
@@ -1849,140 +2064,7 @@ windows 下應該也有類似的工具吧，總之我不熟。&lt;/p&gt;
 <category term="game"/>
 <category term="nds"/>
 <category term="wine"/>
-<content type="html">&lt;h1 id=&quot;用-proton-在-linux-下開-epic-game-中的美麗新世界&quot;&gt;用 proton 在 linux 下開 epic game 中的美麗新世界&lt;/h1&gt;
-&lt;p&gt;美麗新世界 &lt;abbr title=&quot;the world end with you&quot;&gt;TWEWY&lt;/abbr&gt;
-是 square enix 過去發表的一款 NDS 遊戲，也是我的童年回憶之一。
-可惜當年叫好不叫座，從此決定只要有機會一定會支持這款遊戲，
-後來遊戲移植 android 時就有買了，也推坑過朋友。
-最近 9 月底出了續作，同時發表在 switch 與 pc 上的 epic 商店。
-本來還想回 windows 玩，但試了 proton 發現開得起來，就用 proton 玩了。
-本文會介紹如何使用 proton 執行 epic store 與 twewy。&lt;/p&gt;
-&lt;p&gt;美麗新世界又譯美妙世界，英文名 the world end with you 簡稱 twewy，
-原作 It&apos;s a wonderful world 因此中文圈又有 IAWW 的簡稱，
-英文圈則是因為 it&apos;s a wonderful world
-和歐威爾的著名的小說美麗新世界撞名，所以改成 the world end with you。&lt;/p&gt;
-&lt;h2 id=&quot;prove-of-concept-script&quot;&gt;prove of concept script&lt;/h2&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;mkdir epic
-cd epic
-cp -ar &quot;/mnt/windows/Program Files/Epic Games&quot; epic-windows
 
-export STEAM_COMPAT_CLIENT_INSTALL_PATH=&quot;$HOME/.steam/steam&quot;
-export STEAM_COMPAT_DATA_PATH=&quot;$PWD/epic-proton-compat-data&quot;
-
-# run epic games store
-&quot;$HOME/.steam/steam/steamapps/common/Proton 6.3/proton&quot; run \
-    epic-windows/Launcher/Portal/Binaries/Win64/EpicGamesLauncher.exe -opengl
-
-echo buy and install your game now
-echo and add game to desktop in games library
-echo press enter after finish
-read x
-
-game_url=$(grep -o -m 1 &apos;com.epicgames.launcher://[^ ]*&apos; \
-    proton-compat-data/pfx/drive_c/users/steamuser/AppData/Local/EpicGamesLauncher/Saved/Logs/EpicGamesLauncher.log)
-
-# run game directly
-&quot;$HOME/.steam/steam/steamapps/common/Proton 6.3/proton&quot; run \
-    epic-windows/Launcher/Portal/Binaries/Win64/EpicGamesLauncher.exe $game_url
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;epic-store&quot;&gt;epic store&lt;/h2&gt;
-&lt;p&gt;比較尷尬是我沒有實際在 linux 跑一次安裝 epic store，
-我是在 windows 裝好後，直接把整個安裝的資料夾複製到 linux 下來跑。
-因為跑起來沒什麼問題，就這樣了。
-但執行 epic store 要加上 &lt;code&gt;-opengl&lt;/code&gt; 參數，
-不然在 proton 下畫面會一直閃爍，
-&lt;a href=&quot;https://github.com/doitsujin/dxvk/issues/817#issuecomment-590855216&quot;&gt;閃爍這好像是 electron app 的通病&lt;/a&gt;。&lt;/p&gt;
-&lt;p&gt;例如安裝在 &lt;code&gt;C:\Program Files\Epic Games&lt;/code&gt; 的話，
-我就是先把整個安裝的資料夾複製出來，
-然後執行資料夾裡的執行檔
-&lt;code&gt;Launcher/Portal/Binaries/Win64/EpicGamesLauncher.exe&lt;/code&gt; 。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;mkdir epic
-cd epic
-cp -ar &quot;/mnt/windows/Program Files/Epic Games&quot; epic-windows
-
-(
-    export STEAM_COMPAT_CLIENT_INSTALL_PATH=&quot;$HOME/.steam/steam&quot;
-    export STEAM_COMPAT_DATA_PATH=&quot;$PWD/epic-proton-compat-data&quot;
-
-    &quot;$HOME/.steam/steam/steamapps/common/Proton 6.3/proton&quot; run \
-        epic-windows/Launcher/Portal/Binaries/Win64/EpicGamesLauncher.exe -opengl
-)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;用了 &lt;code&gt;-opengl&lt;/code&gt; 參數 epic store 跑起來就沒什麼問題了，
-之後就可以正常裝買好的遊戲了。
-遊戲我是在 web 介面裡買的，所以也沒有試過在 electron 裡買。
-裝遊戲的時候下載有點慢，秒速 3MB 而已，網路沒有跑滿。&lt;/p&gt;
-&lt;h2 id=&quot;啟動遊戲&quot;&gt;啟動遊戲&lt;/h2&gt;
-&lt;p&gt;這遊戲啟動比較麻煩，因為有 DRM，所以不能直接啟動，要透過 epic 啟動，
-直接啟動安裝位置的 exe 檔會跳錯誤然後退出，
-然後自動把 epic game 開啟來接 DRM 後重啟一次。
-可以先開 epic 後，在收藏庫裡啟動，但這樣比較麻煩。
-如果要直接用一行命令開啟遊戲，可以先進收藏庫，
-找到想開啟的遊戲，在遊戲下面三個點的按鈕，可以新增捷徑。&lt;/p&gt;
-&lt;p&gt;新增後，如果有在 &lt;code&gt;proton-compat-data/pfx/drive_c/users/steamuser/Desktop&lt;/code&gt;
-裡多出檔案，就去看檔案內容，應該會有一條很長的 url，
-長得像這樣： &lt;code&gt;com.epicgames.launcher://apps/2f686f6d652f67686f6c6b2f6d656469%3A65722f417070446174612f4c6f63616c%3A646174612f7066782f64726976655f63?action=launch&amp;amp;silent=true&lt;/code&gt; 。&lt;/p&gt;
-&lt;p&gt;如果沒有，那只能去翻 &lt;code&gt;proton-compat-data/pfx/drive_c/users/steamuser/AppData/Local/EpicGamesLauncher/Saved/Logs/EpicGamesLauncher.log&lt;/code&gt; ，
-裡面應該也會出現那條 url。
-我猜 windows 的作法，應該是像 android 一樣，
-可以讓程式 &lt;em&gt;註冊&lt;/em&gt; 一種協議。
-只要看到 &lt;code&gt;com.epicgames.launcher://&lt;/code&gt; 開頭的網址，
-就交給 epic games 處理，然後 epic 就會依網址去開對應的遊戲。&lt;/p&gt;
-&lt;p&gt;如果要手動用指令開遊戲，
-我試過可以直接 
-&lt;code&gt;&quot;$HOME/.steam/steam/steamapps/common/Proton 6.3/proton&quot; run com.epicgames.launcher://apps/2f686f6d652f67686f6c6b2f6d656469%3A65722f417070446174612f4c6f63616c%3A646174612f7066782f64726976655f63?action=launch&amp;amp;silent=true&lt;/code&gt;
-（當然是有設二個 proton 環境變數的情況下）。
-但總覺得這樣沒什麼踏實感，所以又多翻了一下 log，
-發現實際上這條 url 會直接當參數傳給 &lt;code&gt;C:\Program File\Launcher\Portal\Binaries\Win64\EpicGamesLauncher.exe&lt;/code&gt; 處理，
-所以我們也可以直接啟動 epic game launcher 時，參數傳入 url 即可。
-這樣 epic game launcher 就只會在背景執行，
-不會跳出商店視窗。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;(
-    export STEAM_COMPAT_CLIENT_INSTALL_PATH=&quot;$HOME/.steam/steam&quot;
-    export STEAM_COMPAT_DATA_PATH=&quot;$PWD/epic-proton-compat-data&quot;
-
-    &quot;$HOME/.steam/steam/steamapps/common/Proton 6.3/proton&quot; run \
-        epic-windows/Launcher/Portal/Binaries/Win64/EpicGamesLauncher.exe \
-        com.epicgames.launcher://apps/2f686f6d652f67686f6c6b2f6d656469%3A65722f417070446174612f4c6f63616c%3A646174612f7066782f64726976655f63?action=launch&amp;amp;silent=true
-)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;初期心得&quot;&gt;初期心得&lt;/h2&gt;
-&lt;p&gt;這遊戲蠻吃記憶體的，我在 linux 上用 proton 跑，會吃到 6G 的 ram。
-但跑起來蠻順的，不會像哈利波特魔法覺醒那樣，吃一堆 gpu 還會頓；
-但還是沒有 tabletop simulator 吃的多。
-（照慣例我用 proton 玩遊戲，都是把特效和 fps 調到最低，避免卡頓。）
-遊戲開頭沒有出現 unity logo，但用 top 會看到有 unity 的程序在跑。&lt;/p&gt;
-&lt;p&gt;遊戲跑得時候會把游標吃掉，游標移進去就移不出來，
-而且把集點移到視窗是不夠的，要把游標移進去點擊後才能用鍵盤操作的。
-遊戲中是鍵盤或搖捍操作，主要有確認鍵和退出鍵，
-其它就 WASD 或方向鍵也可以，但遊戲中移動是 wasd，
-放招則是 IJKL，和 NDS 時同樣風格的把 ABXY 當方向鍵用。
-有個退出鍵介面上寫 sp，我一閞始一直以為是 backspace，
-後來才發現是空白鍵 space，&lt;/p&gt;
-&lt;p&gt;我玩用 wasd 的遊戲都會很不適應，
-因為平常打字時左手三隻手指是放在 sdf 上，
-換到 wasd 就要左移一格，要按其它鍵時肌肉記憶就會不習慣。
-這遊戲問題又更嚴重，因為還多 IJKL，
-要知道在 vim 裡移動是 hjkl 啊！&lt;/p&gt;
-&lt;p&gt;因為我不會日文，所以自然選英文介面，
-配音則可以調要日文還英文。
-遊戲初期遇到的的褐色壯漢，
-日文配音是有點幼的屁孩風格，讓我很出戲，&lt;/p&gt;
-&lt;p&gt;遊戲在設定裡可以調成視窗化，但有時候視窗化會失敗，
-可能是上次遊戲啟動結束後，一起啟動的一些雜七雜八背景程序沒有一起關掉，
-所以第二次啟動時不正常。
-我後來會用 &lt;code&gt;systemd-run --scope&lt;/code&gt; 把啟動的子程序關在一個新的 scope，
-這樣可以用 systemctl status 來列出該 scope，
-比較好掌握哪些程序沒砍掉。&lt;/p&gt;
-&lt;p&gt;這作對我比較不適應的地方，就是主角變成二個很現充的金毛花美男，
-我也不確定這樣的形容正不正確，反正就是很美的男公關氣質。
-可能製作團隊發現原作的目標受眾腐女意外的多，於是……。
-而且開場就把南師猩叫出來露臉了，讓原作粉絲吃好吃滿。&lt;/p&gt;
-&lt;p&gt;之前美麗新世界無印的訪談中，就有說過其實製作是先做美術再想劇情，
-難怪劇情這麼無腦中二，很多難以和現實連接的地方。
-我很喜歡的畫風，也是後來才知道是來自女神異聞錄的。
-總之還是繼續支持吧。&lt;/p&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/linux-proton-play-harry-potter-magic-awakened.html#修正城堡內地圖不連通的錯誤敘述與安裝腳本的註解</id>
 <title>用 proton 在 linux 下玩哈利波特：魔法覺醒</title>

@@ -1,0 +1,231 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2022-04-01T13:22:44.663Z">
+<meta name="keywords" property="og:article:tag" content="firefox,email,funny,linux">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="cd-project-gwent-on-gog-steam.html" title="在 linux 上安裝昆特牌 gwent">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>thunderbird 91 移除 movemail 功能後無法收本機 email</title>
+</head>
+<body>
+<main><h1 id="thunderbird-91-移除-movemail-功能後無法收本機-email">thunderbird 91 移除 movemail 功能後無法收本機 email</h1>
+<p>一陣子沒收到 at 或 crontab 的執行結果的 email，
+才發現 thunderbird 不能收本機的信了，
+收件匣裡的 localhost 消失了。
+查了一下，發現這功能叫 movemail，在 91 版被移除了。
+目前想到的解法是用 <code>$HOME/.forward</code> 把信直接存到
+<code>~/.thunderbird/abcdefgh.default/Mail/Local Folders/Inbox</code> ，
+再加上每次刪信後都要 <em>壓實重整</em> 郵件夾，
+暫時是能擋著用。</p>
+<h2 id="movemail-的消失">movemail 的消失</h2>
+<p>linux 上如果裝了 crontab 或 at，
+大機率會裝一個簡單的 mail server，可以是不連網的，
+只在本機的帳號間和讓程式可以寄通知信給使用者。
+像 crontab 這種定時執行的程式，如果執行結果有輸出，
+就會把內容用 mail 寄給對應的使用者。
+或是 sudo 如果有人打錯密碼太多次也會寄信。</p>
+<p>大概今年一月，把 debian 升到 bullseye，
+仔細回想大概是那之後就沒有收到 at 或 crontab 的信了。
+我也是隔了幾個月才開始注意這件事，
+畢竟剛升上來時就出了一些小問題，還在忙著解。
+真的發現，則是 apt 一直有更新，
+但都沒看到之前寫的 apt 更新通知腳本的信，
+仔細一檢查才發現原本代表本機的帳號不見了。
+想重開一個，結果建立帳號的介面裡也有建立本機信箱的選項了。</p>
+<p>大概猜到是 thunderbird 更新拿掉功能，
+就去翻 <a href="https://www.thunderbird.net/en-US/thunderbird/91.0/releasenotes/">thunderbird 91 release note</a> ，
+只看到一個好像有點像的功能移除：
+<em>CHANGED Movemail support removed</em> 。
+<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1625741">找到 bugzilla 上對應的 movemail 討論</a> ，
+才知道這東西就是用來收本機郵件的功能。</p>
+<h2 id="土砲補救辦法">土砲補救辦法</h2>
+<p>thunderbird 的郵件格式現在是 mbox 單一檔案，
+加上同名的附檔名為 msf 的檔案來記錄對每篇郵件的操作。
+所以事實上 unix 裡寄給使用者信，
+位在 <code>/var/mai/$USER</code> 的 mbox 檔是可以直接給 thunderbird 讀的。
+只要把 mbox 檔放進 <code>~/.thunderbird/*.default/Mail/Local Folders/</code> 裡，
+thunderbird 就會顯示該 mbox 為郵件資料夾。</p>
+<p>這裡有二個作法，一是直接 ln 把 <code>/var/mail</code> 裡的信箱，
+設成 thunderbird 裡的連結，或是反過來。
+另一個是用 unix 下慣用的 <code>$HOME/.forward</code> ，
+可以讓有來信時，自動存到某一檔案、
+轉寄給其它 email 地址、用管道傳送給另一支程式。</p>
+<p>只要把 forward 內容一行用 <code>/</code> 開頭，
+即會視為路徑，並把信件存到該檔案中。
+像直接指定 <code>/home/abcdefgh/.thunderbird/ijklmnop.default/Mail/Local Folders</code> 
+即可。</p>
+<p>但這樣有一個問題，如果 mbox 在 thunderbird 外有修改過，
+thunderbird 建立的 msf 內容就會無法和 mbox 對應，
+thunderbird 就會依據現有的 mbox 建立 msf 檔案。
+例如在 thunderbird 中刪除郵件時，
+其實不會真的把郵件從 mbox 裡刪除，只會在 msf 中標記該郵件為已刪除，
+所以 mbox 裡還是找得到那篇郵件。
+當 thunderbird 重建 msf 時，
+之前移除或移動到其它資料夾的郵件就又會出現。</p>
+<p>要防止此一情況，就得讓 thunderbird 真正把郵件從 mbox 裡刪除。
+thunderbird 在側邊欄的資料夾中按右鍵，
+會有個壓實重整的選項，可用來重整 mbox 檔案，
+把在 msf 中記錄為刪除的郵件從 mbox 中真正刪除。
+所以只要在刪除郵件後，使用壓實重整的功能，將郵件從 mbox 中刪除，
+未來重建 msf 時就不會有已刪除的郵件再出現的問題了。</p>
+<h3 id="solution-in-shell-script">solution in shell script</h3>
+<pre><code class="lang-sh">echo $HOME/.thunderbird/*.default/Mail/'Local Folders'/Inbox &gt; $HOME/.forward
+</code></pre>
+<p>Moreover, everytime you delete/move mail in <code>Local Folders/Inbox</code>,
+click <code>Compact</code> in the context menu on the Inbox.</p>
+<h2 id="移除-movemail-的討論">移除 movemail 的討論</h2>
+<p>功能移除的起因也很有趣，bugzilla 上有人發現某一版本，
+建立 movemail 帳號的選項被移除了。（但 movemail 本身沒有被移除。）
+開發者發現這個 bug 出現好幾個月了，但完全沒有人來抱怨，
+於是他們認定這功能沒人用了，所以決定移除。</p>
+<p>實際上，多數使用者如 debian user 是使用穩定版本，
+不會看到開發中的 movemail 壞一半的版本。
+所以他們經歷的，就是上一版 78 裡 movemail 是好的，
+然後下一版 91 就被移除了。</p>
+<p>當然，從開發者的角度和實際使用人數來看，
+linux 使用者約 180000，佔了全體 thunderbird 使用者的 1%，
+而其中只有 2101 個使用了 movemail 功能，
+也只佔了 linux 使用者的 1%。
+當然，這裡可能要考慮有多少人沒開 telemetry，
+所以沒有出現在統計數字裡。</p>
+<p><a href="https://blog.gslin.org/archives/2021/09/01/10300/">gslin 之前有轉貼 hacker news 上一篇文章</a> ，
+大概就是進階使用者都會把隱私加強和防追蹤功能打開，
+所以科技類網站就會有一大部份使用者的行為用 google analysis 抓不到，
+讓 ga 的分析失真。</p>
+<p>套到 telemetry 上也是類似的效果。
+現在很多軟體都會統計使用者使用各功能的次數，
+然後回報給開發者，這樣的監控統計功能就叫 telemetry。
+但自由軟體使用者，有些不喜歡自己的行為被回報，
+所以軟體中多半也會提供關閉 telemetry 的功能。</p>
+<p>總之，這功能被拔掉後，就引來了一堆憤怒的使用者到 bugzilla 留言，
+在移除了 movemail 的穩定版在六個月後釋出後。
+<a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=993526">同時也有幾個人在 debian bug 上抱怨</a> ，
+雖然從 thunderbird 開發者提出的 telemetry 資料來看，
+其實人沒有很多。</p>
+<h2 id="沒事整天砍功能的-ui-設計師">沒事整天砍功能的 ui 設計師</h2>
+<p><a href="https://blog.gslin.org/archives/2022/02/26/10567/i-have-no-capslock-and-i-must-scream/">之前 gslin 分享了一篇諷刺 ui 設計師根據 telemetry 統計數據砍功能的文章</a>：
+<a href="https://memex.marginalia.nu/log/48-i-have-no-capslock.gmi">I have no capslock and I must scream</a> 。
+大意就是說 ui 設計師從 telemetry 的報表，
+觀察哪些功能是很少使用的，由此可以精簡軟體的功能。</p>
+<p>最近 mozilla 也砍了 firefox 一個修改編碼的功能。
+以前可以在 <em>選單列</em> &gt; <em>檢視</em> &gt; <em>編碼</em> 來選擇網頁的編碼，
+現在則是該功能從可選擇的編碼選單，
+簡化成單一個 <em>修複文字編碼</em> 按鈕。</p>
+<p>在 bugzilla 上這項 issue 上，
+mozilla 的設計師是給出這功能很少使用的理由，
+而且會有安全疑慮（？）
+可能某些場合會造成腳本執行不正確之類的？</p>
+<p>很多使用者攻擊，這些設計師整天閒著沒事，
+就四處砍現有功能，宣稱可以讓界面更人性化，
+也為自己創造履歷與 KPI，最後就留下沒人用的軟體拍拍屁股走人。
+把功能和界面改的亂七八糟，然後再問為什麼沒人用，
+又把原因推給舊界面不佳。</p>
+<h2 id="瀏覽器應該要容忍編碼不正確嗎">瀏覽器應該要容忍編碼不正確嗎</h2>
+<p>在 issue 上也是出現了不少反對者，但 mozilla 還是幹了。
+所以，現在網頁的編碼壞掉，就沒機會自己修改。
+mozilla 給出的說法是，這是網頁開發者的責任，
+編碼設定錯誤的網頁本來就不該正常顯示。
+而且瀏覽器應避免 <a href="http://www.teagle.top/index.php/archives/192/">MIME 類型嗅探</a> ，
+而應該使用 http header 給出的類型，以防止意外執行到惡意腳本。
+這樣來說，修改文字的編碼好像也不一定是 <em>正常使用</em> 時會用到的功能，
+所以沒有不會很奇怪，chromium 也是已經拔掉編碼修複的功能。</p>
+<p>從一個角度來看，這些功能是用來 <em>相容</em> 舊的不標準的網頁。
+隨著 ie 限定網頁的逐步退出舞台，這些不標準的功能，
+像各種專屬 javascript 函數，也早就逐漸移除。
+所以修改編碼，也算是一種相容性的功能，嗎？</p>
+<p>不過話說回來，現在的問題是要拔掉現有的功能，
+和本來就沒有這項功能是不一樣的。
+既然沒有問題，為什麼要拔掉呢？
+<em>If it ain't broke, don't fix it.</em></p>
+<h2 id="永遠不要背叛核心用戶">永遠不要背叛核心用戶</h2>
+<p>這裡引用一篇中國的文章 <a href="https://necromanov.wordpress.com/2019/03/10/%E8%BE%90%E5%B0%84%E6%8C%BD%E6%AD%8C%EF%BC%9A%E6%B0%B8%E8%BF%9C%E4%B8%8D%E8%A6%81%E8%83%8C%E5%8F%9B%E4%BD%A0%E7%9A%84%E6%A0%B8%E5%BF%83%E7%94%A8%E6%88%B7/">輻射挽歌：永遠不要背叛你的核心用戶</a> ，
+文中提了異塵餘生 76 的失敗，
+來自於錯誤的數據分析，捨棄了最初成功的原因。
+異塵餘生團隊，發現隨著每一代中，
+加入更多 FPS 元素減少 RPG 與劇情元素，遊戲就賣的越好，
+所以 76 成了幾乎沒有 RPG 的一代，最終成了糞作。</p>
+<p>因為倖存者偏差。
+團隊只看到 FPS 增加 RPG 減少，遊戲就越賣，
+卻沒看到市場上同期遊戲中，滿滿都是 FPS，
+成功的只有那幾款，其它滿滿都是失敗的。
+異塵餘生成功的原因，是因為他的 RPG 元素，
+讓他在 FPS 遊戲中能脫穎而出。
+FPS 是吸引新玩家的元素，但異塵餘生優秀的本質是 RPG 元素。
+所以當 76 整部遊戲幾乎只剩時下最流行的 FPS 類型 PUBG 時，
+她成了一款平凡無奇的作品，不再是異塵餘生。</p>
+<p>核心用戶是遊戲，最硬核、精通所有功能、
+最 hack、最保守、最難取悅的一群人。
+對異塵餘生來說，是熱愛非線性敘事、大量分支劇情。
+相對於遊戲，什麼是 firefox 的核心用戶在乎的？
+是隱私？是開源？是符合 html 標準？
+我認為很大一個群體是附加元件，
+所以 <a href="https://yoric.github.io/post/why-did-mozilla-remove-xul-addons/">firefox 57 捨棄 xul</a>，就有大量的使用者發出不滿。</p>
+<p>附加元件的繁盛，背後的價值是駭客精神，
+鼓勵動手修改瀏覽器的功能；更根本的理念，
+是 developer first，從開發者角度思考。
+優質的軟體，成功的關鍵多是 developer first。
+（對 windows 不是在說你，windows 是成功的軟體，但不是優質的軟體。）
+apple 在賈伯斯回歸後推出的 Mac OSX，就是一個優質的系統，
+以更好開發體驗的 unix freebsd 為基礎。</p>
+<p>開發者本位可能做不出大賣的軟體，
+但開發者知道使用者需要什麼，先有了最核心的開發者，
+才會有核心外圍的高階使用者，才會有一般使用者。
+開發者是社群的骨幹，而健康的社群是軟體發展不可或缺的。</p>
+<p>台灣知名駭客唐鳳，曾提出 <a href="https://www.slideshare.net/autang/ofun-optimizing-for-fun">optimizing for fun</a> <code>-Ofun</code> 的概念，
+認為開源專案經營，最重要的目標應該是要提升讓參與者的體驗，
+讓開發者快樂、使用者也快樂。</p>
+<h2 id="結論">結論</h2>
+<p>對 firefox 而言，許多使用者看重的是豐富的附加功能、高度的可客制化，
+相對 chrome 從一開始就著重於速度，核心客群本來就有區別。
+當 firefox 57 放棄了長久以來的擴充元件系統，
+放下了包衭也放棄了客群，逐漸向 chrome 的高效能和有限的客制化靠攏，
+那只剩下和 chrome 無異的產品。
+背離了核心客群所追求的高度可客制化，
+而追求大眾所需要的效能，這樣的軟體還能成功嗎？</p>
+<p>回到 thunderbird 移除 movemail 的問題。
+thunderbird 作為現今少數功能豐富完整的圖形介面 email 客戶端，
+也有其長久的歷史發展。
+movemail 的使用者雖然不是多數，但絕對不是外圍使用者；
+movemail 的用例只會在 unix 系統上發生，
+而 unix 系統使用者，應該算核心使用者了吧？
+何況，這些使用者，很可能是從 movemail
+整合進 thunderbird 時就開始使用，
+絕對可以算是長期使用者了。
+（雖然我不是。）</p>
+<p>軟體界有一句話：</p>
+<blockquote>
+<p>Programming is like sex.
+One mistake and you have to support it for the rest of your life.</p>
+<p>-- Michael Sinz</p>
+<p><a href="https://www.reddit.com/r/learnprogramming/comments/1v74h4">https://www.reddit.com/r/learnprogramming/comments/1v74h4</a></p>
+</blockquote>
+<p>只要你加入了一個新功能，很可能就必須終生支持他；
+就像性，一不小心犯錯，就要賠上一輩子。
+套用在 thunderbird movemail 這個功能也類似，
+可能無意間加入的小功能，看起來沒什麼人在用，
+結果移除還是接到這麼多反彈。</p>
+</main>
+
+<script defer="" src="ext/meta-meta.js"></script>
+<script defer="" data-lazy="" src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+
+</body></html>

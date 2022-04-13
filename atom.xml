@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2022-04-03T13:44:17.146Z</updated>
+  <updated>2022-04-13T16:12:42.384Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,148 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/rss-reader-future-work.html</id>
+<title>我期望中的 rss 閱讀軟體</title>
+<published>2021-12-22T12:32:28.641Z</published>
+<updated>2022-04-13T16:12:42.355Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/rss-reader-future-work.html"/>
+<summary type="html">最近比較閒，所以想改進一下自己吸收資訊的途徑，主要就是 rss。
+目前是用 feedly，但對 feedly 還有一些不滿，
+例如 feedly 要依賴雲端，不然其實他的付費方案是可以完全滿足我的。
+主要就是全文備份與全文搜尋功能，還有不漏訊息的功能，
+其它想要的還有自行用腳本或簡單 css selector 擴充的能力。
+最後就是，希望他是一個無需雲端的，在本機執行的程式。</summary>
+<category term="web"/>
+<category term="android"/>
+<category term="rss"/>
+<category term="js"/>
+<category term="瀏覽器"/>
+<category term="備份"/>
+<content type="html">&lt;h1 id=&quot;我期望中的-rss-閱讀軟體&quot;&gt;我期望中的 rss 閱讀軟體&lt;/h1&gt;
+&lt;p&gt;最近比較閒，所以想改進一下自己吸收資訊的途徑，主要就是 rss。
+目前是用 feedly，但對 feedly 還有一些不滿，
+例如 feedly 要依賴雲端，不然其實他的付費方案是可以完全滿足我的。
+主要就是全文備份與全文搜尋功能，還有不漏訊息的功能，
+其它想要的還有自行用腳本或簡單 css selector 擴充的能力。
+最後就是，希望他是一個無需雲端的，在本機執行的程式。&lt;/p&gt;
+&lt;h2 id=&quot;rss-reader&quot;&gt;rss reader&lt;/h2&gt;
+&lt;p&gt;大概是從三年前開始使用 rss 來吸收資訊，
+我是在 google reader 收掉後才真正弄清楚 rss 是什麼。
+那時候看來唯一的選擇就是 feedly，也的確蠻好上手的，
+如果付費的話，功能也很強大，我也付費過一陣子。
+但後來還是覺得自己的知識庫應該要能自己掌握，
+所以不太喜歡他需要付費才能使用的全文搜尋功能。&lt;/p&gt;
+&lt;h3 id=&quot;收藏功能&quot;&gt;收藏功能&lt;/h3&gt;
+&lt;p&gt;feedly 有個做的半吊子的收藏功能。
+可以依分類收藏文章，收藏後的文章會完整保存摘要，
+如果有全文就會完整保存全文。
+但分類只能列出，檢索也只能檢索 30 天內的新內容，
+要無限期檢索要付費。
+而且已經有全文檢索功能，所以分類反而沒那麼重要，
+也沒有取交集之類的功能。&lt;/p&gt;
+&lt;h3 id=&quot;備份文章與全文搜尋功能&quot;&gt;備份文章與全文搜尋功能&lt;/h3&gt;
+&lt;p&gt;會想要這個功能，主要是因為有一陣子，
+我常出現想起某篇文章，但又找不到覺得很煩。
+最後常常只能靠印象中幾個關鍵字用 google 搜尋，
+祈禱 google 知道我在說什麼。
+甚至有時候出現原網址死了，只剩其它內容農場的轉文搜得到的情況。&lt;/p&gt;
+&lt;p&gt;後來想想，其實把有興趣的每篇文章都另存 html 到本機，
+再用個 rgrep 就可以全文搜尋了。
+甚至其實也不用真的全文，只用標題和摘要去搜，
+應該就能搜到多數想找的內容了，
+再加個簡單的標籤功能就完美了。
+或是可以在儲存時修改摘要，自己加入一些關鍵字，
+防止通篇沒提到某個關鍵字的情況。&lt;/p&gt;
+&lt;p&gt;如果資料是用 sqlite 之類的資料庫檔案存的，
+那備份和轉移也就很簡單了，
+就是跨平台各自的資料庫，如果有衝突會比較麻煩。
+全文備份的話，我是覺得用單一檔案比較方便，
+以簡單複製遷移後仍可以運作為主。
+可能可以加一個匯入的功能，來解決資料庫衝突的問題。&lt;/p&gt;
+&lt;p&gt;這些備份的內容，應該要無限期保存的。
+但考量到儲存空間限制，我應該會定期把過舊的內容，
+轉移到桌電或 nas 上。
+想找東西時，就匯入到桌電上搜尋，
+反正越舊的內容，理論上查找的頻率也會越低。&lt;/p&gt;
+&lt;h3 id=&quot;rss-更新機制&quot;&gt;rss 更新機制&lt;/h3&gt;
+&lt;p&gt;以前選 feedly 有個原因，
+是 feedly 這種雲端閱讀器似乎會自動更新，
+所以不用擔心幾天沒開閱讀器後，
+某網站的 rss 的某次更新沒抓到。
+但後來發現累積太多沒讀完的話，最舊還是只能讀到半個月前的文章，
+但更舊的文章應該也有還沒讀過的，卻沒有出現在閱讀器裡，
+所以 feedly 應該也是會因為太久沒開而漏文章。&lt;/p&gt;
+&lt;p&gt;後來我認為比較好的機制是，
+app 每天固定在背景檢查有沒有更新，
+有更新就存在本機，供有空時閱讀，
+而不是開 app 時才檢查。
+檢查更新可以設一些條件，例如充電或有 wifi 時檢查，
+就和某些漫畫閱讀器 app 一樣。
+以一般的部落格來說，每天一更就算超級頻繁了，
+所以每天檢查一次更新也夠了，
+剛好可以配合手機每天回家後有 wifi 和充電的使用習慣。&lt;/p&gt;
+&lt;p&gt;更新的存檔，我個人是想無限期保存，
+直到已讀後才刪，但也可以設個期限。
+已讀的內容，我覺得也是設個期限，定期刪除過期的內容即可，
+已讀後立即刪除有時會很討厭。&lt;/p&gt;
+&lt;p&gt;至於收藏的內容，就和前章寫的，無限期保存，
+但要可以手動匯出匯入，供全文檢索。&lt;/p&gt;
+&lt;h3 id=&quot;擴充功能&quot;&gt;擴充功能&lt;/h3&gt;
+&lt;p&gt;這功能是後來才發現原來 app 也可以這樣做，
+主要是被 &lt;a href=&quot;https://tachiyomi.org/&quot;&gt;Tachiyomi&lt;/a&gt; 和 &lt;a href=&quot;https://github.com/PureDark/H-Viewer&quot;&gt;H-viewer&lt;/a&gt; 這二個 app 驚豔到。
+tachiyomi 是用來看漫畫的 app，他有 plugin 機制，
+例如想用來看 &lt;a href=&quot;https://manhuaren.com/&quot;&gt;漫畫人&lt;/a&gt; 網站上的漫畫，就裝漫畫人的 plugin，
+app 就可以解析漫畫人的網頁，把其中的漫畫顯示在 app 裡。&lt;/p&gt;
+&lt;p&gt;tachiyomi 的 plugin 是打包成一個 apk，
+安裝後就會在 tachiyomi 裡顯示已安裝。
+雖然這種作法對寫 java 或 kotlin 的人來說也不錯，
+就是重用 android 本身的套件系統，
+但也因此門檻比較高。&lt;/p&gt;
+&lt;p&gt;h-viewer 的作法則更有趣，是用簡單的 css 選擇器當作擴充功能的語法，
+要做一個擴充功能，就是填好對標題、作者、圖片的選擇器。
+（實際上是一個 json，選擇器是字串的形式。）
+所以門檻更低了，唯一缺點就是功能有點死。&lt;/p&gt;
+&lt;p&gt;我自己以前做類似的東西 &lt;a href=&quot;https://github.com/GHolk/feed/blob/e249f2a/script/anafeed.js&quot;&gt;RSS 產生器&lt;/a&gt; 時，是用 js 語法來做。
+如果用選擇器就能解決的，就繼承後覆寫選擇器語法即可。
+如果需要取子字串、構造連結，就覆寫父類的方法。
+優勢是夠彈性，缺點則是安全性的疑慮，
+但自用我是不在乎安全性的。&lt;/p&gt;
+&lt;p&gt;後來覺得如果 rss 閱讀器，也內建一個簡單的腳本引擎就會很方便，
+就不用另外做一個 rss 產生器了。
+尤其是 js 在多數 web view 裡都已經內建了，
+不知道能不能重用。
+只是多數跑在瀏覽器內的 js 都會受限於 cors，
+不能任意發 http request。&lt;/p&gt;
+&lt;p&gt;除了 css 選擇器和完整的程式語言，還有一個選擇是用 xpath，
+但這東西和 xml 一起退流行後就比較少人用了。
+xpath 甚至可以和 xslt，直接用來生成 rss。
+但實際上用的人也不多。&lt;/p&gt;
+&lt;h2 id=&quot;備份網頁內容的獨立-app&quot;&gt;備份網頁內容的獨立 app&lt;/h2&gt;
+&lt;p&gt;這和上面的全文備份是類似的，
+就是希望能有一個統一的方式管理收藏的文章，
+所以同時也希望 rss 裡的收藏功能，可以跨足到一般網頁。
+一般對多數文章來說，文字備份就夠了，
+但希望如果有需要，也有圖片備份的能力。&lt;/p&gt;
+&lt;p&gt;如果要在手機上實作這個功能，
+因為目前 firefox android 版的擴充功能一直沒有做完整，
+chrome 更是直接閹割，所以可能只能用獨立 app 的方式實作。
+要備份的話，就是用分享到該 app 的方式。&lt;/p&gt;
+&lt;h2 id=&quot;app-的實作&quot;&gt;app 的實作&lt;/h2&gt;
+&lt;p&gt;個人寫 gui 的話，一直只有基礎的 html5 能力，
+用 java 寫 android 對我來說根本是天書。
+如果在不特別去學 java 和 android 開發的情況，
+就只有用 cordova 或 electron 把 html5 移植到手機的作法。&lt;/p&gt;
+&lt;p&gt;雖然以前也期望過 pwa 能成功，但 pwa 和我理想中的，
+可以存取本機檔案還是有很大的差距。
+也許 cordova 可以做到吧？
+electron 則是我一直很討厭的，把整個瀏覽器打包到 app 裡，
+cordova 至少只用了一個 android 內建的 web view。&lt;/p&gt;
+&lt;p&gt;但這二種 app 好像也都不適合在桌面使用，
+後來有看到 cordova 有第三方做的，在 linux 上跑的外掛。
+總之如果有一天太閒，就來寫寫看吧。
+順便學個 android 開發也不錯？&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/email-thunderbird-unable-localhost.html</id>
 <title>thunderbird 91 移除 movemail 功能後無法收本機 email</title>
 <published>2022-04-01T13:22:44.663Z</published>
@@ -1969,82 +2111,7 @@ windows 下應該也有類似的工具吧，總之我不熟。&lt;/p&gt;
 <category term="遊戲"/>
 <category term="rpg"/>
 <category term="太空"/>
-<content type="html">&lt;h1 id=&quot;龍脈常歌的悲劇結尾異見&quot;&gt;龍脈常歌的悲劇結尾異見&lt;/h1&gt;
-&lt;p&gt;剛玩完台灣團隊製作的銀河探索 rpg &lt;a href=&quot;https://www.sigono.com/opus-echo-of-starsong&quot;&gt;龍脈常歌&lt;/a&gt; ，
-一開始覺得沒有想像中的好玩，但後來也漸漸被劇情所吸引，越玩越投入。
-但最後的結局艾妲陣亡，感覺像是劇情殺，
-玩完有點不滿，看不出這樣安排的理由。
-明明前面立了很多 flag，要成為新女巫，
-船隊成為群山青年人的偶像。
-結果在最後一刻，艾妲選擇放下尋找紅後，
-紅樓就被一陣隕石砸爛，強制進入 bad end。&lt;/p&gt;
-&lt;h2 id=&quot;角色死亡的意義&quot;&gt;角色死亡的意義&lt;/h2&gt;
-&lt;p&gt;其實被隕石擊墜也不是很稀奇的事。
-在終章他們冒險登陸黑龍時，就已經碰過一次隕石雨，
-但用主角光環和優秀的駕駛技術穿過了。
-結果返航時又碰到隕石雨，最後毀船，
-考慮太空冒險的風險也不是說不過去。
-但就劇情上，主角群止於這種幾乎不可預期的意外，
-就像飛行員死於鳥擊，如果不是現實，
-故意讓劇情這樣安排實在讓人很無力。&lt;/p&gt;
-&lt;p&gt;對於經典的 rpg 來說，死亡應該是要有意義的。
-要為有意義的事而死，要能夠推動劇情，
-讀者或玩家才會認同角色的死亡是合理的。
-就像 rpg 中，如果主角群角色，死於隨便一隻小怪，
-然後原因給個 &lt;em&gt;戰鬥有風險，與小怪戰鬥的年死亡率為 2%&lt;/em&gt; 之類的，
-玩家也很難接受。
-除非是那種硬派寫實 rpg，我猜啦。&lt;/p&gt;
-&lt;p&gt;這裡也可能是要呼應前期的一個設定，
-也就是龍脈的氾氣可以記錄意識、穿越時空。
-所以墜毀在白龍的艾妲，在宇宙中繼續探索龍脈的李莫，
-每次的聆聽、演奏龍鳴，都可以聽見對方。
-一開始李莫被群山的龍鳴所感動，
-很可能也是因為未來的艾妲在呼喚他。
-但要呼應這個設定而把人寫死實在是莫明奇妙。&lt;/p&gt;
-&lt;h2 id=&quot;劇情中的-flag&quot;&gt;劇情中的 flag&lt;/h2&gt;
-&lt;p&gt;此外，很不能令人接受的一點，是在劇情中立了不少 flag，
-主角群好像有所成長了，結果還是悲劇收場，
-艾妲還是死在和師父紅一樣的地方。
-紅要艾妲成為新女巫，在發現萬道的太空站後的幾年，
-紅樓逐漸出名，成為群山年輕人的榜樣。
-洗刷女巫戰爭機器汙名，重新定義女巫的理想，
-好像有稍微開始了，結果最後還是一場空。&lt;/p&gt;
-&lt;p&gt;還有紅一直要艾妲不要跟隨、尋找她，
-不要成為她，要走自己的路；
-結果整部龍脈常歌卻幾乎還是艾妲在找紅的故事。
-艾妲本來還想冒無法返航的風險登陸白龍，
-但又想通了，還是返航。&lt;/p&gt;
-&lt;p&gt;結果在決定返航後的最後一刻，
-忽然來一群隕石雨，直接把紅樓砸成智障。
-逼得艾妲只能用逃生艙把李莫和菈米亞送走，
-自己留在失去動力的紅樓上，最後迫降白龍，
-也是紅當年迫降的地點。&lt;/p&gt;
-&lt;p&gt;結果一切又回到原點，艾妲還是走上和紅一樣的道路，犧牲自己拯救他人。
-說要成為新女巫，結果都還沒發揮影響力，第一位新女巫艾妲就死了，
-還是死在和紅一樣的地方，一點成長都沒有。&lt;/p&gt;
-&lt;h2 id=&quot;過於現實的後話&quot;&gt;過於現實的後話&lt;/h2&gt;
-&lt;p&gt;然後艾妲死後，李莫和菈米亞也就各奔東西。
-李莫回到瀛海的鳶家，菈米亞兌現承諾和斑鳩約會，
-結婚再離婚，後來不知怎麼又跑到鳶家李莫那裡。
-在艾妲死後幾年，群山人就又起義，
-領袖依然是白牙，然後又是打打停停。
-雖然我知道現實中很常這樣，但遊戲裡至少不要這麼絕望吧，
-好像遊戲中的一切努力都沒有意義了。&lt;/p&gt;
-&lt;h2 id=&quot;雜談&quot;&gt;雜談&lt;/h2&gt;
-&lt;p&gt;感覺這遊戲的結局，被隕石砸死，
-很像那種多重結局遊戲裡的其中一條 bad end，
-像走到錯誤的航線、沒帶夠護甲，game over 引發的結局。
-感覺像是運氣夠好就可以解鎖真結局 good end，
-如果真得這樣推出後續更新就是神作了。
-不過這樣那後日談的部份就要吃書了。&lt;/p&gt;
-&lt;p&gt;不知道開發人員在寫這個劇本的時候在想什麼。
-雖然時代中小人物的故事，
-以這種小的結局收場似乎也無可厚非。
-又或是開發人員想用悲劇來創造記憶點，製造盪氣迴腸的感覺。
-對常規玩家，喜劇結局可能看看就過去了，
-但悲劇可以讓人鬱卒上一二天，甚至寫一篇部落格來罵。
-算是行銷手段的一種吧。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/linux-proton-play-epic-twewy.html</id>
 <title>用 proton 在 linux 下開 epic game 中的美麗新世界</title>

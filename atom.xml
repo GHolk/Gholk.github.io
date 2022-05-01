@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2022-04-13T16:12:42.384Z</updated>
+  <updated>2022-05-01T02:28:33.035Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,130 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
 <entry>
+<id>http://gholk.github.io/linux-citrix-workspace-install.html</id>
+<title>在 linux 使用遠端辦公軟體 citrix workspace</title>
+<published>2022-05-01T02:27:06.867Z</published>
+<updated>2022-05-01T02:28:33.013Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/linux-citrix-workspace-install.html"/>
+<summary type="html">公司用 citrix workspace 這套遠端辦公軟體。
+雖然給的手冊沒寫 linux 版，但去他們官網查時，
+發現有 linux 版的 client。
+有包成 deb 的，裝起修一些 bug 後就可以動了，
+還可以讀到 linux 下的讀卡機的驅動。
+bug 有沒包 TWCA 的憑證，
+和啟用 x window 的畫面縮放功能時視窗顯示會壤掉。</summary>
+<category term="linux"/>
+<category term="driver"/>
+<category term="iccard"/>
+<category term="debug"/>
+<category term="遠端"/>
+<content type="html">&lt;h1 id=&quot;在-linux-使用遠端辦公軟體-citrix-workspace&quot;&gt;在 linux 使用遠端辦公軟體 citrix workspace&lt;/h1&gt;
+&lt;p&gt;公司用 citrix workspace 這套遠端辦公軟體。
+雖然給的手冊沒寫 linux 版，但去他們官網查時，
+發現有 linux 版的 client。
+有包成 deb 的，裝起修一些 bug 後就可以動了，
+還可以讀到 linux 下的讀卡機的驅動。
+bug 有沒包 TWCA 的憑證，
+和啟用 x window 的畫面縮放功能時視窗顯示會壤掉。&lt;/p&gt;
+&lt;p&gt;因為之前有人接觸到確診者，
+所以大家都很緊張，開始裝遠端辦公軟體，
+使用 citrix workspace 需要在本機安裝叫 citrix receiver 的程式。
+一開始就照著資訊室的手冊裝，
+他手冊只列了 windows macosx android 三個版本。
+另外他用了 OTP 做二階段認證，但是自己做了個認證 app 出來，
+在遠端辦公登入時，要輸入 app 裡出現的 otp。&lt;/p&gt;
+&lt;p&gt;在 windows 裝起來後，發現他不需要管理員權限就能裝，
+因為公司的電腦有鎖管理員權限但我還是裝得起來。
+運作上是可以用瀏覽器開，
+或用 citrix 內建的一個可能是 electron 或 web view 的東西開，
+開某個掛在公司 subdomain 的網站 &lt;code&gt;cxws.*&lt;/code&gt; 。
+之後點裡面的連結，firefox 會詢問要不要用本機的應用程式 receiver 開啟，
+同意後 citrix receiver 就會跳起來，
+打開原本在公司電腦上跑的程式。
+這應該是近幾年瀏覽器標準推的新功能，可以讓網頁開本機的應用程式。&lt;/p&gt;
+&lt;p&gt;citrix 開起來的程式，就是一個視窗而已。
+有點像某些特化的虛擬機程式，
+可以只把虛擬機中的某個程式的視窗，在另一個本機的視窗中顯示。
+看起來就直接開了一個原生的程式一樣，
+而不是把系統放在某個視窗中，裡面的視窗就沒辦法像原生本機視窗那樣移動。&lt;/p&gt;
+&lt;h2 id=&quot;在-linux-上安裝&quot;&gt;在 linux 上安裝&lt;/h2&gt;
+&lt;p&gt;我回家後用 linux 去開網頁，
+但沒裝就不會跳出打開應用程式的對話框，
+只會下載一個 ica 為副檔名的檔案。
+本來想用 wine 裝，後來找了 citrix 的官網，
+發現他們有給 linux 版，有 deb 格式，就裝起來了。
+還不小，100 多 MB。&lt;/p&gt;
+&lt;p&gt;不知道裝完有沒有亂改系統，我看到他是放在 &lt;code&gt;/opt/Citrix&lt;/code&gt; ，
+然後也有在 systemd 註冊一個服務，開機會自動啟動。
+安裝還會跳一個 dialog(1) 的視窗，
+警告 citrix 會控制本機的系統管理權限，
+不知道什麼意思，總之就裝起來了。&lt;/p&gt;
+&lt;h3 id=&quot;啟用-citrix-receiver&quot;&gt;啟用 citrix receiver&lt;/h3&gt;
+&lt;p&gt;我們公司的 citrix receiver 裝好載入設定檔後，
+是不用另外登入的。
+我一開始裝好後，還去點網頁中帳號設定裡的 &lt;em&gt;啟動 citrix receiver&lt;/em&gt; ，
+會跳出 citrix receiver 的設定視窗，
+但其中一步一直無法用帳號或網域名稱登入，
+打我帳號、email、網域都報錯。
+後來才發現這步根本是多餘的，
+裝好後直接點網頁裡的應用程式就可以啟用了。&lt;/p&gt;
+&lt;h3 id=&quot;TWCA-憑證&quot;&gt;TWCA 憑證&lt;/h3&gt;
+&lt;p&gt;但點了應用程式後打不開，跳了一個 ssl 憑證錯誤。
+後來發現是 citrix receiver 沒用系統的 ssl 憑證，
+而是自帶了憑證。
+他自帶的超少，一些沒那麼廣泛使用的就沒包在裡面，
+像台灣的 &lt;a href=&quot;https://www.twca.com.tw/&quot;&gt;TWCA&lt;/a&gt; 。
+我們公司的是用 twca 簽的，就開不了。
+雖然不確定是因為 &lt;code&gt;cxws.*&lt;/code&gt; 要用 ssl 連，
+還是 citrix workspace 裡的應用程式也用 twca 簽了一遍。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://support.citrix.com/article/CTX260336&quot;&gt;citrix workspace 安裝憑證的方法也不難，官網有給教學&lt;/a&gt;。
+就把 pem 格式的憑證丟進 &lt;code&gt;/opt/Citrix/ICAClient/keystore/cacerts/&lt;/code&gt; ，
+然後執行 &lt;code&gt;/opt/Citrix/ICAClient/util/ctx_rehash&lt;/code&gt; ，
+再把現有的程式殺掉讓他自行重啟 &lt;code&gt;killall AuthManagerDaemon ServiceRecord&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;twca 的憑證可以去網上下載，或 debian 有內建 &lt;code&gt;/etc/ssl/certs/TWCA_*&lt;/code&gt; ，
+全複製過去就行了。
+我不知道怎麼在 twca 的網站找到他們的憑證，
+政府的網站總是很容易迷路。
+&lt;a href=&quot;https://ssl-tools.net/subjects/8e88f59059604b03df43780a8094a649cdb975f6&quot;&gt;本來是在 ssl-tools.net 下載的&lt;/a&gt; 。
+但根憑證這種東西，沒事還是不要在不確定來歷的網站載比較好，
+如果系統有內附了，就直接複製過去即可。&lt;/p&gt;
+&lt;h3 id=&quot;顯示器縮放係數&quot;&gt;顯示器縮放係數&lt;/h3&gt;
+&lt;p&gt;但程式開起來後都是黑的一片，沒有畫面。
+四處翻 log google 找文件半天，
+看到有人回報在 &lt;a href=&quot;https://support.citrix.com/article/CTX224400&quot;&gt;雙螢幕&lt;/a&gt; 或 &lt;a href=&quot;https://support.citrix.com/article/CTX230017&quot;&gt;hdpi&lt;/a&gt; 模式下顯示會異常，
+就想到可能是因為我用雙螢幕時，其中一個啟用了像素縮放功能。
+也就是把解析度低的螢幕當成高的在用，
+例如 1 個像素當 2 個像素在用，
+這樣就能把太大的視窗顯示在不夠大的螢幕上。&lt;/p&gt;
+&lt;p&gt;我用這個是因為筆電的螢幕解析度高，但外接螢幕的解析度低。
+如果依解析度將外接螢幕和筆電螢幕對接，
+就會現現螢幕物理尺寸和視窗位置對不上的問題。
+例如同樣 600x400 的視窗，可能在筆電螢幕上是 12x8 公分，
+但在外接螢幕上是 15x10 公分。
+當視窗在不同螢幕間移動時就會很不習慣。&lt;/p&gt;
+&lt;p&gt;但這個功能開了後，citrix workspace 的視窗就會顯示不正常，
+幾乎是無法使用。
+所以以後如果要開 citrix workspace，可能要先把這功能關掉。&lt;/p&gt;
+&lt;h3 id=&quot;讀卡機驅動程式&quot;&gt;讀卡機驅動程式&lt;/h3&gt;
+&lt;p&gt;另一件比較驚奇的事是，linux 下的讀卡機驅動可以直接無縫接軌
+citrix workspace 裡的程式。
+一開始我以為這東西是像開一個 vnc 協議之類的，
+把執行在遠端的程式的畫面接過來，
+所以網路應該是吃遠端的 server 方的網路。&lt;/p&gt;
+&lt;p&gt;但這樣的話，讀卡機驅動應該是動不了的。
+現代台灣的讀卡機驅動為了在 chrome firefox
+等 &lt;strong&gt;現代&lt;/strong&gt; 瀏覽器裡也能執行，
+都是在本機跑一支程式，監聽 localhost 某個 port，
+然後網站就對該預定義的 port 發起 ajax 來溝通。
+但 citrix 程式如果是跑在遠端，怎麼可能連到本機的 port？
+我也想不出他怎麼做的。&lt;/p&gt;
+&lt;p&gt;但另外還有一件事比較有趣，就是讀卡機驅動只在公司的內部網站能動，
+到其它一般銀行或政府機關的網站，就又偵測不到讀卡機了。
+我猜可能是內部網站發現自己跑在 citrix 裡時，
+會調整發 ajax 的 hostname，
+可能 citrix 裡會有一組虛擬 ip 是對應到本機的。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/rss-reader-future-work.html</id>
 <title>我期望中的 rss 閱讀軟體</title>
 <published>2021-12-22T12:32:28.641Z</published>
@@ -1914,184 +2038,7 @@ qXeRUSaWVny/AKLyax59/JzFIhq1p4Z9ZW1xGCiINBLyVHO3hcc9ahKV4EyouFde
 <category term="proton"/>
 <category term="wine"/>
 <category term="windows"/>
-<content type="html">&lt;h1 id=&quot;用-proton-在-linux-下玩哈利波特：魔法覺醒&quot;&gt;用 proton 在 linux 下玩哈利波特：魔法覺醒&lt;/h1&gt;
-&lt;p&gt;上個月中國網易合作開發的哈利波特魔法覺醒遊戲推出了，
-看起來做得很棒，完全不是免洗手遊，對原作還原度也很高，
-對我這代童年在哈利波特長大的人應該很有吸引力。
-幾周後電腦版也出了，我本來想現在這個遊戲引擎時代，
-這種用遊戲引擎開發的遊戲應該裝起來很簡單。
-結果一開始沒裝起來，折騰半天才想到是要先裝好
-Visual C++ Redistributable， &lt;a href=&quot;linux-proton-wine-outside-steam.html&quot;&gt;在 proton 下就可以玩了&lt;/a&gt; 。&lt;/p&gt;
-&lt;h2 id=&quot;all-in-one-script&quot;&gt;all in one script&lt;/h2&gt;
-&lt;p&gt;for those who does not speak chinese but speak bash.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;wget https://g92.gdl.netease.com/HPMA.rar # game size 6.7G
-7z x HPMA.rar # 6.8G
 
-export STEAM_COMPAT_DATA_PATH=$HOME/hpma-compat-data
-export STEAM_COMPAT_CLIENT_INSTALL_PATH=$HOME/.steam/steam
-proton_version=6.3
-
-cd hpzs # game file directory in rar
-# installation take 10G
-&quot;$HOME/.steam/steam/steamapps/common/Proton $proton_version/proton&quot; \
-    run harrypotter_setup.exe
-echo press enter after installation finished
-read x
-cd ..
-
-wget https://aka.ms/vs/16/release/vc_redist.x64.exe
-&quot;$HOME/.steam/steam/steamapps/common/Proton $proton_version/proton&quot; \
-    run vc_redist.x64.exe
-echo press enter after installation finished
-read x
-
-&quot;$HOME/.steam/steam/steamapps/common/Proton $proton_version/proton&quot; \
-    run &quot;C:\Program Files (x86)\HPMA\Launch.exe&quot;
-# do not choose OpenGL in graphic setting; choose direct x 11.
-# opengl will cause chinese font become tofu.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;美術風格&quot;&gt;美術風格&lt;/h2&gt;
-&lt;p&gt;這遊戲對我這代童年在哈利波特長大的人應該很有吸引力，
-遊戲出了後臉書上都出現一堆哈利波特 cosplay 照，
-剛推出時我自己也和朋友去西門町的大型廣告走了一圈。
-遊戲內容也蠻用心的，
-在地圖模式裡可以騎掃把在霍格華茲校園裡自由飛行，
-城堡內部大多地圖也是可以純用走的走到，只是很容易迷路而已。
-只有少部份地圖只能靠超連結按鈕連進去。&lt;/p&gt;
-&lt;p&gt;可能是網易的風格和哈利波特很合吧，
-第五人格的畫風，稍微改一下就很適合哈利波特了。
-雖然這遊戲很明顯有中資問題，但還是真香，
-畢竟是原廠有合作開發，中資問題應該也沒那麼大吧。（自我安慰中。）
-總之等到出事再來抵制應該也不遲。&lt;/p&gt;
-&lt;p&gt;還有一個主因是，我覺得遊戲中用卡牌加上拖曳來施法的機制蠻有趣的，
-所以也想入坑玩玩看。
-朋友也有幾個一開始就入坑，然後爬到蠻高段位的，
-看他們雙排一直贏感覺很爽。&lt;/p&gt;
-&lt;h2 id=&quot;電腦版&quot;&gt;電腦版&lt;/h2&gt;
-&lt;p&gt;這遊戲一開始只出 android ios 版，
-但因為不是大家手機都很好，
-所以後來很多人都用電腦的手機模擬器玩，像用 bluestack。
-我的手機是夠新跑得動，但螢幕太小字看不清楚，根本沒辦法玩。
-後來網易自己出了 pc 版，檔案超大 8G，就打算裝裝看。&lt;/p&gt;
-&lt;p&gt;一開始在 linux 下用 proton 裝一次，但裝完一直開不起來。
-我用 proton 的作法是裝好 steam，
-用 steam 內建的功能裝 proton，
-之後 proton 就會在
-&lt;code&gt;$HOME/.steam/steam/steamapps/common/Proton $version/proton&lt;/code&gt; ，
-version 目前最新是 6.3。&lt;/p&gt;
-&lt;p&gt;proton 執行時要指定一個當 windows c 槽，放系統函式庫的資料夾，
-用環境變數 &lt;code&gt;STEAM_COMPAT_DATA_PATH&lt;/code&gt; 指定，
-然後執行安裝檔 &lt;code&gt;proton run harrypotter_setup.exe&lt;/code&gt; 即可。
-安裝檔一共有五個檔案， &lt;code&gt;harrypotter_setup-[1-4].bin&lt;/code&gt; 
-和一個 &lt;code&gt;harrypotter_setup.exe&lt;/code&gt; ，載下來時是都放在一個 rar 壓縮檔裡。&lt;/p&gt;
-&lt;p&gt;例如我解壓縮後的四個檔案放在 &lt;code&gt;~/hpzs&lt;/code&gt; ，
-給 proton 當 c 槽的資料夾則是 &lt;code&gt;~/hpma-compat-data&lt;/code&gt; ，
-steam 則是安裝在 &lt;code&gt;~/.steam&lt;/code&gt; ，proton 版本是 6.3，
-那執行 proton 來安裝的指令就要這樣下：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;cd ~/hpzs
-env STEAM_COMPAT_DATA_PATH=$HOME/hpma-compat-data \
-    STEAM_COMPAT_CLIENT_INSTALL_PATH=$HOME/.steam/steam \
-    &quot;$HOME/.steam/steam/steamapps/common/Proton 6.3/proton&quot; run \
-    harrypotter_setup.exe
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;安裝後預設是把遊戲裝在 &lt;code&gt;C:\Program Files (x86)\HPMA&lt;/code&gt; ，
-也就是 &lt;code&gt;~/hpma-compat-data/pfx/drive_c/Program Files (x86)/HPMA&lt;/code&gt; 。
-執行檔是 &lt;code&gt;C:\Program Files (x86)\HPMA\Launch.exe&lt;/code&gt;
-裝好要執行的話，可以直接用 windows 風格指定 c 槽路徑：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;env STEAM_COMPAT_DATA_PATH=$HOME/hpma-compat-data \
-    STEAM_COMPAT_CLIENT_INSTALL_PATH=$HOME/.steam/steam \
-    &quot;$HOME/.steam/steam/steamapps/common/Proton 6.3/proton&quot; run \
-    &quot;C:\Program Files (x86)\HPMA\Launch.exe&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;但現在還不能跑，因為少了一個 microsoft visual c++ 的函式庫，
-應該跑到出現網易的 logo 後會有錯誤訊息的視窗出現，
-但是亂碼所以我一開始都不知道是什麼意思。
-visual c++ 函式庫可以去 &lt;a href=&quot;https://docs.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist&quot;&gt;microsoft 網站&lt;/a&gt; 下載，
-我是選 x64 那個，或是 &lt;a href=&quot;https://aka.ms/vs/16/release/vc_redist.x64.exe&quot;&gt;用 exe 檔直接連結&lt;/a&gt; 。&lt;/p&gt;
-&lt;p&gt;載下來和上面裝遊戲的安裝方式一樣，
-用 proton 指定同一個 c 槽資料夾，
-然後一直下一步就好了。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;env STEAM_COMPAT_DATA_PATH=$HOME/hpma-compat-data \
-    STEAM_COMPAT_CLIENT_INSTALL_PATH=$HOME/.steam/steam \
-    &quot;$HOME/.steam/steam/steamapps/common/Proton 6.3/proton&quot; run \
-    vc_redist.x64.exe
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;裝完後理論上就可以開了。
-第一次開可能要更新，檔案還蠻大的。
-更新完後要重開一次，遊戲只會自己關掉，你要手動打開。&lt;/p&gt;
-&lt;p&gt;第一次打開後要註冊，可以綁 facebook 或 line，也只有這二種方法。
-遊戲會嘗試打開瀏覽器用 oauth 授權，如果是 windows 會開 edge，
-proton 下會用 linux 預設的瀏覽開；
-如果都沒有也會顯示授權網址，就自己開吧。&lt;/p&gt;
-&lt;p&gt;進遊戲之後可以去設定把調顯示設定，
-我筆電沒有很好，所以設 fps 30、畫質低。
-然後有一個可以選底層要用 OpenGL 或 DirectX 11，
-proton 選 opengl 的話（下次重開生效），
-字會變豆腐方塊顯示不出來，所以不要選。&lt;/p&gt;
-&lt;p&gt;遊戲安裝檔大小 8G，安裝後 10G。&lt;/p&gt;
-&lt;h2 id=&quot;安裝撞牆記錄&quot;&gt;安裝撞牆記錄&lt;/h2&gt;
-&lt;p&gt;一開始裝不起來以為是 proton 的問題，就把塵封已久的 windows 開來裝裝看。
-先用虛擬機試，本以為手機遊戲應該不會太吃效能，搞不好虛擬機就夠用。
-結果手上二個 windows 硬碟的映像檔，一個開不起來一個開得起來。
-開得起來那個效能也嚴重不足，連過場動畫都超頓，
-畫面落後聲音快一半，根本不能玩。
-所以打算雙開機回 windows 玩。&lt;/p&gt;
-&lt;p&gt;在 windows 裝時，錯誤訊息是缺少 &lt;code&gt;CONTCTR140.dll&lt;/code&gt; 
-和 &lt;code&gt;MSVCP140.dll&lt;/code&gt; 二個函式庫。
-先用之前的想法，手動把這二個 dll 抓下來放進 windows system32，
-但還是不行，錯誤訊息變成別的無意義的東西。&lt;/p&gt;
-&lt;p&gt;於是去開得起來那台找這二個 dll 是收在哪，
-結果是很檔名很長很奇怪的資料夾，我猜是 windows 內部更新會用的位置，
-所以以為是 windows 版本太舊，就把雙系統 windows 整理一下，
-更新到最新版，edge 也從 ms 自幹換成 blink 底了。
-但還是跳一樣的，缺那二個 dll 的錯誤訊息。&lt;/p&gt;
-&lt;p&gt;後來用錯誤訊息去 google，看到一些相關問題，
-提到那二個 dll 是屬於 microsoft visual c++ 的函式庫，
-有些軟體會用到，可以自己手動裝。
-後來仔細想想那台開得起來的映象檔，
-以前的確因為某商業軟體要用，
-就裝過 visual c++ 函式庫，難怪可以動。&lt;/p&gt;
-&lt;p&gt;但網易也太雷，在安裝說明寫個要手動裝 visual c++ 函式庫是會死嗎？
-而且好像大家都沒有這個問題？
-我也不知道為什麼，可能是我的 windows 太乾淨吧。&lt;/p&gt;
-&lt;p&gt;裝完函式庫就可以玩了。
-之後想到，搞不好 proton 不能玩也是這個原因？
-所以就在 proton 下把函式庫裝起來，結果還真的可以跑了。
-只是效能比在 windows 下還差一點，
-打二對二對戰時，畫面比較花就會 lag。
-後來發現不要邊開著瀏覽器邊玩就好了，可能我的 ram 不夠。&lt;/p&gt;
-&lt;p&gt;這遊戲好像是先發布中國版和台灣版，歐美都還沒發布，
-所以之前想找有沒有人用 linux 裝的經驗都找不到。
-reddit 的討論區裡，還有美國人跑來台灣服玩的心得。&lt;/p&gt;
-&lt;h2 id=&quot;用鍵盤玩舞會音樂遊戲時無法一次點二個音符的問題&quot;&gt;用鍵盤玩舞會音樂遊戲時無法一次點二個音符的問題&lt;/h2&gt;
-&lt;p&gt;這遊戲裡除了決鬥，還有舞會這個簡單的小音樂遊戲。
-在手機上可以直接全螢幕點擊，在電腦版用滑鼠不太好操作，
-所以官方讓電腦版可以用空白鍵直接點擊音符，不用管位置。
-但如果是要同時按下二個音符的場合，就變成要按二下空白鍵。
-如果其它鍵也可以代替空白鍵判定，就可以同時按下二個鍵擊中二個音符了。&lt;/p&gt;
-&lt;p&gt;隨便 google 了一下 linux 下做不做得到這件事，
-找到 &lt;a href=&quot;https://askubuntu.com/a/24930/763777&quot;&gt;一則 ask ubuntu 上的回答，看起來用 xmodmap 就行了&lt;/a&gt; 。
-簡單用 &lt;code&gt;xmodmap -e &apos;keycode 54 = space&apos;&lt;/code&gt; 
-就可以把本次 xsession 裡的 keycode 54 換成輸出成空白鍵，
-也就是按 c 鍵也會輸出空白鍵。
-如果要還原，就是 &lt;code&gt;xmodmap -e &apos;keycode 54 = c&lt;/code&gt; 。&lt;/p&gt;
-&lt;p&gt;寫成腳本的話：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;#!/bin/sh
-xmodmap -e &quot;keycode 54 = space&quot;
-xmodmap -e &quot;keycode 59 = space&quot;
-xmodmap -e &quot;keycode 58 = space&quot;
-xmodmap -e &quot;keycode 78 = space&quot;
-
-echo &quot;key &apos;x&apos; &apos;c&apos; &apos;m&apos; &apos;,&apos; are mapped to space&quot;
-echo &quot;press enter to recover&quot;
-read wait
-
-xmodmap -e &quot;keycode 54 = c&quot;
-xmodmap -e &quot;keycode 59 = comma&quot;
-xmodmap -e &quot;keycode 58 = m&quot;
-xmodmap -e &quot;keycode 78 = x&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;這樣就碰到需要雙手同時按的音符時，
-就可以一次按二個鍵達成。
-windows 下應該也有類似的工具吧，總之我不熟。&lt;/p&gt;
-</content>
 </entry><entry>
 <id>http://gholk.github.io/game-opus-starsong-bad-end.html</id>
 <title>龍脈常歌的悲劇結尾異見</title>

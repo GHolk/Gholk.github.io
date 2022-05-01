@@ -1,0 +1,140 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2022-05-01T02:27:06.867Z">
+<meta name="keywords" property="og:article:tag" content="linux,driver,iccard,debug,遠端">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="cd-project-gwent-on-gog-steam.html" title="在 linux 上安裝昆特牌 gwent">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>在 linux 使用遠端辦公軟體 citrix workspace</title>
+</head>
+<body>
+<main><h1 id="在-linux-使用遠端辦公軟體-citrix-workspace">在 linux 使用遠端辦公軟體 citrix workspace</h1>
+<p>公司用 citrix workspace 這套遠端辦公軟體。
+雖然給的手冊沒寫 linux 版，但去他們官網查時，
+發現有 linux 版的 client。
+有包成 deb 的，裝起修一些 bug 後就可以動了，
+還可以讀到 linux 下的讀卡機的驅動。
+bug 有沒包 TWCA 的憑證，
+和啟用 x window 的畫面縮放功能時視窗顯示會壤掉。</p>
+<p>因為之前有人接觸到確診者，
+所以大家都很緊張，開始裝遠端辦公軟體，
+使用 citrix workspace 需要在本機安裝叫 citrix receiver 的程式。
+一開始就照著資訊室的手冊裝，
+他手冊只列了 windows macosx android 三個版本。
+另外他用了 OTP 做二階段認證，但是自己做了個認證 app 出來，
+在遠端辦公登入時，要輸入 app 裡出現的 otp。</p>
+<p>在 windows 裝起來後，發現他不需要管理員權限就能裝，
+因為公司的電腦有鎖管理員權限但我還是裝得起來。
+運作上是可以用瀏覽器開，
+或用 citrix 內建的一個可能是 electron 或 web view 的東西開，
+開某個掛在公司 subdomain 的網站 <code>cxws.*</code> 。
+之後點裡面的連結，firefox 會詢問要不要用本機的應用程式 receiver 開啟，
+同意後 citrix receiver 就會跳起來，
+打開原本在公司電腦上跑的程式。
+這應該是近幾年瀏覽器標準推的新功能，可以讓網頁開本機的應用程式。</p>
+<p>citrix 開起來的程式，就是一個視窗而已。
+有點像某些特化的虛擬機程式，
+可以只把虛擬機中的某個程式的視窗，在另一個本機的視窗中顯示。
+看起來就直接開了一個原生的程式一樣，
+而不是把系統放在某個視窗中，裡面的視窗就沒辦法像原生本機視窗那樣移動。</p>
+<h2 id="在-linux-上安裝">在 linux 上安裝</h2>
+<p>我回家後用 linux 去開網頁，
+但沒裝就不會跳出打開應用程式的對話框，
+只會下載一個 ica 為副檔名的檔案。
+本來想用 wine 裝，後來找了 citrix 的官網，
+發現他們有給 linux 版，有 deb 格式，就裝起來了。
+還不小，100 多 MB。</p>
+<p>不知道裝完有沒有亂改系統，我看到他是放在 <code>/opt/Citrix</code> ，
+然後也有在 systemd 註冊一個服務，開機會自動啟動。
+安裝還會跳一個 dialog(1) 的視窗，
+警告 citrix 會控制本機的系統管理權限，
+不知道什麼意思，總之就裝起來了。</p>
+<h3 id="啟用-citrix-receiver">啟用 citrix receiver</h3>
+<p>我們公司的 citrix receiver 裝好載入設定檔後，
+是不用另外登入的。
+我一開始裝好後，還去點網頁中帳號設定裡的 <em>啟動 citrix receiver</em> ，
+會跳出 citrix receiver 的設定視窗，
+但其中一步一直無法用帳號或網域名稱登入，
+打我帳號、email、網域都報錯。
+後來才發現這步根本是多餘的，
+裝好後直接點網頁裡的應用程式就可以啟用了。</p>
+<h3 id="TWCA-憑證">TWCA 憑證</h3>
+<p>但點了應用程式後打不開，跳了一個 ssl 憑證錯誤。
+後來發現是 citrix receiver 沒用系統的 ssl 憑證，
+而是自帶了憑證。
+他自帶的超少，一些沒那麼廣泛使用的就沒包在裡面，
+像台灣的 <a href="https://www.twca.com.tw/">TWCA</a> 。
+我們公司的是用 twca 簽的，就開不了。
+雖然不確定是因為 <code>cxws.*</code> 要用 ssl 連，
+還是 citrix workspace 裡的應用程式也用 twca 簽了一遍。</p>
+<p><a href="https://support.citrix.com/article/CTX260336">citrix workspace 安裝憑證的方法也不難，官網有給教學</a>。
+就把 pem 格式的憑證丟進 <code>/opt/Citrix/ICAClient/keystore/cacerts/</code> ，
+然後執行 <code>/opt/Citrix/ICAClient/util/ctx_rehash</code> ，
+再把現有的程式殺掉讓他自行重啟 <code>killall AuthManagerDaemon ServiceRecord</code> 。</p>
+<p>twca 的憑證可以去網上下載，或 debian 有內建 <code>/etc/ssl/certs/TWCA_*</code> ，
+全複製過去就行了。
+我不知道怎麼在 twca 的網站找到他們的憑證，
+政府的網站總是很容易迷路。
+<a href="https://ssl-tools.net/subjects/8e88f59059604b03df43780a8094a649cdb975f6">本來是在 ssl-tools.net 下載的</a> 。
+但根憑證這種東西，沒事還是不要在不確定來歷的網站載比較好，
+如果系統有內附了，就直接複製過去即可。</p>
+<h3 id="顯示器縮放係數">顯示器縮放係數</h3>
+<p>但程式開起來後都是黑的一片，沒有畫面。
+四處翻 log google 找文件半天，
+看到有人回報在 <a href="https://support.citrix.com/article/CTX224400">雙螢幕</a> 或 <a href="https://support.citrix.com/article/CTX230017">hdpi</a> 模式下顯示會異常，
+就想到可能是因為我用雙螢幕時，其中一個啟用了像素縮放功能。
+也就是把解析度低的螢幕當成高的在用，
+例如 1 個像素當 2 個像素在用，
+這樣就能把太大的視窗顯示在不夠大的螢幕上。</p>
+<p>我用這個是因為筆電的螢幕解析度高，但外接螢幕的解析度低。
+如果依解析度將外接螢幕和筆電螢幕對接，
+就會現現螢幕物理尺寸和視窗位置對不上的問題。
+例如同樣 600x400 的視窗，可能在筆電螢幕上是 12x8 公分，
+但在外接螢幕上是 15x10 公分。
+當視窗在不同螢幕間移動時就會很不習慣。</p>
+<p>但這個功能開了後，citrix workspace 的視窗就會顯示不正常，
+幾乎是無法使用。
+所以以後如果要開 citrix workspace，可能要先把這功能關掉。</p>
+<h3 id="讀卡機驅動程式">讀卡機驅動程式</h3>
+<p>另一件比較驚奇的事是，linux 下的讀卡機驅動可以直接無縫接軌
+citrix workspace 裡的程式。
+一開始我以為這東西是像開一個 vnc 協議之類的，
+把執行在遠端的程式的畫面接過來，
+所以網路應該是吃遠端的 server 方的網路。</p>
+<p>但這樣的話，讀卡機驅動應該是動不了的。
+現代台灣的讀卡機驅動為了在 chrome firefox
+等 <strong>現代</strong> 瀏覽器裡也能執行，
+都是在本機跑一支程式，監聽 localhost 某個 port，
+然後網站就對該預定義的 port 發起 ajax 來溝通。
+但 citrix 程式如果是跑在遠端，怎麼可能連到本機的 port？
+我也想不出他怎麼做的。</p>
+<p>但另外還有一件事比較有趣，就是讀卡機驅動只在公司的內部網站能動，
+到其它一般銀行或政府機關的網站，就又偵測不到讀卡機了。
+我猜可能是內部網站發現自己跑在 citrix 裡時，
+會調整發 ajax 的 hostname，
+可能 citrix 裡會有一組虛擬 ip 是對應到本機的。</p>
+</main>
+
+<script defer="" src="ext/meta-meta.js"></script>
+<script defer="" data-lazy="" src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+
+</body></html>

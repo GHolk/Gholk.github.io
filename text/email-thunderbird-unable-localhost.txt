@@ -117,6 +117,9 @@ linux 使用者約 180000，佔了全體 thunderbird 使用者的 1%，
 
 [debian bug]: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=993526
 
+## thunderbird 預設的原因
+系統預裝與通知信
+
 ## 沒事整天砍功能的 ui 設計師
 [之前 gslin 分享了一篇諷刺 ui 設計師根據 telemetry 統計數據砍功能的文章][gslin]：
 [I have no capslock and I must scream][scream] 。

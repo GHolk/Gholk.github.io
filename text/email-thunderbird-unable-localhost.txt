@@ -117,8 +117,22 @@ linux 使用者約 180000，佔了全體 thunderbird 使用者的 1%，
 
 [debian bug]: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=993526
 
-## thunderbird 預設的原因
-系統預裝與通知信
+## thunderbird 預裝的原因
+thunderbird 會預裝，除了預設使用者需要有一個 email 軟體外，
+還在收系統通知信的意義。
+unix 系統中有些排程的程式，像前文提到的 at 和 crontab，
+或是更多其它有的沒的，都會以寄 email 的方式通知使用者訊息。
+所以一些系統也會預裝好本機用的 mail server。
+而使用者要看這些信，就得用 email 程式，
+現在的時代不太可能叫使用者用那個文字介面的 mailutils，
+於是就是預裝的 thunderbird 了。
+
+如果 thunderbird 不支援讀本機的 email 了，
+那預裝 thunderbird 以讓使用者能收本機 email 的使用場景就不存在了。
+扣掉這個，真得有那麼多人需要 email 程式來收信嗎？
+現在主流已經是 web mail 了。
+那許多發行版，可能要重新考慮，
+安裝一個不能讀本機 mail 的 mua 的必要性。
 
 ## 沒事整天砍功能的 ui 設計師
 [之前 gslin 分享了一篇諷刺 ui 設計師根據 telemetry 統計數據砍功能的文章][gslin]：
@@ -250,6 +264,24 @@ movemail 的用例只會在 unix 系統上發生，
 套用在 thunderbird movemail 這個功能也類似，
 可能無意間加入的小功能，看起來沒什麼人在用，
 結果移除還是接到這麼多反彈。
+
+## 更新：PM 收回決策
+在 2022-07-08 時，thunderbird pm _Ryan_Lee_Sipes_ 
+[出來道歉][revert] 說會把這功能加回去了。
+從 2020-03-20 bug 回報，2021-02-22 這功能移除，
+2021-06-22 有使用者發現這個功能被移除，
+開始在 thread 下面吵的一年半後，pm 出來道歉了，並決定把這功能加回去。
+我也不知道為什麼，總之大家可以回家啦！
+雖然不知道什麼時候才會正式加回去，總之為了慶祝，
+決定開始贊助 thunderbird 的開發。
+
+[revert]: https://bugzilla.mozilla.org/show_bug.cgi?id=1625741#c87
+
+有個道理是這樣說，要付錢的才是客戶，
+才有資格對產品指指點點。
+如果身為重度使用者，卻對產品開發沒有話語權，那也是蠻難過的。
+那至少可以用微薄的贊助，告訴 mozilla 這樣是對的，我們支持你。
+如果哪天 mozilla 又做蠢事，也可以用收回贊助的方式抗議。
 
 #firefox
 #email

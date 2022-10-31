@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2022-07-17T12:31:27.278Z</updated>
+  <updated>2022-10-31T14:42:43.534Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -22,6 +22,321 @@
   <category term="ncku"/>
   <category term="taiwan"/>
   <generator uri="https://cheerio.js.org/">cheerio</generator>
+
+  <entry>
+<id>http://gholk.github.io/batch-qrcode-generate.html#2022-10-大張尺寸改版</id>
+<title>將檔案編碼為 QR code 的工具</title>
+<published>2021-07-22T06:23:31.453Z</published>
+<updated>2022-10-31T14:42:43.489Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/batch-qrcode-generate.html#2022-10-大張尺寸改版"/>
+<summary type="html">
+加入 qrcode 容量調整的選項，並預設產生中等大小、適合列印的 qrcode 。
+qrcode 容量則是用切割字串的功能和換行符分割來達成。
+還有一些用於手動微調的選項，與列印上的建議。</summary>
+<category term="qr-code"/>
+<category term="tool"/>
+<category term="js"/>
+<category term="web"/>
+<category term="手機"/>
+<content type="html">&lt;h1 id=&quot;將檔案編碼為-QR-code-的工具&quot;&gt;將檔案編碼為 QR code 的工具&lt;/h1&gt;
+&lt;p&gt;本程式可以將字串分割編碼為 qr code，供連續掃描後合併回檔案。
+因為之前開了個腦洞，在想要如何寄紙本加密信件，
+加密我的想法就只有 pgp，然後再加一個把數位資料轉紙本的方式
+印出來後用 ocr 好像不太準確，且 ocr 對一般人不夠普及。
+後來就想到編碼成 qr code，配合一些 app 有連續掃描功能，
+掃完後再匯出，於是就這樣成了。&lt;/p&gt;
+&lt;p&gt;qr code 可以很大，但問題是手機的鏡頭沒有那麼大和清晰。
+雖然理論上也可以用掃描器掃描後再用電腦去判讀，
+但一樣有技術不夠普及，對一般使用者不友善的問題。
+所以要把資料拆成多個 qr code，
+再借助另一項某些 qr code 掃描器的功能，連續掃描。&lt;/p&gt;
+&lt;p&gt;以我用的 qr code 掃描器 &lt;a href=&quot;https://play.google.com/store/apps/details?id=de.markusfisch.android.binaryeye&quot;&gt;binary eye&lt;/a&gt; 來說，
+就是開啟連續掃描功能，然後掃完後進到歷史記錄，
+選擇匯出掃描記錄即可。
+掃描記錄可以是 csv 或 json，總之都是用 linux 可以簡單處理的格式。&lt;/p&gt;
+&lt;p&gt;資料格式的話，我不確定 qr code 能不能塞二進位資料，
+但我不想給自己找麻煩，還得找一款能讀取二進位的 qr code scaner，
+所以最簡單的方式就是先用 base64 編碼資料。
+因為 linux base64 工具默認會自己切割資料了，
+但如果用我原本的想法 64 個字元切成一個 qr code，
+加上換行符字數變奇數，qr code 就會斷在奇怪的地方，
+所以後來加了一個用換行切割的功能。&lt;/p&gt;
+&lt;p&gt;我掃描時碰到幾個問題，第一個是如果照常規排版每行由左到右，
+掃完一行時換行可能會亂掉，而且也沒效率，應該要用 s 型的排列。
+所以我加了個簡單的 s 型排版功能，但也把版型固定成四欄。&lt;/p&gt;
+&lt;p&gt;再來是有時可能會漏掃或重復掃，應該要加個 checksum 機制。
+我後來幫每個 qr code 標了編號，
+應該就不會亂掉了，最後總數也可以用來驗證。
+之後我又幫每個 qr code 下面標上內容字串，
+可以用來找出哪個漏掃。&lt;/p&gt;
+&lt;p&gt;但最後還有個問題是瀏覽器印出來時，
+某些 qr code 可能被分頁切斷。
+我試了 css 的 &lt;code&gt;page-break: avoid&lt;/code&gt; ，但 chromium 還是會切斷，
+無論我的 qr code 是用 img 或 canvas。
+目前只確定 firefox 是可以用的，chromium 就再等等吧。&lt;/p&gt;
+&lt;h2 id=&quot;2022-10-大張尺寸改版&quot;&gt;2022-10 大張尺寸改版&lt;/h2&gt;
+&lt;p&gt;原本本工具是印出大量的小張 qrcode，但大張 qrcode 在儲存上比較有效率，
+所以改版讓本工具可以方便印出較大張的 qrcode。&lt;/p&gt;
+&lt;p&gt;建議使用每張 512 個字元的 qrcode，並每列 3 張 qrcode，直式列印可以印四列。
+這樣單面可以容納 12 張 qrcode，6144 個字元，base64 編碼前為 4608 byte。
+操作上把 &lt;em&gt;每列字元數&lt;/em&gt; 設為 512，再按下重新切割字串，
+後勾選 &lt;em&gt;依換行分割字串&lt;/em&gt; 再按 &lt;em&gt;encode&lt;/em&gt; 即可。&lt;/p&gt;
+&lt;p&gt;另一種印法是每張 1024 字元，每列 3 張，用橫式列印一頁二列。
+但這種作法要調一下頁緣間距，很容易超過。&lt;/p&gt;
+&lt;p&gt;而且 qrcode 太大張不太好掃，也最好不要摺到。
+除了不能摺到 qrcode 內部，外部也最好不要。
+紙張有摺痕的話，山線谷線多少會讓紙面有弧度，
+然後 qrcode 扭曲就掃不出來。
+如果非摺不可，要掃時可以考慮撕開，
+紙面沒有摺線的話就不會有扭曲的問題了。&lt;/p&gt;
+&lt;h3 id=&quot;其他改版說明：&quot;&gt;其他改版說明：&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;S 型排列無法在每列 4 張 qrcode 以外場合正常運作&lt;/li&gt;
+&lt;li&gt;預設行為變為依換行分割字串&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;重新切割字串&lt;/em&gt; 按鈕會刪除換行符後，依每列字元數目斷行。&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;每列字元數&lt;/em&gt; 清除內容後，雙擊文字框會出現建議的字元數，
+對應各尺寸 qrcode 的容量上限。&lt;/li&gt;
+&lt;li&gt;qrcode 尺寸是在 qrcode 邊界過大或超出顯示範圍時，用來調整大小的。
+原則上是依 &lt;em&gt;每列的 qrcode 數目&lt;/em&gt; 自動調整大小。&lt;/li&gt;
+&lt;li&gt;這個 qrcode library qrious 不能輸入 unicode 字串，輸出會壞掉。
+之前就是這樣，但沒有特別寫出來，只有建議用 base64。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;form&gt;
+&lt;label&gt;
+&lt;h2&gt;原始資料&lt;/h2&gt;
+&lt;textarea name=&quot;text-data&quot;&gt;&lt;/textarea&gt;&lt;/label&gt;
+&lt;label&gt;&lt;input name=&quot;snake-render&quot; onchange=&quot;qrcodeBatcher.handleStyleCheckbox(this)&quot; data-style-name=&quot;snake&quot; type=&quot;checkbox&quot;&gt;S 型排列 qr code (只在每列 4 個 qrcode 下有效)&lt;/label&gt;
+&lt;label&gt;&lt;input name=&quot;split-by-newline&quot; type=&quot;checkbox&quot; checked=&quot;&quot;&gt;
+依換行分割字串&lt;/label&gt;
+
+&lt;label&gt;&lt;input name=&quot;show-text-data&quot; type=&quot;checkbox&quot; checked=&quot;true&quot; onchange=&quot;qrcodeBatcher.handleStyleCheckbox(this)&quot; data-style-name=&quot;ellipsis&quot;&gt;顯示省略版字串&lt;/label&gt;
+
+&lt;label&gt;每列的 qrcode 數目
+&lt;input name=&quot;qrcode-per-row&quot; type=&quot;number&quot; value=&quot;3&quot; min=&quot;2&quot; max=&quot;4&quot; step=&quot;1&quot;&gt;&lt;/label&gt;
+
+&lt;div&gt;&lt;label&gt;每列字元數&lt;input name=&quot;character-per-line&quot; type=&quot;number&quot; min=&quot;64&quot; max=&quot;2953&quot; value=&quot;512&quot; list=&quot;qrcode-byte-capacity&quot;&gt;&lt;/label&gt;
+&lt;button type=&quot;button&quot; onclick=&quot;qrcodeBatcher.getFormNode(&apos;character-per-line&apos;).value = &apos;&apos;&quot;&gt;
+clear&lt;/button&gt;
+&lt;button type=&quot;button&quot; onclick=&quot;qrcodeBatcher.splitTextPerLine()&quot;&gt;重新切割字串&lt;/button&gt;
+&lt;datalist id=&quot;qrcode-byte-capacity&quot;&gt;
+&lt;option value=&quot;64&quot;&gt;
+&lt;/option&gt;&lt;option value=&quot;256&quot;&gt;
+&lt;/option&gt;&lt;option value=&quot;512&quot;&gt;
+&lt;/option&gt;&lt;option value=&quot;1024&quot;&gt;
+&lt;/option&gt;&lt;option value=&quot;2048&quot;&gt;
+&lt;/option&gt;&lt;option value=&quot;2953&quot;&gt;
+&lt;/option&gt;&lt;/datalist&gt;
+&lt;/div&gt;
+
+&lt;label&gt;qr-code 尺寸
+&lt;input name=&quot;qrcode-canvas-size&quot; type=&quot;range&quot; min=&quot;33&quot; max=&quot;180&quot; value=&quot;77&quot; oninput=&quot;qrcodeBatcher.handleSizeChange()&quot;&gt;&lt;/label&gt;
+
+&lt;button type=&quot;button&quot; onclick=&quot;qrcodeBatcher.handleEncode()&quot;&gt;encode&lt;/button&gt;
+
+&lt;label&gt;
+&lt;h2&gt;QR code&lt;/h2&gt;
+&lt;output name=&quot;qr-code-area&quot; class=&quot;ellipsis&quot;&gt;&lt;/output&gt;&lt;/label&gt;
+&lt;/form&gt;
+
+&lt;style&gt;
+form &gt; * {
+    display: block;
+}
+form textarea {
+    width: 100%;
+    min-height: 16em;
+}
+output .item {
+    box-sizing: border-box;
+    width: 25%;
+    float: left;
+    counter-increment: image-counter;
+    border: solid 1px;
+}
+.item img, .item canvas {
+    width: 90%;
+    display: block;
+    margin: 5% auto;
+    image-rendering: pixelated;
+}
+.item .subtitle {
+    display: inline-block;
+    width: 70%;
+    margin: 0 1em;
+    height: 15em;
+}
+.ellipsis .item .subtitle {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: auto;
+}
+output .item::after {
+    content: counter(image-counter);
+    display: inline-block;
+}
+output.snake .item:nth-child(8n+1),
+output.snake .item:nth-child(8n+2),
+output.snake .item:nth-child(8n+3),
+output.snake .item:nth-child(8n+4) {
+    float: left;
+    clear: right;
+}
+output.snake .item:nth-child(8n+5),
+output.snake .item:nth-child(8n+6),
+output.snake .item:nth-child(8n+7),
+output.snake .item:nth-child(8n) {
+    float: right;
+    clear: left;
+}
+output:after {
+    content: &apos; &apos;;
+    clear: both;
+    display: block;
+}
+
+@media print {
+    body {
+        max-width: 100%;
+    }
+    @page {
+        margin: 1em;
+    }
+    output {
+        page-break-before: always;
+        padding: 1em;
+    }
+    output .item, output .item * {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+    output .item &gt; canvas {
+        width: 96%;
+        margin: 2% auto;
+    }
+    form + * {
+        clear: both;
+    }
+    footer {
+        display: block;
+        clear: both;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+}
+&lt;/style&gt;
+
+&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js&quot;&gt;&lt;/script&gt;
+
+&lt;script&gt;
+    var qrcodeBatcher = {
+        qrious: new QRious(),
+        form: document.getElementsByTagName(&apos;form&apos;)[0],
+        getFormNode(name) {
+            return this.form.elements[name]
+        },
+        handleTextInput() {
+            const textarea = this.getFormNode(&apos;text-data&apos;)
+            textarea.style.height = textarea.scrollHeight + &apos;px&apos;
+        },
+        handleStyleCheckbox(node) {
+            const output = this.getFormNode(&apos;qr-code-area&apos;)
+            if (node.checked) {
+                output.classList.add(node.dataset.styleName)
+            }
+            else output.classList.remove(node.dataset.styleName)
+        },
+        *segmentText64(text) {
+            let i = 0
+            const n = 64
+            do {
+                yield text.slice(i, i+n)
+                i += n
+            }
+            while (i &lt; text.length)
+        },
+        splitTextPerLine(width) {
+            if (!width) width = Number(
+                this.getFormNode(&apos;character-per-line&apos;).value
+            )
+            const field = this.getFormNode(&apos;text-data&apos;)
+            const value = field.value.replace(/\n/g, &apos;&apos;)
+            const list = []
+            for (let i=0; i&lt;value.length; i+=width) {
+                list.push(value.slice(i, i+width))
+            }
+            field.value = list.join(&apos;\n&apos;)
+        },
+        handleSizeChange() {
+            const size = Number(this.getFormNode(&apos;qrcode-canvas-size&apos;).value)
+            this.qriousCanvasSize = size
+            this.getFormNode(&apos;qr-code-area&apos;)
+                .querySelectorAll(&apos;canvas&apos;)
+                .forEach(canvas =&gt; canvas.qrious.size = size)
+        },
+        segmentText(text = this.getFormNode(&apos;text-data&apos;).value) {
+            if (this.getFormNode(&apos;split-by-newline&apos;).checked) {
+                return text.split(/\n/)
+            }
+            else return this.segmentText64(text)
+        },
+        handleEncode() {
+            this.getFormNode(&apos;qr-code-area&apos;).textContent = &apos;&apos;
+            for (const seg of this.segmentText()) {
+                const canvas = this.textToCanvas(seg)
+                this.renderImage(canvas, seg)
+                // const url = this.textToDataUrl(seg)
+                // const image = document.createElement(&apos;img&apos;)
+                // image.src = url
+                // this.renderImage(image)
+            }
+        },
+        renderImage(node, segment) {
+            const output = this.getFormNode(&apos;qr-code-area&apos;)
+            const item = document.createElement(&apos;div&apos;)
+            item.className = &apos;item&apos;
+            item.appendChild(node)
+            const count = Number(this.getFormNode(&apos;qrcode-per-row&apos;).value)
+            item.style.width = 100 / count + &apos;%&apos;
+            const subtitle = document.createElement(&apos;div&apos;)
+            subtitle.className = &apos;subtitle&apos;
+            subtitle.textContent = segment
+            item.appendChild(subtitle)
+            output.appendChild(item)
+        },
+        qriousCanvasSize: 77,
+        textToCanvas(text) {
+            const qrcode = new QRious({
+                value: text,
+                size: this.qriousCanvasSize
+            })
+            return qrcode.canvas
+        },
+        textToDataUrl(text) {
+            this.qrious.value = text
+            return this.qrious.toDataURL()
+        },
+        textToGoogleImageUrl(text) {
+            const url = encodeURIComponent(text)
+            const qrcodeUrl = `http://chart.googleapis.com/chart?chs=150x150&amp;cht=qr&amp;chl=${url}`
+            return qrcodeUrl
+        }
+    }
+&lt;/script&gt;
+</content>
+</entry><entry>
+<id>http://gholk.github.io/email-thunderbird-unable-localhost.html#foo-bar</id>
+<title>thunderbird foo bar</title>
+<published>2022-04-01T13:22:44.663Z</published>
+<updated>2022-10-25T14:06:27.278Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/email-thunderbird-unable-localhost.html#foo-bar"/>
+<summary type="html">foo bar sum</summary>
+<category term="firefox"/>
+<category term="email"/>
+<category term="funny"/>
+<category term="linux"/>
+<content type="html">this is html</content>
+</entry>
 
 <entry>
 <id>http://gholk.github.io/email-thunderbird-unable-localhost.html#更新：PM-收回決策</id>
@@ -1664,220 +1979,7 @@ gwent 的網站用 linux 訪問，則會出現請用 windows pc 下載的提示�
 <category term="電影"/>
 <category term="愛情"/>
 <category term="百合"/>
-<content type="html">&lt;h1 id=&quot;藍色大門心得：太過幼稚與太過好說話的時期&quot;&gt;藍色大門心得：太過幼稚與太過好說話的時期&lt;/h1&gt;
-&lt;p&gt;久聞大名，看到 mod 電影 199 有上，就開來看了。
-前期第一個感想是，林月珍到底在想什麼，
-喜歡張士豪還一直推給孟克柔，然後還在那邊鬧脾氣。
-到後期又變成張士豪也太屁孩，哪有人這樣吵架的，
-好幾次的幼稚吼叫行為，感覺都可以歸到恐怖情人了。
-然後克柔也太好說話，竟然沒有直接報警之類。
-總之桂綸鎂好美，搖肩膀那段好可愛；
-陳柏霖倒沒什麼感覺，就平凡的男高中生，直男癌。&lt;/p&gt;
-&lt;h2 id=&quot;背景介紹&quot;&gt;背景介紹&lt;/h2&gt;
-&lt;p&gt;場景是師大附中。
-林月珍和孟克柔是好閨蜜，反正就女生那種好好朋友的闗係，
-會打打鬧鬧、講小祕密。
-月珍暗戀游泳隊的張士豪，常叫克柔陪她去見面，
-幫她壯膽，但又自己跑掉。
-但其實克柔喜歡的是月珍，但士豪和克柔接觸後，
-卻喜歡上了克柔。&lt;/p&gt;
-&lt;h2 id=&quot;劇情與心得&quot;&gt;劇情與心得&lt;/h2&gt;
-&lt;p&gt;在開頭一段，林月珍和孟克柔說了她喜歡的男生是張士豪後，
-放學克柔騎腳踏車回家時，好像眼睛紅紅的？
-不知道是有要做出哭的效果，還是光影的闗係，
-總覺得整部片裡桂綸鎂很常出現這種眼神。&lt;/p&gt;
-&lt;h3 id=&quot;替身告白&quot;&gt;替身告白&lt;/h3&gt;
-&lt;p&gt;月珍不知從哪裡聽到，士豪會在半夜跑進學校的游泳池練習，
-於是就找克柔去偷看，然後就大叫叫士豪過來，要告白。
-但士豪來了，月珍又自己害羞跑掉，
-於是士豪只看到克柔一個人來找他。
-在這之前，三人之間是完全不認識的，
-只有月珍知道游泳隊有這個人，所以士豪從一開始知道的就只有克柔。&lt;/p&gt;
-&lt;p&gt;接著林月珍寫信，請克柔轉交給張士豪，
-但月珍不知道在想什麼，用克柔的名字署名。
-雖然也不是告白，就很文雅的想認識，你很不錯之類的。
-然後士豪就開始覺得奇怪，每次克柔都說是月珍要她轉交的，
-用月珍當藉口；
-就擅自推理成其實根本沒有月珍這個人，
-是克柔自己害羞，所以捏造出來的。&lt;/p&gt;
-&lt;h3 id=&quot;擅自推理&quot;&gt;擅自推理&lt;/h3&gt;
-&lt;p&gt;我說這段士豪也太自戀，你也多相信朋友一點，
-不要擅自把別人的理由，解讀成掰出來的藉口。
-雖然反過來看是完全合理的，
-把月珍和克柔角色對調，就會發現月珍的確一直在用克柔當藉口，
-要和士豪碰面。
-所以其實在劇情上，士豪對害羞少女心的掌握還是蠻不錯的，
-只可惜害羞的少女是月珍而不是克柔。&lt;/p&gt;
-&lt;p&gt;之後士豪就開始一些小男生的反應，
-看到克柔會傻笑，然後自介是很經典的那段：
-「我叫張士豪，天蝎座 O 型，游泳隊吉他社。」
-然後出現一些奇怪的橋段，像士豪跟在克柔後面走，
-或騎腳踏車上下學時故意騎在她前面。
-這段我倒是看得心驚膽顫，感覺和恐怖情人已經沒兩樣了。&lt;/p&gt;
-&lt;p&gt;像是某段下課時間，士豪就一直跟在克柔後面，
-她走到哪就跟到哪，搞得克柔最後回頭問他「你跟著我幹麻？」
-士豪就回：「我叫張士豪，天蝎座 O 型，游泳隊吉他社；我覺得我不錯啊。」
-如果是成年人或再大一點，這樣跟蹤可能就直接報警上新聞了吧。
-其它還有士豪下課後都跟在克柔後面騎去她家，
-在她家公寓門口堵她，然後克柔不下來，
-就在她家的麵攤吃麵，還每天去……。&lt;/p&gt;
-&lt;h3 id=&quot;演唱會&quot;&gt;演唱會&lt;/h3&gt;
-&lt;p&gt;更扯的是在跟蹤自我介紹後，克柔回了一句：「我很麻煩的」，
-士豪也回一句「我也很麻煩」後，場景竟然就變成他們二個一起去聽演唱會了。
-大概也只有還沒接觸過愛情的單純的女生，
-還沒被蒼蠅群騷擾過，才會這樣給第一隻蒼蠅機會。
-有時候還是會懷念那個單純的時期，只要有願意去追，
-用毅力去噓寒問暖，就可以換來一次會面的單純時光。&lt;/p&gt;
-&lt;p&gt;海邊沙攤上的演唱會大概是本片我最喜歡的地方了吧。
-克柔搖肩膀的那段實在太美了，帥氣的克柔也可以有這麼可愛的一面。
-士豪閒聊，然後硬要附合的部份也很好笑，
-「你聽得懂嗎？」『我聽得懂啊。』「喔喔，我也聽得懂啊！」&lt;/p&gt;
-&lt;p&gt;之後那段二人去玩水的部份，現在看起來也是很違合。
-士豪不想聽了跑去游泳，然後還拉克柔跑去玩水，
-這段士豪看起來超強迫人的，
-哪有直接把女生拉到水裡的作法，人家都說不要了……。
-可能是想表現小朋友打打鬧鬧的場景吧，
-但套到接近成人的高中生身上，或是以現代人權的角度，
-所謂的不要就是不要，就很不好。&lt;/p&gt;
-&lt;h3 id=&quot;女生的社交&quot;&gt;女生的社交&lt;/h3&gt;
-&lt;p&gt;前面還有一條劇情，是月珍用克柔名字寫的情書，
-被其它人發現貼在地上。
-這裡有一段二人一起踢黏在地上的情書的鏡頭，
-一起出腳的默契也是很有趣。
-隔天克柔桌上，被用粉筆寫了噁心二個字。&lt;/p&gt;
-&lt;p&gt;但我要說的不是這個，是之後克柔很不爽，
-為什麼月珍要用她的名字寫情書，直接在上課中大聲質問月珍為什麼，
-月珍不回答她就直接拿課本丟她。
-老師看了也覺得很奇怪，直接點她，但克柔也不管，
-就搞到全班都知道克柔質問月珍這件事。
-之後二人就幾乎冷戰。&lt;/p&gt;
-&lt;p&gt;這條線和上面克柔、士豪二人相識的線交錯發展，
-到某一天，月珍來問二人發展狀況，克柔說他們真的沒有交往後，
-月珍才說她知道是誰在她桌上寫噁心的。
-結果是另一個也蠻漂亮的女生，因為也喜歡士豪，
-所以才會討厭克柔，就做這種小動作。&lt;/p&gt;
-&lt;p&gt;這裡應該是要表現女生間的複雜社交關係。
-月珍應該知道也有其它人喜歡士豪，
-所以也不太敢表白，就用克柔的名字。
-（這操作還是很謎，但以女生間的小圈圈，我也不想說什麼。）
-之後克柔和士豪二人互動時，月珍應該是有生氣，所以才不理克柔。
-月珍的想法大概是：「我害羞不敢寫自己名字，改成寫你的，
-你竟然還真得去和士豪交往？我還以為你也會害羞跑掉的，你要不要臉啊。」
-所以之後克柔和月珍一再說二人沒有交往後，月珍才和克柔合好。&lt;/p&gt;
-&lt;h3 id=&quot;體育老師&quot;&gt;體育老師&lt;/h3&gt;
-&lt;p&gt;這條線我真的看不懂。
-之前克柔和士豪接吻一次，看自己會不會因此愛上男生，結果當然沒有。
-之後克柔一個晚上在外面閒逛時，碰見在慢跑的體育老師。
-有點忘了前後文，不知道克柔是撞到腦袋還怎麼樣，
-竟然問體育老師要不要吻她；體育老師當然很理智的選了不要。&lt;/p&gt;
-&lt;p&gt;隔天在學校，體育老師又看到克柔，
-就用很慎重的態度找克柔談話。
-但克柔心情又變了，不想和體育老師說話，
-就跑去牽士豪的手，要讓體育老師看到後自己走開。
-但體育老師還是不死心，還對士豪喊話希望能和克柔說話，
-但克柔一直死死握著士豪的手，所以最後體育老師還是自己跑掉了。&lt;/p&gt;
-&lt;p&gt;這裡不知道想表達什麼。
-以前面體育老師理智的行為，應該是要開導克柔：
-女生和老師是不行的，你不能喜歡我之類的；
-或是你們現在談戀愛還太早，不要做什麼不該做的事。
-我猜一開始老師可能以為克柔喜歡她，
-但後來看到士豪又冒出其它想法。
-電影可能想表達，男生會很容易以為女生喜歡自己，
-像士豪，像體育老師，都因為克柔一點點動作，就以為她喜歡自己。&lt;/p&gt;
-&lt;p&gt;套一段成句：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;男生很常有「她喜歡我」的錯覺&lt;/p&gt;
-&lt;p&gt;女生的委婉拒絕，很常讓男生產生錯覺。
-女生都有一把鏡花水月，但男生都是那個日番谷冬獅郎&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.facebook.com/weilun.luo.39/posts/3499260370093330&quot;&gt;https://www.facebook.com/weilun.luo.39/posts/3499260370093330&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&quot;克柔的心情起伏&quot;&gt;克柔的心情起伏&lt;/h3&gt;
-&lt;p&gt;克柔這個角色，常常有心情陰晴不定的描寫，情緒起伏很大。
-和士豪時也是，一開始覺得士豪很煩，
-後來卻又答應和他約會，還處得不錯。
-但三不五時，又會心情突變，讓士豪不知所措。
-（碰到像士豪那樣笨又亂來的男生，會忽然生氣也是理所當然的事吧？）&lt;/p&gt;
-&lt;p&gt;其實二人的相處套到克柔和月珍身上也是，
-在和克柔相處時，月珍也會有這樣陰晴不定的表現。
-其實我覺得以女生間的相處模式，出現這種狀況不算奇怪。
-像後來克柔親月珍的時候，或是二人的關係，
-也常常莫名其妙的好轉或吵架。
-當然也可能是我男的看不懂。&lt;/p&gt;
-&lt;h3 id=&quot;用祕密交換祕密&quot;&gt;用祕密交換祕密&lt;/h3&gt;
-&lt;p&gt;最後，士豪一直追問下，克柔要士豪告訴她一個祕密。
-士豪就說了一些很像祕密的事，
-像他其實不喜歡游泳，他尿尿會分杈，還是蓮蓬頭式的。
-克柔對第一個一笑置之，後來幾個也不怎麼滿意，
-但她還是說了自己的祕密，其實她喜歡女生。&lt;/p&gt;
-&lt;p&gt;不知道這個遊戲是誰發明的，用祕密交換祕密，
-總之我是覺得挺有趣的，可能有一天我也會這麼做吧。
-我們會恆量對方祕密的價值，然後以等值的祕密回應。
-祕密是資訊，重置成本低，唯一的擔保是用自己的祕密去抵押；
-如果你公布了我的，我也會公布你的。&lt;/p&gt;
-&lt;p&gt;士豪的那幾個祕密，不知道是不是指他還是處男。
-尿尿會分杈，或是蓮蓬頭樣的開花式，
-應該是指他馬眼還沒有完全露出包皮外，
-所以尿尿時會因為包皮牽制分杈，或因為流經包板的震動，
-讓包皮晃動，就共振成開花式。&lt;/p&gt;
-&lt;h3 id=&quot;恐怖情人&quot;&gt;恐怖情人&lt;/h3&gt;
-&lt;p&gt;士豪的很多行為我真得不忍直視。
-在校園裡一直跟著、跟克柔回家，
-還有有時候克柔拒絕溝通時，變成用吼叫的。
-男性要有自覺，一個成年男人的吼叫或某些肢體動作，
-是會讓女性產生恐懼的；
-已經不是那個小時候可以打打鬧鬧的時期了。
-雖然現在的士豪尚不完全是成年男人。
-不過可能是克柔的個性，或她不那麼女性，
-所以她沒有對這些行為產生恐懼。&lt;/p&gt;
-&lt;h3 id=&quot;我會告訴她&quot;&gt;我會告訴她&lt;/h3&gt;
-&lt;p&gt;總之也因為這樣，劇情得以推進。
-來到士豪再度質疑根本沒有月珍，
-月珍也和克柔合好，並在月珍的請求下，
-克柔答應安排二人會面。
-會面後二人出去走了一天，然後最後月珍和士豪告白，
-士豪留下一句抱歉就跑掉了。&lt;/p&gt;
-&lt;p&gt;很明顯這裡是因為士豪喜歡上克柔，所以不能答應月珍。
-之後士豪就跑去找克柔，問她到底什麼意思，
-一直問還用吼的，我都快怕死了，哪有人這樣吼女生的啦。
-總之吵一吵後，二人之後大概弄懂彼此關係了，
-士豪知道克柔沒有喜歡他，但他喜歡克柔了，
-所以也沒有接受月珍，然後就剩最後一條線了，克柔和月珍。&lt;/p&gt;
-&lt;p&gt;士豪知道克柔喜歡月珍後，
-克柔問他，如果是你，你會說嗎？
-士豪就很直男的說：「如果是我，我會告訴她。」
-不知道劇情這裡是不是刻意的，
-事實上在上一段劇情中，月珍就「告訴」士豪了，
-然後士豪就拒絕了。
-所以士豪這裡這樣回答，也有點諷刺。&lt;/p&gt;
-&lt;h3 id=&quot;你會習慣的&quot;&gt;你會習慣的&lt;/h3&gt;
-&lt;p&gt;在操場一角，克柔和月珍坐在樹下聊天，
-她們好像在聊彼此的未來吧，
-就一開始月珍閉眼想像未來的場景那樣。
-月珍說著說著，克柔叫了她；
-月珍停了一下，又繼續，然後克柔又叫了她一次，
-然後又一次，在她回頭時，親了上去。
-月珍呆了一下，然後跑走了，留下克柔在原地。&lt;/p&gt;
-&lt;p&gt;克柔曾經感嘆，為什麼其它人可以那麼平凡簡單的喜歡上異性，
-但她的喜歡卻像千斤重擔，壓在身上。
-但總有一天克柔也會習慣的，當她社會化，
-被人群磨去稜角，變成平凡的人。
-人都是這樣活過來的，你會習慣的，
-人是混雜的、不純粹的存在，難以永遠堅持同一理念，
-時間會改變一切。&lt;/p&gt;
-&lt;h2 id=&quot;結論&quot;&gt;結論&lt;/h2&gt;
-&lt;p&gt;桂綸鎂好正。
-不知道是不是林月珍的演員太普通，
-完全被可以理解士豪為什麼不喜歡月珍，
-當然電影也幾乎只給的士豪和克柔的接觸機會，
-所以士豪這樣選也很合理。&lt;/p&gt;
-&lt;p&gt;電影中也引用了一些有趣的都市傳說，或說校園文化風格的流言。
-像是克柔的用祕密交換祕密，和月珍收集士豪的物品，
-認為只要把士豪的原子筆水用完，士豪就會喜歡上她。
-這些流言，我幾乎分不出是電影成就了流言，還是流言本來就有。
-我記得中學時就聽過用祕密交換祕密的說法，
-但我實在不知道這個流言的來源是藍色大門，
-還是流言本來就在，只是藍色大門也引用了而已。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/courage-mean-in-digimon.html</id>
 <title>所謂的勇氣就是</title>
@@ -1890,456 +1992,7 @@ gwent 的網站用 linux 訪問，則會出現請用 windows pc 下載的提示�
 在神奇寶貝改名為寶可夢後，童年只剩下數碼寶貝這個 ip 了。</summary>
 <category term="funny"/>
 <category term="daily"/>
-<content type="html">&lt;h1 id=&quot;所謂的勇氣就是&quot;&gt;所謂的勇氣就是&lt;/h1&gt;
-&lt;p&gt;據說數碼寶貝除了無印都是黑歷史。
-我終於開始要把無印篇補完了，但也因為太多負評，
-沒有繼續追數碼寶貝 2 的打算。
-在神奇寶貝改名為寶可夢後，童年只剩下數碼寶貝這個 ip 了。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;勇氣就是光明被希望帶走，友情和愛情私奔，純真與希望結伴跑路，甚至誠實都已經失蹤後，還能堅強的生活下去 ---  八神太一&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;banacorn 彩虹旗
-@banacorn&lt;/p&gt;
-&lt;p&gt;「連勝文一直在神壇，想下來卻下不來」&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;間桐櫻做了禮拜，漲紅的臉色漸漸復了原，旁人便又問道，“ 間桐櫻，你當真會魔法嗎？” 間桐櫻看著問她的人，顯出不屑置辯的神氣。他們便接著說道，“ 你怎的連半個 Master 也撈不到呢？” 間桐櫻立刻顯出頹唐不安模樣，臉上籠上了一層灰色，嘴裡說些話；這回可是全是“ 討厭戰爭” “ 為了士郎” 之類，一些不懂了。在這時候，眾人也都哄笑起來：教堂內外充滿了快活的空氣。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;春日南向高原登 青山傲然堇香純 鄉間老婦旗未立 兄先對弈七香陣&lt;/p&gt;
-&lt;p&gt;月夜燈下中川昏 白亞嬌赧栞靜文 名門閨秀結已解 妹還欲唱千尋歌&lt;/p&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;绵羊级&quot;&gt;绵羊级&lt;/h3&gt;
-&lt;p&gt;你对于作品方面的标准仅停留在原始到不能更原始的标准，甚至到了精神洁癖的地步，真的是让人叹为观止。&lt;/p&gt;
-&lt;h3 id=&quot;人类级&quot;&gt;人类级&lt;/h3&gt;
-&lt;p&gt;你对于作品的标准，处于一种正常且健康的状态，艺术脱胎于现实而超越现实，你勇敢地在作品中寻找着与现实相互交融而不背离的世界。&lt;/p&gt;
-&lt;h3 id=&quot;勇者级&quot;&gt;勇者级&lt;/h3&gt;
-&lt;p&gt;现实是场无聊的闹剧，它限制了太多想象与可能性，而你在幻想的世界中自由游荡，作品过激的部分帮你满足现实无法满足的东西。&lt;/p&gt;
-&lt;h3 id=&quot;巨龙级&quot;&gt;巨龙级&lt;/h3&gt;
-&lt;p&gt;正常的作品已经无法满足你，你开始追求那些过于刺激的东西，反正是虚构的，不也挺好的吗。&lt;/p&gt;
-&lt;h3 id=&quot;异形级&quot;&gt;异形级&lt;/h3&gt;
-&lt;p&gt;当你凝视深渊的时候，深渊也在凝视着你。&lt;/p&gt;
-&lt;h3 id=&quot;恶魔级&quot;&gt;恶魔级&lt;/h3&gt;
-&lt;p&gt;当你凝视深渊的时候，深渊也看向了你，你们对视了一眼，你脱下了裤子开始打起了飞机，以至于让深渊尴尬地移开了视线。&lt;/p&gt;
-&lt;h3 id=&quot;古神级&quot;&gt;古神级&lt;/h3&gt;
-&lt;p&gt;当你凝视深渊的时候，深渊落荒而逃，而你抓住深渊，把它按在了胯下。&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt;→  HornyDragon:一個男的和自己的胸部結婚    自娶其乳                01/17 17:59
-推 Raskolnikov:一個女的拿自己擠的奶來喝    自取其乳                01/17 18:01
-→  orzotlxd:一個軍師用計摸到天下第一奇乳   智取奇乳                01/17 18:14
-推 aftercome:小明從小想娶胸形怪異的老婆    志娶奇乳                01/17 19:08
-推 otakuwill:幫剛長的痔瘡命名奇乳          痔取奇乳                01/17 19:50
-→  taiwanalien:給曲琦汝的一封信            致曲琦汝                01/17 19:58
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;我們做到了! 時間旅行成功了!&lt;/p&gt;
-&lt;p&gt;但現在是哪一年&lt;/p&gt;
-&lt;p&gt;來問問那邊的路人&lt;/p&gt;
-&lt;p&gt;電玩界有甚麼重要資訊嗎?&lt;/p&gt;
-&lt;p&gt;世紀帝國要上市了&lt;/p&gt;
-&lt;p&gt;還有呢?&lt;/p&gt;
-&lt;p&gt;暗黑破壞神二算嗎&lt;/p&gt;
-&lt;p&gt;喔，今年是西元 2000 年&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;一位政客造訪一個村莊，問村民他們需要什麼？&lt;/p&gt;
-&lt;p&gt;村民回應說：「我們有兩個問題，第一、我們有一間醫院，但請不到醫生」。&lt;/p&gt;
-&lt;p&gt;政客聽到這裡，立刻拿出手機撥了電話，講了一會後，他跟村長保證明天醫生就會抵達村莊。
-然後他問：第二個問題是什麼？&lt;/p&gt;
-&lt;p&gt;村民：「第二個問題是我們全村都收不到手機訊號。」&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;義大利麵在弄濕前也是直的&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;如果你焦慮代表你活在未來，如果你憂鬱代表你還活在過去&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;貓：當我看到主人打開無痕瀏覽器，我就被關房間了&lt;/p&gt;
-&lt;p&gt;Frankie Tsang: 不要玩主人用過的紙巾球啦&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;肥宅、夢女跟獸甲的差別&quot;&gt;肥宅、夢女跟獸甲的差別&lt;/h2&gt;
-&lt;p&gt;在討論這個問題以前，我們要先設定一種不具競爭性的公共財（排他性我們先不論）但也不能太沒有實體（例如空氣），不如我們就拿捷運上的某一個座位來當作舉例好了&lt;/p&gt;
-&lt;p&gt;肥宅：這個座位是我的，你可以聲稱這個座位是你的，而且我們可以一起坐，我可能會嘴你，你也會嘴回來，但其實真的沒差。&lt;/p&gt;
-&lt;p&gt;夢女：這個座位是我的，我說是我的就是我的，如果你說這是你的那請你先預防性的避開我會搭的這個班次，因為她是我的，我每天都花很多錢搭捷運只為了坐這個座位，你算甚麼東西？你又花多少錢搭捷運了？我每天都想著這個座位，我會花錢請攝影師幫我跟我的座位合照，再花很多錢請小說家撰寫我跟他一起經過的心路歷程，你又算是甚麼了？你怎麼可以說他是大家公共的？你花的錢有比我多嗎？他們花的錢有比我多嗎？這個座位很明顯的只屬於我啊，你坐在這個座位上就是冒犯到我，如果你很不爽的話，請你自動迴避我，不然我就會嘴你，我會上爆料公設跟 PTT 把你的事蹟全部講出來，然後讓你在這個社會活不下去。&lt;/p&gt;
-&lt;p&gt;獸甲：這是我的座位，而且我一個人坐喔，嗷嗷 &lt;code&gt;O//w//O&lt;/code&gt; &lt;em&gt;附上褲檔照&lt;/em&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;Tè Sî-ú: 颱風目測主峰高度後投共了&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;ニオ いぬかい
-4 小時  ·
-為什麼隊友血扣哪麼快
-因為他是資工系的吧&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;我也這樣對我的女朋友過，而且還不在乎他的年齡，不在乎他是小三，沒想到才短短幾個月，他就已經是小學四年級了，不能再像以前小三那樣幼稚了&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;木虎 あらし
-昨天上午 9:28  ·&lt;/p&gt;
-&lt;p&gt;老師：&lt;em&gt;講解毛茸茸的英文&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;老師：我們來查 fluffy 的圖片&lt;/p&gt;
-&lt;p&gt;Google：&lt;em&gt;可愛動物&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;老師：接下來來查 furry&lt;/p&gt;
-&lt;p&gt;老師：&lt;/p&gt;
-&lt;p&gt;老師：？？？這些是什麼東西*驚恐*&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;Valve 受害者互助會
-昨天下午 7:30  ·&lt;/p&gt;
-&lt;p&gt;中央山脈 : 聽你這麼說，你很勇喔&lt;/p&gt;
-&lt;p&gt;璨樹颱風 : 開玩笑 我超勇的好不好
-我超會登陸的啦&lt;/p&gt;
-&lt;p&gt;中央山脈 : 超會登陸 很勇嘛
-暴風圈很大喔 結構滿結實的啊&lt;/p&gt;
-&lt;p&gt;璨樹颱風 : 中哥 你幹嘛啊&lt;/p&gt;
-&lt;p&gt;中央山脈 : 都形成多久了 還那麼害羞
-我看你是完全不懂喔&lt;/p&gt;
-&lt;p&gt;璨樹颱風 : 懂什麼啊&lt;/p&gt;
-&lt;p&gt;中央山脈 : 你想懂 我陸地有些好康的&lt;/p&gt;
-&lt;p&gt;璨樹颱風 : 好康 是新路徑喔&lt;/p&gt;
-&lt;p&gt;中央山脈 : 什麼新路徑 比路徑還刺激
-還可以教你登強颱喔&lt;/p&gt;
-&lt;p&gt;璨樹颱風 : 登強颱？&lt;/p&gt;
-&lt;p&gt;中央山脈 : 對啊 來啦 來登陸就知道了 來 你過來&lt;/p&gt;
-&lt;p&gt;璨樹颱風 : 中哥 你有好多支流哦&lt;/p&gt;
-&lt;p&gt;中央山脈：哎唷那沒什麼 來看這個好康的（秀出堅硬的山脈結構）&lt;/p&gt;
-&lt;p&gt;璨樹颱風：中哥 這什麼啊&lt;/p&gt;
-&lt;p&gt;中央山脈：哎唷 你臉紅啦 讓我看看&lt;/p&gt;
-&lt;p&gt;璨樹颱風：不要 中哥你幹嘛啊&lt;/p&gt;
-&lt;p&gt;中央山脈：讓我看看你的颱風眼有沒有正常啊&lt;/p&gt;
-&lt;p&gt;璨樹颱風：中哥不要啦&lt;/p&gt;
-&lt;p&gt;中央山脈：聽話！讓我看看！&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;哲學迷因 Philosophy meme
-14 分鐘  ·&lt;/p&gt;
-&lt;p&gt;以後如果要養狗一定要記得去領養浪浪，然後多準備一些穿山甲在家裡給牠(們)玩。
-這樣才會讓狗狗有在家的感覺。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;a href=&quot;https://stars.udn.com/star/story/10089/5719115&quot;&gt;朱學恆與宋少卿談酒駕&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;死朱不怕酒駕撞，因為酒駕是學長。&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code&gt;研究生迷因 Graduate Student Memes
-2 小時  ·
-欸都 這是我的實驗數據吧 www（搔頭
-嘛 先提醒你一下 論文抄襲是會被告的喔 www(推眼鏡
-嗯姆 我是沒有很在意啦 www
-但是調侃別人的研究方法不覺得很過分嗎？
-嘛 抱歉講話有點兇（茶
-是否能聯絡那個人將註腳刪掉呢 www（歪頭
-至於你的話 也不要覺得沒事喔 www
-總是要做些補償吧 害我被這樣嘲笑（茶
-接受我科技部的計畫就原諒你吧 ww 怎麼樣 ww（燦笑
-嘛 我正教授應該算高標（？
-產出蠻多的
-朋友都說我感覺像中研院院士 www 嘛 我是覺得沒那麼誇張啦 ww(汗顏
-實驗室也算有錢喔 ww(笑
-呀咧呀咧
-那這下難辦了呢 www
-嘛 反正你有研究方向還跟我聊天聊這麼開心 www
-應該改掉也無所謂吧?ww(摸頭
-&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
-&lt;p&gt;你跟同學打籃球的時候會心跳加速。
-你以為是心臟為了輸送更多氧氣給肌肉。&lt;/p&gt;
-&lt;p&gt;其實不是。
-心跳加速是因為你的隊友是男孩，
-而你還不自己喜歡男孩子。&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt;→  b00668880:我也曾經是支箭  直到我射中了一個膝蓋                  01/16 23:48
-推 tartrate: 我也曾經是個膝蓋 直到我被樓上射中&amp;gt;///&amp;lt;                01/17 01:09
-推 melzard:上面兩樓放甚麼閃光阿太可惡了~(戴墨鏡                    01/17 01:14
-→  LSC112233:b00668880 &amp;amp; tartrate，在一起 在一起 在一起！Yooooooo  01/17 01:36
-推 j022015:為什麼這裡都可以有閃啊.....                             01/17 03:54
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;p&gt;李天豪
-9 小時  ·&lt;/p&gt;
-&lt;p&gt;剛剛去便利商店選飲料
-聽到一個小男生對媽媽說：
-「我可以買洋芋片嗎？」&lt;/p&gt;
-&lt;p&gt;他的媽媽回答：
-「不可以，你這麼任性，媽媽會不喜歡你噢😠」&lt;/p&gt;
-&lt;p&gt;本來我以為小男孩會哭鬧😭
-結果他說：&lt;/p&gt;
-&lt;p&gt;「沒關係啊，我喜歡妳啊😘」
-「不管妳喜不喜歡我，我都會一直喜歡妳😍」&lt;/p&gt;
-&lt;p&gt;後來媽媽在櫃檯結帳五包洋芋片～&lt;/p&gt;
-&lt;hr&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-ptt&quot;&gt;→ mer5566: 如果走姐寺路線我下次版聚 COS 姐寺給大家幹                05/15 10:26
-→ mer5566: ......                              看                 05/15 10:27
-→ mer5566: ......                               看                05/15 10:27
-→ Xavy: ....把字接起來還真糟糕                                    05/15 10:28
-&lt;/code&gt;&lt;/pre&gt;
-&lt;hr&gt;
-&lt;p&gt;雖然我喜歡叫她阿姨，但是事實上我們也只相差了九歲並且沒有任何血緣關係。
-我只是很單純的喜歡這樣著她，雖然她每次都會嘟著嘴巴佯裝生氣。&lt;/p&gt;
-&lt;p&gt;和她的原因我已經遺忘了，這也不是那麼的重要。
-老實說第一眼看到她的時候我必須說我很訝異於她的外表。也許不是美若天仙或是傾城傾國，但她所擁有的氣質讓我深深著迷。你會覺得她像是高雅的公主，卻又不會帶著反感或是做作，相反的，她的舉手投足都留露出一種氣質，像是與生俱來的高貴。&lt;/p&gt;
-&lt;p&gt;她很輕易的和我們打成一片，不帶架子的。
-隨意地聊天，開玩笑，喝著啤酒，吃著夜市買來的小吃。&lt;/p&gt;
-&lt;p&gt;她的外表可以藉於 20-30 之間，有時像個小女孩淘氣，有時又有著女人的嫵媚。而事後知道她大了我九歲的時候我很認分的讓下巴掉到脖子，真是意外中的不意外。&lt;/p&gt;
-&lt;p&gt;在預期之中的我拿到她的聯絡方式。
-嚴格來我並不是我提問的，是她自己拿起我的手機填入電話號碼，而我笑著對她說現在的年輕人已經不打手機聯絡了。她用著面帶微醺的臉龐對著我微笑，然後拿起啤酒杯冰了我的額頭。&lt;/p&gt;
-&lt;p&gt;「臭小孩。」她在我耳邊低喃。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;不得不說我有些抗拒坐在副駕駛座上看著女人開車，上一次我這麼做已經是老媽載我去上學的路上。總覺得像是小女人一樣。&lt;/p&gt;
-&lt;p&gt;「臭小孩，難得出門約會你也開心點。」她一邊打著方向燈一邊對著我說。&lt;/p&gt;
-&lt;p&gt;「阿姨我已經給妳面子做妳的車了拜託。」原本我是要騎車帶她的，可是她總覺得機車載人這種事情太年輕不適合她。&lt;/p&gt;
-&lt;p&gt;「不許叫我阿姨！」她捏了我的臉，然後嘟起嘴巴。&lt;/p&gt;
-&lt;p&gt;「說說妳今年幾歲。」我轉過頭對著她笑著。&lt;/p&gt;
-&lt;p&gt;「女人的秘密好嗎！」她停下車子，又捏了我的鼻子。&lt;/p&gt;
-&lt;p&gt;我們很自然的相處著，像是沒有任何年齡差距和代溝。
-不過對於我來說，我本來就不怎麼介意年齡就是了。
-我們牽著手逛著街，然後看了場意義不明的電影，之後我送她回家。&lt;/p&gt;
-&lt;p&gt;我必須說我送她回家這件事情是被安排好的，因為車子不是我在開。
-所以我們理所當然的在門外依依不捨，接著再理所當然的被問到要不要上來喝杯茶。
-然後我們理所當然的看了不知道片名的ＤＶＤ，
-理所當然地擁抱著，
-再理所當然的瘋狂熱吻。
-脫衣，愛撫，做愛，高潮，射精。&lt;/p&gt;
-&lt;p&gt;她的身體並未隨著年華老去，我必須說這是我所擁有的完美性愛之一。
-我感受著她微微的嬌喘聲，到哭天搶地般地呼喊。
-她現在正在我懷裡喘息，享受著高潮後的餘韻。&lt;/p&gt;
-&lt;p&gt;「你知道女人愈接近三十歲性慾會愈高漲嗎？」她看著我，撫摸著我的臉頰。&lt;/p&gt;
-&lt;p&gt;「所以才需要血氣方剛的年輕小夥子？」我對著她笑。&lt;/p&gt;
-&lt;p&gt;「或許是，也不是。」她俏皮的嘟起嘴巴，示意我再親她。&lt;/p&gt;
-&lt;p&gt;「再一次？」在一個深深的吻後，我眨眼問著。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;如果我們走在街上我可以相信應該沒有人會質疑我們的年紀差距。
-她擁有著少女的外表和女人的氣息，這是上天的傑出之作。
-她很享受在街上的那些目光，而我也樂於不用解釋年紀。&lt;/p&gt;
-&lt;p&gt;我有一度很害怕被當作小白臉，所以每次從副駕駛座下來總是遮遮掩掩。&lt;/p&gt;
-&lt;p&gt;「我要學開車。」我是這樣說的。&lt;/p&gt;
-&lt;p&gt;「好啊。」她笑著。&lt;/p&gt;
-&lt;p&gt;接下來的整個假期我都泡在她的 LEXUS 裡面，在台北市區晃啊晃。
-而她就在副駕駛座上看著我開車的側臉，傻笑。&lt;/p&gt;
-&lt;p&gt;「會開車的臭小孩真帥。」&lt;/p&gt;
-&lt;p&gt;「是男人，謝謝。」&lt;/p&gt;
-&lt;p&gt;「誰叫你愛叫我阿姨。」&lt;/p&gt;
-&lt;p&gt;「妳自己說妳脫離學校多久了，哈哈。」&lt;/p&gt;
-&lt;p&gt;上課結束後除了和朋友偶爾去吃飯，大部分的時間我都陪著她加班或是在家看電視。
-她很寵我，就像是養了一隻大大的寵物一樣。
-她曾經問我像這樣子生活會不會打擾到我的上課，而我總是摸著頭對她說別傻了。
-我很喜歡這樣的生活，陪伴，依賴。&lt;/p&gt;
-&lt;p&gt;即使兩個人的生活圈不同，想法不同，甚至經濟徹底不同，但是仍然可以在一起生活那種
-感覺，雖然說我在知道她年薪之後有嚇了那麼大跳，大概是我畢業後起薪的三倍。
-在那瞬間我總覺得自己的臉有那麼點的白。
-而她總會安慰著我，說等我以後賺錢養她。
-雖然我不知道在台灣這鬼島我甚麼時候薪水才會養活她。&lt;/p&gt;
-&lt;p&gt;她很喜歡帶我逛 IKEA 然後買點甚麼回來自己布置家裡。
-雖然是她家但是我已經幾乎要和她同居在一起。
-她有她自己獨特的品味，有時候都會讓我自己覺得像是個鄉下俗。
-我躺在布置好的床上開始想像著以後的未來，看來我應該會是要顧家照顧小孩的爸爸。
-而她總是會笑說我想的真遠，然後嘴角漾起幸福的笑容。&lt;/p&gt;
-&lt;p&gt;有時候我都會想著女人不是都喜歡男人有能力養活她，而她卻選擇養著一個男人作陪。
-每次她聽到我這樣問總是會說：「有人養當然好，但是能有一個適合自己的更好。」接著
-抱住我燦爛的笑。
-是有那麼點的幸福到快要瘋掉的感覺。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;於是我努力地給予我所有能給予的一切。
-努力生活，努力讓自己變得更好。
-即使我知道她會有些應酬，
-也即使我知道她會被朋友推薦給哪間公司的主管。&lt;/p&gt;
-&lt;p&gt;的確，我是有那麼點的慌張。
-我甚麼都沒有，嚴格的說的確是這樣沒錯。
-沒車沒錢沒房子，只有還能稍微有點用處的腦子。
-她總是安慰著我，然後等她處理完公務後會趴在我身上挑逗著我。
-這是我唯一平靜的時光。&lt;/p&gt;
-&lt;p&gt;我們做愛著，感受彼此的氣息，然後擁有對方的身體。
-她會告訴我射在她體內，或許有個孩子也不錯。
-面對這種充滿挑逗的話我毫不保留的全部射了進去。
-也許，是一種佔有的感覺。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;那次我們吵架的起因在於她跟某個朋友介紹的男人出去吃飯。
-我在家裡看著她從 BMW i8 下來的時候我的確是怒不可遏的。
-那是她的自由，我知道，我當然知道。&lt;/p&gt;
-&lt;p&gt;對於一個連模型車都難以下手的我來說，那是種沉痛的打擊。
-等她進門，我不發一語的收拾著屬於自己的東西。
-而我才發現原來我的生活已經開始和她密不可分。&lt;/p&gt;
-&lt;p&gt;在 SOGO 買的紅酒杯套組，
-在 A 兩萬 A 五萬的新光三越買的抱枕，
-在蘋果專賣店買的 iMac，
-我才發現這些東西原來都不是我的。
-她看著我在收拾東西的時候也是沉默著。&lt;/p&gt;
-&lt;p&gt;我收拾到一半之後就停下了手，然後和她面對面坐著對看。&lt;/p&gt;
-&lt;p&gt;「晚餐吃了嗎？」她問著。&lt;/p&gt;
-&lt;p&gt;「跑車好坐嗎？」&lt;/p&gt;
-&lt;p&gt;「要不要我去煮點甚麼？」&lt;/p&gt;
-&lt;p&gt;「身家有上億嗎？」&lt;/p&gt;
-&lt;p&gt;「小孩你不要這樣。」&lt;/p&gt;
-&lt;p&gt;「夠了，我就是個小孩！」&lt;/p&gt;
-&lt;p&gt;我放下我所有收拾的東西，然後甚麼都不拿的要走出門。&lt;/p&gt;
-&lt;p&gt;「那你呢，也許你也只是看上這樣的生活而已。」她冷冷地說著。&lt;/p&gt;
-&lt;p&gt;我轉過身看著她，然後我愣在那裏。&lt;/p&gt;
-&lt;p&gt;「看上我的外表，看上我的錢，看上這樣的生活，承認吧，只是各取所需。」她說。&lt;/p&gt;
-&lt;p&gt;我微笑著，開了門，接著甩上。&lt;/p&gt;
-&lt;p&gt;我不知道目的地在哪裡，我只是發動了許久未騎的機車。
-引擎聲響，車庫門開啟，發動，逃離。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;也許我錯了，吃個飯沒什麼的。
-也許我對了，不屬於我的生活我早就該脫離。&lt;/p&gt;
-&lt;p&gt;我開了燈，走進了許久未進的套房。
-原來這才是我的，小小的單人床，沒有打完折還要２５００的抱枕。
-簡單的馬克杯，不用擔心摔壞幾張小朋友就飛的那種。
-我看著窗外，即使是一片天空漆黑。
-遠方有著台北１０１，這也是那時候房東大力推薦的觀景套房。
-現在看來格外諷刺。
-虛幻，浮華，現實。&lt;/p&gt;
-&lt;p&gt;我關上燈，拉上窗簾，然後躺在床上。
-細數著這些日子我得到了甚麼。
-我很平靜，
-平靜到，原來我甚麼都失去了。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;沒有聯絡這種動詞其實是自欺其人。
-你的賴狀態可以看到，你的臉書動態可以看到，你的ＩＧ其實都有追蹤。
-我必須說我很想念她，一切。
-我開始想著那天我離開時她所說的話。&lt;/p&gt;
-&lt;p&gt;我愛上她的外表嗎？
-我愛上她的錢？
-我愛上那樣的生活？
-也許外表亮麗和生活美滿，但是這都不會是我愛上她的原因。&lt;/p&gt;
-&lt;p&gt;我愛上的，是她在駕駛座認真的表情。
-我愛上的，是她在加班的疲倦後，對我的依賴。
-我愛上的，是能夠和她擁有共同的回憶。
-我愛上的，即使是被冠上小白臉我也是願意為她付出所有。
-我愛上的，是能夠因為她而讓自己努力向上的動力。
-但是這些事情，我整整花了一年才想通。&lt;/p&gt;
-&lt;p&gt;物換星移，誰知道她在哪裡，又或者誰該拉下臉，問著對方還好嗎。&lt;/p&gt;
-&lt;p&gt;那年
-她３０歲，
-我２１歲。&lt;/p&gt;
-&lt;p&gt;我收到了喜帖，在我的觀景套房。
-新娘的名字我不陌生，那是我魂牽夢縈這麼久的名字。
-我看著日期，然後又看了一眼日曆。&lt;/p&gt;
-&lt;p&gt;「阿姨，妳要相信我嗎？」&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;她在咖啡廳出現的時候有些憔悴，沒意外的話應該是為了婚禮的籌備而忙碌著。&lt;/p&gt;
-&lt;p&gt;她看見我，說了句好久不見。
-而我笑著。&lt;/p&gt;
-&lt;p&gt;「結婚的事情還好嗎？」&lt;/p&gt;
-&lt;p&gt;「很累。」&lt;/p&gt;
-&lt;p&gt;「妳不是說妳不結婚的嗎，哈哈。」&lt;/p&gt;
-&lt;p&gt;「都多老了，有人要也該慶幸了。」我可以聽出濃厚的酸意。&lt;/p&gt;
-&lt;p&gt;「為了賭氣？」我攪拌著咖啡。&lt;/p&gt;
-&lt;p&gt;「別傻了，你以為你多偉大。」她聳肩，露出笑容。&lt;/p&gt;
-&lt;p&gt;「新婚快樂。」我起身，放下了一個曾經對於我們意義重大的東西，接著轉身離開。&lt;/p&gt;
-&lt;p&gt;那是一個可樂鋁罐的拉環。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;一年前。&lt;/p&gt;
-&lt;p&gt;「老實說我不想結婚耶。」&lt;/p&gt;
-&lt;p&gt;「為甚麼。」我疑惑著。&lt;/p&gt;
-&lt;p&gt;「因為被你娶了之後感覺很難跟以後的小孩解釋年紀啊，哈哈。」&lt;/p&gt;
-&lt;p&gt;「不覺得結婚很浪漫嗎？」我說。&lt;/p&gt;
-&lt;p&gt;「浪漫啊，當然。」&lt;/p&gt;
-&lt;p&gt;「像是拿著鑽戒單腳下跪求婚那樣。」我說。&lt;/p&gt;
-&lt;p&gt;「光想像就想嫁了，哈哈。」&lt;/p&gt;
-&lt;p&gt;「可是我沒有鑽戒，只有可樂拉環吧我想。」我自嘲著。&lt;/p&gt;
-&lt;p&gt;「重點是單膝下跪好嗎，如果是你，就算可樂拉環我也嫁。」她笑著說，緊緊的抱住我。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;我不去想她有沒有看到我在拉環上刻的那三個英文字，但是我很瀟灑地轉身故作堅強。
-如果是我想太多那就當作我想太多吧。&lt;/p&gt;
-&lt;p&gt;婚禮日期的逼近，我也無心去思考些甚麼。
-看著牆上的日曆一天一天被我劃去，而手機始終保持沉默。&lt;/p&gt;
-&lt;p&gt;婚禮當天，我傳了封訊息給了她。
-「新婚快樂，恭喜。」
-然後關機。&lt;/p&gt;
-&lt;p&gt;看著喜帖，我沒有要去的意思。
-我隨意地將它扔在垃圾桶，這種晦氣的東西不想再看一眼。
-是該出門買點東西了我想。&lt;/p&gt;
-&lt;p&gt;我走出了門口，接著看到一個穿著白紗的人坐在階梯上。
-那個樣子有點突兀，而我也不知道該如何解釋。
-她手上拿著一罐可樂，上面的拉環已被拔去。&lt;/p&gt;
-&lt;p&gt;「我都穿好婚紗準備交換戒指了，你怎麼還穿著拖鞋跟七分褲？」她嘟著嘴，對我笑。&lt;/p&gt;
-&lt;p&gt;「所以跑車好坐嗎？」&lt;/p&gt;
-&lt;p&gt;「難坐死了，還是你開的車子好多。」&lt;/p&gt;
-&lt;p&gt;「我沒有億來億去。」&lt;/p&gt;
-&lt;p&gt;「晚上有就好，沒關係。」&lt;/p&gt;
-&lt;p&gt;我笑著，吻上了她。
-她將拉環套入我手中，但是其實到指甲時就卡住了。&lt;/p&gt;
-&lt;p&gt;「婚禮呢？」&lt;/p&gt;
-&lt;p&gt;「管他的。」她從地上拿起兩張機票，目的地是峇厘島，那是我們一直說好要去的地方。&lt;/p&gt;
-&lt;p&gt;「不是吧。」&lt;/p&gt;
-&lt;p&gt;「就是。」她抱著我，不再讓我說話。&lt;/p&gt;
-&lt;p&gt;「謝謝你，愛的是，我的所有。」她說，她右手無名指上的那枚拉環，在陽光下閃閃發亮，印照出我刻在上面的三個字：&lt;/p&gt;
-&lt;p&gt;「NCU」&lt;/p&gt;
-&lt;p&gt;原來是國立中央大學的學生，難怪有這麼好的素質。&lt;/p&gt;
-&lt;p&gt;國立中央大學是一所積極新創、學科齊全、學術實力雄厚、辦學特色鮮明，在國際上具有重要影響力與競爭力的綜合性大學，在多個學術領域具有非常前瞻的科技實力，擁有世界一流的實驗室與師資力量，各種排名均位於全球前列。歡迎大家報考國立中央大學。&lt;/p&gt;
-&lt;hr&gt;
-&lt;blockquote&gt;
-&lt;p&gt;人類幸福的二大宿敵是痛苦和無聊
---- 叔本華&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;有個年輕妹子正在挑選老公，眼前有三位候選人，分別是禿頭男、金毛男與中分男，
-妹子要這三位候選人去環遊世界，等他們回國後再說要選誰，一年後四人重新聚首。
-禿頭男乘坐私人飛機，將整個歐亞非大陸全逛過一遍
-金毛男乘坐廉價航空，前往澳洲去看無尾熊以及袋鼠
-中分男沒有錢能出國，只能繞妹子一圈，說妳就是我的世界，妹子很感動
-妹子挑了最有錢的禿頭男，但接著就被金毛男睡走，最後三人聯手殺掉了顏良。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;心如澄澈秋水，行若不系之舟&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;詩句是可口的毒藥；
-靠著詩句，就連痛苦的味道暫時都顯得苦中帶甜。&lt;/p&gt;
-&lt;p&gt;-- 墨水心 肥肉伯爵&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;我和菜月的秘密基地，在不久後就被拆掉了
-在原來的地基上，會建立起一個新的住宅區
-但這也意味著，在那些日子裡，我們留下的痕跡隨之一併遠去了。
-話雖如此，但是……&lt;/p&gt;
-&lt;p&gt;仍舊在此地居住的，那些天真無邪的孩童們，
-他們一定也能像今日的我和菜月那樣，
-發現這個美麗世界上，隨處可見的無比閃耀的光芒吧。&lt;/p&gt;
-&lt;p&gt;終有一日，他們也會突然明白，這世界是如此的寬廣，如此的灑脫肆意，豪放不羈&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;咲夜:我可以倒轉時間，把碎掉的杯子恢復原狀
-(時停，然後從櫃子裡拿另一個出來)&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;八雲紫的隙間&quot;&gt;八雲紫的隙間&lt;/h2&gt;
-&lt;p&gt;中階是你在抽插你老婆她說沒感覺
-紫表示舒服&lt;/p&gt;
-&lt;p&gt;高階是你老婆怎樣都不孕
-天子一直處女懷胎&lt;/p&gt;
-&lt;p&gt;最上級…你永遠都在對不知道是誰的裏面&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;北車守則怪譚&quot;&gt;北車守則怪譚&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;如果你沒來過請立刻在下車後找人問路&lt;/li&gt;
-&lt;li&gt;如果你很不幸的無法做到第一點，請跟著紅線走&lt;/li&gt;
-&lt;li&gt;找不到出口了話請立刻前往大廳&lt;/li&gt;
-&lt;li&gt;打給台北的朋友是沒用的，因為他也不知道路，你只能夠相信地圖&lt;/li&gt;
-&lt;li&gt;趴在平面圖上研究是不會被責備的，因為大家都知道發生了什麼&lt;/li&gt;
-&lt;li&gt;如果發現自己在同一個地方繞了十分鐘以上，很正常請勿驚慌，跟著人潮走便能成功離開&lt;/li&gt;
-&lt;li&gt;在毫無防備的情況下請勿輕易的跟著「地下街」的指示走，不然大部分人都會走不出來&lt;/li&gt;
-&lt;/ol&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;夢女守則&quot;&gt;夢女守則&lt;/h2&gt;
-&lt;p&gt;墨燃
-15 小時  ·&lt;/p&gt;
-&lt;p&gt;在夢女圈遊蕩時，請遵守以下所有規則並且謹言慎行，否則後果自負。&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;如果發現逃出來的同嫁，不要直接進行捕捉，也不要靠近，把它們引到自創群裡，接下來的事請交給親友團。&lt;/li&gt;
-&lt;li&gt;不要獨自面對兇猛的同嫁和他的親友團（除非你自己也有親友團）&lt;/li&gt;
-&lt;li&gt;不要給同嫁看到夢向，其餘親友皆可。&lt;/li&gt;
-&lt;li&gt;若看見有同嫁走進你的視線，請馬上投稿世說夢女。&lt;/li&gt;
-&lt;li&gt;每天都要海巡是否有同嫁。若有，立刻馬上撕下來丟進黑名單。&lt;/li&gt;
-&lt;li&gt;友列絕對不會有內鬼。若你發現有人在偷偷轉發你的夢向給其他同嫁，他已經不是你認識的親友了。&lt;/li&gt;
-&lt;li&gt;如果你看到自己在世說被靠北了，告訴自己它是不存在的，馬上離開。&lt;/li&gt;
-&lt;li&gt;熱門坑異常凶險。請確保自己擁有足夠強大的親友團才入坑。&lt;/li&gt;
-&lt;li&gt;除此之外，若條件許可，讓你的同嫁自卑到退圈。&lt;/li&gt;
-&lt;li&gt;如果你觸犯以上任何一款條例，那麼你就失去當夢女的資格了。&lt;/li&gt;
-&lt;li&gt;若事態變得嚴重的情況下（如被上世說而且很紅）請馬上關帳假裝看不到任何一切。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&quot;在夢女圈撿到的紙條&quot;&gt;在夢女圈撿到的紙條&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;銅 價 滅 殺（這句話字跡極其潦草）&lt;/li&gt;
-&lt;li&gt;夢角只能屬於我。（這句話字跡異常工整）&lt;/li&gt;
-&lt;/ol&gt;
-&lt;hr&gt;
-&lt;p&gt;軟體工程師的離職有四次，
-第一次是離職預告發出時，
-第二次是僱傭關係終止時，
-第三次是開會不再提到你時，
-第四次是 Git Blame 不到你時。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;12 月 24 日深夜到 12 月 25 日凌晨，是全世界愛情旅館房間最為爆滿的一天。
-你喜歡的女人，你曾經憧憬過的少女，你的姊姊、妹妹、同事、同班同學，
-只要她們不在你的視線裡，70%都在別的男人的身體下面。
-她們快樂的呻吟著，而聲音卻永遠傳達不到你的耳邊。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/linux-boot-local-live-cd.html</id>
 <title>製作供 linux 使用的存有 live cd 映象檔的救援分割區</title>
@@ -2671,7 +2324,7 @@ Visual C++ Redistributable， &lt;a href=&quot;linux-proton-wine-outside-steam.h
 <link rel="alternate" type="text/html" href="http://gholk.github.io/batch-qrcode-generate.html#顯示-qr-code-文字內容"/>
 <summary type="html">
 在原本的 qr code 下方再加上 qr code 的文字內容，
-可以用來找出漏掃的 qr code 。
+可以用來找出漏掃的 qr code。
 並加上切換顯示省略與完整內容的功能。</summary>
 <category term="qr-code"/>
 <category term="tool"/>
@@ -3194,8 +2847,8 @@ in-place 是指直接改變部份原有檔案內容，如 rsync 有類似的功�
 <summary type="html">
 手動啟動和終止 adb daemon 的命令
 是 adb start-server 和 adb kill-server
-之前我都在 man-page 裡搜 daemon 而不是搜 server ，難怪沒看到。
-在文章中改用這二個命令來啟動和關閉 server 。</summary>
+之前我都在 man-page 裡搜 daemon 而不是搜 server，難怪沒看到。
+在文章中改用這二個命令來啟動和關閉 server。</summary>
 <category term="android"/>
 <category term="adb"/>
 <category term="tor"/>
@@ -3630,7 +3283,7 @@ web 開發者的身份，讓我能以 web 為介面，
 <updated>2020-03-12T17:07:11.894Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/shell-kill-pipe-process-group.html#子-shell-的問題"/>
 <summary type="html">
-修正在啟動子 shell 時除非啟用 job control ，
+修正在啟動子 shell 時除非啟用 job control，
 否則不會創建新程序群組。
 並加入碰過的 bug 與處理方法。</summary>
 <category term="linux"/>
@@ -3976,7 +3629,7 @@ or scroll with left key press.</summary>
 <updated>2019-08-05T07:33:09.866Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/gnss-teqc-data-bulk-process.html#只在需要時手動啟用-contorl-master"/>
 <summary type="html">
-設置 auto 會幫每條連線都建立 control master ，
+設置 auto 會幫每條連線都建立 control master，
 我偏好只在需要時手動啟動。
 要只在需要時手動啟動，就只設置 control path 參數即可，
 需要時手動開一個連線指名 control master yes 當作主連線即可。</summary>
@@ -4030,7 +3683,7 @@ or scroll with left key press.</summary>
 <updated>2019-07-16T06:30:58.772Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/taiwan-consensus-stolen-base.html#ptt-highlight"/>
 <summary type="html">
-指定 code block 語言為 ptt ，
+指定 code block 語言為 ptt，
 ptt-highlight.js 就會幫文章裡的 ptt 文字上色。</summary>
 <category term="funny"/>
 <category term="daily"/>
@@ -4116,7 +3769,7 @@ ptt-highlight.js 就會幫文章裡的 ptt 文字上色。</summary>
 完成作業二與作業三的建模記錄報告。
 作業三中很多部份偷懶沒做，因為時間太趕，
 而且很多是機械式的重複操作，我認為沒什麼意義。
-另外也以 gis 使用者和程式人的角度評論 bim ，
+另外也以 gis 使用者和程式人的角度評論 bim，
 主要是使用者觀念不同，軟體也不夠成熟，
 而且產業生態系不同，造成我對 bim 印象不佳。</summary>
 <category term="nctu"/>
@@ -4337,8 +3990,8 @@ linux 的開機管理員 grub，
 <updated>2019-03-29T12:25:26.465Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/android-atom-tip.html#透過-wifi-連線-adb"/>
 <summary type="html">
-加入 wifi adb 、 sftp 、 ssh 轉發 port 等網路 app ，
-還有計算機、 ifw 關閉直接分享、 quick setting tile 、 NFC 。</summary>
+加入 wifi adb、sftp、ssh 轉發 port 等網路 app，
+還有計算機、ifw 關閉直接分享、quick setting tile、NFC。</summary>
 <category term="android"/>
 <category term="root"/>
 
@@ -4373,7 +4026,7 @@ linux 的開機管理員 grub，
 <link rel="alternate" type="text/html" href="http://gholk.github.io/adb-over-wifi.html#換成-wirebug"/>
 <summary type="html">
 後來在新手機 atom 上不 adb manager 不能用，
-就又找到一款更老的 wirebug ，介面簡單好用， 
+就又找到一款更老的 wirebug，介面簡單好用， 
 而且啟動後還會釘選在通知欄，
 通知上還有一顆按鈕可以直接關掉 adb。</summary>
 <category term="刷機"/>
@@ -4533,7 +4186,7 @@ linux 的開機管理員 grub，
 <updated>2019-03-11T05:08:01.911Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/linux-easy-shell-send-file.html#pipe-command-here-doc"/>
 <summary type="html">
-把 shell 命令 pipe 給遠端的 shell ，
+把 shell 命令 pipe 給遠端的 shell，
 並用 here doc 傳送 base64 編碼後的資料。</summary>
 <category term="linux"/>
 <category term="shell"/>
@@ -4705,8 +4358,8 @@ linux 的開機管理員 grub，
 <updated>2019-02-23T13:30:30.594Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/android-root-atom.html#oem-unlock-setting"/>
 <summary type="html">
-需要在開機狀態下，從開發者功能裡允許 unlock ，
-才能再在 fastboot 下 unlock 。</summary>
+需要在開機狀態下，從開發者功能裡允許 unlock，
+才能再在 fastboot 下 unlock。</summary>
 <category term="android"/>
 <category term="slide"/>
 <category term="root"/>
@@ -4826,10 +4479,10 @@ linux 的開機管理員 grub，
 <updated>2019-02-13T15:12:01.858Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/linux-iccard-ccid-compile.html#新測試二台讀卡機"/>
 <summary type="html">
-新測試了 KTHCROATM300BK ，
+新測試了 KTHCROATM300BK，
 確定可以用，是走 ccid 的。
 另一台 easy atm k50 應該也能用，
-包裝都明寫支援 pc/sc了，
+包裝都明寫支援 pc/sc 了，
 只是沒有買來試。</summary>
 <category term="linux"/>
 <category term="driver"/>
@@ -4927,7 +4580,7 @@ linux 的開機管理員 grub，
 <updated>2019-01-17T09:16:22.194Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/linux-l2tp-vpn-debian-stretch.html#network-manager-介面"/>
 <summary type="html">
-用 network manager 連上 l2tp vpn ，
+用 network manager 連上 l2tp vpn，
 和在 debian stretch 裝舊版 deb 包的作法。</summary>
 <category term="linux"/>
 <category term="debian"/>
@@ -5191,7 +4844,7 @@ linux 的開機管理員 grub，
 <updated>2019-01-05T15:38:14.600Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/geomatics-seminar-sar-usage.html#insar-as-contour"/>
 <summary type="html">
-淹水偵測與 insar ，並引入論文格式。</summary>
+淹水偵測與 insar，並引入論文格式。</summary>
 <category term="nctu"/>
 <category term="report"/>
 <category term="geomatics"/>
@@ -5308,7 +4961,7 @@ checkinstall 的用法和自己放 debian package 的雲端。</summary>
  gipsyx 的 python 腳本都編譯成 byte code `*.pyc` ，
  而 python byte code 在各版本是不相容的。
 -總之最簡單的作法，就是把軟體裝好後那一刻整個系統備份下來，
-+總之最簡單的作法，就是挑軟體發行時的linux版本來裝，
++總之最簡單的作法，就是挑軟體發行時的 linux 版本來裝，
 +之後可以再把軟體裝好後那一刻整個系統備份下來，
  也就是 docker 的作法了。
  
@@ -5655,8 +5308,8 @@ android 使用上有些快捷鍵，各品牌會不太一樣，
 <updated>2018-12-03T14:42:54.125Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/secret-reader.html#support-html-format"/>
 <summary type="html">
-如果檔名以 `*.html.gpg` 結尾，將判定為 html ，
-在 iframe 中展示完整的 html 。</summary>
+如果檔名以 `*.html.gpg` 結尾，將判定為 html，
+在 iframe 中展示完整的 html。</summary>
 <category term="encrypt"/>
 <category term="blog"/>
 
@@ -6422,7 +6075,7 @@ posix 有 api 可以讓程序執行時改變自己的 uid，
 <link rel="alternate" type="text/html" href="http://gholk.github.io/linux-iccard-ccid-compile.html"/>
 <summary>因為辦了自然人憑證，自辦了 visa 卡開始做一些消費，
 也一直想用 web atm 讓生活更方便。
-於是做足功課後，終於買了第一台支援 linux 的讀卡機， IT-500U 。
+於是做足功課後，終於買了第一台支援 linux 的讀卡機，IT-500U。
 在自行編譯最新版的函式庫後，終於成功驅動，
 再胡亂摸索後，web atm 與自然人憑證都能使用了。</summary>
 <category term="linux"/>
@@ -6857,7 +6510,7 @@ Atom 等多個版本，這裡統稱 RSS。
 <published>2018-05-26T05:41:36.293Z</published>
 <updated>2018-05-26T05:41:36.549Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/javascript-except-query-selector.html"/>
-<summary>在 javascript 操作 dom 中， document.querySelector
+<summary>在 javascript 操作 dom 中，document.querySelector
 這個新的方法可以簡化很多操作，一舉取代大部份的查詢方法。
 但有時候不打算把查詢目標寫死時，就會比較麻煩，
 這時候可以回到單純的 getElementsByClassName、
@@ -6976,7 +6629,7 @@ getElementById 等會比較方便，不用為 id 加上 # ，
 <published>2018-05-18T15:40:08.968Z</published>
 <updated>2018-05-20T10:13:04.310Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/novel-lhdls.html"/>
-<summary>加入更多補充資料，並使用 marked 在瀏覽器端轉成 html 。</summary>
+<summary>加入更多補充資料，並使用 marked 在瀏覽器端轉成 html。</summary>
 <category term="小說"/>
 <category term="encrypt"/>
 
@@ -7252,7 +6905,7 @@ getElementById 等會比較方便，不用為 id 加上 # ，
 <category term="bookmarklet"/>
 
 </entry><entry>
-<id>http://gholk.github.io/ccns-grease-monkey-bookmarklet.html#小書籤fix</id>
+<id>http://gholk.github.io/ccns-grease-monkey-bookmarklet.html#小書籤 fix</id>
 <title>不用寫外掛也能惡搞網頁</title>
 <published>2018-05-05T11:55:20.441Z</published>
 <updated>2018-05-05T14:42:40.757Z</updated>
@@ -7942,13 +7595,13 @@ for (let i in array) ；
 
 </entry><entry>
 <id>http://gholk.github.io/wii-dolphin-wiimote-cursor.html</id>
-<title>dolphin用模擬wiimote體感</title>
+<title>dolphin 用模擬 wiimote 體感</title>
 <published>2018-03-25T12:35:11.384Z</published>
 <updated>2018-03-25T12:35:11.630Z</updated>
 <link rel="alternate" type="text/html" href="http://gholk.github.io/wii-dolphin-wiimote-cursor.html"/>
-<summary>之前玩dolphin模擬器都只有用到按鍵，
+<summary>之前玩 dolphin 模擬器都只有用到按鍵，
 沒有用到用描準之類的功能。
-原來可以用滑鼠的移動模擬wiimote，左鍵是A右鍵是B。
+原來可以用滑鼠的移動模擬 wiimote，左鍵是 A 右鍵是 B。
 或用搖捍的香菇頭搖捍也可以，只是不太好用。</summary>
 <category term="kirby"/>
 <category term="wii"/>

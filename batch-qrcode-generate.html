@@ -61,14 +61,65 @@
 我試了 css 的 <code>page-break: avoid</code> ，但 chromium 還是會切斷，
 無論我的 qr code 是用 img 或 canvas。
 目前只確定 firefox 是可以用的，chromium 就再等等吧。</p>
+<h2 id="2022-10-大張尺寸改版">2022-10 大張尺寸改版</h2>
+<p>原本本工具是印出大量的小張 qrcode，但大張 qrcode 在儲存上比較有效率，
+所以改版讓本工具可以方便印出較大張的 qrcode。</p>
+<p>建議使用每張 512 個字元的 qrcode，並每列 3 張 qrcode，直式列印可以印四列。
+這樣單面可以容納 12 張 qrcode，6144 個字元，base64 編碼前為 4608 byte。
+操作上把 <em>每列字元數</em> 設為 512，再按下重新切割字串，
+後勾選 <em>依換行分割字串</em> 再按 <em>encode</em> 即可。</p>
+<p>另一種印法是每張 1024 字元，每列 3 張，用橫式列印一頁二列。
+但這種作法要調一下頁緣間距，很容易超過。</p>
+<p>而且 qrcode 太大張不太好掃，也最好不要摺到。
+除了不能摺到 qrcode 內部，外部也最好不要。
+紙張有摺痕的話，山線谷線多少會讓紙面有弧度，
+然後 qrcode 扭曲就掃不出來。
+如果非摺不可，要掃時可以考慮撕開，
+紙面沒有摺線的話就不會有扭曲的問題了。</p>
+<h3 id="其他改版說明：">其他改版說明：</h3>
+<ul>
+<li>S 型排列無法在每列 4 張 qrcode 以外場合正常運作</li>
+<li>預設行為變為依換行分割字串</li>
+<li><em>重新切割字串</em> 按鈕會刪除換行符後，依每列字元數目斷行。</li>
+<li><em>每列字元數</em> 清除內容後，雙擊文字框會出現建議的字元數，
+對應各尺寸 qrcode 的容量上限。</li>
+<li>qrcode 尺寸是在 qrcode 邊界過大或超出顯示範圍時，用來調整大小的。
+原則上是依 <em>每列的 qrcode 數目</em> 自動調整大小。</li>
+<li>這個 qrcode library qrious 不能輸入 unicode 字串，輸出會壞掉。
+之前就是這樣，但沒有特別寫出來，只有建議用 base64。</li>
+</ul>
 <form>
 <label>
 <h2>原始資料</h2>
 <textarea name="text-data"></textarea></label>
-<label><input name="snake-render" onchange="qrcodeBatcher.handleStyleCheckbox(this)" data-style-name="snake" type="checkbox">S 型排列 qr code</label>
-<label><input name="split-by-newline" type="checkbox">依換行分割字串</label>
+<label><input name="snake-render" onchange="qrcodeBatcher.handleStyleCheckbox(this)" data-style-name="snake" type="checkbox">S 型排列 qr code (只在每列 4 個 qrcode 下有效)</label>
+<label><input name="split-by-newline" type="checkbox" checked="">
+依換行分割字串</label>
+
 <label><input name="show-text-data" type="checkbox" checked="true" onchange="qrcodeBatcher.handleStyleCheckbox(this)" data-style-name="ellipsis">顯示省略版字串</label>
+
+<label>每列的 qrcode 數目
+<input name="qrcode-per-row" type="number" value="3" min="2" max="4" step="1"></label>
+
+<div><label>每列字元數<input name="character-per-line" type="number" min="64" max="2953" value="512" list="qrcode-byte-capacity"></label>
+<button type="button" onclick="qrcodeBatcher.getFormNode('character-per-line').value = ''">
+clear</button>
+<button type="button" onclick="qrcodeBatcher.splitTextPerLine()">重新切割字串</button>
+<datalist id="qrcode-byte-capacity">
+<option value="64">
+</option><option value="256">
+</option><option value="512">
+</option><option value="1024">
+</option><option value="2048">
+</option><option value="2953">
+</option></datalist>
+</div>
+
+<label>qr-code 尺寸
+<input name="qrcode-canvas-size" type="range" min="33" max="180" value="77" oninput="qrcodeBatcher.handleSizeChange()"></label>
+
 <button type="button" onclick="qrcodeBatcher.handleEncode()">encode</button>
+
 <label>
 <h2>QR code</h2>
 <output name="qr-code-area" class="ellipsis"></output></label>
@@ -90,11 +141,14 @@ output .item {
     border: solid 1px;
 }
 .item img, .item canvas {
-    width: 80%;
+    width: 90%;
     display: block;
-    margin: 1em auto;
+    margin: 5% auto;
+    image-rendering: pixelated;
 }
 .item .subtitle {
+    display: inline-block;
+    width: 70%;
     margin: 0 1em;
     height: 15em;
 }
@@ -106,9 +160,7 @@ output .item {
 }
 output .item::after {
     content: counter(image-counter);
-    display: block;
-    padding: 0.2em;
-    text-align: right;
+    display: inline-block;
 }
 output.snake .item:nth-child(8n+1),
 output.snake .item:nth-child(8n+2),
@@ -131,9 +183,26 @@ output:after {
 }
 
 @media print {
+    body {
+        max-width: 100%;
+    }
+    @page {
+        margin: 1em;
+    }
+    output {
+        page-break-before: always;
+        padding: 1em;
+    }
     output .item, output .item * {
         page-break-inside: avoid;
         break-inside: avoid;
+    }
+    output .item > canvas {
+        width: 96%;
+        margin: 2% auto;
+    }
+    form + * {
+        clear: both;
     }
     footer {
         display: block;
@@ -173,6 +242,25 @@ output:after {
             }
             while (i < text.length)
         },
+        splitTextPerLine(width) {
+            if (!width) width = Number(
+                this.getFormNode('character-per-line').value
+            )
+            const field = this.getFormNode('text-data')
+            const value = field.value.replace(/\n/g, '')
+            const list = []
+            for (let i=0; i<value.length; i+=width) {
+                list.push(value.slice(i, i+width))
+            }
+            field.value = list.join('\n')
+        },
+        handleSizeChange() {
+            const size = Number(this.getFormNode('qrcode-canvas-size').value)
+            this.qriousCanvasSize = size
+            this.getFormNode('qr-code-area')
+                .querySelectorAll('canvas')
+                .forEach(canvas => canvas.qrious.size = size)
+        },
         segmentText(text = this.getFormNode('text-data').value) {
             if (this.getFormNode('split-by-newline').checked) {
                 return text.split(/\n/)
@@ -182,7 +270,6 @@ output:after {
         handleEncode() {
             this.getFormNode('qr-code-area').textContent = ''
             for (const seg of this.segmentText()) {
-                console.debug('seg: ', seg)
                 const canvas = this.textToCanvas(seg)
                 this.renderImage(canvas, seg)
                 // const url = this.textToDataUrl(seg)
@@ -196,14 +283,20 @@ output:after {
             const item = document.createElement('div')
             item.className = 'item'
             item.appendChild(node)
+            const count = Number(this.getFormNode('qrcode-per-row').value)
+            item.style.width = 100 / count + '%'
             const subtitle = document.createElement('div')
             subtitle.className = 'subtitle'
             subtitle.textContent = segment
             item.appendChild(subtitle)
             output.appendChild(item)
         },
+        qriousCanvasSize: 77,
         textToCanvas(text) {
-            const qrcode = new QRious({value: text})
+            const qrcode = new QRious({
+                value: text,
+                size: this.qriousCanvasSize
+            })
             return qrcode.canvas
         },
         textToDataUrl(text) {
@@ -219,8 +312,9 @@ output:after {
 </script>
 </main>
 
-<script defer src="ext/meta-meta.js"></script>
-<script defer data-lazy src="ext/load-disqus.js"></script>
+<script defer="" src="ext/meta-meta.js"></script>
+<script defer="" data-lazy="" src="ext/load-disqus.js"></script>
 <script>autoLoader.autoLoad()</script>
+
 
 </body></html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2022-11-06T13:42:55.304Z">
+<meta name="keywords" property="og:article:tag" content="firefox,addon,javascript">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="linux-citrix-workspace-install.html" title="在 linux 使用遠端辦公軟體 citrix workspace">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+<link rel="webmention" href="https://webmention.io/gholk.github.io/webmention">
+<link rel="pingback" href="https://webmention.io/gholk.github.io/xmlrpc">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>Tridactyl 初學使用心得</title>
+</head>
+<body>
+<main><h1 id="Tridactyl-初學使用心得">Tridactyl 初學使用心得</h1>
+<p>瀏覽器擴充元件中一直有一系列套件，
+是可以完全用鍵盤控制一般網頁瀏覽的，像 vimfx vimium tridactyl。
+最近用了 <a href="https://tridactyl.xyz/">tridactyl</a> ，真是一個非常 hack 的套件，
+可以客制化的地方超多，但也很多功能幾乎是半成品。
+如果是會寫 js 的進階使用者，強烈推薦 tridactyl，
+如果用的滿意，也希望可以幫忙貢獻或捐款。</p>
+<h2 id="從-vimium-的功能增強說起">從 vimium 的功能增強說起</h2>
+<p>一直以來都會用像 <a href="https://github.com/akhodakivskiy/VimFx">vimfx</a> 之類的擴充套件，
+就能用鍵盤控制瀏覽器，不用用到滑鼠就能瀏覽網頁。
+這類套件大多是模仿 vim 的按鍵操作，用 jk 來上下滾動網頁，
+用 f 來點擊連結或按鈕，其它就比較不一定；
+像 JK 來切換分頁，HL 上一頁下一頁。</p>
+<p>我是用 firefox。
+原本一直用功能比 vimfx 稍強的[vimium] firefox 版，[vimium-ff]
+後來無意間裝了 vimium-c，發現功能遠勝 vimium。
+像多了快捷鍵在文字框輸入時也能生效，
+主要用途是像 chromium 原本在輸入時要按 Esc 來離開輸入模式，
+就像 vim 那樣。
+問題是 Esc 很遠很難按，一般 vim user 會挷到 <code>C-c</code> 或 <code>jk</code> 。</p>
+<p>但後來仔細看了 vimium-c，發現這東西是某個中國人做的，
+而且還 <a href="https://github.com/gdh1995/vimium-c/blob/9cd705d/README-zh.md#%E9%92%88%E5%AF%B9%E9%80%82%E7%94%A8%E5%8C%BA%E5%9F%9F%E7%9A%84%E5%A3%B0%E6%98%8E">在 readme 特別宣告</a> ，
+不贊成 chrome 或 edge 商店中， 將台灣與中國並列的作法。</p>
+<blockquote>
+<h3 id="[针对适用区域的声明][taiwan-declare]"><a href="https://github.com/gdh1995/vimium-c/blob/9cd705d/README-zh.md#%E9%92%88%E5%AF%B9%E9%80%82%E7%94%A8%E5%8C%BA%E5%9F%9F%E7%9A%84%E5%A3%B0%E6%98%8E">针对适用区域的声明</a></h3>
+<p>Vimium C（和 gdh1995 发布的其他扩展）在被发布到“Microsoft Edge 加载项”和“Chrome
+网上应用店”等商店上时，均已向 所有地区 的所有人公开。
+但这个行为只是为了让这些插件更容易使用，并不代表或者暗示作者 gdh1995 “同意或者不反对”“台湾”一词可以同“中国”并列。
+虽然并列显示这一现状的确错误地出现在了这些商店的（开发者）页面中（于 2021 年 6 月 3 日确认）。</p>
+<p>根据《中华人民共和国宪法》和国际共识，台湾是中华人民共和国的神圣领土（不可分割）的一部分。</p>
+</blockquote>
+<p>既然對方都那麼強烈反對了，只好另尋它款擴充，
+就找到了 tridactyl。</p>
+<h2 id="tridactyl-新手適應">tridactyl 新手適應</h2>
+<p>一開始用 tridactyl 不太適應，他的鍵綁定和 vimium 系不太一樣，
+畢竟 vimium-ff 和 vimium-c 都算 vimium 衍生的。
+之前從 vimfx 切到 vimium 時也有調過。
+總之我就都重新綁定成我習慣的。</p>
+<h3 id="單手操作">單手操作</h3>
+<p>有一陣子發現我會幾乎只用左手摸鍵盤，右手可能在摸滑鼠或拿飲料。
+所以把一些功能都綁到左側鍵盤。
+像把 f 的連結目標編號改成只有左側鍵盤的鍵，
+上下捲動功能也綁到左側的按鍵 <code>Dd</code> 上，
+切換分頁的 JK 也綁到 bw，gi 綁到 a。
+上一頁下一頁則是綁到 <code>eE</code> ，
+這沒什麼邏輯，就挑一個還空著的按鍵。</p>
+<h3 id="tridactylrc">tridactylrc</h3>
+<p>tridactyl 自己定義了一些簡單的可組合的語法，
+有點像 tcl，不過比 tcl 還不如，因為沒有 quote 跳脫功能。
+嚴格來說不算一種語言，
+只是一些指令會把傳入的參數當成多個指令組合執行，
+而某一些指令可以執行任意 js。</p>
+<p>整體有點像 tmux.conf 的語法，
+例如 <code>bind j scrollline 10</code> 。
+但語法上又模仿了 unix 用連字符當參數的用法，
+例如 <code>bind --mode=insert &lt;C-b&gt; text.backward_char</code> 。</p>
+<p>整體我不太看好長期發展，因為有些功能初看還不錯，
+但感覺沒考慮到深處的設計哲學。
+例如用來組合指令的 composite，
+使用管道符時會把前一個指令的結果傳給下一個，
+還有個自動等待 promise 結果的功能。
+但某些理論上應該是要回傳 promise 的指令，
+如 fillcmdline 卻沒有回傳指令輸入後完成的 promise，
+所以就要自己包成 promise。
+發展到後面就會變成縫縫補補。</p>
+<h2 id="任意執行-js-的能力">任意執行 js 的能力</h2>
+<p>我認為 tridactyl 最大的強項是是 <code>:js</code> 這個命令，
+可以用來執行任意 js 程式碼，
+加上許多內部功能也有做成可呼叫的 js 函數，
+所以可以用這個命令做到非常多的事。</p>
+<h3 id="比附加元件更方便">比附加元件更方便</h3>
+<p>事實上，因為 tridactyl 曝露了大量的內部函數，
+也直接曝露了 WebExtension API，
+所以可以從 js 直接呼叫 webextension api，
+等於可以不用獨立做一個附加元件，就執行某些需要附加元件等級的功能。</p>
+<p>像是可以定義一個命令 <code>history_clear_url</code> ，
+利用 history api，把目前歷史記錄裡符合目前 url 的網頁都刪除。
+或是 <code>tab_list</code> ，用來列出目前所有開啟的分頁的網址，
+然後可以存在 tridactyl 的內部儲存空間或存成文字檔，
+甚至用 setinterval 每幾小時記錄一次，防止 crash 時分頁記錄消失；
+這大概就是某個附加元件 tab session manager 的最基本功能。</p>
+<p>雖然做起來會有點綁手綁腳，像要跳脫某些特殊字元，
+要找出 tridactyl 有限的事件中，
+這些命令應該要掛到什麼事件上觸發。</p>
+<h3 id="任意擴充命令">任意擴充命令</h3>
+<p>另一點就是，自己用 js 定義的函數和內建的命令差異不大。
+像內建有 tabpush tabqueue 命令，
+都是用來把分頁移動到另一個視窗。
+但我希望能夠移動後，自動讓該分頁取得焦點，
+所以自己定義了一個 <code>tabpush_and_focus</code> ，
+利用 web extension 的 <code>tabs.onActivated</code> 事件，
+抓到分頁移動後焦點移到另一分頁的準確時間點，
+準確重新聚焦到該分頁上。</p>
+<pre><code class="lang-js">// alias tabpush_and_focus jsb ...
+void async function() {
+    const tab = await activeTab();
+    const tabId = tab.id;
+    const oldWindowId = tab.windowId;
+    fillcmdline("tabpush");
+    await new Promise(ok =&gt; {
+        browser.tabs.onActivated.addListener(function leftCurrentTab(event) {
+            browser.tabs.onActivated.removeListener(leftCurrentTab);
+            ok();
+        });
+    });
+    const tabNow = await browser.tabs.get(tabId);
+    if (tabNow.windowId == oldWindowId) return;
+    browser.tabs.update(tabId, {
+        active: true
+    });
+    browser.windows.update(tabNow.windowId, {
+        focused: true
+    });
+}();
+</code></pre>
+<h2 id="自動化的能力">自動化的能力</h2>
+<p>js 的能力直接讓自動化成為可能。
+例如我想要讓 gr 二個鍵，可以把目前頁面加入書籤，
+並關閉目前頁面，也完全可以做到。
+甚至是網頁等級內的自動化，
+像在 gitlab 上打開某 repository 內檔案的編輯介面，
+然後從某處把新版內容填入，並按下預覽鍵。</p>
+<pre><code class="lang-js">// alias mktridactylrc_put tabopen_and_js -s https://gitlab.io/gholk/tridactylrc/-/edit/main/tridactylrc ...
+const $ = x =&gt; document.querySelector(x);
+$("a[href='#editor']").click();
+const rc = await tri.controller.acceptExCmd("mktridactylrc_fix");
+const node = $("#editor&gt;*");
+const getEditor = await tri.excmds.js("getEditor");
+const editor = getEditor(node);
+await editor.setContent(rc + "\n");
+$("a[href='#preview']").click();
+</code></pre>
+<p>但某次更新後 gitlab 的 editor 不再暴露全域的 monaco editor 變數，
+所以上述腳本就不能運作了，此是後話。</p>
+<h3 id="比-GreaseMonkey-更自由">比 GreaseMonkey 更自由</h3>
+<p>綜合來看有點像 grease monkey 等的 user.js，
+但 grease monkey 提供的程式的 <em>進入點</em> 很有限，
+只有頁面載入時執行。
+如果要定義某個按鍵時執行對應動作，
+就得自己綁定到對應的 key press，
+或是在頁面上新增按鈕，然後監聽按鈕按下的事件。</p>
+<p>這二點都很麻煩，要避免影響到原本網頁的結構運作。
+但 tridactyl 直接幫你處理好這些事，
+只要綁到某一按鍵就就好了，
+或是甚至不用綁，寫成 ex command 就好了。</p>
+<p>例如在 youtube 上，可以定義讓 gu 是按下 like 鍵，讓 gd 是 dislike。
+在動畫瘋上，可以定義讓 I 是顯示輸入彈幕的文字框。</p>
+<h3 id="其他有的沒的">其他有的沒的</h3>
+<p>其他也有很多可以獨立在其他附加元件裡做，
+但因為方便我直接做在 tridactyl 裡了。
+像 adblock 用來擋廣告的 webRequest api，
+我用來擋了巴哈的通知，防止某些重導向連結如 google 搜尋結果自追蹤用連結，
+改某些網頁的 user agent。</p>
+<p>以下是擋掉 google 追蹤用跳轉連結的 tridactyl 命令：</p>
+<pre><code>autocmd BeforeRequest https://www.google.com/url?* req =&gt; { const u = new URL(req.url); return {redirectUrl: u.searchParams.get('q')} }
+</code></pre><h2 id="糟糕的心得">糟糕的心得</h2>
+<p>最後我想說，這其實是一篇糟糕的心得。
+我從三月開始用 tridactyl，
+七月開始修 bug，九月開始開發新功能。
+我已經沒辦法想像沒有 tridactyl 的生活，
+但我卻沒辦法好好描述 tridactyl 到底好用在哪。
+總之我不想再等了，所以就這樣發布吧。</p>
+<p>也許我該做的，是用文學編程的方式，
+把自己的 tridactylrc 註解一次，說明每個指令做了什麼。
+但我的 rc 又會不斷更新，更新後舊的文件就要重新對應，
+感覺就很麻煩。</p>
+</main>
+
+<script defer="" src="ext/meta-meta.js"></script>
+<script defer="" data-lazy="" src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+
+
+</body></html>

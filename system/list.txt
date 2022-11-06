@@ -346,3 +346,4 @@ earphone-line-broken.html
 cd-project-gwent-on-gog-steam.html
 email-thunderbird-unable-localhost.html
 linux-citrix-workspace-install.html
+firefox-vim-like-tridactyl-addon.html

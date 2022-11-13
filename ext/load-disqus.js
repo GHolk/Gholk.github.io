@@ -19,14 +19,19 @@ function loadDisqus() {
 }
 
 function lazyDisqus() {
-    const details = document.createElement('details')
-    details.innerHTML = '<summary>留言板</summary>'
-    details.appendChild(disqus_thread)
-    details.ontoggle = function () {
-        loadDisqus()
-        this.ontoggle = null
+    let trigger = document.querySelector('#disqus-load')
+    if (!trigger) {
+        trigger = document.createElement('details')
+        trigger.innerHTML = '<summary>留言板</summary>'
+        trigger.appendChild(disqus_thread)
+        document.body.appendChild(trigger)
     }
-    document.body.appendChild(details)
+    let event = 'toggle'
+    if (trigger.nodeName == 'BUTTON') event = 'click'
+    trigger['on' + event] = function (event) {
+        loadDisqus()
+        this['on' + event.type] = null
+    }
 }
 
 function testLoadDisqus() {

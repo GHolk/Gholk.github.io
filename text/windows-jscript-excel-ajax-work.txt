@@ -1,5 +1,5 @@
 # 用 jscript 操作 excel 發 http request 與讀寫檔案系統
-這幾天玩 windows jscript 的腳本，用了 excel object model 讀寫 excel 表格、ActiveX 的 ajax、FileSystemObject 來存檔 http response 作快取 (不過最後沒用到) 。
+這幾個月玩 windows jscript 的腳本，用了 excel object model 讀寫 excel 表格、ActiveX 的 ajax、FileSystemObject 來存檔 http response 作快取。
 覺得 jscript 在讀寫 excel 自動化這點還蠻方便的，windows 內建不用裝其它有的沒的，也不用特別調什麼設定就能跑。
 雖然比起 VBA 明顯少掉 msgbox 這類對話框功能，但對不想學 basic 的人還是可以一用。
 於是把變數名稱、url、資料碼掉後分享出來。
@@ -7,6 +7,7 @@
 ## 原始碼
 本文可以用 [writ] 抽分離程式和文件，雖然用其他工具土法煉鋼應該也可以，
 應該不會用到特別的語法。
+（但有一塊 vbscript 的原始碼要刪除）
 想看直接的 [原始碼也可以去 gist](https://gist.github.com/GHolk/119afb3d5c34b0c528e212c2dc6a23a4) 。
 
 [writ]: https://www.npmjs.com/package/writ#how-it-works
@@ -264,7 +265,7 @@ function debug(string, flag) {
 像 [網站 devguru 的 wsh 範例][devguru wsh argument] ：
 
 ```vbscript
-##!! vbscript example
+//!! vbscript example
 Set objArgs = WScript.Arguments
 WScript.Echo WScript.Arguments.Count
 For Each strArg in objArgs
@@ -379,18 +380,34 @@ getRow 則是會讀取到 n 個欄位或是到第一個空儲存格為止。
 另外 cell 承襲良好的 basic 傳統，陣列從 1 開始計算，
 所以我在封裝時幫他加 1 了不用謝。
 
-		getCell: function (i, j, sheet) {
-			var sheetObject
-			if (sheet) sheetObject = this.book.Sheets(sheet)
-			else sheetObject = this.book.ActiveSheet
-			return sheetObject.Cells(i+1, j+1).Value
-		},
+        getCell: function (i, j, sheet) {
+            var sheetObject
+            if (typeof j == 'string') j = this.cellStringToIndex(j)
+            if (sheet != undefined) sheetObject = this.book.Sheets(sheet)
+            else sheetObject = this.book.ActiveSheet
+            return sheetObject.Cells(i+1, j+1).Value
+        },
 		setCell: function (i, j, value, sheet) {
 			var sheetObject
 			if (sheet) sheetObject = this.book.Sheets(sheet)
 			else sheetObject = this.book.ActiveSheet
+            if (typeof j == 'string') j = this.cellStringToIndex(j)
 			sheetObject.Cells(i+1, j+1).Value = value
 		},
+
+然後也做了個把字母風格的索引轉成數字的方法，
+不然還要人力計算 G 欄位是對應到第幾欄。
+
+        cellStringToIndex: function (string) {
+            string = string.toUpperCase()
+            var j = 0
+            for (var k=0; k<string.length; k++) {
+                j *= 26
+                j += string.charCodeAt(k) - 'A'.charCodeAt(0) + 1
+            }
+            j -= 1
+            return j
+        },
 		getRow: function (i, count) {
 			var a = []
 			var j = 0
@@ -551,45 +568,39 @@ jscript 只能用 com 版本的 xml http api： `ActiveX("Microsoft.XMLHTTP")`
 fso 的讀檔寫檔都是同步操作，用起來輕鬆愉快，
 跑起來也不慢，至少比 http 快得多。
 
-	var clAjax = {
-		init: function () {
-			this.fso = WScript.CreateObject('Scripting.FileSystemObject')
-			this.cacheJson = true
-			this.fetch5QueueArray = []
-			this.fetch5QueueSize = 25
-		},
-		writeFile: function (file, string) {
-			var overwrite = true
-			var file = this.fso.CreateTextFile(file, overwrite)
-			file.Write(string)
-			file.Close()
-		},
-		readFile: function (file) {
-			file = this.u2wpath(file)
-			var modeRead = 1
-			var encodeAnsi = 0
-			var f = this.fso.OpenTextFile(file, modeRead, encodeAnsi)
-			var text = f.ReadAll()
-			f.Close()
-			return text
-		},
-		existFile: function (file) {
-			file = this.u2wpath(file)
-			return this.fso.FileExists(file)
-		},
-		cacheFile: function (name, text) {
-			var cachePrefix = this.cachePrefix || ''
-			var path = cachePrefix + '/' + name
-			if (text != undefined) {
-				debug('cache-write: ' + path, 'cache')
-				return this.writeFile(path, text)
-			}
-			
-			if (this.existFile(path)) {
-				debug('cache hit: ' + path, 'cache')
-				return this.readFile(path)
-			}
-		},
+    var clAjax = {
+        init: function () {
+            this.fso = WScript.CreateObject('Scripting.FileSystemObject')
+            this.cacheJson = true
+            this.fetchLandRegQueueArray = []
+            this.fetchLandRegQueueSize = 25
+            var oTable = this.oTable = {}
+            '...censored'.split(';')
+                .forEach(function (r) {
+                    var pair = r.split('\t')
+                    ownerTypeTable[pair[0]] = pair[1]
+                })
+        },
+        writeFile: function (file, string) {
+            file = this.u2wpath(file)
+            var overwrite = true
+            var f = this.fso.CreateTextFile(file, overwrite)
+            f.Write(string)
+            f.Close()
+        },
+        readFile: function (file) {
+            file = this.u2wpath(file)
+            var modeRead = 1
+            var encodeAnsi = 0
+            var f = this.fso.OpenTextFile(file, modeRead, encodeAnsi)
+            var text = f.ReadAll()
+            f.Close()
+            return text
+        },
+        existFile: function (file) {
+            file = this.u2wpath(file)
+            return this.fso.FileExists(file)
+        },
 
 ### 處理 windows 路徑分隔符
 因為反斜線太反智了，每次遇到都要寫二條，醜的要死。
@@ -626,44 +637,83 @@ jscript 竟然就有 encodeURIComponent 了。
 只傳 body 就看不到回應的標頭。
 但目前用不到，所以就只回 body。
 		
-		fetch: function (url, option) {
-			var xhr = WScript.CreateObject('MSXML2.XMLHTTP.6.0')
-			var method = 'GET'
-			if (option.method) method = option.method
-			if (method == 'GET' && option.data) {
-				if (typeof option.data == 'string') {
-					url += '?' + option.data
-				}
-				else url += '?' + this.queryStringEncode(option.data)
-				option.data = null
-			}
-			debug(method + ' ' + url, 'xhr-open')
-			xhr.open(method, url, false)
-			var json = false
-			var header = option.header
-			if (header) {
-				for (var key in header) {
-					xhr.setRequestHeader(key, header[key])
-					debug(key + ':' + header[key], 'xhr-set-header')
-				}
-				if (header['Content-Type'] && header['Content-Type'].match(/^applications.json/)) {
-					json = true
-				}
-			}
-			var data
-			if (option.data) {
-				if (typeof option.data == 'string') data = option.data
-				else if (json) {
-					data = JSON.stringify(option.data)
-				}
-				else data = this.queryStringEncode(option.data)
-			}
-			if (data) xhr.send(data), debug(data, 'xhr-send')
-			else xhr.send()
-			debug(xhr.status, 'xhr-response-head')
-			debug(xhr.getAllResponseHeaders(), 'xhr-response-head')
-			return xhr.responseText
-		},
+        fetch: function (url, option) {
+            var xhr = WScript.CreateObject('MSXML2.XMLHTTP.6.0')
+            var method = 'GET'
+            if (option.method) method = option.method
+            if (method == 'GET' && option.data) {
+                if (typeof option.data == 'string') {
+                    url += '?' + option.data
+                }
+                else url += '?' + this.queryStringEncode(option.data)
+                option.data = null
+            }
+            debug(method + ' ' + url, 'xhr-open')
+            xhr.open(method, url, false)
+            var json = false
+            var header = option.header
+            if (header) {
+                for (var key in header) {
+                    xhr.setRequestHeader(key, header[key])
+                    debug(key + ':' + header[key], 'xhr-set-header')
+                }
+                if (header['Content-Type'] && header['Content-Type'].match(/^applications.json/)) {
+                    json = true
+                }
+            }
+            var data
+            if (option.data) {
+                if (typeof option.data == 'string') data = option.data
+                else if (json) {
+                    data = JSON.stringify(option.data)
+                }
+                else data = this.queryStringEncode(option.data)
+            }
+            var safeFileName
+
+### http cache 機制
+然後直接把 cache 機制做到 fetch 裡，
+之後如果有相同的 http request 就不用再發一次。
+用方法、url、參數簡單當作鍵（檔名）來存，
+如果是複雜的方法，則可以直接把 cache 設成 false 來繞過，
+也可以再自己再實作 cache。
+
+            if (option.cache) {
+                if (method == 'GET') safeFileName = encodeURIComponent(url)
+                else if (typeof data == 'string') {
+                    safeFileName = encodeURIComponent(url) + 
+                        encodeURIComponent('\n') + 
+                        encodeURIComponent(data)
+                }
+                if (safeFileName) {
+                    safeFileName = method + '%0A' + safeFileName + '.cache'
+                    var cacheFetch = this.cacheFile('basic/' + safeFileName)
+                    if (cacheFetch) return cacheFetch
+                }
+            }
+            if (data) xhr.send(data), debug(data, 'xhr-send')
+            else xhr.send()
+            debug(xhr.status, 'xhr-response-head')
+            debug(xhr.getAllResponseHeaders(), 'xhr-response-head')
+            if (option.cache && safeFileName) {
+                this.cacheFile('basic/' + safeFileName, xhr.responseText)
+                debug('cache fail ' + method + ' ' + url, 'cache-basic')
+            }
+            return xhr.responseText
+        },
+        cacheFile: function (name, text) {
+            var cachePrefix = this.cachePrefix || ''
+            var path = cachePrefix + '/' + name
+            if (text != undefined) {
+                debug('cache-write: ' + path, 'cache')
+                return this.writeFile(path, text)
+            }
+
+            if (this.existFile(path)) {
+                debug('cache hit: ' + path, 'cache')
+                return this.readFile(path)
+            }
+        },
 
 ### 包裝的 api 函數
 再來就是把 api 多包幾層，
@@ -685,69 +735,82 @@ jscript 竟然就有 encodeURIComponent 了。
 			var base = 'https://api.server.io'
 			return this.fetch1(base + path, data)
 		},
-		fetch3: function (name, method, version, data) {
-			var url = 'https://some.api.io'
-			url += name + '.ashx'
-			url += '?' + this.queryStringEncode({mode: method, version: version})
-			debug(url)
-			var result = this.fetch(url, {
-				method: 'POST',
-				header: {'Content-Type': 'applications/json; charset=utf-8'},
-				data: data
-			})
-			return JSON.parse(result)
-		},
+        fetchFree: function (name, method, version, option) {
+            var url = 'https://some.api.io'
+            url += name + '.ashx'
+            url += '?' + this.queryStringEncode({mode: method, version: version})
+            debug(url)
+            if (!option.method) option.method = 'POST'
+            if (!option.header) option.header = {
+                'Content-Type': 'applications/json; charset=utf-8'
+            }
+            var result = this.fetch(url, option)
+            return JSON.parse(result)
+        },
 		reasonCache: {},
 		reasonDecode: function () {
+            /* censored */
 		},
 
-舊 code，那時候還沒寫 cache 函數，
-而且只有先存下來，後來也沒有用到暫存的回應。
+像這個就是自己實作 cache，用幾個參數當 cache 名稱而不是用預設的 url。
 
-		fetch6: function () {
-			var result = this.fetchPay(
+        fetch4: function (a, b, c) {
+            var cacheName = [a,b,c].join('-') + '.json'
+            var json = this.cacheFile(cacheName)
 
-			)
-			if (this.cacheJson) {
-				this.writeFile( /* censored */ result)
-			}
-			try {
-				return result /* censored */ 
-			}
-			catch (error) {
-				alert(error)
-			}
-			return null
-		},
+            var result
+            if (json) return JSON.parse(json)
+
+            result = this.fetch2(
+                'some/endpoint',
+                [{a, b, c}]
+            )
+            if (this.cacheJson) {
+                this.cacheFile([a,b,c].join('-') + '.json', JSON.stringify(result))
+            }
+            return result
+        },
 
 ### 非同步批次查詢
 這裡做了一個有趣的批次化設計。
 因為他們的 api 一次可以查 25 筆資料，
 所以我寫成回呼風格的非同步函數。
+因為是批次查詢，所以 cache 也是自己實作，
+對每次的單次查詢做 cache，不然整批 cache 意義不大。
 
-		fetch5: function (single, callback) {
-			var queue = this.fetch5QueueArray
-			queue.push({single: single, callback: callback})
-			if (queue.length != this.fetch5QueueSize) return
-            
+        fetch5: function (single, callback) {
+            var o = single
+            var cacheName = ['info/x', o.a, o.b, o.c].join('-') + '.json'
+            var cache = this.cacheFile(cacheName)
+            if (cache) return callback(JSON.parse(cache))
+
+            var queue = this.fetchQueueArray
+            queue.push({single: single, callback: callback})
+            if (queue.length != this.fetchQueueSize) return
+
 當 queue 滿了的時候才會正真送出查詢，
 之後一一執行每個回呼函數。
 理論上還是會照順序。
 
-			var data = []
-			for (var i=0; i<queue.length; i++) {
-				data.push(queue[i].single)
-			}
-			var result = this.fetchPay('api-endpoint', data)
-			// debug(JSON.stringify(result, null, ' '))
-			var response = result /* censored */ 
-			for (var i=0; i<response.length; i++) {
-				queue[i].callback(response[i])
-			}
-			this.fetch5QueueArray = []
-			return response
-		},
-        
+            var data = []
+            for (var i=0; i<queue.length; i++) {
+                data.push(queue[i].single)
+            }
+            var result = this.fetch2('some/endpoint', data)
+            // debug(JSON.stringify(result, null, ' '))
+            var response = result.RESPONSE
+            for (var i=0; i<response.length; i++) {
+                var cachable = queue[i].callback.call(this, response[i])
+                if (cachable) {
+                    o = queue[i].single
+                    cacheName = ['info/x', o.a, o.b, o.c].join('-') + '.json'
+                    this.cacheFile(cacheName, JSON.stringify(response[i]))
+                }
+            }
+            this.fetchQueueArray = []
+            return response
+        },
+
 之後有碰到一個問題是，某些資料查不到，
 所以回應不到 25 筆，就不知道是少了哪些資料，
 然後一一對應的回呼就會對應錯。
@@ -790,6 +853,13 @@ jscript 竟然就有 encodeURIComponent 了。
 		for (var i=0; i<this.length; i++) copy[i] = f(this[i],i,this)
 		return copy
 	}
+    Array.prototype.flat = function () {
+        var list = []
+        this.forEach(function (x, i, l) {
+            list = list.concat(x)
+        })
+        return list
+    }
 	Array.prototype.forEach = Array.prototype.map
 
 

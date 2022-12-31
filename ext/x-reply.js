@@ -3,10 +3,13 @@ function createBoard() {
     board.id = 'comment-board'
     board.innerHTML = `
 <h2>留言</h2>
+<p>
 <a href="mastodon" target="_blank">
 <button>在 mastodon 或用 ActivePub 留言</button></a>
 <a href="mailto:"><button>用 email 回復</button></a>
 <button id="disqus-load">載入 disqus 回復</button>
+</p>
+<p><small>Webmention is supported</small></p>
 `
     board.querySelector('a[href^=mailto]').href = getMailToUrl()
     handleActivePub(board.querySelector('a[href=mastodon]'))

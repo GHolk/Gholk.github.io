@@ -1,0 +1,1153 @@
+# 用 jscript 操作 excel 發 http request 與讀寫檔案系統
+這幾天玩 windows jscript 的腳本，用了 excel object model 讀寫 excel 表格、ActiveX 的 ajax、FileSystemObject 來存檔 http response 作快取 (不過最後沒用到) 。
+覺得 jscript 在讀寫 excel 自動化這點還蠻方便的，windows 內建不用裝其它有的沒的，也不用特別調什麼設定就能跑。
+雖然比起 VBA 明顯少掉 msgbox 這類對話框功能，但對不想學 basic 的人還是可以一用。
+於是把變數名稱、url、資料碼掉後分享出來。
+
+## 原始碼
+本文可以用 [writ] 抽分離程式和文件，雖然用其他工具土法煉鋼應該也可以，
+應該不會用到特別的語法。
+想看直接的 [原始碼也可以去 gist](https://gist.github.com/GHolk/119afb3d5c34b0c528e212c2dc6a23a4) 。
+
+[writ]: https://www.npmjs.com/package/writ#how-it-works
+
+但抽出來的原始碼應該不能用，因為很多變數、程式碼片段都刪掉了，
+可能少數 get/set cell 還可以動，或是那個 hacky 的 fetch 函數。
+
+## jscript
+瀏覽器大戰時，microsoft 的 ie 把自己的 javascript 實現叫 jscript，
+然後還推了 vbscript，讓在 windows 長大的 visual basic 工程師也可以無痛開發網站。
+那時候 ie 可以指定 `<script language="vbscript">` ，
+然後就能跑 visual basic 的方言 vbscript。
+
+不過我覺得 basic 這家族每個實際的語法都差很多，
+雖然看起來很像，但因為細節差異，學起來應該也不會輕鬆到哪裡去。
+
+然後可能是因為 ms 一直缺少一個堪用的腳本語言， [batch] 那什麼垃圾就不要拿出來笑了。
+ms 弄出個 [windows script host] ，複用了 jscript vbscript 的語法，
+但執行環境從瀏覽器換成直接跑在檔案系統上，讓使用者可以用來自動化一些日常工作。
+
+[batch]: https://zh.wikipedia.org/wiki/%E6%89%B9%E6%AC%A1%E6%AA%94
+[windows script host]: https://zh.wikipedia.org/wiki/Windows_Script_Host
+
+### jscript 使用
+只要呼叫 cscript 或 wscript 這二支直譯器，就分別可以用 CLI 或 GUI 執行 windows script host，
+會依照附檔名自動以對應的語言解析。
+這二支程式自 windows 98 以來就一直默默躺在 C 槽裡，到 windows 11 都不離不棄，
+不用開箱就可以用，也不太會被防毒擋或像 telnet 功能被封印。
+
+只要用 `cscript file.js` 或直接雙擊附檔名為 js 的檔案，就會以 wscript 執行。
+（可參考下面的章節 [wscript cscript 差異](#半殘的圖形介面-echo) ）
+另外也可以用 wsf 的附檔名，以 xml 用像網頁的型式組織程式碼。
+可參考 [張智星的教材 jscript 程式設計 - Chapter 23: 程式碼的重複使用][book wsh] 。
+
+[book wsh]: http://mirlab.org/jang/books/wsh/functionFile.asp?title=23-2%20%A8%E7%BC%C6%A9w%B8q%C0%C9%AA%BA%A8%CF%A5%CE
+
+### 呼叫 COM 物件的魔法
+ms 送給 cscript 最大的禮物，就是讓他可以存取 COM 介面函式庫，
+準確來說是存取有支援 [Active scripting] 介面的 com。
+windows 不同函式庫間主要透過 COM 來溝通，應該吧，沒寫過 windows 有錯請指正，
+關於 active scripting 的術語也其實不是很清楚。
+用 new ActiveX 或 WShell.CreateObject 就可以建立對應的物件，
+從而達成操作 excel word 等對 com 支援很夠的 windows 程式。
+
+[Active scripting]: https://en.wikipedia.org/wiki/Active_Scripting
+
+### .NET 一統天下的夢
+cscript 還有一項特色，也可以跑在 ASP 裡。
+也就是不只可以從 asp 送出含 jscript 的網頁在 ie 裡跑，
+也可以在 asp 裡像 php 那樣，內嵌 jscript 來生成網頁內容。
+微軟很早就有這種大平台的觀點，com 之間的互相呼叫，
+到處都可以跑同一種程式語言，甚至也能讓第三方
+[在 windows script host 上建立其它的腳本語言][wsh other language] ，
+像 active perl。
+
+[wsh other language]: https://en.wikipedia.org/wiki/Windows_Script_Host#Available_scripting_engines
+
+[後來 com 就變成 .NET 了][com dot net]，然後這堆東西，
+我也不知道後來怎麼樣，未來會不會淘汰，總之現在還可以動。
+
+[com dot net]: https://coolshell.cn/articles/3008.html
+
+## polyfill json
+對，jscript 的時代還沒有 JSON 全域靜態物件。
+如果只是要解析還好說，直接 `eval('(' + json + ')')` 就好，
+但要序列化還是直接抓一個現成的 polyfill 比較方便。
+我是用 [json2.js](https://gist.github.com/atheken/654510) ，
+直接整個檔案貼過來而已。
+
+
+```js
+// import JSON
+```
+
+後來覺得其實可以做個簡單的 jscript import 或 require 功能，
+反正也有 [FileSystemObject](#FileSystemObject) 可以用，
+要抓網路上的也有 ajax，做個類似 common.js 規範的 require 應該不是太難。
+AMD 就比較複雜但比較好做，因為他不需要同步載入 module，
+但 jscript 可以同步執行，就沒什麼差。
+
+## 半殘的圖形介面 echo
+windows script host 有 cscript 和 wscript 二個命令，
+分別對應文字介面與圖形介面的 api，
+我所知的差異也就只有內建的 WScript 物件上，Echo 方法會如何輸出。
+如果是 cscript，echo 就是輸出一行文字，類似 console.log；
+如果是 wscript 則會是類似瀏覽器中 alert 函數的效果，
+會彈出一個阻塞式的對話框。
+
+```
+function alert(string) {
+	WScript.Echo(string)
+}
+```
+
+一開始我是想做成友善一點的圖形介面版，
+預設在檔案總管雙擊 js 檔案時，預設就是用 wscript 執行。
+但後來發現 wscript 這東西根本殘廢，只有一個像 alert 的 echo，
+其它 prompt confirm 都沒有，也沒辦法彈出選擇檔案的對話框，
+也就做不了完整的 gui。
+
+cli 裡還勉強能用 stdin.readline，但對麻瓜體驗就很槽糕。
+而且因為 wscript 的 alert 會阻塞，就不能用來 debug 輸出一堆訊息，
+不然只會變成一堆對話框，不一個個點掉就會卡在那裡。
+後來就只用 cscript 了，所以會把 alert 當 console.log 用。
+
+## 多功能版 confirm
+後來發現有 WScript.Shell 這個物件可以用，
+可以用來彈出基本的是否對話框。
+內容 [參考自 devguru 的 vbscript 指南][devguru wsh popup] 。
+
+	var wsh = WScript.CreateObject('WScript.Shell')
+	function confirm(string, option) {
+		if (!option) option = {}
+		var title = option.title == null ?
+			'Windows Script Host' : option.title
+		var level = option.level || 0
+		var button = option.button == null ? 1 : option.button
+		var timeout = option.timeout || 0
+		return wsh.PopUp(string, timeout, title, button + level)
+	}
+
+[devguru wsh popup]: https://www.devguru.com/content/technologies/wsh/wshshell-popup.html
+
+這函數功能不少，如果要用 java 風格來寫會變成：
+
+	var PopUp = {
+		init: function () {
+			this.wsh = WScript.CreateObject('WScript.Shell')
+		},
+
+timemout 是秒數，設定訊息框自動消失的時間。
+如果填 0 就是不會自動消失。
+
+		TIMEOUT_INFINITY: 0,
+
+level 指定訊息框的等級，實際上就是會用什麼圖標，
+分別是叉叉、問號、驚嘆號、一個藍色的 information 的 **i** 。
+
+		LEVEL_CRITICAL: 16,
+		LEVEL_QUESTION: 32,
+		LEVEL_EXCLAMATION: 48,
+		LEVEL_INFORMATION: 64,
+
+可以出現的按鈕組合：
+
+		SHOW_OK: 0,
+		SHOW_OK_CANCEL: 1,
+		SHOW_ABORT_IGNORE_RETRY: 2,
+		SHOW_YES_NO_CANCEL: 3,
+		SHOW_YES_NO: 4,
+		SHOW_RETRY_CANCEL: 5,
+
+使用者按了哪個按鈕，如果沒按等到 timeout 就是 `-1` 。
+
+		BUTTON_OK: 1,
+		BUTTON_CANCEL: 2,
+		BUTTON_ABORT: 3,
+		BUTTON_RETRY: 4,
+		BUTTON_IGNORE: 5,
+		BUTTON_YES: 6,
+		BUTTON_NO: 7,
+		BUTTON_TIMEOUT: -1,
+
+實際函數如下。
+對，那個 `+` 不是筆誤，他 api 就是這樣設計。
+你要換成 `|` 也可以，反正所有容許出現的按鈕組合都小於 16。
+
+		run: function (message, timeout, title, show, level) {
+			return this.wsh.PopUp(
+				message, timeout, title,
+				show + level
+			)
+		}
+	}
+
+實際使用：
+
+	//!! WSH PopUp Example
+	PopUp.init()
+	var result = PopUp.run(
+		'operation fail',
+		PopUp.TIMEOUT_INFINITY,
+		'WScript Test',
+		PopUp.ALLOW_ABORT_IGNORE_RETRY,
+		PopUp.LEVEL_EXCLAMATION
+	)
+	switch (result) {
+	case PopUp.BUTTON_ABORT:
+		return
+	case PopUp.BUTTON_IGNORE:
+		alert('ignore error')
+	case PopUp.BUTTON_RETRY:
+		retry()
+		break
+	}
+
+## debug 功能
+這很晚才做的簡易 debug flag 功能，簡單但實用，
+用單一全域變數來控制是否要輸出某一功能的訊息。
+例如 response 解析不出來，可以加個 `debug(response.responseText, 'log-response')` ，
+然後把 flag 那行改成 `var debugFlag = 'log-response'` ，就看得到訊息了。
+如果要關掉就把 `log-response` 從 debugFlag 裡拿掉就好了。
+可以加多個 debug flag，然後按需求增減，用完就關掉，之後有問題還可以再打開。
+
+```js
+var debugFlag = ''
+function debug(string, flag) {
+	var uflag = debugFlag
+	if (debug.hasOwnProperty('flag')) uflag = debug.flag
+	if (flag && uflag.match(flag)) alert(string)
+	else if (flag == null && uflag) alert(string)
+}
+```
+
+要寫好看一點當然是全部封裝成一個物件，
+但這樣用變數前綴名稱來寫也是勉強及格，
+反正 c bash 很多沒有物件導向的語言，也都這樣做的。
+
+## sleep 與事件循環
+對，jscript 的 sleep 也是同步阻塞的，
+而且 jscript 還沒有 setTimeout setInterval 這二支函數。
+所以用到後來，發現 Microsoft.XMLHTTP 函式庫的非同步版本跑起來怪怪的，
+都抓不到 `status == 4` 也就是 onload 的事件，
+我就懷疑 jscript 根本沒有做 event queue 與事件循環。
+
+仔細想想，某些 javascript 實作也可以提供很多同步版本的 api 呼叫，
+不一定要做成事件驅動的環境，所以其實非事件驅動的 js 也是存在的嗎？
+
+然後依我的習慣，這種用到第三方函式庫的功能，
+會封裝成函數，事後移植時只要改函數的定義即可。
+
+	function sleep(second) {
+		WScript.Sleep(second * 1000)
+	}
+
+如果是瀏覽器 javascript，我會寫成這樣：
+
+	function sleep(second) {
+		return new Promise(wake => setTimeout(wake, second * 1000))
+	}
+
+## 讀取命令列參數
+後來我是把 cookie 和檔名放命令列參數，
+至於發現 ajax 無法送 cookie 又是另一個故事了。
+
+	function getArgv(i) {
+		var wa = WScript.Arguments
+		if (i < 0) return wa.Count()
+		else if (i == 0) return WScript.ScriptFullName
+		else return wa(i-1)
+	}
+
+而且那個 Count 竟然是個 method，下面可以看到 excel 裡某些物件的 count 是 property。
+這裡有個很麻煩的點，vbscript 裡如果是無參數的 method，似乎可以省略呼叫的括號，
+像 [網站 devguru 的 wsh 範例][devguru wsh argument] ：
+
+```vbscript
+##!! vbscript example
+Set objArgs = WScript.Arguments
+WScript.Echo WScript.Arguments.Count
+For Each strArg in objArgs
+    WScript.Echo strArg
+Next
+```
+
+[devguru wsh argument]: https://www.devguru.com/content/technologies/wsh/wscript-arguments.html
+
+所以有時候沒有 jscript 版範例，只能從 vb 參考 api 怎麼用時，
+要想一下到底那個名字是方法還是屬性。
+
+## 不要造神
+不要造神是 clean code 指南之一，意思是不要把所有東西都寫到同一個物件上。
+雖然自從我學會 oo 後，就蠻喜歡造神的。
+所有函數都寫在一個物件裡，之後可以很簡單的部份修改、繼承，
+只要覆寫物件的屬性、方法即可。
+
+總之這是用來處理 excel 試算表的主要物件。
+這裡我是用原型風格來建立物件，
+直接實例化出含有所有方法的物件，
+之後如果需要重用再用 `Object.create` 繼承即可。
+
+	var lookupEr = {
+		WScript: WScript,
+
+我蠻喜歡這種把用到的外部封裝好的物件，
+再在自己的物件裡封裝一次的作法。
+這樣之後移植時，只要重新定義出含有這些方法的物件即可。
+
+## init 初始化
+這也是我喜歡用的手法，比起在 constructor 裡定義屬性，
+我喜歡在 constructor 裡什麼都不做，
+而在 init 或自己定義一個 `_constructor` 來初始化。
+因為 js 或多數物件導向語言有限制，
+繼承後一定要呼叫父類的建構函數；
+但有時候子類會有不一樣的使用場景，無法套用父類的建構函數。
+這時就會難以繼承。
+如果是獨立的初始化方法，看要照舊呼叫或直接覆寫，
+或是修改參數後呼叫都很方便。
+之前有寫過一篇文章 [更彈性繼承建構子函數的方式] 介紹這個技巧。
+
+[更彈性繼承建構子函數的方式]: http://gholk.github.io/javascript-pipe-method-and-inherit-constructor.html#%E6%9B%B4%E5%BD%88%E6%80%A7%E7%B9%BC%E6%89%BF%E5%BB%BA%E6%A7%8B%E5%AD%90%E5%87%BD%E6%95%B8%E7%9A%84%E6%96%B9%E5%BC%8F
+
+
+		init: function () {
+
+## excel 物件
+wscript 裡要建立一個 com 物件就是 `WScript.CreateObject` 這麼簡單；
+之後可以設定一些細節，以 excel 大部份都是像 getter/setter，
+覆寫即生效的屬性。
+
+			this.excel = this.WScript.CreateObject('Excel.Application')
+			this.excel.Visible = true
+			// this.excel = new ActiveXObject('Excel.Sheet')
+			this.table = {}
+		},
+
+visible 屬性是控制要不要彈出視窗，
+如果是 true，就會在螢幕上顯示 excel 視窗。
+這時候應該會看到一個不含任何試算表的 excel 視窗。
+彈出視窗的好處是，程式在跑時就可以看到儲存格一個個被修改的過程。
+程式出錯或當掉後，excel 也會留在那裡，
+可以視情況看要不要存檔。
+
+### excel 開檔
+我也封裝了 excel 的 open 方法來開啟特定的檔案，
+open 後視窗就會顯示對應的試算表內容了。
+
+		open: function (path) {
+			var abs = clAjax.fso.GetAbsolutePathName(clAjax.u2wpath(path))
+			return this.openSheet(abs)
+		},
+		openSheet: function (file) {
+			this.book = this.excel.Workbooks.Open(file)
+		},
+		saveAs: function (file) {
+			this.book.saveAs(file)
+		},
+		save: function () {
+			this.book.Save()
+		},
+		close: function () {
+			this.excel.Quit()
+		},
+		openAuto: function () {
+			var file
+			if (getArgv(-1) == 1) file = getArgv(1)
+			else file = this.pickFile()
+			return file
+		},
+
+
+要注意的是 excel.Workbooks.Open 的參數是絕對路徑，不能理解。
+使用上我會用 `FileSystemObject.GetAbsolutePathName` 
+來把相對路徑轉成絕對路徑。
+
+但壞處是，如果在程式操作 excel 中選取或進行某些 excel 操作，
+有可能會讓 jscript 當掉，可能是在寫入儲存格的當中不能有其他操作吧？
+我自己經驗是滾動是安全的，ctrl 方向鍵移動到特定的儲存格則很容易當掉。
+
+### 讀寫儲存格
+excel 重點當然是讀寫儲存格啦，我也封裝了對應的函數。
+excel 儲存格物件 Cells 是個奇怪的東西，
+要用類似函數呼叫的方式來索引儲存格。
+我猜可能是因為 basic 裡索引陣列是用小括號，
+和函數呼叫的語法相同，在 com object 裡也就用一樣的語法。
+
+讀寫儲存格用的 Value 屬性像是個 getter/setter，
+getRow 則是會讀取到 n 個欄位或是到第一個空儲存格為止。
+
+另外 cell 承襲良好的 basic 傳統，陣列從 1 開始計算，
+所以我在封裝時幫他加 1 了不用謝。
+
+		getCell: function (i, j, sheet) {
+			var sheetObject
+			if (sheet) sheetObject = this.book.Sheets(sheet)
+			else sheetObject = this.book.ActiveSheet
+			return sheetObject.Cells(i+1, j+1).Value
+		},
+		setCell: function (i, j, value, sheet) {
+			var sheetObject
+			if (sheet) sheetObject = this.book.Sheets(sheet)
+			else sheetObject = this.book.ActiveSheet
+			sheetObject.Cells(i+1, j+1).Value = value
+		},
+		getRow: function (i, count) {
+			var a = []
+			var j = 0
+			var v
+			while (true) {
+				debug('get cell ' + [i,j], 'get-cell')
+				v = this.getCell(i, j)
+				if (count == null && !v) break
+				else if (j >= count) break
+				a.push(v)
+				j += 1
+			}
+			return a
+		},
+
+getCell setCell 會有可選的 sheet 參數，
+是因為後來碰到 callback 延遲呼叫時的問題。
+迴圈中試算表已經換頁了，如果不指定試算表，就會寫到另一頁的儲存格去。
+所以硬加上一個可選的 sheet 參數。
+
+### 不能彈出檔案選取視窗的遺憾
+那時 google 很久，在找要怎麼從 jscript 裡彈出檔案選取視窗甚至對話框，
+因為本來是以為程式可能要給其他人用，
+所以得寫出 gui 介面，也才會用 jscript 寫。
+不然我可能會把 excel 轉成 csv，用 linux bash 處理會簡單的多。
+
+找到的一個解法是，開一個 ie 再用 ie 的 `<input type="file">` 來處理。
+
+		pickFile: function () {
+			// not work
+			var shell = this.WScript.CreateObject('WScript.Shell')
+			var exec = shell.Exec("mshta.exe \"about:<input type=file id=FILE><script>FILE.click();new ActiveXObject('Scripting.FileSystemObject').GetStandardStream(1).WriteLine(FILE.value);close();resizeTo(0,0);</script>\"")
+			return exec.StdOut.ReadLine()
+		},
+
+其他還有很多有的沒的，像用 vbscript 包裝 vb 內建的 msgbox 或 pickfile，
+然後再利用 ie 或 wsf 裡可以同時解析 vbscript 和 jscript 的特性，
+分別寫 `<script language="jscript">` 和 `<script language="vbscript>` ，
+用 vb 定義的全域函數也能在 js 呼叫，
+就能在 js 呼叫 vb 的內建函數了。
+
+或是直接開一個 vb 子程序，然後 eval 開檔的命令。
+
+## 其他資料處理業務邏輯的方法
+因為當初是要處理某一問題才開始寫這個腳本，
+把所有函數都造神成 lookupEr 這個物件的方法，
+所以遺留了一些業務邏輯在裡面。
+像這個用來模糊搜尋地名的函數，
+可以把地名轉成 regexp 來匹配。
+
+		nameToBlurRegExp: function (name) {
+			var raw = name.replace(/[縣市鄉鎮市區]/g, '[縣市鄉鎮市區]')
+			raw = raw.replace(/[台臺]/g, '[台臺]')
+			raw = '^' + raw + '$'
+			return new RegExp(raw)
+		},
+
+這個則是載入某個對應表格用的函數。
+雖然叫 tsv，但後來覺得 tsv 不適合嵌在程式裡，
+所以改成分號和逗號。
+
+		loadTsvString: function (tsv) {
+			var line = tsv.split(/;/)
+			for (var i=0; i<line.length; i++) {
+				var pair = line[i].split(/\t/)
+				if (pair.length == 2) this.table[pair[0]] = pair[1]
+			}
+		}
+	}
+
+在 js 沒有反引號字串以前，多行字串要嘛用 `+` 號串接，
+要嘛是用反斜線跳腳換行符來寫成多行。
+不然我會習慣用反引號和換行符來切割就好，
+多加一個分號實在很麻煩。
+
+	var tsv = "\
+	the tsv data censored;\
+	the tsv data censored2;\
+	".replace(/,/g, '\t')
+
+	lookupEr.init()
+	lookupEr.loadTsvString(tsv)
+
+## 方便遍歷試算表的方法
+後來為了方便，定義了類似 Array 的 forEach 方法，
+照慣例三個參數依序是值、索引、陣列本身，
+套到試算表上我改成該列、列索引、工作表。
+
+	lookupEr.forEach = function (callback) {
+		for (var i=1; i<=this.excel.Worksheets.count; i++) {
+			this.excel.Worksheets(i).Activate()
+			for (var j=1; true; j++) {
+				var row = this.getRow(j, 7)
+				if (row.length == 0 || !row.join('')) break
+				if (row.length < 6) continue
+				// if (this.getCell(j, 13)) continue
+				var array = [row[2], row[3], row[5]]
+				callback([ /* censored */ ], j, i)
+			}
+		}
+	}
+
+原本是定義成如果陣列是空陣列就代表該列開頭沒有內容，
+就當作工作表結束了，切到下一工作表。
+但後來又覺得不夠方便，主要是也會有開頭留空，
+或想要跳過某幾個工作表的情況，
+所以定義了更彈性的方法 walk，
+會依照 callback 的回傳值判斷要不要切換工作表。
+另外也把 this 綁定過去，
+讓 callback 可以直接呼叫 lookupEr 的方法如 getCell。
+
+	lookupEr.walk = function (callback) {
+		for (var i=1; i<=this.excel.Worksheets.count; i++) {
+			this.excel.Worksheets(i).Activate()
+			for (var j=0; true; j++) {	
+				var row = this.getRow(j)
+				var action = callback.call(this, row, j, i)
+				if (action == 'next-sheet') break
+			}
+		}
+	}
+
+之前一直在想這種常用樣版有沒有比較好的作法。
+用 callback 來遍歷是方便，但就要多一個 scope，
+不像 generator 可以用 `for of` 在同一個 scope 裡進行。
+但 generator 搭配 for of 又只能單向，
+不能在一次迭代裡控制下一步行為。
+
+以前 dom 也是提供了一個 [createTreeWalker] 方法，
+回傳類似 generator 可以呼叫 nextNode 方法的迭代器，
+用迭代器方法來控制下一步要怎麼動，
+但用起來就很醜不好用。
+
+[createTreeWalker]: https://developer.mozilla.org/en-US/docs/Web/API/Document/createTreeWalker
+
+## ajax 相關函數
+這個則是第二尊神祗，用來發 http request 的物件。
+jscript 只能用 com 版本的 xml http api： `ActiveX("Microsoft.XMLHTTP")`
+或 `WScript.CreateObject("Microsoft.XMLHTTP")` ，
+還沒有 XMLHttpRequest。
+
+雖然不管是 XMLHttpRequest 還是 activex 版本的都很難用，
+難怪 JQuery.ajax 會流行，
+總之我就自己包裝一個類似的介面來用。
+另外所有 http 和 api 邏輯也都寫在裡面。
+
+### 暫存 http 回應
+這個物件比較有趣的地方是我做了 cache，
+發 http request 還算耗時，大概要 1 秒多，
+所以我決定把所有回應都存到硬碟裡。
+因為預感我的腳本會重跑蠻多次的，
+所以存到硬碟應該可以減少 http 的時間。
+
+#### FileSystemObject
+快取就用最簡單的檔名當鍵，直接實作在檔案系統上，
+所以就把 active script 的 file system object 包進物件裡，
+然後包了基礎的讀寫檔案方法。
+fso 的讀檔寫檔都是同步操作，用起來輕鬆愉快，
+跑起來也不慢，至少比 http 快得多。
+
+	var clAjax = {
+		init: function () {
+			this.fso = WScript.CreateObject('Scripting.FileSystemObject')
+			this.cacheJson = true
+			this.fetch5QueueArray = []
+			this.fetch5QueueSize = 25
+		},
+		writeFile: function (file, string) {
+			var overwrite = true
+			var file = this.fso.CreateTextFile(file, overwrite)
+			file.Write(string)
+			file.Close()
+		},
+		readFile: function (file) {
+			file = this.u2wpath(file)
+			var modeRead = 1
+			var encodeAnsi = 0
+			var f = this.fso.OpenTextFile(file, modeRead, encodeAnsi)
+			var text = f.ReadAll()
+			f.Close()
+			return text
+		},
+		existFile: function (file) {
+			file = this.u2wpath(file)
+			return this.fso.FileExists(file)
+		},
+		cacheFile: function (name, text) {
+			var cachePrefix = this.cachePrefix || ''
+			var path = cachePrefix + '/' + name
+			if (text != undefined) {
+				debug('cache-write: ' + path, 'cache')
+				return this.writeFile(path, text)
+			}
+			
+			if (this.existFile(path)) {
+				debug('cache hit: ' + path, 'cache')
+				return this.readFile(path)
+			}
+		},
+
+### 處理 windows 路徑分隔符
+因為反斜線太反智了，每次遇到都要寫二條，醜的要死。
+
+		u2wpath: function (path) {
+			return path.replace(/\//g, '\\')
+		},
+
+### 編碼 query string
+jscript 竟然就有 encodeURIComponent 了。
+
+		queryStringEncode: function (object) {
+			var list = []
+			for (var key in object) {
+				list.push(
+					encodeURIComponent(key) + '=' +
+					encodeURIComponent(String(object[key]))
+				)
+			}
+			return list.join('&')
+		},
+
+### jquery ajax 風格的包裝函數
+包裝方向大概就第一個參數是網址，
+默認是 get，模仿 fetch api。
+細節可以由第二個參數 option 控制，
+像如果有給 method 就會用 method 送，
+並把 data 以 content type 編碼成 www-form-data
+或 json 在 body 送出。
+除非 method 是 get，那 data 則會編碼成 querystring 附在網址後面。
+另外也可以給 header 來設定 xhr 的 header。
+
+回傳值有想過要回傳物件還是 body 就好，
+只傳 body 就看不到回應的標頭。
+但目前用不到，所以就只回 body。
+		
+		fetch: function (url, option) {
+			var xhr = WScript.CreateObject('MSXML2.XMLHTTP.6.0')
+			var method = 'GET'
+			if (option.method) method = option.method
+			if (method == 'GET' && option.data) {
+				if (typeof option.data == 'string') {
+					url += '?' + option.data
+				}
+				else url += '?' + this.queryStringEncode(option.data)
+				option.data = null
+			}
+			debug(method + ' ' + url, 'xhr-open')
+			xhr.open(method, url, false)
+			var json = false
+			var header = option.header
+			if (header) {
+				for (var key in header) {
+					xhr.setRequestHeader(key, header[key])
+					debug(key + ':' + header[key], 'xhr-set-header')
+				}
+				if (header['Content-Type'] && header['Content-Type'].match(/^applications.json/)) {
+					json = true
+				}
+			}
+			var data
+			if (option.data) {
+				if (typeof option.data == 'string') data = option.data
+				else if (json) {
+					data = JSON.stringify(option.data)
+				}
+				else data = this.queryStringEncode(option.data)
+			}
+			if (data) xhr.send(data), debug(data, 'xhr-send')
+			else xhr.send()
+			debug(xhr.status, 'xhr-response-head')
+			debug(xhr.getAllResponseHeaders(), 'xhr-response-head')
+			return xhr.responseText
+		},
+
+### 包裝的 api 函數
+再來就是把 api 多包幾層，
+像自動附上 http basic authorization。
+
+		fetch1: function (url, data) {
+			var result = this.fetch(url, {
+				method: 'POST',
+				header: {
+					'Content-Type': 'applications/json; charset=utf-8',
+					'Accept': 'application/json',
+					'Authorization': 'Basic the+secret+base64+encrypt=='
+				},
+				data: data
+			})
+			return JSON.parse(result)
+		},
+		fetch2: function (path, data) {
+			var base = 'https://api.server.io'
+			return this.fetch1(base + path, data)
+		},
+		fetch3: function (name, method, version, data) {
+			var url = 'https://some.api.io'
+			url += name + '.ashx'
+			url += '?' + this.queryStringEncode({mode: method, version: version})
+			debug(url)
+			var result = this.fetch(url, {
+				method: 'POST',
+				header: {'Content-Type': 'applications/json; charset=utf-8'},
+				data: data
+			})
+			return JSON.parse(result)
+		},
+		reasonCache: {},
+		reasonDecode: function () {
+		},
+
+舊 code，那時候還沒寫 cache 函數，
+而且只有先存下來，後來也沒有用到暫存的回應。
+
+		fetch6: function () {
+			var result = this.fetchPay(
+
+			)
+			if (this.cacheJson) {
+				this.writeFile( /* censored */ result)
+			}
+			try {
+				return result /* censored */ 
+			}
+			catch (error) {
+				alert(error)
+			}
+			return null
+		},
+
+### 非同步批次查詢
+這裡做了一個有趣的批次化設計。
+因為他們的 api 一次可以查 25 筆資料，
+所以我寫成回呼風格的非同步函數。
+
+		fetch5: function (single, callback) {
+			var queue = this.fetch5QueueArray
+			queue.push({single: single, callback: callback})
+			if (queue.length != this.fetch5QueueSize) return
+            
+當 queue 滿了的時候才會正真送出查詢，
+之後一一執行每個回呼函數。
+理論上還是會照順序。
+
+			var data = []
+			for (var i=0; i<queue.length; i++) {
+				data.push(queue[i].single)
+			}
+			var result = this.fetchPay('api-endpoint', data)
+			// debug(JSON.stringify(result, null, ' '))
+			var response = result /* censored */ 
+			for (var i=0; i<response.length; i++) {
+				queue[i].callback(response[i])
+			}
+			this.fetch5QueueArray = []
+			return response
+		},
+        
+之後有碰到一個問題是，某些資料查不到，
+所以回應不到 25 筆，就不知道是少了哪些資料，
+然後一一對應的回呼就會對應錯。
+也忘了後來怎麼解的，應該是改用鍵值對而不是單純用順序對應吧？
+
+## 其他工具函數
+業務邏輯用到的工具函數，把字串補零或補空白。
+
+		padLeft: function (s, length, c) {
+			while (s.length < length) {
+				s = c + s
+			}
+			return s
+		}
+	}
+
+很實用的小工具，把一個陣列用 callback 分成數個陣列。
+以前也有實做在 array prototype 上過，但好像沒那麼直接相關。
+
+	function groupBy(f, a) {
+		var group = {};
+		for (var i=0; i<a.length; i++) {
+			var key = f(a[i]);
+			if (key in group) group[key].push(a[i]);
+			else group[key] = [a[i]]
+		}
+		return group
+	}
+
+後來受不了直接 patch 了一堆 array 的方法。
+
+	Array.prototype.any = function (f) {
+		for (var i=0; i<this.length; i++) {
+			if (!f(this[i])) return false
+		}
+		return true
+	}
+	Array.prototype.map = function (f) {
+		var copy = this.slice()
+		for (var i=0; i<this.length; i++) copy[i] = f(this[i],i,this)
+		return copy
+	}
+	Array.prototype.forEach = Array.prototype.map
+
+
+## 後來補上的函數
+用物件的好處就是可以事後擴充，
+後來改寫的幾個函式庫
+也是用 Object.create 繼承後這樣擴充。
+
+這時代還沒有 Object.create，要自己做；
+老 js 人都知道要怎麼把原型鍊玩弄於股掌之間。
+
+	Object.create = function (parent) {
+		var Klass = function () {}
+		Klass.prototype = parent
+		return new Klass()
+	}
+
+### 互動式更新部份範圍
+第一次跑完所有資料，發現一些範圍沒抓到資料，
+就補了一個可以互動更新選取的範圍的函數；
+事實上就是更新在選取範圍內的列。
+
+那時候是選好後很艱難的用 [repl](#repl) 直接跑，
+沒有寫成按鈕什麼的。
+
+	lookupEr.fetchSelectRow = function () {
+		var range = this.excel.Selection
+		var rowStart = range.Row - 1
+		var height = range.Rows.Count
+		var that = this
+		function fetchRow(value, row, sheet) {
+			// censored
+			clAjax.fetch5(
+				{ /* censored */ },
+				function callback(result) {
+					if (!result) {
+						alert('empty-response: '+ [ /* censored */ ].join(' '))
+						return
+					}
+					var reason = clAjax.reasonDecode(unit  /* censored */ )
+					that.setCell(row, 13, reason, sheet)
+				}
+			)
+		}
+		
+		var oldSize = clAjax  /* censored */ 
+		clAjax.fetch5QueueSize = height
+		for (var i=0; i<height; i++) {
+			var row = this.getRow(rowStart + i)
+			var unit = this.find([row[2], row[3], row[5]])
+			var sec = row[4]
+			var no = row[6]
+			fetchRow([ /* censored */ ], rowStart+i, null)
+		}
+		clAjax.fetch5QueueSize = oldSize
+	}
+
+後來重寫的類似 main 函數的東西，我習慣命名成 run。
+
+	lookupEr.run = function () {
+		var path = clAjax.fso.GetAbsolutePathName('all.xlsx')
+		this.open(path)
+		// lookupEr.saveAs('all-result.xlsx')
+		var that = this
+		this.forEach(function (value, row, sheet) {
+			alert([ /* censored */ ].join(' '))
+			// censored
+			clAjax /* censored */ (
+				{ /* censored */ },
+				function callback(result) {
+					if (!result /* censored */ ) {
+						alert('empty-response: '+ [ /* censored */ ].join(' '))
+						return
+					}
+					var reason = clAjax.reasonDecode( /* censored */ )
+					that.setCell(row, 13, reason, sheet)
+				}
+			)
+		})
+	}
+
+### 對應另一個 api 的 agAjax 物件
+這基本上是 arc gis web 版的 api。
+繼承自 clAjax，直接把寫好的 fetch 拿來用。
+
+	var agAjax = Object.create(clAjax)
+
+覆寫 init 方法，不理原有的 init，定義自己的邏輯。
+如果是用建構子方式，就很難達到這種彈性。
+
+	agAjax.init = function (token) {
+		this.fso = WScript.CreateObject('Scripting.FileSystemObject')
+		this.baseUrl = 'http://secret.api.io'
+		this.token = token
+	}
+	agAjax.fetchApi = function (path, option) {
+		var data = option.data
+		if (!('token' in data)) data.token = this.token
+		if (!option.header) option.header = {}
+		option.header.Cookie = 'bisquit'
+		var url = this.baseUrl + path
+		var json = this.fetch(url, option)
+		debug('response: ' + JSON.stringify(json), 'xhr-response')
+		return JSON.parse(json)
+	}
+	agAjax.queryById = function (id, field) {
+		if (!field) field = '*'
+		if (typeof id == 'string') id = [id]
+		var idTuple = "('" + id.join("','") + "')"
+		return this.fetchApi('query', {
+			data: {
+				f: 'json',
+				where: 'ID in ' + idTuple,
+				returnGeometry: false,
+				spatialRel: 'esriSpatialRelIntersects',
+				outFields: field
+			}
+		})
+	}
+	agAjax.queryX = function (id) {
+		var result = this.queryById(id /* censored */ )
+		var feature = result.features
+		var idOrder = []
+		featuer.forEach(function (x) {
+			var index = id.indexOf( /* censored */ )
+			idOrder[index] = x
+		})
+		return idOrder.map(function (x) { return x.attributes['censored'] })
+	}
+
+對應 agAjax 的第二個 main 函數。
+
+	lookupEr.run2 = function (token, file) {
+		agAjax.init(token)
+		
+		this.openSheet(agAjax.fso.GetAbsolutePathName(file))
+		var batch = {queue: [], size: 25}
+		var that = this
+		debugFlag = 'xhr-response-head xhr-set-header xhr-open xhr-send'
+		this.forEach(function (value, i, sheet) {
+			if (sheet == 1) return
+			if (that.getCell(i, 15, sheet)) return
+			debug(value, 'id')
+			// censored
+			debug('queue ' + id)
+			batch.queue.push({id: id, callback: function (x) {
+				that.setCell(i, 15, x, sheet)
+			}})
+
+			if (batch.queue.length >= batch.size) {
+				debug('query send')
+				var idList = batch.queue.map(function (x) { return x.id })
+				idList.forEach(function (x, i) {
+					batch.queue[i].callback(x)
+				})
+				batch.queue = []
+				sleep(3)
+			}
+		})
+	}
+
+最初的想法是把 token 和檔名用命令列參數帶進來。
+
+	// repl()
+	// agAjax.init()
+	lookupEr.run2(WScript.Arguments(0), WScript.Arguments(1))
+
+### jscript ajax cookie 問題
+好不容易用舊舊的 jscript 寫好了腳本，結果怎麼戳 api 都沒反應，
+只會回 200 空白，明明在瀏覽器裡是可以動的。
+jscript `ActiveX("Microsoft.XMLHTTP")`
+送出的 http 到底是夾了什麼 header 啊？
+我把整個瀏覽器的 header 都貼過去也沒用。
+
+把 http request 發到自己的 ip，然後用 nc 檢查到底發了什麼。
+乍看之下很正常，仔細一條條看才發現 cookie 沒發出去。
+google 的結果 ms xmlhttp setRequestHeader 好像無法設定 request 的 cookie？
+[ms troubleshoot 的文章說要設二次才會成功][cookie 2 times]；
+這什麼奇怪的儀式？
+[另一則 stackoverflow 上的討論則是說 ms 會忽略手動設定的 cookie header][vba ajax cookie] ，
+我自己試設二次也沒有用，可能真的不支援吧。
+
+[cookie 2 times]: https://docs.microsoft.com/en-us/troubleshoot/developer/webapps/iis/active-server-pages/xmlhttprequest-setrequestheader-method-cookies
+
+[vba ajax cookie]: https://stackoverflow.com/questions/38306825/vba-microsoft-xmlhttp-setrequestheader-not-sending-cookie
+
+## repl
+debug 用函數，讀取一行文字，然後執行並印出結果。
+
+	function repl() {
+		while (true) {
+			var line = WScript.StdIn.ReadLine()
+			if (line == '.exit') break
+			var result
+			try {
+				result = eval(line)
+			}
+			catch (error) {
+				result = error.message
+			}
+			alert(String(result))
+		}
+	}
+
+## debug xhr
+debug xhr 的函數，之前用非同步 xhr 時 callback 都呼叫不到，
+寫了這個來 debug，還是沒弄清楚，
+可能沒有 event loop 吧，總之他就是怪怪的。
+
+	function checkXhr(e) {
+		alert(String(xhr.readyState))
+		if (xhr.readyState == 4) alert(xhr.responseText)
+	}
+
+## 呼叫 vbscript
+一開始想努力克服不能呼叫 prompt 或讀檔視窗的問題，
+就試著呼叫 vbscript。
+後來不成功，因為 vbscript 沒有 x64 版本，
+com object 會找不到。
+
+
+	function vb(s) {
+		var vbe = WScript.CreateObject('ScriptControl')
+		vbe.Language = 'VBScript'
+		return vbe.eval(s)
+	}
+
+	// var x = vb('InputBox("Enter a String")')
+
+其實要做還是做得到，要用 `C:/Windows/SysWOW64/cscript.exe`
+來執行，就可以在 x64 下呼叫 x32 的 vbscript。
+根據這個問答：
+[Active-X error CreateObject("ScriptControl") - Visual Basic .NET](https://bytes.com/topic/visual-basic-net/answers/890888-active-x-error-createobject-scriptcontrol)
+
+## 瀏覽器端的 code
+後來因為要用到廢除不再更新的資料，但官方 api 不再給。
+然後就在幾個 web gis 裡看到某個有提供，
+就用瀏覽器的開發者工具逆向出他們的 api，
+然後爬他們的資料回來。
+
+因為 jscript 實作登入等功能太困難了，
+也不支援手動設定 cookie，就改在瀏覽器裡跑。
+大概就是把 code 複製一份，
+然後把原本用 Microsoft.XMLHTTP 的改寫成用瀏覽器的 fetch。
+
+整份 code 複製後包在函數裡來修改
+
+    function browserCode() {
+      var agAjax = {}
+
+      function sleep(s) {
+        return new Promise(wake => setTimeout(wake, s * 1000))
+      }
+      agAjax.init = function(token) {
+        this.batch = {
+          queue: [],
+          size: 25
+        }
+        this.result = []
+        this.baseUrl = 'http://secret.safe.api'
+        this.token = token
+      }
+      
+基礎的 fetchApi 改寫成用 fetch
+
+      agAjax.fetch = u => fetch(u)
+      agAjax.fetchApi = async function(path, option) {
+        var data = option.data
+        if (!('token' in data)) data.token = this.token
+        var url = this.baseUrl + path + '?' + this.queryStringEncode(data)
+        var response = await this.fetch(url)
+        var json = response.json()
+        return json
+      }
+      agAjax.queryById = function(id, field) {
+        if (!field) field = '*'
+        if (typeof id == 'string') id = [id]
+        var idTuple = "('" + id.join("','") + "')"
+        return this.fetchApi('query', {
+          data: {
+            f: 'json',
+            where: 'ID in ' + idTuple,
+            returnGeometry: false,
+            spatialRel: 'esriSpatialRelIntersects',
+            outFields: field
+          }
+        })
+      }
+      agAjax.queryX = async function(id) {
+        var result = await this.queryById(id, 'f1,f2'))
+        var feature = result.features
+        // console.log(result)
+        
+重新按照 id 來排列 callback，
+避免缺少的資料造成對應錯誤。
+
+        var idOrder = []
+        feature.forEach(function(x) {
+          var index = id.indexOf(x /* censored */ )
+          idOrder[index] = x
+        })
+        return idOrder.map(function(x) {
+          return x.attributes['f1']
+        })
+      }
+      agAjax.queryStringEncode = function(obj) {
+        const qs = new URLSearchParams(obj)
+        return qs.toString()
+      }
+
+在瀏覽器就可以寫成 promise 版本，
+不用用 callback 了。
+
+      agAjax.queryQueue = function(id) {
+        return new Promise(async ok => {
+          var batch = this.batch
+          batch.queue.push({
+            id,
+            callback: ok
+          })
+          if (batch.queue.length < batch.size) return
+
+          const queue = batch.queue
+          batch.queue = []
+          const idList = queue.map(o => o.id)
+
+這裡寫了一個限制 http request 的冷卻時間功能。
+不過這部份 code 寫的不太好，非同步流程裡 promise
+被多個 await 時哪個會被先執行沒有考慮得很仔細，
+只是用大概沒問題的想法去寫的。
+
+          if (this.wait) this.wait = this.wait.then(x => sleep(3))
+          else this.wait = sleep(3)
+          await this.wait
+          const result = await this.query2(idList)
+          queue.forEach((o, i) => o.callback(result[i]))
+        })
+      }
+      
+入口函數
+
+      agAjax.queryBatch = async function(list) {
+        return Promise.all(list.map(async id => this.result.push(await this.queryQueue(id))))
+      }
+      return agAjax
+    }
+
+## 結語
+如果想要完整的 code 可以找我拿，
+碼成這樣不知道還有沒有人看得出來原本是幹麻的，
+但有 esri web gis 那段應該很顯了？
+jscript excel 那段我是覺得蠻實用的，後來也用來寫了一些工具。
+
+#javascript
+#jscript
+#excel
+#office
+#windows
+#active-x
+#writ
+#vbscript

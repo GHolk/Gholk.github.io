@@ -348,3 +348,4 @@ email-thunderbird-unable-localhost.html
 linux-citrix-workspace-install.html
 firefox-vim-like-tridactyl-addon.html
 windows-jscript-excel-ajax-work.html
+log-function-easy-and-useful.html

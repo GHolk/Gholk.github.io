@@ -1,0 +1,119 @@
+# 簡單好用的除錯 log 函數
+相信一般人寫程式最開始 debug 都是用 printf 或 console.log 之類的函數，
+簡單把想要的資料丟到輸出，但事後又要刪除 debug 用的函數很麻煩。
+最近弄出了一種稍微包裝過的 log 函數，
+可以控制在 production 階段時就不輸出東西，有點像通用的 log 函式庫，
+但控制實作複雜度在一定範圍內。
+簡單來說就是幫每條 log 加上一個名稱，
+然後可以用一個變數控制哪些名稱的 log 才要輸出。
+
+```js
+const flag = {
+    exclude: ''.split(/ /g),
+    dict: null
+}
+function log(name, m) {
+    let dict = flag.dict
+    if (!dict) {
+        dict = flag.dict = {}
+        for (const name of flag.exclude) dict[name] = false
+    }
+    if (!m) {
+        m = name
+        name = 'debug'
+    }
+    if (!(name in dict)) dict[name] = true
+    if (!dict[name]) return
+    let s
+    if (m.indexOf('\n') == -1) {
+        s = `[${name}] ${m}`
+    }
+    else {
+        m = m.trim()
+        s = 
+`[${name}]
+${m}
+[/${name}]\n`
+    }
+    console.log(s)
+}
+```
+
+其實文章到這裡就可以結束了，我想說的都在 code 裡了。
+
+這個函數的目標大概就是，讓每條 log 都有一個名字，事後可以關掉。
+使用情境就是對次一次除錯的過程；
+在除錯時，會先在想檢查的地方加入 log，然後幫 log 取一個名字。
+在事後解決問題後，就可以把名字加入 exclude 的清單裡，
+程式就不會再輸出這則訊息，但又保留如果有需要可以再打開的彈性。
+
+## 多行訊息
+比較有趣的是對多行訊息的處理。
+由於用方括號加在行首的作法只適合單行訊息：
+
+```term
+[error-message] ls: cannot access 'foo': No such file or directory
+```
+
+對於多行訊息，我加入了一種類似 html 開關標籤的寫法，
+實際效果會像這樣：
+
+```term
+[error-message]
+Cannot find module 'foo'
+Require stack:
+- <repl>
+[/error-message]
+```
+
+用方括號是來自 [[BBCode]] 的語法，實際上就是把 html 的大小於換成方括號而已。
+主要是用來顯示預先格式化好的錯誤訊息。
+因為我自己蠻常遇到多行的錯誤訊息，
+所以就想了一個符合既有方括號格式語法的顯示方式。
+
+## 其他功能
+其它也有一些可以更彈性的地方，
+像是加入一個全域 flag debug，能按命令列參數一次開啟所有的 log。
+或是加入萬用字元或 regexp 的支援，
+可以開啟某些或某個命名空間下的所有 log，
+或是二層的先 exclude 再 include 策略。
+當然，會不會用到就是另外一回事了。
+實際也不是那麼實用，所以也不一定有加。
+
+## 執行開銷
+如果用 c 語言寫，甚至可以用巨集的方式定義 log，
+在 production 階段完全把 log 函數從程式中移除，
+減少效能的損耗。
+雖然很多完整的 log 函式庫，也都有類似的功能。
+
+用 js 最多就是把整個 log 函數換成一個什麼都不做的 nop 函數，
+或用一個全域 flag 關掉。
+至於要減少格式化訊息的開銷的話，
+像如果要錯誤訊息是序列化整個物件，
+可能可以用 callback 惰性求值來避免開銷，
+只要在確定要輸出錯誤訊息時再執行 callback。
+
+```js
+function log(name, m) {
+    // ...
+    if (typeof m == 'function') m = m()
+    // ...
+}
+log('html-full', () => $.html())
+```
+
+## 使用策略
+而且因為每則 log 都有名稱，
+在解析上可以朝機器可讀的方式寫 log，
+也就是在訊息中不用帶太多的說明，直接輸出數字、字串就好。
+像如果想驗證目前到迴圈第幾次，
+可以直接寫： `log('loop-count', i)` 而不是
+``log(`the ${i}th loop`)`` 。
+
+這樣寫的好處是，來自各處的訊息混在一起時，可以依名稱分辨，
+不用想某個寫法的 count 到底是來自哪個變數的 count。
+其實就是變成替 log 取名字時就要確保最好名稱沒有重複。
+
+#debug
+#log
+#js

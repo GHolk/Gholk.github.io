@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2022-12-31T12:09:53.007Z</updated>
+  <updated>2023-04-02T15:38:16.293Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,120 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
   <entry>
+<id>http://gholk.github.io/log-function-easy-and-useful.html</id>
+<title>簡單好用的除錯 log 函數</title>
+<published>2023-04-02T15:26:56.865Z</published>
+<updated>2023-04-02T15:38:16.265Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/log-function-easy-and-useful.html"/>
+<summary type="html">相信一般人寫程式最開始 debug 都是用 printf 或 console.log 之類的函數，
+簡單把想要的資料丟到輸出，但事後又要刪除 debug 用的函數很麻煩。
+最近弄出了一種稍微包裝過的 log 函數，
+可以控制在 production 階段時就不輸出東西，有點像通用的 log 函式庫，
+但控制實作複雜度在一定範圍內。
+簡單來說就是幫每條 log 加上一個名稱，
+然後可以用一個變數控制哪些名稱的 log 才要輸出。</summary>
+<category term="debug"/>
+<category term="log"/>
+<category term="js"/>
+<content type="html">&lt;h1 id=&quot;簡單好用的除錯-log-函數&quot;&gt;簡單好用的除錯 log 函數&lt;/h1&gt;
+&lt;p&gt;相信一般人寫程式最開始 debug 都是用 printf 或 console.log 之類的函數，
+簡單把想要的資料丟到輸出，但事後又要刪除 debug 用的函數很麻煩。
+最近弄出了一種稍微包裝過的 log 函數，
+可以控制在 production 階段時就不輸出東西，有點像通用的 log 函式庫，
+但控制實作複雜度在一定範圍內。
+簡單來說就是幫每條 log 加上一個名稱，
+然後可以用一個變數控制哪些名稱的 log 才要輸出。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;const flag = {
+    exclude: &apos;&apos;.split(/ /g),
+    dict: null
+}
+function log(name, m) {
+    let dict = flag.dict
+    if (!dict) {
+        dict = flag.dict = {}
+        for (const name of flag.exclude) dict[name] = false
+    }
+    if (!m) {
+        m = name
+        name = &apos;debug&apos;
+    }
+    if (!(name in dict)) dict[name] = true
+    if (!dict[name]) return
+    let s
+    if (m.indexOf(&apos;\n&apos;) == -1) {
+        s = `[${name}] ${m}`
+    }
+    else {
+        m = m.trim()
+        s = 
+`[${name}]
+${m}
+[/${name}]\n`
+    }
+    console.log(s)
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;其實文章到這裡就可以結束了，我想說的都在 code 裡了。&lt;/p&gt;
+&lt;p&gt;這個函數的目標大概就是，讓每條 log 都有一個名字，事後可以關掉。
+使用情境就是對次一次除錯的過程；
+在除錯時，會先在想檢查的地方加入 log，然後幫 log 取一個名字。
+在事後解決問題後，就可以把名字加入 exclude 的清單裡，
+程式就不會再輸出這則訊息，但又保留如果有需要可以再打開的彈性。&lt;/p&gt;
+&lt;h2 id=&quot;多行訊息&quot;&gt;多行訊息&lt;/h2&gt;
+&lt;p&gt;比較有趣的是對多行訊息的處理。
+由於用方括號加在行首的作法只適合單行訊息：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;[error-message] ls: cannot access &apos;foo&apos;: No such file or directory
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;對於多行訊息，我加入了一種類似 html 開關標籤的寫法，
+實際效果會像這樣：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;[error-message]
+Cannot find module &apos;foo&apos;
+Require stack:
+- &amp;lt;repl&amp;gt;
+[/error-message]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;用方括號是來自 &lt;a href=&quot;http://zh.wikipedia.org/wiki/BBCode&quot;&gt;BBCode&lt;/a&gt; 的語法，實際上就是把 html 的大小於換成方括號而已。
+主要是用來顯示預先格式化好的錯誤訊息。
+因為我自己蠻常遇到多行的錯誤訊息，
+所以就想了一個符合既有方括號格式語法的顯示方式。&lt;/p&gt;
+&lt;h2 id=&quot;其他功能&quot;&gt;其他功能&lt;/h2&gt;
+&lt;p&gt;其它也有一些可以更彈性的地方，
+像是加入一個全域 flag debug，能按命令列參數一次開啟所有的 log。
+或是加入萬用字元或 regexp 的支援，
+可以開啟某些或某個命名空間下的所有 log，
+或是二層的先 exclude 再 include 策略。
+當然，會不會用到就是另外一回事了。
+實際也不是那麼實用，所以也不一定有加。&lt;/p&gt;
+&lt;h2 id=&quot;執行開銷&quot;&gt;執行開銷&lt;/h2&gt;
+&lt;p&gt;如果用 c 語言寫，甚至可以用巨集的方式定義 log，
+在 production 階段完全把 log 函數從程式中移除，
+減少效能的損耗。
+雖然很多完整的 log 函式庫，也都有類似的功能。&lt;/p&gt;
+&lt;p&gt;用 js 最多就是把整個 log 函數換成一個什麼都不做的 nop 函數，
+或用一個全域 flag 關掉。
+至於要減少格式化訊息的開銷的話，
+像如果要錯誤訊息是序列化整個物件，
+可能可以用 callback 惰性求值來避免開銷，
+只要在確定要輸出錯誤訊息時再執行 callback。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;function log(name, m) {
+    // ...
+    if (typeof m == &apos;function&apos;) m = m()
+    // ...
+}
+log(&apos;html-full&apos;, () =&amp;gt; $.html())
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;使用策略&quot;&gt;使用策略&lt;/h2&gt;
+&lt;p&gt;而且因為每則 log 都有名稱，
+在解析上可以朝機器可讀的方式寫 log，
+也就是在訊息中不用帶太多的說明，直接輸出數字、字串就好。
+像如果想驗證目前到迴圈第幾次，
+可以直接寫： &lt;code&gt;log(&apos;loop-count&apos;, i)&lt;/code&gt; 而不是
+&lt;code&gt;log(`the ${i}th loop`)&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;這樣寫的好處是，來自各處的訊息混在一起時，可以依名稱分辨，
+不用想某個寫法的 count 到底是來自哪個變數的 count。
+其實就是變成替 log 取名字時就要確保最好名稱沒有重複。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/windows-jscript-excel-ajax-work.html</id>
 <title>用 jscript 操作 excel 發 http request 與讀寫檔案系統</title>
 <published>2022-12-31T09:31:27.916Z</published>
@@ -3505,130 +3619,7 @@ citrix workspace 裡的程式。
 <category term="js"/>
 <category term="瀏覽器"/>
 <category term="備份"/>
-<content type="html">&lt;h1 id=&quot;我期望中的-rss-閱讀軟體&quot;&gt;我期望中的 rss 閱讀軟體&lt;/h1&gt;
-&lt;p&gt;最近比較閒，所以想改進一下自己吸收資訊的途徑，主要就是 rss。
-目前是用 feedly，但對 feedly 還有一些不滿，
-例如 feedly 要依賴雲端，不然其實他的付費方案是可以完全滿足我的。
-主要就是全文備份與全文搜尋功能，還有不漏訊息的功能，
-其它想要的還有自行用腳本或簡單 css selector 擴充的能力。
-最後就是，希望他是一個無需雲端的，在本機執行的程式。&lt;/p&gt;
-&lt;h2 id=&quot;rss-reader&quot;&gt;rss reader&lt;/h2&gt;
-&lt;p&gt;大概是從三年前開始使用 rss 來吸收資訊，
-我是在 google reader 收掉後才真正弄清楚 rss 是什麼。
-那時候看來唯一的選擇就是 feedly，也的確蠻好上手的，
-如果付費的話，功能也很強大，我也付費過一陣子。
-但後來還是覺得自己的知識庫應該要能自己掌握，
-所以不太喜歡他需要付費才能使用的全文搜尋功能。&lt;/p&gt;
-&lt;h3 id=&quot;收藏功能&quot;&gt;收藏功能&lt;/h3&gt;
-&lt;p&gt;feedly 有個做的半吊子的收藏功能。
-可以依分類收藏文章，收藏後的文章會完整保存摘要，
-如果有全文就會完整保存全文。
-但分類只能列出，檢索也只能檢索 30 天內的新內容，
-要無限期檢索要付費。
-而且已經有全文檢索功能，所以分類反而沒那麼重要，
-也沒有取交集之類的功能。&lt;/p&gt;
-&lt;h3 id=&quot;備份文章與全文搜尋功能&quot;&gt;備份文章與全文搜尋功能&lt;/h3&gt;
-&lt;p&gt;會想要這個功能，主要是因為有一陣子，
-我常出現想起某篇文章，但又找不到覺得很煩。
-最後常常只能靠印象中幾個關鍵字用 google 搜尋，
-祈禱 google 知道我在說什麼。
-甚至有時候出現原網址死了，只剩其它內容農場的轉文搜得到的情況。&lt;/p&gt;
-&lt;p&gt;後來想想，其實把有興趣的每篇文章都另存 html 到本機，
-再用個 rgrep 就可以全文搜尋了。
-甚至其實也不用真的全文，只用標題和摘要去搜，
-應該就能搜到多數想找的內容了，
-再加個簡單的標籤功能就完美了。
-或是可以在儲存時修改摘要，自己加入一些關鍵字，
-防止通篇沒提到某個關鍵字的情況。&lt;/p&gt;
-&lt;p&gt;如果資料是用 sqlite 之類的資料庫檔案存的，
-那備份和轉移也就很簡單了，
-就是跨平台各自的資料庫，如果有衝突會比較麻煩。
-全文備份的話，我是覺得用單一檔案比較方便，
-以簡單複製遷移後仍可以運作為主。
-可能可以加一個匯入的功能，來解決資料庫衝突的問題。&lt;/p&gt;
-&lt;p&gt;這些備份的內容，應該要無限期保存的。
-但考量到儲存空間限制，我應該會定期把過舊的內容，
-轉移到桌電或 nas 上。
-想找東西時，就匯入到桌電上搜尋，
-反正越舊的內容，理論上查找的頻率也會越低。&lt;/p&gt;
-&lt;h3 id=&quot;rss-更新機制&quot;&gt;rss 更新機制&lt;/h3&gt;
-&lt;p&gt;以前選 feedly 有個原因，
-是 feedly 這種雲端閱讀器似乎會自動更新，
-所以不用擔心幾天沒開閱讀器後，
-某網站的 rss 的某次更新沒抓到。
-但後來發現累積太多沒讀完的話，最舊還是只能讀到半個月前的文章，
-但更舊的文章應該也有還沒讀過的，卻沒有出現在閱讀器裡，
-所以 feedly 應該也是會因為太久沒開而漏文章。&lt;/p&gt;
-&lt;p&gt;後來我認為比較好的機制是，
-app 每天固定在背景檢查有沒有更新，
-有更新就存在本機，供有空時閱讀，
-而不是開 app 時才檢查。
-檢查更新可以設一些條件，例如充電或有 wifi 時檢查，
-就和某些漫畫閱讀器 app 一樣。
-以一般的部落格來說，每天一更就算超級頻繁了，
-所以每天檢查一次更新也夠了，
-剛好可以配合手機每天回家後有 wifi 和充電的使用習慣。&lt;/p&gt;
-&lt;p&gt;更新的存檔，我個人是想無限期保存，
-直到已讀後才刪，但也可以設個期限。
-已讀的內容，我覺得也是設個期限，定期刪除過期的內容即可，
-已讀後立即刪除有時會很討厭。&lt;/p&gt;
-&lt;p&gt;至於收藏的內容，就和前章寫的，無限期保存，
-但要可以手動匯出匯入，供全文檢索。&lt;/p&gt;
-&lt;h3 id=&quot;擴充功能&quot;&gt;擴充功能&lt;/h3&gt;
-&lt;p&gt;這功能是後來才發現原來 app 也可以這樣做，
-主要是被 &lt;a href=&quot;https://tachiyomi.org/&quot;&gt;Tachiyomi&lt;/a&gt; 和 &lt;a href=&quot;https://github.com/PureDark/H-Viewer&quot;&gt;H-viewer&lt;/a&gt; 這二個 app 驚豔到。
-tachiyomi 是用來看漫畫的 app，他有 plugin 機制，
-例如想用來看 &lt;a href=&quot;https://manhuaren.com/&quot;&gt;漫畫人&lt;/a&gt; 網站上的漫畫，就裝漫畫人的 plugin，
-app 就可以解析漫畫人的網頁，把其中的漫畫顯示在 app 裡。&lt;/p&gt;
-&lt;p&gt;tachiyomi 的 plugin 是打包成一個 apk，
-安裝後就會在 tachiyomi 裡顯示已安裝。
-雖然這種作法對寫 java 或 kotlin 的人來說也不錯，
-就是重用 android 本身的套件系統，
-但也因此門檻比較高。&lt;/p&gt;
-&lt;p&gt;h-viewer 的作法則更有趣，是用簡單的 css 選擇器當作擴充功能的語法，
-要做一個擴充功能，就是填好對標題、作者、圖片的選擇器。
-（實際上是一個 json，選擇器是字串的形式。）
-所以門檻更低了，唯一缺點就是功能有點死。&lt;/p&gt;
-&lt;p&gt;我自己以前做類似的東西 &lt;a href=&quot;https://github.com/GHolk/feed/blob/e249f2a/script/anafeed.js&quot;&gt;RSS 產生器&lt;/a&gt; 時，是用 js 語法來做。
-如果用選擇器就能解決的，就繼承後覆寫選擇器語法即可。
-如果需要取子字串、構造連結，就覆寫父類的方法。
-優勢是夠彈性，缺點則是安全性的疑慮，
-但自用我是不在乎安全性的。&lt;/p&gt;
-&lt;p&gt;後來覺得如果 rss 閱讀器，也內建一個簡單的腳本引擎就會很方便，
-就不用另外做一個 rss 產生器了。
-尤其是 js 在多數 web view 裡都已經內建了，
-不知道能不能重用。
-只是多數跑在瀏覽器內的 js 都會受限於 cors，
-不能任意發 http request。&lt;/p&gt;
-&lt;p&gt;除了 css 選擇器和完整的程式語言，還有一個選擇是用 xpath，
-但這東西和 xml 一起退流行後就比較少人用了。
-xpath 甚至可以和 xslt，直接用來生成 rss。
-但實際上用的人也不多。&lt;/p&gt;
-&lt;h2 id=&quot;備份網頁內容的獨立-app&quot;&gt;備份網頁內容的獨立 app&lt;/h2&gt;
-&lt;p&gt;這和上面的全文備份是類似的，
-就是希望能有一個統一的方式管理收藏的文章，
-所以同時也希望 rss 裡的收藏功能，可以跨足到一般網頁。
-一般對多數文章來說，文字備份就夠了，
-但希望如果有需要，也有圖片備份的能力。&lt;/p&gt;
-&lt;p&gt;如果要在手機上實作這個功能，
-因為目前 firefox android 版的擴充功能一直沒有做完整，
-chrome 更是直接閹割，所以可能只能用獨立 app 的方式實作。
-要備份的話，就是用分享到該 app 的方式。&lt;/p&gt;
-&lt;h2 id=&quot;app-的實作&quot;&gt;app 的實作&lt;/h2&gt;
-&lt;p&gt;個人寫 gui 的話，一直只有基礎的 html5 能力，
-用 java 寫 android 對我來說根本是天書。
-如果在不特別去學 java 和 android 開發的情況，
-就只有用 cordova 或 electron 把 html5 移植到手機的作法。&lt;/p&gt;
-&lt;p&gt;雖然以前也期望過 pwa 能成功，但 pwa 和我理想中的，
-可以存取本機檔案還是有很大的差距。
-也許 cordova 可以做到吧？
-electron 則是我一直很討厭的，把整個瀏覽器打包到 app 裡，
-cordova 至少只用了一個 android 內建的 web view。&lt;/p&gt;
-&lt;p&gt;但這二種 app 好像也都不適合在桌面使用，
-後來有看到 cordova 有第三方做的，在 linux 上跑的外掛。
-總之如果有一天太閒，就來寫寫看吧。
-順便學個 android 開發也不錯？&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/email-thunderbird-unable-localhost.html</id>
 <title>thunderbird 91 移除 movemail 功能後無法收本機 email</title>

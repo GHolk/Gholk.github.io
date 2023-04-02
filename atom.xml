@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2023-04-02T15:38:16.293Z</updated>
+  <updated>2023-04-02T15:55:34.725Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,117 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
   <entry>
+<id>http://gholk.github.io/log-function-easy-and-useful.html#將參數轉型為字串並移除多行訊息尾部的換行符</id>
+<title>簡單好用的除錯 log 函數</title>
+<published>2023-04-02T15:26:56.865Z</published>
+<updated>2023-04-02T15:55:34.700Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/log-function-easy-and-useful.html#將參數轉型為字串並移除多行訊息尾部的換行符"/>
+<summary type="html">
+將參數轉型為字串並移除多行訊息尾部的換行符，
+並且加入 mastodon 留言連結。</summary>
+<category term="debug"/>
+<category term="log"/>
+<category term="js"/>
+<content type="html">&lt;h1 id=&quot;簡單好用的除錯-log-函數&quot;&gt;簡單好用的除錯 log 函數&lt;/h1&gt;
+&lt;p&gt;相信一般人寫程式最開始 debug 都是用 printf 或 console.log 之類的函數，
+簡單把想要的資料丟到輸出，但事後又要刪除 debug 用的函數很麻煩。
+最近弄出了一種稍微包裝過的 log 函數，
+可以控制在 production 階段時就不輸出東西，有點像通用的 log 函式庫，
+但控制實作複雜度在一定範圍內。
+簡單來說就是幫每條 log 加上一個名稱，
+然後可以用一個變數控制哪些名稱的 log 才要輸出。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;const flag = {
+    exclude: &apos;&apos;.split(/ /g),
+    dict: null
+}
+function log(name, m) {
+    let dict = flag.dict
+    if (!dict) {
+        dict = flag.dict = {}
+        for (const name of flag.exclude) dict[name] = false
+    }
+    if (!m) {
+        m = name
+        name = &apos;debug&apos;
+    }
+    if (!(name in dict)) dict[name] = true
+    if (!dict[name]) return
+    if (typeof m != &apos;string&apos;) m = String(m)
+    let s
+    if (m.indexOf(&apos;\n&apos;) == -1) {
+        s = `[${name}] ${m}`
+    }
+    else {
+        m = m.trim()
+        s =
+`[${name}]
+${m}
+[/${name}]`
+    }
+    console.log(s)
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;其實文章到這裡就可以結束了，我想說的都在 code 裡了。&lt;/p&gt;
+&lt;p&gt;這個函數的目標大概就是，讓每條 log 都有一個名字，事後可以關掉。
+使用情境就是對次一次除錯的過程；
+在除錯時，會先在想檢查的地方加入 log，然後幫 log 取一個名字。
+在事後解決問題後，就可以把名字加入 exclude 的清單裡，
+程式就不會再輸出這則訊息，但又保留如果有需要可以再打開的彈性。&lt;/p&gt;
+&lt;h2 id=&quot;多行訊息&quot;&gt;多行訊息&lt;/h2&gt;
+&lt;p&gt;比較有趣的是對多行訊息的處理。
+由於用方括號加在行首的作法只適合單行訊息：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;[error-message] ls: cannot access &apos;foo&apos;: No such file or directory
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;對於多行訊息，我加入了一種類似 html 開關標籤的寫法，
+實際效果會像這樣：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;[error-message]
+Cannot find module &apos;foo&apos;
+Require stack:
+- &amp;lt;repl&amp;gt;
+[/error-message]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;用方括號是來自 &lt;a href=&quot;http://zh.wikipedia.org/wiki/BBCode&quot;&gt;BBCode&lt;/a&gt; 的語法，實際上就是把 html 的大小於換成方括號而已。
+主要是用來顯示預先格式化好的錯誤訊息。
+因為我自己蠻常遇到多行的錯誤訊息，
+所以就想了一個符合既有方括號格式語法的顯示方式。&lt;/p&gt;
+&lt;h2 id=&quot;其他功能&quot;&gt;其他功能&lt;/h2&gt;
+&lt;p&gt;其它也有一些可以更彈性的地方，
+像是加入一個全域 flag debug，能按命令列參數一次開啟所有的 log。
+或是加入萬用字元或 regexp 的支援，
+可以開啟某些或某個命名空間下的所有 log，
+或是二層的先 exclude 再 include 策略。
+當然，會不會用到就是另外一回事了。
+實際也不是那麼實用，所以也不一定有加。&lt;/p&gt;
+&lt;h2 id=&quot;執行開銷&quot;&gt;執行開銷&lt;/h2&gt;
+&lt;p&gt;如果用 c 語言寫，甚至可以用巨集的方式定義 log，
+在 production 階段完全把 log 函數從程式中移除，
+減少效能的損耗。
+雖然很多完整的 log 函式庫，也都有類似的功能。&lt;/p&gt;
+&lt;p&gt;用 js 最多就是把整個 log 函數換成一個什麼都不做的 nop 函數，
+或用一個全域 flag 關掉。
+至於要減少格式化訊息的開銷的話，
+像如果要錯誤訊息是序列化整個物件，
+可能可以用 callback 惰性求值來避免開銷，
+只要在確定要輸出錯誤訊息時再執行 callback。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;function log(name, m) {
+    // ...
+    if (typeof m == &apos;function&apos;) m = m()
+    // ...
+}
+log(&apos;html-full&apos;, () =&amp;gt; $.html())
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;使用策略&quot;&gt;使用策略&lt;/h2&gt;
+&lt;p&gt;而且因為每則 log 都有名稱，
+在解析上可以朝機器可讀的方式寫 log，
+也就是在訊息中不用帶太多的說明，直接輸出數字、字串就好。
+像如果想驗證目前到迴圈第幾次，
+可以直接寫： &lt;code&gt;log(&apos;loop-count&apos;, i)&lt;/code&gt; 而不是
+&lt;code&gt;log(`the ${i}th loop`)&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;這樣寫的好處是，來自各處的訊息混在一起時，可以依名稱分辨，
+不用想某個寫法的 count 到底是來自哪個變數的 count。
+其實就是變成替 log 取名字時就要確保最好名稱沒有重複。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/log-function-easy-and-useful.html</id>
 <title>簡單好用的除錯 log 函數</title>
 <published>2023-04-02T15:26:56.865Z</published>
@@ -3495,112 +3606,7 @@ bug 有沒包 TWCA 的憑證，
 <category term="iccard"/>
 <category term="debug"/>
 <category term="遠端"/>
-<content type="html">&lt;h1 id=&quot;在-linux-使用遠端辦公軟體-citrix-workspace&quot;&gt;在 linux 使用遠端辦公軟體 citrix workspace&lt;/h1&gt;
-&lt;p&gt;公司用 citrix workspace 這套遠端辦公軟體。
-雖然給的手冊沒寫 linux 版，但去他們官網查時，
-發現有 linux 版的 client。
-有包成 deb 的，裝起修一些 bug 後就可以動了，
-還可以讀到 linux 下的讀卡機的驅動。
-bug 有沒包 TWCA 的憑證，
-和啟用 x window 的畫面縮放功能時視窗顯示會壤掉。&lt;/p&gt;
-&lt;p&gt;因為之前有人接觸到確診者，
-所以大家都很緊張，開始裝遠端辦公軟體，
-使用 citrix workspace 需要在本機安裝叫 citrix receiver 的程式。
-一開始就照著資訊室的手冊裝，
-他手冊只列了 windows macosx android 三個版本。
-另外他用了 OTP 做二階段認證，但是自己做了個認證 app 出來，
-在遠端辦公登入時，要輸入 app 裡出現的 otp。&lt;/p&gt;
-&lt;p&gt;在 windows 裝起來後，發現他不需要管理員權限就能裝，
-因為公司的電腦有鎖管理員權限但我還是裝得起來。
-運作上是可以用瀏覽器開，
-或用 citrix 內建的一個可能是 electron 或 web view 的東西開，
-開某個掛在公司 subdomain 的網站 &lt;code&gt;cxws.*&lt;/code&gt; 。
-之後點裡面的連結，firefox 會詢問要不要用本機的應用程式 receiver 開啟，
-同意後 citrix receiver 就會跳起來，
-打開原本在公司電腦上跑的程式。
-這應該是近幾年瀏覽器標準推的新功能，可以讓網頁開本機的應用程式。&lt;/p&gt;
-&lt;p&gt;citrix 開起來的程式，就是一個視窗而已。
-有點像某些特化的虛擬機程式，
-可以只把虛擬機中的某個程式的視窗，在另一個本機的視窗中顯示。
-看起來就直接開了一個原生的程式一樣，
-而不是把系統放在某個視窗中，裡面的視窗就沒辦法像原生本機視窗那樣移動。&lt;/p&gt;
-&lt;h2 id=&quot;在-linux-上安裝&quot;&gt;在 linux 上安裝&lt;/h2&gt;
-&lt;p&gt;我回家後用 linux 去開網頁，
-但沒裝就不會跳出打開應用程式的對話框，
-只會下載一個 ica 為副檔名的檔案。
-本來想用 wine 裝，後來找了 citrix 的官網，
-發現他們有給 linux 版，有 deb 格式，就裝起來了。
-還不小，100 多 MB。&lt;/p&gt;
-&lt;p&gt;不知道裝完有沒有亂改系統，我看到他是放在 &lt;code&gt;/opt/Citrix&lt;/code&gt; ，
-然後也有在 systemd 註冊一個服務，開機會自動啟動。
-安裝還會跳一個 dialog(1) 的視窗，
-警告 citrix 會控制本機的系統管理權限，
-不知道什麼意思，總之就裝起來了。&lt;/p&gt;
-&lt;h3 id=&quot;啟用-citrix-receiver&quot;&gt;啟用 citrix receiver&lt;/h3&gt;
-&lt;p&gt;我們公司的 citrix receiver 裝好載入設定檔後，
-是不用另外登入的。
-我一開始裝好後，還去點網頁中帳號設定裡的 &lt;em&gt;啟動 citrix receiver&lt;/em&gt; ，
-會跳出 citrix receiver 的設定視窗，
-但其中一步一直無法用帳號或網域名稱登入，
-打我帳號、email、網域都報錯。
-後來才發現這步根本是多餘的，
-裝好後直接點網頁裡的應用程式就可以啟用了。&lt;/p&gt;
-&lt;h3 id=&quot;TWCA-憑證&quot;&gt;TWCA 憑證&lt;/h3&gt;
-&lt;p&gt;但點了應用程式後打不開，跳了一個 ssl 憑證錯誤。
-後來發現是 citrix receiver 沒用系統的 ssl 憑證，
-而是自帶了憑證。
-他自帶的超少，一些沒那麼廣泛使用的就沒包在裡面，
-像台灣的 &lt;a href=&quot;https://www.twca.com.tw/&quot;&gt;TWCA&lt;/a&gt; 。
-我們公司的是用 twca 簽的，就開不了。
-雖然不確定是因為 &lt;code&gt;cxws.*&lt;/code&gt; 要用 ssl 連，
-還是 citrix workspace 裡的應用程式也用 twca 簽了一遍。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://support.citrix.com/article/CTX260336&quot;&gt;citrix workspace 安裝憑證的方法也不難，官網有給教學&lt;/a&gt;。
-就把 pem 格式的憑證丟進 &lt;code&gt;/opt/Citrix/ICAClient/keystore/cacerts/&lt;/code&gt; ，
-然後執行 &lt;code&gt;/opt/Citrix/ICAClient/util/ctx_rehash&lt;/code&gt; ，
-再把現有的程式殺掉讓他自行重啟 &lt;code&gt;killall AuthManagerDaemon ServiceRecord&lt;/code&gt; 。&lt;/p&gt;
-&lt;p&gt;twca 的憑證可以去網上下載，或 debian 有內建 &lt;code&gt;/etc/ssl/certs/TWCA_*&lt;/code&gt; ，
-全複製過去就行了。
-我不知道怎麼在 twca 的網站找到他們的憑證，
-政府的網站總是很容易迷路。
-&lt;a href=&quot;https://ssl-tools.net/subjects/8e88f59059604b03df43780a8094a649cdb975f6&quot;&gt;本來是在 ssl-tools.net 下載的&lt;/a&gt; 。
-但根憑證這種東西，沒事還是不要在不確定來歷的網站載比較好，
-如果系統有內附了，就直接複製過去即可。&lt;/p&gt;
-&lt;h3 id=&quot;顯示器縮放係數&quot;&gt;顯示器縮放係數&lt;/h3&gt;
-&lt;p&gt;但程式開起來後都是黑的一片，沒有畫面。
-四處翻 log google 找文件半天，
-看到有人回報在 &lt;a href=&quot;https://support.citrix.com/article/CTX224400&quot;&gt;雙螢幕&lt;/a&gt; 或 &lt;a href=&quot;https://support.citrix.com/article/CTX230017&quot;&gt;hdpi&lt;/a&gt; 模式下顯示會異常，
-就想到可能是因為我用雙螢幕時，其中一個啟用了像素縮放功能。
-也就是把解析度低的螢幕當成高的在用，
-例如 1 個像素當 2 個像素在用，
-這樣就能把太大的視窗顯示在不夠大的螢幕上。&lt;/p&gt;
-&lt;p&gt;我用這個是因為筆電的螢幕解析度高，但外接螢幕的解析度低。
-如果依解析度將外接螢幕和筆電螢幕對接，
-就會現現螢幕物理尺寸和視窗位置對不上的問題。
-例如同樣 600x400 的視窗，可能在筆電螢幕上是 12x8 公分，
-但在外接螢幕上是 15x10 公分。
-當視窗在不同螢幕間移動時就會很不習慣。&lt;/p&gt;
-&lt;p&gt;但這個功能開了後，citrix workspace 的視窗就會顯示不正常，
-幾乎是無法使用。
-所以以後如果要開 citrix workspace，可能要先把這功能關掉。&lt;/p&gt;
-&lt;h3 id=&quot;讀卡機驅動程式&quot;&gt;讀卡機驅動程式&lt;/h3&gt;
-&lt;p&gt;另一件比較驚奇的事是，linux 下的讀卡機驅動可以直接無縫接軌
-citrix workspace 裡的程式。
-一開始我以為這東西是像開一個 vnc 協議之類的，
-把執行在遠端的程式的畫面接過來，
-所以網路應該是吃遠端的 server 方的網路。&lt;/p&gt;
-&lt;p&gt;但這樣的話，讀卡機驅動應該是動不了的。
-現代台灣的讀卡機驅動為了在 chrome firefox
-等 &lt;strong&gt;現代&lt;/strong&gt; 瀏覽器裡也能執行，
-都是在本機跑一支程式，監聽 localhost 某個 port，
-然後網站就對該預定義的 port 發起 ajax 來溝通。
-但 citrix 程式如果是跑在遠端，怎麼可能連到本機的 port？
-我也想不出他怎麼做的。&lt;/p&gt;
-&lt;p&gt;但另外還有一件事比較有趣，就是讀卡機驅動只在公司的內部網站能動，
-到其它一般銀行或政府機關的網站，就又偵測不到讀卡機了。
-我猜可能是內部網站發現自己跑在 citrix 裡時，
-會調整發 ajax 的 hostname，
-可能 citrix 裡會有一組虛擬 ip 是對應到本機的。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/rss-reader-future-work.html</id>
 <title>我期望中的 rss 閱讀軟體</title>

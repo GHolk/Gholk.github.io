@@ -52,16 +52,17 @@ function log(name, m) {
     }
     if (!(name in dict)) dict[name] = true
     if (!dict[name]) return
+    if (typeof m != 'string') m = String(m)
     let s
     if (m.indexOf('\n') == -1) {
         s = `[${name}] ${m}`
     }
     else {
         m = m.trim()
-        s = 
+        s =
 `[${name}]
 ${m}
-[/${name}]\n`
+[/${name}]`
     }
     console.log(s)
 }

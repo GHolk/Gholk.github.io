@@ -3126,18 +3126,6 @@ output:after {
     }
 &lt;/script&gt;
 </content>
-</entry><entry>
-<id>http://gholk.github.io/email-thunderbird-unable-localhost.html#foo-bar</id>
-<title>thunderbird foo bar</title>
-<published>2022-04-01T13:22:44.663Z</published>
-<updated>2022-10-25T14:06:27.278Z</updated>
-<link rel="alternate" type="text/html" href="http://gholk.github.io/email-thunderbird-unable-localhost.html#foo-bar"/>
-<summary type="html">foo bar sum</summary>
-<category term="firefox"/>
-<category term="email"/>
-<category term="funny"/>
-<category term="linux"/>
-<content type="html">this is html</content>
 </entry>
 
 <entry>

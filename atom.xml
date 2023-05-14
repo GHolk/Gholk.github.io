@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2023-04-03T01:59:43.614Z</updated>
+  <updated>2023-05-14T07:13:25.625Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,120 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
   <entry>
+<id>http://gholk.github.io/android-lock-screen-virtual-key.html</id>
+<title>不用實體按鍵鎖 android 手機螢幕的方法</title>
+<published>2023-05-14T07:12:31.933Z</published>
+<updated>2023-05-14T07:13:25.599Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/android-lock-screen-virtual-key.html"/>
+<summary type="html">鎖定螢幕是日常使用手機時非常頻繁的操作，收口袋或閒置時都會用到。
+正常人都是用實體電源鍵去鎖，但今年初我手機的音量鍵開始接觸不良，
+所以找了用觸控調整音量的方式，於是也想到也許鎖定螢幕也該少用實體鍵，
+不然哪天實體鍵故障就連開機都開不了了。
+目前找到的二個最好的方式，是裝 &lt;a href=&quot;https://f-droid.org/zh_Hant/packages/name.seguri.android.lock/&quot;&gt;lock&lt;/a&gt; 後長按 home 鍵鎖定，和用螢幕手勢鎖定。
+其他類似的解決方案有通知欄的 &lt;strong&gt;快速設定&lt;/strong&gt; 按鈕和 &lt;a href=&quot;https://f-droid.org/zh_Hant/packages/de.devmil.paperlaunch&quot;&gt;paper launcher&lt;/a&gt; 。</summary>
+<category term="android"/>
+<category term="atom"/>
+<category term="手勢操作"/>
+<content type="html">&lt;h1 id=&quot;不用實體按鍵鎖-android-手機螢幕的方法&quot;&gt;不用實體按鍵鎖 android 手機螢幕的方法&lt;/h1&gt;
+&lt;p&gt;鎖定螢幕是日常使用手機時非常頻繁的操作，收口袋或閒置時都會用到。
+正常人都是用實體電源鍵去鎖，但今年初我手機的音量鍵開始接觸不良，
+所以找了用觸控調整音量的方式，於是也想到也許鎖定螢幕也該少用實體鍵，
+不然哪天實體鍵故障就連開機都開不了了。
+目前找到的二個最好的方式，是裝 &lt;a href=&quot;https://f-droid.org/zh_Hant/packages/name.seguri.android.lock/&quot;&gt;lock&lt;/a&gt; 後長按 home 鍵鎖定，和用螢幕手勢鎖定。
+其他類似的解決方案有通知欄的 &lt;strong&gt;快速設定&lt;/strong&gt; 按鈕和 &lt;a href=&quot;https://f-droid.org/zh_Hant/packages/de.devmil.paperlaunch&quot;&gt;paper launcher&lt;/a&gt; 。&lt;/p&gt;
+&lt;h2 id=&quot;盲操的可能性&quot;&gt;盲操的可能性&lt;/h2&gt;
+&lt;p&gt;觸控操作除了步驟不能太多外，還有一點很重要是要能盲操，
+不看著螢幕也能準確的操作。
+像實體鍵，就不需要看著螢幕，
+所以用實體鍵鎖螢幕然後收手機這個動作，不需要看著手機也能操作。
+可以在手機螢幕還開著時，就往口袋或包包移動，在收的過程再一邊按下電源鍵。&lt;/p&gt;
+&lt;p&gt;以下介紹我目前用過的各種快速設定的方式：&lt;/p&gt;
+&lt;h3 id=&quot;通知欄快速設定&quot;&gt;通知欄快速設定&lt;/h3&gt;
+&lt;p&gt;&lt;abbr title=&quot;quick settings tiles&quot;&gt;快速設定&lt;/abbr&gt;
+就是 android 頂部的通知欄往下滑，會出現 wifi、行動數據、gps 等開關，
+一些 app 會提供更多快速設定可以放到通知欄裡。&lt;/p&gt;
+&lt;p&gt;通知欄的好處是任何 app 使用中，都可以開啟通知欄，
+但空間有限，如果放到第二頁後，操作起來其實不太方便。
+而且對盲操不太友善，往下滑後還要看準位置才能點。&lt;/p&gt;
+&lt;p&gt;就操作步驟數，如果第一頁就是二步，往下滑再點。
+在第二頁後就是 2+n，因為要往下滑二次才能翻頁通知欄。&lt;/p&gt;
+&lt;p&gt;另一種是作為可點選的通知或有按鈕的通知放在通知欄，
+但我不喜歡通知欄有東西，所以不用這種方式。&lt;/p&gt;
+&lt;h3 id=&quot;主畫面手勢操作&quot;&gt;主畫面手勢操作&lt;/h3&gt;
+&lt;p&gt;我用的 [open launcer] 有支援，其他比較能客制化的 lanucher 應該也都有。
+雖然 open launcher 的目前有點設計不良，
+要在桌面上空白處作為起點，手勢才有效。&lt;/p&gt;
+&lt;p&gt;一定程度可以盲操，但要先回到主畫面，
+所以動作一定是二步，按 home 鍵後再手勢操作。
+但手勢只有三種盲操友善，上滑、下滑、雙擊，
+其他含 pinch in 和 pinch out 都無法單手操作，
+而且上滑通常會綁到開啟 app drawer 的行為，所以也就只有雙擊、下滑能用。&lt;/p&gt;
+&lt;h3 id=&quot;把-widget-或-app-在桌面&quot;&gt;把 widget 或 app 在桌面&lt;/h3&gt;
+&lt;p&gt;既然都要回到主畫面的話，也可以考慮做成像開關的，
+一個在主畫面裡可以按的按鈕。
+但一樣很難盲操，好處就是某些功能如果很少用的話，可以這樣放。&lt;/p&gt;
+&lt;p&gt;像放一個 wifi adb 開關 widget，就不用每次都打開 wirebug，
+再按下按鈕，只要點一下開關就好了。
+widget 的好處是可以顯示現在的狀態，
+除了操控，也可以看到原本是開還是關。&lt;/p&gt;
+&lt;p&gt;或也可以做成捷徑的方式，點一下就啟動 app 並自動調設定後退出。
+捷徑的好處是可以放在資料夾內，widget 則只能放在畫面上。
+雖然說我現在還沒看過有類似的功能做成捷徑的。&lt;/p&gt;
+&lt;h3 id=&quot;長按-home-鍵&quot;&gt;長按 home 鍵&lt;/h3&gt;
+&lt;p&gt;長按 home 鍵會啟動。android 長按 home 鍵時，
+預設會啟動 &lt;strong&gt;數位助理應用程式&lt;/strong&gt; ，
+預設是 google 助手，不過也可以設成啟動其他 app，
+當然要該 app 有支援，在預設的應用程式裡可以調。&lt;/p&gt;
+&lt;p&gt;像 firefox 有，可以讓長按 home 鍵變成啟動 firefox，
+我一開始提到的 &lt;a href=&quot;https://f-droid.org/zh_Hant/packages/name.seguri.android.lock/&quot;&gt;lock&lt;/a&gt; 也有，
+這也是我覺得鎖定螢幕最方便的用法，長按 home 鍵鎖定。&lt;/p&gt;
+&lt;p&gt;但就要看手機的 home 鍵是哪種，
+像我之前的是觸控式的實體 home 鍵，兼指紋辨識功能。
+如果是出現在螢幕底部的虛擬 home 鍵，就只有出現時能按，不能盲操。
+如果是物理按鍵，那又會扯回一開始說的按鍵耗損問題。&lt;/p&gt;
+&lt;h3 id=&quot;paper-launcher&quot;&gt;paper launcher&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://f-droid.org/zh_Hant/packages/de.devmil.paperlaunch&quot;&gt;paper launcher&lt;/a&gt; 是一個 app，可以在螢幕邊緣放一個常駐的功能列，
+當從螢幕邊緣往內滑的時候就會啟動，然後可以放 app 在功能列裡面。
+這東西基本上是全域的，只要螢幕沒轉向就可以用。
+但操作也不太能盲操，除非你 paper launcher 裡只放一個 app 之類的。&lt;/p&gt;
+&lt;p&gt;另外到 android 12 後還有另個問題，操作方式會多一個叫手勢操作的，
+也就是在螢幕邊緣往內滑就會視為按下返回鍵的行為。
+如果啟用了這個功能，paper lanucer 的感應範圍就會被蓋住不能用。&lt;/p&gt;
+&lt;h2 id=&quot;音量控制使用分析&quot;&gt;音量控制使用分析&lt;/h2&gt;
+&lt;p&gt;音量控制需求反而沒有電源鍵那麼嚴格，
+通常都是要播音樂或操作 app 時才會需要調音量，
+那在操作時一定也是觸控操作，螢幕也會亮著，人也會看著手機，
+所以一般不會有需要盲操音量的場合。
+重點只要把音量控制放在步驟少、方便使用的地方即可。&lt;/p&gt;
+&lt;p&gt;我自己試過二個方案，放在通知欄的快捷操作，
+或放在 launcher 主畫面的手勢操作。
+後來我是感覺其實使用沒那麼頻繁，所以應該不用佔到快捷操作，
+因為我自己的快捷操作放了非常多東西，
+為了節省空間，後來是放在主畫面的雙擊的手勢。&lt;/p&gt;
+&lt;h2 id=&quot;鎖定螢幕使用分析&quot;&gt;鎖定螢幕使用分析&lt;/h2&gt;
+&lt;p&gt;如前述，鎖定螢幕很常見的場合是一邊收進口袋、包包的同時，
+一邊在不看螢幕的情況下鎖定盲操，所以可能不看著螢幕操作就很重要。
+首先要想辦法在軟體層面執行 &lt;strong&gt;鎖定螢幕&lt;/strong&gt; 這個操作，
+open launcher 雖然有鎖定螢幕的操作，
+但是比一般鎖定更嚴格的鎖，會無法用指紋解開，
+一定要畫圖形解鎖或密碼解鎖。&lt;/p&gt;
+&lt;p&gt;後來我找到 &lt;a href=&quot;https://f-droid.org/zh_Hant/packages/name.seguri.android.lock/&quot;&gt;lock&lt;/a&gt; 這款 app，啟動後就鎖定螢幕，沒有其他功能。
+所以只要把這個 app 綁定成手勢操作後要啟動的 app，
+就可以用手勢操作鎖定螢幕。&lt;/p&gt;
+&lt;p&gt;我有試過用快速設定或 paper launcher，但在盲操上還是沒有手勢友善。
+快速設定不看著螢幕很難點，paper launcher 也差不多，
+因為我放了蠻多 app 在裡面。&lt;/p&gt;
+&lt;p&gt;後來我發現 lock 可以綁成數位助理應用程式，
+也就是長按 home 鍵時啟動的程式，
+這在有實體 home 鍵的手機蠻方便的，
+只要長按 home 鍵就可以鎖定螢幕。&lt;/p&gt;
+&lt;h2 id=&quot;後記&quot;&gt;後記&lt;/h2&gt;
+&lt;p&gt;之前我的 atom 手機掉了，也半個月了應該是找不回來了。
+這些是用 atom 最後幾個月時針對 home 鍵耗損問題做的方案，
+現在也用不到了。寫這篇文章就當紀念吧。
+另外還有幾篇沒來得及寫，像怎麼更換聽筒之類的，有空再說。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/courage-mean-in-digimon.html#再哭我就當眾吻你</id>
 <title>所謂的勇氣就是</title>
 <published>2022-01-03T13:00:54.789Z</published>

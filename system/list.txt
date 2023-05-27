@@ -350,3 +350,4 @@ firefox-vim-like-tridactyl-addon.html
 windows-jscript-excel-ajax-work.html
 log-function-easy-and-useful.html
 android-lock-screen-virtual-key.html
+line-chrome-app-message-dump.html

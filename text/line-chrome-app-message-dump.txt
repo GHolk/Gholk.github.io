@@ -1,0 +1,316 @@
+# line chrome app 版匯出聊天訊息紀錄
+今年五月初舊手機丟了，無法備份 line 舊訊息，
+最後嘗試從尚能登入的 chrome app 版，
+用 debugger 逆向工程把儲存的訊息匯出。
+line 訊息是存在 chrome app 內的 indexed db 內，
+而且儲存進去前還有把每則訊息加密過，算蠻嚴謹的；
+雖然我不懂已經是在本機端可以信任的環境了還那麼嚴謹幹麻。
+然後五月底接到 line chrome 版 6 月的更新會強制刪除舊訊息的通知，
+就高效率的把這篇文章趕出來了。
+
+<script src="ext/toc.js"></script>
+
+## line 更新刪除舊訊息
+從 [五月初逆向工程 line 成功][line reverse] 到現在拖了快一個月，
+今天突然很高效率的把這篇文章趕出來了，
+因為昨天開 line chrome 版時，跳了個訊息說 6 月要更新，
+更新後 2 周前的訊息都會被刪掉。
+
+[line reverse]: https://g0v.social/@gholk/110305098105622846
+
+> ### Chrome 版 LINE 即將進行更新
+> Chrome 版 LINE 將於 2023 年 6 月進行更新以提高服務品質。更新後，使用 Chrome 版 LINE 時將僅可瀏覽最近 2 週內的訊息。此變更是為了提高於 Chrome 系統的穩定性，所有的訊息將可繼續於手機版及電腦版 LINE 正常瀏覽。請於系統更新前備份重要的訊息。造成您的不便，我們深感抱歉。感謝您使用 Chrome 版 LINE。我們將繼續努力提供更優質的服務。
+
+可能會有人需要這篇文章，所以就趕出來了，
+連怎麼使用匯出的檔案都還沒想就發了。
+積稿也是要清的。
+
+## 手機遺失
+之前舊手機丟了，所以沒辦法把舊的訊息備份到 google drive 再移轉，
+還掙扎了快一周，才終於決定要重新把 line 裝回來。
+
+其間還有照一則 [點子科技的 line 換機教學文章][line recover]
+嘗試聯絡客服，
+看能不能從 line 公司那邊拿到舊資料，不過他們也是回信不行。
+
+[line recover]: https://techsaydigi.com/2021/04/39957.html
+
+在遺失後 chrome 版的 line 還是能連線的，
+也看得到一部份的歷史訊息。
+我猜 chrome 版本的 line 訊息同步是只同步最近的訊息，
+所如果很長時間沒開 line 就會漏訊息沒同步到。
+
+於是就打算看看 chrome app 版 line 的資料怎麼存，
+看能不能把訊息倒出來。
+
+以下皆簡稱為 line。
+
+## 路徑結構
+linux 版 chrome 的資料存在 `$HOME/.config` 內，
+不知道為什麼不是存在 cache。
+因為全是存 indexed database，
+所以會在 `$HOME/.config/chromium/Default/IndexedDB/chrome-extension_${id}*.indexeddb.{blob,leveldb}/` 內。
+其中 line 的 chrome extension id
+可以根據之前 [介紹建立 line launcher 啟動捷徑][line launcher]
+這篇文章的內容去查，大概是 32 字元長的 `[a-p]` 16 個英文字母組合而成的 id。
+
+[line launcher]: line-new-chrome-app-launcher.html
+
+### blob 圖片等
+blob 比較好理解，應該是存入 <abbr title="Indexed Database">idb</abbr>
+裡的 blob，一般也就是圖片、影像之類的，
+也有一些像 line 自己用的 html template 的東西。
+總之不是我們的目標，雖然要備份也是可以，
+就整個資料夾複製出來就好了，
+只是會不知道哪個是哪個。
+
+我自己 line 都會把圖片存一份起來，所以理論上不會有需要備份的東西。
+
+### level db 資料夾
+level db 是 chromium 團隊的 idb 底層實作，所以很可能就是存訊息紀錄的。
+這個我就先複製出來而已，當初是想事後再去找怎麼讀 level db。
+
+不過事後可以發現 line 存入 idb 中的資料都是加密過的，
+所以直接把 level db 複製出來其實沒什麼用。
+用後面講的 debugger 去逆向工程解比較好。
+
+## chromium debugger
+這是某晚解出來的，本來打算隨便試一下就好，
+結果一不小心就試了二個多小時，還真的把訊息解出來了；
+熬夜 coding 是真的有某種加成嗎。
+如果當時沒有碰巧解出來，也不知道後來從頭重試能不能重現奇蹟。
+
+**警告** ：在 debugger 中貼上不明程式碼是極危險的行為，
+可能導致你的帳號被盜走。
+除非你信任程式碼的來源，否則不要這麼做。
+
+### 進入 debugger
+開 line 後按 f12 就能開啟，不過 line 有做反偵錯，
+開啟 debugger 後會一直卡在 `debugger` 指令啟動的 repl 內，
+line 也就無法正常執行。
+
+先找到主程式，一個超大的 js 檔案，line 應該有用 bundler 包。
+也就是開啟 debugger 後，會因為 debug 指令停住的那個 statement 所在檔案。
+他開頭有一個很長的 var，宣告了一大堆變數，
+第二行是函數表達式宣告，第三行也是很長的 var 宣告，
+第四行則定義了一個判斷是否為函數的 `isFunction` 函數。
+
+### 關閉反偵錯
+117877 行附近，找到
+`!E['test'](G + 'chain') || !F['test'](G + 'input') ? G('0') : b();`
+這行。
+*行數和變數名稱可能會任意改變* ，我自己隔快一個月再試就差蠻多的。
+可以用字面量 `'chain'` 去找，
+另一個線索前面有二個 regexp 物件宣告，
+也可以用 regexp 內文去找。
+
+```js
+var E = new RegExp('function\x20*\x5c(\x20*\x5c)')
+  , F = new RegExp('\x5c+\x5c+\x20*(?:[a-zA-Z_$][0-9a-zA-Z_$]*)','i')
+```
+
+在宣告後的那行函數呼叫，點擊該行行號下一個中斷點，
+我們要在 debug 函數執行前移除他。
+
+然後縮小 debugger 回到 line 視窗，按 f5 重新整理重新載入一次 js，
+chrome 會停在剛才下的中斷點。
+debugger 會停是因為 117877 行的最後一個函數呼叫 `b()` （可能改名），
+返回了一個會無窮迴圈呼叫 debugger 的函數，
+我們就把被呼叫的 b 函數換掉，讓他返回一個什麼都不做的函數。
+
+在中斷時於 debugger 下方的 repl 中，輸入
+`b = () => { return () => 0 }` ，
+也就是把 b 返回的函數換成一個永遠返回 0 的什麼都不做的函數。
+如果前述的 b 函數改名，就把前句中的 b 換成對應的名稱。
+
+之後按播放箭頭離開中斷點，debugger 仍然開著，
+但已不會陷入無窮中斷迴圈。
+
+### 讀取所有 indexed db 中的資料
+再來先回 line 視窗登入，再回到 debugger。
+我們先把 idb 的內容全部讀入 js 裡比較好操作。
+這裡可以用下列的 idb 匯出腳本，
+我是用 loilo 的 gist [idb backup and restore] 去改的。
+
+[idb backup and restore]: https://gist.github.com/loilo/ed43739361ec718129a15ae5d531095b
+
+```js
+function exportToObject(idbDatabase) {
+  return new Promise((resolve, reject) => {
+    const exportObject = {}
+    if (idbDatabase.objectStoreNames.length === 0) {
+      resolve(exportObject)
+    } else {
+      const transaction = idbDatabase.transaction(
+        idbDatabase.objectStoreNames,
+        'readonly'
+      )
+
+      transaction.addEventListener('error', reject)
+
+      for (const storeName of idbDatabase.objectStoreNames) {
+        const allObjects = []
+        transaction
+          .objectStore(storeName)
+          .openCursor()
+          .addEventListener('success', event => {
+            const cursor = event.target.result
+            if (cursor) {
+              // Cursor holds value, put it into store data
+              allObjects.push(cursor.value)
+              cursor.continue()
+            } else {
+              // No more values, store is done
+              exportObject[storeName] = allObjects
+
+              for (const store of idbDatabase.objectStoreNames) {
+                if (!exportObject.hasOwnProperty(store)) return
+              }
+              resolve(exportObject)
+            }
+          })
+      }
+    }
+  })
+}
+
+async function exportToObjectAll(idbApi = indexedDB, list = null) {
+    if (!list) {
+        const dbs = await idbApi.databases()
+        list = dbs.map(db => db.name)
+    }
+    const result = {}
+    for (const name of list) {
+        const db = await openIdb(name)
+        result[name] = await exportToObject(db)
+    }
+    return result
+}
+
+function openIdb(name, idbApi = indexedDB) {
+    return new Promise((ok, error) => {
+        const req = idbApi.open(name)
+        req.onsuccess = e => ok(e.target.result)
+        req.onerror = e => error(e)
+    })
+}
+
+exportToObjectAll().then(dump => window.idbDump = dump)
+```
+
+可能要等一段時間，等 idbDump 不是 undefined 而是 object 就是執行完了。
+
+有興趣的話可以觀察 `idbDump` 內容，就是 indexed db 的資料，
+會有二個鍵， `idbDump.LINE_[0-9a-f]{16}` 和 `idbDump.LINE_USER` ，
+`idbDump.LINE_[0-9a-f]{16}` 這個鍵主要是存聊天資訊的。
+假設是 `idbDump.LINE_68656c6c6f20776f726c64210a68656c.chat_message[0]` ，
+就是第一則訊息，然後裡面都是二進位字串（亂碼），
+不只是 value，key 也有亂碼的。
+不知道 line 在想什麼，總之就是這樣。
+
+### 解密與金鑰
+再來要讓 debugger 停在可以存取解密函數和金鑰的地方，把 idbDump 解密。
+大約 86780 行，找到 `'decryptByDBResult': function(d) {` 這段程式碼，
+下中斷點在函數裡。
+
+之後隨便點開幾個聊天室，觸發中斷點進入 repl。
+在中斷點 repl 中可以存取解密函數 `c.decrypt` 和金鑰 `this.key` 。
+（一樣，變數 c 可能被改名，decrypt 倒是不會。）
+在 repl 中貼上下面的程式碼，就可以解密所有資料，
+然後把解密完的資料存到 window.idbDumpPlain 這個變數。
+
+```js
+{
+  const mapObject = x => {
+    if (x instanceof Object && !Array.isArray(x)) {
+      const copy = {}
+      for (const k in x) {
+        copy[k] = mapObject(x[k])
+      }
+      return copy
+    }
+    else return c.decrypt(this.key, x)
+  }
+  window.idbDumpPlain = mapObject(idbDump)
+}
+```
+
+這裡要包一層 block 的原因是這裡 debugger 不給宣告會改變外部作用域的變數。
+
+所以 line 的設計，雖然 indexed db 是加密的，
+但加解密的函數也是都做好了。
+基本上就是只有在 leveldb 中或說存入檔案系統時是加密的，
+然後解密金鑰，整個 db 是同一套，至少在呼叫 decrypt 時只要給同一套。
+還好是同一套，要不然還不知道從何解起。
+
+之後一樣可以嘗試存取
+`idbDumpPlain.LINE_68656c6c6f20776f726c64210a68656c.chat_message[0]` ，
+就會看到訊息資料從二進位字串亂碼，
+變成可讀的內容。
+
+### 下載解密內容
+資料都存在全域變數 idbDumpPlain 裡，可以把中斷點關掉了，
+點一下設置中斷點後的行號處標籤就能取消中斷點。
+再按播放鍵繼續執行。
+
+然後在 debugger 中貼上下列程式碼，
+把物件轉成 json 後轉成 blob 下載：
+
+```js
+function downloadObjectJson(o, name) {
+  var idbDumpAnchor = document.createElement('a')
+  var idbDumpFile = new File(
+    [JSON.stringify(o)], name,
+    {type: 'application/json'}
+  )
+  idbDumpAnchor.textContent = 'object json'
+  idbDumpAnchor.download = idbDumpFile.name
+  idbDumpAnchor.href = URL.createObjectURL(idbDumpFile)
+  document.body.appendChild(idbDumpAnchor)
+  idbDumpAnchor.click()
+
+  setTimeout(30 * 1000, () => {
+    idbDumpAnchor.remove()
+    URL.revokeObjectURL(idbDumpFile)
+  })
+}
+
+downloadObjectJson(idbDumpPlain, 'line-chrome-data-dump.json')
+```
+
+下載的 json 就有明文的所有訊息內容了，不含圖片影像等 blob。
+請好好保存，因為訊息是明文的。
+雖然我不知道 line 為什麼要重重加密已經在本機的檔案，
+但既然都加密了就還是提醒一下。
+然後 json 應該會很大，壓縮大概能縮到 1/7 的大小。
+
+### user email 下載
+我自己在下載時， `idbDump.LINE_USER.user` 
+陣列有一個元素沒解碼成功，解出來的還是亂碼。
+如果你也有類似的情況並想保留解密前的內容的話，
+可以在 debugger 中貼上下列程式碼，下載解密前的資料。
+
+```js
+downloadObjectJson(idbDump.LINE_USER, 'line-user-encrypt.json')
+```
+
+## 資料讀取
+line 的資料結構大概是這樣的：
+所有訊息都存在 `chat_message` 陣列裡，
+每則訊息會有屬性註明自己屬於哪個聊天室。
+聊天室則是存在 `chat` 陣列裡，
+聊天室會註明其中有哪些成員，
+成員的名字則要從 `contacts` 陣列裡用 id 找。
+
+總之大概就是學過資料庫的人會很熟悉（但也很麻煩）的正規化結構，
+因為 dump indexeddb 的腳本就是直接把 indexeddb 的內容倒出來。
+
+如果要轉換成方便檢索讀取的格式，
+好麻煩下一篇再說吧，歡迎投稿（幫我想）。
+
+#javascript
+#line
+#逆向工程
+#debugger
+#web-extension
+#備份

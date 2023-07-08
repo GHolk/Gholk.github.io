@@ -282,7 +282,7 @@ downloadObjectJson(idbDumpPlain, 'line-chrome-data-dump.json')
 請好好保存，因為訊息是明文的。
 雖然我不知道 line 為什麼要重重加密已經在本機的檔案，
 但既然都加密了就還是提醒一下。
-然後 json 應該會很大，壓縮大概能縮到 1/7 的大小。
+然後 json 應該會很大，我自己有 25M，壓縮大概能縮到 1/7 的大小。
 
 ### user email 下載
 我自己在下載時， `idbDump.LINE_USER.user` 
@@ -314,3 +314,4 @@ line 的資料結構大概是這樣的：
 #debugger
 #web-extension
 #備份
+#im

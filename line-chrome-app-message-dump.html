@@ -8,7 +8,7 @@
 
 <!-- 後設資料 -->
 <meta name="date" property="og:article:public_time" content="2023-05-27T13:21:16.776Z">
-<meta name="keywords" property="og:article:tag" content="javascript,line,逆向工程,debugger,web-extension,備份">
+<meta name="keywords" property="og:article:tag" content="javascript,line,逆向工程,debugger,web-extension,備份,im">
 <link rel="index" type="text/html" href="index.html" title="首頁">
 <link rel="start" type="text/html" href="index.html" title="首頁">
 <link rel="next" type="text/html" href="">
@@ -19,6 +19,7 @@
 <link rel="icon" type="image/png" href="ext/icon.png">
 <link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
 <link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+<link rel="stylesheet" type="text/css" href="ext/mastodon-comment-system.css">
 <link rel="webmention" href="https://webmention.io/gholk.github.io/webmention">
 <link rel="pingback" href="https://webmention.io/gholk.github.io/xmlrpc">
 
@@ -265,7 +266,7 @@ downloadObjectJson(idbDumpPlain, 'line-chrome-data-dump.json')
 請好好保存，因為訊息是明文的。
 雖然我不知道 line 為什麼要重重加密已經在本機的檔案，
 但既然都加密了就還是提醒一下。
-然後 json 應該會很大，壓縮大概能縮到 1/7 的大小。</p>
+然後 json 應該會很大，我自己有 25M，壓縮大概能縮到 1/7 的大小。</p>
 <h3 id="user-email-下載">user email 下載</h3>
 <p>我自己在下載時， <code>idbDump.LINE_USER.user</code> 
 陣列有一個元素沒解碼成功，解出來的還是亂碼。
@@ -291,7 +292,23 @@ downloadObjectJson(idbDumpPlain, 'line-chrome-data-dump.json')
 <script defer="" data-lazy="" src="ext/load-disqus.js"></script>
 <script>autoLoader.autoLoad()</script>
 
+<footer></footer>
 
+<div id="comment-board">
+<h2>留言</h2>
+
+<section id="fediverse-comment"><article id="mastodon-110441352974531365"><header><a class="avatar" href="https://g0v.social/@idoleat" target="_blank"><img src="https://objects.g0v.social/accounts/avatars/108/845/019/711/899/466/original/22f7fe6cf738ca8e.png"></a><div class="left"><span class="account">idoleat</span> <a class="date" href="https://g0v.social/users/idoleat/statuses/110441352974531365" target="_blank">2023-05-27T15:28:28.814Z</a></div></header><div class="content"><p><span class="h-card"><a href="https://g0v.social/@gholk" class="u-url mention">@<span>gholk</span></a></span> 我現在都會丟一隻 line-tg-bridge-bot 在群組，可以傳訊息加備份，個人對話的話如果其他人可以接受跟一隻隨時已讀的 bot 講話我也都叫他跟 bot 講話</p></div></article><article id="mastodon-110583421723800927"><header><a class="avatar" href="https://g0v.social/@gholk" target="_blank"><img src="https://objects.g0v.social/accounts/avatars/000/019/583/original/8122d10cf4273468.png"></a><div class="left"><span class="account">gholk</span> <a class="date" href="https://g0v.social/users/gholk/statuses/110583421723800927" target="_blank">2023-06-21T17:38:25.898Z</a></div></header><div class="content"><p>備份出來有些訊息是 null, 會有一個 chunk 的二維陣列裡存一堆數字, 不知道是不是當初顯示為 "此訊息無法顯示" 的訊息, 或是開了 letter sealing 的訊息</p></div></article></section>
+
+<div id="disqus_thread"></div>
+
+<menu>
+  <li><a href="mastodon" target="_blank">
+      <button>在 mastodon 或用 ActivePub 留言</button></a></li>
+  <li><a href="mailto:"><button>用 email 回復</button></a></li>
+  <li><button id="disqus-load">載入 disqus 回復</button></li>
+</menu>
+<p><small>Webmention is supported</small></p>
+</div>
 
 
 </body></html>

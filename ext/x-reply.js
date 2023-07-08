@@ -1,19 +1,23 @@
 function createBoard() {
-    const board = document.createElement('div')
-    board.id = 'comment-board'
-    board.innerHTML = `
+    let board = document.getElementById('comment-board')
+    if (!board) {
+        board = document.createElement('div')
+        board.id = 'comment-board'
+        board.innerHTML = `
 <h2>留言</h2>
-<p>
-<a href="mastodon" target="_blank">
-<button>在 mastodon 或用 ActivePub 留言</button></a>
-<a href="mailto:"><button>用 email 回復</button></a>
-<button id="disqus-load">載入 disqus 回復</button>
-</p>
+<div id="disqus_thread"></div>
+<menu>
+<li><a href="mastodon" target="_blank">
+<button>在 mastodon 或用 ActivePub 留言</button></a></li>
+<li><a href="mailto:"><button>用 email 回復</button></a></li>
+<li><button id="disqus-load">載入 disqus 回復</button></li>
+</menu>
 <p><small>Webmention is supported</small></p>
 `
+        document.body.appendChild(board)
+    }
     board.querySelector('a[href^=mailto]').href = getMailToUrl()
     handleActivePub(board.querySelector('a[href=mastodon]'))
-    document.body.appendChild(board)
 }
 
 function handleActivePub(anchor) {

@@ -1,0 +1,30 @@
+#fediverse-comment > * {
+    display: block;
+}
+#fediverse-comment header > * {
+    float: left;
+    display: block;
+}
+#fediverse-comment header .avatar img {
+    width: 3em;
+    height: 3em;
+}
+#fediverse-comment header .left > * {
+    float: left;
+    margin-left: 0.5em;
+}
+#fediverse-comment header .date {
+    clear: left;
+}
+#fediverse-comment article .content {
+    clear: left;
+}
+#fediverse-comment article {
+    max-width: 48em;
+    padding: 0.5em;
+    padding-bottom: 1px;
+}
+:target {
+    transition: background-color 2s ; 
+    background-color: #FFC;
+}

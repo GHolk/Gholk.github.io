@@ -184,6 +184,9 @@ figcaption {
     text-align: center;
 }
 
+#disqus_thread:empty {
+    display: none;
+}
 #disqus_thread {
     margin: 0.5em;
     padding: 0.5em;
@@ -243,4 +246,12 @@ summary {
     #disqus_thread {
         display: none;
     }
+}
+
+menu > li {
+    list-style: none;
+    display: inline;
+}
+menu {
+    padding-left: 0;
 }

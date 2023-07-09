@@ -1,0 +1,228 @@
+<!DOCTYPE html><html lang="zh-TW" prefix="og: http://ogp.me/ns#"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="author" property="og:article:author" content="gholk">
+<meta name="copyright" content="Common Creative">
+<meta name="generator" content="emacs, markdown">
+<!-- 以上一般不用改，以下才要改。 -->
+
+<!-- 後設資料 -->
+<meta name="date" property="og:article:public_time" content="2023-07-08T16:16:06.846Z">
+<meta name="keywords" property="og:article:tag" content="javascript,generator,async,with">
+<link rel="index" type="text/html" href="index.html" title="首頁">
+<link rel="start" type="text/html" href="index.html" title="首頁">
+<link rel="next" type="text/html" href="">
+<link rel="prev" type="text/html" href="line-chrome-app-message-dump.html" title="line chrome app 版匯出聊天訊息紀錄">
+<link rel="alternate" type="text/html" href="https://g0v.social/@gholk" title="在 fediverse 上討論" id="active-pub-thread">
+
+<!-- 和網頁位置有關 -->
+<link rel="icon" type="image/png" href="ext/icon.png">
+<link rel="apple-touch-icon" type="image/png" href="ext/icon.png">
+<link rel="stylesheet" type="text/css" href="ext/padding-lot.css">
+<link rel="stylesheet" type="text/css" href="ext/mastodon-comment-system.css">
+<link rel="webmention" href="https://webmention.io/gholk.github.io/webmention">
+<link rel="pingback" href="https://webmention.io/gholk.github.io/xmlrpc">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="ext/meta-bloging.js"></script>
+
+<title>javascript 中模仿 python 的 with 自動關閉功能</title>
+</head>
+<body>
+<main><h1 id="javascript-中模仿-python-的-with-自動關閉功能">javascript 中模仿 python 的 with 自動關閉功能</h1>
+<p>python 中有一個 with 關鍵字，
+可以實現離開 scope 時自動關檔或執行某些清理操作的功能。
+js 中可以用 generator 實作出類似的功能，只是會很不直覺。
+也可以用 callback 實作，但要額外處理 async 的問題。
+ecmascript 委員會也有收到一個來自 go 語言的 using 的提案，
+雖然說 js 已經有類似的 finalizer 功能，
+但是依靠垃圾回收觸發，js 的垃圾回收器又不是離開 scope 會必定觸發的。</p>
+<p>這裡講的不是 js 的 with，js 的 with 是像 basic 的，
+純用來簡寫屬性名稱用的。</p>
+<h2 id="自動清理機制">自動清理機制</h2>
+<p>以前寫系統級的語言，像 c perl python 都會有開檔、關檔的行為，
+教學都會提醒檔案沒有要用要關掉，
+因為程序的 <abbr title="file handle">fd</abbr> 是有限的，也會鎖到其他程序。
+這時候就會有像這樣的寫法：</p>
+<pre><code class="lang-python">f = open('file.txt')
+do_something(f)
+f.close()
+</code></pre>
+<p>因為要手動呼叫 close 很麻煩，又可能會忘記，
+python 就有 with 的語法，
+可以在離開 with 的 block 時自動呼叫 close 或定義好的函數。</p>
+<pre><code class="lang-python">with open('file.txt') as f
+    do_something(f)
+</code></pre>
+<h2 id="js-類似的使用情境">js 類似的使用情境</h2>
+<p>js 不太有這類需求，瀏覽器端幾乎沒有這種需要關掉的東西，
+type array 或 blob 都是跟著 gc 自動回收的。
+頂多 URL.createObjectURL、URL.revokeObjectURL 有點像，
+但這種通常要等使用者做完事才能回收，也不太適合。
+indexeddb 有些連線可以手動關閉，但也不是絕對必要。</p>
+<p>node.js 直接跑在作業系統裡有機會接觸到 fd，
+但 js 設計上還是比較適合把整個檔案讀進來成字串再處理，
+所以也不太常用。</p>
+<h2 id="js-中用-generator-實現">js 中用 generator 實現</h2>
+<p>總之 js 越長越大，總會有人碰到類似的需求。
+以既有的 js 語法，其實可以用 generator 達成類似的功能：</p>
+<pre><code class="lang-js">function *openg(name) {
+    const file = open(name)
+    yield file
+    file.close()
+}
+for (const f of openg('file.txt')) {
+    do_something(f)
+}
+</code></pre>
+<p>generator 函數碰到 yield 會暫停並把值丟出去，
+等到外面呼叫 next 才會繼續執行。
+而 generator 函數的返回值是可以當作 array 遍歷的，
+就相當於把每次 yield 丟出的值放指派給疊代的變數，
+直到 generator 函數返回。</p>
+<p>所以這裡 yield 後會執行 for 迴圈的本體一次，
+然後 block 結束回到 generator 函數，
+就 close 了，之後 generator 函數就返回了，所以也沒有下次。</p>
+<p>只是用 for of 迴圈來做像開關檔的清理行為，實在語義上很不合。
+<a href="implement-async-by-generator.html">其實 async await 函數也只是 generator 函數和 promise 組合的語法糖</a> ，
+只是可能 async 實在太常用了，而且用 yield 的語意不合沒那麼好看，
+所以還是另外加了 async await 取代 yield。</p>
+<h2 id="js-callback-實作">js callback 實作</h2>
+<p>另一種作法是用 callback 實作，執行完傳入的函數就關檔。</p>
+<pre><code class="lang-js">function opencb(name, fn) {
+    const f = open(name)
+    fn(f)
+    f.close()
+}
+opencb('file.txt', f =&gt; do_something(f))
+</code></pre>
+<p>但 callback，傳入的如果是非同步函數，就會壞掉。
+這時就得把所有東西都改成 async：</p>
+<pre><code class="lang-js">async function opencb(name, fn) {
+    const f = open(name)
+    await fn(f)
+    f.close()
+}
+opencb('file.txt', async f =&gt; {
+    await do1(f)
+    await do2(f)
+})
+</code></pre>
+<p>當然也可以取巧一點，在 opencb 中判斷回傳值是不是 promise，
+但總之還是很醜。</p>
+<pre><code class="lang-js">async function opencb(name, fn) {
+    const f = open(name)
+    const ret = fn(f)
+    if (ret &amp;&amp; ret.then) await ret
+    f.close()
+}
+</code></pre>
+<h3 id="for-迴圈遍歷與用-map-callback-遍歷的差異">for 迴圈遍歷與用 map callback 遍歷的差異</h3>
+<p>這裡就會出現 callback 的短處，也就是本質上他另起了一個函數，
+該函數同步與否與現在的作用域同步與否無關；
+而如果是用既有的語言結構，for while 之類的，
+在語句塊裡因為還在同一個函數內，要 yield 要 await 都沒問題。
+（這裡應該可以另外寫一篇文章探討這個問題。）</p>
+<p>用 for 迴圈很簡單就能處理 await：</p>
+<pre><code class="lang-js">async function do_async_loop(l) {
+    for (const x of l) {
+        await do_async(x)
+    }
+}
+</code></pre>
+<p>如果改用 forEach 之類的 callback 寫法，就會很麻煩：</p>
+<pre><code class="lang-js">async function do_async_cb(l) {
+    // 錯，for each callback 要宣告成 async 才能用 await
+    l.forEach(x =&gt; await do_async(x))
+
+    // 還是錯，forEach 不會等 async 函數
+    l.forEach(async x =&gt; await do_async(x))
+
+    // 半對半錯，map 不會等前一個 do_async 執行完，所以會全部呼叫完再一起等
+    await Promise.all(l.map(async x =&gt; await do_async(x)))
+
+    // 有沒有很難寫
+    await l.reduce(async (prev, x) =&gt; {
+        await prev // 確保上一個 async 執行完
+        await do_async(x)
+    }, Promise.resolve(true))
+}
+</code></pre>
+<p>在全都是同步執行時 foreach 或 map 配上 callback，
+可以讓程式更簡潔好看，
+但如果碰到非同步就沒輒了，不切回 loop 就會寫得很醜。</p>
+<h2 id="finalizer-實作與-gc-問題">finalizer 實作與 gc 問題</h2>
+<p>js 中還有 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/FinalizationRegistry">finalizer</a> 可以達成類似的效果，但實際上會不太一樣。
+js 中離開 scope 不會馬上觸發 gc，用 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakRef">WeakRef</a> 試就知道。
+所以觸發 gc 的時機很難掌控。
+而且某些情況要被 close 的物件，實際上是在某處被引用的，
+所以根本不會被 gc。</p>
+<p>可以玩玩看下面這個測試：</p>
+<button onclick="weakRefTest.add()">add</button>
+<button onclick="weakRefTest.check()">check</button>
+
+<script>
+var weakRefTest = {
+  list: [],
+  add() {
+    const o = {d: new Date()}
+    const r = new WeakRef(o)
+    this.list.push(r)
+    this.check()
+  },
+  check() {
+    const l = this.list.map(r => r.deref())
+    alert(JSON.stringify(l))
+  }
+}
+</script>
+
+<h2 id="提案中的-using-語法">提案中的 using 語法</h2>
+<p>跟據 <a href="https://chat.sylee.dev/2023/07/05/%E7%B6%B2%E8%B7%AF%E9%BB%91%E6%89%8B%E7%9A%84%E5%91%A2%E5%96%83-33">網路黑手的呢喃 #33</a> ，這功能有參考了 go 的 defer，
+會讓某個 statement 延到離開 block 時再執行，
+相較 python 的 with，則是不限定要在 block 開頭就綁定。
+但缺點是要使用 using 就得把返回值多包一層物件，並指定 dispose symbol 屬性。
+而且要讓變數所在的 scope 會結束，
+簡單的作法就是簡單包一層 block。</p>
+<pre><code class="lang-js">import { open } from "node:fs/promises";
+
+const getFileHandle = async (path: string) =&gt; {
+    const fileHandler = await open(path, "r");
+
+    return {
+        fileHandler,
+        [Symbol.asyncDispose]: async () =&gt; {
+            await fileHandler.close();
+        },
+    }
+};
+
+// main
+{
+    await using file = getFileHandle("test_file.txt");
+}
+// That's it! I/O will disposed automatically!
+</code></pre>
+<p>根據 <a href="https://www.totaltypescript.com/typescript-5-2-new-keyword-using">TypeScript 5.2's New Keyword: 'using' | Total TypeScript</a> 這篇，
+也能搭配解構賦值，所以使用的時候不太影響，只是函數裡還是要多包一層。</p>
+<pre><code class="lang-typescript">{
+  await using {filehandle} = getFileHandle("thefile.txt");
+  // Do stuff with filehandle
+} // Automatically disposed!
+</code></pre>
+<p>如果宣告了多個 using，到時候是會反向 dispose，
+最晚宣告的最先 dispose。
+<a href="https://github.com/tc39/proposal-explicit-resource-management#user-content-await-using-in-for-of-and-for-await-of-statements">ecmascript 的 github 提案裡還有和 for 迴圈的組合用法</a>，
+處理了很多奇怪的情況。</p>
+</main>
+
+<script defer="" src="ext/meta-meta.js"></script>
+<script defer="" data-execute="" src="ext/x-reply.js"></script>
+<script defer="" data-lazy="" src="ext/load-disqus.js"></script>
+<script>autoLoader.autoLoad()</script>
+
+
+
+
+
+</body></html>

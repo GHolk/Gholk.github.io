@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2023-05-27T14:07:16.898Z</updated>
+  <updated>2023-07-09T06:11:30.911Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,209 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
   <entry>
+<id>http://gholk.github.io/javascript-using-auto-close.html</id>
+<title>javascript 中模仿 python 的 with 自動關閉功能</title>
+<published>2023-07-08T16:16:06.846Z</published>
+<updated>2023-07-09T06:11:30.885Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/javascript-using-auto-close.html"/>
+<summary type="html">python 中有一個 with 關鍵字，
+可以實現離開 scope 時自動關檔或執行某些清理操作的功能。
+js 中可以用 generator 實作出類似的功能，只是會很不直覺。
+也可以用 callback 實作，但要額外處理 async 的問題。
+ecmascript 委員會也有收到一個來自 go 語言的 using 的提案，
+雖然說 js 已經有類似的 finalizer 功能，
+但是依靠垃圾回收觸發，js 的垃圾回收器又不是離開 scope 會必定觸發的。</summary>
+<category term="javascript"/>
+<category term="generator"/>
+<category term="async"/>
+<category term="with"/>
+<content type="html">&lt;h1 id=&quot;javascript-中模仿-python-的-with-自動關閉功能&quot;&gt;javascript 中模仿 python 的 with 自動關閉功能&lt;/h1&gt;
+&lt;p&gt;python 中有一個 with 關鍵字，
+可以實現離開 scope 時自動關檔或執行某些清理操作的功能。
+js 中可以用 generator 實作出類似的功能，只是會很不直覺。
+也可以用 callback 實作，但要額外處理 async 的問題。
+ecmascript 委員會也有收到一個來自 go 語言的 using 的提案，
+雖然說 js 已經有類似的 finalizer 功能，
+但是依靠垃圾回收觸發，js 的垃圾回收器又不是離開 scope 會必定觸發的。&lt;/p&gt;
+&lt;p&gt;這裡講的不是 js 的 with，js 的 with 是像 basic 的，
+純用來簡寫屬性名稱用的。&lt;/p&gt;
+&lt;h2 id=&quot;自動清理機制&quot;&gt;自動清理機制&lt;/h2&gt;
+&lt;p&gt;以前寫系統級的語言，像 c perl python 都會有開檔、關檔的行為，
+教學都會提醒檔案沒有要用要關掉，
+因為程序的 &lt;abbr title=&quot;file handle&quot;&gt;fd&lt;/abbr&gt; 是有限的，也會鎖到其他程序。
+這時候就會有像這樣的寫法：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;f = open(&apos;file.txt&apos;)
+do_something(f)
+f.close()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;因為要手動呼叫 close 很麻煩，又可能會忘記，
+python 就有 with 的語法，
+可以在離開 with 的 block 時自動呼叫 close 或定義好的函數。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;with open(&apos;file.txt&apos;) as f
+    do_something(f)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;js-類似的使用情境&quot;&gt;js 類似的使用情境&lt;/h2&gt;
+&lt;p&gt;js 不太有這類需求，瀏覽器端幾乎沒有這種需要關掉的東西，
+type array 或 blob 都是跟著 gc 自動回收的。
+頂多 URL.createObjectURL、URL.revokeObjectURL 有點像，
+但這種通常要等使用者做完事才能回收，也不太適合。
+indexeddb 有些連線可以手動關閉，但也不是絕對必要。&lt;/p&gt;
+&lt;p&gt;node.js 直接跑在作業系統裡有機會接觸到 fd，
+但 js 設計上還是比較適合把整個檔案讀進來成字串再處理，
+所以也不太常用。&lt;/p&gt;
+&lt;h2 id=&quot;js-中用-generator-實現&quot;&gt;js 中用 generator 實現&lt;/h2&gt;
+&lt;p&gt;總之 js 越長越大，總會有人碰到類似的需求。
+以既有的 js 語法，其實可以用 generator 達成類似的功能：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;function *openg(name) {
+    const file = open(name)
+    yield file
+    file.close()
+}
+for (const f of openg(&apos;file.txt&apos;)) {
+    do_something(f)
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;generator 函數碰到 yield 會暫停並把值丟出去，
+等到外面呼叫 next 才會繼續執行。
+而 generator 函數的返回值是可以當作 array 遍歷的，
+就相當於把每次 yield 丟出的值放指派給疊代的變數，
+直到 generator 函數返回。&lt;/p&gt;
+&lt;p&gt;所以這裡 yield 後會執行 for 迴圈的本體一次，
+然後 block 結束回到 generator 函數，
+就 close 了，之後 generator 函數就返回了，所以也沒有下次。&lt;/p&gt;
+&lt;p&gt;只是用 for of 迴圈來做像開關檔的清理行為，實在語義上很不合。
+&lt;a href=&quot;implement-async-by-generator.html&quot;&gt;其實 async await 函數也只是 generator 函數和 promise 組合的語法糖&lt;/a&gt; ，
+只是可能 async 實在太常用了，而且用 yield 的語意不合沒那麼好看，
+所以還是另外加了 async await 取代 yield。&lt;/p&gt;
+&lt;h2 id=&quot;js-callback-實作&quot;&gt;js callback 實作&lt;/h2&gt;
+&lt;p&gt;另一種作法是用 callback 實作，執行完傳入的函數就關檔。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;function opencb(name, fn) {
+    const f = open(name)
+    fn(f)
+    f.close()
+}
+opencb(&apos;file.txt&apos;, f =&amp;gt; do_something(f))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;但 callback，傳入的如果是非同步函數，就會壞掉。
+這時就得把所有東西都改成 async：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;async function opencb(name, fn) {
+    const f = open(name)
+    await fn(f)
+    f.close()
+}
+opencb(&apos;file.txt&apos;, async f =&amp;gt; {
+    await do1(f)
+    await do2(f)
+})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;當然也可以取巧一點，在 opencb 中判斷回傳值是不是 promise，
+但總之還是很醜。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;async function opencb(name, fn) {
+    const f = open(name)
+    const ret = fn(f)
+    if (ret &amp;amp;&amp;amp; ret.then) await ret
+    f.close()
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;for-迴圈遍歷與用-map-callback-遍歷的差異&quot;&gt;for 迴圈遍歷與用 map callback 遍歷的差異&lt;/h3&gt;
+&lt;p&gt;這裡就會出現 callback 的短處，也就是本質上他另起了一個函數，
+該函數同步與否與現在的作用域同步與否無關；
+而如果是用既有的語言結構，for while 之類的，
+在語句塊裡因為還在同一個函數內，要 yield 要 await 都沒問題。
+（這裡應該可以另外寫一篇文章探討這個問題。）&lt;/p&gt;
+&lt;p&gt;用 for 迴圈很簡單就能處理 await：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;async function do_async_loop(l) {
+    for (const x of l) {
+        await do_async(x)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果改用 forEach 之類的 callback 寫法，就會很麻煩：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;async function do_async_cb(l) {
+    // 錯，for each callback 要宣告成 async 才能用 await
+    l.forEach(x =&amp;gt; await do_async(x))
+
+    // 還是錯，forEach 不會等 async 函數
+    l.forEach(async x =&amp;gt; await do_async(x))
+
+    // 半對半錯，map 不會等前一個 do_async 執行完，所以會全部呼叫完再一起等
+    await Promise.all(l.map(async x =&amp;gt; await do_async(x)))
+
+    // 有沒有很難寫
+    await l.reduce(async (prev, x) =&amp;gt; {
+        await prev // 確保上一個 async 執行完
+        await do_async(x)
+    }, Promise.resolve(true))
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;在全都是同步執行時 foreach 或 map 配上 callback，
+可以讓程式更簡潔好看，
+但如果碰到非同步就沒輒了，不切回 loop 就會寫得很醜。&lt;/p&gt;
+&lt;h2 id=&quot;finalizer-實作與-gc-問題&quot;&gt;finalizer 實作與 gc 問題&lt;/h2&gt;
+&lt;p&gt;js 中還有 &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/FinalizationRegistry&quot;&gt;finalizer&lt;/a&gt; 可以達成類似的效果，但實際上會不太一樣。
+js 中離開 scope 不會馬上觸發 gc，用 &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakRef&quot;&gt;WeakRef&lt;/a&gt; 試就知道。
+所以觸發 gc 的時機很難掌控。
+而且某些情況要被 close 的物件，實際上是在某處被引用的，
+所以根本不會被 gc。&lt;/p&gt;
+&lt;p&gt;可以玩玩看下面這個測試：&lt;/p&gt;
+&lt;button onclick=&quot;weakRefTest.add()&quot;&gt;add&lt;/button&gt;
+&lt;button onclick=&quot;weakRefTest.check()&quot;&gt;check&lt;/button&gt;
+
+&lt;script&gt;
+var weakRefTest = {
+  list: [],
+  add() {
+    const o = {d: new Date()}
+    const r = new WeakRef(o)
+    this.list.push(r)
+    this.check()
+  },
+  check() {
+    const l = this.list.map(r =&gt; r.deref())
+    alert(JSON.stringify(l))
+  }
+}
+&lt;/script&gt;
+
+&lt;h2 id=&quot;提案中的-using-語法&quot;&gt;提案中的 using 語法&lt;/h2&gt;
+&lt;p&gt;跟據 &lt;a href=&quot;https://chat.sylee.dev/2023/07/05/%E7%B6%B2%E8%B7%AF%E9%BB%91%E6%89%8B%E7%9A%84%E5%91%A2%E5%96%83-33&quot;&gt;網路黑手的呢喃 #33&lt;/a&gt; ，這功能有參考了 go 的 defer，
+會讓某個 statement 延到離開 block 時再執行，
+相較 python 的 with，則是不限定要在 block 開頭就綁定。
+但缺點是要使用 using 就得把返回值多包一層物件，並指定 dispose symbol 屬性。
+而且要讓變數所在的 scope 會結束，
+簡單的作法就是簡單包一層 block。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;import { open } from &quot;node:fs/promises&quot;;
+
+const getFileHandle = async (path: string) =&amp;gt; {
+    const fileHandler = await open(path, &quot;r&quot;);
+
+    return {
+        fileHandler,
+        [Symbol.asyncDispose]: async () =&amp;gt; {
+            await fileHandler.close();
+        },
+    }
+};
+
+// main
+{
+    await using file = getFileHandle(&quot;test_file.txt&quot;);
+}
+// That&apos;s it! I/O will disposed automatically!
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;根據 &lt;a href=&quot;https://www.totaltypescript.com/typescript-5-2-new-keyword-using&quot;&gt;TypeScript 5.2&apos;s New Keyword: &apos;using&apos; | Total TypeScript&lt;/a&gt; 這篇，
+也能搭配解構賦值，所以使用的時候不太影響，只是函數裡還是要多包一層。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-typescript&quot;&gt;{
+  await using {filehandle} = getFileHandle(&quot;thefile.txt&quot;);
+  // Do stuff with filehandle
+} // Automatically disposed!
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果宣告了多個 using，到時候是會反向 dispose，
+最晚宣告的最先 dispose。
+&lt;a href=&quot;https://github.com/tc39/proposal-explicit-resource-management#user-content-await-using-in-for-of-and-for-await-of-statements&quot;&gt;ecmascript 的 github 提案裡還有和 for 迴圈的組合用法&lt;/a&gt;，
+處理了很多奇怪的情況。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/line-chrome-app-message-dump.html</id>
 <title>line chrome app 版匯出聊天訊息紀錄</title>
 <published>2023-05-27T13:21:16.776Z</published>
@@ -3537,232 +3740,7 @@ output:after {
 <category term="email"/>
 <category term="funny"/>
 <category term="linux"/>
-<content type="html">&lt;h1 id=&quot;thunderbird-91-移除-movemail-功能後無法收本機-email&quot;&gt;thunderbird 91 移除 movemail 功能後無法收本機 email&lt;/h1&gt;
-&lt;p&gt;一陣子沒收到 at 或 crontab 的執行結果的 email，
-才發現 thunderbird 不能收本機的信了，
-收件匣裡的 localhost 消失了。
-查了一下，發現這功能叫 movemail，在 91 版被移除了。
-目前想到的解法是用 &lt;code&gt;$HOME/.forward&lt;/code&gt; 把信直接存到
-&lt;code&gt;~/.thunderbird/abcdefgh.default/Mail/Local Folders/Inbox&lt;/code&gt; ，
-再加上每次刪信後都要 &lt;em&gt;壓實重整&lt;/em&gt; 郵件夾，
-暫時是能擋著用。&lt;/p&gt;
-&lt;h2 id=&quot;movemail-的消失&quot;&gt;movemail 的消失&lt;/h2&gt;
-&lt;p&gt;linux 上如果裝了 crontab 或 at，
-大機率會裝一個簡單的 mail server，可以是不連網的，
-只在本機的帳號間和讓程式可以寄通知信給使用者。
-像 crontab 這種定時執行的程式，如果執行結果有輸出，
-就會把內容用 mail 寄給對應的使用者。
-或是 sudo 如果有人打錯密碼太多次也會寄信。&lt;/p&gt;
-&lt;p&gt;大概今年一月，把 debian 升到 bullseye，
-仔細回想大概是那之後就沒有收到 at 或 crontab 的信了。
-我也是隔了幾個月才開始注意這件事，
-畢竟剛升上來時就出了一些小問題，還在忙著解。
-真的發現，則是 apt 一直有更新，
-但都沒看到之前寫的 apt 更新通知腳本的信，
-仔細一檢查才發現原本代表本機的帳號不見了。
-想重開一個，結果建立帳號的介面裡也有建立本機信箱的選項了。&lt;/p&gt;
-&lt;p&gt;大概猜到是 thunderbird 更新拿掉功能，
-就去翻 &lt;a href=&quot;https://www.thunderbird.net/en-US/thunderbird/91.0/releasenotes/&quot;&gt;thunderbird 91 release note&lt;/a&gt; ，
-只看到一個好像有點像的功能移除：
-&lt;em&gt;CHANGED Movemail support removed&lt;/em&gt; 。
-&lt;a href=&quot;https://bugzilla.mozilla.org/show_bug.cgi?id=1625741&quot;&gt;找到 bugzilla 上對應的 movemail 討論&lt;/a&gt; ，
-才知道這東西就是用來收本機郵件的功能。&lt;/p&gt;
-&lt;h2 id=&quot;土砲補救辦法&quot;&gt;土砲補救辦法&lt;/h2&gt;
-&lt;p&gt;thunderbird 的郵件格式現在是 mbox 單一檔案，
-加上同名的附檔名為 msf 的檔案來記錄對每篇郵件的操作。
-所以事實上 unix 裡寄給使用者信，
-位在 &lt;code&gt;/var/mai/$USER&lt;/code&gt; 的 mbox 檔是可以直接給 thunderbird 讀的。
-只要把 mbox 檔放進 &lt;code&gt;~/.thunderbird/*.default/Mail/Local Folders/&lt;/code&gt; 裡，
-thunderbird 就會顯示該 mbox 為郵件資料夾。&lt;/p&gt;
-&lt;p&gt;這裡有二個作法，一是直接 ln 把 &lt;code&gt;/var/mail&lt;/code&gt; 裡的信箱，
-設成 thunderbird 裡的連結，或是反過來。
-另一個是用 unix 下慣用的 &lt;code&gt;$HOME/.forward&lt;/code&gt; ，
-可以讓有來信時，自動存到某一檔案、
-轉寄給其它 email 地址、用管道傳送給另一支程式。&lt;/p&gt;
-&lt;p&gt;只要把 forward 內容一行用 &lt;code&gt;/&lt;/code&gt; 開頭，
-即會視為路徑，並把信件存到該檔案中。
-像直接指定 &lt;code&gt;/home/abcdefgh/.thunderbird/ijklmnop.default/Mail/Local Folders&lt;/code&gt; 
-即可。&lt;/p&gt;
-&lt;p&gt;但這樣有一個問題，如果 mbox 在 thunderbird 外有修改過，
-thunderbird 建立的 msf 內容就會無法和 mbox 對應，
-thunderbird 就會依據現有的 mbox 建立 msf 檔案。
-例如在 thunderbird 中刪除郵件時，
-其實不會真的把郵件從 mbox 裡刪除，只會在 msf 中標記該郵件為已刪除，
-所以 mbox 裡還是找得到那篇郵件。
-當 thunderbird 重建 msf 時，
-之前移除或移動到其它資料夾的郵件就又會出現。&lt;/p&gt;
-&lt;p&gt;要防止此一情況，就得讓 thunderbird 真正把郵件從 mbox 裡刪除。
-thunderbird 在側邊欄的資料夾中按右鍵，
-會有個壓實重整的選項，可用來重整 mbox 檔案，
-把在 msf 中記錄為刪除的郵件從 mbox 中真正刪除。
-所以只要在刪除郵件後，使用壓實重整的功能，將郵件從 mbox 中刪除，
-未來重建 msf 時就不會有已刪除的郵件再出現的問題了。&lt;/p&gt;
-&lt;h3 id=&quot;solution-in-shell-script&quot;&gt;solution in shell script&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;echo $HOME/.thunderbird/*.default/Mail/&apos;Local Folders&apos;/Inbox &amp;gt; $HOME/.forward
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Moreover, everytime you delete/move mail in &lt;code&gt;Local Folders/Inbox&lt;/code&gt;,
-click &lt;code&gt;Compact&lt;/code&gt; in the context menu on the Inbox.&lt;/p&gt;
-&lt;h2 id=&quot;移除-movemail-的討論&quot;&gt;移除 movemail 的討論&lt;/h2&gt;
-&lt;p&gt;功能移除的起因也很有趣，bugzilla 上有人發現某一版本，
-建立 movemail 帳號的選項被移除了。（但 movemail 本身沒有被移除。）
-開發者發現這個 bug 出現好幾個月了，但完全沒有人來抱怨，
-於是他們認定這功能沒人用了，所以決定移除。&lt;/p&gt;
-&lt;p&gt;實際上，多數使用者如 debian user 是使用穩定版本，
-不會看到開發中的 movemail 壞一半的版本。
-所以他們經歷的，就是上一版 78 裡 movemail 是好的，
-然後下一版 91 就被移除了。&lt;/p&gt;
-&lt;p&gt;當然，從開發者的角度和實際使用人數來看，
-linux 使用者約 180000，佔了全體 thunderbird 使用者的 1%，
-而其中只有 2101 個使用了 movemail 功能，
-也只佔了 linux 使用者的 1%。
-當然，這裡可能要考慮有多少人沒開 telemetry，
-所以沒有出現在統計數字裡。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://blog.gslin.org/archives/2021/09/01/10300/&quot;&gt;gslin 之前有轉貼 hacker news 上一篇文章&lt;/a&gt; ，
-大概就是進階使用者都會把隱私加強和防追蹤功能打開，
-所以科技類網站就會有一大部份使用者的行為用 google analysis 抓不到，
-讓 ga 的分析失真。&lt;/p&gt;
-&lt;p&gt;套到 telemetry 上也是類似的效果。
-現在很多軟體都會統計使用者使用各功能的次數，
-然後回報給開發者，這樣的監控統計功能就叫 telemetry。
-但自由軟體使用者，有些不喜歡自己的行為被回報，
-所以軟體中多半也會提供關閉 telemetry 的功能。&lt;/p&gt;
-&lt;p&gt;總之，這功能被拔掉後，就引來了一堆憤怒的使用者到 bugzilla 留言，
-在移除了 movemail 的穩定版在六個月後釋出後。
-&lt;a href=&quot;https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=993526&quot;&gt;同時也有幾個人在 debian bug 上抱怨&lt;/a&gt; ，
-雖然從 thunderbird 開發者提出的 telemetry 資料來看，
-其實人沒有很多。&lt;/p&gt;
-&lt;h2 id=&quot;thunderbird-預裝的原因&quot;&gt;thunderbird 預裝的原因&lt;/h2&gt;
-&lt;p&gt;thunderbird 會預裝，除了預設使用者需要有一個 email 軟體外，
-還在收系統通知信的意義。
-unix 系統中有些排程的程式，像前文提到的 at 和 crontab，
-或是更多其它有的沒的，都會以寄 email 的方式通知使用者訊息。
-所以一些系統也會預裝好本機用的 mail server。
-而使用者要看這些信，就得用 email 程式，
-現在的時代不太可能叫使用者用那個文字介面的 mailutils，
-於是就是預裝的 thunderbird 了。&lt;/p&gt;
-&lt;p&gt;如果 thunderbird 不支援讀本機的 email 了，
-那預裝 thunderbird 以讓使用者能收本機 email 的使用場景就不存在了。
-扣掉這個，真得有那麼多人需要 email 程式來收信嗎？
-現在主流已經是 web mail 了。
-那許多發行版，可能要重新考慮，
-安裝一個不能讀本機 mail 的 mua 的必要性。&lt;/p&gt;
-&lt;h2 id=&quot;沒事整天砍功能的-ui-設計師&quot;&gt;沒事整天砍功能的 ui 設計師&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&quot;https://blog.gslin.org/archives/2022/02/26/10567/i-have-no-capslock-and-i-must-scream/&quot;&gt;之前 gslin 分享了一篇諷刺 ui 設計師根據 telemetry 統計數據砍功能的文章&lt;/a&gt;：
-&lt;a href=&quot;https://memex.marginalia.nu/log/48-i-have-no-capslock.gmi&quot;&gt;I have no capslock and I must scream&lt;/a&gt; 。
-大意就是說 ui 設計師從 telemetry 的報表，
-觀察哪些功能是很少使用的，由此可以精簡軟體的功能。&lt;/p&gt;
-&lt;p&gt;最近 mozilla 也砍了 firefox 一個修改編碼的功能。
-以前可以在 &lt;em&gt;選單列&lt;/em&gt; &amp;gt; &lt;em&gt;檢視&lt;/em&gt; &amp;gt; &lt;em&gt;編碼&lt;/em&gt; 來選擇網頁的編碼，
-現在則是該功能從可選擇的編碼選單，
-簡化成單一個 &lt;em&gt;修複文字編碼&lt;/em&gt; 按鈕。&lt;/p&gt;
-&lt;p&gt;在 bugzilla 上這項 issue 上，
-mozilla 的設計師是給出這功能很少使用的理由，
-而且會有安全疑慮（？）
-可能某些場合會造成腳本執行不正確之類的？&lt;/p&gt;
-&lt;p&gt;很多使用者攻擊，這些設計師整天閒著沒事，
-就四處砍現有功能，宣稱可以讓界面更人性化，
-也為自己創造履歷與 KPI，最後就留下沒人用的軟體拍拍屁股走人。
-把功能和界面改的亂七八糟，然後再問為什麼沒人用，
-又把原因推給舊界面不佳。&lt;/p&gt;
-&lt;h2 id=&quot;瀏覽器應該要容忍編碼不正確嗎&quot;&gt;瀏覽器應該要容忍編碼不正確嗎&lt;/h2&gt;
-&lt;p&gt;在 issue 上也是出現了不少反對者，但 mozilla 還是幹了。
-所以，現在網頁的編碼壞掉，就沒機會自己修改。
-mozilla 給出的說法是，這是網頁開發者的責任，
-編碼設定錯誤的網頁本來就不該正常顯示。
-而且瀏覽器應避免 &lt;a href=&quot;http://www.teagle.top/index.php/archives/192/&quot;&gt;MIME 類型嗅探&lt;/a&gt; ，
-而應該使用 http header 給出的類型，以防止意外執行到惡意腳本。
-這樣來說，修改文字的編碼好像也不一定是 &lt;em&gt;正常使用&lt;/em&gt; 時會用到的功能，
-所以沒有不會很奇怪，chromium 也是已經拔掉編碼修複的功能。&lt;/p&gt;
-&lt;p&gt;從一個角度來看，這些功能是用來 &lt;em&gt;相容&lt;/em&gt; 舊的不標準的網頁。
-隨著 ie 限定網頁的逐步退出舞台，這些不標準的功能，
-像各種專屬 javascript 函數，也早就逐漸移除。
-所以修改編碼，也算是一種相容性的功能，嗎？&lt;/p&gt;
-&lt;p&gt;不過話說回來，現在的問題是要拔掉現有的功能，
-和本來就沒有這項功能是不一樣的。
-既然沒有問題，為什麼要拔掉呢？
-&lt;em&gt;If it ain&apos;t broke, don&apos;t fix it.&lt;/em&gt;&lt;/p&gt;
-&lt;h2 id=&quot;永遠不要背叛核心用戶&quot;&gt;永遠不要背叛核心用戶&lt;/h2&gt;
-&lt;p&gt;這裡引用一篇中國的文章 &lt;a href=&quot;https://necromanov.wordpress.com/2019/03/10/%E8%BE%90%E5%B0%84%E6%8C%BD%E6%AD%8C%EF%BC%9A%E6%B0%B8%E8%BF%9C%E4%B8%8D%E8%A6%81%E8%83%8C%E5%8F%9B%E4%BD%A0%E7%9A%84%E6%A0%B8%E5%BF%83%E7%94%A8%E6%88%B7/&quot;&gt;輻射挽歌：永遠不要背叛你的核心用戶&lt;/a&gt; ，
-文中提了異塵餘生 76 的失敗，
-來自於錯誤的數據分析，捨棄了最初成功的原因。
-異塵餘生團隊，發現隨著每一代中，
-加入更多 FPS 元素減少 RPG 與劇情元素，遊戲就賣的越好，
-所以 76 成了幾乎沒有 RPG 的一代，最終成了糞作。&lt;/p&gt;
-&lt;p&gt;因為倖存者偏差。
-團隊只看到 FPS 增加 RPG 減少，遊戲就越賣，
-卻沒看到市場上同期遊戲中，滿滿都是 FPS，
-成功的只有那幾款，其它滿滿都是失敗的。
-異塵餘生成功的原因，是因為他的 RPG 元素，
-讓他在 FPS 遊戲中能脫穎而出。
-FPS 是吸引新玩家的元素，但異塵餘生優秀的本質是 RPG 元素。
-所以當 76 整部遊戲幾乎只剩時下最流行的 FPS 類型 PUBG 時，
-她成了一款平凡無奇的作品，不再是異塵餘生。&lt;/p&gt;
-&lt;p&gt;核心用戶是遊戲，最硬核、精通所有功能、
-最 hack、最保守、最難取悅的一群人。
-對異塵餘生來說，是熱愛非線性敘事、大量分支劇情。
-相對於遊戲，什麼是 firefox 的核心用戶在乎的？
-是隱私？是開源？是符合 html 標準？
-我認為很大一個群體是附加元件，
-所以 &lt;a href=&quot;https://yoric.github.io/post/why-did-mozilla-remove-xul-addons/&quot;&gt;firefox 57 捨棄 xul&lt;/a&gt;，就有大量的使用者發出不滿。&lt;/p&gt;
-&lt;p&gt;附加元件的繁盛，背後的價值是駭客精神，
-鼓勵動手修改瀏覽器的功能；更根本的理念，
-是 developer first，從開發者角度思考。
-優質的軟體，成功的關鍵多是 developer first。
-（對 windows 不是在說你，windows 是成功的軟體，但不是優質的軟體。）
-apple 在賈伯斯回歸後推出的 Mac OSX，就是一個優質的系統，
-以更好開發體驗的 unix freebsd 為基礎。&lt;/p&gt;
-&lt;p&gt;開發者本位可能做不出大賣的軟體，
-但開發者知道使用者需要什麼，先有了最核心的開發者，
-才會有核心外圍的高階使用者，才會有一般使用者。
-開發者是社群的骨幹，而健康的社群是軟體發展不可或缺的。&lt;/p&gt;
-&lt;p&gt;台灣知名駭客唐鳳，曾提出 &lt;a href=&quot;https://www.slideshare.net/autang/ofun-optimizing-for-fun&quot;&gt;optimizing for fun&lt;/a&gt; &lt;code&gt;-Ofun&lt;/code&gt; 的概念，
-認為開源專案經營，最重要的目標應該是要提升讓參與者的體驗，
-讓開發者快樂、使用者也快樂。&lt;/p&gt;
-&lt;h2 id=&quot;結論&quot;&gt;結論&lt;/h2&gt;
-&lt;p&gt;對 firefox 而言，許多使用者看重的是豐富的附加功能、高度的可客制化，
-相對 chrome 從一開始就著重於速度，核心客群本來就有區別。
-當 firefox 57 放棄了長久以來的擴充元件系統，
-放下了包衭也放棄了客群，逐漸向 chrome 的高效能和有限的客制化靠攏，
-那只剩下和 chrome 無異的產品。
-背離了核心客群所追求的高度可客制化，
-而追求大眾所需要的效能，這樣的軟體還能成功嗎？&lt;/p&gt;
-&lt;p&gt;回到 thunderbird 移除 movemail 的問題。
-thunderbird 作為現今少數功能豐富完整的圖形介面 email 客戶端，
-也有其長久的歷史發展。
-movemail 的使用者雖然不是多數，但絕對不是外圍使用者；
-movemail 的用例只會在 unix 系統上發生，
-而 unix 系統使用者，應該算核心使用者了吧？
-何況，這些使用者，很可能是從 movemail
-整合進 thunderbird 時就開始使用，
-絕對可以算是長期使用者了。
-（雖然我不是。）&lt;/p&gt;
-&lt;p&gt;軟體界有一句話：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Programming is like sex.
-One mistake and you have to support it for the rest of your life.&lt;/p&gt;
-&lt;p&gt;-- Michael Sinz&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.reddit.com/r/learnprogramming/comments/1v74h4&quot;&gt;https://www.reddit.com/r/learnprogramming/comments/1v74h4&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;只要你加入了一個新功能，很可能就必須終生支持他；
-就像性，一不小心犯錯，就要賠上一輩子。
-套用在 thunderbird movemail 這個功能也類似，
-可能無意間加入的小功能，看起來沒什麼人在用，
-結果移除還是接到這麼多反彈。&lt;/p&gt;
-&lt;h2 id=&quot;更新：PM-收回決策&quot;&gt;更新：PM 收回決策&lt;/h2&gt;
-&lt;p&gt;在 2022-07-08 時，thunderbird pm &lt;u&gt;Ryan Lee Sipes&lt;/u&gt; 
-&lt;a href=&quot;https://bugzilla.mozilla.org/show_bug.cgi?id=1625741#c87&quot;&gt;出來道歉&lt;/a&gt; 說會把這功能加回去了。
-從 2020-03-20 bug 回報，2021-02-22 這功能移除，
-2021-06-22 有使用者發現這個功能被移除，
-開始在 thread 下面吵的一年半後，pm 出來道歉了，並決定把這功能加回去。
-我也不知道為什麼，總之大家可以回家啦！
-雖然不知道什麼時候才會正式加回去，總之為了慶祝，
-決定開始贊助 thunderbird 的開發。&lt;/p&gt;
-&lt;p&gt;有個道理是這樣說，要付錢的才是客戶，
-才有資格對產品指指點點。
-如果身為重度使用者，卻對產品開發沒有話語權，那也是蠻難過的。
-那至少可以用微薄的贊助，告訴 mozilla 這樣是對的，我們支持你。
-如果哪天 mozilla 又做蠢事，也可以用收回贊助的方式抗議。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/courage-mean-in-digimon.html#我沒有興趣，而你沒有才華</id>
 <title>所謂的勇氣就是</title>

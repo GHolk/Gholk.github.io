@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2023-07-09T06:23:17.389Z</updated>
+  <updated>2023-07-09T11:16:09.761Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,219 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
   <entry>
+<id>http://gholk.github.io/javascript-using-auto-close.html#using-是來算-c#-不是-go</id>
+<title>javascript 中模仿 python 的 with 自動關閉功能</title>
+<published>2023-07-08T16:16:06.846Z</published>
+<updated>2023-07-09T11:16:09.733Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/javascript-using-auto-close.html#using-是來算-c#-不是-go"/>
+<summary type="html">&lt;pre class=&quot;diff&quot;&gt;@@ -3,7 +3,8 @@ python 中有一個 with 關鍵字，
+ 可以實現離開 scope 時自動關檔或執行某些清理操作的功能。
+ js 中可以用 generator 實作出類似的功能，只是會很不直覺。
+ 也可以用 callback 實作，但要額外處理 async 的問題。
+-ecmascript 委員會也有收到一個取材自 go 語言的 using 的提案，
++ecmascript 委員會也有收到一個取材自 &amp;lt;del&amp;gt;go&amp;lt;/del&amp;gt;
++&amp;lt;ins&amp;gt;c#&amp;lt;/ins&amp;gt; 的 using 的提案，
+ 雖然說 js 已經有類似的 finalizer 功能，
+ 但是依靠垃圾回收觸發，js 的垃圾回收器又不是離開 scope 會必定觸發的。
+ 
+@@ -189,7 +190,8 @@ var weakRefTest = {
+ 
+ ## 提案中的 using 語法
+ 跟據 [網路黑手的呢喃 #33] ，這功能有參考了 go 的 defer，
+-會讓某個 statement 延到離開 block 時再執行，&lt;/pre&gt;</summary>
+<category term="javascript"/>
+<category term="generator"/>
+<category term="async"/>
+<category term="with"/>
+<content type="html">&lt;h1 id=&quot;javascript-中模仿-python-的-with-自動關閉功能&quot;&gt;javascript 中模仿 python 的 with 自動關閉功能&lt;/h1&gt;
+&lt;p&gt;python 中有一個 with 關鍵字，
+可以實現離開 scope 時自動關檔或執行某些清理操作的功能。
+js 中可以用 generator 實作出類似的功能，只是會很不直覺。
+也可以用 callback 實作，但要額外處理 async 的問題。
+ecmascript 委員會也有收到一個取材自 &lt;del&gt;go&lt;/del&gt;
+&lt;ins&gt;c#&lt;/ins&gt; 的 using 的提案，
+雖然說 js 已經有類似的 finalizer 功能，
+但是依靠垃圾回收觸發，js 的垃圾回收器又不是離開 scope 會必定觸發的。&lt;/p&gt;
+&lt;p&gt;這裡講的不是 js 的 with，js 的 with 是像 basic 的，
+純用來簡寫屬性名稱用的。&lt;/p&gt;
+&lt;h2 id=&quot;自動清理機制&quot;&gt;自動清理機制&lt;/h2&gt;
+&lt;p&gt;以前寫系統級的語言，像 c perl python 都會有開檔、關檔的行為，
+教學都會提醒檔案沒有要用要關掉，
+因為程序的 &lt;abbr title=&quot;file handle&quot;&gt;fd&lt;/abbr&gt; 是有限的，也會鎖到其他程序。
+這時候就會有像這樣的寫法：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;f = open(&apos;file.txt&apos;)
+do_something(f)
+f.close()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;因為要手動呼叫 close 很麻煩，又可能會忘記，
+python 就有 with 的語法，
+可以在離開 with 的 block 時自動呼叫 close 或定義好的函數。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;with open(&apos;file.txt&apos;) as f
+    do_something(f)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;js-類似的使用情境&quot;&gt;js 類似的使用情境&lt;/h2&gt;
+&lt;p&gt;js 不太有這類需求，瀏覽器端幾乎沒有這種需要關掉的東西，
+type array 或 blob 都是跟著 gc 自動回收的。
+頂多 URL.createObjectURL、URL.revokeObjectURL 有點像，
+但這種通常要等使用者做完事才能回收，也不太適合。
+indexeddb 有些連線可以手動關閉，但也不是絕對必要。&lt;/p&gt;
+&lt;p&gt;node.js 直接跑在作業系統裡有機會接觸到 fd，
+但 js 設計上還是比較適合把整個檔案讀進來成字串再處理，
+所以也不太常用。&lt;/p&gt;
+&lt;h2 id=&quot;js-中用-generator-實現&quot;&gt;js 中用 generator 實現&lt;/h2&gt;
+&lt;p&gt;總之 js 越長越大，總會有人碰到類似的需求。
+以既有的 js 語法，其實可以用 generator 達成類似的功能：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;function *openg(name) {
+    const file = open(name)
+    yield file
+    file.close()
+}
+for (const f of openg(&apos;file.txt&apos;)) {
+    do_something(f)
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;generator 函數碰到 yield 會暫停並把值丟出去，
+等到外面呼叫 next 才會繼續執行。
+而 generator 函數的返回值是可以當作 array 遍歷的，
+就相當於把每次 yield 丟出的值放指派給疊代的變數，
+直到 generator 函數返回。&lt;/p&gt;
+&lt;p&gt;所以這裡 yield 後會執行 for 迴圈的本體一次，
+然後 block 結束回到 generator 函數，
+就 close 了，之後 generator 函數就返回了，所以也沒有下次。&lt;/p&gt;
+&lt;p&gt;只是用 for of 迴圈來做像開關檔的清理行為，實在語義上很不合。
+&lt;a href=&quot;implement-async-by-generator.html&quot;&gt;其實 async await 函數也只是 generator 函數和 promise 組合的語法糖&lt;/a&gt; ，
+只是可能 async 實在太常用了，而且用 yield 的語意不合沒那麼好看，
+所以還是另外加了 async await 取代 yield。&lt;/p&gt;
+&lt;h2 id=&quot;js-callback-實作&quot;&gt;js callback 實作&lt;/h2&gt;
+&lt;p&gt;另一種作法是用 callback 實作，執行完傳入的函數就關檔。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;function opencb(name, fn) {
+    const f = open(name)
+    fn(f)
+    f.close()
+}
+opencb(&apos;file.txt&apos;, f =&amp;gt; do_something(f))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;但 callback，傳入的如果是非同步函數，就會壞掉。
+這時就得把所有東西都改成 async：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;async function opencb(name, fn) {
+    const f = open(name)
+    await fn(f)
+    f.close()
+}
+opencb(&apos;file.txt&apos;, async f =&amp;gt; {
+    await do1(f)
+    await do2(f)
+})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;當然也可以取巧一點，在 opencb 中判斷回傳值是不是 promise，
+但總之還是很醜。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;async function opencb(name, fn) {
+    const f = open(name)
+    const ret = fn(f)
+    if (ret &amp;amp;&amp;amp; ret.then) await ret
+    f.close()
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;for-迴圈遍歷與用-map-callback-遍歷的差異&quot;&gt;for 迴圈遍歷與用 map callback 遍歷的差異&lt;/h3&gt;
+&lt;p&gt;這裡就會出現 callback 的短處，也就是本質上他另起了一個函數，
+該函數同步與否與現在的作用域同步與否無關；
+而如果是用既有的語言結構，for while 之類的，
+在語句塊裡因為還在同一個函數內，要 yield 要 await 都沒問題。
+（這裡應該可以另外寫一篇文章探討這個問題。）&lt;/p&gt;
+&lt;p&gt;用 for 迴圈很簡單就能處理 await：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;async function do_async_loop(l) {
+    for (const x of l) {
+        await do_async(x)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果改用 forEach 之類的 callback 寫法，就會很麻煩：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;async function do_async_cb(l) {
+    // 錯，for each callback 要宣告成 async 才能用 await
+    l.forEach(x =&amp;gt; await do_async(x))
+
+    // 還是錯，forEach 不會等 async 函數
+    l.forEach(async x =&amp;gt; await do_async(x))
+
+    // 半對半錯，map 不會等前一個 do_async 執行完，所以會全部呼叫完再一起等
+    await Promise.all(l.map(async x =&amp;gt; await do_async(x)))
+
+    // 有沒有很難寫
+    await l.reduce(async (prev, x) =&amp;gt; {
+        await prev // 確保上一個 async 執行完
+        await do_async(x)
+    }, Promise.resolve(true))
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;在全都是同步執行時 foreach 或 map 配上 callback，
+可以讓程式更簡潔好看，
+但如果碰到非同步就沒輒了，不切回 loop 就會寫得很醜。&lt;/p&gt;
+&lt;h2 id=&quot;finalizer-實作與-gc-問題&quot;&gt;finalizer 實作與 gc 問題&lt;/h2&gt;
+&lt;p&gt;js 中還有 &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/FinalizationRegistry&quot;&gt;finalizer&lt;/a&gt; 可以達成類似的效果，但實際上會不太一樣。
+js 中離開 scope 不會馬上觸發 gc，用 &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakRef&quot;&gt;WeakRef&lt;/a&gt; 試就知道。
+所以觸發 gc 的時機很難掌控。
+而且某些情況要被 close 的物件，實際上是在某處被引用的，
+所以根本不會被 gc。&lt;/p&gt;
+&lt;p&gt;可以玩玩看下面這個測試：&lt;/p&gt;
+&lt;button onclick=&quot;weakRefTest.add()&quot;&gt;add&lt;/button&gt;
+&lt;button onclick=&quot;weakRefTest.check()&quot;&gt;check&lt;/button&gt;
+
+&lt;script&gt;
+var weakRefTest = {
+  list: [],
+  add() {
+    const o = {d: new Date()}
+    const r = new WeakRef(o)
+    this.list.push(r)
+    this.check()
+  },
+  check() {
+    const l = this.list.map(r =&gt; r.deref())
+    alert(JSON.stringify(l))
+  }
+}
+&lt;/script&gt;
+
+&lt;h2 id=&quot;提案中的-using-語法&quot;&gt;提案中的 using 語法&lt;/h2&gt;
+&lt;p&gt;跟據 &lt;a href=&quot;https://chat.sylee.dev/2023/07/05/%E7%B6%B2%E8%B7%AF%E9%BB%91%E6%89%8B%E7%9A%84%E5%91%A2%E5%96%83-33&quot;&gt;網路黑手的呢喃 #33&lt;/a&gt; ，這功能有參考了 go 的 defer，
+會讓某個 statement 延到離開 block 時再執行。
+&lt;ins&gt;實際比較像 c# using： &lt;a href=&quot;https://learn.microsoft.com/zh-tw/dotnet/csharp/language-reference/statements/using&quot;&gt;using 陳述式 - 確保正確使用可處置的物件&lt;/a&gt; 。&lt;/ins&gt;
+相較 python 的 with，則是不限定要在 block 開頭就綁定。
+但缺點是要使用 using 就得把返回值多包一層物件，並指定 dispose symbol 屬性。
+而且要讓變數所在的 scope 會結束，
+簡單的作法就是簡單包一層 block。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;import { open } from &quot;node:fs/promises&quot;;
+
+const getFileHandle = async (path: string) =&amp;gt; {
+    const fileHandler = await open(path, &quot;r&quot;);
+
+    return {
+        fileHandler,
+        [Symbol.asyncDispose]: async () =&amp;gt; {
+            await fileHandler.close();
+        },
+    }
+};
+
+// main
+{
+    await using file = getFileHandle(&quot;test_file.txt&quot;);
+}
+// That&apos;s it! I/O will disposed automatically!
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;根據 &lt;a href=&quot;https://www.totaltypescript.com/typescript-5-2-new-keyword-using&quot;&gt;TypeScript 5.2&apos;s New Keyword: &apos;using&apos; | Total TypeScript&lt;/a&gt; 這篇，
+也能搭配解構賦值，所以使用的時候不太影響，只是函數裡還是要多包一層。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-typescript&quot;&gt;{
+  await using {filehandle} = getFileHandle(&quot;thefile.txt&quot;);
+  // Do stuff with filehandle
+} // Automatically disposed!
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果宣告了多個 using，到時候是會反向 dispose，
+最晚宣告的最先 dispose。
+&lt;a href=&quot;https://github.com/tc39/proposal-explicit-resource-management#user-content-await-using-in-for-of-and-for-await-of-statements&quot;&gt;ecmascript 的 github 提案裡還有和 for 迴圈的組合用法&lt;/a&gt;，
+處理了很多奇怪的情況。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/javascript-using-auto-close.html#將-using-提案改為取材自-go</id>
 <title>javascript 中模仿 python 的 with 自動關閉功能</title>
 <published>2023-07-08T16:16:06.846Z</published>
@@ -3458,173 +3671,7 @@ https://i.imgur.com/iwyiF9L.jpg
 <category term="firefox"/>
 <category term="addon"/>
 <category term="javascript"/>
-<content type="html">&lt;h1 id=&quot;Tridactyl-初學使用心得&quot;&gt;Tridactyl 初學使用心得&lt;/h1&gt;
-&lt;p&gt;瀏覽器擴充元件中一直有一系列套件，
-是可以完全用鍵盤控制一般網頁瀏覽的，像 vimfx vimium tridactyl。
-最近用了 &lt;a href=&quot;https://tridactyl.xyz/&quot;&gt;tridactyl&lt;/a&gt; ，真是一個非常 hack 的套件，
-可以客制化的地方超多，但也很多功能幾乎是半成品。
-如果是會寫 js 的進階使用者，強烈推薦 tridactyl，
-如果用的滿意，也希望可以幫忙貢獻或捐款。&lt;/p&gt;
-&lt;h2 id=&quot;從-vimium-的功能增強說起&quot;&gt;從 vimium 的功能增強說起&lt;/h2&gt;
-&lt;p&gt;一直以來都會用像 &lt;a href=&quot;https://github.com/akhodakivskiy/VimFx&quot;&gt;vimfx&lt;/a&gt; 之類的擴充套件，
-就能用鍵盤控制瀏覽器，不用用到滑鼠就能瀏覽網頁。
-這類套件大多是模仿 vim 的按鍵操作，用 jk 來上下滾動網頁，
-用 f 來點擊連結或按鈕，其它就比較不一定；
-像 JK 來切換分頁，HL 上一頁下一頁。&lt;/p&gt;
-&lt;p&gt;我是用 firefox。
-原本一直用功能比 vimfx 稍強的[vimium] firefox 版，[vimium-ff]
-後來無意間裝了 vimium-c，發現功能遠勝 vimium。
-像多了快捷鍵在文字框輸入時也能生效，
-主要用途是像 chromium 原本在輸入時要按 Esc 來離開輸入模式，
-就像 vim 那樣。
-問題是 Esc 很遠很難按，一般 vim user 會挷到 &lt;code&gt;C-c&lt;/code&gt; 或 &lt;code&gt;jk&lt;/code&gt; 。&lt;/p&gt;
-&lt;p&gt;但後來仔細看了 vimium-c，發現這東西是某個中國人做的，
-而且還 &lt;a href=&quot;https://github.com/gdh1995/vimium-c/blob/9cd705d/README-zh.md#%E9%92%88%E5%AF%B9%E9%80%82%E7%94%A8%E5%8C%BA%E5%9F%9F%E7%9A%84%E5%A3%B0%E6%98%8E&quot;&gt;在 readme 特別宣告&lt;/a&gt; ，
-不贊成 chrome 或 edge 商店中， 將台灣與中國並列的作法。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;h3 id=&quot;[针对适用区域的声明][taiwan-declare]&quot;&gt;&lt;a href=&quot;https://github.com/gdh1995/vimium-c/blob/9cd705d/README-zh.md#%E9%92%88%E5%AF%B9%E9%80%82%E7%94%A8%E5%8C%BA%E5%9F%9F%E7%9A%84%E5%A3%B0%E6%98%8E&quot;&gt;针对适用区域的声明&lt;/a&gt;&lt;/h3&gt;
-&lt;p&gt;Vimium C（和 gdh1995 发布的其他扩展）在被发布到“Microsoft Edge 加载项”和“Chrome
-网上应用店”等商店上时，均已向 所有地区 的所有人公开。
-但这个行为只是为了让这些插件更容易使用，并不代表或者暗示作者 gdh1995 “同意或者不反对”“台湾”一词可以同“中国”并列。
-虽然并列显示这一现状的确错误地出现在了这些商店的（开发者）页面中（于 2021 年 6 月 3 日确认）。&lt;/p&gt;
-&lt;p&gt;根据《中华人民共和国宪法》和国际共识，台湾是中华人民共和国的神圣领土（不可分割）的一部分。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;既然對方都那麼強烈反對了，只好另尋它款擴充，
-就找到了 tridactyl。&lt;/p&gt;
-&lt;h2 id=&quot;tridactyl-新手適應&quot;&gt;tridactyl 新手適應&lt;/h2&gt;
-&lt;p&gt;一開始用 tridactyl 不太適應，他的鍵綁定和 vimium 系不太一樣，
-畢竟 vimium-ff 和 vimium-c 都算 vimium 衍生的。
-之前從 vimfx 切到 vimium 時也有調過。
-總之我就都重新綁定成我習慣的。&lt;/p&gt;
-&lt;h3 id=&quot;單手操作&quot;&gt;單手操作&lt;/h3&gt;
-&lt;p&gt;有一陣子發現我會幾乎只用左手摸鍵盤，右手可能在摸滑鼠或拿飲料。
-所以把一些功能都綁到左側鍵盤。
-像把 f 的連結目標編號改成只有左側鍵盤的鍵，
-上下捲動功能也綁到左側的按鍵 &lt;code&gt;Dd&lt;/code&gt; 上，
-切換分頁的 JK 也綁到 bw，gi 綁到 a。
-上一頁下一頁則是綁到 &lt;code&gt;eE&lt;/code&gt; ，
-這沒什麼邏輯，就挑一個還空著的按鍵。&lt;/p&gt;
-&lt;h3 id=&quot;tridactylrc&quot;&gt;tridactylrc&lt;/h3&gt;
-&lt;p&gt;tridactyl 自己定義了一些簡單的可組合的語法，
-有點像 tcl，不過比 tcl 還不如，因為沒有 quote 跳脫功能。
-嚴格來說不算一種語言，
-只是一些指令會把傳入的參數當成多個指令組合執行，
-而某一些指令可以執行任意 js。&lt;/p&gt;
-&lt;p&gt;整體有點像 tmux.conf 的語法，
-例如 &lt;code&gt;bind j scrollline 10&lt;/code&gt; 。
-但語法上又模仿了 unix 用連字符當參數的用法，
-例如 &lt;code&gt;bind --mode=insert &amp;lt;C-b&amp;gt; text.backward_char&lt;/code&gt; 。&lt;/p&gt;
-&lt;p&gt;整體我不太看好長期發展，因為有些功能初看還不錯，
-但感覺沒考慮到深處的設計哲學。
-例如用來組合指令的 composite，
-使用管道符時會把前一個指令的結果傳給下一個，
-還有個自動等待 promise 結果的功能。
-但某些理論上應該是要回傳 promise 的指令，
-如 fillcmdline 卻沒有回傳指令輸入後完成的 promise，
-所以就要自己包成 promise。
-發展到後面就會變成縫縫補補。&lt;/p&gt;
-&lt;h2 id=&quot;任意執行-js-的能力&quot;&gt;任意執行 js 的能力&lt;/h2&gt;
-&lt;p&gt;我認為 tridactyl 最大的強項是是 &lt;code&gt;:js&lt;/code&gt; 這個命令，
-可以用來執行任意 js 程式碼，
-加上許多內部功能也有做成可呼叫的 js 函數，
-所以可以用這個命令做到非常多的事。&lt;/p&gt;
-&lt;h3 id=&quot;比附加元件更方便&quot;&gt;比附加元件更方便&lt;/h3&gt;
-&lt;p&gt;事實上，因為 tridactyl 曝露了大量的內部函數，
-也直接曝露了 WebExtension API，
-所以可以從 js 直接呼叫 webextension api，
-等於可以不用獨立做一個附加元件，就執行某些需要附加元件等級的功能。&lt;/p&gt;
-&lt;p&gt;像是可以定義一個命令 &lt;code&gt;history_clear_url&lt;/code&gt; ，
-利用 history api，把目前歷史記錄裡符合目前 url 的網頁都刪除。
-或是 &lt;code&gt;tab_list&lt;/code&gt; ，用來列出目前所有開啟的分頁的網址，
-然後可以存在 tridactyl 的內部儲存空間或存成文字檔，
-甚至用 setinterval 每幾小時記錄一次，防止 crash 時分頁記錄消失；
-這大概就是某個附加元件 tab session manager 的最基本功能。&lt;/p&gt;
-&lt;p&gt;雖然做起來會有點綁手綁腳，像要跳脫某些特殊字元，
-要找出 tridactyl 有限的事件中，
-這些命令應該要掛到什麼事件上觸發。&lt;/p&gt;
-&lt;h3 id=&quot;任意擴充命令&quot;&gt;任意擴充命令&lt;/h3&gt;
-&lt;p&gt;另一點就是，自己用 js 定義的函數和內建的命令差異不大。
-像內建有 tabpush tabqueue 命令，
-都是用來把分頁移動到另一個視窗。
-但我希望能夠移動後，自動讓該分頁取得焦點，
-所以自己定義了一個 &lt;code&gt;tabpush_and_focus&lt;/code&gt; ，
-利用 web extension 的 &lt;code&gt;tabs.onActivated&lt;/code&gt; 事件，
-抓到分頁移動後焦點移到另一分頁的準確時間點，
-準確重新聚焦到該分頁上。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;// alias tabpush_and_focus jsb ...
-void async function() {
-    const tab = await activeTab();
-    const tabId = tab.id;
-    const oldWindowId = tab.windowId;
-    fillcmdline(&quot;tabpush&quot;);
-    await new Promise(ok =&amp;gt; {
-        browser.tabs.onActivated.addListener(function leftCurrentTab(event) {
-            browser.tabs.onActivated.removeListener(leftCurrentTab);
-            ok();
-        });
-    });
-    const tabNow = await browser.tabs.get(tabId);
-    if (tabNow.windowId == oldWindowId) return;
-    browser.tabs.update(tabId, {
-        active: true
-    });
-    browser.windows.update(tabNow.windowId, {
-        focused: true
-    });
-}();
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;自動化的能力&quot;&gt;自動化的能力&lt;/h2&gt;
-&lt;p&gt;js 的能力直接讓自動化成為可能。
-例如我想要讓 gr 二個鍵，可以把目前頁面加入書籤，
-並關閉目前頁面，也完全可以做到。
-甚至是網頁等級內的自動化，
-像在 gitlab 上打開某 repository 內檔案的編輯介面，
-然後從某處把新版內容填入，並按下預覽鍵。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;// alias mktridactylrc_put tabopen_and_js -s https://gitlab.io/gholk/tridactylrc/-/edit/main/tridactylrc ...
-const $ = x =&amp;gt; document.querySelector(x);
-$(&quot;a[href=&apos;#editor&apos;]&quot;).click();
-const rc = await tri.controller.acceptExCmd(&quot;mktridactylrc_fix&quot;);
-const node = $(&quot;#editor&amp;gt;*&quot;);
-const getEditor = await tri.excmds.js(&quot;getEditor&quot;);
-const editor = getEditor(node);
-await editor.setContent(rc + &quot;\n&quot;);
-$(&quot;a[href=&apos;#preview&apos;]&quot;).click();
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;但某次更新後 gitlab 的 editor 不再暴露全域的 monaco editor 變數，
-所以上述腳本就不能運作了，此是後話。&lt;/p&gt;
-&lt;h3 id=&quot;比-GreaseMonkey-更自由&quot;&gt;比 GreaseMonkey 更自由&lt;/h3&gt;
-&lt;p&gt;綜合來看有點像 grease monkey 等的 user.js，
-但 grease monkey 提供的程式的 &lt;em&gt;進入點&lt;/em&gt; 很有限，
-只有頁面載入時執行。
-如果要定義某個按鍵時執行對應動作，
-就得自己綁定到對應的 key press，
-或是在頁面上新增按鈕，然後監聽按鈕按下的事件。&lt;/p&gt;
-&lt;p&gt;這二點都很麻煩，要避免影響到原本網頁的結構運作。
-但 tridactyl 直接幫你處理好這些事，
-只要綁到某一按鍵就就好了，
-或是甚至不用綁，寫成 ex command 就好了。&lt;/p&gt;
-&lt;p&gt;例如在 youtube 上，可以定義讓 gu 是按下 like 鍵，讓 gd 是 dislike。
-在動畫瘋上，可以定義讓 I 是顯示輸入彈幕的文字框。&lt;/p&gt;
-&lt;h3 id=&quot;其他有的沒的&quot;&gt;其他有的沒的&lt;/h3&gt;
-&lt;p&gt;其他也有很多可以獨立在其他附加元件裡做，
-但因為方便我直接做在 tridactyl 裡了。
-像 adblock 用來擋廣告的 webRequest api，
-我用來擋了巴哈的通知，防止某些重導向連結如 google 搜尋結果自追蹤用連結，
-改某些網頁的 user agent。&lt;/p&gt;
-&lt;p&gt;以下是擋掉 google 追蹤用跳轉連結的 tridactyl 命令：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;autocmd BeforeRequest https://www.google.com/url?* req =&amp;gt; { const u = new URL(req.url); return {redirectUrl: u.searchParams.get(&apos;q&apos;)} }
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;糟糕的心得&quot;&gt;糟糕的心得&lt;/h2&gt;
-&lt;p&gt;最後我想說，這其實是一篇糟糕的心得。
-我從三月開始用 tridactyl，
-七月開始修 bug，九月開始開發新功能。
-我已經沒辦法想像沒有 tridactyl 的生活，
-但我卻沒辦法好好描述 tridactyl 到底好用在哪。
-總之我不想再等了，所以就這樣發布吧。&lt;/p&gt;
-&lt;p&gt;也許我該做的，是用文學編程的方式，
-把自己的 tridactylrc 註解一次，說明每個指令做了什麼。
-但我的 rc 又會不斷更新，更新後舊的文件就要重新對應，
-感覺就很麻煩。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/batch-qrcode-generate.html#2022-10-大張尺寸改版</id>
 <title>將檔案編碼為 QR code 的工具</title>

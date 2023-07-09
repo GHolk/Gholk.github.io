@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2023-07-09T06:11:30.911Z</updated>
+  <updated>2023-07-09T06:23:17.389Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,212 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
   <entry>
+<id>http://gholk.github.io/javascript-using-auto-close.html#將-using-提案改為取材自-go</id>
+<title>javascript 中模仿 python 的 with 自動關閉功能</title>
+<published>2023-07-08T16:16:06.846Z</published>
+<updated>2023-07-09T06:23:17.360Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/javascript-using-auto-close.html#將-using-提案改為取材自-go"/>
+<summary type="html">&lt;pre class=&quot;diff&quot;&gt;@@ -3,7 +3,7 @@ python 中有一個 with 關鍵字，
+ 可以實現離開 scope 時自動關檔或執行某些清理操作的功能。
+ js 中可以用 generator 實作出類似的功能，只是會很不直覺。
+ 也可以用 callback 實作，但要額外處理 async 的問題。
+-ecmascript 委員會也有收到一個來自 go 語言的 using 的提案，
++ecmascript 委員會也有收到一個取材自 go 語言的 using 的提案，
+ 雖然說 js 已經有類似的 finalizer 功能，
+ 但是依靠垃圾回收觸發，js 的垃圾回收器又不是離開 scope 會必定觸發的。
+ 
+&lt;/pre&gt;</summary>
+<category term="javascript"/>
+<category term="generator"/>
+<category term="async"/>
+<category term="with"/>
+<content type="html">&lt;h1 id=&quot;javascript-中模仿-python-的-with-自動關閉功能&quot;&gt;javascript 中模仿 python 的 with 自動關閉功能&lt;/h1&gt;
+&lt;p&gt;python 中有一個 with 關鍵字，
+可以實現離開 scope 時自動關檔或執行某些清理操作的功能。
+js 中可以用 generator 實作出類似的功能，只是會很不直覺。
+也可以用 callback 實作，但要額外處理 async 的問題。
+ecmascript 委員會也有收到一個取材自 go 語言的 using 的提案，
+雖然說 js 已經有類似的 finalizer 功能，
+但是依靠垃圾回收觸發，js 的垃圾回收器又不是離開 scope 會必定觸發的。&lt;/p&gt;
+&lt;p&gt;這裡講的不是 js 的 with，js 的 with 是像 basic 的，
+純用來簡寫屬性名稱用的。&lt;/p&gt;
+&lt;h2 id=&quot;自動清理機制&quot;&gt;自動清理機制&lt;/h2&gt;
+&lt;p&gt;以前寫系統級的語言，像 c perl python 都會有開檔、關檔的行為，
+教學都會提醒檔案沒有要用要關掉，
+因為程序的 &lt;abbr title=&quot;file handle&quot;&gt;fd&lt;/abbr&gt; 是有限的，也會鎖到其他程序。
+這時候就會有像這樣的寫法：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;f = open(&apos;file.txt&apos;)
+do_something(f)
+f.close()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;因為要手動呼叫 close 很麻煩，又可能會忘記，
+python 就有 with 的語法，
+可以在離開 with 的 block 時自動呼叫 close 或定義好的函數。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-python&quot;&gt;with open(&apos;file.txt&apos;) as f
+    do_something(f)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;js-類似的使用情境&quot;&gt;js 類似的使用情境&lt;/h2&gt;
+&lt;p&gt;js 不太有這類需求，瀏覽器端幾乎沒有這種需要關掉的東西，
+type array 或 blob 都是跟著 gc 自動回收的。
+頂多 URL.createObjectURL、URL.revokeObjectURL 有點像，
+但這種通常要等使用者做完事才能回收，也不太適合。
+indexeddb 有些連線可以手動關閉，但也不是絕對必要。&lt;/p&gt;
+&lt;p&gt;node.js 直接跑在作業系統裡有機會接觸到 fd，
+但 js 設計上還是比較適合把整個檔案讀進來成字串再處理，
+所以也不太常用。&lt;/p&gt;
+&lt;h2 id=&quot;js-中用-generator-實現&quot;&gt;js 中用 generator 實現&lt;/h2&gt;
+&lt;p&gt;總之 js 越長越大，總會有人碰到類似的需求。
+以既有的 js 語法，其實可以用 generator 達成類似的功能：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;function *openg(name) {
+    const file = open(name)
+    yield file
+    file.close()
+}
+for (const f of openg(&apos;file.txt&apos;)) {
+    do_something(f)
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;generator 函數碰到 yield 會暫停並把值丟出去，
+等到外面呼叫 next 才會繼續執行。
+而 generator 函數的返回值是可以當作 array 遍歷的，
+就相當於把每次 yield 丟出的值放指派給疊代的變數，
+直到 generator 函數返回。&lt;/p&gt;
+&lt;p&gt;所以這裡 yield 後會執行 for 迴圈的本體一次，
+然後 block 結束回到 generator 函數，
+就 close 了，之後 generator 函數就返回了，所以也沒有下次。&lt;/p&gt;
+&lt;p&gt;只是用 for of 迴圈來做像開關檔的清理行為，實在語義上很不合。
+&lt;a href=&quot;implement-async-by-generator.html&quot;&gt;其實 async await 函數也只是 generator 函數和 promise 組合的語法糖&lt;/a&gt; ，
+只是可能 async 實在太常用了，而且用 yield 的語意不合沒那麼好看，
+所以還是另外加了 async await 取代 yield。&lt;/p&gt;
+&lt;h2 id=&quot;js-callback-實作&quot;&gt;js callback 實作&lt;/h2&gt;
+&lt;p&gt;另一種作法是用 callback 實作，執行完傳入的函數就關檔。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;function opencb(name, fn) {
+    const f = open(name)
+    fn(f)
+    f.close()
+}
+opencb(&apos;file.txt&apos;, f =&amp;gt; do_something(f))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;但 callback，傳入的如果是非同步函數，就會壞掉。
+這時就得把所有東西都改成 async：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;async function opencb(name, fn) {
+    const f = open(name)
+    await fn(f)
+    f.close()
+}
+opencb(&apos;file.txt&apos;, async f =&amp;gt; {
+    await do1(f)
+    await do2(f)
+})
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;當然也可以取巧一點，在 opencb 中判斷回傳值是不是 promise，
+但總之還是很醜。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;async function opencb(name, fn) {
+    const f = open(name)
+    const ret = fn(f)
+    if (ret &amp;amp;&amp;amp; ret.then) await ret
+    f.close()
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;for-迴圈遍歷與用-map-callback-遍歷的差異&quot;&gt;for 迴圈遍歷與用 map callback 遍歷的差異&lt;/h3&gt;
+&lt;p&gt;這裡就會出現 callback 的短處，也就是本質上他另起了一個函數，
+該函數同步與否與現在的作用域同步與否無關；
+而如果是用既有的語言結構，for while 之類的，
+在語句塊裡因為還在同一個函數內，要 yield 要 await 都沒問題。
+（這裡應該可以另外寫一篇文章探討這個問題。）&lt;/p&gt;
+&lt;p&gt;用 for 迴圈很簡單就能處理 await：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;async function do_async_loop(l) {
+    for (const x of l) {
+        await do_async(x)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果改用 forEach 之類的 callback 寫法，就會很麻煩：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;async function do_async_cb(l) {
+    // 錯，for each callback 要宣告成 async 才能用 await
+    l.forEach(x =&amp;gt; await do_async(x))
+
+    // 還是錯，forEach 不會等 async 函數
+    l.forEach(async x =&amp;gt; await do_async(x))
+
+    // 半對半錯，map 不會等前一個 do_async 執行完，所以會全部呼叫完再一起等
+    await Promise.all(l.map(async x =&amp;gt; await do_async(x)))
+
+    // 有沒有很難寫
+    await l.reduce(async (prev, x) =&amp;gt; {
+        await prev // 確保上一個 async 執行完
+        await do_async(x)
+    }, Promise.resolve(true))
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;在全都是同步執行時 foreach 或 map 配上 callback，
+可以讓程式更簡潔好看，
+但如果碰到非同步就沒輒了，不切回 loop 就會寫得很醜。&lt;/p&gt;
+&lt;h2 id=&quot;finalizer-實作與-gc-問題&quot;&gt;finalizer 實作與 gc 問題&lt;/h2&gt;
+&lt;p&gt;js 中還有 &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/FinalizationRegistry&quot;&gt;finalizer&lt;/a&gt; 可以達成類似的效果，但實際上會不太一樣。
+js 中離開 scope 不會馬上觸發 gc，用 &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakRef&quot;&gt;WeakRef&lt;/a&gt; 試就知道。
+所以觸發 gc 的時機很難掌控。
+而且某些情況要被 close 的物件，實際上是在某處被引用的，
+所以根本不會被 gc。&lt;/p&gt;
+&lt;p&gt;可以玩玩看下面這個測試：&lt;/p&gt;
+&lt;button onclick=&quot;weakRefTest.add()&quot;&gt;add&lt;/button&gt;
+&lt;button onclick=&quot;weakRefTest.check()&quot;&gt;check&lt;/button&gt;
+
+&lt;script&gt;
+var weakRefTest = {
+  list: [],
+  add() {
+    const o = {d: new Date()}
+    const r = new WeakRef(o)
+    this.list.push(r)
+    this.check()
+  },
+  check() {
+    const l = this.list.map(r =&gt; r.deref())
+    alert(JSON.stringify(l))
+  }
+}
+&lt;/script&gt;
+
+&lt;h2 id=&quot;提案中的-using-語法&quot;&gt;提案中的 using 語法&lt;/h2&gt;
+&lt;p&gt;跟據 &lt;a href=&quot;https://chat.sylee.dev/2023/07/05/%E7%B6%B2%E8%B7%AF%E9%BB%91%E6%89%8B%E7%9A%84%E5%91%A2%E5%96%83-33&quot;&gt;網路黑手的呢喃 #33&lt;/a&gt; ，這功能有參考了 go 的 defer，
+會讓某個 statement 延到離開 block 時再執行，
+相較 python 的 with，則是不限定要在 block 開頭就綁定。
+但缺點是要使用 using 就得把返回值多包一層物件，並指定 dispose symbol 屬性。
+而且要讓變數所在的 scope 會結束，
+簡單的作法就是簡單包一層 block。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;import { open } from &quot;node:fs/promises&quot;;
+
+const getFileHandle = async (path: string) =&amp;gt; {
+    const fileHandler = await open(path, &quot;r&quot;);
+
+    return {
+        fileHandler,
+        [Symbol.asyncDispose]: async () =&amp;gt; {
+            await fileHandler.close();
+        },
+    }
+};
+
+// main
+{
+    await using file = getFileHandle(&quot;test_file.txt&quot;);
+}
+// That&apos;s it! I/O will disposed automatically!
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;根據 &lt;a href=&quot;https://www.totaltypescript.com/typescript-5-2-new-keyword-using&quot;&gt;TypeScript 5.2&apos;s New Keyword: &apos;using&apos; | Total TypeScript&lt;/a&gt; 這篇，
+也能搭配解構賦值，所以使用的時候不太影響，只是函數裡還是要多包一層。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-typescript&quot;&gt;{
+  await using {filehandle} = getFileHandle(&quot;thefile.txt&quot;);
+  // Do stuff with filehandle
+} // Automatically disposed!
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果宣告了多個 using，到時候是會反向 dispose，
+最晚宣告的最先 dispose。
+&lt;a href=&quot;https://github.com/tc39/proposal-explicit-resource-management#user-content-await-using-in-for-of-and-for-await-of-statements&quot;&gt;ecmascript 的 github 提案裡還有和 for 迴圈的組合用法&lt;/a&gt;，
+處理了很多奇怪的情況。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/javascript-using-auto-close.html</id>
 <title>javascript 中模仿 python 的 with 自動關閉功能</title>
 <published>2023-07-08T16:16:06.846Z</published>
@@ -3434,292 +3640,7 @@ qrcode 容量則是用切割字串的功能和換行符分割來達成。
 <category term="js"/>
 <category term="web"/>
 <category term="手機"/>
-<content type="html">&lt;h1 id=&quot;將檔案編碼為-QR-code-的工具&quot;&gt;將檔案編碼為 QR code 的工具&lt;/h1&gt;
-&lt;p&gt;本程式可以將字串分割編碼為 qr code，供連續掃描後合併回檔案。
-因為之前開了個腦洞，在想要如何寄紙本加密信件，
-加密我的想法就只有 pgp，然後再加一個把數位資料轉紙本的方式
-印出來後用 ocr 好像不太準確，且 ocr 對一般人不夠普及。
-後來就想到編碼成 qr code，配合一些 app 有連續掃描功能，
-掃完後再匯出，於是就這樣成了。&lt;/p&gt;
-&lt;p&gt;qr code 可以很大，但問題是手機的鏡頭沒有那麼大和清晰。
-雖然理論上也可以用掃描器掃描後再用電腦去判讀，
-但一樣有技術不夠普及，對一般使用者不友善的問題。
-所以要把資料拆成多個 qr code，
-再借助另一項某些 qr code 掃描器的功能，連續掃描。&lt;/p&gt;
-&lt;p&gt;以我用的 qr code 掃描器 &lt;a href=&quot;https://play.google.com/store/apps/details?id=de.markusfisch.android.binaryeye&quot;&gt;binary eye&lt;/a&gt; 來說，
-就是開啟連續掃描功能，然後掃完後進到歷史記錄，
-選擇匯出掃描記錄即可。
-掃描記錄可以是 csv 或 json，總之都是用 linux 可以簡單處理的格式。&lt;/p&gt;
-&lt;p&gt;資料格式的話，我不確定 qr code 能不能塞二進位資料，
-但我不想給自己找麻煩，還得找一款能讀取二進位的 qr code scaner，
-所以最簡單的方式就是先用 base64 編碼資料。
-因為 linux base64 工具默認會自己切割資料了，
-但如果用我原本的想法 64 個字元切成一個 qr code，
-加上換行符字數變奇數，qr code 就會斷在奇怪的地方，
-所以後來加了一個用換行切割的功能。&lt;/p&gt;
-&lt;p&gt;我掃描時碰到幾個問題，第一個是如果照常規排版每行由左到右，
-掃完一行時換行可能會亂掉，而且也沒效率，應該要用 s 型的排列。
-所以我加了個簡單的 s 型排版功能，但也把版型固定成四欄。&lt;/p&gt;
-&lt;p&gt;再來是有時可能會漏掃或重復掃，應該要加個 checksum 機制。
-我後來幫每個 qr code 標了編號，
-應該就不會亂掉了，最後總數也可以用來驗證。
-之後我又幫每個 qr code 下面標上內容字串，
-可以用來找出哪個漏掃。&lt;/p&gt;
-&lt;p&gt;但最後還有個問題是瀏覽器印出來時，
-某些 qr code 可能被分頁切斷。
-我試了 css 的 &lt;code&gt;page-break: avoid&lt;/code&gt; ，但 chromium 還是會切斷，
-無論我的 qr code 是用 img 或 canvas。
-目前只確定 firefox 是可以用的，chromium 就再等等吧。&lt;/p&gt;
-&lt;h2 id=&quot;2022-10-大張尺寸改版&quot;&gt;2022-10 大張尺寸改版&lt;/h2&gt;
-&lt;p&gt;原本本工具是印出大量的小張 qrcode，但大張 qrcode 在儲存上比較有效率，
-所以改版讓本工具可以方便印出較大張的 qrcode。&lt;/p&gt;
-&lt;p&gt;建議使用每張 512 個字元的 qrcode，並每列 3 張 qrcode，直式列印可以印四列。
-這樣單面可以容納 12 張 qrcode，6144 個字元，base64 編碼前為 4608 byte。
-操作上把 &lt;em&gt;每列字元數&lt;/em&gt; 設為 512，再按下重新切割字串，
-後勾選 &lt;em&gt;依換行分割字串&lt;/em&gt; 再按 &lt;em&gt;encode&lt;/em&gt; 即可。&lt;/p&gt;
-&lt;p&gt;另一種印法是每張 1024 字元，每列 3 張，用橫式列印一頁二列。
-但這種作法要調一下頁緣間距，很容易超過。&lt;/p&gt;
-&lt;p&gt;而且 qrcode 太大張不太好掃，也最好不要摺到。
-除了不能摺到 qrcode 內部，外部也最好不要。
-紙張有摺痕的話，山線谷線多少會讓紙面有弧度，
-然後 qrcode 扭曲就掃不出來。
-如果非摺不可，要掃時可以考慮撕開，
-紙面沒有摺線的話就不會有扭曲的問題了。&lt;/p&gt;
-&lt;h3 id=&quot;其他改版說明：&quot;&gt;其他改版說明：&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;S 型排列無法在每列 4 張 qrcode 以外場合正常運作&lt;/li&gt;
-&lt;li&gt;預設行為變為依換行分割字串&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;重新切割字串&lt;/em&gt; 按鈕會刪除換行符後，依每列字元數目斷行。&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;每列字元數&lt;/em&gt; 清除內容後，雙擊文字框會出現建議的字元數，
-對應各尺寸 qrcode 的容量上限。&lt;/li&gt;
-&lt;li&gt;qrcode 尺寸是在 qrcode 邊界過大或超出顯示範圍時，用來調整大小的。
-原則上是依 &lt;em&gt;每列的 qrcode 數目&lt;/em&gt; 自動調整大小。&lt;/li&gt;
-&lt;li&gt;這個 qrcode library qrious 不能輸入 unicode 字串，輸出會壞掉。
-之前就是這樣，但沒有特別寫出來，只有建議用 base64。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;form&gt;
-&lt;label&gt;
-&lt;h2&gt;原始資料&lt;/h2&gt;
-&lt;textarea name=&quot;text-data&quot;&gt;&lt;/textarea&gt;&lt;/label&gt;
-&lt;label&gt;&lt;input name=&quot;snake-render&quot; onchange=&quot;qrcodeBatcher.handleStyleCheckbox(this)&quot; data-style-name=&quot;snake&quot; type=&quot;checkbox&quot;&gt;S 型排列 qr code (只在每列 4 個 qrcode 下有效)&lt;/label&gt;
-&lt;label&gt;&lt;input name=&quot;split-by-newline&quot; type=&quot;checkbox&quot; checked=&quot;&quot;&gt;
-依換行分割字串&lt;/label&gt;
 
-&lt;label&gt;&lt;input name=&quot;show-text-data&quot; type=&quot;checkbox&quot; checked=&quot;true&quot; onchange=&quot;qrcodeBatcher.handleStyleCheckbox(this)&quot; data-style-name=&quot;ellipsis&quot;&gt;顯示省略版字串&lt;/label&gt;
-
-&lt;label&gt;每列的 qrcode 數目
-&lt;input name=&quot;qrcode-per-row&quot; type=&quot;number&quot; value=&quot;3&quot; min=&quot;2&quot; max=&quot;4&quot; step=&quot;1&quot;&gt;&lt;/label&gt;
-
-&lt;div&gt;&lt;label&gt;每列字元數&lt;input name=&quot;character-per-line&quot; type=&quot;number&quot; min=&quot;64&quot; max=&quot;2953&quot; value=&quot;512&quot; list=&quot;qrcode-byte-capacity&quot;&gt;&lt;/label&gt;
-&lt;button type=&quot;button&quot; onclick=&quot;qrcodeBatcher.getFormNode(&apos;character-per-line&apos;).value = &apos;&apos;&quot;&gt;
-clear&lt;/button&gt;
-&lt;button type=&quot;button&quot; onclick=&quot;qrcodeBatcher.splitTextPerLine()&quot;&gt;重新切割字串&lt;/button&gt;
-&lt;datalist id=&quot;qrcode-byte-capacity&quot;&gt;
-&lt;option value=&quot;64&quot;&gt;
-&lt;/option&gt;&lt;option value=&quot;256&quot;&gt;
-&lt;/option&gt;&lt;option value=&quot;512&quot;&gt;
-&lt;/option&gt;&lt;option value=&quot;1024&quot;&gt;
-&lt;/option&gt;&lt;option value=&quot;2048&quot;&gt;
-&lt;/option&gt;&lt;option value=&quot;2953&quot;&gt;
-&lt;/option&gt;&lt;/datalist&gt;
-&lt;/div&gt;
-
-&lt;label&gt;qr-code 尺寸
-&lt;input name=&quot;qrcode-canvas-size&quot; type=&quot;range&quot; min=&quot;33&quot; max=&quot;180&quot; value=&quot;77&quot; oninput=&quot;qrcodeBatcher.handleSizeChange()&quot;&gt;&lt;/label&gt;
-
-&lt;button type=&quot;button&quot; onclick=&quot;qrcodeBatcher.handleEncode()&quot;&gt;encode&lt;/button&gt;
-
-&lt;label&gt;
-&lt;h2&gt;QR code&lt;/h2&gt;
-&lt;output name=&quot;qr-code-area&quot; class=&quot;ellipsis&quot;&gt;&lt;/output&gt;&lt;/label&gt;
-&lt;/form&gt;
-
-&lt;style&gt;
-form &gt; * {
-    display: block;
-}
-form textarea {
-    width: 100%;
-    min-height: 16em;
-}
-output .item {
-    box-sizing: border-box;
-    width: 25%;
-    float: left;
-    counter-increment: image-counter;
-    border: solid 1px;
-}
-.item img, .item canvas {
-    width: 90%;
-    display: block;
-    margin: 5% auto;
-    image-rendering: pixelated;
-}
-.item .subtitle {
-    display: inline-block;
-    width: 70%;
-    margin: 0 1em;
-    height: 15em;
-}
-.ellipsis .item .subtitle {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    height: auto;
-}
-output .item::after {
-    content: counter(image-counter);
-    display: inline-block;
-}
-output.snake .item:nth-child(8n+1),
-output.snake .item:nth-child(8n+2),
-output.snake .item:nth-child(8n+3),
-output.snake .item:nth-child(8n+4) {
-    float: left;
-    clear: right;
-}
-output.snake .item:nth-child(8n+5),
-output.snake .item:nth-child(8n+6),
-output.snake .item:nth-child(8n+7),
-output.snake .item:nth-child(8n) {
-    float: right;
-    clear: left;
-}
-output:after {
-    content: &apos; &apos;;
-    clear: both;
-    display: block;
-}
-
-@media print {
-    body {
-        max-width: 100%;
-    }
-    @page {
-        margin: 1em;
-    }
-    output {
-        page-break-before: always;
-        padding: 1em;
-    }
-    output .item, output .item * {
-        page-break-inside: avoid;
-        break-inside: avoid;
-    }
-    output .item &gt; canvas {
-        width: 96%;
-        margin: 2% auto;
-    }
-    form + * {
-        clear: both;
-    }
-    footer {
-        display: block;
-        clear: both;
-        page-break-inside: avoid;
-        break-inside: avoid;
-    }
-}
-&lt;/style&gt;
-
-&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js&quot;&gt;&lt;/script&gt;
-
-&lt;script&gt;
-    var qrcodeBatcher = {
-        qrious: new QRious(),
-        form: document.getElementsByTagName(&apos;form&apos;)[0],
-        getFormNode(name) {
-            return this.form.elements[name]
-        },
-        handleTextInput() {
-            const textarea = this.getFormNode(&apos;text-data&apos;)
-            textarea.style.height = textarea.scrollHeight + &apos;px&apos;
-        },
-        handleStyleCheckbox(node) {
-            const output = this.getFormNode(&apos;qr-code-area&apos;)
-            if (node.checked) {
-                output.classList.add(node.dataset.styleName)
-            }
-            else output.classList.remove(node.dataset.styleName)
-        },
-        *segmentText64(text) {
-            let i = 0
-            const n = 64
-            do {
-                yield text.slice(i, i+n)
-                i += n
-            }
-            while (i &lt; text.length)
-        },
-        splitTextPerLine(width) {
-            if (!width) width = Number(
-                this.getFormNode(&apos;character-per-line&apos;).value
-            )
-            const field = this.getFormNode(&apos;text-data&apos;)
-            const value = field.value.replace(/\n/g, &apos;&apos;)
-            const list = []
-            for (let i=0; i&lt;value.length; i+=width) {
-                list.push(value.slice(i, i+width))
-            }
-            field.value = list.join(&apos;\n&apos;)
-        },
-        handleSizeChange() {
-            const size = Number(this.getFormNode(&apos;qrcode-canvas-size&apos;).value)
-            this.qriousCanvasSize = size
-            this.getFormNode(&apos;qr-code-area&apos;)
-                .querySelectorAll(&apos;canvas&apos;)
-                .forEach(canvas =&gt; canvas.qrious.size = size)
-        },
-        segmentText(text = this.getFormNode(&apos;text-data&apos;).value) {
-            if (this.getFormNode(&apos;split-by-newline&apos;).checked) {
-                return text.split(/\n/)
-            }
-            else return this.segmentText64(text)
-        },
-        handleEncode() {
-            this.getFormNode(&apos;qr-code-area&apos;).textContent = &apos;&apos;
-            for (const seg of this.segmentText()) {
-                const canvas = this.textToCanvas(seg)
-                this.renderImage(canvas, seg)
-                // const url = this.textToDataUrl(seg)
-                // const image = document.createElement(&apos;img&apos;)
-                // image.src = url
-                // this.renderImage(image)
-            }
-        },
-        renderImage(node, segment) {
-            const output = this.getFormNode(&apos;qr-code-area&apos;)
-            const item = document.createElement(&apos;div&apos;)
-            item.className = &apos;item&apos;
-            item.appendChild(node)
-            const count = Number(this.getFormNode(&apos;qrcode-per-row&apos;).value)
-            item.style.width = 100 / count + &apos;%&apos;
-            const subtitle = document.createElement(&apos;div&apos;)
-            subtitle.className = &apos;subtitle&apos;
-            subtitle.textContent = segment
-            item.appendChild(subtitle)
-            output.appendChild(item)
-        },
-        qriousCanvasSize: 77,
-        textToCanvas(text) {
-            const qrcode = new QRious({
-                value: text,
-                size: this.qriousCanvasSize
-            })
-            return qrcode.canvas
-        },
-        textToDataUrl(text) {
-            this.qrious.value = text
-            return this.qrious.toDataURL()
-        },
-        textToGoogleImageUrl(text) {
-            const url = encodeURIComponent(text)
-            const qrcodeUrl = `http://chart.googleapis.com/chart?chs=150x150&amp;cht=qr&amp;chl=${url}`
-            return qrcodeUrl
-        }
-    }
-&lt;/script&gt;
-</content>
 </entry>
 
 <entry>

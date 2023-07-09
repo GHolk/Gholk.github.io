@@ -13,7 +13,6 @@
 <link rel="start" type="text/html" href="index.html" title="首頁">
 <link rel="next" type="text/html" href="">
 <link rel="prev" type="text/html" href="javascript-using-auto-close.html" title="">
-<link rel="alternate" type="text/html" href="https://g0v.social/@gholk" title="在 fediverse 上討論" id="active-pub-thread">
 
 <!-- 和網頁位置有關 -->
 <link rel="icon" type="image/png" href="ext/icon.png">
@@ -37,7 +36,23 @@
 <script defer="" data-lazy="" src="ext/load-disqus.js"></script>
 <script>autoLoader.autoLoad()</script>
 
+<footer></footer>
 
+<section id="comment-board">
+<h2>留言</h2>
+
+<section id="fediverse-comment"></section>
+
+<div id="disqus_thread"></div>
+
+<menu>
+  <li><a target="_blank" rel="alternate" type="text/html" href="https://g0v.social/@gholk" id="activity-pub-thread" title="fediverse 上的本文">
+      <button>在 mastodon 或用 Activity Pub 留言</button></a></li>
+  <li><a href="mailto:"><button>用 email 回復</button></a></li>
+  <li><button id="disqus-load">載入 disqus 回復</button></li>
+</menu>
+<p><small>Webmention is supported</small></p>
+</section>
 
 
 

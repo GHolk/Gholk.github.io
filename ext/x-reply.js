@@ -8,7 +8,7 @@ function createBoard() {
 <div id="disqus_thread"></div>
 <menu>
 <li><a href="mastodon" target="_blank">
-<button>在 mastodon 或用 ActivePub 留言</button></a></li>
+<button>在 mastodon 或用 Activity Pub 留言</button></a></li>
 <li><a href="mailto:"><button>用 email 回復</button></a></li>
 <li><button id="disqus-load">載入 disqus 回復</button></li>
 </menu>
@@ -23,7 +23,8 @@ function createBoard() {
 function handleActivePub(anchor) {
     /* <link rel="alternate" href="..." type="text/html"
        name="..." id="active-pub-thread"> */
-    const link = document.querySelector('link#active-pub-thread')
+    if (!anchor) return
+    const link = document.querySelector('link#activity-pub-thread')
     if (!link) return anchor.remove()
     anchor.href = link.href
 }

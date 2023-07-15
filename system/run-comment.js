@@ -17,6 +17,7 @@ async function main(...args) {
         const b = mc.matchBoard(args[1])
         updateHtmlFile(b.name + '.html', libmc.commentFromJson(res[0]))
     }
+    else console.log(res)
 }
 
 function updateHtmlFile(file, comment) {

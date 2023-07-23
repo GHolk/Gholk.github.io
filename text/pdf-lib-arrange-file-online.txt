@@ -1,9 +1,10 @@
 # 合併重組切割 pdf 檔案的工具
 因為常有重組或抽換 pdf 檔案中某些頁數的需求，
-所以寫了一個可以在瀏覽器中離線運作的小工具。
+所以寫了一個可以在瀏覽器中離線運作的小工具
+[pdf-lib browser tool] ，
 可以用來合併、抽換、重組 pdf 檔案成新的檔案，
 也能載入多頁的 tiff，jpeg png gif 等其他圖檔。
-除了載入 javascript 外全程都在本機端執行，
+除了線上版載入 javascript 外全程都在本機端執行，
 主要是用 [PDF-LIB] 這個 js 函式庫做的。
 
 [PDF-LIB]: https://pdf-lib.js.org/

@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2023-07-23T14:49:14.774Z</updated>
+  <updated>2023-10-08T13:15:18.897Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,41 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
   <entry>
+<id>http://gholk.github.io/bike-change-cassette-interlock-problem.html</id>
+<title>小破車後輪維修記</title>
+<published>2023-10-08T13:12:41.685Z</published>
+<updated>2023-10-08T13:15:18.870Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/bike-change-cassette-interlock-problem.html"/>
+<summary type="html">腳踏車後輪的輪框裂了，可能是氣打太飽導致的，當然也可能是單純太舊裂了。
+換了新輪子後，發現鏈條不太合，結果是因為新輪子的齒輪太新，和舊鏈條不合。
+這種情況沒什麼救，因為車店也沒有好的處理辦法，就是全組換掉。
+最後自己找來工具，費了九牛二虎之力，把舊齒輪裝到新輪子上，
+花了一個多月 &lt;em&gt;修好&lt;/em&gt; 了腳踏車。</summary>
+<category term="腳踏車"/>
+<category term="diy"/>
+<content type="html">&lt;h1 id=&quot;小破車後輪維修記&quot;&gt;小破車後輪維修記&lt;/h1&gt;
+&lt;p&gt;腳踏車後輪的輪框裂了，可能是氣打太飽導致的，當然也可能是單純太舊裂了。
+換了新輪子後，發現鏈條不太合，結果是因為新輪子的齒輪太新，和舊鏈條不合。
+這種情況沒什麼救，因為車店也沒有好的處理辦法，就是全組換掉。
+最後自己找來工具，費了九牛二虎之力，把舊齒輪裝到新輪子上，
+花了一個多月 &lt;em&gt;修好&lt;/em&gt; 了腳踏車。&lt;/p&gt;
+&lt;h2 id=&quot;裂框&quot;&gt;裂框&lt;/h2&gt;
+&lt;p&gt;幾個月前腳踏車後輪輪框裂了，懷疑是某次打氣打太飽造成了，只能怪不小心信了某位整天鼓吹腳踏車要打到 100 磅的狂人。&lt;/p&gt;
+&lt;p&gt;一開始還以為是輪框偏擺磨到，因為最初檢查是側停，磨到的地方也不是裂開凸出的地方。後來發現是因為側停輸子會偏一邊，和正常騎乘時磨到的地方不同。&lt;/p&gt;
+&lt;h2 id=&quot;車店&quot;&gt;車店&lt;/h2&gt;
+&lt;p&gt;總之就換輪子，踩雷一間老闆做心情的車店，用便宜價格換了另一顆二手後輪上去。結果換了後輪齒輪聲變超大，跑了幾間車店大概聽懂是後輪的齒輪太新，和鏈條的磨損程度不同，所以會有齒輪聲。&lt;/p&gt;
+&lt;p&gt;如果換鏈條，說不定變前齒要抱怨，搞到最後可能整組都要換。雖然也沒多少錢，但就很討厭。還不如騎久一點，把後齒磨到和鏈條一樣程度就不吵了，但感覺也不太好。&lt;/p&gt;
+&lt;p&gt;後來去把換下來的後輪討回來，決定把舊棘輪換到新後輪上，這樣應該就不會吵了。上露天隨便買了便宜的拆棘輪用的飛輪套筒，結果轉到滑牙還拆不下來。&lt;/p&gt;
+&lt;h2 id=&quot;diy&quot;&gt;diy&lt;/h2&gt;
+&lt;p&gt;後來把舊的後輪帶回老家的車店試，就轉下來了，看來是便宜套筒太爛了。於是又買了個比較貴的套筒，來轉後來裝上的二手後輪。&lt;/p&gt;
+&lt;p&gt;然而又遇到網傳的後輪超緊的問題，一般的扳手根本轉不下來。於是只好嘗試網友的扳手套鐵管大法，在回收場好不容易撿到一根夠粗的套的上扳手的鐵管，套在扳手上加長力矩才轉下來。&lt;/p&gt;
+&lt;p&gt;最後換回舊的飛輪，的確就沒有聲音了，只是不知道鏈條還能撐多久。其一車店老闆說鏈條壽命大概就 2-3 年，用久了就會磨損，整體會被拉長，間距也會變大。用鏈條卡尺去比，我的鏈條已經磨到很鬆了。上一條鏈差不多用了 4 年斷掉，這條不知道還能撐多久。&lt;/p&gt;
+&lt;h2 id=&quot;舊後輪&quot;&gt;舊後輪&lt;/h2&gt;
+&lt;p&gt;仔細回想其實後輪的飛輪也算新，大概三年前棘輪有壞掉過，那時候的附近的車店就很特別的幫我換了新飛輪。那時的新飛輪就有明顯的齒輪聲，只是我沒有去在意。後來磨久了也就沒聲音了。&lt;/p&gt;
+&lt;p&gt;說那間車店特別，是車店好像少有換飛輪的，因為如前文所述飛輪很緊，以鎖牙式飛輪的設計，騎乘時的施力方向就會一直上緊，如果騎太久沒保養就會超級緊，超過一般人力以扳手能拆的程度。而且拆又要拆到最底，比拆後輪多好幾個步驟，也不能多收錢。一般都是連後輪整組換，就只要拆後輪就好。&lt;/p&gt;
+&lt;p&gt;印象中那間車店，好像也是退休了？總之是沒什麼在經營的狀態，感覺是幫我拆興趣的，而且老闆人不錯，比我後來換二手後輪的店好多了。老闆可能是剛好有剩的飛輪，或沒有整組的後輪，所以才幫我換飛輪的。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/pdf-lib-arrange-file-online.html#fediverse-comment</id>
 <title>合併重組切割 pdf 檔案的工具</title>
 <published>2023-07-23T13:18:39.641Z</published>
@@ -1988,104 +2023,7 @@ log(&apos;html-full&apos;, () =&amp;gt; $.html())
 <category term="debug"/>
 <category term="log"/>
 <category term="js"/>
-<content type="html">&lt;h1 id=&quot;簡單好用的除錯-log-函數&quot;&gt;簡單好用的除錯 log 函數&lt;/h1&gt;
-&lt;p&gt;相信一般人寫程式最開始 debug 都是用 printf 或 console.log 之類的函數，
-簡單把想要的資料丟到輸出，但事後又要刪除 debug 用的函數很麻煩。
-最近弄出了一種稍微包裝過的 log 函數，
-可以控制在 production 階段時就不輸出東西，有點像通用的 log 函式庫，
-但控制實作複雜度在一定範圍內。
-簡單來說就是幫每條 log 加上一個名稱，
-然後可以用一個變數控制哪些名稱的 log 才要輸出。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;const flag = {
-    exclude: &apos;&apos;.split(/ /g),
-    dict: null
-}
-function log(name, m) {
-    let dict = flag.dict
-    if (!dict) {
-        dict = flag.dict = {}
-        for (const name of flag.exclude) dict[name] = false
-    }
-    if (!m) {
-        m = name
-        name = &apos;debug&apos;
-    }
-    if (!(name in dict)) dict[name] = true
-    if (!dict[name]) return
-    let s
-    if (m.indexOf(&apos;\n&apos;) == -1) {
-        s = `[${name}] ${m}`
-    }
-    else {
-        m = m.trim()
-        s = 
-`[${name}]
-${m}
-[/${name}]\n`
-    }
-    console.log(s)
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;其實文章到這裡就可以結束了，我想說的都在 code 裡了。&lt;/p&gt;
-&lt;p&gt;這個函數的目標大概就是，讓每條 log 都有一個名字，事後可以關掉。
-使用情境就是對次一次除錯的過程；
-在除錯時，會先在想檢查的地方加入 log，然後幫 log 取一個名字。
-在事後解決問題後，就可以把名字加入 exclude 的清單裡，
-程式就不會再輸出這則訊息，但又保留如果有需要可以再打開的彈性。&lt;/p&gt;
-&lt;h2 id=&quot;多行訊息&quot;&gt;多行訊息&lt;/h2&gt;
-&lt;p&gt;比較有趣的是對多行訊息的處理。
-由於用方括號加在行首的作法只適合單行訊息：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;[error-message] ls: cannot access &apos;foo&apos;: No such file or directory
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;對於多行訊息，我加入了一種類似 html 開關標籤的寫法，
-實際效果會像這樣：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-term&quot;&gt;[error-message]
-Cannot find module &apos;foo&apos;
-Require stack:
-- &amp;lt;repl&amp;gt;
-[/error-message]
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;用方括號是來自 &lt;a href=&quot;http://zh.wikipedia.org/wiki/BBCode&quot;&gt;BBCode&lt;/a&gt; 的語法，實際上就是把 html 的大小於換成方括號而已。
-主要是用來顯示預先格式化好的錯誤訊息。
-因為我自己蠻常遇到多行的錯誤訊息，
-所以就想了一個符合既有方括號格式語法的顯示方式。&lt;/p&gt;
-&lt;h2 id=&quot;其他功能&quot;&gt;其他功能&lt;/h2&gt;
-&lt;p&gt;其它也有一些可以更彈性的地方，
-像是加入一個全域 flag debug，能按命令列參數一次開啟所有的 log。
-或是加入萬用字元或 regexp 的支援，
-可以開啟某些或某個命名空間下的所有 log，
-或是二層的先 exclude 再 include 策略。
-當然，會不會用到就是另外一回事了。
-實際也不是那麼實用，所以也不一定有加。&lt;/p&gt;
-&lt;h2 id=&quot;執行開銷&quot;&gt;執行開銷&lt;/h2&gt;
-&lt;p&gt;如果用 c 語言寫，甚至可以用巨集的方式定義 log，
-在 production 階段完全把 log 函數從程式中移除，
-減少效能的損耗。
-雖然很多完整的 log 函式庫，也都有類似的功能。&lt;/p&gt;
-&lt;p&gt;用 js 最多就是把整個 log 函數換成一個什麼都不做的 nop 函數，
-或用一個全域 flag 關掉。
-至於要減少格式化訊息的開銷的話，
-像如果要錯誤訊息是序列化整個物件，
-可能可以用 callback 惰性求值來避免開銷，
-只要在確定要輸出錯誤訊息時再執行 callback。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-js&quot;&gt;function log(name, m) {
-    // ...
-    if (typeof m == &apos;function&apos;) m = m()
-    // ...
-}
-log(&apos;html-full&apos;, () =&amp;gt; $.html())
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;使用策略&quot;&gt;使用策略&lt;/h2&gt;
-&lt;p&gt;而且因為每則 log 都有名稱，
-在解析上可以朝機器可讀的方式寫 log，
-也就是在訊息中不用帶太多的說明，直接輸出數字、字串就好。
-像如果想驗證目前到迴圈第幾次，
-可以直接寫： &lt;code&gt;log(&apos;loop-count&apos;, i)&lt;/code&gt; 而不是
-&lt;code&gt;log(`the ${i}th loop`)&lt;/code&gt; 。&lt;/p&gt;
-&lt;p&gt;這樣寫的好處是，來自各處的訊息混在一起時，可以依名稱分辨，
-不用想某個寫法的 count 到底是來自哪個變數的 count。
-其實就是變成替 log 取名字時就要確保最好名稱沒有重複。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/windows-jscript-excel-ajax-work.html</id>
 <title>用 jscript 操作 excel 發 http request 與讀寫檔案系統</title>

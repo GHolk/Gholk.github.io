@@ -4,7 +4,7 @@
                  type="text/css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://gholk.github.io/</id>
-  <updated>2023-12-17T09:34:43.321Z</updated>
+  <updated>2024-02-28T09:38:40.002Z</updated>
   <icon>http://gholk.github.io/ext/icon.png</icon>
   <title>靜態試驗場 mblog</title>
   <subtitle>你的瀏覽器就是我的實驗場 mblog is for meta bloging</subtitle>
@@ -24,6 +24,201 @@
   <generator uri="https://cheerio.js.org/">cheerio</generator>
 
   <entry>
+<id>http://gholk.github.io/pdf-lib-arrange-file-online.html#更新-2024-02，分割-pdf</id>
+<title>合併重組切割 pdf 檔案的工具</title>
+<published>2023-07-23T13:18:39.641Z</published>
+<updated>2024-02-28T09:38:39.975Z</updated>
+<link rel="alternate" type="text/html" href="http://gholk.github.io/pdf-lib-arrange-file-online.html#更新-2024-02，分割-pdf"/>
+<summary type="html">&lt;pre class=&quot;diff&quot;&gt;@@ -9,6 +9,8 @@
+ 
+ [PDF-LIB]: https://pdf-lib.js.org/
+ 
++&amp;lt;script src=&quot;ext/toc.js&quot;&amp;gt;&amp;lt;/script&amp;gt;
++
+ ## 讀取檔案
+ 我寫的工具 [pdf-lib browser tool] ，
+ 載入檔案時可以用網頁上的 input file
+@@ -182,6 +184,43 @@ page 則是 pdf-lib 函式庫中的 pdf page 物件，
+ 然後還會在每行結尾多加一個空格，
+ 這樣就能把頁碼拖曳到行尾時還有空格。
+ 
++## 更新 2024-02，分割 pdf
++加了一個分割 pdf 成多個檔案的功能 `split pdf` ，ui 是做成按鈕。&lt;/pre&gt;</summary>
+<category term="pdf"/>
+<category term="tool"/>
+<category term="離線"/>
+<category term="js"/>
+<content type="html">&lt;h1 id=&quot;合併重組切割-pdf-檔案的工具&quot;&gt;合併重組切割 pdf 檔案的工具&lt;/h1&gt;
+&lt;p&gt;因為常有重組或抽換 pdf 檔案中某些頁數的需求，
+所以寫了一個可以在瀏覽器中離線運作的小工具
+&lt;a href=&quot;https://gholk.github.io/pdf-js-tool/pdf-js-tool.html&quot;&gt;pdf-lib browser tool&lt;/a&gt; ，
+可以用來合併、抽換、重組 pdf 檔案成新的檔案，
+也能載入多頁的 tiff，jpeg png gif 等其他圖檔。
+除了線上版載入 javascript 外全程都在本機端執行，
+主要是用 &lt;a href=&quot;https://pdf-lib.js.org/&quot;&gt;PDF-LIB&lt;/a&gt; 這個 js 函式庫做的。&lt;/p&gt;
+&lt;script src=&quot;ext/toc.js&quot;&gt;&lt;/script&gt;
+
+&lt;h2 id=&quot;讀取檔案&quot;&gt;讀取檔案&lt;/h2&gt;
+&lt;p&gt;我寫的工具 &lt;a href=&quot;https://gholk.github.io/pdf-js-tool/pdf-js-tool.html&quot;&gt;pdf-lib browser tool&lt;/a&gt; ，
+載入檔案時可以用網頁上的 input file
+以檔案選取對話框載入檔案，
+或直接把檔案拖到 &lt;strong&gt;pdf list&lt;/strong&gt; 下面的清單裡載入。&lt;/p&gt;
+&lt;h2 id=&quot;檔案及頁碼指定&quot;&gt;檔案及頁碼指定&lt;/h2&gt;
+&lt;p&gt;載入後清單會顯示目前載入的檔案清單，從 0 開始編號。
+重組 pdf 則是使用文字框來指定要輸出哪些檔案中的哪些頁數，
+文字框中是一個二維 json 陣列，
+第一個陣列是要依序輸出哪幾個檔案，其後的陣列則是每個檔案要輸出哪些頁數，
+頁數一樣是從 0 開始編號。&lt;/p&gt;
+&lt;p&gt;像如果要跳過奇數頁，
+可以寫 &lt;code&gt;[[0], [1, 3, 5, 7, 9]]&lt;/code&gt; ，
+這樣就會輸出第 0 個檔案中的第 2 4 6 8 頁。
+（0 對應到第 1 頁）&lt;/p&gt;
+&lt;p&gt;如果寫 &lt;code&gt;[[0,1,0], [0,1,2], [0], [4,5]]&lt;/code&gt; ，
+則是輸出第 0 個檔案的 1-3 頁，
+再來第 1 個檔案的第 1 頁，最後繼續輸出第 0 個檔案的 5-6 頁；
+大概就是用第 1 個檔案的第 1 頁抽換掉第 0 個檔案的第 4 頁的意思。&lt;/p&gt;
+&lt;p&gt;在載入檔案時，下方的文字框預設會自動將載入的檔案的編號及所有頁數都加在最後面，
+方便在頁碼很多時手動打要打很久；
+如果打亂掉了，也可以按 &lt;strong&gt;重設&lt;/strong&gt; 按鈕，
+會把所有 pdf 按順序放進來。&lt;/p&gt;
+&lt;h2 id=&quot;下載-pdf&quot;&gt;下載 pdf&lt;/h2&gt;
+&lt;p&gt;按 &lt;strong&gt;arrange&lt;/strong&gt; 即可依指定的順序頁碼合成 pdf，
+合成後會在新分頁開啟，如果要下載，在開啟中的分頁按下載，
+或右鍵另存新檔皆可。
+如果不小心關掉了，可以按 arrange 旁邊的 &lt;strong&gt;pdf link&lt;/strong&gt; 連結重新開啟。&lt;/p&gt;
+&lt;h2 id=&quot;圖片格式支援&quot;&gt;圖片格式支援&lt;/h2&gt;
+&lt;p&gt;如果載入的格式是 jpeg gif png，會在載入時轉成單頁的 pdf，
+並自動依長寬轉置成橫向或直向的 A4 大小，並縮放到最大。&lt;/p&gt;
+&lt;p&gt;自動轉置功能只會對 &lt;strong&gt;圖片&lt;/strong&gt; 含 tiff 格式啟用，
+如果輸入的是 pdf 則不會自動轉置。
+如果要轉置可以參考下面的 &lt;a href=&quot;#手動指定頁面轉置&quot;&gt;手動指定頁面轉置&lt;/a&gt; 一節。&lt;/p&gt;
+&lt;h2 id=&quot;tiff-格式支援&quot;&gt;tiff 格式支援&lt;/h2&gt;
+&lt;p&gt;這工具也能載入多頁的 tiff 檔案，一些掃描機的掃描結果是 tiff 格式，
+在載入時會轉成相應的多頁 pdf 檔案，一樣會用圖片的方式自動轉置。
+多頁 tiff 的轉換會稍久。&lt;/p&gt;
+&lt;h3 id=&quot;tiff-格式大小&quot;&gt;tiff 格式大小&lt;/h3&gt;
+&lt;p&gt;tiff 預設是用無損格式轉成 pdf，
+要是原本 tiff 內部是用 jpeg 編碼的話，轉 png 檔案大小會暴增個 4 5 倍。
+如果想避免，可以在載入前勾選 &lt;strong&gt;use jpg lossy compression...&lt;/strong&gt; 的選項，
+並調整 tiff quality 的壓縮品質，
+我的經驗是品質設到 0.7 就差不多了，很難再更小。&lt;/p&gt;
+&lt;p&gt;tiff 變大的原因我也不是很清楚，
+據我所知 tiff 中有 jpg 或像 png 的無損式編碼，
+大多時候只有原本已經是 jpg 的編碼能被壓縮，
+如果是類 png 的無損式編碼轉成 jpg 反而會變大，
+所以我在壓縮時只會把原本已經是 jpg 的頁面轉成 jpg，png 就保留不動。&lt;/p&gt;
+&lt;p&gt;而類 png 編碼轉成 pdf 時是用把圖片當成 png 再編碼一次，
+這樣的作法會讓檔案變大，可能因為原本 tiff 只有黑白二色，
+又用了特殊的技術去壓縮吧？&lt;/p&gt;
+&lt;p&gt;如果有人可以解決這個問題歡迎留言與我聯絡，我會很感謝的。&lt;/p&gt;
+&lt;h2 id=&quot;手動指定頁面轉置&quot;&gt;手動指定頁面轉置&lt;/h2&gt;
+&lt;p&gt;如果對預設的轉向不滿意，
+可以在 &lt;strong&gt;page processing script&lt;/strong&gt; 文字框中
+使用指令手動指定某些頁面的轉向。&lt;/p&gt;
+&lt;p&gt;文字框中的程式碼會在合成 pdf 時的每一頁呼叫，
+呼叫時會傳入 page ref doc 三個參數。
+ref 是一個長度 2 的陣列，可以用來判斷現在是合成第幾頁，
+ref 第一個數字是目前的頁面是來自第幾個檔案，
+第二個數字則是該頁在該檔案中的頁碼。&lt;/p&gt;
+&lt;p&gt;page 則是 pdf-lib 函式庫中的 pdf page 物件，
+可以呼叫 page.setRotation 方法來指定轉向。
+但轉向參數不是直接輸入角度數值，
+而是要用 &lt;code&gt;PDFLib.degrees(90)&lt;/code&gt; 來把數值轉成角度再輸入。
+轉向順時針為正，逆時針為負。&lt;/p&gt;
+&lt;p&gt;網頁中有給出範例，基本上就是用 if 判斷，
+如果是想轉置的頁就呼叫 setRotation 來轉置。
+然後要注意在 js 中二個內容相同的陣列不一定會相等：
+&lt;code&gt;[1,2] != [1,2]&lt;/code&gt; ，但如果把陣列和字串比較，
+則會把陣列內容用逗號連結成字串後再和字串比，
+這樣就能方便的判斷是否在某頁了。&lt;/p&gt;
+&lt;h2 id=&quot;不可修改的-pdf&quot;&gt;不可修改的 pdf&lt;/h2&gt;
+&lt;p&gt;某些 pdf 有加密或有不可修改的數位簽章，
+目前沒有處理這些問題，會跳錯誤訊息無法載入。
+可以用列印為 pdf 的方式去除數位簽章或加密後再載入。&lt;/p&gt;
+&lt;h2 id=&quot;離線使用&quot;&gt;離線使用&lt;/h2&gt;
+&lt;p&gt;到 &lt;a href=&quot;https://github.com/GHolk/pdf-js-tool&quot;&gt;github repo&lt;/a&gt; 去 &lt;a href=&quot;https://github.com/GHolk/pdf-js-tool/archive/refs/heads/master.zip&quot;&gt;下載打包的 zip&lt;/a&gt; ，
+解壓縮後開啟 &lt;code&gt;pdf-js-tool.html&lt;/code&gt; 即可使用。&lt;/p&gt;
+&lt;h2 id=&quot;結語&quot;&gt;結語&lt;/h2&gt;
+&lt;p&gt;我知道用 json 指定頁碼和檔案很廢，但我就懶。
+而且 json 用程式產生也方便，寫 ui 不知道要花多少時間。
+如果想送 pr 幫我寫 ui 也歡迎。
+有不會用的也歡迎提問。&lt;/p&gt;
+&lt;h2 id=&quot;更新-2023-12&quot;&gt;更新 2023-12&lt;/h2&gt;
+&lt;p&gt;更新了一些東西，在 json 格式外加了種純文字頁碼的格式，和加了幾個新按鈕。
+主要是讓系統可以儘量全滑鼠操作。&lt;/p&gt;
+&lt;h3 id=&quot;純文字格式&quot;&gt;純文字格式&lt;/h3&gt;
+&lt;p&gt;基本上是把 json 二維陣列映射成用空格和換行符分隔的陣列，
+一樣第一行是 pdf 檔案索引，之後每行對應一個 pdf 中的頁數。
+空行和多餘的空白會被忽略，像行首行尾縮排。
+另外為了方便在小鍵盤輸入，加號也視為空白。
+舊的 json 格式也仍然是合法的輸入。&lt;/p&gt;
+&lt;p&gt;例如：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-json&quot;&gt;[
+  [0, 1, 0],
+  [0, 1],
+  [0],
+  [2, 4]
+]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;等同於：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;0 1 0
+0 1
+0
+2 4
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;按鈕&quot;&gt;按鈕&lt;/h3&gt;
+&lt;p&gt;不知道怎麼寫 ui 的時候，寫成按鈕就對了！&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;re-add last files&lt;/code&gt; 按鈕可以重新讀取放在檔案輸入欄位裡的檔案，
+主要是如果檔案太大，想調成用 jpeg 編碼，可以調了後按，
+就會換成調整後的檔案。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;remove odd page&lt;/code&gt; 按鈕是用來移除奇數頁用的，
+主要是用在雙面掃描時，如果有很多單面頁，可以用這功能快速移除某些頁面。
+（這功能在用純文字格式頁碼比較好用。）
+選取文字框裡需要移除部份的文字，然後按按鈕，
+就會把選取中每二個數字移除第一個數字（和實際數字奇偶無關）。
+例如選取了 &lt;code&gt;2 3 4 5 6&lt;/code&gt; ，就會移除 2 4 6 這三個位於奇數序位的數字。
+如果沒有選取，就會每行都移除一次。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;delete text&lt;/code&gt; 很簡單，就是用來選取部份頁碼的，
+主要是讓手可以不用離開滑鼠去按鍵盤上的 backspace。
+然後按 ctrl 多重選取中也能生效，
+為了這點還特別去找了古早時代的 &lt;code&gt;document.execCommand&lt;/code&gt; api。&lt;/p&gt;
+&lt;h3 id=&quot;快速加入-pdf&quot;&gt;快速加入 pdf&lt;/h3&gt;
+&lt;p&gt;按 pdf list 裡的檔名時，會把該檔案加到文件列表裡。
+如果游標有在第一行，就會加入在游標處，
+如果沒有就加入在第一行結尾。&lt;/p&gt;
+&lt;h3 id=&quot;全滑鼠操作&quot;&gt;全滑鼠操作&lt;/h3&gt;
+&lt;p&gt;除了上面幾個按鈕和新功能，滑鼠操作還有個技巧，
+在文字框裡選取文字後，可以拖曳選擇的文字到另一個地方來移動文字。
+這樣大概就能涵蓋大多數在重排 pdf 時的動作。
+然後還會在每行結尾多加一個空格，
+這樣就能把頁碼拖曳到行尾時還有空格。&lt;/p&gt;
+&lt;h2 id=&quot;更新-2024-02，分割-pdf&quot;&gt;更新 2024-02，分割 pdf&lt;/h2&gt;
+&lt;p&gt;加了一個分割 pdf 成多個檔案的功能 &lt;code&gt;split pdf&lt;/code&gt; ，ui 是做成按鈕。
+輸入格式一樣是多個檔案然後照 arrange 的功能那樣輸入文件編號和頁碼，
+之後要多加最後一行是要分割出的 pdf 的起始頁數。&lt;/p&gt;
+&lt;p&gt;例如原本如下輸入 arrange 會產生 9 頁的 pdf：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;0 2 1 2
+
+0 3
+1 2 3
+10
+0 0 0
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;如果想把這 9 頁分成各 2 3 4 頁共 3 個檔案，
+就再加上最後一行，再按下 &lt;code&gt;split pdf&lt;/code&gt; 鍵。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;0 2 1 2
+
+0 3
+1 2 3
+10
+0 0 0
+
+0 2 5
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;這樣就會從第 0 2 5 頁切成一個新檔案，
+也就是頁碼 &lt;code&gt;0-1&lt;/code&gt; &lt;code&gt;2-4&lt;/code&gt; &lt;code&gt;5-8&lt;/code&gt; 三個檔案，會依序下載。&lt;/p&gt;
+&lt;p&gt;空行都只是排版上美觀而已，實際處理時會忽略，
+只要有多加最後一行就好了。
+如果不只多加一行，就只會看最後一行。&lt;/p&gt;
+</content>
+</entry><entry>
 <id>http://gholk.github.io/pdf-lib-arrange-file-online.html#更新-2023-12</id>
 <title>合併重組切割 pdf 檔案的工具</title>
 <published>2023-07-23T13:18:39.641Z</published>
@@ -2018,105 +2213,7 @@ downloadObjectJson(idbDumpPlain, &apos;line-chrome-data-dump.json&apos;)
 <category term="android"/>
 <category term="atom"/>
 <category term="手勢操作"/>
-<content type="html">&lt;h1 id=&quot;不用實體按鍵鎖-android-手機螢幕的方法&quot;&gt;不用實體按鍵鎖 android 手機螢幕的方法&lt;/h1&gt;
-&lt;p&gt;鎖定螢幕是日常使用手機時非常頻繁的操作，收口袋或閒置時都會用到。
-正常人都是用實體電源鍵去鎖，但今年初我手機的音量鍵開始接觸不良，
-所以找了用觸控調整音量的方式，於是也想到也許鎖定螢幕也該少用實體鍵，
-不然哪天實體鍵故障就連開機都開不了了。
-目前找到的二個最好的方式，是裝 &lt;a href=&quot;https://f-droid.org/zh_Hant/packages/name.seguri.android.lock/&quot;&gt;lock&lt;/a&gt; 後長按 home 鍵鎖定，和用螢幕手勢鎖定。
-其他類似的解決方案有通知欄的 &lt;strong&gt;快速設定&lt;/strong&gt; 按鈕和 &lt;a href=&quot;https://f-droid.org/zh_Hant/packages/de.devmil.paperlaunch&quot;&gt;paper launcher&lt;/a&gt; 。&lt;/p&gt;
-&lt;h2 id=&quot;盲操的可能性&quot;&gt;盲操的可能性&lt;/h2&gt;
-&lt;p&gt;觸控操作除了步驟不能太多外，還有一點很重要是要能盲操，
-不看著螢幕也能準確的操作。
-像實體鍵，就不需要看著螢幕，
-所以用實體鍵鎖螢幕然後收手機這個動作，不需要看著手機也能操作。
-可以在手機螢幕還開著時，就往口袋或包包移動，在收的過程再一邊按下電源鍵。&lt;/p&gt;
-&lt;p&gt;以下介紹我目前用過的各種快速設定的方式：&lt;/p&gt;
-&lt;h3 id=&quot;通知欄快速設定&quot;&gt;通知欄快速設定&lt;/h3&gt;
-&lt;p&gt;&lt;abbr title=&quot;quick settings tiles&quot;&gt;快速設定&lt;/abbr&gt;
-就是 android 頂部的通知欄往下滑，會出現 wifi、行動數據、gps 等開關，
-一些 app 會提供更多快速設定可以放到通知欄裡。&lt;/p&gt;
-&lt;p&gt;通知欄的好處是任何 app 使用中，都可以開啟通知欄，
-但空間有限，如果放到第二頁後，操作起來其實不太方便。
-而且對盲操不太友善，往下滑後還要看準位置才能點。&lt;/p&gt;
-&lt;p&gt;就操作步驟數，如果第一頁就是二步，往下滑再點。
-在第二頁後就是 2+n，因為要往下滑二次才能翻頁通知欄。&lt;/p&gt;
-&lt;p&gt;另一種是作為可點選的通知或有按鈕的通知放在通知欄，
-但我不喜歡通知欄有東西，所以不用這種方式。&lt;/p&gt;
-&lt;h3 id=&quot;主畫面手勢操作&quot;&gt;主畫面手勢操作&lt;/h3&gt;
-&lt;p&gt;我用的 [open launcer] 有支援，其他比較能客制化的 lanucher 應該也都有。
-雖然 open launcher 的目前有點設計不良，
-要在桌面上空白處作為起點，手勢才有效。&lt;/p&gt;
-&lt;p&gt;一定程度可以盲操，但要先回到主畫面，
-所以動作一定是二步，按 home 鍵後再手勢操作。
-但手勢只有三種盲操友善，上滑、下滑、雙擊，
-其他含 pinch in 和 pinch out 都無法單手操作，
-而且上滑通常會綁到開啟 app drawer 的行為，所以也就只有雙擊、下滑能用。&lt;/p&gt;
-&lt;h3 id=&quot;把-widget-或-app-在桌面&quot;&gt;把 widget 或 app 在桌面&lt;/h3&gt;
-&lt;p&gt;既然都要回到主畫面的話，也可以考慮做成像開關的，
-一個在主畫面裡可以按的按鈕。
-但一樣很難盲操，好處就是某些功能如果很少用的話，可以這樣放。&lt;/p&gt;
-&lt;p&gt;像放一個 wifi adb 開關 widget，就不用每次都打開 wirebug，
-再按下按鈕，只要點一下開關就好了。
-widget 的好處是可以顯示現在的狀態，
-除了操控，也可以看到原本是開還是關。&lt;/p&gt;
-&lt;p&gt;或也可以做成捷徑的方式，點一下就啟動 app 並自動調設定後退出。
-捷徑的好處是可以放在資料夾內，widget 則只能放在畫面上。
-雖然說我現在還沒看過有類似的功能做成捷徑的。&lt;/p&gt;
-&lt;h3 id=&quot;長按-home-鍵&quot;&gt;長按 home 鍵&lt;/h3&gt;
-&lt;p&gt;長按 home 鍵會啟動。android 長按 home 鍵時，
-預設會啟動 &lt;strong&gt;數位助理應用程式&lt;/strong&gt; ，
-預設是 google 助手，不過也可以設成啟動其他 app，
-當然要該 app 有支援，在預設的應用程式裡可以調。&lt;/p&gt;
-&lt;p&gt;像 firefox 有，可以讓長按 home 鍵變成啟動 firefox，
-我一開始提到的 &lt;a href=&quot;https://f-droid.org/zh_Hant/packages/name.seguri.android.lock/&quot;&gt;lock&lt;/a&gt; 也有，
-這也是我覺得鎖定螢幕最方便的用法，長按 home 鍵鎖定。&lt;/p&gt;
-&lt;p&gt;但就要看手機的 home 鍵是哪種，
-像我之前的是觸控式的實體 home 鍵，兼指紋辨識功能。
-如果是出現在螢幕底部的虛擬 home 鍵，就只有出現時能按，不能盲操。
-如果是物理按鍵，那又會扯回一開始說的按鍵耗損問題。&lt;/p&gt;
-&lt;h3 id=&quot;paper-launcher&quot;&gt;paper launcher&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;https://f-droid.org/zh_Hant/packages/de.devmil.paperlaunch&quot;&gt;paper launcher&lt;/a&gt; 是一個 app，可以在螢幕邊緣放一個常駐的功能列，
-當從螢幕邊緣往內滑的時候就會啟動，然後可以放 app 在功能列裡面。
-這東西基本上是全域的，只要螢幕沒轉向就可以用。
-但操作也不太能盲操，除非你 paper launcher 裡只放一個 app 之類的。&lt;/p&gt;
-&lt;p&gt;另外到 android 12 後還有另個問題，操作方式會多一個叫手勢操作的，
-也就是在螢幕邊緣往內滑就會視為按下返回鍵的行為。
-如果啟用了這個功能，paper lanucer 的感應範圍就會被蓋住不能用。&lt;/p&gt;
-&lt;h2 id=&quot;音量控制使用分析&quot;&gt;音量控制使用分析&lt;/h2&gt;
-&lt;p&gt;音量控制需求反而沒有電源鍵那麼嚴格，
-通常都是要播音樂或操作 app 時才會需要調音量，
-那在操作時一定也是觸控操作，螢幕也會亮著，人也會看著手機，
-所以一般不會有需要盲操音量的場合。
-重點只要把音量控制放在步驟少、方便使用的地方即可。&lt;/p&gt;
-&lt;p&gt;我自己試過二個方案，放在通知欄的快捷操作，
-或放在 launcher 主畫面的手勢操作。
-後來我是感覺其實使用沒那麼頻繁，所以應該不用佔到快捷操作，
-因為我自己的快捷操作放了非常多東西，
-為了節省空間，後來是放在主畫面的雙擊的手勢。&lt;/p&gt;
-&lt;h2 id=&quot;鎖定螢幕使用分析&quot;&gt;鎖定螢幕使用分析&lt;/h2&gt;
-&lt;p&gt;如前述，鎖定螢幕很常見的場合是一邊收進口袋、包包的同時，
-一邊在不看螢幕的情況下鎖定盲操，所以可能不看著螢幕操作就很重要。
-首先要想辦法在軟體層面執行 &lt;strong&gt;鎖定螢幕&lt;/strong&gt; 這個操作，
-open launcher 雖然有鎖定螢幕的操作，
-但是比一般鎖定更嚴格的鎖，會無法用指紋解開，
-一定要畫圖形解鎖或密碼解鎖。&lt;/p&gt;
-&lt;p&gt;後來我找到 &lt;a href=&quot;https://f-droid.org/zh_Hant/packages/name.seguri.android.lock/&quot;&gt;lock&lt;/a&gt; 這款 app，啟動後就鎖定螢幕，沒有其他功能。
-所以只要把這個 app 綁定成手勢操作後要啟動的 app，
-就可以用手勢操作鎖定螢幕。&lt;/p&gt;
-&lt;p&gt;我有試過用快速設定或 paper launcher，但在盲操上還是沒有手勢友善。
-快速設定不看著螢幕很難點，paper launcher 也差不多，
-因為我放了蠻多 app 在裡面。&lt;/p&gt;
-&lt;p&gt;後來我發現 lock 可以綁成數位助理應用程式，
-也就是長按 home 鍵時啟動的程式，
-這在有實體 home 鍵的手機蠻方便的，
-只要長按 home 鍵就可以鎖定螢幕。&lt;/p&gt;
-&lt;h2 id=&quot;後記&quot;&gt;後記&lt;/h2&gt;
-&lt;p&gt;之前我的 atom 手機掉了，也半個月了應該是找不回來了。
-這些是用 atom 最後幾個月時針對 home 鍵耗損問題做的方案，
-現在也用不到了。寫這篇文章就當紀念吧。
-另外還有幾篇沒來得及寫，像怎麼更換聽筒之類的，有空再說。&lt;/p&gt;
-</content>
+
 </entry><entry>
 <id>http://gholk.github.io/courage-mean-in-digimon.html#再哭我就當眾吻你</id>
 <title>所謂的勇氣就是</title>

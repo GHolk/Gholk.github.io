@@ -36,6 +36,8 @@
 也能載入多頁的 tiff，jpeg png gif 等其他圖檔。
 除了線上版載入 javascript 外全程都在本機端執行，
 主要是用 <a href="https://pdf-lib.js.org/">PDF-LIB</a> 這個 js 函式庫做的。</p>
+<script src="ext/toc.js"></script>
+
 <h2 id="讀取檔案">讀取檔案</h2>
 <p>我寫的工具 <a href="https://gholk.github.io/pdf-js-tool/pdf-js-tool.html">pdf-lib browser tool</a> ，
 載入檔案時可以用網頁上的 input file
@@ -169,6 +171,32 @@ ref 第一個數字是目前的頁面是來自第幾個檔案，
 這樣大概就能涵蓋大多數在重排 pdf 時的動作。
 然後還會在每行結尾多加一個空格，
 這樣就能把頁碼拖曳到行尾時還有空格。</p>
+<h2 id="更新-2024-02，分割-pdf">更新 2024-02，分割 pdf</h2>
+<p>加了一個分割 pdf 成多個檔案的功能 <code>split pdf</code> ，ui 是做成按鈕。
+輸入格式一樣是多個檔案然後照 arrange 的功能那樣輸入文件編號和頁碼，
+之後要多加最後一行是要分割出的 pdf 的起始頁數。</p>
+<p>例如原本如下輸入 arrange 會產生 9 頁的 pdf：</p>
+<pre><code>0 2 1 2
+
+0 3
+1 2 3
+10
+0 0 0
+</code></pre><p>如果想把這 9 頁分成各 2 3 4 頁共 3 個檔案，
+就再加上最後一行，再按下 <code>split pdf</code> 鍵。</p>
+<pre><code>0 2 1 2
+
+0 3
+1 2 3
+10
+0 0 0
+
+0 2 5
+</code></pre><p>這樣就會從第 0 2 5 頁切成一個新檔案，
+也就是頁碼 <code>0-1</code> <code>2-4</code> <code>5-8</code> 三個檔案，會依序下載。</p>
+<p>空行都只是排版上美觀而已，實際處理時會忽略，
+只要有多加最後一行就好了。
+如果不只多加一行，就只會看最後一行。</p>
 </main>
 
 <script defer="" src="ext/meta-meta.js"></script>

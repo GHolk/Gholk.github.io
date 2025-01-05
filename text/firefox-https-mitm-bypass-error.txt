@@ -1,0 +1,137 @@
+# 用 mitm-proxy 繞過 firefox https 憑證錯誤
+公司內網的 https 憑證用了
+**Microsoft Application Policies** extension，
+然後 firefox 不認得這個擴充就報錯了，
+但這個擴充應該是可以安全忽略的。
+因為大人的原因不可能要 mis 修，
+只能自己用 mit 的 mitm-proxy 軟體繞過這張有問題的憑證。
+
+## 憑證問題
+TLS 證書可以有擴充欄位，**Microsoft Application Policies**
+應該是 ms 產品用到的功能。
+擴充可以標重要性，規範中如果 client 碰到不認識
+卻標為 critical 等級的擴充，應該要報錯退出。
+ms 這個擴充欄位就是 critical，但根據 [ms 的文件][ms doc] ，
+如果 client 不認識應該要忽略他而不是退出（ms 又是你，你最爛！）。
+
+[ms doc]: https://learn.microsoft.com/en-us/windows/win32/seccertenroll/supported-extensions#msapplicationpolicies
+
+這欄位推測是讓某些瀏覽器可以用 windows 系統功能直接登入之類的，
+如果不認識就是自動切成 Basic access authentication 登入而已。
+（http header `Authorization: Basic $base64`)
+
+因為是 ms 的產品，基本上不可能要求他們改政策。
+目前 edge chrome 都會對這個偽 critical 欄位特別處理，就 firefox 沒有。
+再加上，這個功能大部份是用在企業內網，
+所以一般使用者不會碰到這個 bug。
+企業內也不會考慮 firefox 使用者，
+只會叫你用 edge chrome，有測過二種瀏覽器就要偷笑了。
+所以 [bugzilla 上的 bug][bug] 修正機率應該很渺茫。
+
+[bug]: https://bugzilla.mozilla.org/show_bug.cgi?id=1909824
+
+## mitm-proxy
+[mitm-proxy] 是 mit 的計劃，讓使用者可以觀察 https 流量內容，
+像用來看手機會在背景連線到哪些網站，或電腦應用程式，
+檢查有沒有回報侵犯隱私的資訊。
+原理是走 http proxy，讓瀏覽器所有流量都經過 mitm-proxy，
+mitm-proxy 則會把所有 https 解密，再用自己的憑證簽。
+所以也要把 mitm-proxy 的憑證加入瀏覽器的信任憑證清單裡。
+
+[mitm-proxy]: https://mitmproxy.org/
+
+但這裡我們的只是要用 mitm-proxy 繞過 ms 的問題憑證而已。
+因為用了只會看到 mitm-proxy 的憑證，不會看到原始網站的憑證。
+mitm-proxy 也沒有碰到 Microsoft Application Policies 就報錯的問題。
+所以就沒問題了。
+
+## 安裝權限
+這種內網環境還有一點是常有權限管制不能亂裝軟體，
+mitm-proxy 剛好有提供一個靜態打包的免安裝版本，
+像這個 [mitm-proxy v11.0.2 版][green] ，
+其他版本的在 [mitm-proxy download][dl] 裡
+檔名是 `*-windows-x86_64.zip` 的。
+
+[dl]: https://mitmproxy.org/downloads/
+
+[green]: https://downloads.mitmproxy.org/11.0.2/mitmproxy-11.0.2-windows-x86_64.zip
+
+解壓縮後執行 `mitmproxy.exe` 就可以了，
+他本質就是一個完整的 python 環境和所有執行時需要的程式。
+因為 proxy 可以開在任意埠所以也不用特殊權限，
+只要能執行 exe 執行檔，能改 firefox proxy、憑證設定就可以了。
+之後照著 [mitm-proxy 官網教學走][start] 即可，
+匯入憑證、改 proxy 設定之類的。
+
+[start]: https://docs.mitmproxy.org/stable/overview-getting-started/
+
+## 只讓部份流量走 mitm-proxy
+我還搭配 [proxy.pac] 檔案來設定哪些流量要走 mitm-proxy，
+畢竟其實不是所有流量都需要走 mitm-proxy，
+理論上只需要讓內網有問題的 https server 流量 proxy 即可。
+proxy.pac 檔案就能用 js 程式來控制哪些網址的流量要走 mitm-proxy。
+
+[proxy.pac]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Proxy_servers_and_tunneling/Proxy_Auto-Configuration_PAC_file
+
+例如以下的設定，會讓 `(ftp|git|hr).myinc.internal` 
+和 mitm.it 的連線經由 localhost:8080 的 proxy 出去。
+要放行 mitm.it 是因為這是 mitm-proxy 的測試頁面的網址。
+
+```pac
+function FindProxyForURL(url, host) {
+  var re = /^((ftp|git|hr)\.myinc\.internal|mitm\.it)$/
+  if (re.test(host)) {
+    return "PROXY localhost:8080"
+  }
+  return "DIRECT"
+}
+```
+
+照上面 mdn 教學填好後另存成 `proxy.pac` 的檔案，
+在 firefox 網路設定裡，proxy 自動設定網址直接填該檔案在本機的路徑，
+像在 D 槽根目錄就 `D:\proxy.pac` ，windows 反斜線的路徑可以直接貼，
+或填正式 file url 也行。
+
+## 安全性問題
+另外因為內網常是自簽憑證之類的，如果 mitm-proxy 不認得也可能報錯，
+一個方式是指定憑證檔案給 mitm-proxy，但太麻煩我不想弄。
+我是直接在啟動 mitmproxy.exe 的捷徑加一個 `--ssl-insecure` 選項，
+讓 mitm-proxy 不驗證對方的 tls 憑證，
+反正我只有特定幾個內網網站會走 proxy，
+所以不驗證內網的 https 憑證應該也行。
+
+當初我試成功時，有在 bugzilla 上留言分享此作法，
+但 mozilla 的人卻留言說有安全性問題，然後把 [我的留言][cmt] 摺疊起來。
+我知道我在幹麻，mitm-proxy 的流量都在本機，
+瀏覽器會匯入 mitm 的自產憑證，不會有洩漏流量的問題。
+除了 `--ssl-insecure` 選項外我是看不出有什麼安全性問題。
+
+[cmt]: https://bugzilla.mozilla.org/show_bug.cgi?id=1909824#c4
+
+但畢竟 bugzilla 主題是討論 bug 本身，
+不是討論這種邪門歪道的地方，
+我也不想在 mozilla 他們家和他們離題吵下去。
+我有寄信給指出有安全性問題的 [keeler] 試圖澄清，但她也沒有回我。
+
+[keeler]: https://bugzilla.mozilla.org/show_bug.cgi?id=1909824#c5
+
+反正對我來說 mozilla 的安全性標準一直有點謎，
+像他們保留了在官方釋出版本的 firefox 裡，
+封鎖任意 firefox 擴充元件的能力，
+任何附加元件都要有 mozilla 官方簽署才能安裝，
+這還能算一個自由軟體嗎？
+就 mozilla 的安全標準，附加元件可以不經詢問讀取任意 http(s) 流量，
+但卻沒有辦法要求權限讀取本機的檔案。
+
+總之，如果你有任何安全性問題，都歡迎留言或 [來信詢問][contact] 。
+
+[contact]: contact.html
+
+#mitm-proxy
+#mit
+#內網
+#自簽憑證
+#firefox
+#tls
+#https
+#microsoft

@@ -2,7 +2,9 @@
 <meta charset="UTF-8">
 <body>
 <script>
-var q = new URLSearchParams(window.location.search)
+var qs = window.location.search
+if (!qs) qs = '?' + window.location.hash.slice(1)
+var q = new URLSearchParams(qs)
 var u = q.get('url')
 q.delete('url')
 var d = document

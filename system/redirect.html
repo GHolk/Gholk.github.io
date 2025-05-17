@@ -1,0 +1,19 @@
+<html>
+<meta charset="UTF-8">
+<body>
+<h1><a></a></h1>
+<script>
+var qs = window.location.search
+if (!qs) qs = '?' + window.location.hash.slice(1)
+var q = new URLSearchParams(qs)
+var u = q.get('url')
+
+var t = q.get('title')
+const a = document.getElementsByTagName('a')[0]
+a.href = a.textContent = u
+if (t) a.textContent = t
+
+window.location = u
+</script>
+</body>
+</html>

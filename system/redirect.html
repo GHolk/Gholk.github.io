@@ -4,18 +4,69 @@
 <h1><a></a></h1>
 <script>
 var qs = window.location.search
-if (!qs) qs = '?' + window.location.hash.slice(1)
 var q = new URLSearchParams(qs)
+if (window.location.hash) {
+    let hq = new URLSearchParams('?' + window.location.hash.slice(1))
+    q = new URLSearchParams(Array.from(q).concat(Array.from(hq)))
+}
 var u = q.get('url')
+if (!u && q.has('url!')) {
+  let m = qs.match(/(^\?|&)url!=(.*)/)
+  if (m) u = m[1]
+}
 
+if (u) {
 var t = q.get('title')
 const a = document.getElementsByTagName('a')[0]
-a.href = a.textContent = u
+    setLink(a, u)
 if (t) a.textContent = t
 
 window.location = u
+
+    function setLink(a, u) {
+        a.href = u
+        a.textContent = decUrl(u)
+    }
+    function decUrl(u) {
+        return u.replace(/(%[0-9A-F]{2})+/g, s => {
+            try {return decodeURIComponent(s)}
+            catch (err) {return s}
+        })
+    }
+}
 </script>
 <p>you can close this page</p>
 <p>您可以關閉此網頁</p>
+<hr>
+<textarea width="80" height="80" type="text"></textarea> <br>
+<button>line</button> <button>redir</button>
+<script>
+  function enc(s) {
+      return s.replace(/[\s&#%]+/g, c => encodeURIComponent(c))
+  }
+  const command = {
+      line(o) {
+          const u = new URL(o.input.value)
+          u.searchParams.set('openExternalBrowser', 1)
+          setLink(o.a, u.href)
+          navigator.clipboard.writeText(location.href)
+      },
+      redir(o) {
+          const q = enc(o.input.value)
+          location.hash = `#url=${q}`
+          setLink(o.a, location.href)
+          navigator.clipboard.writeText(location.href)
+      }
+  }
+  window.addEventListener('click', evt => {
+      const e = evt.target
+      const input = document.querySelector('textarea')
+      const a = document.querySelector('a')
+      if (e.nodeName == 'BUTTON') {
+          evt.preventDefault()
+          command[e.textContent]({input, a})
+      }
+  })
+</script>
 </body>
 </html>

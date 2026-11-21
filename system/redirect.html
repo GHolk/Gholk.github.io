@@ -22,7 +22,7 @@ const a = document.getElementsByTagName('a')[0]
 if (t) a.textContent = t
 
 window.location = u
-
+}
     function setLink(a, u) {
         a.href = u
         a.textContent = decUrl(u)
@@ -33,16 +33,24 @@ window.location = u
             catch (err) {return s}
         })
     }
-}
+    const escCharReg = /[\s&#%]+/g
+    var decUrlSmart = u => u.replace(/(%[0-9A-F]{2})+/g, s => {
+        try {
+            const d = decodeURIComponent(s)
+            return enc(d)
+        }
+        catch (err) {return s}
+    })
 </script>
 <p>you can close this page</p>
 <p>您可以關閉此網頁</p>
 <hr>
 <textarea width="80" height="80" type="text"></textarea> <br>
 <button>line</button> <button>redir</button>
+<button>trim</button> <button>dec</button>
 <script>
   function enc(s) {
-      return s.replace(/[\s&#%]+/g, c => encodeURIComponent(c))
+      return s.replace(escCharReg, c => encodeURIComponent(c))
   }
   const command = {
       line(o) {
@@ -56,6 +64,17 @@ window.location = u
           location.hash = `#url=${q}`
           setLink(o.a, location.href)
           navigator.clipboard.writeText(location.href)
+      },
+      trim(o) {
+          let t = o.input.value
+          let m = t.match(/geo:\S+/)
+          if (m) {
+              t = m[0]
+              o.input.value = t
+          }
+      },
+      dec(o) {
+          o.input.value = decUrlSmart(o.input.value)
       }
   }
   window.addEventListener('click', evt => {

@@ -33,7 +33,7 @@ window.location = u
             catch (err) {return s}
         })
     }
-    const escCharReg = /[\s&#%]+/g
+    const encCharReg = /[\s&#%()]+/g
     var decUrlSmart = u => u.replace(/(%[0-9A-F]{2})+/g, s => {
         try {
             const d = decodeURIComponent(s)
@@ -48,9 +48,12 @@ window.location = u
 <textarea width="80" height="80" type="text"></textarea> <br>
 <button>line</button> <button>redir</button>
 <button>trim</button> <button>dec</button>
+<button>copy</button>
+<br>
+<button>osmand</button>
 <script>
   function enc(s) {
-      return s.replace(escCharReg, c => encodeURIComponent(c))
+      return s.replace(encCharReg, c => encodeURIComponent(c))
   }
   const command = {
       line(o) {
@@ -73,8 +76,18 @@ window.location = u
               o.input.value = t
           }
       },
-      dec(o) {
-          o.input.value = decUrlSmart(o.input.value)
+      dec(o) {o.input.value = decUrlSmart(o.input.value)},
+      copy(o) { navigator.clipboard.writeText(o.input.value) },
+      osmand(o) {
+          const {a} = o
+          this.trim(o)
+          this.dec(o)
+          this.redir(o)
+          o.input.value = a.href
+          this.dec(o)
+          this.line(o)
+          o.input.value = a.href
+          this.dec(o)
       }
   }
   window.addEventListener('click', evt => {
